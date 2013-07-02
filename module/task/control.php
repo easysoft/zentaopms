@@ -966,7 +966,7 @@ class task extends control
                 {
                     foreach($relatedFiles[$task->id] as $file)
                     {
-                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/$task->company/" . $file->pathname;
+                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;
                         $task->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }

@@ -98,13 +98,12 @@ class groupModel extends model
     /**
      * Get group lists.
      * 
-     * @param  int    $companyID 
      * @access public
      * @return array
      */
-    public function getList($companyID)
+    public function getList()
     {
-        return $this->dao->findByCompany($companyID)->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
     }
 
     /**
@@ -115,7 +114,7 @@ class groupModel extends model
      */
     public function getPairs()
     {
-        return $this->dao->findByCompany($this->app->company->id)->fields('id, name')->from(TABLE_GROUP)->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs();
     }
 
     /**
@@ -175,7 +174,6 @@ class groupModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('`group`')->eq((int)$groupID)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.company')->eq($this->app->company->id)
             ->orderBy('t2.account')
             ->fetchPairs();
     }

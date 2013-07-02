@@ -500,7 +500,7 @@ class user extends control
         $this->view->user       = $user;
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
-        $this->view->groups     = $this->loadModel('group')->getPairs($this->app->company->id);
+        $this->view->groups     = $this->loadModel('group')->getPairs();
  
         $this->display();
     }

@@ -397,18 +397,12 @@ class installModel extends model
         if(!dao::isError())
         {
             /* Set admin. */
-            $companyID = $this->dbh->lastInsertID();
             $admin = new stdclass();
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
             $admin->gender   = '';
-            $admin->company  = $companyID;
             $this->dao->insert(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
-
-            /* Update the group and groupPriv table. */
-            $this->dao->update(TABLE_GROUP)->set('company')->eq($companyID)->exec($autoCompany = false);
-            $this->dao->update(TABLE_GROUPPRIV)->set('company')->eq($companyID)->exec($autoCompany = false);
 
             /* Update group name and desc on dafault lang. */
             $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
@@ -440,13 +434,12 @@ class installModel extends model
             if(!$this->dbh->query($table)) return false;
         }
 
-        $config->company = '1';
         $config->module  = 'common';
         $config->owner   = 'system';
         $config->section = 'global';
         $config->key     = 'showDemoUsers';
         $config->value   = '1';
-        $this->dao->replace(TABLE_CONFIG)->data($config, false)->exec(false);
+        $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
         return true;
     }
 

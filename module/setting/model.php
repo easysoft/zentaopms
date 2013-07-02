@@ -24,7 +24,7 @@ class settingModel extends model
      */
     public function getItem($paramString)
     {
-        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetch('value', $autoCompany = false);
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetch('value');
     }
 
     /**
@@ -36,7 +36,7 @@ class settingModel extends model
      */
     public function getItems($paramString)
     {
-        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id', $autoCompany = false);
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id');
     }
 
     /**
@@ -44,11 +44,10 @@ class settingModel extends model
      * 
      * @param  string      $path     system.common.global.sn or system.common.sn 
      * @param  string      $value 
-     * @param  string|int  $company 
      * @access public
      * @return void
      */
-    public function setItem($path, $value = '', $company = 'current')
+    public function setItem($path, $value = '')
     {
         $level    = substr_count($path, '.');
         $section = '';
@@ -58,14 +57,13 @@ class settingModel extends model
         if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
 
         $item = new stdclass();
-        $item->company = $company === 'current' ? $this->app->company->id : $company;
         $item->owner   = $owner;
         $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
 
-        $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+        $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
 
     /**
@@ -80,7 +78,7 @@ class settingModel extends model
      * @access public
      * @return bool
      */
-    public function setItems($path, $items, $company = 'current')
+    public function setItems($path, $items)
     {
         foreach($items as $key => $item)
         {
@@ -111,13 +109,13 @@ class settingModel extends model
      */
     public function deleteItems($paramString)
     {
-        $this->createDAO($this->parseItemParam($paramString), 'delete')->exec($autoCompany = false);
+        $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
     }
 
     /**
      * Parse the param string for select or delete items.
      * 
-     * @param  string    $paramString     owner=xxx&company=1,2&key=sn and so on.
+     * @param  string    $paramString     owner=xxx&key=sn and so on.
      * @access public
      * @return array
      */
@@ -127,12 +125,9 @@ class settingModel extends model
         parse_str($paramString, $params); 
 
         /* Init fields not set in the param string. */
-        $fields = 'company,owner,module,section,key';
+        $fields = 'owner,module,section,key';
         $fields = explode(',', $fields);
         foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
-
-        /* If not set company, set as current company. */
-        if($params['company'] == '') $params['company'] = $this->app->company->id;
 
         return $params;
     }
@@ -148,7 +143,6 @@ class settingModel extends model
     public function createDAO($params, $method = 'select')
     {
         return $this->dao->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
-            ->beginIF($params['company'])->andWhere('company')->in($params['company'])->fi()
             ->beginIF($params['owner'])->andWhere('owner')->in($params['owner'])->fi()
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
@@ -164,13 +158,11 @@ class settingModel extends model
      */
     public function getSysAndPersonalConfig($account = '')
     {
-        $company = $this->app->company->id . ',' . '0';     // Get settings of current company, and also settings for all company.
         $owner   = 'system,' . ($account ? $account : '');
         $records = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('owner')->in($owner)
-            ->andWhere('company')->in($company)
             ->orderBy('id')
-            ->fetchAll('id', false);
+            ->fetchAll('id');
         if(!$records) return array();
 
         /* Group records by owner and module. */

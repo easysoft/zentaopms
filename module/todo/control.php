@@ -388,7 +388,6 @@ class todo extends control
                 if($todo->private == 1)                         $todo->desc    = $this->lang->todo->thisIsPrivate;
 
                 /* drop some field that is not needed. */
-                unset($todo->company);
                 unset($todo->idvalue);
                 unset($todo->private);
             }

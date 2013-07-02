@@ -43,7 +43,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $groups = $this->dao->dbh($this->sourceDBH)
             ->select("groupID AS id, groupName AS name, groupUser AS users")
             ->from('BugGroup')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($groups as $groupID => $group)
         {
             /* Explode into array. */
@@ -78,10 +78,10 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->select("username AS account, userpassword AS password, realname, email")
             ->from('BugUser')
             ->orderBy('userID ASC')
-            ->fetchAll('account', $autoCompany = false);
+            ->fetchAll('account');
 
         /* Get users in histories. */
-        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs('', '', $autoCompany = false);
+        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs('', '');
 
         /* Merge them. */
         foreach($allUsers as $key => $account)
@@ -122,7 +122,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
      */
     public function convertProject()
     {
-        $projects = $this->dao->dbh($this->sourceDBH)->select("projectID AS id, projectName AS name")->from('BugProject')->fetchAll('id', $autoCompany = false);
+        $projects = $this->dao->dbh($this->sourceDBH)->select("projectID AS id, projectName AS name")->from('BugProject')->fetchAll('id');
         foreach($projects as $projectID => $project)
         {
             unset($project->id);
@@ -152,7 +152,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 "bug" AS type')
             ->from('BugModule')
             ->orderBy('id ASC')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($modules as $moduleID => $module)
         {
             $module->root = $this->map['product'][$module->root];
@@ -200,7 +200,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ')
             ->from('BugInfo')
             ->orderBy('bugID')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($bugs as $bugID => $bug)
         {
             /* Adjust some fields of bug. */
@@ -244,7 +244,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 actionDate AS date")
             ->from('BugHistory')
             ->orderBy('bugID, historyID')
-            ->fetchGroup('objectID', '', $autoCompany = false);
+            ->fetchGroup('objectID', '');
         $convertCount = 0;
         foreach($actions as $bugID => $bugActions)
         {
@@ -290,7 +290,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 ")
             ->from('BugFile')
             ->orderBy('fileID')
-            ->fetchAll('', $autoCompany = false);
+            ->fetchAll('');
         foreach($files as $file)
         {
             $file->objectID = $this->map['bug'][(int)$file->objectID];

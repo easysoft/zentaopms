@@ -1030,7 +1030,6 @@ class projectModel extends model
         return $this->dao->select('t1.*, t1.hours * t1.days AS totalHours, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->andWHere('t2.company')->eq($this->app->company->id)
             ->fetchAll('account');
     }
 
@@ -1047,7 +1046,6 @@ class projectModel extends model
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->andWHere('t2.company')->eq($this->app->company->id)
             ->beginIF($params == 'nodeleted')
             ->andWhere('t2.deleted')->eq(0)
             ->fi()

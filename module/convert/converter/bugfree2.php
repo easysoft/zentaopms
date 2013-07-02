@@ -68,7 +68,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return $this->dao->dbh($this->sourceDBH)
             ->select("optionValue as version")->from(BUGFREE_TABLE_OPTION)
             ->where('OptionName')->eq('dbVersion')
-            ->fetch('version', $autoCompany = false);
+            ->fetch('version');
 
     }
 
@@ -86,7 +86,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->select("username AS account, userpassword AS password, realname, email, isDroped AS deleted")
             ->from(BUGFREE_TABLE_USER)
             ->orderBy('userID ASC')
-            ->fetchAll('account', $autoCompany = false);
+            ->fetchAll('account');
 
         /* Insert into zentao. */
         $convertCount = 0;
@@ -117,7 +117,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $groups = $this->dao->dbh($this->sourceDBH)
             ->select("groupID AS id, groupName AS name, groupUser AS users")
             ->from(BUGFREE_TABLE_GROUP)
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($groups as $groupID => $group)
         {
             /* Fix the group data. */
@@ -153,7 +153,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $projects = $this->dao->dbh($this->sourceDBH)
             ->select("projectID AS id, projectName AS name, isDroped AS deleted")
             ->from(BUGFREE_TABLE_PROJECT)
-            ->fetchAll('id', $autoComapny = false);
+            ->fetchAll('id');
         foreach($projects as $projectID => $project)
         {
             unset($project->id);
@@ -184,7 +184,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
                 displayOrder AS `order`')
             ->from(BUGFREE_TABLE_MODULE)
             ->orderBy('id ASC')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($modules as $moduleID => $module)
         {
             $module->root = $this->map['product'][$module->root];
@@ -244,7 +244,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->from(BUGFREE_TABLE_BUGINFO)
             ->where('isDroped')->eq(0)
             ->orderBy('bugID')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($bugs as $bugID => $bug)
         {
             /* Fix some fileds of bug. */
@@ -314,7 +314,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->from(BUGFREE_TABLE_CASEINFO)
             ->where('isDroped')->eq(0)
             ->orderBy('caseID')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($cases as $caseID => $case)
         {
             /* Fix fields of case. */
@@ -380,7 +380,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ')
             ->from(BUGFREE_TABLE_RESULTINFO)
             ->orderBy('id')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         foreach($results as $resultID => $result)
         {
             unset($result->id);
@@ -422,7 +422,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->from(BUGFREE_TABLE_ACTION)
             ->where('actionTarget' != 'Result')
             ->orderBy('actionID')
-            ->fetchAll('id', $autoComapny = false);
+            ->fetchAll('id');
 
         foreach($actions as $actionID => $action)
         {
@@ -450,7 +450,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->select('actioID, actionField AS field, oldValue AS old, newValue AS new')
             ->from(BUGFREE_TABLE_HISTORY)
             ->orderBy('historyID')
-            ->fetchAll('', $autoCompany = false);
+            ->fetchAll('');
         foreach($histories as $history)
         {
             $history->actionID = $this->map['action'][$history->actionID];
@@ -477,7 +477,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
                 ")
             ->from(BUGFREE_TABLE_FILE)
             ->orderBy('fileID')
-            ->fetchAll('', $autoCompany = false);
+            ->fetchAll('');
         foreach($files as $file)
         {
             /* Get the actionID in zentao, to get file info. */

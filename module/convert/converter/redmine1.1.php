@@ -148,7 +148,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("id, lastName AS name")
             ->from(REDMINE_TABLE_USERS)
             ->where('type')->eq('Group')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         $zentaoGroupNames = $this->dao->dbh($this->dbh)->select('id, name')->from(TABLE_GROUP)->fetchPairs();
         $zentaoGroupIDs = $this->dao->dbh($this->dbh)->select('name, id')->from(TABLE_GROUP)->fetchPairs();
@@ -187,7 +187,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("id, login AS account, firstname, lastname, mail as email")
             ->from(REDMINE_TABLE_USERS)
             ->where('type')->eq('User')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         $zentaoUserNames = $this->dao->dbh($this->dbh)->select('id, account')->from(TABLE_USER)->fetchPairs();
         $zentaoUserIDs = $this->dao->dbh($this->dbh)->select('account, id')->from(TABLE_USER)->fetchPairs();
@@ -230,7 +230,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("t1.group_id, t2.login as account")
             ->from(REDMINE_TABLE_GROUPS_USERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
-            ->fetchAll('', $autoCompany = false);
+            ->fetchAll('');
 
         $zentaoUserGroups = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_USERGROUP)->fetchAll();
 
@@ -266,7 +266,7 @@ class redmine11ConvertModel extends redmineConvertModel
         $products = $this->dao->dbh($this->sourceDBH)
             ->select("id, name, description as `desc`, created_on as createdDate")
             ->from(REDMINE_TABLE_PROJECTS)
-            ->fetchAll('id', $autoComapny = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($products as $productID => $product)
@@ -290,7 +290,7 @@ class redmine11ConvertModel extends redmineConvertModel
         $projects = $this->dao->dbh($this->sourceDBH)
             ->select("id, name, project_id, description as `desc`, effective_date AS end")
             ->from(REDMINE_TABLE_VERSIONS)
-            ->fetchAll('id', $autoComapny = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($projects as $projectID => $project)
@@ -326,7 +326,7 @@ class redmine11ConvertModel extends redmineConvertModel
         $buildAndReleases = $this->dao->dbh($this->sourceDBH)
             ->select("id, name, project_id, description as `desc`, effective_date AS date")
             ->from(REDMINE_TABLE_VERSIONS)
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         $convertBuildsCount = 0;
@@ -381,7 +381,7 @@ class redmine11ConvertModel extends redmineConvertModel
         $productPlans = $this->dao->dbh($this->sourceDBH)
             ->select("id, name as title, project_id, description as `desc`, effective_date as end, created_on AS begin")
             ->from(REDMINE_TABLE_VERSIONS)
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
         /* Insert into zentao */
         foreach($productPlans as $id => $productPlan)
         {
@@ -437,7 +437,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->from(REDMINE_TABLE_MEMBERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
             ->where('t2.type')->eq('User')
-            ->fetchAll('', $autoCompany = false);
+            ->fetchAll('');
 
         /* Insert into zentao */
         foreach($teams as $team)
@@ -465,7 +465,7 @@ class redmine11ConvertModel extends redmineConvertModel
         $docLibs = $this->dao->dbh($this->sourceDBH)
             ->select("id, name")->from(REDMINE_TABLE_ENUMERATIONS)
             ->where('type')->eq('DocumentCategory')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($docLibs as $docLibID => $docLib)
@@ -490,7 +490,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("t1.id, t1.project_id AS product, t2.id AS lib, t1.title, t1.description AS content, t1.created_on AS addedDate")
             ->from(REDMINE_TABLE_DOCUMENTS)->alias('t1')
             ->leftjoin(REDMINE_TABLE_ENUMERATIONS)->alias('t2')->on('t1.category_id = t2.id')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($docs as $docID => $doc)
@@ -519,7 +519,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("t1.project_id as product, t1.title, t1.summary as digest, t1.description as content, t2.login as addedBy, t1.created_on as addedDate")
             ->from(REDMINE_TABLE_NEWS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
-            ->fetchAll('', $autoCompany = false);
+            ->fetchAll('');
 
         /* Create a news docLib  */
         $newLib->name = 'news';
@@ -591,7 +591,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
             ->where('t1.tracker_id')->eq($issueType)
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($stories as $issueID => $story)
@@ -640,7 +640,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
             ->where('t1.tracker_id')->eq($issueType)
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($tasks as $issueID => $task)
@@ -685,7 +685,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
             ->where('t1.tracker_id')->eq($issueType)
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($bugs as $issueID => $bug)
@@ -734,7 +734,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select('t1.id, t1.container_id as objectID, t1.container_type as objectType, t1.filename as title, t1.disk_filename as pathname, t1.filesize as size, t2.login as addedBy, t1.created_on as addedDate, description')
             ->from(REDMINE_TABLE_ATTACHMENTS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
-            ->fetchAll('id', $autoCompany = false);
+            ->fetchAll('id');
 
         /* Insert into zentao */
         foreach($files as $fileID => $file)

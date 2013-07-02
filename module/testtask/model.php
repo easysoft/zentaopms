@@ -230,7 +230,7 @@ class testtaskModel extends model
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('', false);
+            ->fetchAll();
     }
 
     /**

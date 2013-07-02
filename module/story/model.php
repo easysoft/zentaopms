@@ -137,7 +137,6 @@ class storyModel extends model
             if($projectID != 0) 
             {
                 $this->dao->insert(TABLE_PROJECTSTORY)
-                    ->set('company')->eq(1)
                     ->set('project')->eq($projectID)
                     ->set('product')->eq($this->post->product)
                     ->set('story')->eq($storyID)

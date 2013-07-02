@@ -16,7 +16,7 @@
 <table align='center' class='table-4'>
   <caption>
     <div class='f-left'> <?php echo $lang->user->profile;?></div>
-    <div class='f-right'><?php echo html::a($this->createLink('user', 'edit', "userID=$user->id&from=company"), $lang->user->editProfile); ?></div>
+    <div class='f-right'><?php echo html::a($this->createLink('user', 'edit', "userID=$user->id"), $lang->user->editProfile); ?></div>
   </caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->dept;?></th>

@@ -147,23 +147,6 @@ class upgradeModel extends model
      */
     public function updateCompany()
     {
-        /* Get user defined constants. */
-        $constants     = get_defined_constants(true);
-        $userConstants = $constants['user'];
-
-        /* Update tables. */
-        foreach($userConstants as $key => $value)
-        {
-            if(strpos($key, 'TABLE') === false) continue;
-            if($key == 'TABLE_COMPANY') continue;
-
-            $table  = $value;
-            $result = $this->dbh->query("SHOW TABLES LIKE '$table'");
-            if($result->rowCount() > 0)
-            {
-                $this->dbh->query("UPDATE $table SET company = '{$this->app->company->id}'");
-            }
-        }
     }
 
     /**
@@ -341,18 +324,18 @@ class upgradeModel extends model
                 $task->lastEditedDate = $action->date;
 
                 /* Update action type. */
-                $this->dao->update(TABLE_ACTION)->set('action')->eq($action->action)->where('id')->eq($action->id)->exec(false);
+                $this->dao->update(TABLE_ACTION)->set('action')->eq($action->action)->where('id')->eq($action->id)->exec();
             }
         }
 
         /* Update db. */
         foreach($tasks as $task)
         {
-            $this->dao->update(TABLE_TASK)->data($task, false)->where('id')->eq($task->id)->exec(false);
+            $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($task->id)->exec();
         }
 
-        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = finishedDate')->where('status')->eq('done')->exec(false);
-        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = canceledDate')->where('status')->eq('cancel')->exec(false);
+        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = finishedDate')->where('status')->eq('done')->exec();
+        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = canceledDate')->where('status')->eq('cancel')->exec();
 
         /* Update action name. */
     }
@@ -430,9 +413,8 @@ class upgradeModel extends model
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('recordEstimate')
-                ->exec(false);
+                ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
-                ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('recordEstimate')
@@ -442,9 +424,8 @@ class upgradeModel extends model
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('editEstimate')
-                ->exec(false);
+                ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
-                ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('editEstimate')
@@ -454,9 +435,8 @@ class upgradeModel extends model
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('deleteEstimate')
-                ->exec(false);
+                ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
-                ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('deleteEstimate')
@@ -554,8 +534,8 @@ class upgradeModel extends model
      */
     public function deletePatch()
     {
-        $this->dao->delete()->from(TABLE_EXTENSION)->where('type')->eq('patch')->exec(false);
-        $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->in('zentaopatch,patch')->exec(false);
+        $this->dao->delete()->from(TABLE_EXTENSION)->where('type')->eq('patch')->exec();
+        $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->in('zentaopatch,patch')->exec();
     }
 
     /**
@@ -623,7 +603,7 @@ class upgradeModel extends model
     public function processFlow()
     {
         /* First delete all flow records. */
-        $this->setting->deleteItems('company=0,1&owner=system&module=common&section=global&key=flow');
+        $this->setting->deleteItems('owner=system&module=common&section=global&key=flow');
 
         /* Search the extension table to check zentaotest, zentaotask, zentaostory exists or not. */
         $flow = 'full';
@@ -653,7 +633,6 @@ class upgradeModel extends model
         foreach($oldPriv as $item)
         {
             $this->dao->insert(TABLE_GROUPPRIV)
-                ->set('company')->eq($item->company)
                 ->set('module')->eq('company')
                 ->set('method')->eq('view')
                 ->set('`group`')->eq($item->group)
@@ -668,7 +647,6 @@ class upgradeModel extends model
         foreach($oldPriv as $item)
         {
             $this->dao->insert(TABLE_GROUPPRIV)
-                ->set('company')->eq($item->company)
                 ->set('module')->eq('todo')
                 ->set('method')->eq('batchFinish')
                 ->set('`group`')->eq($item->group)

@@ -153,9 +153,9 @@ class convert extends control
         $checkInfo['db'] = $converter->connectDB();
         $checkInfo['path'] = $converter->checkPath();
 
-        $this->view->trackers = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('trackers')->fetchAll('id', $autoCompany = false);
-        $this->view->statuses = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('issue_statuses')->fetchAll('id', $autoCompany = false);
-        $this->view->pries    = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('enumerations')->where('type')->eq('IssuePriority')->fetchAll('id', $autoCompany = false);
+        $this->view->trackers = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('trackers')->fetchAll('id');
+        $this->view->statuses = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('issue_statuses')->fetchAll('id');
+        $this->view->pries    = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('enumerations')->where('type')->eq('IssuePriority')->fetchAll('id');
         /* Compute the checking result. */
         $result = 'pass';
         if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';

@@ -335,7 +335,7 @@ class userModel extends model
             if(strpos($this->app->company->admins, ',' . $oldUser->account . ',') !== false)
             {
                 $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
-                $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
+                $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
                 if(!dao::isError()) $this->app->user->account = $this->post->account;
             }
         }
@@ -396,7 +396,7 @@ class userModel extends model
                 if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
                 {
                     $admins = str_replace(',' . $oldAccount . ',', ',' . $user['account'] . ',', $this->app->company->admins);
-                    $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
+                    $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
                 }
                 if(!dao::isError() and $this->app->user->account == $oldAccount) $this->app->user->account = $users['account'];
             }
@@ -641,7 +641,7 @@ class userModel extends model
             $locked    = date('Y-m-d H:i:s', mktime());
             $failTimes = 0;
         }
-        $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec(false);
+        $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec();
         return $fails;
     }
 
@@ -668,7 +668,7 @@ class userModel extends model
      */
     public function cleanLocked($account)
     {
-        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec(false);
+        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec();
     }
 
     /**

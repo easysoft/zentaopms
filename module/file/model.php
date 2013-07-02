@@ -218,7 +218,7 @@ class fileModel extends model
         if($files = $this->getUpload($postName))
         {
             $file = $files[0];
-            $filePath = $this->dao->select('pathname')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch('', false);
+            $filePath = $this->dao->select('pathname')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
             $pathName = $filePath->pathname;
             $realPathName= $this->savePath . $pathName;
             if(!is_dir(dirname($realPathName)))mkdir(dirname($realPathName));
@@ -227,7 +227,7 @@ class fileModel extends model
             $fileInfo->addedBy   = $this->app->user->account;
             $fileInfo->addedDate = helper::now();
             $fileInfo->size      = $file['size'];
-            $this->dao->update(TABLE_FILE)->data($fileInfo, false)->where('id')->eq($fileID)->exec(false);
+            $this->dao->update(TABLE_FILE)->data($fileInfo)->where('id')->eq($fileID)->exec();
             return true;
         }
         else

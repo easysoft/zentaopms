@@ -347,14 +347,12 @@ class dao
      * Set the data to update or insert.
      * 
      * @param  object $data         the data object or array
-     * @param  bool   $autoCompany  auto append company field or not
      * @access public
      * @return object the dao object self.
      */
-    public function data($data, $autoCompany = true)
+    public function data($data)
     {
         if(!is_object($data)) $data = (object)$data;
-        if($autoCompany and isset($this->app->company) and $this->table != TABLE_COMPANY and !isset($data->company)) $data->company = $this->app->company->id;
         $this->sqlobj->data($data);
         return $this;
     }
@@ -386,11 +384,10 @@ class dao
     /**
      * Process the sql, replace the table, fields and add the company condition.
      * 
-     * @param  bool     $autoCompany 
      * @access private
      * @return string the sql string after process.
      */
-    private function processSQL($autoCompany = true)
+    private function processSQL()
     {
         $sql = $this->sqlobj->get();
 
@@ -402,42 +399,6 @@ class dao
             $sql = sprintf($this->sqlobj->get(), $this->fields, $this->table);
         }
 
-        /* If the method is select, update or delete, set the comapny condition. */
-        if(isset($this->app->company) and $autoCompany and $this->table != '' and $this->table != TABLE_COMPANY and $this->method != 'insert' and $this->method != 'replace')
-        {
-            /* Get the position to insert company = ?. */
-            $wherePOS  = strrpos($sql, DAO::WHERE);             // The position of WHERE keyword.
-            $groupPOS  = strrpos($sql, DAO::GROUPBY);           // The position of GROUP BY keyword.
-            $havingPOS = strrpos($sql, DAO::HAVING);            // The position of HAVING keyword.
-            $orderPOS  = strrpos($sql, DAO::ORDERBY);           // The position of ORDERBY keyword.
-            $limitPOS  = strrpos($sql, DAO::LIMIT);             // The position of LIMIT keyword.
-            $splitPOS  = $orderPOS ? $orderPOS : $limitPOS;     // If $orderPOS, use it instead of $limitPOS.
-            $splitPOS  = $havingPOS? $havingPOS: $splitPOS;     // If $havingPOS, use it instead of $orderPOS.
-            $splitPOS  = $groupPOS ? $groupPOS : $splitPOS;     // If $groupPOS, use it instead of $havingPOS.
-
-            /* Set the conditon to be appened. */
-            $tableName = !empty($this->alias) ? $this->alias : $this->table;
-            $companyCondition = " $tableName.company = '{$this->app->company->id}' ";
-
-            /* If $spliPOS > 0, split the sql at $splitPOS. */
-            if($splitPOS)
-            {
-                $firstPart = substr($sql, 0, $splitPOS);
-                $lastPart  = substr($sql, $splitPOS);
-                if($wherePOS)
-                {
-                    $sql = $firstPart . " AND $companyCondition " . $lastPart;
-                }
-                else
-                {
-                    $sql = $firstPart . " WHERE $companyCondition " . $lastPart;
-                }
-            }
-            else
-            {
-                $sql .= $wherePOS ? " AND $companyCondition" : " WHERE $companyCondition";
-            }
-        }
         self::$querys[] = $this->processKeywords($sql);
         return $sql;
     }
@@ -474,15 +435,14 @@ class dao
     /**
      * Query the sql, return the statement object.
      * 
-     * @param  bool     $autoCompany 
      * @access public
      * @return object   the PDOStatement object.
      */
-    public function query($autoCompany = true)
+    public function query()
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        $sql = $this->processSQL($autoCompany);
+        $sql = $this->processSQL();
         try
         {
             $method = $this->method;
@@ -553,15 +513,14 @@ class dao
     /**
     /* Execute the sql. It's different with query(), which return the stmt object. But this not.
      * 
-     * @param  bool     $autoCompany 
      * @access public
      * @return int the modified or deleted records.
      */
-    public function exec($autoCompany = true)
+    public function exec()
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        $sql = $this->processSQL($autoCompany);
+        $sql = $this->processSQL();
         try
         {
             $this->reset();
@@ -579,15 +538,14 @@ class dao
      * Fetch one record.
      * 
      * @param  string $field        if the field is set, only return the value of this field, else return this record
-     * @param  bool   $autoCompany 
      * @access public
      * @return object|mixed
      */
-    public function fetch($field = '', $autoCompany = true)
+    public function fetch($field = '')
     {
-        if(empty($field)) return $this->query($autoCompany)->fetch();
+        if(empty($field)) return $this->query()->fetch();
         $this->setFields($field);
-        $result = $this->query($autoCompany)->fetch(PDO::FETCH_OBJ);
+        $result = $this->query()->fetch(PDO::FETCH_OBJ);
         if($result) return $result->$field;
     }
 
@@ -595,13 +553,12 @@ class dao
      * Fetch all records.
      * 
      * @param  string $keyField     the key field, thus the return records is keyed by this field
-     * @param  bool   $autoCompany 
      * @access public
      * @return array the records
      */
-    public function fetchAll($keyField = '', $autoCompany = true)
+    public function fetchAll($keyField = '')
     {
-        $stmt = $this->query($autoCompany);
+        $stmt = $this->query();
         if(empty($keyField)) return $stmt->fetchAll();
         $rows = array();
         while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
@@ -613,13 +570,12 @@ class dao
      * 
      * @param  string $groupField   the field to group by
      * @param  string $keyField     the field of key
-     * @param  bool   $autoCompany 
      * @access public
      * @return array the records.
      */
-    public function fetchGroup($groupField, $keyField = '', $autoCompany = true)
+    public function fetchGroup($groupField, $keyField = '')
     {
-        $stmt = $this->query($autoCompany);
+        $stmt = $this->query();
         $rows = array();
         while($row = $stmt->fetch())
         {
@@ -635,15 +591,14 @@ class dao
      * 
      * @param  string $keyField 
      * @param  string $valueField 
-     * @param  bool   $autoCompany 
      * @access public
      * @return array
      */
-    public function fetchPairs($keyField = '', $valueField = '', $autoCompany = true)
+    public function fetchPairs($keyField = '', $valueField = '')
     {
         $pairs = array();
         $ready = false;
-        $stmt  = $this->query($autoCompany);
+        $stmt  = $this->query();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             if(!$ready)

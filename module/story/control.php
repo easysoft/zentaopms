@@ -912,7 +912,7 @@ class story extends control
             {
                 $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                    ->orderBy($orderBy)->fetchAll('id', false);
+                    ->orderBy($orderBy)->fetchAll('id');
             }
             else
             {
@@ -1023,7 +1023,7 @@ class story extends control
                 {
                     foreach($relatedFiles[$story->id] as $file)
                     {
-                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/$story->company/" . $file->pathname;
+                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;
                         $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }

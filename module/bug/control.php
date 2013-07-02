@@ -1095,7 +1095,7 @@ class bug extends control
                 {
                     foreach($relatedFiles[$bug->id] as $file)
                     {
-                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/$bug->company/" . $file->pathname;
+                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;
                         $bug->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }
@@ -1109,8 +1109,6 @@ class bug extends control
                     if(isset($users[$mailto])) $bug->mailto .= $users[$mailto] . ',';
                 }
 
-                /* drop some field that is not needed. */
-                unset($bug->company);
                 unset($bug->caseVersion);
                 unset($bug->result);
                 unset($bug->deleted);

@@ -627,7 +627,7 @@ class testtask extends control
             $case    = $this->testtask->getRunById($runID)->case;
             $results = $this->testtask->getResults($runID);
 
-            $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task', false);
+            $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
             $testtask   = $this->dao->select('build, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
             $builds     = $this->loadModel('build')->getProductBuildPairs($testtask->product);
             $this->view->build = isset($builds[$testtask->build]) ? $builds[$testtask->build] : '';
