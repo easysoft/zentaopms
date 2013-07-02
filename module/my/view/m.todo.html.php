@@ -43,9 +43,9 @@
 <?php endforeach;?>
 <p><?php echo $pager->show('right', 'short')?></p>
 <div data-role='footer' data-position='fixed'>
-  <div data-role='navbar'>
+  <div data-role='navbar' data-iconpos="left">
     <ul>
-      <li><?php echo html::a($this->createLink('todo', 'batchCreate'), $lang->todo->create, '', "data-icon='plus'")?></li>
+      <li><?php echo html::a($this->createLink('todo', 'batchCreate'), $lang->todo->create, '', "data-icon='plus' data-theme='e'")?></li>
     </ul>
   </div>
 </div>
