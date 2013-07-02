@@ -273,7 +273,8 @@ class task extends control
         if($from == 'projectTask')
         {
             /* Initialize vars. */
-            if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
+            $orderBy = str_replace('status', 'statusCustom', $this->cookie->projectTaskOrder);
+            if(!$orderBy) $orderBy = 'statusCustom,id_desc';
             $project         = $this->project->getById($projectID); 
             $taskIDList      = $this->post->taskIDList ? $this->post->taskIDList : array();
             $editedTasks     = array();
