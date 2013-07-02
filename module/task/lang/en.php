@@ -144,8 +144,10 @@ $lang->task->confirmChangeProject  = 'Change project will change module, story a
 $lang->task->confirmFinish         = '"Left" is 0, this task will be done. Are you sure?';
 
 $lang->task->error = new stdclass();
-$lang->task->error->consumed      = '"Consumed" must be number';
-$lang->task->error->consumedSmall = '"Consumed" must be more than consumed before';
+$lang->task->error->consumed         = '"Consumed" must be number';
+$lang->task->error->consumedSmall    = '"Consumed" must be more than consumed before';
+$lang->task->error->consumedThisTime = 'Please input "hours"';
+$lang->task->error->left             = 'Please input "left"';
 
 /* Report. */
 $lang->task->report = new stdclass();

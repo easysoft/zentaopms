@@ -427,7 +427,8 @@ class taskModel extends model
         {
             if($record->dates[$id])
             {
-                if(!$record->consumed[$id]) die(js::alert('ii')); 
+                if(!$record->consumed[$id]) die(js::alert($this->lang->task->error->consumedThisTime));
+                if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
                 $estimates[$id]->date     = $record->dates[$id];
                 $estimates[$id]->task     = $taskID;
                 $estimates[$id]->consumed = $record->consumed[$id];
@@ -438,6 +439,7 @@ class taskModel extends model
 
         $consumed = 0;
         $left     = $task->left;
+        $this->loadModel('action');
         foreach($estimates as $estimate)
         {
             $consumed += $estimate->consumed;
@@ -447,7 +449,7 @@ class taskModel extends model
                 ->autoCheck()
                 ->exec();
             $estimateID = $this->dao->lastInsertID();
-            $actionID   = $this->loadModel('action')->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
+            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
         }
 
         if($left == 0)
