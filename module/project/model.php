@@ -213,6 +213,7 @@ class projectModel extends model
             ->stripTags('name, code, team')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedVersion', $this->config->version)
+            ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->remove('products, workDays, delta')
             ->get();
@@ -280,6 +281,7 @@ class projectModel extends model
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->remove('products')
             ->get();
