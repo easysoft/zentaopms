@@ -32,7 +32,7 @@
       common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'button', '', 'hiddenwin');
       if($todo->account == $app->user->account)
       {
-          common::printIcon('todo', 'import2Today',   "todoID=$todo->id");
+          if($type != 'today') common::printIcon('todo', 'import2Today',   "todoID=$todo->id");
           common::printIcon('todo', 'delete', "todoID=$todo->id", '', 'button', '', 'hiddenwin');
       }
       ?>
