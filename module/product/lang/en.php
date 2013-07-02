@@ -20,6 +20,9 @@ $lang->product->read   = "Info";
 $lang->product->delete = "Delete";
 $lang->product->close  = "Close";
 $lang->product->select = '--select product--';
+$lang->product->mine   = 'I charge : ';
+$lang->product->other  = 'Other : ';
+$lang->product->closed = 'Closed&raquo;';
 
 $lang->product->basicInfo = 'Basic info';
 $lang->product->otherInfo = 'Other info';

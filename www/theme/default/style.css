@@ -260,6 +260,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------COLOR SETTING----------------------------*/
 .white   {color:white;}
+.black   {color:black;}
 .red     {color:red;}
 .blue    {color:blue}
 .yellow  {color:yellow;}
@@ -323,8 +324,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 #dropMenu, #dropMenu ul {background:#f1f1f1; height:auto}
 #dropMenu ul {line-height:24px; max-height:320px; overflow-y:auto}
-#dropMenu li {float:none;}
+#dropMenu li {float:none; padding-left:12px}
 #dropMenu, #dropMenu li {text-align: left}
+#dropMenu li a:hover {font-weight: bold}
+#dropMenu li a.mine   {color:#1a59b6}
+#dropMenu li a.other, #dropMenu li a.closed, #dropMenu #more{color:gray; font-size:12px}
 
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 

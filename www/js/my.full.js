@@ -138,6 +138,8 @@ var showMenu = 0; //Showing or hiding drop menu.
 function showDropMenu(objectType, objectID, module, method, extra)
 {
     if(showMenu == 1) { showMenu = 0; return $("#dropMenu").hide();};
+    $('#wrap').click(function(){return $("#dropMenu").hide();});
+
     $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
     var offset = $('#currentItem').offset();
     $("#dropMenu").css({ top:offset.top + $('#currentItem').height() + "px", left:offset.left });
@@ -172,14 +174,14 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
 }
 
 /**
- * Show more items. 
+ * Show or hide more items. 
  * 
  * @access public
  * @return void
  */
-function showMore()
+function switchMore()
 {
-    $('#moreMenu').removeClass('hidden');
+    $('#moreMenu').toggle(0, function(){$('#moreMenu').css('width', $('#defaultMenu').width())});
     $('#search').focus();
 }
 
