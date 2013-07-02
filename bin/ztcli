@@ -11,7 +11,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+error_reporting(E_ALL ^ E_NOTICE);
 define('IN_SHELL', true);
 
 /* Judge the args. */
