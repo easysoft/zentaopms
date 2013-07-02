@@ -99,7 +99,7 @@ $lang->testcase->legendComment      = 'Comment';
 $lang->testcase->legendProduct      = 'Product & module';
 
 $lang->testcase->confirmDelete = 'Are you sure to delete this case?';
-$lang->testcase->same          = 'The same as above';
+$lang->testcase->same          = 'Ditto';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
