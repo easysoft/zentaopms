@@ -918,7 +918,7 @@ class task extends control
 
             /* Get users and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $projects = $this->loadModel('project')->getPairs('all');
+            $projects = $this->loadModel('project')->getPairs('all|nocode');
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();

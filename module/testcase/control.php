@@ -582,7 +582,7 @@ class testcase extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs();
+            $products = $this->loadModel('product')->getPairs('nocode');
 
             /* Get related objects id lists. */
             $relatedModuleIdList = array();

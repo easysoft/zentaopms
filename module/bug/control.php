@@ -972,8 +972,8 @@ class bug extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs();
-            $projects = $this->loadModel('project')->getPairs('all');
+            $products = $this->loadModel('product')->getPairs('nocode');
+            $projects = $this->loadModel('project')->getPairs('all|nocode');
 
             /* Get related objects id lists. */
             $relatedModuleIdList = array();
