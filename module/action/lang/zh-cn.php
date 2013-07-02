@@ -55,7 +55,7 @@ $lang->action->objectTypes['testtask']    = '测试任务';
 $lang->action->objectTypes['user']        = '用户';
 $lang->action->objectTypes['doc']         = '文档';
 $lang->action->objectTypes['doclib']      = '文档库';
-$lang->action->objectTypes['todo']        = 'TODO';
+$lang->action->objectTypes['todo']        = '待办';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -159,7 +159,7 @@ $lang->action->search->objectTypeList['testtask']    = '测试任务';
 $lang->action->search->objectTypeList['user']        = '用户'; 
 $lang->action->search->objectTypeList['doc']         = '文档';
 $lang->action->search->objectTypeList['doclib']      = '文档库';   
-$lang->action->search->objectTypeList['todo']        = 'TODO'; 
+$lang->action->search->objectTypeList['todo']        = '待办'; 
 $lang->action->search->objectTypeList['build']       = 'Build';  
 $lang->action->search->objectTypeList['release']     = '发布';    
 $lang->action->search->objectTypeList['productplan'] = '计划';        

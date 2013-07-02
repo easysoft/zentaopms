@@ -9,19 +9,19 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->todo->common       = 'TODO';
-$lang->todo->index        = "todo一览";
+$lang->todo->common       = '待办';
+$lang->todo->index        = "待办一览";
 $lang->todo->create       = "新增";
 $lang->todo->batchCreate  = "批量添加";
-$lang->todo->edit         = "更新TODO";
+$lang->todo->edit         = "更新待办";
 $lang->todo->batchEdit    = "批量编辑";
-$lang->todo->view         = "TODO详情";
+$lang->todo->view         = "待办详情";
 $lang->todo->viewAB       = "详情";
 $lang->todo->finish       = "完成";
 $lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "导出";
-$lang->todo->delete       = "删除TODO";
-$lang->todo->browse       = "浏览TODO";
+$lang->todo->delete       = "删除待办";
+$lang->todo->browse       = "浏览待办";
 $lang->todo->import2Today = "导入到今天";
 $lang->todo->changeStatus = "更改";
 
@@ -59,7 +59,7 @@ $lang->todo->typeList['custom'] = '自定义';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = '项目任务';
 
-$lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
+$lang->todo->confirmDelete  = "您确定要删除这个待办吗？";
 $lang->todo->successMarked  = "成功切换状态！";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';

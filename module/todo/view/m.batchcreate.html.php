@@ -16,7 +16,7 @@
 <?php echo html::hidden("date", date('Y-m-d'));?>
 <?php for($i = 1; $i <= 5; $i++):?>
 <?php
-echo html::input("names[$i]", '', "placeholder='TODO{$lang->todo->name}'");
+echo html::input("names[$i]", '', "placeholder='{$lang->todo->common}{$lang->todo->name}'");
 echo html::hidden("types[$i]", 'custom');
 echo html::hidden("pris[$i]", 3);
 echo html::hidden("descs[$i]", '');
