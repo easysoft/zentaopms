@@ -334,7 +334,7 @@ class todo extends control
         $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
         $today      = date::today();
         $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todoIDList)->exec();
-        die(js::locate($this->session->todoList));
+        $this->locate($this->session->todoList);
     }
 
     /**

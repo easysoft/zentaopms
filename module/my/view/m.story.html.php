@@ -27,18 +27,16 @@
     <h1 onClick="showDetail('story', <?php echo $story->id;?>)"><?php echo $story->title;?></h1>
 
     <div id='item<?php echo $story->id;?>'></div>
-    <div data-role='navbar'>
-      <ul>
-        <?php
-        if(!$story->deleted)
-        {
-            common::printIcon('story', 'review',     "storyID=$story->id", $story);
-            common::printIcon('story', 'close',      "storyID=$story->id", $story);
-            common::printIcon('story', 'activate',  "storyID=$story->id", $story);
-            common::printIcon('story', 'delete', "storyID=$story->id", '', '', '', 'hiddenwin');
-        }
-        ?>
-      </ul>
+    <div data-role='content' class='a-center'>
+      <?php
+      if(!$story->deleted)
+      {
+          common::printIcon('story', 'review',     "storyID=$story->id", $story);
+          common::printIcon('story', 'close',      "storyID=$story->id", $story);
+          common::printIcon('story', 'activate',  "storyID=$story->id", $story);
+          common::printIcon('story', 'delete', "storyID=$story->id", '', '', '', 'hiddenwin');
+      }
+      ?>
     </div>
   </div>
 </div>
