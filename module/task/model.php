@@ -447,7 +447,7 @@ class taskModel extends model
                 ->autoCheck()
                 ->exec();
             $estimateID = $this->dao->lastInsertID();
-            $actionID   = $this->loadModel('action')->create('task', $taskID, 'RecordEstimate', '', $estimate->consumed);
+            $actionID   = $this->loadModel('action')->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
         }
 
         if($left == 0)

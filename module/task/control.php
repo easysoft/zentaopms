@@ -501,7 +501,7 @@ class task extends control
             $changes = $this->task->updateEstimate($estimateID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate');
+            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
             $url = $this->session->estimateList ? $this->session->estimateList : inlink('record', "taskID={$estimate->task}");
