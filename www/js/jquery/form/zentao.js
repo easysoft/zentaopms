@@ -49,13 +49,13 @@ $.extend(
                         var errorLabel =  key + 'Label';
 
                         /* Create the error message. */
-                        var errorMSG = '<label id="'  + errorLabel + '" class="text-error">';
+                        var errorMSG = '<div id="'  + errorLabel + '" class="text-error">';
                         errorMSG += $.type(value) == 'string' ? value : value.join(';');
-                        errorMSG += '</label>';
+                        errorMSG += '</div>';
 
                         /* Append error message, set style and set the focus events. */
                         $('#' + errorLabel).remove(); 
-                        $(errorOBJ).after(errorMSG);
+                        $(errorOBJ).parent().append(errorMSG);
                         $(errorOBJ).css('margin-bottom', 0);
                         $(errorOBJ).css('border-color','#953B39')
                         $(errorOBJ).focus(function()
@@ -63,6 +63,7 @@ $.extend(
                             $(this).removeAttr('style')
                             $('#' + errorLabel).remove(); 
                         });
+                        setTimeout(function(){$('#' + errorLabel).remove();}, 5000);
                     })
                 }
             },
