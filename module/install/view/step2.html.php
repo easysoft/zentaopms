@@ -19,10 +19,6 @@
       <th class='a-left'><?php echo $lang->install->value?></th>
     </tr>
     <tr>
-      <th><?php echo $lang->install->requestType;?></th>
-      <td><?php echo html::select('requestType', $lang->install->requestTypes, 'GET', 'class=select-3');?></td>
-    </tr>
-    <tr>
       <th><?php echo $lang->install->defaultLang;?></th>
       <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), 'class=select-3');?></td>
     </tr>
@@ -56,7 +52,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::hidden('requestType', 'GET');?></td>
     </tr>
   </table>
 </form>
