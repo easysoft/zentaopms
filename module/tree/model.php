@@ -646,7 +646,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function createWebappLink($module, $extra)
+    public function createWebappLink($type, $module, $extra)
     {
         $linkHtml = html::a(helper::createLink('webapp', 'index', "module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
