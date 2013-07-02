@@ -1353,6 +1353,8 @@ class project extends control
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+        unset($this->lang->story->statusList['draft']);
+        $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
