@@ -121,7 +121,7 @@ class buildModel extends model
             ->join('bugs', ',')
             ->remove('allchecker')
             ->add('project', (int)$projectID)->get();
-        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name','unique')->exec();
+        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -147,7 +147,7 @@ class buildModel extends model
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
             ->where('id')->eq((int)$buildID)
-            ->check('name','unique', "id != $buildID")
+            ->check('name','unique', "id != $buildID AND product = {$build->product}")
             ->exec();
         if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }

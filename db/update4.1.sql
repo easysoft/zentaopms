@@ -5,3 +5,5 @@ ALTER TABLE  `zt_product` DROP  `order`;
 ALTER TABLE  `zt_project` DROP  `order`;
 
 ALTER TABLE `zt_story` CHANGE `reviewedBy` `reviewedBy` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE `zt_build` DROP INDEX `name`;
