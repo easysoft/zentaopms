@@ -15,7 +15,7 @@ include '../../common/view/m.header.lite.html.php';
 </div>
 <div data-role="content" >
 <form method='post' target='hiddenwin'>
-  <table class='table-1'> 
+  <table align='center'> 
     <tr>
       <td class='rowhead'><?php echo $lang->user->account;?>：</td>  
       <td><input type='text' name='account' id='account' /></td>
