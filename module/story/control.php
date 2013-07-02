@@ -498,6 +498,7 @@ class story extends control
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;
+        $this->view->projects   = $this->loadModel('project')->getPairs('nocode');
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;
