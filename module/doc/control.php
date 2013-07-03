@@ -357,7 +357,6 @@ class doc extends control
 
         $this->view->doc              = $doc;
         $this->view->libID            = $libID;
-        $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }
@@ -395,7 +394,7 @@ class doc extends control
         $this->view->doc        = $doc;
         $this->view->lib        = $lib;
         $this->view->actions    = $this->loadModel('action')->getList('doc', $docID);
-        $this->view->users      = $this->user->getPairs('noclosed,nodeleted,noletter');
+        $this->view->users      = $this->user->getPairs('noclosed,noletter');
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->keTableCSS = $this->doc->extractKETableCSS($doc->content);
 
