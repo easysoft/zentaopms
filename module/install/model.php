@@ -135,7 +135,7 @@ class installModel extends model
     {
         if(preg_match('/WIN/i', PHP_OS))
         {
-            $result['path']     = session_save_path();
+            $result['path']     = preg_replace("/\d;/", '', session_save_path());
             $result['exists']   = is_dir($result['path']);
             $result['writable'] = is_writable($result['path']);
             return $result;
@@ -153,7 +153,7 @@ class installModel extends model
     {
         if(preg_match('/WIN/i', PHP_OS))
         {
-            $sessionSavePath = session_save_path();
+            $sessionSavePath = preg_replace("/\d;/", '', session_save_path());
             return $result   = (is_dir($sessionSavePath) and is_writable($sessionSavePath)) ? 'ok' : 'fail'; 
         }
         return 'ok';
