@@ -437,6 +437,8 @@ class taskModel extends model
             }
         }
 
+        if(empty($estimates)) return;
+
         $consumed = 0;
         $left     = $task->left;
         $this->loadModel('action');

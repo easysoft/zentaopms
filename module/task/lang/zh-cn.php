@@ -142,6 +142,7 @@ $lang->task->delayWarning          = " <strong class='delayed f-14px'> 延期%s�
 $lang->task->remindBug             = "该任务为Bug转化得到，是否更新Bug:%s ?";
 $lang->task->confirmChangeProject  = '修改项目会导致相应的所属模块、相关需求和指派人发生变化，确定吗？';
 $lang->task->confirmFinish         = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';
+$lang->task->confirmRecord         = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumed         = '"已经消耗"必须为数字';

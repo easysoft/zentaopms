@@ -12,8 +12,8 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('confirmFinish', $lang->task->confirmFinish);?>
-<form method='post' target='hiddenwin'>
+<?php js::set('confirmRecord', $lang->task->confirmRecord);?>
+<form id="recordForm" method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
@@ -58,12 +58,12 @@
       <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
       <td><?php echo html::input("dates[$i]", '', "class='text-6 a-center date'");?></td>
       <td><?php echo html::input("consumed[$i]", '', "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("left[$i]", '', "class='text-1 a-center'");?></td>
+      <td><?php echo html::input("left[$i]", '', "class='text-1 a-center left'");?></td>
       <td class="a-left"><?php echo html::textarea("work[$i]", '', "class='text-1' rows='1'");?></td>
     </tr>
     <?php endfor;?>
     <tr>
-      <td colspan='6' class='a-center'><?php echo html::submitButton() . html::backButton(); ?></td>
+      <td colspan='6' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
   <?php endif;?>
