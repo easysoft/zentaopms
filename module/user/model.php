@@ -60,10 +60,11 @@ class userModel extends model
      * Get the account=>relaname pairs.
      * 
      * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest|pofirst|devfirst|qafirst|pmfirst, can be sets of theme
+     * @param  string $usersToAppended  account1,account2 
      * @access public
      * @return array
      */
-    public function getPairs($params = '')
+    public function getPairs($params = '', $usersToAppended = '')
     {
         /* Set the query fields and orderBy condition.
          *
@@ -84,6 +85,7 @@ class userModel extends model
             ->beginIF(strpos($params, 'nodeleted') !== false)->where('deleted')->eq(0)->fi()
             ->orderBy($orderBy)
             ->fetchAll('account');
+        if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
 
         /* Cycle the user records to append the first letter of his account. */
         foreach($users as $account => $user)
@@ -118,24 +120,6 @@ class userModel extends model
         return $commiters;
     }
     
-    /**
-     * Appened deleted users to the user list.
-     * 
-     * @param  array    $users 
-     * @param  string   $deleteds   the deleted users, can be a list
-     * @access public
-     * @return array new user lists with deleted users.
-     */
-    public function appendDeleted($users, $deleteds = '')
-    {
-        $deleteds = explode(',', $deleteds);
-        foreach($deleteds as $deleted)
-        {
-            if(!isset($users[$deleted])) $users[$deleted] = $deleted;
-        }
-        return $users;
-    }
-
     /**
      * Get user list with email and real name.
      * 
