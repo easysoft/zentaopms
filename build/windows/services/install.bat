@@ -7,6 +7,9 @@ if %ERRORLEVEL% == 0 goto normalStart
 
 :notRootDirectory
   echo "Please extract the xampp to root directory, example:D:\\xampp"
+
+  del .\null
+
   pause 
   exit
 
@@ -23,5 +26,7 @@ if %ERRORLEVEL% == 0 goto normalStart
   ..\mysql\bin\mysqld.exe --install mysqlzt
   echo starting mysql
   net start mysqlzt
+
+  del .\null
 
   pause
