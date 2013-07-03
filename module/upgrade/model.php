@@ -147,6 +147,23 @@ class upgradeModel extends model
      */
     public function updateCompany()
     {
+        /* Get user defined constants. */
+        $constants     = get_defined_constants(true);
+        $userConstants = $constants['user'];
+
+        /* Update tables. */
+        foreach($userConstants as $key => $value)
+        {
+            if(strpos($key, 'TABLE') === false) continue;
+            if($key == 'TABLE_COMPANY') continue;
+
+            $table  = $value;
+            $result = $this->dbh->query("SHOW TABLES LIKE '$table'");
+            if($result->rowCount() > 0)
+            {
+                $this->dbh->query("UPDATE $table SET company = '{$this->app->company->id}'");
+            }
+        }
     }
 
     /**
@@ -255,6 +272,34 @@ class upgradeModel extends model
             $build->desc = nl2br($build->desc);
             $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($build->id)->exec();
         }
+    }
+
+    public function deleteCompany()
+    {
+        /* Delete priv that is not in this company. Prevent conflict when delete company's field.*/
+        $this->dao->delete()->from(TABLE_GROUPRIV)->where('company')->ne($this->app->company->id)->exec();
+        $this->dbh->exec("ALTER TABLE `zt_groupPriv` DROP `company`;");
+
+        /* Delete version and sn that don's conform to the rules. Prevent conflict when delete company's field.*/
+        $version = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('`key`')->eq('version')
+            ->andWhere('company')->eq(0)
+            ->andWhere('owner')->eq('system')
+            ->andWhere('module')->eq('common')
+            ->andWhere('section')->eq('global')
+            ->fetch();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('id')->ne($version->id)->exec();
+
+        $sn = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('`key`')->eq('sn')
+            ->andWhere('company')->eq($this->app->company->id)
+            ->andWhere('owner')->eq('system')
+            ->andWhere('module')->eq('common')
+            ->andWhere('section')->eq('global')
+            ->fetch();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('sn')->andWhere('id')->ne($sn->id)->exec();
+
+        $this->dbh->exec("ALTER TABLE `zt_config` DROP `company`;");
     }
 
     /**
@@ -415,6 +460,7 @@ class upgradeModel extends model
                 ->andWhere('method')->eq('recordEstimate')
                 ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('recordEstimate')
@@ -426,6 +472,7 @@ class upgradeModel extends model
                 ->andWhere('method')->eq('editEstimate')
                 ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('editEstimate')
@@ -437,6 +484,7 @@ class upgradeModel extends model
                 ->andWhere('method')->eq('deleteEstimate')
                 ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('deleteEstimate')
@@ -633,6 +681,7 @@ class upgradeModel extends model
         foreach($oldPriv as $item)
         {
             $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($item->company)
                 ->set('module')->eq('company')
                 ->set('method')->eq('view')
                 ->set('`group`')->eq($item->group)
@@ -647,6 +696,7 @@ class upgradeModel extends model
         foreach($oldPriv as $item)
         {
             $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($item->company)
                 ->set('module')->eq('todo')
                 ->set('method')->eq('batchFinish')
                 ->set('`group`')->eq($item->group)
