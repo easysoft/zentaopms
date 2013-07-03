@@ -665,6 +665,10 @@ class commonModel extends model
         {
             $orderBy = explode('limit', $orderBy[1]);
             $orderBy = str_replace('t1.', '', $orderBy[0]);
+
+            /* Fix bug #448. I don't know why too. */
+            if($orderBy == 'yes') $orderBy = '';
+
             $this->session->set($objectType . 'OrderBy', $orderBy);
         }
         else

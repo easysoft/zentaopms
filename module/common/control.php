@@ -178,7 +178,8 @@ class common extends control
         }
         else
         {
-            $orderBy   = $fieldName . '_' . 'asc';
+            
+            $orderBy   = "`" . trim($fieldName, '`') . "`" . '_' . 'asc';
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
