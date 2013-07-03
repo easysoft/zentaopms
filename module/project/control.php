@@ -895,10 +895,10 @@ class project extends control
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
-        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed,nodeleted,pofirst');
-        $this->view->pmUsers        = $this->user->getPairs('noclosed,nodeleted,pmfirst');
-        $this->view->qdUsers        = $this->user->getPairs('noclosed,nodeleted,qdfirst');
-        $this->view->rdUsers        = $this->user->getPairs('noclosed,nodeleted,devfirst');
+        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed,nodeleted,pofirst', $project->PO);
+        $this->view->pmUsers        = $this->user->getPairs('noclosed,nodeleted,pmfirst',  $project->PM);
+        $this->view->qdUsers        = $this->user->getPairs('noclosed,nodeleted,qdfirst',  $project->QD);
+        $this->view->rdUsers        = $this->user->getPairs('noclosed,nodeleted,devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $this->loadModel('product')->getPairs();
         $this->view->linkedProducts = $linkedProducts;
