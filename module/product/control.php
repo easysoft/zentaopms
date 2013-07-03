@@ -215,9 +215,9 @@ class product extends control
         $this->view->position[] = $this->lang->product->edit;
         $this->view->product    = $product;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst');
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst',  $product->PO);
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
 
         $this->display();
     }
