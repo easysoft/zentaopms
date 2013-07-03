@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post' target='hiddenwin'>
+<?php js::set('confirmRecord', $lang->task->confirmRecord);?>
+<form method='post' target='hiddenwin' <?php if($estimate->isLast) echo "onsubmit='return confirmLeft();'"?>>
   <table class='table-1 a-left'> 
     <caption><?php echo $lang->task->editEstimate;?></caption>
     <tr>

@@ -13,8 +13,5 @@ $("#recordForm").submit(function()
     {
         if($(this).val() !== '') left = $(this).val();
     });
-    if(left === '0')
-    {
-        return confirm(confirmRecord);
-    }
+    if(left === '0') return confirm(confirmRecord);
 });
