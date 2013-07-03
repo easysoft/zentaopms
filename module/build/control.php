@@ -47,7 +47,7 @@ class build extends control
         $this->view->title     = $this->lang->build->create;
         $this->view->products  = $this->project->getProducts($projectID);
         $this->view->projectID = $projectID;
-        $this->view->users     = $this->user->getPairs();
+        $this->view->users     = $this->user->getPairs('nodeleted');
         $this->view->stories   = $stories;
         $this->view->bugs      = $bugs;
         $this->view->orderBy   = $orderBy;
@@ -92,8 +92,8 @@ class build extends control
         $this->view->title      = $this->lang->build->edit;
         $this->view->position[] = $this->lang->build->edit;
         $this->view->products   = $this->project->getProducts($build->project);
-        $this->view->users      = $this->loadModel('user')->getPairs();
         $this->view->build      = $build;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
         $this->view->stories    = $stories;
         $this->view->bugs       = $bugs;
         $this->view->orderBy    = $orderBy;
