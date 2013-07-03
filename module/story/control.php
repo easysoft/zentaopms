@@ -188,7 +188,7 @@ class story extends control
             die(js::locate($this->createLink('product', 'browse', "productID=$productID"), 'parent'));
         }
 
-        /* Set products, users and module. */
+        /* Set products and module. */
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
@@ -237,7 +237,6 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
-        $users    = $this->user->getPairs('nodeleted|pdfirst');
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story');
 
         /* Set menu. */
@@ -248,7 +247,6 @@ class story extends control
         $this->view->product          = $product;
         $this->view->products         = $products;
         $this->view->story            = $story;
-        $this->view->users            = $users;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id);
         $this->view->actions          = $this->action->getList('story', $storyID);
@@ -280,10 +278,11 @@ class story extends control
         $this->commonAction($storyID);
   
         /* Assign. */
+        $story = $this->story->getById($storyID, 0, true);
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
-        $this->view->users      = $this->user->appendDeleted($this->user->getPairs('nodeleted|pofirst'), $this->view->story->assignedTo);
-        $this->view->story      = $this->story->getById($storyID, 0, true);
+        $this->view->story      = $story;
+        $this->view->users      = $this->user->getPairs('nodeleted|pofirst', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->display();
     }
 
@@ -428,6 +427,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->story->change . $this->lang->colon . $this->view->story->title;
+        $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->display();
     }
@@ -457,6 +457,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->story->activate . $this->lang->colon . $this->view->story->title;
+        $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->closedBy);
         $this->view->position[] = $this->lang->story->activate;
         $this->display();
     }
@@ -573,7 +574,7 @@ class story extends control
         $this->view->product = $product;
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted', "$story->lastEditedBy,$story->openedBy");
 
         /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);
@@ -687,7 +688,6 @@ class story extends control
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->position[]       = $this->lang->story->common;
             $this->view->position[]       = $this->lang->story->batchClose;
-            $this->view->users            = $this->loadModel('user')->getPairs('nodeleted');
             $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
             $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
             $this->view->productID        = $productID;
