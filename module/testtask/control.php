@@ -296,7 +296,7 @@ class testtask extends control
         $this->view->task      = $task;
         $this->view->projects  = $this->product->getProjectPairs($productID);
         $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->view->users     = $this->loadModel('user')->getPairs();
+        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
 
         $this->display();
     }
