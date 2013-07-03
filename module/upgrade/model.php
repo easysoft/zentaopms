@@ -85,6 +85,10 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('4.0.1'));
                 $this->processFlow();
                 $this->addPriv4_0_1();
+            case '4_1':
+                $this->execSQL($this->getUpgradeFile('4.1'));
+                $this->addPriv4_1();
+                $this->processTaskFinish();
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
 
@@ -133,6 +137,7 @@ class upgradeModel extends model
         case '4_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta2'));
         case '4_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.0'));
         case '4_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.1'));
+        case '4_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -702,6 +707,50 @@ class upgradeModel extends model
                 ->set('`group`')->eq($item->group)
                 ->exec();
         }
+
+        return true;
+    }
+
+    /**
+     * Add priv for version 4.1 
+     * 
+     * @access public
+     * @return bool 
+     */
+    public function addPriv4_1()
+    {
+        $oldPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('tree')
+            ->andWhere('method')->eq('browse')
+            ->fetchAll();
+
+        foreach($oldPriv as $item)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($item->company)
+                ->set('module')->eq('tree')
+                ->set('method')->eq('browseTask')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Process finishedBy and finishedDate of task.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function processTaskFinish()
+    {
+        $this->dao->update(TABLE_TASK)
+            ->set('finishedBy = lastEditedBy')
+            ->set('finishedDate = lastEditedDate')
+            ->where('status')->in('done,closed')
+            ->andWhere('finishedBy')->eq('')
+            ->exec();
 
         return true;
     }
