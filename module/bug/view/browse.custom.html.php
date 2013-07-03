@@ -10,10 +10,10 @@
       </nobr>
     </td>
     <td class='divider'></td>
+    <td>
       <form method='post' action='<?php echo $this->inLink('batchEdit', "from=bugBrowse&productID=$productID&orderBy=$orderBy");?>'>
       <?php include './buglist.custom.html.php'?>
       </form>
-    <td>
     </td>
   </tr>
 </table>

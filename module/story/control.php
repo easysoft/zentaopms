@@ -448,6 +448,8 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
             $this->sendMail($storyID, $actionID);
+
+            if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
