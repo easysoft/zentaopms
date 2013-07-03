@@ -58,7 +58,7 @@ class task extends control
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted|noletter');
 
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $project->id);
@@ -141,7 +141,6 @@ class task extends control
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
 
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $project->id);
@@ -188,7 +187,6 @@ class task extends control
         $this->view->task    = $this->loadModel('task')->getByID($taskID);
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter'); 
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
@@ -250,10 +248,11 @@ class task extends control
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
 
+        if(!isset($members[$this->view->task->assignedTo])) $members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         $this->view->title      = $this->lang->task->edit;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->members    = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noletter', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();
     }
@@ -459,6 +458,7 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[] = $this->lang->task->start;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
         $this->display();
     }
     
@@ -587,6 +587,7 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noletter', $this->view->task->openedBy); 
         $this->view->date       = strftime("%Y-%m-%d %X", strtotime('now'));
        
         $this->display();
@@ -620,6 +621,7 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
         
         $this->display();
 
@@ -687,6 +689,7 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
         $this->view->position[] = $this->lang->task->cancel;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
         
         $this->display();
     }
@@ -718,6 +721,7 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->display();
