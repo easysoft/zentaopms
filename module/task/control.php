@@ -448,7 +448,8 @@ class task extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('task', $taskID, 'Started', $this->post->comment);
+                $act = $this->post->left == 0 ? 'Finished' : 'Started';
+                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }

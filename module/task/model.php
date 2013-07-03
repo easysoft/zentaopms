@@ -384,12 +384,21 @@ class taskModel extends model
         if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
         $now  = helper::now();
         $task = fixer::input('post')
-            ->setDefault('status', 'doing')
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now) 
             ->remove('comment')->get();
+        if($this->post->left == 0)
+        {
+            $task->status       = 'done'; 
+            $task->finishedBy   = $this->app->user->account;
+            $task->finishedDate = helper::now();
+        }
+        else
+        {
+            $task->status = 'doing';
+        }
         $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)
