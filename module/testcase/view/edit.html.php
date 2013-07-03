@@ -120,10 +120,10 @@
         <table class='table-1 a-left'>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
-            <td><?php echo $case->openedBy . $lang->at . $case->openedDate;?></td>
+            <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->lblLastEdited;?></td>
-            <td><?php if($case->lastEditedBy) echo $case->lastEditedBy . $lang->at . $case->lastEditedDate;?></td>
+            <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>
           </tr>
         </table>
       </fieldset>
