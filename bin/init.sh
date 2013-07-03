@@ -28,11 +28,13 @@ if [ ! -n "$2" ]; then
 fi 
 
 pmsRoot=`echo "$pmsRoot" | sed 's/[/]$//g'`
-if [ "`cat $basePath/../config/my.php | grep -c 'PATH_INFO'`" != 0 ];then
+cat $basePath/../config/my.php |awk '$1!~/^\/\//&& $1~/\$config\->requestType/{requestType = $0} END{print requestType}'| grep -c 'PATH_INFO' > ./init.tmp
+if [ "`cat ./init.tmp`" != 0 ];then
   requestType='PATH_INFO';
 else
   requestType='GET';
 fi
+rm ./init.tmp
 
 # ztcli
 ztcli="$phpcli $basePath/ztcli \$*"
