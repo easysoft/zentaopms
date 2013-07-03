@@ -460,7 +460,7 @@ class bug extends control
         $this->view->projects         = $this->product->getProjectPairs($bug->product);
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
-        $this->view->users            = $this->user->appendDeleted($this->user->getPairs('nodeleted'), "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy");
+        $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
         $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
@@ -573,7 +573,7 @@ class bug extends control
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
         $this->view->position[] = $this->lang->bug->assignedTo;
 
-        $this->view->users   = $this->user->getPairs('nodeleted');
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
         $this->view->bug     = $bug;
         $this->view->bugID   = $bugID;
         $this->view->actions = $this->action->getList('bug', $bugID);
@@ -608,7 +608,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->confirmBug;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted');
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
@@ -622,7 +622,6 @@ class bug extends control
      */
     public function resolve($bugID)
     {
-        $this->view->users = $this->user->getPairs('nodeleted');
         if(!empty($_POST))
         {
             $this->bug->resolve($bugID);
@@ -650,6 +649,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->resolve;
 
         $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->openedBy);
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
@@ -664,8 +664,6 @@ class bug extends control
      */
     public function activate($bugID)
     {
-        $this->view->users = $this->user->getPairs('nodeleted');
-
         if(!empty($_POST))
         {
             $this->bug->activate($bugID);
@@ -686,6 +684,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->activate;
 
         $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->actions = $this->action->getList('bug', $bugID);
 
@@ -701,7 +700,6 @@ class bug extends control
      */
     public function close($bugID)
     {
-        $this->view->users   = $this->user->getPairs('noletter');
         if(!empty($_POST))
         {
             $this->bug->close($bugID);
@@ -721,6 +719,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->close;
 
         $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('noletter');
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
