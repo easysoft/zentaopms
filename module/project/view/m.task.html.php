@@ -3,7 +3,7 @@
 <?php $this->session->set('taskType', '');?>
 <?php foreach($tasks as $task):?>
 <div  data-role="collapsible-set">
-  <div data-role="collapsible" data-collapsed="<?php echo $this->session->taskID == $task->id ? 'false' : 'true'?>">
+  <div data-role="collapsible" data-collapsed="<?php echo $this->session->taskID == $task->id ? 'false' : 'true'?>" class='collapsible'>
     <?php if($this->session->taskID == $task->id) echo "<script>showDetail('task', $task->id);</script>";?>
     <h1 onClick="showDetail('task', <?php echo $task->id;?>)"><?php echo $task->name;?></h1>
     <div><?php echo $task->desc?></div>

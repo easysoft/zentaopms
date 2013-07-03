@@ -212,7 +212,23 @@ function showDetail(objectType, objectID)
     {
         $('#item' + objectID).html(data);
         $("div:jqmData(role='header')").next().css('margin-top', '5px');
+        $.mobile.loading("hide");
     });      
+}
+
+/**
+ * Set loading icon. 
+ * 
+ * @access public
+ * @return void
+ */
+function setLoadingIcon()
+{
+    $('div.collapsible').bind('expand', 
+    function()
+    {
+        $.mobile.loading("show", {text:'', textVisible:false, theme:'b', textonly:false, html:''}); 
+    });
 }
 
 /* Ping the server every some minutes to keep the session. */
@@ -226,6 +242,7 @@ $(document).ready(function()
     setPlaceholder();
 
     toggleSearch();
+    setLoadingIcon();
 
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
     $(document).pjax("a[target!='hiddenwin']", '#main');

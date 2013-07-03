@@ -3,7 +3,7 @@
 <?php foreach($stories as $story):?>
 <?php if($story->status == 'closed') continue;?>
 <div  data-role="collapsible-set">
-  <div data-role="collapsible" data-collapsed="<?php echo $this->session->storyID == $story->id ? 'false' : 'true'?>">
+  <div data-role="collapsible" data-collapsed="<?php echo $this->session->storyID == $story->id ? 'false' : 'true'?>" class='collapsible'>
     <?php if($this->session->storyID == $story->id) echo "<script>showDetail('story', $story->id);</script>";?>
     <h1 onClick="showDetail('story', <?php echo $story->id;?>)"><?php echo $story->title;?></h1>
 
