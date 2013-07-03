@@ -231,6 +231,20 @@ function setLoadingIcon()
     });
 }
 
+/**
+ * Remove anchor from the url.
+ * 
+ * @param  string $url 
+ * @access public
+ * @return string
+ */
+function removeAnchor(url)
+{
+    pos = url.indexOf('#');
+    if(pos > 0) return url.substring(0, pos);
+    return url;
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

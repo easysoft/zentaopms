@@ -17,16 +17,16 @@ include '../../common/view/m.header.lite.html.php';
 <form method='post' target='hiddenwin'>
   <table align='center'> 
     <tr>
-      <td class='rowhead'><?php echo $lang->user->account;?>：</td>  
-      <td><input type='text' name='account' id='account' /></td>
+      <td><input type='text' name='account' id='account' placeholder='<?php echo $lang->user->account?>' /></td>
     </tr>  
     <tr>
-      <td class='rowhead'><?php echo $lang->user->password;?>：</td>  
-      <td><input type='password' name='password' /></td>
+      <td><input type='password' name='password' placeholder='<?php echo $lang->user->password?>' /></td>
     </tr>
-    <tr><td></td><td id='keeplogin'><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td></tr>
     <tr>
-      <td colspan='2' align='center'>
+      <td><?php echo html::select('lang', $config->langs, $this->app->getClientLang(), 'class=select-2 onchange=selectLang(this.value)');?></td>
+    </tr>
+    <tr>
+      <td align='center'>
       <?php 
       echo html::submitButton($lang->login, "data-inline='true' data-theme='b'");
       if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module), '', "data-inline='true'");
