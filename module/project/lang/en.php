@@ -54,6 +54,8 @@ $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";
 $lang->project->all           = 'All';
 $lang->project->typeDesc      = 'No burndown for waterfall, no story in OPS';
+$lang->project->mine          = 'I charge : ';
+$lang->project->other         = 'Other : ';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
