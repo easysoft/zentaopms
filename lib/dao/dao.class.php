@@ -382,7 +382,7 @@ class dao
     }
 
     /**
-     * Process the sql, replace the table, fields and add the company condition.
+     * Process the sql, replace the table, fields.
      * 
      * @access private
      * @return string the sql string after process.
