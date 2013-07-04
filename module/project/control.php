@@ -41,7 +41,7 @@ class project extends control
     {
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
-        $this->commonAction($projectID);
+        if($this->projects) $this->commonAction($projectID);
         $this->session->set('projectList', $this->app->getURI(true));
 
         $this->app->loadLang('my');

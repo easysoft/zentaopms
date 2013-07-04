@@ -241,8 +241,8 @@ class commonModel extends model
         $task    = $this->lang->my->menu->task;
         $story   = $this->lang->my->menu->story;
         $bug     = $this->lang->my->menu->bug;
-        $project = $this->lang->menu->project . '|locate=no&&status=doing&projectID=1';
-        $product = $this->lang->menu->product . '|locate=no&productID=1';
+        $project = $this->lang->menu->project . '|locate=no&&status=doing';
+        $product = $this->lang->menu->product . '|locate=no';
 
         if($role == 'dev' or $role == 'td' or $role == 'pm')
         {
