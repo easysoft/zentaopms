@@ -52,3 +52,9 @@
 .w-200px {width:200px}
 
 .ui-select .ui-btn-text{text-align:left}
+
+.ui-btn-left, .ui-btn-right, .ui-input-clear, .ui-btn-inline, .ui-grid-a .ui-btn, .ui-grid-b .ui-btn, .ui-grid-c .ui-btn, .ui-grid-d .ui-btn, .ui-grid-e .ui-btn, .ui-grid-solo .ui-btn
+{
+  margin-left: 2px;
+  margin-right: 2px;
+}
