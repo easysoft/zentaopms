@@ -59,6 +59,8 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
     {
+        if(!$productID) return;
+
         $currentProduct = $this->getById($productID);
         $output  = "<div id='currentItem'>";
         $output .= "<a onclick=\"showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name}<span id='dropIcon'></span></a>";

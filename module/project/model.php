@@ -116,6 +116,8 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $currentModule, $currentMethod, $extra = '')
     {
+        if(!$projectID) return;
+
         $currentProject = $this->getById($projectID);
         $output  = "<div id='currentItem'>";
         $output .= "<a onclick=\"showDropMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name}<span id='dropIcon'></span></a>";
