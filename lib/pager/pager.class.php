@@ -302,17 +302,24 @@ class pager
         $this->setParams();
         
         /* Create the prePage and nextpage, all types have them. */
-        $pager  = $this->createPrePage();
-        $pager .= $this->createNextPage();
+        $pager  = $this->createPrePage($type);
+        $pager .= $this->createNextPage($type);
 
         /* The short and full type. */
-        if($type !== 'shortest')
+        if($type !== 'shortest' and $type !== 'mobile')
         {
             $pager  = $this->createFirstPage() . $pager;
             $pager .= $this->createLastPage();
         }
 
-        if($type != 'full') $pager = $this->pageID . '/' . $this->pageTotal . ' ' . $pager;
+        if($type == 'mobile')
+        {
+            $pager = $pager . ' ' . $this->pageID . '/' . $this->pageTotal;
+        }
+        else if($type != 'full') 
+        {
+            $pager = $this->pageID . '/' . $this->pageTotal . ' ' . $pager;
+        }
 
         /* Only the full type . */
         if($type == 'full')
@@ -355,11 +362,20 @@ class pager
      * @access private
      * @return string
      */
-    private function createPrePage()
+    private function createPrePage($type = 'full')
     {
-        if($this->pageID == 1) return $this->lang->pager->pre . ' ';
-        $this->params['pageID'] = $this->pageID - 1;
-        return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->pre);
+        if($type == 'mobile')
+        {
+            if($this->pageID == 1) return '';
+            $this->params['pageID'] = $this->pageID - 1;
+            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->pre, '', 'data-role="button" data-icon="arrow-l" data-iconpos="left" data-inline="true"');
+        }
+        else
+        {
+            if($this->pageID == 1) return $this->lang->pager->pre . ' ';
+            $this->params['pageID'] = $this->pageID - 1;
+            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->pre);
+        }
     }    
 
     /**
@@ -368,11 +384,20 @@ class pager
      * @access private
      * @return string
      */
-    private function createNextPage()
+    private function createNextPage($type = 'full')
     {
-        if($this->pageID == $this->pageTotal) return $this->lang->pager->next . ' ';
-        $this->params['pageID'] = $this->pageID + 1;
-        return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->next);
+        if($type == 'mobile')
+        {
+            if($this->pageID == $this->pageTotal) return '';
+            $this->params['pageID'] = $this->pageID + 1;
+            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->next, '', 'data-role="button" data-icon="arrow-r" data-iconpos="right" data-inline="true"');
+        }
+        else
+        {
+            if($this->pageID == $this->pageTotal) return $this->lang->pager->next . ' ';
+            $this->params['pageID'] = $this->pageID + 1;
+            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->next);
+        }
     }
 
     /**
