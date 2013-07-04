@@ -41,7 +41,7 @@
 </div>
 <?php endif;?>
 <?php endforeach;?>
-<p><?php echo $pager->show('right', 'short')?></p>
+<p><?php echo $pager->show('left', 'mobile')?></p>
 <div data-role='footer' data-position='fixed'>
   <div data-role='navbar' data-iconpos="left">
     <ul>

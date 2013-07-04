@@ -22,5 +22,5 @@
   </div>
 </div>
 <?php endforeach;?>
-<p><?php $pager->show('right', 'short')?></p>
+<p><?php $pager->show('left', 'mobile')?></p>
 <?php include '../../common/view/m.footer.html.php';?>
