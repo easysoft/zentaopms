@@ -89,6 +89,7 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('4.1'));
                 $this->addPriv4_1();
                 $this->processTaskFinish();
+                $this->deleteCompany();
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
 
@@ -277,34 +278,6 @@ class upgradeModel extends model
             $build->desc = nl2br($build->desc);
             $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($build->id)->exec();
         }
-    }
-
-    public function deleteCompany()
-    {
-        /* Delete priv that is not in this company. Prevent conflict when delete company's field.*/
-        $this->dao->delete()->from(TABLE_GROUPRIV)->where('company')->ne($this->app->company->id)->exec();
-        $this->dbh->exec("ALTER TABLE `zt_groupPriv` DROP `company`;");
-
-        /* Delete version and sn that don's conform to the rules. Prevent conflict when delete company's field.*/
-        $version = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('`key`')->eq('version')
-            ->andWhere('company')->eq(0)
-            ->andWhere('owner')->eq('system')
-            ->andWhere('module')->eq('common')
-            ->andWhere('section')->eq('global')
-            ->fetch();
-        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('id')->ne($version->id)->exec();
-
-        $sn = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('`key`')->eq('sn')
-            ->andWhere('company')->eq($this->app->company->id)
-            ->andWhere('owner')->eq('system')
-            ->andWhere('module')->eq('common')
-            ->andWhere('section')->eq('global')
-            ->fetch();
-        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('sn')->andWhere('id')->ne($sn->id)->exec();
-
-        $this->dbh->exec("ALTER TABLE `zt_config` DROP `company`;");
     }
 
     /**
@@ -753,6 +726,40 @@ class upgradeModel extends model
             ->exec();
 
         return true;
+    }
+
+    /**
+     * Delete company field for the table of zt_config and zt_groupPriv.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteCompany()
+    {
+        /* Delete priv that is not in this company. Prevent conflict when delete company's field.*/
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('company')->ne($this->app->company->id)->exec();
+        $this->dbh->exec("ALTER TABLE " . TABLE_GROUPPRIV . " DROP `company`;");
+
+        /* Delete version and sn that don's conform to the rules. Prevent conflict when delete company's field.*/
+        $version = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('`key`')->eq('version')
+            ->andWhere('company')->eq(0)
+            ->andWhere('owner')->eq('system')
+            ->andWhere('module')->eq('common')
+            ->andWhere('section')->eq('global')
+            ->fetch();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('id')->ne($version->id)->exec();
+
+        $sn = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('`key`')->eq('sn')
+            ->andWhere('company')->eq($this->app->company->id)
+            ->andWhere('owner')->eq('system')
+            ->andWhere('module')->eq('common')
+            ->andWhere('section')->eq('global')
+            ->fetch();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('sn')->andWhere('id')->ne($sn->id)->exec();
+
+        $this->dbh->exec("ALTER TABLE " . TABLE_CONFIG . " DROP `company`;");
     }
 
     /**
