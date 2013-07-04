@@ -24,7 +24,7 @@ class project extends control
         if($this->methodName != 'computeburn')
         {
             $this->projects = $this->project->getPairs();
-            if(!$this->projects and $this->methodName != 'create') $this->locate($this->createLink('project', 'create'));
+            if(!$this->projects and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
     }
 
@@ -39,7 +39,6 @@ class project extends control
      */
     public function index($locate = 'yes', $status = 'all', $projectID = 0)
     {
-        if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         $this->commonAction($projectID);
