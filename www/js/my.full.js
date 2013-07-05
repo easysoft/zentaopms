@@ -104,26 +104,6 @@ function shortcut()
 }
 
 /**
- * Set the product switcher 
- * 
- * @access public
- * @return void
- */
-function setProductSwitcher()
-{
-    productMode = $.cookie('productMode');
-    if(!productMode) productMode = 'noclosed';
-    if(productMode == 'all')
-    {
-        $("#productID").append($("<option value='noclosed' id='switcher'>" + config.lblHideClosed + "</option>"));
-    }
-    else
-    {
-        $("#productID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
-    }
-}
-
-/**
  * Show drop menu. 
  * 
  * @param  string $objectType product|project
@@ -225,63 +205,6 @@ function switchDocLib(libID, module, method, extra)
 function saveProduct()
 {
     if($('#productID')) $.cookie('lastProduct', $('#productID').val(), {expires:config.cookieLife, path:config.webRoot});
-}
-
-/**
- * Set project switcher 
- * 
- * @access public
- * @return void
- */
-function setProjectSwitcher()
-{
-    projectMode = $.cookie('projectMode');
-    if(!projectMode) projectMode = 'noclosed';
-    if(projectMode == 'all')
-    {
-        $("#projectID").append($("<option value='noclosed' id='switcher'>" + config.lblHideClosed + "</option>"));
-    }
-    else
-    {
-        $("#projectID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
-    }
-}
-
-/**
- * Swtich project.
- * 
- * @param  int    $projectID 
- * @param  string $module 
- * @param  string $method 
- * @access public
- * @return void
- */
-function switchProject(projectID, module, method, extra)
-{
-    /* The projec id is a string, use it as the project model. */
-    if(isNaN(projectID))
-    {
-        $.cookie('projectMode', projectID, {expires:config.cookieLife, path:config.webRoot});
-        projectID = 0;
-    }
-
-    /* Process task and build modules. */
-    if(module == 'task' && (method == 'view' || method == 'edit' || method == 'batchedit'))
-    {
-        module = 'project';
-        method = 'task';
-    }
-    if(module == 'build' && method == 'edit')
-    {
-        module = 'project';
-        method = 'build';
-    }
-
-    if(module == 'project' && method == 'create') return;
-
-    link = createLink(module, method, 'projectID=' + projectID);
-    if(extra != '') link = createLink(module, method, 'projectID=' + projectID + '&type=' + extra);
-    location.href = link;
 }
 
 /**
@@ -881,8 +804,6 @@ $(document).ready(function()
 
     setRequiredFields();
     setPlaceholder();
-    setProductSwitcher();
-    setProjectSwitcher();
     saveProduct();
     saveProject();
 

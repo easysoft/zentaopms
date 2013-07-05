@@ -89,12 +89,6 @@ class projectModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
-        if($this->cookie->projectMode == 'noclosed' and $project->status == 'done') 
-        {
-            setcookie('projectMode', 'all');
-            $this->cookie->projectMode = 'all';
-        }
-
         $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName, $extra);
         foreach($this->lang->project->menu as $key => $menu)
         {
@@ -439,8 +433,7 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
-        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
-        $mode    .= $this->cookie->projectMode;
+        $orderBy = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
