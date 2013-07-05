@@ -59,7 +59,7 @@ $lang->todo->typeList['custom'] = '自定义';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = '项目任务';
 
-$lang->todo->confirmDelete  = "您确定要删除这个待办吗？";
+$lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->successMarked  = "成功切换状态！";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
