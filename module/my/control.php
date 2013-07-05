@@ -79,6 +79,7 @@ class my extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* The header and position. */
@@ -118,6 +119,7 @@ class my extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
@@ -153,6 +155,7 @@ class my extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
@@ -189,6 +192,7 @@ class my extends control
  
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $orderBy, 0, $pager);

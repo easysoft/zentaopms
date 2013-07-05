@@ -79,6 +79,7 @@ class bug extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $projects = $this->loadModel('project')->getPairs();

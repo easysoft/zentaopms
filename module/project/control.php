@@ -137,6 +137,7 @@ class project extends control
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $tasks = array();
