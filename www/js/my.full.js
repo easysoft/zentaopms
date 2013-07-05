@@ -138,7 +138,7 @@ var showMenu = 0; //Showing or hiding drop menu.
 function showDropMenu(objectType, objectID, module, method, extra)
 {
     if(showMenu == 1) { showMenu = 0; return $("#dropMenu").hide();};
-    $('#wrap').click(function(){return $("#dropMenu").hide();});
+    $('#wrap').click(function(){showMenu = 0; return $("#dropMenu").hide();});
 
     $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
     var offset = $('#currentItem').offset();
@@ -181,7 +181,8 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
  */
 function switchMore()
 {
-    $('#moreMenu').toggle(0, function(){$('#moreMenu').css('width', $('#defaultMenu').width())});
+    $('#moreMenu').css('width', $('#defaultMenu').width());
+    $('#moreMenu').toggle();
     $('#search').focus();
 }
 
