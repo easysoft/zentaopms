@@ -18,6 +18,7 @@ ALTER TABLE `zt_dept` DROP `company`;
 ALTER TABLE `zt_doc` DROP `company`;
 ALTER TABLE `zt_docLib` DROP `company`;
 ALTER TABLE `zt_extension` DROP `company`;
+ALTER TABLE `zt_effort` DROP `company`;
 ALTER TABLE `zt_file` DROP `company`;
 ALTER TABLE `zt_group` DROP `company`;
 ALTER TABLE `zt_history` DROP `company`;

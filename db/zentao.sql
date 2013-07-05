@@ -200,7 +200,6 @@ CREATE TABLE IF NOT EXISTS `zt_docLib` (
 -- DROP TABLE IF EXISTS `zt_effort`;
 CREATE TABLE IF NOT EXISTS `zt_effort` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `company` mediumint(8) unsigned NOT NULL,
   `user` char(30) NOT NULL default '',
   `todo` enum('1','0') NOT NULL default '1',
   `date` date NOT NULL default '0000-00-00',
@@ -212,8 +211,7 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `desc` char(255) NOT NULL default '',
   `status` enum('1','2','3') NOT NULL default '1',
   PRIMARY KEY  (`id`),
-  KEY `user` (`user`),
-  KEY `company` (`company`)
+  KEY `user` (`user`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_extension`;
 CREATE TABLE IF NOT EXISTS `zt_extension` (
