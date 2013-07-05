@@ -760,6 +760,8 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('sn')->andWhere('id')->ne($sn->id)->exec();
 
         $this->dbh->exec("ALTER TABLE " . TABLE_CONFIG . " DROP `company`;");
+
+        return true;
     }
 
     /**
