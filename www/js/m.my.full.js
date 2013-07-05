@@ -208,10 +208,10 @@ function ajaxGetSearchForm()
  */
 function showDetail(objectType, objectID)
 {
+    $("div:jqmData(role='header')").next().css('margin-top', '5px');
     $.get(createLink(objectType, 'ajaxGetDetail', "objectID=" + objectID), function(data)
     {
         $('#item' + objectID).html(data);
-        $("div:jqmData(role='header')").next().css('margin-top', '5px');
         $.mobile.loading("hide");
     });      
 }
@@ -259,7 +259,7 @@ $(document).ready(function()
     setLoadingIcon();
 
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
-    $(document).pjax("a[target!='hiddenwin']", '#main');
+    $(document).pjax("a[target!='hiddenwin'][id!='logout']", '#main');
     $(document).on('pjax:complete', function()
     {
         $('#main').trigger("pagecreate");
