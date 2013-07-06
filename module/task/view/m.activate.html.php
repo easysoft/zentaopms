@@ -5,7 +5,7 @@
   <table class='table-1'>
     <tr>
       <td class="w-70px"><?php echo $lang->task->assignedTo;?></td> 
-      <td><?php echo html::select('assignedTo', $users, $task->openedBy);?>
+      <td><?php echo html::select('assignedTo', $members, $task->openedBy);?>
     </tr>
     <tr>
       <td><?php echo $lang->task->left;?></td>
