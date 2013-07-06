@@ -478,8 +478,11 @@ class taskModel extends model
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = helper::now();
-        if($left == 0) $data->finishedBy   = $this->app->user->account;
-        if($left == 0) $data->finishedDate = helper::now();
+        if(!$left)
+        {
+            $data->finishedBy   = $this->app->user->account;
+            $data->finishedDate = helper::now();
+        }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
@@ -923,8 +926,11 @@ class taskModel extends model
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = helper::now();
-        if($left == 0) $data->finishedBy   = $this->app->user->account;
-        if($left == 0) $data->finishedDate = helper::now();
+        if(!$left) 
+        {
+            $data->finishedBy   = $this->app->user->account;
+            $data->finishedDate = helper::now();
+        }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
 
