@@ -221,21 +221,21 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $responser['result']  = 'success';
-            $responser['message'] = '';
+            $response['result']  = 'success';
+            $response['message'] = '';
 
             $bugID = $this->bug->create();
             if(dao::isError())
             {
-                $responser['result']  = 'fail';
-                $responser['message'] = dao::getError();
-                $this->send($responser);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
             }
 
             $actionID = $this->action->create('bug', $bugID, 'Opened');
             $this->sendmail($bugID, $actionID);
-            $responser['locate'] = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
-            $this->send($responser);
+            $response['locate'] = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
+            $this->send($response);
         }
 
         /* Get product, then set menu. */

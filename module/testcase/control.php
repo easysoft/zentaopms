@@ -177,20 +177,20 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $responser['result']  = 'success';
-            $responser['message'] = '';
+            $response['result']  = 'success';
+            $response['message'] = '';
 
             $caseID = $this->testcase->create($bugID);
             if(dao::isError())
             {
-                $responser['result']  = 'fail';
-                $responser['message'] = dao::getError();
-                $this->send($responser);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
             }
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            $responser['locate'] = $this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]");
-            $this->send($responser);
+            $response['locate'] = $this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]");
+            $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 

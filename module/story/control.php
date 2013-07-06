@@ -39,15 +39,15 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $responser['result']  = 'success';
-            $responser['message'] = '';
+            $response['result']  = 'success';
+            $response['message'] = '';
 
             $storyID = $this->story->create($projectID, $bugID);
             if(dao::isError())
             {
-                $responser['result']  = 'fail';
-                $responser['message'] = dao::getError();
-                $this->send($responser);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
             }
             if($bugID == 0)
             {
@@ -60,19 +60,19 @@ class story extends control
             $this->sendMail($storyID, $actionID);
             if($this->post->newStory)
             {
-                $responser['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
-                $responser['locate']  = $this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
-                $this->send($responser);
+                $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
+                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
+                $this->send($response);
             }
             if($projectID == 0)
             {
-                $responser['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
-                $this->send($responser);
+                $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+                $this->send($response);
             }
             else
             {
-                $responser['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
-                $this->send($responser);
+                $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+                $this->send($response);
             }
         }
 

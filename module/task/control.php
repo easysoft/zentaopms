@@ -65,15 +65,15 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $responser['result']  = 'success';
-            $responser['message'] = '';
+            $response['result']  = 'success';
+            $response['message'] = '';
 
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {
-                $responser['result']  = 'fail';
-                $responser['message'] = dao::getError();
-                $this->send($responser);
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
             }
 
             /* Create actions. */
@@ -87,24 +87,24 @@ class task extends control
             /* Locate the browser. */
             if($this->post->after == 'continueAdding')
             {
-                $responser['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
-                $responser['locate']  = $this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}");
-                $this->send($responser);
+                $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
+                $response['locate']  = $this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}");
+                $this->send($response);
             }
             elseif($this->post->after == 'toTaskList')
             {
-                $responser['locate'] = $taskLink;
-                $this->send($responser);
+                $response['locate'] = $taskLink;
+                $this->send($response);
             }
             elseif($this->post->after == 'toStoryList')
             {
-                $responser['locate'] = $storyLink;
-                $this->send($responser);
+                $response['locate'] = $storyLink;
+                $this->send($response);
             }
             else
             {
-                $responser['locate'] = $taskLink;
-                $this->send($responser);
+                $response['locate'] = $taskLink;
+                $this->send($response);
             }
         }
 
