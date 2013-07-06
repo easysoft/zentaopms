@@ -37,6 +37,7 @@
       }
       ?>
     </div>
+    <?php if(end($todos) == $todo) echo "<hr />";?>
   </div>
 </div>
 <?php endif;?>

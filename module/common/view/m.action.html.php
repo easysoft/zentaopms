@@ -1,6 +1,6 @@
 <div id='actionbox'>
 <fieldset>
-  <hr />
+  <hr color='#dddddd'/>
 
   <ol id='historyItem' style='padding-left:20px; font-size:11px'>
     <?php $i = 1; ?>

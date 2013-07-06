@@ -30,6 +30,7 @@
         common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
         ?>
       </div>
+      <?php if(end($bugs) == $bug) echo "<hr />";?>
     </div>
   </div>
 <?php endforeach;?>

@@ -18,6 +18,7 @@
       common::printIcon('task', 'activate',       "taskID=$task->id", $task);
       ?>
     </div>
+    <?php if(end($tasks) == $task) echo "<hr />";?>
   </div>
 </div>
 <?php endforeach;?>
