@@ -520,7 +520,7 @@ class taskModel extends model
             ->setDefault('finishedDate, lastEditedDate', $now) 
             ->remove('comment')->get();
 
-        if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumed));
+        if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 
         /* Record consumed and left. */
         $consumed = $task->consumed - $oldTask->consumed; 
