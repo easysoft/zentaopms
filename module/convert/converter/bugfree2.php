@@ -450,7 +450,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->select('actioID, actionField AS field, oldValue AS old, newValue AS new')
             ->from(BUGFREE_TABLE_HISTORY)
             ->orderBy('historyID')
-            ->fetchAll('');
+            ->fetchAll();
         foreach($histories as $history)
         {
             $history->actionID = $this->map['action'][$history->actionID];
@@ -477,7 +477,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
                 ")
             ->from(BUGFREE_TABLE_FILE)
             ->orderBy('fileID')
-            ->fetchAll('');
+            ->fetchAll();
         foreach($files as $file)
         {
             /* Get the actionID in zentao, to get file info. */

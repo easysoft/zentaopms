@@ -81,7 +81,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->fetchAll('account');
 
         /* Get users in histories. */
-        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs('', '');
+        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs();
 
         /* Merge them. */
         foreach($allUsers as $key => $account)
@@ -244,7 +244,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 actionDate AS date")
             ->from('BugHistory')
             ->orderBy('bugID, historyID')
-            ->fetchGroup('objectID', '');
+            ->fetchGroup('objectID');
         $convertCount = 0;
         foreach($actions as $bugID => $bugActions)
         {
@@ -290,7 +290,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 ")
             ->from('BugFile')
             ->orderBy('fileID')
-            ->fetchAll('');
+            ->fetchAll();
         foreach($files as $file)
         {
             $file->objectID = $this->map['bug'][(int)$file->objectID];

@@ -230,7 +230,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("t1.group_id, t2.login as account")
             ->from(REDMINE_TABLE_GROUPS_USERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
-            ->fetchAll('');
+            ->fetchAll();
 
         $zentaoUserGroups = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_USERGROUP)->fetchAll();
 
@@ -437,7 +437,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->from(REDMINE_TABLE_MEMBERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
             ->where('t2.type')->eq('User')
-            ->fetchAll('');
+            ->fetchAll();
 
         /* Insert into zentao */
         foreach($teams as $team)
@@ -519,7 +519,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->select("t1.project_id as product, t1.title, t1.summary as digest, t1.description as content, t2.login as addedBy, t1.created_on as addedDate")
             ->from(REDMINE_TABLE_NEWS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
-            ->fetchAll('');
+            ->fetchAll();
 
         /* Create a news docLib  */
         $newLib->name = 'news';

@@ -84,7 +84,7 @@ class actionModel extends model
 
         foreach($objectList as $object => $table)
         {
-            $idList = $this->dao->select('id')->from($table)->where('assignedTo')->eq($this->app->user->account)->fetchPairs('id', '');
+            $idList = $this->dao->select('id')->from($table)->where('assignedTo')->eq($this->app->user->account)->fetchPairs('id');
 
             $tmpActions = $this->dao->select('*')->from(TABLE_ACTION)
                 ->where('objectType')->eq($object)
