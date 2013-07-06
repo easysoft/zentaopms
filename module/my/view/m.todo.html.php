@@ -20,6 +20,7 @@
     </ul>
   </div>
 </div>
+<?php $this->session->set('todoType', $type);?>
 <?php foreach($todos as $todo):?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <div data-role="collapsible-set">

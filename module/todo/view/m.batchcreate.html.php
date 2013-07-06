@@ -28,7 +28,7 @@
 <p class='a-center'>
   <?php
   echo html::submitButton('', "data-inline='true' data-theme='b'");
-  echo html::backButton("data-inline='true'");
+  echo html::linkButton($lang->goback, $this->createLink('my', 'todo', "type={$this->session->todoType}"), 'self', "data-inline='true'");
   ?>
 </p>
 </form>
