@@ -226,6 +226,12 @@ class commonModel extends model
         echo html::select('', $app->lang->themes,  $app->cookie->theme, 'onchange="selectTheme(this.value)"');
     }
 
+    /**
+     * Set mobile menu.
+     * 
+     * @access public
+     * @return void
+     */
     public function setMobileMenu()
     {
         $menu = new stdclass();
@@ -295,9 +301,9 @@ class commonModel extends model
         {
             if($moduleName == 'my')   $mainMenu = $methodName;
             if($moduleName == 'todo') $mainMenu = $moduleName;
-            if($moduleName == 'story' and !array_key_exists('story', $lang->menu)) $mainMenu = 'product';
-            if($moduleName == 'bug'   and !array_key_exists('bug',   $lang->menu)) $mainMenu = 'product';
-            if($moduleName == 'task'  and !array_key_exists('task',  $lang->menu)) $mainMenu = 'project';
+            if($moduleName == 'story' and !isset($lang->menu->story)) $mainMenu = 'product';
+            if($moduleName == 'bug'   and !isset($lang->menu->bug))   $mainMenu = 'product';
+            if($moduleName == 'task'  and !isset($lang->menu->task))  $mainMenu = 'project';
         }
 
         /* Sort menu according to menuOrder. */
