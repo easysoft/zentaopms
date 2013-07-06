@@ -726,6 +726,14 @@ EOT;
         return $js;
     }
 
+    /**
+     * Close colorbox in javascript.
+     * 
+     * @param  string $window 
+     * @static
+     * @access public
+     * @return void
+     */
     static public function closeColorbox($window = 'self')
     {
         $js  = self::start();
@@ -813,14 +821,14 @@ EOT;
         }
         elseif(is_array($value) or is_object($value) or is_string($value))
         {
+            /* Fix for auto-complete when user is number.*/
             if(is_array($value) or is_object($value))
             {
-                $newValue = array();
+                $value = (array)$value;
                 foreach($value as $k => $v)
                 {
-                    $newValue[$k] = is_numeric($v) ? (string)$v : $v;
+                    if(is_numeric($v)) $value[$k] = (string)$v;
                 }
-                $value = $newValue;
             }
             
             $value = json_encode($value);
