@@ -126,79 +126,6 @@ function setForm()
 }
 
 /**
- * Set comment. 
- * 
- * @access public
- * @return void
- */
-function setComment()
-{
-    $('#commentBox').toggle();
-    $('.ke-container').css('width', '100%');
-    setTimeout(function() { $('#commentBox textarea').focus(); }, 50);
-}
-
-/**
- * Toogle the search form.
- * 
- * @access public
- * @return void
- */
-function toggleSearch()
-{
-    $("#bysearchTab").toggle
-    (
-        function()
-        {
-            if(browseType == 'bymodule')
-            {
-                $('#treebox').addClass('hidden');
-                $('.divider').addClass('hidden');
-                $('#bymoduleTab').removeClass('active');
-            }
-            else
-            {
-                $('#' + browseType + 'Tab').removeClass('active');
-            }
-            $('#bysearchTab').addClass('active');
-            ajaxGetSearchForm();
-            $('#querybox').removeClass('hidden');
-        },
-        function()
-        {
-            if(browseType == 'bymodule')
-            {
-                $('#treebox').removeClass('hidden');
-                $('.divider').removeClass('hidden');
-                $('#bymoduleTab').addClass('active');
-            }
-            else
-            {
-                $('#' + browseType +'Tab').addClass('active');
-            }
-            $('#bysearchTab').removeClass('active');
-            $('#querybox').addClass('hidden');
-        } 
-    );
-}
-
-/**
- * Ajax get search form 
- * 
- * @access public
- * @return void
- */
-function ajaxGetSearchForm()
-{
-    if($('#querybox').html() == '')
-    {
-        $.get(createLink('search', 'buildForm'), function(data){
-            $('#querybox').html(data);
-        });
-    }
-}
-
-/**
  * Show detail.
  * 
  * @param  string $objectType 
@@ -252,10 +179,7 @@ needPing = true;
 $(document).ready(function() 
 {
     setForm();
-
     setPlaceholder();
-
-    toggleSearch();
     setLoadingIcon();
 
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
