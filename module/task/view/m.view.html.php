@@ -1,5 +1,5 @@
 <?php 
 $this->session->set('taskID', $task->id);
-if($this->session->taskType) die(js::locate($this->createLink('my', 'task', "type={$this->session->taskType}"), 'parent'));
-die(js::locate($this->createLink('project', 'task', "projectID=$project->id"), 'parent'));
+if($this->session->taskType) die($this->locate($this->createLink('my', 'task', "type={$this->session->taskType}")));
+die($this->locate($this->createLink('project', 'task', "projectID=$project->id")));
 ?>

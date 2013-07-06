@@ -29,7 +29,13 @@
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
     <tr class="a-center">
-      <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"') . html::backButton("data-inline='true'") . html::hidden('dates[1]', helper::today()) . html::hidden("id[1]", 1); ?></td>
+      <td colspan="2">
+      <?php 
+      echo html::submitButton('', 'data-inline="true" data-theme="b"');
+      echo html::linkButton($lang->goback, $this->createLink('task', 'view', "taskID=$task->id"), 'self', "data-inline='true'");
+      echo html::hidden('dates[1]', helper::today()) . html::hidden("id[1]", 1); 
+      ?>
+     </td>
     </tr>
     <?php endif;?>
   <table>

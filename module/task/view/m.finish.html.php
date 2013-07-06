@@ -19,7 +19,7 @@
       <td colspan="2">
         <?php 
         echo html::submitButton('', 'data-inline="true" data-theme="b"');
-        echo html::backButton("data-inline='true'");
+        echo html::linkButton($lang->goback, $this->createLink('task', 'view', "taskID=$task->id"), 'self', "data-inline='true'");
         echo html::hidden('finishedDate', $date);
         ?>
       </td>
