@@ -189,9 +189,9 @@ class router
      * The view type.
      * 
      * @var string
-     * @access private
+     * @access public
      */
-    private $viewType;
+    public $viewType;
 
     /**
      * The global $config object.
