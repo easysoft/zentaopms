@@ -37,7 +37,7 @@ $lang->tree->syncFromProject   = 'Copy from project module';
 $lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
 $lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
-$lang->tree->confirmDelete = 'Are you sure to delete this module and its sons?';
+$lang->tree->confirmDelete = 'Are you sure to delete this module and its children?';
 $lang->tree->successSave   = 'Successfully saved';
 $lang->tree->successFixed  = 'Successfully fixed.';
 
