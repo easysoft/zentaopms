@@ -141,8 +141,8 @@ $lang->task->successSaved          = "Successfully saved";
 $lang->task->delayWarning          = " <strong class='delayed f-14px'> Postponed %s days </strong>";
 $lang->task->remindBug             = "This task from Bug, update the Bug:%s or not?";
 $lang->task->confirmChangeProject  = 'Change project will change module, story and assignedTo also, are you sure?';
-$lang->task->confirmFinish         = '"Left" is 0, this task will be done. Are you sure?';
-$lang->task->confirmRecord         = '"Left" is 0, this task will be done. Are you sure?';
+$lang->task->confirmFinish         = '"Left" is zero, this task will be done. Are you sure?';
+$lang->task->confirmRecord         = '"Left" is zero, this task will be done. Are you sure?';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumed         = '"Consumed" must be number';
