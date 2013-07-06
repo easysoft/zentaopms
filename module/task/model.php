@@ -880,7 +880,7 @@ class taskModel extends model
           ->where('id')->eq($estimateID)
           ->fetch();
 
-        /* Decide if the estimate is the last one of this task. */
+        /* If the estimate is the last of its task, status of task will be checked. */
         $lastID = $this->dao->select('id')
             ->from(TABLE_TASKESTIMATE)
             ->where('task')->eq($estimate->task)
