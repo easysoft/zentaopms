@@ -129,13 +129,9 @@ class misc extends control
      */
     public function qrCode($mode = 'template')
     {
-        if($mode == 'template') die("<div style='text-align:center;'><img src='" . inlink('qrcode', 'mode=qrcode') . "' /></div>");
-
-        $ciqrcode = $this->app->loadClass('ciqrcode');
+        $ciqrcode = $this->app->loadClass('qrcode');
         $loginAPI = common::getSysURL() . $this->config->webRoot;
         if($this->loadModel('user')->isLogon()) $loginAPI .= "?sid=" . session_ID();
-
-        header("Content-Type: image/png");
-        die($ciqrcode->generate(array('data' => $loginAPI, 'size' => 8)));
+        QRcode::png($loginAPI, false, 4, 11);
     }
 }
