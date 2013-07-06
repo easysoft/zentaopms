@@ -30,7 +30,7 @@
     <tr>
       <td class='a-center' colspan='2'>
       <?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?>
-      <?php echo html::backButton("data-inline='true'");?>
+      <?php echo html::linkButton($lang->goback, $this->createLink('bug', 'view', "bugID=$bug->id"), 'self', "data-inline='true'");?>
       </td>
     </tr>
   </table>
