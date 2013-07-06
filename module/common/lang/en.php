@@ -60,6 +60,8 @@ $lang->fold         = '-';
 $lang->selectAll     = 'All';
 $lang->selectReverse = 'Inverse';
 $lang->notFound      = 'Sorry, the object not found.';
+$lang->showAll       = '[[Show all projects]]';
+$lang->hideClosed    = '[[Show projects going]]';
 
 $lang->future       = 'Future';
 $lang->year         = 'Year';

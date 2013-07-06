@@ -7,8 +7,8 @@
   $allLeft = 0;
   foreach($estimates as $estimate)
   {
-       $allConsumed += $estimate->consumed;
-       $allLeft      = $estimate->left;
+      $allConsumed += $estimate->consumed;
+      $allLeft      = $estimate->left;
   }
   ?>
   <table class='table-1'>

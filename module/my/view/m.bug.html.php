@@ -23,14 +23,6 @@
       <div id='item<?php echo $bug->id;?>'></div>
       <div data-role='content' class='a-center'>
         <?php
-        if($this->session->bugList)
-        {
-            $browseLink = $this->session->bugList;
-        }
-        else
-        {
-            $browseLink = $this->createLink('my', 'bug');
-        }
         common::printIcon('bug', 'confirmBug', "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
         common::printIcon('bug', 'assignTo',   "bugID=$bug->id", '',   'button', '', '', 'iframe');
         common::printIcon('bug', 'resolve',    "bugID=$bug->id", $bug, 'button', '', '', 'iframe');

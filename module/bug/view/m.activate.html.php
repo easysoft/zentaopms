@@ -8,11 +8,11 @@
       <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, 'class=select-3');?></td>
     </tr>
     <tr>
-      <td class='w-80px'><?php echo $lang->bug->openedBuild;?></td>
+      <td><?php echo $lang->bug->openedBuild;?></td>
       <td><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class=select-3');?></td>
     </tr>
     <tr>
-      <td class='w-80px'><?php echo $lang->comment;?></td>
+      <td><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
     <tr>

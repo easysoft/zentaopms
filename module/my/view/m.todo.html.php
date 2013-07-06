@@ -20,7 +20,7 @@
     </ul>
   </div>
 </div>
- <?php foreach($todos as $todo):?>
+<?php foreach($todos as $todo):?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <div data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true" class='collapsible'>

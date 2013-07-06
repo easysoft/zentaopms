@@ -87,4 +87,4 @@ $lang->product->aclList['private'] = '私有产品(只有项目团队成员才�
 $lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
 $lang->product->storySummary     = "本页共 <strong>%s</strong> 个需求，预计 <strong>%s</strong> 个工时。";
-$lang->product->noMatchedProduct = '找不到包含"%s"的产品';
+$lang->product->noMatchedProduct = '找不到与"%s"相关的产品';

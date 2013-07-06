@@ -13,22 +13,23 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <form method='post' target='hiddenwin'>
-<?php echo html::hidden("date", date('Y-m-d'));?>
-<?php for($i = 1; $i <= 5; $i++):?>
-<?php
-echo html::input("names[$i]", '', "placeholder='{$lang->todo->common}{$lang->todo->name}'");
-echo html::hidden("types[$i]", 'custom');
-echo html::hidden("pris[$i]", 3);
-echo html::hidden("descs[$i]", '');
-echo html::hidden("begins[$i]", '2400');
-echo html::hidden("ends[$i]",   '2400');
-?>
-<?php endfor;?>
+  <?php 
+  echo html::hidden("date", date('Y-m-d'));
+  for($i = 1; $i <= 5; $i++)
+  {
+      echo html::input("names[$i]", '', "placeholder='{$lang->todo->common}{$lang->todo->name}'");
+      echo html::hidden("types[$i]", 'custom');
+      echo html::hidden("pris[$i]", 3);
+      echo html::hidden("descs[$i]", '');
+      echo html::hidden("begins[$i]", '2400');
+      echo html::hidden("ends[$i]",   '2400');
+  }
+  ?>
 <p class='a-center'>
-<?php
-echo html::submitButton('', "data-inline='true' data-theme='b'");
-echo html::backButton("data-inline='true'");
-?>
+  <?php
+  echo html::submitButton('', "data-inline='true' data-theme='b'");
+  echo html::backButton("data-inline='true'");
+  ?>
 </p>
 </form>
 <?php include '../../common/view/m.footer.html.php';?>

@@ -178,7 +178,7 @@ $lang->project->whyNoStories     = "看起来没有需求可以关联。请检�
 $lang->project->doneProjects     = '已结束';
 $lang->project->unDoneProjects   = '未结束';
 $lang->project->copyTeam         = '复制团队';
-$lang->product->noMatchedProject = '找不到包含"%s"的项目';
+$lang->product->noMatchedProject = '找不到与"%s"相关的项目';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';

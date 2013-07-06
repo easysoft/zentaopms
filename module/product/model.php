@@ -145,6 +145,7 @@ class productModel extends model
     public function getPairs($mode = '')
     {
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
+        $mode    .= $this->cookie->productMode;
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
