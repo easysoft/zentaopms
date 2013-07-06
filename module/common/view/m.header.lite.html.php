@@ -17,14 +17,22 @@ $clientTheme  = $this->app->getClientTheme();
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
-  js::import($jsRoot . 'jquery/mobile/jquery-1.10.1.min.js', $config->version);
-  js::import($jsRoot . 'm.my.full.js', $config->version);
-  js::import($jsRoot . 'jquery/mobile/jquery.mobile.min.js', $config->version);
-  js::import($jsRoot . 'jquery/jquery.pjax.js', $config->version);
+  if($config->debug)
+  {
+      js::import($jsRoot . 'jquery/mobile/jquery-1.10.1.min.js', $config->version);
+      js::import($jsRoot . 'm.my.full.js', $config->version);
+      js::import($jsRoot . 'jquery/mobile/jquery.mobile.min.js', $config->version);
+      js::import($jsRoot . 'jquery/jquery.pjax.js', $config->version);
 
-  css::import($defaultTheme . 'jquery.mobile.css', $config->version);
-  css::import($defaultTheme . 'm.style.css', $config->version);
-  css::import($langTheme, $config->version);
+      css::import($defaultTheme . 'jquery.mobile.css', $config->version);
+      css::import($defaultTheme . 'm.style.css', $config->version);
+      css::import($langTheme, $config->version);
+  }
+  else
+  {
+      js::import($jsRoot . 'm.all.js', $config->version);
+      css::import($defaultTheme . 'm.' . $this->cookie->lang . '.' . $this->cookie->theme . '.css', $config->version);
+  }
 
   if(isset($pageCss)) css::internal($pageCss);
 
