@@ -133,6 +133,7 @@ class productModel extends model
             ->beginIF($status = 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
+            ->orderBy('code')
             ->fetchAll('id');
     }
 

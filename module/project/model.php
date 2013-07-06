@@ -493,7 +493,7 @@ class projectModel extends model
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->orderBy('status')
+                ->orderBy('code')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -503,7 +503,7 @@ class projectModel extends model
                 ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
-                ->orderBy($this->config->project->orderBy)
+                ->orderBy('code')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
