@@ -8,6 +8,9 @@ ALTER TABLE `zt_story` CHANGE `reviewedBy` `reviewedBy` VARCHAR( 255 ) CHARACTER
 
 ALTER TABLE `zt_build` DROP INDEX `name`;
 
+ALTER TABLE `zt_project` DROP INDEX `company` , ADD INDEX `project` ( `type` , `parent` , `begin` , `end` , `status` , `statge` , `pri` );
+ALTER TABLE `zt_user` DROP INDEX `company`;
+
 ALTER TABLE `zt_action` DROP `company`;
 ALTER TABLE `zt_bug` DROP `company`;
 ALTER TABLE `zt_build` DROP `company`;

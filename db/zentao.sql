@@ -350,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `whitelist` varchar(255) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `company` (`type`,`parent`,`begin`,`end`,`status`,`statge`,`pri`)
+  KEY `project` (`type`,`parent`,`begin`,`end`,`status`,`statge`,`pri`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectProduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectProduct` (
@@ -581,7 +581,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `account` (`account`),
-  KEY `company` (`dept`)
+  KEY `dept` (`dept`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userContact`;
 CREATE TABLE IF NOT EXISTS `zt_userContact` (
