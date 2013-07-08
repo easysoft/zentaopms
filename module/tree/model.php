@@ -288,6 +288,7 @@ class treeModel extends model
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
     {
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
+
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
             ->where('id')->eq($rootID)
@@ -311,8 +312,11 @@ class treeModel extends model
         }
 
         $manage = $userFunc[1] == 'createTaskManageLink' ? true : false;
+
+        /* if not manage, only get linked modules and ignore others. */
         if(!$manage) $projectModules = $this->getTaskTreeModules($rootID, true);
 
+        /* Get module according to product. */
         foreach($products as $id => $product)
         {
             $extra['productID'] = $id;
@@ -335,7 +339,9 @@ class treeModel extends model
             $stmt = $this->dbh->query($query);
             while($module = $stmt->fetch())
             {
+                /* if not manage, ignore unused modules. */
                 if(!$manage and !isset($projectModules[$module->id])) continue;
+
                 $linkHtml = call_user_func($userFunc, 'task', $module, $extra);
 
                 if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
@@ -348,14 +354,14 @@ class treeModel extends model
                 {
                     if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
                     {
-                        $treeMenu[$module->parent] .= "<li>$linkHtml\n";  
+                        $treeMenu[$module->parent] .= "<li>$linkHtml\n";
                     }
                     else
                     {
-                        $treeMenu[$module->parent] = "<li>$linkHtml\n";  
+                        $treeMenu[$module->parent] = "<li>$linkHtml\n";
                     }
                 }
-                $treeMenu[$module->parent] .= "</li>\n"; 
+                $treeMenu[$module->parent] .= "</li>\n";
             }
 
             $lastMenu = "<ul class='tree'>" . @array_pop($treeMenu) . "</ul>\n";
@@ -376,17 +382,22 @@ class treeModel extends model
     {
         $projectModules = array();
         $field = $parent ? 'path' : 'id';
+
+        /* Get story paths of this project. */
         $paths = $this->dao->select('t3.' . $field)
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
             ->where('t1.project')->eq($projectID)
             ->fetchPairs();
+
+        /* Add task paths of this project.*/
         $paths += $this->dao->select($field)->from(TABLE_MODULE)
             ->where('root')->eq($projectID)
             ->andWhere('type')->eq('task')
             ->fetchPairs();
 
+        /* Get all modules from paths. */
         foreach($paths as $path)
         {
             $modules = explode(',', $path); 
