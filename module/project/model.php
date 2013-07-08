@@ -1404,4 +1404,34 @@ class projectModel extends model
 
         return true;
     }
+
+    /**
+     * Create the link from module,method,extra
+     * 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function getProjectLink($module, $method, $extra)
+    {
+        $link = '';
+        if($module == 'task' && ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
+        {   
+            $module = 'project';
+            $method = 'task';
+        }   
+        if($module == 'build' && $method == 'edit')
+        {   
+            $module = 'project';
+            $method = 'build';
+        }   
+
+        if($module == 'project' && $method == 'create') return;
+
+        $link = helper::createLink($module, $method, "projectID=%s");
+        if($extra != '') $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
+        return $link;
+    }
 }

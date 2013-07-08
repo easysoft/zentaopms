@@ -574,4 +574,39 @@ class productModel extends model
 
         return true;
     }
+
+    /**
+     * Create the link from module,method,extra
+     * 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function getProductLink($module, $method, $extra)
+    {
+        $link = '';
+        if(strpos('product,roadmap,bug,testcase,testtask,story', $module) !== false)
+        {
+            if($module == 'product' && $method == 'project')
+            {
+                $link = helper::createLink($module, $method, "status=all&productID=%s");
+            }
+            else
+            {
+                $link = helper::createLink($module, $method, "productID=%s");
+            }
+        }
+        else if($module == 'productplan' || $module == 'release')
+        {
+            if($method != 'browse' && $method != 'create') $method = 'browse';
+            $link = helper::createLink($module, $method, "productID=%s");
+        }
+        else if($module == 'tree')
+        {
+            $link = helper::createLink($module, $method, "productID=%s&type=$extra");
+        }
+        return $link;
+    }
 }
