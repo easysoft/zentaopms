@@ -162,23 +162,23 @@ $lang->project->aboveAllProduct = 'Above all products';
 $lang->project->aboveAllProject = 'Above all projects';
 
 /* Notcie. */
-$lang->project->selectProject    = "Select project";
-$lang->project->beginAndEnd      = 'Begin and end';
-$lang->project->lblStats         = 'Stats';
-$lang->project->stats            = 'Total work hours is 『%s』hours, <br />Total estimate is『%s』hours,<br />Total confused is『%s』hours<br />Total left is『%s』hours';
-$lang->project->oneLineStats     = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
-$lang->project->taskSummary      = "<strong>%s</strong> tasks in this page. Pending: <strong>%s</strong>. doing: <strong>%s</strong>. Est: <strong>%s</strong> h. Consumed: <strong>%s</strong> h. Left: <strong>%s</strong>.";
-$lang->project->memberHours      = "%s has <strong>%s</strong> workhours, ";
-$lang->project->groupSummary     = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
-$lang->project->wbs              = "WBS";
-$lang->project->batchWBS         = "Batch WBS";
-$lang->project->largeBurnChart   = 'View large';
-$lang->project->howToUpdateBurn  = "<a href='http://www.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>How?</a>";
-$lang->project->whyNoStories     = "There no active stories to added to this project. Please check the linked product.";
-$lang->project->doneProjects     = 'Done';
-$lang->project->unDoneProjects   = 'Undone';
-$lang->project->copyTeam         = 'Copy a team';
-$lang->product->noMatchedProject = 'No matched project including "%s"';
+$lang->project->selectProject   = "Select project";
+$lang->project->beginAndEnd     = 'Begin and end';
+$lang->project->lblStats        = 'Stats';
+$lang->project->stats           = 'Total work hours is 『%s』hours, <br />Total estimate is『%s』hours,<br />Total confused is『%s』hours<br />Total left is『%s』hours';
+$lang->project->oneLineStats    = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
+$lang->project->taskSummary     = "<strong>%s</strong> tasks in this page. Pending: <strong>%s</strong>. doing: <strong>%s</strong>. Est: <strong>%s</strong> h. Consumed: <strong>%s</strong> h. Left: <strong>%s</strong>.";
+$lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";
+$lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
+$lang->project->wbs             = "WBS";
+$lang->project->batchWBS        = "Batch WBS";
+$lang->project->largeBurnChart  = 'View large';
+$lang->project->howToUpdateBurn = "<a href='http://www.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>How?</a>";
+$lang->project->whyNoStories    = "There no active stories to added to this project. Please check the linked product.";
+$lang->project->doneProjects    = 'Done';
+$lang->project->unDoneProjects  = 'Undone';
+$lang->project->copyTeam        = 'Copy a team';
+$lang->product->noMatched       = 'No matched project including "%s"';
 
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';

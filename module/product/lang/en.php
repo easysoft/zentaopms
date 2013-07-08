@@ -86,5 +86,5 @@ $lang->product->aclList['open']    = 'Default(Having product module prividge, ca
 $lang->product->aclList['private'] = 'Private(Only project team members can visit)';
 $lang->product->aclList['custom']  = 'Whitelist(Project team members and who belongs to the whilelist groups can visit)';
 
-$lang->product->storySummary     = "Total <strong>%s</strong> stories in this page, estimate <strong>%s</strong> hours.";
-$lang->product->noMatchedProduct = 'No matched product including "%s"';
+$lang->product->storySummary = "Total <strong>%s</strong> stories in this page, estimate <strong>%s</strong> hours.";
+$lang->product->noMatched    = 'No matched product including "%s"';

@@ -1,4 +1,4 @@
-<?php if(!$products) echo sprintf($lang->product->noMatchedProduct, $keywords);?>
+<?php if(!$products) echo sprintf($lang->product->noMatched, $keywords);?>
 <ul>
 <?php
 foreach($products as $product)
