@@ -132,6 +132,6 @@ class misc extends control
         $ciqrcode = $this->app->loadClass('qrcode');
         $loginAPI = common::getSysURL() . $this->config->webRoot;
         if($this->loadModel('user')->isLogon()) $loginAPI .= "?sid=" . session_ID();
-        QRcode::png($loginAPI, false, 4, 11);
+        QRcode::png($loginAPI, false, 4, 9);
     }
 }
