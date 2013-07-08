@@ -509,6 +509,17 @@ class testtask extends control
      */
     public function runCase($runID, $caseID = 0, $version = 0)
     {
+        if($caseID)
+        {
+            $run = new stdclass();
+            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
+        }
+        else
+        {
+            $run = $this->testtask->getRunById($runID);
+        }
+
+        $caseID     = $caseID ? $caseID : $run->case->id;
         $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         if(!empty($_POST))
         {
@@ -528,16 +539,8 @@ class testtask extends control
             }
         }
 
-        if(!$caseID) $run = $this->testtask->getRunById($runID);
-        if($caseID)
-        {
-            $run = new stdclass();
-            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
-        }
-
         $preCase  = '';
         $nextCase = '';
-        $caseID   = $caseID ? $caseID : $run->case->id;
         if($preAndNext->pre)
         {
             $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
