@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 4547 2013-03-02 14:55:28Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -142,10 +142,13 @@ $lang->task->delayWarning          = " <strong class='delayed f-14px'> 延期%s�
 $lang->task->remindBug             = "該任務為Bug轉化得到，是否更新Bug:%s ?";
 $lang->task->confirmChangeProject  = '修改項目會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？';
 $lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
+$lang->task->confirmRecord         = '"剩餘"為0，任務將標記為"已完成"，您確定嗎？';
 
 $lang->task->error = new stdclass();
-$lang->task->error->consumed      = '"已經消耗"必須為數字';
-$lang->task->error->consumedSmall = '"已經消耗"必須大於之前消耗';
+$lang->task->error->consumedNumber   = '"已經消耗"必須為數字';
+$lang->task->error->consumedSmall    = '"已經消耗"必須大於之前消耗';
+$lang->task->error->consumedThisTime = '請填寫"工時"';
+$lang->task->error->left             = '請填寫"剩餘"';
 
 /* 統計報表。*/
 $lang->task->report = new stdclass();

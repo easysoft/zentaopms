@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 4751 2013-05-05 00:29:24Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5029 2013-07-06 03:00:01Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
@@ -163,7 +163,6 @@ $lang->product->menu->doc     = array('link' => '文檔|product|doc|productID=%s
 $lang->product->menu->view    = array('link' => '維護|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '項目|product|project|status=all&productID=%s';
-$lang->product->menu->order   = '排序|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加產品|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有產品|product|index|locate=no&productID=%s', 'float' => 'right');
 
@@ -180,7 +179,7 @@ $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
 $lang->project->menu->list      = '%s';
-$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,burn,importbug');
+$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug');
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
@@ -190,7 +189,6 @@ $lang->project->menu->team      = array('link' => '團隊|project|team|projectID
 $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '產品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '維護|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>添加項目|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有項目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 

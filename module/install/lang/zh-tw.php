@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-tw.php 4972 2013-07-02 06:50:10Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->install = new stdclass();
@@ -73,7 +73,7 @@ $lang->install->webRoot        = 'PMS所在網站目錄';
 $lang->install->requestType    = 'URL方式';
 $lang->install->defaultLang    = '預設語言';
 $lang->install->dbHost         = '資料庫伺服器';
-$lang->install->dbHostNote     = '如果localhost無法訪問，嘗試使用127.0.0.1';
+$lang->install->dbHostNote     = '如果127.0.0.1無法訪問，嘗試使用localhost';
 $lang->install->dbPort         = '伺服器連接埠';
 $lang->install->dbUser         = '資料庫用戶名';
 $lang->install->dbPassword     = '資料庫密碼';

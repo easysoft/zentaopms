@@ -6,22 +6,22 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5022 2013-07-05 06:50:39Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->todo->common       = 'TODO';
-$lang->todo->index        = "todo一覽";
+$lang->todo->common       = '待辦';
+$lang->todo->index        = "待辦一覽";
 $lang->todo->create       = "新增";
 $lang->todo->batchCreate  = "批量添加";
-$lang->todo->edit         = "更新TODO";
+$lang->todo->edit         = "更新待辦";
 $lang->todo->batchEdit    = "批量編輯";
-$lang->todo->view         = "TODO詳情";
+$lang->todo->view         = "待辦詳情";
 $lang->todo->viewAB       = "詳情";
 $lang->todo->finish       = "完成";
 $lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "導出";
-$lang->todo->delete       = "刪除TODO";
-$lang->todo->browse       = "瀏覽TODO";
+$lang->todo->delete       = "刪除待辦";
+$lang->todo->browse       = "瀏覽待辦";
 $lang->todo->import2Today = "導入到今天";
 $lang->todo->changeStatus = "更改";
 
@@ -59,7 +59,7 @@ $lang->todo->typeList['custom'] = '自定義';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = '項目任務';
 
-$lang->todo->confirmDelete  = "您確定要刪除這個todo嗎？";
+$lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->successMarked  = "成功切換狀態！";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';

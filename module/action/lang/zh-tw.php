@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common     = '系統日誌';
@@ -55,7 +55,7 @@ $lang->action->objectTypes['testtask']    = '測試任務';
 $lang->action->objectTypes['user']        = '用戶';
 $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
-$lang->action->objectTypes['todo']        = 'TODO';
+$lang->action->objectTypes['todo']        = '待辦';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -159,7 +159,7 @@ $lang->action->search->objectTypeList['testtask']    = '測試任務';
 $lang->action->search->objectTypeList['user']        = '用戶'; 
 $lang->action->search->objectTypeList['doc']         = '文檔';
 $lang->action->search->objectTypeList['doclib']      = '文檔庫';   
-$lang->action->search->objectTypeList['todo']        = 'TODO'; 
+$lang->action->search->objectTypeList['todo']        = '待辦'; 
 $lang->action->search->objectTypeList['build']       = 'Build';  
 $lang->action->search->objectTypeList['release']     = '發佈';    
 $lang->action->search->objectTypeList['productplan'] = '計劃';        
