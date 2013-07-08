@@ -674,11 +674,26 @@ class treeModel extends model
      */
     public function getSons($rootID, $moduleID, $type = 'root')
     {
+        $createdVersion = $this->dao->select('createdVersion')->from(TABLE_PRODUCT) 
+            ->where('id')->eq($rootID)
+            ->fetch('createdVersion');
+
+        /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
+        if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or $type == 'story')
+        {
+            return $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq((int)$rootID)
+                ->andWhere('parent')->eq((int)$moduleID)
+                ->andWhere('type')->eq($type)
+                ->orderBy('`order`')
+                ->fetchAll();
+        }
+
+        /* else get modules of its type and story type. */
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
-            ->beginIF($type == 'story')->andWhere('type')->eq($type)->fi()
-            ->beginIF($type != 'story')->andWhere('type')->in("$type,story")->fi()
+            ->andWhere('type')->in("$type,story")
             ->orderBy('type desc,`order`')
             ->fetchAll();
     }
