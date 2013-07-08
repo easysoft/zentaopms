@@ -9,12 +9,12 @@
  * @version     $Id: login.html.php 4612 2013-03-18 07:46:16Z wwccss $
  */
 ?>
-<?php include '../../common/view/m.header.lite.html.php';?>
 <?php
+include '../../common/view/m.header.lite.html.php';
 $lang->user->placeholder->account  = $lang->user->account;
 $lang->user->placeholder->password = $lang->user->password;
+js::set('holders', $lang->user->placeholder) ;
 ?>
-<?php js::set('holders', $lang->user->placeholder) ?>
 <div data-role="header" data-position="fixed">
   <h1 style='margin-left:0px;margin-right:0px'><?php echo $app->company->name;?></h1>
 </div>
