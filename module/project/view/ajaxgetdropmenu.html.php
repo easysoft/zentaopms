@@ -23,7 +23,7 @@
       $class = $i ? "class='other'" : '';
       foreach($projects as $project)
       {
-          if($project->status != 'done' and !$project->PM == $this->app->user->account)
+          if($project->status != 'done' and !($project->PM == $this->app->user->account))
           {
               echo "<li>" . html::a(sprintf($link, $project->id), $project->name, '', "$class"). "</li>";
           }
