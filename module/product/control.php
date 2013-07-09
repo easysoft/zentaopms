@@ -48,7 +48,7 @@ class product extends control
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
         $this->session->set('productList', $this->app->getURI(true));
-        $this->product->setMenu($this->products, $productID);
+        if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
 
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
