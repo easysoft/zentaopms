@@ -314,7 +314,8 @@ class pager
 
         if($type == 'mobile')
         {
-            $pager = $pager . ' ' . $this->pageID . '/' . $this->pageTotal;
+            $position = $this->pageTotal == 1 ? '' : $this->pageID . '/' . $this->pageTotal;
+            $pager    = $pager . ' ' . $position;
         }
         else if($type != 'full') 
         {
