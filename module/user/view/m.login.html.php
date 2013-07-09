@@ -22,7 +22,7 @@ js::set('holders', $lang->user->placeholder) ;
 <form method='post' target='hiddenwin'>
   <table align='center'> 
     <tr><td><?php echo html::input('account')?></td></tr>  
-    <tr><td><?php echo html::input('password')?></td></tr>
+    <tr><td><?php echo html::password('password')?></td></tr>
     <tr><td><?php echo html::select('lang', $config->langs, $this->app->getClientLang(), 'class=select-2 onchange=selectLang(this.value)');?></td></tr>
     <tr>
       <td align='center'>
