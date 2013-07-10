@@ -32,7 +32,7 @@
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, 'class=select-1');?></td>
       <td><?php echo html::select("plan[$i]", $plans, $planID, 'class=select-1');?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='text-1'");?></td>
-      <td><?php echo html::input("spec[$i]", $spec, "class='text-1'");?></td>
+      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='text-1'");?></td>
       <td><?php echo html::select("pri[$i]", (array)$lang->story->priList, $pri, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='text-1'");?></td>
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='text-1'");?></td>

@@ -53,7 +53,7 @@
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1');?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
-      <td><?php echo html::input("desc[$i]", '', "class=text-1");?></td>
+      <td><?php echo html::textarea("desc[$i]", '', "rows='1' class=text-1");?></td>
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=select-1');?></td>
     </tr>
     <?php endfor;?>

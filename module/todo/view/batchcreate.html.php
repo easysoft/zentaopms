@@ -35,7 +35,7 @@
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="f-left text-1"');?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="f-left text-1"');?></div>
       </td>
-      <td><?php echo html::input("descs[$i]", '', "class=text-1");?></td>
+      <td><?php echo html::textarea("descs[$i]", '', "rows='1' class=text-1");?></td>
       <td>
         <?php 
         echo html::select("begins[$i]", $times, $time, "onchange=setBeginsAndEnds($i,'begin')");
