@@ -24,7 +24,7 @@
       <th class='w-100px red'><?php echo $lang->user->role;?></th>
       <th class='w-100px'><?php echo $lang->user->group;?></th>
       <th><?php echo $lang->user->email;?></th>
-      <th class='w-60px'><?php echo $lang->user->gender;?></th>
+      <th class='w-70px'><?php echo $lang->user->gender;?></th>
       <th class="red"><?php echo $lang->user->password;?></th>
     </tr>
     <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
@@ -40,10 +40,10 @@
       <td><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='select-1'");?></td>
       <td><?php echo html::input("email[$i]", '', "class='text-1 email_$i' onchange='setDefaultEmail($i)'");?></td>
       <td><?php echo html::radio("gender[$i]", (array)$lang->user->genderList, 'm');?></td>
-      <td>
+      <td align='left'>
       <?php
-      echo html::input("password[$i]", '', "class='w-p70' autocomplete='off'");
-      echo "<input type='checkbox' name='ditto[$i]' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}";
+      echo html::input("password[$i]", '', "class='w-p70' autocomplete='off' onkeyup='toggleCheck(this, $i)'");
+      if($i != 0) echo "<input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}";
       ?>
       </td>
     </tr>  
