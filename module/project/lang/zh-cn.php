@@ -173,7 +173,7 @@ $lang->project->groupSummary    = "本组共 <strong>%s</strong> 个任务，未
 $lang->project->wbs             = "分解任务";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '点击查看大图';
-$lang->project->howToUpdateBurn = "<a href='http://www.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>如何更新?</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>如何更新?</a>";
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";
 $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';

@@ -36,7 +36,7 @@ $lang->extension->name        = '名称';
 $lang->extension->code        = '插件代号';
 $lang->extension->version     = '版本';
 $lang->extension->compatible  = '适用版本';
-$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禅道<a href="http://www.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
+$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禅道<a href="http://api.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = '作者';
 $lang->extension->license     = '授权';
 $lang->extension->intro       = '详情';

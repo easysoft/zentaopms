@@ -84,4 +84,4 @@ $lang->report->mailtitle->bug   = " Bugs(%s),";
 $lang->report->mailtitle->task  = " Tasks(%s),";
 $lang->report->mailtitle->todo  = " Todos(%s),";
 
-$lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';
+$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';

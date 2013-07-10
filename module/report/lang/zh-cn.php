@@ -84,4 +84,4 @@ $lang->report->mailtitle->bug   = " Bugs(%s),";
 $lang->report->mailtitle->task  = " 任务(%s),";
 $lang->report->mailtitle->todo  = " 待办(%s),";
 
-$lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
+$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
