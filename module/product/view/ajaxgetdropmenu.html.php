@@ -8,19 +8,27 @@
   <div id='defaultMenu' class='f-left'>
     <ul>
     <?php
-    $i = 0;
+    $iCharges = 0;
+    $others   = 0;
+    $closeds  = 0;
+    foreach($products as $product)
+    {
+        if($product->status == 'normal' and $product->PO == $this->app->user->account) $iCharges++;
+        if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $others++;
+        if($product->status == 'closed') $closeds++;
+    }
+
+    if($iCharges and $others) echo "<span class='black'>{$lang->product->mine}</span>";
     foreach($products as $product)
     {
         if($product->status == 'normal' and $product->PO == $this->app->user->account) 
         {
-            if(!$i) echo "<span class='black'>{$lang->product->mine}</span>";
             echo "<li>" . html::a(sprintf($link, $product->id), $product->name, '', "class='mine'"). "</li>";
-            $i++;
         }
     }
 
-    if($i) echo "<span class='black'>{$lang->product->other}</span>";
-    $class = $i ? "class='other'" : '';
+    if($iCharges and $others) echo "<span class='black'>{$lang->product->other}</span>";
+    $class = ($iCharges and $others) ? "class='other'" : '';
     foreach($products as $product)
     {
         if($product->status == 'normal' and !($product->PO == $this->app->user->account))
@@ -30,7 +38,11 @@
     }
     ?>
     </ul>
+
+    <?php if($closeds):?>
     <div class='a-right'><a class='gray' id='more' onClick='switchMore()'><?php echo $lang->product->closed;?></a></div>
+    <?php endif;?>
+
   </div>
 
   <div id='moreMenu' class='hidden f-left'>

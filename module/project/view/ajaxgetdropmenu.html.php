@@ -8,29 +8,41 @@
   <div id='defaultMenu' class='f-left'>
     <ul>
     <?php
-      $i = 0;
-      foreach($projects as $project)
-      {
-          if($project->status != 'done' and $project->PM == $this->app->user->account)
-          {
-              if(!$i) echo "<span class='black'>{$lang->project->mine}</span>";
-              echo "<li>" . html::a(sprintf($link, $project->id), $project->name). "</li>";
-              $i++;
-          }
-      }
+    $iCharges = 0;
+    $others   = 0;
+    $dones    = 0;
+    foreach($projects as $project)
+    {
+        if($project->status != 'done' and $project->PM == $this->app->user->account) $iCharges++;
+        if($project->status != 'done' and !($project->PM == $this->app->user->account)) $others++;
+        if($project->status == 'done') $dones++;
+    }
 
-      if($i) echo "<span class='black'>{$lang->project->other}</span>";
-      $class = $i ? "class='other'" : '';
-      foreach($projects as $project)
-      {
-          if($project->status != 'done' and !($project->PM == $this->app->user->account))
-          {
-              echo "<li>" . html::a(sprintf($link, $project->id), $project->name, '', "$class"). "</li>";
-          }
-      }
+    if($iCharges and $others) echo "<span class='black'>{$lang->project->mine}</span>";
+    foreach($projects as $project)
+    {
+        if($project->status != 'done' and $project->PM == $this->app->user->account)
+        {
+            echo "<li>" . html::a(sprintf($link, $project->id), $project->name). "</li>";
+        }
+    }
+
+    if($iCharges and $others) echo "<span class='black'>{$lang->project->other}</span>";
+    $class = ($iCharges and $others) ? "class='other'" : '';
+    foreach($projects as $project)
+    {
+        if($project->status != 'done' and !($project->PM == $this->app->user->account))
+        {
+            echo "<li>" . html::a(sprintf($link, $project->id), $project->name, '', "$class"). "</li>";
+        }
+    }
     ?>
     </ul>
+
+    <?php if($dones):?>
     <div class='a-right'><a id='more' onClick='switchMore()'><?php echo $lang->project->doneProjects . '&raquo;';?></a></div>
+    <?php endif;?>
+
   </div>
 
   <div id='moreMenu' class='hidden f-left'>
