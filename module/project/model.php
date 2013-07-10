@@ -318,6 +318,63 @@ class projectModel extends model
     }
 
     /**
+     * Batch update. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchUpdate()
+    {
+        $projects   = array();
+        $allChanges = array();
+        foreach($this->post->projectIDList as $projectID)
+        {
+            $projects[$projectID] = new stdClass();
+            $projects[$projectID]->name   = $this->post->names[$projectID];
+            $projects[$projectID]->code   = $this->post->codes[$projectID];
+            $projects[$projectID]->PM     = $this->post->PMs[$projectID];
+            $projects[$projectID]->status = $this->post->statuses[$projectID];
+            $projects[$projectID]->begin  = $this->post->begins[$projectID];
+            $projects[$projectID]->end    = $this->post->ends[$projectID];
+            $projects[$projectID]->days   = $this->post->dayses[$projectID];
+        }
+
+        foreach($projects as $projectID => $project)
+        {
+            $oldProject = $this->getById($projectID);
+            $team       = $this->getTeamMemberPairs($projectID);
+
+            $this->dao->update(TABLE_PROJECT)->data($project)
+                ->autoCheck($skipFields = 'begin,end')
+                ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
+                ->checkIF($project->begin != '', 'begin', 'date')
+                ->checkIF($project->end != '', 'end', 'date')
+                ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+                ->check('name', 'unique', "id!=$projectID")
+                ->check('code', 'unique', "id!=$projectID")
+                ->where('id')->eq($projectID)
+                ->limit(1)
+                ->exec();
+
+            if($project->PM and !isset($team[$project->PM]))
+            {
+                $member = new stdClass();
+                $member->project = (int)$projectID;
+                $member->account = $project->PM;
+                $member->join    = helper::today();
+                $member->role    = $this->lang->project->PM;
+                $member->days    = 0;
+                $member->hours   = $this->config->project->defaultWorkhours;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            }
+
+            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
+            $allChanges[$projectID] = common::createChanges($oldProject, $project);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Start project.
      * 
      * @param  int    $projectID 

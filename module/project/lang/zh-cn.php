@@ -118,6 +118,7 @@ $lang->project->copy            = "复制项目";
 $lang->project->delete          = "删除项目";
 $lang->project->browse          = "浏览项目";
 $lang->project->edit            = "编辑项目";
+$lang->project->batchEdit       = "批量编辑";
 $lang->project->manageMembers   = '团队管理';
 $lang->project->unlinkMember    = '移除成员';
 $lang->project->unlinkStory     = '移除需求';

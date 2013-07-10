@@ -118,6 +118,7 @@ $lang->project->copy            = "Copy a project";
 $lang->project->delete          = "Delete";
 $lang->project->browse          = "Browse";
 $lang->project->edit            = "Edit";
+$lang->project->batchEdit       = "Batch Edit";
 $lang->project->manageMembers   = 'Manage team members';
 $lang->project->unlinkMember    = 'Remove member';
 $lang->project->unlinkStory     = 'Remove story';

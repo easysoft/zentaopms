@@ -47,6 +47,7 @@ class project extends control
         $this->app->loadLang('my');
         $this->view->title         = $this->lang->project->allProject;
         $this->view->projectStats  = $this->project->getProjectStats($status);
+        $this->view->projectID     = $projectID;
 
         $this->display();
     }
@@ -903,6 +904,44 @@ class project extends control
         $this->view->allProducts    = $this->loadModel('product')->getPairs();
         $this->view->linkedProducts = $linkedProducts;
 
+        $this->display();
+    }
+
+    /**
+     * Batch edit.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($projectID = 0)
+    {
+        if($this->post->names)
+        {
+            $allChanges = $this->project->batchUpdate();
+            if(!empty($allChanges))
+            {
+                foreach($allChanges as $projectID => $changes)
+                {
+                    if(!empty($changes))
+                    {
+                        $actionID = $this->loadModel('action')->create('project', $projectID, 'Edited');
+                        $this->action->logHistory($actionID, $changes);
+                    }
+                }
+            }
+            die(js::locate($this->session->projectList, 'parent'));
+        }
+
+        $this->project->setMenu($this->projects, $projectID);
+
+        $projectIDList = $this->post->projectIDList ? $this->post->projectIDList : die(js::locate($this->session->projectList, 'parent'));
+
+        $this->view->title         = $this->lang->project->batchEdit;
+        $this->view->position[]    = $this->lang->project->batchEdit;
+        $this->view->projectIDList = $projectIDList;
+        $this->view->projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchAll('id');
+        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed,nodeleted,pmfirst');
         $this->display();
     }
 

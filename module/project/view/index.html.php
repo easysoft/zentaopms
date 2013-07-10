@@ -19,8 +19,10 @@
   <?php echo html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']);?>
   <?php echo html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->statusList['done']);?>
 </h3>
+<form method='post' action='<?php echo $this->inLink('batchEdit', "projectID=$projectID");?>'>
 <table class='table-1 fixed colored'>
   <tr class='colhead'>
+    <th class='w-id'>   <?php echo $lang->idAB;?></th>
     <th class='w-150px'><?php echo $lang->project->name;?></th>
     <th><?php echo $lang->project->code;?></th>
     <th><?php echo $lang->project->end;?></th>
@@ -31,8 +33,15 @@
     <th class='w-150px'><?php echo $lang->project->progess;?></th>
     <th class='w-100px'><?php echo $lang->project->burn;?></th>
   </tr>
+  <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <?php foreach($projectStats as $project):?>
   <tr class='a-center'>
+    <td>
+      <?php if($canBatchEdit):?>
+      <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
+      <?php endif;?>
+      <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), sprintf('%03d', $project->id));?>
+    </td>
     <td class='a-left'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
     <td><?php echo $project->code;?></td>
     <td><?php echo $project->end;?></td>
@@ -45,7 +54,20 @@
       <small><?php echo $project->hours->progress;?>%</small>
     </td>
     <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
- </tr>
- <?php endforeach;?>
+  </tr>
+  <?php endforeach;?>
+  <?php if($canBatchEdit):?>
+  <tfoot>
+    <tr>
+      <td colspan='10' class='a-right'>
+        <div class='f-left'>
+        <?php echo html::selectAll() . html::selectReverse();?>
+        <?php echo html::submitButton($lang->project->batchEdit);?>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+  <?php endif;?>
 </table>
+</form>
 <?php include '../../common/view/footer.html.php';?>
