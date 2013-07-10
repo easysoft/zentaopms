@@ -24,6 +24,7 @@ class companyModel extends model
     {
         common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
         common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
+        common::setMenuVars($this->lang->company->menu, 'batchAddUser', array($dept));
     }
 
     /**

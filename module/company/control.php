@@ -21,7 +21,6 @@ class company extends control
     {
         parent::__construct();
         $this->loadModel('dept');
-        $this->company->setMenu();
     }
 
     /**
@@ -169,6 +168,7 @@ class company extends control
      */
     public function view()
     {
+        $this->company->setMenu();
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
         $this->view->position[] = $this->lang->company->view;
         $this->view->company    = $this->company->getById($this->app->company->id);
@@ -211,6 +211,7 @@ class company extends control
      */
     public function dynamic($browseType = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->company->setMenu();
         $this->app->loadLang('user');
         $this->app->loadLang('project');
         $this->loadModel('action');
