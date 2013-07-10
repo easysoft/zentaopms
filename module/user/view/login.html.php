@@ -58,7 +58,7 @@ include '../../common/view/colorbox.html.php';
     <?php echo $lang->donate;?>
     <?php if($config->checkVersion):?>
     <br />
-    <iframe id='updater' class='hidden' frameborder='0' scrolling='no' allowtransparency='true' src="http://api.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html"></iframe>
+    <iframe id='updater' class='hidden' frameborder='0' scrolling='no' allowtransparency='true' src="http://api.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html?lang=<?php echo str_replace('-', '_', $this->app->getClientLang())?>"></iframe>
     <?php endif;?>
   </div>
 

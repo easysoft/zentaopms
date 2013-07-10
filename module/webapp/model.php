@@ -96,6 +96,7 @@ class webappModel extends model
      */
     public function fetchAPI($url)
     {
+        $url .= '?lang=' . str_replace('-', '_', $this->app->getClientLang());
         $this->agent->fetch($url);
         $result = json_decode($this->agent->results);
 
