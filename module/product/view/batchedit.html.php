@@ -33,13 +33,7 @@
       <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status);?></td>
     </tr>
     <?php endforeach;?>
-    <tfoot>
-      <tr>
-        <td colspan='7' class='a-center'>
-          <?php echo html::submitButton();?>
-        </td>
-      </tr>
-    </tfoot>
+    <tfoot><tr><td colspan='7' class='a-center'><?php echo html::submitButton();?></td></tr></tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
