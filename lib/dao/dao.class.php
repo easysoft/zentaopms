@@ -1528,7 +1528,7 @@ class sql
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
         $order = str_replace(array('|', '', '_'), ' ', $order);
-        $order = str_replace('left', '`left`', $order); // process the left to `left`.
+
         $this->sql .= ' ' . DAO::ORDERBY . " $order";
         return $this;
     }
