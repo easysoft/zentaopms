@@ -492,7 +492,8 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('status')->ne('suspended')->fi()
+                ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->orderBy('code')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
