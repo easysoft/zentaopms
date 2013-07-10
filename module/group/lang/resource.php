@@ -112,31 +112,33 @@ $lang->todo->methodOrder[40] = 'import2Today';
 
 /* Product. */
 $lang->resource->product = new stdclass();
-$lang->resource->product->index   = 'index';
-$lang->resource->product->browse  = 'browse';
-$lang->resource->product->create  = 'create';
-$lang->resource->product->view    = 'view';
-$lang->resource->product->edit    = 'edit';
-$lang->resource->product->order   = 'order';
-$lang->resource->product->delete  = 'delete';
-$lang->resource->product->roadmap = 'roadmap';
-$lang->resource->product->doc     = 'doc';
-$lang->resource->product->dynamic = 'dynamic';
-$lang->resource->product->project = 'project';
-$lang->resource->product->close   = 'close';
+$lang->resource->product->index     = 'index';
+$lang->resource->product->browse    = 'browse';
+$lang->resource->product->create    = 'create';
+$lang->resource->product->view      = 'view';
+$lang->resource->product->edit      = 'edit';
+$lang->resource->product->batchEdit = 'batchEdit';
+$lang->resource->product->order     = 'order';
+$lang->resource->product->delete    = 'delete';
+$lang->resource->product->roadmap   = 'roadmap';
+$lang->resource->product->doc       = 'doc';
+$lang->resource->product->dynamic   = 'dynamic';
+$lang->resource->product->project   = 'project';
+$lang->resource->product->close     = 'close';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
 $lang->product->methodOrder[10] = 'create';
 $lang->product->methodOrder[15] = 'view';
 $lang->product->methodOrder[20] = 'edit';
-$lang->product->methodOrder[25] = 'order';
-$lang->product->methodOrder[30] = 'delete';
-$lang->product->methodOrder[35] = 'roadmap';
-$lang->product->methodOrder[40] = 'doc';
-$lang->product->methodOrder[45] = 'dynamic';
-$lang->product->methodOrder[50] = 'project';
-$lang->product->methodOrder[55] = 'close';
+$lang->product->methodOrder[25] = 'batchEdit';
+$lang->product->methodOrder[30] = 'order';
+$lang->product->methodOrder[35] = 'delete';
+$lang->product->methodOrder[40] = 'roadmap';
+$lang->product->methodOrder[45] = 'doc';
+$lang->product->methodOrder[50] = 'dynamic';
+$lang->product->methodOrder[55] = 'project';
+$lang->product->methodOrder[60] = 'close';
 
 /* Story. */
 $lang->resource->story = new stdclass();

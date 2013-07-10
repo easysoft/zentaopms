@@ -53,6 +53,7 @@ class product extends control
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
         $this->view->productStats = $this->product->getStats();
+        $this->view->productID    = $productID;
         $this->display();
     }
 
@@ -220,6 +221,47 @@ class product extends control
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
 
+        $this->display();
+    }
+
+    /**
+     * Batch edit products.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($productID = 0)
+    {
+        if($this->post->names)
+        {
+            $allChanges = $this->product->batchUpdate();
+            if(!empty($allChanges))
+            {
+                foreach($allChanges as $productID => $changes)
+                {
+                    if(!empty($changes))
+                    {
+                        $actionID = $this->loadModel('action')->create('product', $productID, 'Edited');
+                        $this->action->logHistory($actionID, $changes);
+                    }
+                }
+            }
+            die(js::locate($this->session->productList, 'parent'));
+        }
+
+        $this->product->setMenu($this->products, $productID);
+
+        $productIDList = $this->post->productIDList ? $this->post->productIDList : array();
+        if(!$productIDList) die(js::locate($this->session->productList, 'parent'));
+
+        $this->view->title         = $this->lang->product->batchEdit;
+        $this->view->position[]    = $this->lang->product->batchEdit;
+        $this->view->productIDList = $productIDList;
+        $this->view->products      = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
+        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
+        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
+        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
         $this->display();
     }
 

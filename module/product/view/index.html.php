@@ -26,8 +26,10 @@
   </tr>
 </table>
 <?php else:?>
+<form method='post' action='<?php echo $this->inLink('batchEdit', "productID=$productID");?>'>
   <table class='table-1 colored fixed'>
     <tr class='colhead'>
+      <th class='w-id'>   <?php echo $lang->idAB;?></th>
       <th class='w-150px'><?php echo $lang->product->name;?></th>
       <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
       <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
@@ -39,9 +41,16 @@
       <th><?php echo $lang->bug->unResolved;?></th>
       <th><?php echo $lang->bug->assignToNull;?></th>
     </tr>
+    <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
     <?php foreach($productStats as $product):?>
     <tr class='a-center' style='height:30px'>
-      <td class='a-left'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+      <td>
+        <?php if($canBatchEdit):?>
+        <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
+        <?php endif;?>
+        <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
+      </td>
+      <td><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
       <td><?php echo $product->stories['active']?></td>
       <td><?php echo $product->stories['changed']?></td>
       <td><?php echo $product->stories['draft']?></td>
@@ -53,7 +62,20 @@
       <td><?php echo $product->assignToNull;?></td>
     </tr>
     <?php endforeach;?>
+    <?php if($canBatchEdit):?>
+    <tfoot>
+      <tr>
+        <td colspan='11' class='a-right'>
+          <div class='f-left'>
+          <?php echo html::selectAll() . html::selectReverse();?>
+          <?php echo html::submitButton($lang->product->batchEdit);?>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+    <?php endif;?>
   </table>
+</form>
 </div>
 <?php endif;?>
 </div>

@@ -26,7 +26,7 @@
   ?>
 </div>
 
-<table class='table-1 colored tablesorter'>
+<table class='table-1 colored tablesorter fixed'>
   <thead>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->action->date;?></th>

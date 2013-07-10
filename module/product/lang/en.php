@@ -9,20 +9,21 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->product->common = 'Product';
-$lang->product->index  = "Index";
-$lang->product->browse = "Browse";
-$lang->product->dynamic= "Dynamic";
-$lang->product->view   = "Info";
-$lang->product->edit   = "Edit";
-$lang->product->create = "Create";
-$lang->product->read   = "Info";
-$lang->product->delete = "Delete";
-$lang->product->close  = "Close";
-$lang->product->select = '--select product--';
-$lang->product->mine   = 'I charge : ';
-$lang->product->other  = 'Other : ';
-$lang->product->closed = 'Closed&raquo;';
+$lang->product->common    = 'Product';
+$lang->product->index     = "Index";
+$lang->product->browse    = "Browse";
+$lang->product->dynamic   = "Dynamic";
+$lang->product->view      = "Info";
+$lang->product->edit      = "Edit";
+$lang->product->batchEdit = "Batch Edit";
+$lang->product->create    = "Create";
+$lang->product->read      = "Info";
+$lang->product->delete    = "Delete";
+$lang->product->close     = "Close";
+$lang->product->select    = '--select product--';
+$lang->product->mine      = 'I charge : ';
+$lang->product->other     = 'Other : ';
+$lang->product->closed    = 'Closed&raquo;';
 
 $lang->product->basicInfo = 'Basic info';
 $lang->product->otherInfo = 'Other info';

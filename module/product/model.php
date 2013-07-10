@@ -252,6 +252,44 @@ class productModel extends model
             ->exec();
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
     }
+
+    /**
+     * Batch update products.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchUpdate()
+    {
+        $products   = array();
+        $allChanges = array();
+        foreach($this->post->productIDList as $productID)
+        {
+            $products[$productID] = new stdClass();
+            $products[$productID]->name   = $this->post->names[$productID];
+            $products[$productID]->code   = $this->post->codes[$productID];
+            $products[$productID]->PO     = $this->post->POs[$productID];
+            $products[$productID]->QD     = $this->post->QDs[$productID];
+            $products[$productID]->RD     = $this->post->RDs[$productID];
+            $products[$productID]->status = $this->post->statuses[$productID];
+        }
+
+        foreach($products as $productID => $product)
+        {
+            $oldProduct = $this->getById($productID);
+            $this->dao->update(TABLE_PRODUCT)
+                ->data($product)
+                ->autoCheck()
+                ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
+                ->check('name', 'unique', "id != $productID")
+                ->check('code', 'unique', "id != $productID")
+                ->where('id')->eq($productID)
+                ->exec();
+            if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
+            $allChanges[$productID] = common::createChanges($oldProduct, $product);
+        }
+        return $allChanges;
+    }
     
     /**
      * Close product.
