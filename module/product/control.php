@@ -252,8 +252,7 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
-        $productIDList = $this->post->productIDList ? $this->post->productIDList : array();
-        if(!$productIDList) die(js::locate($this->session->productList, 'parent'));
+        $productIDList = $this->post->productIDList ? $this->post->productIDList : die(js::locate($this->session->productList, 'parent'));
 
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
