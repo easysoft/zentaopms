@@ -56,14 +56,15 @@ function setAfter()
 {
     if($("#story").length == 0 || $("#story").select().val() == '') 
     {
-        if($('input[value="continueAdding"]').attr('checked') == true) 
+        if($('input[value="continueAdding"]').attr('checked') == 'checked') 
         {
-            $('input[value="toTaskList"]').attr('checked', true);
+            $('input[value="toTaskList"]').attr('checked', 'checked');
         }
         $('input[value="continueAdding"]').attr('disabled', 'disabled');
     }
     else
     {
+        $('input[value="continueAdding"]').attr('checked', 'checked');
         $('input[value="continueAdding"]').attr('disabled', false);
     }
 }

@@ -16,8 +16,8 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders',  $lang->task->placeholder); ?>
-<?php js::set('userList', array_keys($users)); ?>
+<?php js::set('holders',  $lang->task->placeholder);?>
+<?php js::set('userList', array_keys($users));?>
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1 a-left'> 
     <caption>
