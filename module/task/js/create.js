@@ -29,6 +29,7 @@ function setPreview()
     if(!$('#story').val())
     {
         $('#preview').addClass('hidden');
+        $('#copyButton').addClass('hidden');
     }
     else
     {
@@ -37,6 +38,7 @@ function setPreview()
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);
+        $('#copyButton').removeClass('hidden');
     }
 
     $("#preview").colorbox({width:960, height:550, iframe:true, transition:'none', scrolling:true});

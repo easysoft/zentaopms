@@ -33,12 +33,10 @@
       <th class='rowhead'><?php echo $lang->task->project;?></th>
       <td><?php echo $project->name;?></td>
     </tr>  
-    <?php if($project->type != 'sprint'):?>
     <tr>
       <th class='rowhead'><?php echo $lang->task->module;?></th>
       <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3'");?></span></td>
     </tr>  
-    <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
       <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, 'class=select-3');?></td>
@@ -55,7 +53,7 @@
       <td>
       <?php
       echo html::input('name', $task->name, "class='text-1'");
-      echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?>
+      echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle() id="copyButton"');?>
       </td>
     </tr>  
     <tr>
