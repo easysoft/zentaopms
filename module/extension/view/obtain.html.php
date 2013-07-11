@@ -40,14 +40,14 @@
       <?php foreach($extensions as $extension):?>
         <?php 
         $currentRelease = $extension->currentRelease;
-        $latestRelease  = $extension->latestRelease;
+        $latestRelease  = isset($extension->latestRelease) ? $extension->latestRelease : '';
         ?>
         <table class='table-1 exttable'>
           <caption>
             <div class='f-left'><?php echo $extension->name . "($currentRelease->releaseVersion)";?></div>
             <div class='f-right'>
               <?php 
-              if($latestRelease->releaseVersion != $currentRelease->releaseVersion) 
+              if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion) 
               {
                   printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoVersion);
               }?>
@@ -62,12 +62,13 @@
                 echo "{$lang->extension->downloads}:  {$extension->downloads} ";
                 echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
                 echo "{$lang->extension->grade}: ",   html::printStars($extension->stars);
+                echo " {$lang->extension->depends}: ",   $currentRelease->depends;
                 ?>
               </div>
             </td>
             <td class='w-200px a-right'>
               <?php 
-              $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->type&&overridePackage=no&ignoreCompitable=yes");
+              $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->offcial$extension->type&overridePackage=no&ignoreCompitable=yes");
               echo html::a($extension->viewLink, $lang->extension->view, '', 'class="button-c extension"');
               if($currentRelease->public)
               {
