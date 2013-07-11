@@ -48,6 +48,7 @@ $lang->extension->downloads   = 'Downloads';
 $lang->extension->public      = 'Public';
 $lang->extension->compatible  = 'Compatible';
 $lang->extension->grade       = 'Grade';
+$lang->extension->depends     = 'Depends';
 
 $lang->extension->publicList[0] = 'Manually';
 $lang->extension->publicList[1] = 'Auto';

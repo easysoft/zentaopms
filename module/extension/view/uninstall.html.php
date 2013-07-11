@@ -15,6 +15,12 @@
   <caption><?php echo $title;?></caption>
   <tr>
     <td valign='middle'>
+    <?php if(!empty($error)):?>
+      <?php 
+      echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>"; 
+      echo "<p>$error</p>";
+      ?>
+    <?php else:?>
     <?php
     echo "<h3 class='a-center success'>{$title}</h3>";
     if($removeCommands)
@@ -24,6 +30,7 @@
     }
     echo "<p class='a-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
     ?>
+    <?php endif;?>
     </td>
   </tr>
 </table>

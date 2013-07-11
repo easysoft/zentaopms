@@ -48,6 +48,7 @@ $lang->extension->downloads   = '下载量';
 $lang->extension->public      = '下载方式';
 $lang->extension->compatible  = '兼容性';
 $lang->extension->grade       = '评分';
+$lang->extension->depends     = '依赖';
 
 $lang->extension->publicList[0] = '手工下载';
 $lang->extension->publicList[1] = '直接下载';
@@ -62,6 +63,7 @@ $lang->extension->bySearch      = '搜索';
 $lang->extension->byCategory    = '分类浏览';
 
 $lang->extension->installFailed            = '%s失败，错误原因如下:';
+$lang->extension->uninstallFailed          = '卸载失败，错误原因如下:';
 $lang->extension->installFinished          = '恭喜您，插件顺利的%s成功！';
 $lang->extension->refreshPage              = '刷新页面';
 $lang->extension->uninstallFinished        = '插件已经成功卸载';
@@ -96,3 +98,7 @@ $lang->extension->errorPackageNotFound         = '包文件 <strong>%s </strong>
 $lang->extension->errorTargetPathNotWritable   = '目标路径 <strong>%s </strong>不可写。';
 $lang->extension->errorTargetPathNotExists     = '目标路径 <strong>%s </strong>不存在。';
 $lang->extension->errorInstallDB               = '执行数据库语句失败。错误信息如下：%s';
+$lang->extension->errorConflicts               = '与插件“%s”有冲突';
+$lang->extension->errorDepends                 = '没有安装依赖插件“%s”';
+$lang->extension->errorIncompatible            = '该插件与您的禅道版本不兼容';
+$lang->extension->errorUninstallDepends        = '插件“%s”依赖该插件，不能卸载';

@@ -207,10 +207,12 @@ class extensionModel extends model
         $data->license       = 'unknown';
         $data->zentaoVersion = '';
         $data->type          = '';
+        $data->depends       = '';
 
         $info = $this->parseExtensionCFG($extension);
         foreach($info as $key => $value) if(isset($data->$key)) $data->$key = $value;
-        if(isset($info->zentaoversion)) $data->zentaoVersion = $info->zentaoversion;
+        if(isset($info->zentaoversion))        $data->zentaoVersion = $info->zentaoversion;
+        if(isset($info->zentao['compatible'])) $data->zentaoVersion = $info->zentao['compatible'];
 
         return $data;
     }
@@ -312,19 +314,60 @@ class extensionModel extends model
     }
 
     /**
-     * Get the extension's zentaoVersion 
+     * Get the extension's condition. 
      * 
      * @param  string    $extenstion 
      * @access public
-     * @return string
+     * @return object
      */
-    public function getZentaoVersion($extension)
+    public function getCondition($extension)
     {
-        $info = $this->parseExtensionCFG($extension);
-        if(isset($info->zentaoVersion)) return $info->zentaoVersion;
-        if(isset($info->zentaoversion)) return $info->zentaoversion;
+        $info      = $this->parseExtensionCFG($extension);
+        $condition = new stdclass();
 
-        return '';
+        $condition->zentao    = array('compatible' => '', 'incompatible' => '');
+        $condition->depends   = '';
+        $condition->conflicts = '';
+
+        if(isset($info->zentao))        $condition->zentao    = $info->zentao;
+        if(isset($info->depends))       $condition->depends   = $info->depends;
+        if(isset($info->conflicts))     $condition->conflicts = $info->conflicts;
+
+        if(isset($info->zentaoVersion)) $condition->zentao['compatible'] = $info->zentaoVersion;
+        if(isset($info->zentaoversion)) $condition->zentao['compatible'] =  $info->zentaoversion;
+
+        return $condition;
+    }
+
+    /**
+     * Parse condition 
+     * 
+     * @param  string    $condition 
+     * @access public
+     * @return array
+     */
+    public function parseCondition($condition)
+    {
+        $limits     = array();
+        $extensions = explode(') ', $condition);
+        foreach($extensions as $extension)
+        {
+            $code = substr($extension, 0, strpos($extension, '('));
+            $versions = trim(substr($extension, strpos($extension, '(') + 1), ')');
+            if($versions == 'all')
+            {
+                $limits[$code]['min'] = 'all';
+                $limits[$code]['max'] = '';
+            }
+            else
+            {
+                list($min, $max) = explode(',', $versions);
+                $limits[$code]['min'] = $min;
+                $limits[$code]['max'] = $max;
+            }
+        }
+
+        return $limits;
     }
 
     /**
@@ -636,6 +679,7 @@ class extensionModel extends model
 
         /* Remove the zip file. */
         $packageFile = $this->getPackageFile($extension);
+        if(!file_exists($packageFile)) return false;
         if(file_exists($packageFile) and !@unlink($packageFile))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $packageFile" : "del $packageFile";
@@ -758,5 +802,34 @@ class extensionModel extends model
             $data->files = json_encode($data->files);
         }
         return $this->dao->update(TABLE_EXTENSION)->data($data)->where('code')->eq($extension)->exec();
+    }
+
+    public function checkDepends($extension)
+    {
+        $result        = array();
+        $extensionInfo = $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fetch();
+        $dependsExts   = $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->fetchAll();
+        if($dependsExts)
+        {
+            foreach($dependsExts as $dependsExt)
+            {
+                $depends = $this->parseCondition($dependsExt->depends);
+                if($this->compare4Limit($extensionInfo->version, $depends[$extension])) $result[] = $dependsExt->name;
+            }
+        }
+        return $result;
+    }
+
+    public function compare4Limit($version, $limit, $type = 'between')
+    {
+        $result = false;
+        if(empty($limit)) return false;
+
+        if($limit['min'] == 'all') $result = true;
+        if($limit['min'] != 'all' and $limit['min'] and $version >= $limit['min']) $result = true;
+        if($limit['max'] and $version <= $limit['max']) $result = true;
+
+        if($type != 'between') return !$result;
+        return $result;
     }
 }

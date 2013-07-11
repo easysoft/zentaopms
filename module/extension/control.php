@@ -36,7 +36,7 @@ class extension extends control
 
                     $extension = $extensions[$release->code];
                     $extension->viewLink = $release->viewLink;
-                    if($extension->version != $release->latestRelease->releaseVersion and $this->extension->checkVersion($release->latestRelease->zentaoVersion))
+                    if(isset($release->latestRelease) and $extension->version != $release->latestRelease->releaseVersion and $this->extension->checkVersion($release->latestRelease->zentaoVersion))
                     {
                         $upgradeLink = inlink('upgrade', "extension=$release->code&downLink=" . helper::safe64Encode($release->latestRelease->downLink) . "&md5={$release->latestRelease->md5}&type=$release->type");
                         $upgradeLink = ($release->latestRelease->charge or !$release->latestRelease->public) ? $release->latestRelease->downLink : $upgradeLink;
@@ -176,9 +176,79 @@ class extension extends control
             $this->view->error = sprintf($this->lang->extension->errorExtracted, $packageFile, $return->error);
             die($this->display());
         }
+        /* Get condition. e.g. zentao|depends|conflicts. */
+        $condition = $this->extension->getCondition($extension);
+        $installedExts = $this->extension->getLocalExtensions('installed');
 
-        /* Check version comptiable. */
-        $zentaoVersion = $this->extension->getZentaoVersion($extension);
+        /* Check version incompatible */
+        $incompatible = $condition->zentao['incompatible'];
+        if($this->extension->checkVersion($incompatible))
+        {
+            $this->view->error = sprintf($this->lang->extension->errorIncompatible);
+            die($this->display());
+        }
+
+        /* Check conflicts. */
+        $conflicts = $condition->conflicts;
+        if($conflicts)
+        {
+            $conflictsExt = '';
+            $limits = $this->extension->parseCondition($conflicts);
+            foreach($limits as $code => $limit)
+            {
+                $hasConflicts = false;
+                if(isset($installedExts[$code]))
+                {
+                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit)) $hasConflicts = true;
+                }
+                $extVersion = '';
+                if($limit['min'] == 'all') $extVersion = 'all';
+                if($limit['min'] and $limit['min']!= 'all') $extVersion .= '>=V' . $limit['min'];
+                if($limit['max']) $extVersion .= ' <=V' . $limit['max'];
+                if($hasConflicts)$conflictsExt .= $installedExts[$code]->name . "($extVersion) ";
+            }
+
+            if($hasConflicts)
+            {
+                $this->view->error = sprintf($this->lang->extension->errorConflicts, $conflictsExt);
+                die($this->display());
+            }
+        }
+
+        /* Check Depends. */
+        $depends = $condition->depends;
+        if($depends)
+        {
+            $dependsExt = '';
+            $limits = $this->extension->parseCondition($depends);
+            foreach($limits as $code => $limit)
+            {
+                $noDepends = false;
+                if(isset($installedExts[$code]))
+                {
+                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit, 'noBetween'))$noDepends = true;
+                }
+                else
+                {
+                    $noDepends = true;
+                }
+
+                $extVersion = '';
+                if($limit['min'] == 'all') $extVersion = 'all';
+                if($limit['min'] and $limit['min']!= 'all') $extVersion .= '>=V' . $limit['min'];
+                if($limit['max']) $extVersion .= ' <=V' . $limit['max'];
+                if($noDepends)$dependsExt .= $code . "($extVersion) ";
+            }
+
+            if($noDepends)
+            {
+                $this->view->error = sprintf($this->lang->extension->errorDepends, $dependsExt);
+                die($this->display());
+            }
+        }
+
+        /* Check version compatible. */
+        $zentaoVersion = $condition->zentao['compatible'];
         if(!$this->extension->checkVersion($zentaoVersion) and $ignoreCompatible == 'no')
         {
             $ignoreLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&type=$type&overridePackage=$overridePackage&ignoreCompatible=yes&overrideFile=$overrideFile&agreeLicense=$agreeLicense&upgrade=$upgrade");
@@ -269,6 +339,14 @@ class extension extends control
      */
     public function uninstall($extension)
     {
+
+        $dependsExts = $this->extension->checkDepends($extension);
+        if($dependsExts)
+        {
+            $this->view->error = sprintf($this->lang->extension->errorUninstallDepends, join(' ', $dependsExts));
+            die($this->display());
+        }
+
         if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
 
         $this->extension->executeDB($extension, 'uninstall');
