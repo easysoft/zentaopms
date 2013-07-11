@@ -19,11 +19,17 @@
       <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
       <?php endif;?>
     </tr>
+    <?php
+    $canBatchEdit = common::hasPriv('testcase', 'batchEdit');
+    $canBatchClose = common::hasPriv('testtask', 'batchRun');
+    ?>
     <?php foreach($cases as $case):?>
     <tr class='a-center'>
       <?php $viewLink = inlink('view', "caseID=$case->id");?>
       <td>
+        <?php if($canBatchEdit or $canBatchClose):?>
         <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
+        <?php endif;?>
         <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
       </td>
       <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
@@ -59,9 +65,9 @@
        <?php if($cases):?>
        <div class='f-left'>
        <?php
-       echo html::selectAll() . html::selectReverse(); 
-       if(common::hasPriv('testcase', 'batchEdit'))echo html::submitButton($lang->edit, "onclick='changeAction(\"" . inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy") . "\")'");
-       if(common::hasPriv('testtask', 'batchRun')) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
+       if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse(); 
+       if($canBatchEdit) echo html::submitButton($lang->edit, "onclick='changeAction(\"" . inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy") . "\")'");
+       if($canBatchClose) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
        ?>
        </div>
        <?php endif?>

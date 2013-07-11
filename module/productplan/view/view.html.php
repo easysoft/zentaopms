@@ -73,16 +73,21 @@
     </tr>
     </thead>
     <tbody>
-      <?php $totalEstimate = 0.0;?>
+      <?php
+      $totalEstimate = 0.0;
+      $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkStory');
+      ?>
       <?php foreach($planStories as $story):?>
       <?php
-         $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
-         $totalEstimate += $story->estimate;
-       ?>
+      $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+      $totalEstimate += $story->estimate;
+      ?>
       <tr>
-        <td class='a-left'>
+        <td class='a-center'>
+          <?php if($canBatchUnlink):?>
           <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
-          <?php echo html::a($viewLink, $story->id);?>
+          <?php endif;?>
+          <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
         </td>
         <td><span class='<?php echo 'pri' . $story->pri?>'><?php echo $story->pri;?></span></td>
         <td class='a-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
@@ -100,7 +105,7 @@
       <td colspan='9'>
         <div class='a-left'>
         <?php 
-        if(count($planStories) and common::hasPriv('productPlan', 'batchUnlinkStory'))
+        if(count($planStories) and $canBatchUnlink)
         {
             echo html::selectAll() . html::selectReverse();
             echo html::submitButton($lang->productplan->batchUnlinkStory);

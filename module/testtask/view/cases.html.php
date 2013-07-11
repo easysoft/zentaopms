@@ -60,9 +60,19 @@ var moduleID   = '<?php echo $moduleID;?>';
           </tr>
         </thead>
         <tbody>
+          <?php
+          $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+          $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
+          $canBatchRun    = common::hasPriv('testtask', 'batchRun');
+          ?>
           <?php foreach($runs as $run):?>
           <tr class='a-center'>
-            <td class='a-left'><input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> <?php printf('%03d', $run->case);?></td>
+            <td class='a-left'>
+              <?php if($canBatchEdit or $canBatchAssign or $canBatchRun):?>
+              <input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> 
+              <?php endif;?>
+              <?php printf('%03d', $run->case);?>
+            </td>
             <td><span class='<?php echo 'pri' . $run->pri?>'><?php echo $run->pri?></span></td>
             <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
             </td>
@@ -88,17 +98,22 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td colspan='10'>
               <?php if($runs):?>
               <div class='f-left'>
-              <?php 
-              echo html::selectAll() . html::selectReverse();
-              if(common::hasPriv('testcase', 'batchEdit')):
-              ?>
+
+              <?php if($canBatchEdit or $canBatchAssign or $canBatchRun) echo html::selectAll() . html::selectReverse(); ?>
+
+              <?php if($canBatchEdit):?>
               <input class='button-s' value="<?php echo $lang->edit; ?>" type="button" onclick="casesform.action='<?php echo $this->createLink('testcase', 'batchEdit', "from=testtaskCases&productID=$productID");?>';casesform.submit();">
               <?php endif;?>
-              <?php if(common::hasPriv('testtask', 'batchAssign')):?>
+
+              <?php if($canBatchAssign):?>
               <?php echo html::select('assignedTo', $users);?>
               <input class='button-s' value="<?php echo $lang->testtask->assign; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
+              <?php endif;?>
+
+              <?php if($canBatchRun):?>
               <input class='button-s' value="<?php echo $lang->testtask->runCase; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");?>';casesform.submit();">
               <?php endif;?>
+
               </div>
               <?php endif;?>
               <?php echo $pager->show();?>

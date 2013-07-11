@@ -77,11 +77,14 @@
     </tr>
     </thead>
     <tbody>
+    <?php $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkStory');?>
     <?php foreach($planStories as $story):?>
     <tr>
-      <td class='a-left'>
+      <td class='a-center'>
+        <?php if($canBatchUnlink):?>
         <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
-        <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?>
+        <?php endif;?>
+        <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), sprintf("%03d", $story->id));?>
       </td>
       <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
       <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
@@ -93,19 +96,18 @@
       <td><?php common::printIcon('productplan', 'unlinkStory', "story=$story->id", '', 'list', '', 'hiddenwin');?></td>
     </tr>
     <?php endforeach;?>
+    <?php if(count($planStories) and $canBatchUnlink):?>
     <tfoot>
     <tr>
       <td colspan='9' class='a-left'>
       <?php 
-      if(count($planStories) and common::hasPriv('productPlan', 'batchUnlinkStory')) 
-      {
-          echo html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm');
-          echo html::submitButton($lang->productplan->batchUnlinkStory);
-      }
+      echo html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm');
+      echo html::submitButton($lang->productplan->batchUnlinkStory);
       ?>
       </td>
     </tr>
     </tfoot>
+    <?php endif;?>
     </tbody>
   </table>
 </form>

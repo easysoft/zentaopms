@@ -43,7 +43,11 @@
       </tr>
     </thead>
     <tbody>
-      <?php $totalEstimate = 0;?>
+      <?php
+      $totalEstimate = 0;
+      $canBatchEdit = common::hasPriv('story', 'batchEdit');
+      $canBatchClose = common::hasPriv('story', 'batchClose');
+      ?>
       <?php foreach($stories as $key => $story):?>
       <?php
       $storyLink      = $this->createLink('story', 'view', "storyID=$story->id");
@@ -51,7 +55,9 @@
       ?>
       <tr class='a-center'>
         <td>
+          <?php if($canBatchEdit or $canBatchClose):?>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
+          <?php endif;?>
           <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
         </td>
         <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
@@ -91,14 +97,14 @@
           <?php
           if(count($stories))
           {
-              echo html::selectAll() . html::selectReverse();
+              if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
 
-              if(common::hasPriv('story', 'batchEdit'))
+              if($canBatchEdit)
               {
                   $actionLink = $this->createLink('story', 'batchEdit', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
                   echo html::commonButton($lang->edit, "onclick=\"changeAction('projectStoryForm', 'batchEdit', '$actionLink')\"");
               }
-              if(common::hasPriv('story', 'batchClose'))
+              if($canBatchClose)
               {
                   $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
                   echo html::commonButton($lang->close, "onclick=\"changeAction('projectStoryForm', 'batchClose', '$actionLink')\"");

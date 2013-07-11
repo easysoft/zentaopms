@@ -48,9 +48,18 @@ js::set('deptID', $deptID);
         </thead>
         <tbody>
         <form action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
+        <?php 
+        $canBatchEdit      = common::hasPriv('user', 'batchEdit');
+        $canManageContacts = common::hasPriv('user', 'manageContacts');
+        ?>
         <?php foreach($users as $user):?>
         <tr class='a-center'>
-          <td><?php echo "<input type='checkbox' name='users[]' value='$user->account'> "; printf('%03d', $user->id);?></td>
+          <td>
+            <?php 
+            if($canBatchEdit or $canManageContacts) echo "<input type='checkbox' name='users[]' value='$user->account'> ";
+            printf('%03d', $user->id);
+            ?>
+          </td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <td><?php echo $lang->user->roleList[$user->role];?></td>
@@ -78,9 +87,9 @@ js::set('deptID', $deptID);
         <tr>
           <td colspan='12'>
           <?php
-          echo html::selectAll() . html::selectReverse();
-          echo html::submitButton($lang->edit, 'onclick=batchEdit()');
-          echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
+          if($canBatchEdit or $canManageContacts) echo html::selectAll() . html::selectReverse();
+          if($canBatchEdit) echo html::submitButton($lang->edit, 'onclick=batchEdit()');
+          if($canManageContacts) echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
           $pager->show();
           ?>
           </td>

@@ -28,11 +28,17 @@
   </tr>
   </thead>
   <tbody>
+  <?php 
+  $canBatchEdit  = common::hasPriv('task', 'batchEdit');
+  $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
+  ?>
   <?php foreach($tasks as $task):?>
   <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
   <tr class='a-center'>
     <td>
+      <?php if($canBatchEdit or $canBatchClose):?>
       <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
+      <?php endif;?>
       <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
     </td>
     <td><span class='<?php echo 'pri'. $lang->task->priList[$task->pri]?>'><?php echo $lang->task->priList[$task->pri];?></span></td>
@@ -102,14 +108,14 @@
         <?php 
         if(count($tasks))
         {
-            echo html::selectAll() . html::selectReverse();
+            if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
 
-            if(common::hasPriv('task', 'batchEdit'))
+            if($canBatchEdit)
             {
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID&from=projectTask&orderBy=$orderBy");
                 echo html::commonButton($lang->edit, "onclick=\"changeAction('projectTaskForm', 'batchEdit', '$actionLink')\"");
             }
-            if(common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy')
+            if($canBatchClose)
             {
                 $actionLink = $this->createLink('task', 'batchClose');
                 echo html::commonButton($lang->close, "onclick=\"changeAction('projectTaskForm', 'batchClose', '$actionLink')\"");

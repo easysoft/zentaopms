@@ -36,11 +36,14 @@
   </tr>
   </thead>
   <tbody>
+  <?php $canBatchEdit = common::hasPriv('bug', 'batchEdit');?>
   <?php foreach($bugs as $bug):?>
   <?php $bugLink = inlink('view', "bugID=$bug->id");?>
   <tr class='a-center'>
     <td class='<?php echo $bug->status;?>' style="font-weight:bold">
+      <?php if($canBatchEdit):?>
       <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
+      <?php endif;?>
       <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
     </td>
     <td><span class='<?php echo 'severity' . $bug->severity;?>'><?php echo $bug->severity;?></span></td>
@@ -93,11 +96,11 @@
       if($browseType == 'needconfirm') $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 7 : 6; 
       ?>
       <td colspan='<?php echo $columns;?>'>
-        <?php if(!empty($bugs)):?>
+        <?php if(!empty($bugs) and $canBatchEdit):?>
         <div class='f-left'>
           <?php 
           echo html::selectAll() . html::selectReverse(); 
-          if(common::hasPriv('bug', 'batchEdit') and $bugs) echo html::submitButton($lang->edit);
+          echo html::submitButton($lang->edit);
          ?>
         </div>
         <?php endif?>
