@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "projectID={$project->id}&from=taskBatchEdit")?>">
+<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "projectID={$project->id}")?>">
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></caption>
     <tr>
@@ -30,22 +30,22 @@
       <th class='w-80px'><?php echo $lang->task->closedBy;?></th>
       <th class='w-80px'><?php echo $lang->task->closedReason;?></th>
     </tr>
-    <?php foreach($editedTasks as $task):?>
+    <?php foreach($taskIDList as $taskID):?>
     <tr class='a-center'>
-      <td><?php echo $task->id . html::hidden("taskIDList[$task->id]", $task->id);?></td>
-      <td><?php echo html::input("names[$task->id]",          $task->name, 'class=text-1');?></td>
-      <?php if($project->type != 'sprint') echo "<td>" . html::select("modules[$task->id]", $modules, $task->module, 'class=select-1') . "</td>";?>
-      <td><?php echo html::select("assignedTos[$task->id]",   $members, $task->assignedTo, 'class=select-1');?></td>
-      <td><?php echo html::select("types[$task->id]",         $lang->task->typeList, $task->type, 'class=select-1');?></td>
-      <td><?php echo html::select("statuses[$task->id]",      $lang->task->statusList, $task->status, 'class=select-1');?></td>
-      <td><?php echo html::select("pris[$task->id]",          (array)$lang->task->priList, $task->pri, 'class=select-1');?></td>
-      <td><?php echo html::input("estimates[$task->id]",      $task->estimate, "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("", $task->consumed, "class='text-1 a-center' disabled");?></td>
-      <td><?php echo html::input("consumeds[$task->id]",      '', "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("lefts[$task->id]",          $task->left, "class='text-1 a-center'");?></td>
-      <td><?php echo html::select("finishedBys[$task->id]",   $members, $task->finishedBy, 'class=select-1');?></td>
-      <td><?php echo html::select("closedBys[$task->id]",     $members, $task->closedBy, 'class=select-1');?></td>
-      <td><?php echo html::select("closedReasons[$task->id]", $lang->task->reasonList, $task->closedReason, 'class=select-1');?></td>
+      <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
+      <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=text-1');?></td>
+      <?php if($project->type != 'sprint') echo "<td>" . html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, 'class=select-1') . "</td>";?>
+      <td><?php echo html::select("assignedTos[$taskID]",   $members, $tasks[$taskID]->assignedTo, 'class=select-1');?></td>
+      <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=select-1');?></td>
+      <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=select-1');?></td>
+      <td><?php echo html::select("pris[$taskID]",          (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=select-1');?></td>
+      <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='text-1 a-center'");?></td>
+      <td><?php echo html::input("", $tasks[$taskID]->consumed, "class='text-1 a-center' disabled");?></td>
+      <td><?php echo html::input("consumeds[$taskID]",      '', "class='text-1 a-center'");?></td>
+      <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='text-1 a-center'");?></td>
+      <td><?php echo html::select("finishedBys[$taskID]",   $members, $tasks[$taskID]->finishedBy, 'class=select-1');?></td>
+      <td><?php echo html::select("closedBys[$taskID]",     $members, $tasks[$taskID]->closedBy, 'class=select-1');?></td>
+      <td><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=select-1');?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
