@@ -137,7 +137,7 @@ $lang->my->menu = new stdclass();
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = '首页|my|index';
 $lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task           = '任务|my|task|';
+$lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = 'Bug|my|bug|';
 $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'alias' => 'testcase');
 $lang->my->menu->story          = '需求|my|story|';

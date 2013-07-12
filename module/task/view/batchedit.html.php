@@ -11,13 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "projectID={$project->id}")?>">
+<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "projectID={$projectID}")?>">
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></caption>
     <tr>
       <th class='w-30px'><?php echo $lang->idAB;?></th> 
       <th class='red'>   <?php echo $lang->task->name?></th>
-      <?php if($project->type != 'sprint') echo "<th class='w-80px'>" . $lang->task->module . "</th>";?>
+      <?php 
+      if(!isset($project) or (isset($project) and $project->type != 'sprint')) 
+      {
+          echo "<th class='w-80px'>" . $lang->task->module . "</th>";
+      }
+      ?>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-60px red'><?php echo $lang->typeAB;?></th>
       <th class='w-70px'><?php echo $lang->task->status;?></th>
@@ -31,10 +36,22 @@
       <th class='w-80px'><?php echo $lang->task->closedReason;?></th>
     </tr>
     <?php foreach($taskIDList as $taskID):?>
+    <?php 
+    if(!isset($project))
+    {
+        $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task'); 
+        $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
+    }
+    ?>
     <tr class='a-center'>
       <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
       <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=text-1');?></td>
-      <?php if($project->type != 'sprint') echo "<td>" . html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, 'class=select-1') . "</td>";?>
+      <?php 
+      if(!isset($project) or (isset($project) and $project->type != 'sprint')) 
+      {
+          echo "<td>" . html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, 'class=select-1') . "</td>";
+      }
+      ?>
       <td><?php echo html::select("assignedTos[$taskID]",   $members, $tasks[$taskID]->assignedTo, 'class=select-1');?></td>
       <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=select-1');?></td>
       <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=select-1');?></td>

@@ -305,37 +305,46 @@ class task extends control
         /* Initialize vars. */
         $orderBy = str_replace('status', 'statusCustom', $this->cookie->projectTaskOrder);
         if(!$orderBy) $orderBy = 'statusCustom,id_desc';
-        $project         = $this->project->getById($projectID); 
-        $tasks           = array();
         $columns         = 13;
         $showSuhosinInfo = false;
 
-        /* Set project menu. */
-        $this->project->setMenu($this->project->getPairs(), $project->id);
+        /* The tasks of project. */
+        if($projectID)
+        {
+            $project = $this->project->getById($projectID); 
+            $this->project->setMenu($this->project->getPairs(), $project->id);
+            $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+            $members = $members + array('closed' => 'Closed');
+            $this->view->title   = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->project = $project;
+            $this->view->modules = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+            $this->view->members = $members;
+        }
+        /* The tasks of my. */
+        else
+        {
+            $this->lang->task->menu = $this->lang->my->menu;
+            $this->lang->set('menugroup.task', 'my.task');
+            $this->lang->task->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->view->title = $this->lang->task->batchEdit;
+            $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        }
 
-        /* Get all tasks. */
+        /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
 
-        /* Judge whether the editedTasks is too large. */
+        /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), $columns);
-
-        /* Set the sessions. */
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Assign. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->batchEdit;
-
-        $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-        $members = $members + array('closed' => 'Closed');
-
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-        $this->view->project    = $project;
-        $this->view->modules    = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+        $this->view->projectID  = $projectID;
         $this->view->taskIDList = $taskIDList;
         $this->view->tasks      = $tasks;
-        $this->view->members    = $members;
 
         $this->display();
     }

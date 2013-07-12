@@ -24,10 +24,7 @@
     ?>
   </div>
 </div>
-<?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
-<?php if($canBatchClose):?>
-<form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
-<?php endif;?>
+<form method='post' id='myTaskForm'>
   <table class='table-1 tablesorter fixed colored' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
@@ -46,10 +43,12 @@
     </tr>
     </thead>   
     <tbody>
+    <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
+    <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <?php foreach($tasks as $task):?>
     <tr class='a-center'>
       <td class='a-left'>
-        <?php if($canBatchClose):?><input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' /><?php endif;?>
+        <?php if($canBatchEdit or $canBatchClose):?><input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>
       <td><span class='<?php echo 'pri' . $lang->task->priList[$task->pri];?>'><?php echo isset($lang->task->priList[$task->pri]) ? $lang->task->priList[$task->pri] : $task->pri;?></span></td>
@@ -77,13 +76,27 @@
     <tfoot>
       <tr>
         <td colspan='11'>
-        <?php if($canBatchClose and count($tasks)):?>
-        <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->close)?></div> 
+        <?php if(count($tasks)):?>
+        <div class='f-left'>
+        <?php 
+        if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
+        if($canBatchEdit)
+        {
+            $actionLink = $this->createLink('task', 'batchEdit', "projectID=0&orderBy=$orderBy");
+            echo html::commonButton($lang->edit, "onclick=\"changeAction('myTaskForm', 'batchEdit', '$actionLink')\"");
+        }
+        if($canBatchClose)
+        {
+            $actionLink = $this->createLink('task', 'batchClose');
+            echo html::commonButton($lang->close, "onclick=\"changeAction('myTaskForm', 'batchClose', '$actionLink')\"");
+        }
+         ?>
+        </div> 
         <?php endif;?>
         <?php $pager->show();?>
         </td>
       </tr>
     </tfoot>
   </table> 
-<?php if($canBatchClose) echo '</form>';?>
+</form>
 <?php include '../../common/view/footer.html.php';?>

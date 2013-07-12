@@ -137,7 +137,7 @@ $lang->my->menu = new stdclass();
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = 'Index|my|index';
 $lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task           = 'Task|my|task|';
+$lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = 'Bug|my|bug|';
 $lang->my->menu->testtask       = array('link' => 'Test|my|testtask|', 'alias' => 'testcase');
 $lang->my->menu->story          = 'Story|my|story|';
