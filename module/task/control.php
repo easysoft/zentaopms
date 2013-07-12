@@ -329,7 +329,7 @@ class task extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), $this->config->task->batchEdit);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), $this->config->task->batchEdit->columns);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 

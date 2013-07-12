@@ -51,9 +51,9 @@
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='9'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='9' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='a-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

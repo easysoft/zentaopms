@@ -67,12 +67,12 @@
     <?php endforeach;?>
 
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->task->batchEdit;?>'>
+    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns + 1;?>'>
       <div class='f-left blue'><?php echo $suhosinInfo;?></div>
     </td></tr>
     <?php endif;?>
 
-    <tr><td colspan='<?php echo $this->config->task->batchEdit;?>' class='a-center'>
+    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns + 1;?>' class='a-center'>
       <?php echo html::submitButton();?>
     </td></tr>
   </table>

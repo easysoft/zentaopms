@@ -1,7 +1,6 @@
 <?php
 $config->task = new stdclass();
 $config->task->batchCreate = 10;
-$config->task->batchEdit   = 13;
 
 $config->task->create   = new stdclass();
 $config->task->edit     = new stdclass();
@@ -14,6 +13,9 @@ $config->task->edit->requiredFields        = $config->task->create->requiredFiel
 $config->task->start->requiredFields       = 'estimate';
 $config->task->finish->requiredFields      = 'consumed';
 $config->task->activate->requiredFields    = 'left';
+
+$config->task->batchEdit = new stdclass();
+$config->task->batchEdit->columns = 13;
 
 $config->task->editor = new stdclass();
 $config->task->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');

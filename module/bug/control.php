@@ -509,15 +509,14 @@ class bug extends control
 
         /* Initialize vars.*/
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
-        $product         = $this->product->getByID($productID);
-        $columns         = 9;
-        $showSuhosinInfo = false;
+        $product = $this->product->getByID($productID);
 
         /* Set product menu. */
         $this->bug->setMenu($this->products, $productID);
 
         /* Judge whether the editedTasks is too large and set session. */
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), $columns);
+        $showSuhosinInfo = false;
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), $this->config->bug->batchEdit->columns);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 

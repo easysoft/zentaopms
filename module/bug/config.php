@@ -1,4 +1,47 @@
 <?php
+$config->bug = new stdClass();
+
+$config->bug->create  = new stdclass();
+$config->bug->edit    = new stdclass();
+$config->bug->resolve = new stdclass();
+$config->bug->create->requiredFields  = 'title,openedBuild';
+$config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
+$config->bug->resolve->requiredFields = 'resolution';
+
+$config->bug->batchEdit = new stdclass();
+$config->bug->batchEdit->columns = 9;
+
+$config->bug->list = new stdclass();
+$config->bug->list->allFields = 'id, module, project, story, task, 
+    title, keywords, severity, pri, type, os, browser, hardware,
+    found, steps, status, activatedCount, confirmed, mailto,
+    openedBy, openedDate, openedBuild, 
+    assignedTo, assignedDate,
+    resolvedBy, resolution, resolvedBuild, resolvedDate,
+    closedBy, closedDate, 
+    duplicateBug, linkBug, 
+    case,
+    lastEditedBy,
+    lastEditedDate';
+$config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
+
+$config->bug->list->exportFields = 'id, product, module, project, story, task, 
+    title, keywords, severity, pri, type, os, browser,
+    steps, status, activatedCount, confirmed, mailto,
+    openedBy, openedDate, openedBuild, 
+    assignedTo, assignedDate,
+    resolvedBy, resolution, resolvedBuild, resolvedDate,
+    closedBy, closedDate, 
+    duplicateBug, linkBug, 
+    case,
+    lastEditedBy,
+    lastEditedDate, files';
+
+$config->bug->editor = new stdclass();
+$config->bug->editor->create = array('id' => 'steps', 'tools' => 'bugTools');
+$config->bug->editor->edit   = array('id' => 'steps,comment', 'tools' => 'bugTools');
+$config->bug->editor->view   = array('id' => 'comment', 'tools' => 'bugTools');
+
 global $lang;
 $config->bug->search['module']                   = 'bug';
 $config->bug->search['fields']['title']          = $lang->bug->title;
@@ -81,41 +124,3 @@ $config->bug->search['params']['assignedDate']  = array('operator' => '>=',     
 $config->bug->search['params']['resolvedDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['closedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['lastEditedDate']= array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-
-$config->bug->create  = new stdclass();
-$config->bug->edit    = new stdclass();
-$config->bug->resolve = new stdclass();
-$config->bug->create->requiredFields  = 'title,openedBuild';
-$config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
-$config->bug->resolve->requiredFields = 'resolution';
-
-$config->bug->list = new stdclass();
-$config->bug->list->allFields = 'id, module, project, story, task, 
-    title, keywords, severity, pri, type, os, browser, hardware,
-    found, steps, status, activatedCount, confirmed, mailto,
-    openedBy, openedDate, openedBuild, 
-    assignedTo, assignedDate,
-    resolvedBy, resolution, resolvedBuild, resolvedDate,
-    closedBy, closedDate, 
-    duplicateBug, linkBug, 
-    case,
-    lastEditedBy,
-    lastEditedDate';
-$config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
-
-$config->bug->list->exportFields = 'id, product, module, project, story, task, 
-    title, keywords, severity, pri, type, os, browser,
-    steps, status, activatedCount, confirmed, mailto,
-    openedBy, openedDate, openedBuild, 
-    assignedTo, assignedDate,
-    resolvedBy, resolution, resolvedBuild, resolvedDate,
-    closedBy, closedDate, 
-    duplicateBug, linkBug, 
-    case,
-    lastEditedBy,
-    lastEditedDate, files';
-
-$config->bug->editor = new stdclass();
-$config->bug->editor->create = array('id' => 'steps', 'tools' => 'bugTools');
-$config->bug->editor->edit   = array('id' => 'steps,comment', 'tools' => 'bugTools');
-$config->bug->editor->view   = array('id' => 'comment', 'tools' => 'bugTools');
