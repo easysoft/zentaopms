@@ -65,10 +65,16 @@
       <td><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=select-1');?></td>
     </tr>  
     <?php endforeach;?>
+
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='12'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='<?php echo $this->config->task->batchEdit;?>'>
+      <div class='f-left blue'><?php echo $suhosinInfo;?></div>
+    </td></tr>
     <?php endif;?>
-    <tr><td colspan='12' class='a-center'><?php echo html::submitButton();?></td></tr>
+
+    <tr><td colspan='<?php echo $this->config->task->batchEdit;?>' class='a-center'>
+      <?php echo html::submitButton();?>
+    </td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

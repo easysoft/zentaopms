@@ -1,6 +1,7 @@
 <?php
 $config->task = new stdclass();
 $config->task->batchCreate = 10;
+$config->task->batchEdit   = 13;
 
 $config->task->create   = new stdclass();
 $config->task->edit     = new stdclass();

@@ -261,11 +261,10 @@ class task extends control
      * Batch edit task.
      * 
      * @param  int    $projectID 
-     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function batchEdit($projectID = 0, $orderBy = '')
+    public function batchEdit($projectID = 0)
     {
         if($this->post->names)
         {
@@ -302,12 +301,6 @@ class task extends control
 
         $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : die(js::locate($this->session->taskList, 'parent'));
 
-        /* Initialize vars. */
-        $orderBy = str_replace('status', 'statusCustom', $this->cookie->projectTaskOrder);
-        if(!$orderBy) $orderBy = 'statusCustom,id_desc';
-        $columns         = 13;
-        $showSuhosinInfo = false;
-
         /* The tasks of project. */
         if($projectID)
         {
@@ -324,7 +317,7 @@ class task extends control
         else
         {
             $this->lang->task->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.task', 'my.task');
+            $this->lang->set('menugroup.task', 'my');
             $this->lang->task->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
             $this->view->title = $this->lang->task->batchEdit;
@@ -335,7 +328,8 @@ class task extends control
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
 
         /* Judge whether the editedTasks is too large and set session. */
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), $columns);
+        $showSuhosinInfo = false;
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), $this->config->task->batchEdit);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
