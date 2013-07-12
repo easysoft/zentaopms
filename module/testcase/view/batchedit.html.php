@@ -24,6 +24,7 @@
       <th class='w-340px'><?php echo $lang->testcase->stage;?></th>
     </tr>
     <?php foreach($caseIDList as $caseID):?>
+    <?php if(!$productID) $moduleOptionMenu = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0); ?>
     <tr class='a-center'>
       <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
       <td><?php echo html::select("pris[$caseID]",      $lang->testcase->priList, $cases[$caseID]->pri, 'class=select-1');?></td>

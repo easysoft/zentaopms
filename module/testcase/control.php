@@ -438,16 +438,31 @@ class testcase extends control
 
             die(js::locate($this->session->caseList, 'parent'));
         }
-        /* Init vars. */
-        $caseIDList      = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
-        $product         = $this->product->getByID($productID);
 
-        /* Get all cases. */
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+
+        /* Get the edited cases. */
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
 
-        /* Set product menu. */
-        $this->testcase->setMenu($this->products, $productID);
-
+        /* The cases of a product. */
+        if($productID)
+        {
+            $this->testcase->setMenu($this->products, $productID);
+            $product = $this->product->getByID($productID);
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+            $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+            $this->view->title            = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+        }
+        /* The cases of my. */
+        else
+        {
+            $this->lang->testcase->menu = $this->lang->my->menu;
+            $this->lang->set('menugroup.testcase', 'my');
+            $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->view->title = $this->lang->testcase->batchEdit;
+        }
+        
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), $this->config->testcase->batchEdit->columns);
@@ -455,14 +470,11 @@ class testcase extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Assign. */
-        $this->view->title            = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
-        $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]       = $this->lang->testcase->common;
-        $this->view->position[]       = $this->lang->testcase->batchEdit;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
-        $this->view->caseIDList       = $caseIDList;
-        $this->view->productID        = $productID;
-        $this->view->cases            = $cases;
+        $this->view->position[] = $this->lang->testcase->common;
+        $this->view->position[] = $this->lang->testcase->batchEdit;
+        $this->view->caseIDList = $caseIDList;
+        $this->view->productID  = $productID;
+        $this->view->cases      = $cases;
 
         $this->display();
    }

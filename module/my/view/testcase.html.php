@@ -24,6 +24,7 @@
 </div>
 
 <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+<form method='post' id='myCaseForm'>
 <table class='table-1 fixed tablesorter colored'>
   <?php 
     $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
@@ -44,9 +45,16 @@
     </tr>
   </thead>
   <tbody>
+    <?php
+    $canBatchEdit = common::hasPriv('testcase', 'batchEdit');
+    $canBatchRun  = common::hasPriv('testtask', 'batchRun');
+    ?>
     <?php foreach($cases as $case):?>
     <tr class='a-center'>
-      <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
+      <td>
+        <?php if($canBatchEdit or $canBatchRun):?><input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/><?php endif;?>
+        <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
+      </td>
       <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span</td>
       <td class='a-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), $case->title);?></td>
       <td><?php echo $lang->testcase->typeList[$case->type];?></td>
@@ -68,7 +76,27 @@
     </tr>
     <?php endforeach;?>
   </tbody> 
-  <tfoot><tr><td colspan='10'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot>
+    <tr>
+      <td colspan='10'>
+        <?php if($cases):?>
+        <div class='f-left'>
+        <?php
+        if($canBatchEdit or $canBatchRun) echo html::selectAll() . html::selectReverse(); 
+        if($canBatchEdit) 
+        {
+            $actionLink = $this->createLink('testcase', 'batchEdit');
+            echo html::submitButton($lang->edit, "onclick=changeAction('myCaseForm','batchEdit','$actionLink')");
+        }
+        if($canBatchRun) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy") . "\")'");
+        ?>
+        </div>
+        <?php endif?>
+        <?php $pager->show();?>
+      </td>
+    </tr>
+  </tfoot>
 </table>
+</form>
 <script language="Javascript">$("#<?php echo $type;?>Tab").addClass('active'); </script>
 <?php include '../../common/view/footer.html.php';?>
