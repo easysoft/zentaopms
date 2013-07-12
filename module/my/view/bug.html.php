@@ -23,6 +23,7 @@
   </div>
 </div>
 <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+<form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
 <table class='table-1 fixed tablesorter colored'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
@@ -39,9 +40,13 @@
   </tr>
   </thead>
   <tbody>
+  <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
   <?php foreach($bugs as $bug):?>
   <tr class='a-center'>
-    <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
+    <td class='a-left'>
+      <?php if($canBatchEdit):?><input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' /><?php endif;?>
+      <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '_blank');?>
+    </td>
     <td><span class='<?php echo 'severity' . $lang->bug->severityList[$bug->severity]?>'><?php echo isset($lang->bug->severityList[$bug->severity]) ? $lang->bug->severityList[$bug->severity] : $bug->severity;?></span></td>
     <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri]?>'><?php echo isset($lang->bug->priList[$bug->pri]) ? $lang->bug->priList[$bug->pri] : $bug->pri?></span></td>
     <td><?php echo $lang->bug->typeList[$bug->type]?></td>
@@ -62,7 +67,17 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot>
+    <tr><td colspan='9'>
+    <?php if($bugs and $canBatchEdit):?>
+    <div class='f-left'>
+    <?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->edit);?>
+    </div>
+    <?php endif;?>
+    <?php $pager->show();?>
+    </td></tr>
+  </tfoot>
 </table>
+</form>
 <script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

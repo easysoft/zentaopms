@@ -138,7 +138,7 @@ $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arr
 $lang->my->menu->index          = 'Index|my|index';
 $lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug            = 'Bug|my|bug|';
+$lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Test|my|testtask|', 'alias' => 'testcase');
 $lang->my->menu->story          = 'Story|my|story|';
 $lang->my->menu->myProject      = 'Project|my|project|';

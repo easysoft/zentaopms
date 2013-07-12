@@ -507,12 +507,27 @@ class bug extends control
 
         $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
 
+        /* The bugs of a product. */
+        if($productID)
+        {
+            $product = $this->product->getByID($productID);
+
+            /* Set product menu. */
+            $this->bug->setMenu($this->products, $productID);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
+            $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        }
+        /* The bugs of my. */
+        else
+        {
+            $this->lang->bug->menu = $this->lang->my->menu;
+            $this->lang->set('menugroup.bug', 'my');
+            $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->view->title = $this->lang->bug->batchEdit;
+        }
         /* Initialize vars.*/
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
-        $product = $this->product->getByID($productID);
-
-        /* Set product menu. */
-        $this->bug->setMenu($this->products, $productID);
 
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
@@ -521,8 +536,6 @@ class bug extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Assign. */
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->common;
         $this->view->position[] = $this->lang->bug->batchEdit;
         $this->view->bugIDList  = $bugIDList;
