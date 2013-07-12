@@ -79,8 +79,8 @@ $.extend(
         /* Call ajaxSubmit to sumit the form. */
         form.submit(function()
         { 
-             $(this).ajaxSubmit(options);
-             return false;    // Prevent the submitting event of the browser.
+            $(this).ajaxSubmit(options);
+            return false;    // Prevent the submitting event of the browser.
          });
     },
 

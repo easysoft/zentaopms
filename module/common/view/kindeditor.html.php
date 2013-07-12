@@ -44,7 +44,7 @@ $(document).ready(function()
 
         KindEditor.ready(function(K)
         {
-            editor = K.create('#' + editorID,
+            keEditor = K.create('#' + editorID,
             {
                 items:editorTool,
                 filterMode:true, 
@@ -52,12 +52,8 @@ $(document).ready(function()
                 urlType:'relative', 
                 uploadJson: createLink('file', 'ajaxUpload'),
                 allowFileManager:true,
-                langType:'<?php echo $editorLang?>'
-            });
-
-            $('form').submit(function() 
-            {
-                K.sync('#'+editor.id);
+                langType:'<?php echo $editorLang?>',
+                afterBlur: function(){this.sync();}
             });
         });
     })
