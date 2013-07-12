@@ -66,7 +66,7 @@
        <div class='f-left'>
        <?php
        if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse(); 
-       if($canBatchEdit) echo html::submitButton($lang->edit, "onclick='changeAction(\"" . inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy") . "\")'");
+       if($canBatchEdit) echo html::submitButton($lang->edit, "onclick='changeAction(\"" . inLink('batchEdit', "productID=$productID") . "\")'");
        if($canBatchClose) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
        ?>
        </div>

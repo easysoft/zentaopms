@@ -50,7 +50,7 @@ js::set('moduleID'  , $moduleID);
     </td>
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
-      <form id='batchForm' method='post' action='<?php echo inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
+      <form id='batchForm' method='post'>
       <?php include 'caselist.html.php';?>
       </form>
     </td>              

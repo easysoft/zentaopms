@@ -1,4 +1,26 @@
 <?php
+$config->testcase->defaultSteps = 3;
+$config->testcase->batchCreate  = 10;
+
+$config->testcase->create = new stdclass();
+$config->testcase->edit   = new stdclass();
+$config->testcase->create->requiredFields = 'title,type';
+$config->testcase->edit->requiredFields   = 'title,type';
+
+$config->testcase->batchEdit = new stdclass();
+$config->testcase->batchEdit->columns = 7;
+
+$config->testcase->editor = new stdclass();
+$config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleTools');
+
+$config->testcase->exportFields = '
+    id, product, module, story,
+    title, precondition, stepDesc, stepExpect, keywords,
+    pri, type, stage, status, frequency,
+    openedBy, openedDate, lastEditedBy, lastEditedDate, 
+    version,linkCase';
+
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
 $config->testcase->search['fields']['title']          = $lang->testcase->title;
@@ -31,22 +53,3 @@ $config->testcase->search['params']['stage']        = array('operator' => 'inclu
 
 $config->testcase->search['params']['openedDate']     = array('operator' => '>=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '>=', 'control' => 'input', 'values' => '', 'class' => 'date');
-
-$config->testcase->defaultSteps = 3;
-$config->testcase->batchCreate  = 10;
-
-$config->testcase->create = new stdclass();
-$config->testcase->edit   = new stdclass();
-$config->testcase->create->requiredFields = 'title,type';
-$config->testcase->edit->requiredFields   = 'title,type';
-
-$config->testcase->editor = new stdclass();
-$config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleTools');
-
-$config->testcase->exportFields = '
-    id, product, module, story,
-    title, precondition, stepDesc, stepExpect, keywords,
-    pri, type, stage, status, frequency,
-    openedBy, openedDate, lastEditedBy, lastEditedDate, 
-    version,linkCase';

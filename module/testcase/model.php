@@ -275,48 +275,45 @@ class testcaseModel extends model
         $cases      = array();
         $allChanges = array();
         $now        = helper::now();
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : array();
+        $caseIDList = $this->post->caseIDList;
 
         /* Adjust whether the post data is complete, if not, remove the last element of $caseIDList. */
         if($this->session->showSuhosinInfo) array_pop($caseIDList);
 
-        if(!empty($caseIDList))
+        /* Initialize cases from the post data.*/
+        foreach($caseIDList as $caseID)
         {
-            /* Initialize cases from the post data.*/
-            foreach($caseIDList as $caseID)
-            {
-                $case->lastEditedBy   = $this->app->user->account;
-                $caee->lastEditedDate = $now;
-                $case->pri            = $this->post->pris[$caseID];
-                $case->status         = $this->post->statuses[$caseID];
-                $case->module         = $this->post->modules[$caseID];
-                $case->title          = htmlspecialchars($this->post->titles[$caseID]);
-                $case->type           = $this->post->types[$caseID];
-                $case->stage          = implode(',', $this->post->stages[$caseID]);
+            $case->lastEditedBy   = $this->app->user->account;
+            $caee->lastEditedDate = $now;
+            $case->pri            = $this->post->pris[$caseID];
+            $case->status         = $this->post->statuses[$caseID];
+            $case->module         = $this->post->modules[$caseID];
+            $case->title          = htmlspecialchars($this->post->titles[$caseID]);
+            $case->type           = $this->post->types[$caseID];
+            $case->stage          = implode(',', $this->post->stages[$caseID]);
 
-                $cases[$caseID] = $case;
-                unset($case);
+            $cases[$caseID] = $case;
+            unset($case);
+        }
+
+        /* Update cases. */
+        foreach($cases as $caseID => $case)
+        {
+            $oldCase = $this->getByID($caseID);
+            $this->dao->update(TABLE_CASE)->data($case)
+                ->autoCheck()
+                ->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')
+                ->where('id')->eq($caseID)
+                ->exec();
+
+            if(!dao::isError())
+            {
+                unset($oldCase->steps);
+                $allChanges[$caseID] = common::createChanges($oldCase, $case);
             }
-
-            /* Update cases. */
-            foreach($cases as $caseID => $case)
+            else
             {
-                $oldCase = $this->getByID($caseID);
-                $this->dao->update(TABLE_CASE)->data($case)
-                    ->autoCheck()
-                    ->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')
-                    ->where('id')->eq($caseID)
-                    ->exec();
-
-                if(!dao::isError())
-                {
-                    unset($oldCase->steps);
-                    $allChanges[$caseID] = common::createChanges($oldCase, $case);
-                }
-                else
-                {
-                    die(js::error('case#' . $caseID . dao::getError(true)));
-                }
+                die(js::error('case#' . $caseID . dao::getError(true)));
             }
         }
 

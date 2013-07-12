@@ -418,69 +418,54 @@ class testcase extends control
     /**
      * Batch edit case.
      * 
-     * @param  string $from example:testcaseBrowse,testtaskCases,testcaseBatchEdit
      * @param  int    $productID 
-     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function batchEdit($from = '', $productID = 0, $orderBy = '')
+    public function batchEdit($productID = 0)
     {
-        if($from == 'testcaseBrowse' or $from == 'testtaskCases')
+        if($this->post->titles)
         {
-            /* Init vars. */
-            $orderBy         = $orderBy ? $orderBy : 'id_desc';
-            $caseIDList      = $this->post->caseIDList ? $this->post->caseIDList : array();
-            $product         = $this->product->getByID($productID);
-            $editedCases     = array();
-            $columns         = 7;
-            $showSuhosinInfo = false;
-
-            /* Get all cases. */
-            $allCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
-
-            /* Set product menu. */
-            $this->testcase->setMenu($this->products, $productID);
-
-            /* Initialize the cases whose need to edited. */
-            foreach($allCases as $case) if(in_array($case->id, $caseIDList)) $editedCases[$case->id] = $case;
-
-            /* Judge whether the editedTasks is too large. */
-            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedCases), $columns);
-
-            /* Set the sessions. */
-            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-
-            /* Assign. */
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
-            $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-            $this->view->position[] = $this->lang->testcase->common;
-            $this->view->position[] = $this->lang->testcase->batchEdit;
-
-            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
-            $this->view->productID        = $productID;
-            $this->view->editedCases      = $editedCases;
-
-            $this->display();
-        }
-        elseif($from == 'testcaseBatchEdit')
-        {
-            if(!empty($_POST))
+            $allChanges = $this->testcase->batchUpdate();
+            if($allChanges)
             {
-                $allChanges = $this->testcase->batchUpdate();
-                if($allChanges)
+                foreach($allChanges as $caseID => $changes )
                 {
-                    foreach($allChanges as $caseID => $changes )
-                    {
-                        $actionID = $this->loadModel('action')->create('case', $caseID, 'Edited');
-                        $this->action->logHistory($actionID, $changes);
-                    }
+                    $actionID = $this->loadModel('action')->create('case', $caseID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
                 }
             }
+
             die(js::locate($this->session->caseList, 'parent'));
         }
-    }
+        /* Init vars. */
+        $caseIDList      = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+        $product         = $this->product->getByID($productID);
+
+        /* Get all cases. */
+        $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+
+        /* Set product menu. */
+        $this->testcase->setMenu($this->products, $productID);
+
+        /* Judge whether the editedTasks is too large and set session. */
+        $showSuhosinInfo = false;
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), $this->config->testcase->batchEdit->columns);
+        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        /* Assign. */
+        $this->view->title            = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+        $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]       = $this->lang->testcase->common;
+        $this->view->position[]       = $this->lang->testcase->batchEdit;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+        $this->view->caseIDList       = $caseIDList;
+        $this->view->productID        = $productID;
+        $this->view->cases            = $cases;
+
+        $this->display();
+   }
 
     /**
      * Delete a test case
