@@ -88,7 +88,11 @@
             $actionLink = $this->createLink('testcase', 'batchEdit');
             echo html::submitButton($lang->edit, "onclick=changeAction('myCaseForm','batchEdit','$actionLink')");
         }
-        if($canBatchRun) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy") . "\")'");
+        if($canBatchRun) 
+        {
+            $actionLink = $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy&from=testcase");
+            echo html::submitButton($lang->testtask->runCase,  "onclick=changeAction('myCaseForm','batchEdit','$actionLink')");
+        }
         ?>
         </div>
         <?php endif?>

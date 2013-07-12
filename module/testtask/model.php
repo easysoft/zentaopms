@@ -355,8 +355,7 @@ class testtaskModel extends model
      */
     public function batchRun($runCaseType = 'testcase')
     {
-        $this->post->a();
-        $runs   = array();
+        $runs = array();
         $caseIdList = array_keys($this->post->results);
         if($runCaseType == 'testtask') $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs('case', 'id');
 

@@ -572,41 +572,42 @@ class testtask extends control
      */
     public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase')
     {
-        if(isset($_POST['caseIDList']))
-        {
-            if($from == 'testcase') $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($this->post->caseIDList)->orderBy($orderBy)->fetchAll('id');
-            if($from == 'testtask')
-            {
-                $this->view->cases = $this->dao->select('t1.*,t2.lastRunResult')->from(TABLE_CASE)->alias('t1')
-                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                    ->where('t1.id')->in($this->post->caseIDList)
-                    ->orderBy($orderBy)
-                    ->fetchAll('id');
-            }
-        }
-        else
+        $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
+        if($this->post->results)
         {
             $this->testtask->batchRun($from);
-            $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
             die(js::locate($url, 'parent'));
         }
-        $this->app->loadLang('testcase');
-        $this->testtask->setMenu($this->products, $productID);
 
-        $resultList = $this->lang->testcase->resultList;
-        unset($resultList['n/a']);
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($url, 'parent'));
 
-        $steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
+        /* The case of tasks of qa. */
+        if($productID)
+        {
+            $this->testtask->setMenu($this->products, $productID);
+            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+        }
+        /* The case of my. */
+        else
+        {
+            $this->lang->testtask->menu = $this->lang->my->menu;
+            $this->lang->set('menugroup.testtask', 'my');
+            $this->lang->testtask->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->view->title = $this->lang->testtask->batchRun;
+        }
+
+        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+        $this->view->steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t2.id')->in($this->post->caseIDList)
+            ->where('t2.id')->in($caseIDList)
             ->andWhere('t1.version=t2.version')
             ->fetchGroup('case', 'id');
-
-        $this->view->title            = $this->lang->testtask->batchRun;
-        $this->view->position[]       = $this->lang->testtask->batchRun;
-        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
-        $this->view->resultList       = $resultList; 
-        $this->view->steps            = $steps;
+       
+        $this->view->caseIDList = $caseIDList;
+        $this->view->productID  = $productID;
+        $this->view->title      = $this->lang->testtask->batchRun;
+        $this->view->position[] = $this->lang->testtask->batchRun;
         $this->display();
     }
 

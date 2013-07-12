@@ -17,24 +17,26 @@ table td,th{border:1px solid #E4E4E4}
 table .table-1{border:0px; margin:0px;}
 table .table-1 td{border:0px;}
 </style>
+<?php $this->app->loadLang('testcase'); unset($this->lang->testcase->resultList['n/a']); ?>
 <form method='post' target='hiddenwin'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->testtask->common . $lang->colon . $lang->testtask->batchRun;?></caption>
     <tr>
-      <th class='w-id'><?php  echo $lang->idAB;?></th> 
-      <th class='w-pri'><?php  echo $lang->priAB;?></th>
+      <th class='w-id'>   <?php  echo $lang->idAB;?></th> 
+      <th class='w-pri'>  <?php  echo $lang->priAB;?></th>
       <th class='w-100px'><?php echo $lang->testcase->module;?></th> 
-      <th width='300'><?php echo $lang->testcase->title;?></th>
-      <th width='150'><?php echo $lang->testcase->result?></th>
-      <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
+      <th width='300'>    <?php echo $lang->testcase->title;?></th>
+      <th width='150'>    <?php echo $lang->testcase->result?></th>
+      <th>                <?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
     </tr>
-    <?php foreach($cases as $caseID => $case):?>
+    <?php foreach($caseIDList as $caseID):?>
+    <?php if(!$productID) $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);?>
     <tr class='a-center'>
-      <td><?php echo $case->id . html::hidden("version[$case->id]", $case->version)?></td>
-      <td><?php echo $lang->testcase->priList[$case->pri]?></td>
-      <td align='left'><?php echo "<span title='" . $moduleOptionMenu[$case->module] . "'>" . $moduleOptionMenu[$case->module] . "</span>"?></td>
-      <td align='left'><?php echo "<span title='$case->title'>$case->title</span>"?></td>
-      <td><?php echo html::radio("results[$case->id]", $resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
+      <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>
+      <td><?php echo $lang->testcase->priList[$cases[$caseID]->pri]?></td>
+      <td align='left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
+      <td align='left'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
+      <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
       <td>
         <?php if(!empty($steps[$caseID])):?>
         <table class='table-1 fixed'>
