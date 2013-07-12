@@ -35,6 +35,8 @@ if(isset($license) and $upgrade == 'yes') printf($lang->extension->upgradeVersio
     <?php else:?>
       <?php
       if($downloadedPackage) echo  "<h3 class='success'>{$lang->extension->successDownloadedPackage}</h3>";
+      echo "<h1 class='a-center'>" . sprintf($lang->extension->installFinished, $installType) . "</h1>";
+      echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '"') . '</p>';
       echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
       echo '<ul>';
       foreach($files as $fileName => $md5)
@@ -43,8 +45,6 @@ if(isset($license) and $upgrade == 'yes') printf($lang->extension->upgradeVersio
       }
       echo '</ul>';
       echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";
-      echo "<h1 class='a-center'>" . sprintf($lang->extension->installFinished, $installType) . "</h1>";
-      echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '"') . '</p>';
       ?>
     <?php endif;?>
     </td>
