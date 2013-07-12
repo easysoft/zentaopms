@@ -68,7 +68,7 @@
             </td>
             <td class='w-200px a-right'>
               <?php 
-              $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->offcial$extension->type&overridePackage=no&ignoreCompitable=yes");
+              $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->type&overridePackage=no&ignoreCompitable=yes");
               echo html::a($extension->viewLink, $lang->extension->view, '', 'class="button-c extension"');
               if($currentRelease->public)
               {

@@ -127,6 +127,7 @@ class storyModel extends model
             $storyID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('story', $storyID, $extra = 1);
 
+            $data          = new stdclass();
             $data->story   = $storyID;
             $data->version = 1;
             $data->title   = $story->title;
@@ -288,6 +289,7 @@ class storyModel extends model
         {
             if($specChanged)
             {
+                $data          = new stdclass();
                 $data->story   = $storyID;
                 $data->version = $oldStory->version + 1;
                 $data->title   = $story->title;
