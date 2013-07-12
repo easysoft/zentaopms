@@ -472,51 +472,13 @@ class bug extends control
     /**
      * Batch edit bug.
      * 
-     * @param  string $from example:bugBrowse, bugBatchEdit.
      * @param  int    $productID 
-     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function batchEdit($from = '', $productID = 0, $orderBy = '')
+    public function batchEdit($productID = 0)
     {
-        if($from == 'bugBrowse')
-        {
-            /* Initialize vars.*/
-            if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
-            $editedBugs      = array();
-            $allBugs         = $this->dao->select('*')->from(TABLE_BUG)->alias('t1')->where($this->session->bugQueryCondition)->orderBy($orderBy)->fetchAll('id');
-            $bugIDList       = $this->post->bugIDList ? $this->post->bugIDList : array();
-            $product         = $this->product->getByID($productID);
-            $columns         = 9;
-            $showSuhosinInfo = false;
-
-            /* Set product menu. */
-            $this->bug->setMenu($this->products, $productID);
-
-            /* Initialize the tasks whose need to edited. */
-            foreach($allBugs as $bug) if(in_array($bug->id, $bugIDList)) $editedBugs[$bug->id] = $bug;
-
-            /* Judge whether the editedTasks is too large. */
-            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedBugs), $columns);
-
-            /* Set the sessions. */
-            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-
-            /* Assign. */
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
-            $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-            $this->view->position[] = $this->lang->bug->common;
-            $this->view->position[] = $this->lang->bug->batchEdit;
-
-            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-            $this->view->productID   = $productID;
-            $this->view->editedBugs  = $editedBugs;
-            $this->view->users       = $this->user->getPairs('nodeleted,devfirst');
-
-            $this->display();
-        }
-        elseif($from == 'bugBatchEdit')
+        if($this->post->titles)
         {
             $allChanges = $this->bug->batchUpdate();
 
@@ -542,6 +504,34 @@ class bug extends control
             }
             die(js::locate($this->session->bugList, 'parent'));
         }
+
+        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+
+        /* Initialize vars.*/
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
+        $product         = $this->product->getByID($productID);
+        $columns         = 9;
+        $showSuhosinInfo = false;
+
+        /* Set product menu. */
+        $this->bug->setMenu($this->products, $productID);
+
+        /* Judge whether the editedTasks is too large and set session. */
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), $columns);
+        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        /* Assign. */
+        $this->view->title      = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->common;
+        $this->view->position[] = $this->lang->bug->batchEdit;
+        $this->view->bugIDList  = $bugIDList;
+        $this->view->productID  = $productID;
+        $this->view->bugs       = $bugs;
+        $this->view->users      = $this->user->getPairs('nodeleted,devfirst');
+
+        $this->display();
     }
 
     /**
