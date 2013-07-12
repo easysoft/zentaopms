@@ -289,106 +289,80 @@ class story extends control
     /**
      * Batch edit story.
      * 
-     * @param  string $from productBrowse|projectStory|storyBatchEdit.
      * @param  int    $productID 
      * @param  int    $projectID 
-     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function batchEdit($from = '', $productID = 0, $projectID = 0, $orderBy = '')
+    public function batchEdit($productID = 0, $projectID = 0)
     {
-        /* Get post data for product-Browse or project-Story. */
-        if($from == 'productBrowse' or $from == 'projectStory')
+        if($this->post->titles)
         {
-            /* Init vars. */
-            $editedStories   = array();
-            $storyIDList     = $this->post->storyIDList ? $this->post->storyIDList : array();
-            $columns         = 9;
-            $showSuhosinInfo = false;
+            $allChanges = $this->story->batchUpdate();
 
-            /* Get all stories. */
-            if(!$projectID)
+            if($allChanges)
             {
-                /* Set menu. */
-                $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
-                $allStories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
-            }
-            else
-            {
-                $this->lang->story->menu = $this->lang->project->menu;
-                $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
-                $this->lang->set('menugroup.story', 'project');
-                $this->lang->story->menuOrder = $this->lang->project->menuOrder;
-                $allStories = $this->story->getProjectStories($projectID, $orderBy);
-            }
-            if(!$allStories) $allStories = array();
-
-            /* Initialize the stories whose need to edited. */
-            $moduleOptionMenus = array();
-            $productPlans      = array();
-            $this->loadModel('productplan');
-            foreach($allStories as $story) 
-            {
-                if(in_array($story->id, $storyIDList)) 
+                foreach($allChanges as $storyID => $changes)
                 {
-                    $editedStories[$story->id] = $story;
-                    if(!isset($moduleOptionMenus[$story->product]))
-                    {
-                        $moduleOptionMenus[$story->product] = $this->tree->getOptionMenu($story->product, $viewType = 'story');
-                        $productPlans[$story->product]      = $this->productplan->getPairs($story->product);
-                    }
-                }
-            }
-
-            /* Judge whether the editedStories is too large. */
-            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedStories), $columns);
-
-            /* Set the sessions. */
-            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-
-            /* Assign. */
-            if(!$projectID)
-            {
-                $product = $this->product->getByID($productID);
-                $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
-            }
-            else
-            {
-                $project = $this->project->getByID($projectID);
-                $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
-            }
-            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-            $this->view->position[]        = $this->lang->story->common;
-            $this->view->position[]        = $this->lang->story->batchEdit;
-            $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
-            $this->view->moduleOptionMenus = $moduleOptionMenus;
-            $this->view->productPlans      = $productPlans;
-            $this->view->productID         = $productID;
-            $this->view->editedStories     = $editedStories;
-
-            $this->display();
-        }
-        /* Get post data for story-batchEdit. */
-        elseif($from == 'storyBatchEdit')
-        {
-            if(!empty($_POST))
-            {
-
-                $allChanges = $this->story->batchUpdate();
-
-                if($allChanges)
-                {
-                    foreach($allChanges as $storyID => $changes)
-                    {
-                        $actionID = $this->action->create('story', $storyID, 'Edited');
-                        $this->action->logHistory($actionID, $changes);
-                        $this->sendMail($storyID, $actionID);
-                    }
+                    $actionID = $this->action->create('story', $storyID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                    $this->sendMail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
+
         }
+
+        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+
+        /* Get edited stories. */
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
+
+        /* The stories of a product. */
+        if(!$projectID)
+        {
+            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
+            $product = $this->product->getByID($productID);
+            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+
+        }
+        /* The stories of a project. */
+        else
+        {
+            $this->lang->story->menu = $this->lang->project->menu;
+            $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
+            $this->lang->set('menugroup.story', 'project');
+            $this->lang->story->menuOrder = $this->lang->project->menuOrder;
+            $project = $this->project->getByID($projectID);
+            $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+        }
+
+        /* Get the module and productplan of edited stories. */
+        $moduleOptionMenus = array();
+        $productPlans      = array();
+        $this->loadModel('productplan');
+        foreach($stories as $story) 
+        {
+            $moduleOptionMenus[$story->product] = $this->tree->getOptionMenu($story->product, $viewType = 'story');
+            $productPlans[$story->product]      = $this->productplan->getPairs($story->product);
+        }
+
+        /* Judge whether the editedStories is too large and set session. */
+        $showSuhosinInfo = false;
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), $this->config->story->batchEdit->columns);
+        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        $this->view->position[]        = $this->lang->story->common;
+        $this->view->position[]        = $this->lang->story->batchEdit;
+        $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->moduleOptionMenus = $moduleOptionMenus;
+        $this->view->productPlans      = $productPlans;
+        $this->view->productID         = $productID;
+        $this->view->storyIDList       = $storyIDList;
+        $this->view->stories           = $stories;
+
+        $this->display();
     }
 
     /**

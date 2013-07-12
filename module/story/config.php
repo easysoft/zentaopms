@@ -4,6 +4,9 @@ $config->story = new stdclass();
 $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
 
+$config->story->batchEdit = new stdclass();
+$config->story->batchEdit->columns = 10;
+
 $config->story->create = new stdclass();
 $config->story->edit   = new stdclass();
 $config->story->change = new stdclass();

@@ -101,7 +101,7 @@
 
               if($canBatchEdit)
               {
-                  $actionLink = $this->createLink('story', 'batchEdit', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
+                  $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
                   echo html::commonButton($lang->edit, "onclick=\"changeAction('projectStoryForm', 'batchEdit', '$actionLink')\"");
               }
               if($canBatchClose)

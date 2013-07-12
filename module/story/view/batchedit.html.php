@@ -27,50 +27,50 @@
       <th class='w-100px'><?php echo $lang->story->closedBy;?></th>
       <th class='w-120px a-left'><?php echo $lang->story->closedReason;?></th>
     </tr>
-    <?php foreach($editedStories as $story):?>
+    <?php foreach($storyIDList as $storyID):?>
     <tr class='a-center'>
-      <td><?php echo $story->id . html::hidden("storyIDList[$story->id]", $story->id);?></td>
-      <td><?php echo html::select("modules[$story->id]",       $moduleOptionMenus[$story->product], $story->module, 'class=select-1');?></td>
-      <td><?php echo html::select("plans[$story->id]",         $productPlans[$story->product], $story->plan, 'class=select-1');?></td>
-      <td><?php echo html::input("titles[$story->id]",         $story->title, 'class=text-1'); ?></td>
-      <td><?php echo html::input("estimates[$story->id]",      $story->estimate, 'class=text-1'); ?></td>
-      <td><?php echo html::select("pris[$story->id]",          (array)$lang->story->priList, $story->pri, 'class=select-1');?></td>
-      <td><?php echo html::select("sources[$story->id]",       $lang->story->sourceList, $story->source, 'class=select-1');?></td>
-      <td><?php echo $lang->story->statusList[$story->status];?></td>
+      <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
+      <td><?php echo html::select("modules[$storyID]",       $moduleOptionMenus[$stories[$storyID]->product], $stories[$storyID]->module, 'class=select-1');?></td>
+      <td><?php echo html::select("plans[$storyID]",         $productPlans[$stories[$storyID]->product], $stories[$storyID]->plan, 'class=select-1');?></td>
+      <td><?php echo html::input("titles[$storyID]",         $stories[$storyID]->title, 'class=text-1'); ?></td>
+      <td><?php echo html::input("estimates[$storyID]",      $stories[$storyID]->estimate, 'class=text-1'); ?></td>
+      <td><?php echo html::select("pris[$storyID]",          (array)$lang->story->priList, $stories[$storyID]->pri, 'class=select-1');?></td>
+      <td><?php echo html::select("sources[$storyID]",       $lang->story->sourceList, $stories[$storyID]->source, 'class=select-1');?></td>
+      <td><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>
 
-      <?php if($story->status != 'draft'):?> 
-      <td><?php echo html::select("stages[$story->id]",        $lang->story->stageList, $story->stage, 'class=select-1');?></td>
+      <?php if($stories[$storyID]->status != 'draft'):?> 
+      <td><?php echo html::select("stages[$storyID]",        $lang->story->stageList, $stories[$storyID]->stage, 'class=select-1');?></td>
       <?php else:?>  
-      <td><?php echo html::select("stages[$story->id]",        $lang->story->stageList, $story->stage, 'class="select-1" disabled="disabled"');?></td>
+      <td><?php echo html::select("stages[$storyID]",        $lang->story->stageList, $stories[$storyID]->stage, 'class="select-1" disabled="disabled"');?></td>
       <?php endif;?>
 
-      <?php if($story->status == 'closed'):?> 
-      <td><?php echo html::select("closedBys[$story->id]",     $users, $story->closedBy, 'class="select-1"');?></td>
+      <?php if($stories[$storyID]->status == 'closed'):?> 
+      <td><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, 'class="select-1"');?></td>
       <?php else:?>  
-      <td><?php echo html::select("closedBys[$story->id]",     $users, $story->closedBy, 'class="select-1" disabled="disabled"');?></td>
+      <td><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, 'class="select-1" disabled="disabled"');?></td>
       <?php endif;?>
 
-      <?php if($story->status == 'closed'):?>  
+      <?php if($stories[$storyID]->status == 'closed'):?>  
       <td>
-        <div class='f-left'><?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, "class=w-60px onchange=setDuplicateAndChild(this.value,$story->id)");?></div>
+        <div class='f-left'><?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, $stories[$storyID]->closedReason, "class=w-60px onchange=setDuplicateAndChild(this.value,$storyID)");?></div>
 
-        <div class='f-left' id='<?php echo 'duplicateStoryBox' . $story->id;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
-        <?php echo html::input("duplicateStoryIDList[$story->id]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
+        <div class='f-left' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
+        <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
         </div>
 
-        <div class='f-left' id='<?php echo 'childStoryBox' . $story->id;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>
-        <?php echo html::input("childStoriesIDList[$story->id]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
+        <div class='f-left' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
+        <?php echo html::input("childStoriesIDList[$storyID]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
         </div>
       </td>
       <?php else:?>  
-      <td><div class='f-left'><?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, 'class="w-60px" disabled="disabled"');?><div></td>
+      <td><div class='f-left'><?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, $stories[$storyID]->closedReason, 'class="w-60px" disabled="disabled"');?><div></td>
       <?php endif;?>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='11'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='11' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>' class='a-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
