@@ -22,37 +22,37 @@
       <th class='w-120px'><?php echo $lang->story->closedReason;?></th>
       <th class='w-p30 '> <?php echo $lang->story->comment;?></th>
     </tr>
-    <?php foreach($editedStories as $story):?>
+    <?php foreach($storyIDList as $storyID):?>
     <tr class='a-center'>
-      <td><?php echo $story->id . html::hidden("storyIDList[$story->id]", $story->id);?></td>
-      <td class='a-left'><?php echo $story->title;?></td>
-      <td><?php echo $lang->story->statusList[$story->status];?></td>
+      <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
+      <td class='a-left'><?php echo $stories[$storyID]->title;?></td>
+      <td><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>
 
-      <?php if($story->status != 'closed'):?>
+      <?php if($stories[$storyID]->status != 'closed'):?>
       <td>
         <div class='f-left'>
         <?php
-        if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
-        echo html::select("closedReasons[$story->id]", $lang->story->reasonList, 'done', "class=w-70px onchange=setDuplicateAndChild(this.value,$story->id)");
+        if($stories[$storyID]->status == 'draft') unset($this->lang->story->reasonList['cancel']);
+        echo html::select("closedReasons[$storyID]", $lang->story->reasonList, 'done', "class=w-70px onchange=setDuplicateAndChild(this.value,$storyID)");
         ?>
         </div>
-        <div class='f-left' id='<?php echo 'duplicateStoryBox' . $story->id;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
-        <?php echo html::input("duplicateStoryIDList[$story->id]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
+        <div class='f-left' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
+        <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
         </div>
 
-        <div class='f-left' id='<?php echo 'childStoryBox' . $story->id;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>
-        <?php echo html::input("childStoriesIDList[$story->id]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
+        <div class='f-left' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
+        <?php echo html::input("childStoriesIDList[$storyID]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
         </div>
       </td>
       <?php else:?>  
       <td>
         <div class='f-left'>
-          <?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, 'class="w-70px" disabled="disabled"');?>
+          <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, $stories[$storyID]->closedReason, 'class="w-70px" disabled="disabled"');?>
         </div>
       </td>
       <?php endif;?>
 
-      <td><?php echo html::input("comments[$story->id]", '', "class='area-1'");?></td>
+      <td><?php echo html::input("comments[$storyID]", '', "class='area-1'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>

@@ -106,7 +106,7 @@
               }
               if($canBatchClose)
               {
-                  $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
+                  $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
                   echo html::commonButton($lang->close, "onclick=\"changeAction('projectStoryForm', 'batchClose', '$actionLink')\"");
               }
           }

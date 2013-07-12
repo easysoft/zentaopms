@@ -319,7 +319,7 @@ class story extends control
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
 
         /* The stories of a product. */
-        if($productID and !$projectID)
+        if($productID)
         {
             $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
             $product = $this->product->getByID($productID);
@@ -327,7 +327,7 @@ class story extends control
 
         }
         /* The stories of a project. */
-        elseif($productID and $projectID)
+        elseif($projectID)
         {
             $this->lang->story->menu = $this->lang->project->menu;
             $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
@@ -337,7 +337,7 @@ class story extends control
             $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
         /* The stories of my. */
-        elseif(!$productID and !$projectID)
+        else
         {
             $this->lang->story->menu = $this->lang->my->menu;
             $this->lang->set('menugroup.story', 'my');
@@ -612,91 +612,76 @@ class story extends control
     /**
      * Batch close story.
      * 
-     * @param  string $from productBrowse|projectStory|storyBatchClose
      * @param  int    $productID 
      * @param  int    $projectID 
-     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function batchClose($from = '', $productID = 0, $projectID = 0, $orderBy = '')
+    public function batchClose($productID = 0, $projectID = 0)
     {
-        /* Get post data for product-Browse or project-Story. */
-        if($from == 'productBrowse' or $from == 'projectStory')
+        if($this->post->closedReasons)
         {
-            /* Init vars. */
-            $editedStories   = array();
-            $storyIDList     = $this->post->storyIDList ? $this->post->storyIDList : array();
-            $columns         = 4;
-            $showSuhosinInfo = false;
+            $allChanges = $this->story->batchClose();
 
-            /* Get all stories. */
-            if(!$projectID)
+            if($allChanges)
             {
-                /* Set menu. */
-                $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
-                $allStories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
-            }
-            else
-            {
-                $this->lang->story->menu      = $this->lang->project->menu;
-                $this->lang->story->menuOrder = $this->lang->project->menuOrder;
-                $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
-                $this->lang->set('menugroup.story', 'project');
-                $allStories = $this->story->getProjectStories($projectID, $orderBy);
-            }
-            if(!$allStories) $allStories = array();
-
-            /* Initialize the stories whose need to edited. */
-            foreach($allStories as $story) if(in_array($story->id, $storyIDList)) $editedStories[$story->id] = $story;
-
-            /* Judge whether the editedStories is too large. */
-            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedStories), $columns);
-
-            /* Set the sessions. */
-            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-
-            /* Assign. */
-            if(!$projectID)
-            {
-                $product = $this->product->getByID($productID);
-                $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
-            }
-            else
-            {
-                $project = $this->project->getByID($projectID);
-                $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchClose;
-            }
-            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-            $this->view->position[]       = $this->lang->story->common;
-            $this->view->position[]       = $this->lang->story->batchClose;
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
-            $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
-            $this->view->productID        = $productID;
-            $this->view->editedStories    = $editedStories;
-
-            $this->display();
-        }
-        /* Get post data for story-batchClose. */
-        elseif($from == 'storyBatchClose')
-        {
-            if(!empty($_POST))
-            {
-
-                $allChanges = $this->story->batchClose();
-
-                if($allChanges)
+                foreach($allChanges as $storyID => $changes)
                 {
-                    foreach($allChanges as $storyID => $changes)
-                    {
-                        $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comments[$storyID], ucfirst($this->post->closedReasons[$storyID]));
-                        $this->action->logHistory($actionID);
-                        $this->sendMail($storyID, $actionID);
-                    }
+                    $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comments[$storyID], ucfirst($this->post->closedReasons[$storyID]));
+                    $this->action->logHistory($actionID);
+                    $this->sendMail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
         }
+
+        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+
+        /* Get edited stories. */
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
+
+        /* The stories of a product. */
+        if($productID)
+        {
+            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
+            $product = $this->product->getByID($productID);
+            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+        }
+        /* The stories of a project. */
+        elseif($projectID)
+        {
+            $this->lang->story->menu      = $this->lang->project->menu;
+            $this->lang->story->menuOrder = $this->lang->project->menuOrder;
+            $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
+            $this->lang->set('menugroup.story', 'project');
+            $project = $this->project->getByID($projectID);
+            $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchClose;
+        }
+        /* The stories of my. */
+        else
+        {
+            $this->lang->story->menu = $this->lang->my->menu;
+            $this->lang->set('menugroup.story', 'my');
+            $this->lang->story->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->view->title = $this->lang->story->batchEdit;
+        }
+
+        /* Judge whether the editedStories is too large and set session. */
+        $showSuhosinInfo = false;
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), $this->config->story->batchClose->columns);
+        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        $this->view->position[]       = $this->lang->story->common;
+        $this->view->position[]       = $this->lang->story->batchClose;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->productID        = $productID;
+        $this->view->stories          = $stories;
+        $this->view->storyIDList      = $storyIDList;
+
+        $this->display();
     }
 
     /**
