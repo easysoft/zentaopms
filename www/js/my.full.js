@@ -197,28 +197,6 @@ function switchDocLib(libID, module, method, extra)
 }
 
 /**
- * Save the id of the product last visited.
- * 
- * @access public
- * @return void
- */
-function saveProduct()
-{
-    if($('#productID')) $.cookie('lastProduct', $('#productID').val(), {expires:config.cookieLife, path:config.webRoot});
-}
-
-/**
- * Save the id of the project last visited.
- * 
- * @access public
- * @return void
- */
-function saveProject()
-{
-    if($('#projectID')) $.cookie('lastProject', $('#projectID').val(), {expires:config.cookieLife, path:config.webRoot});
-}
-
-/**
  * Set the ping url.
  * 
  * @access public
@@ -804,8 +782,6 @@ $(document).ready(function()
 
     setRequiredFields();
     setPlaceholder();
-    saveProduct();
-    saveProject();
 
     setAbout();
     setQRCode();

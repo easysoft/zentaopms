@@ -118,6 +118,7 @@ class projectModel extends model
     {
         if(!$projectID) return;
 
+        setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot);
         $currentProject = $this->getById($projectID);
         $output  = "<div id='currentItem'>";
         $output .= "<a onclick=\"showDropMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name}<span id='dropIcon'></span></a>";
