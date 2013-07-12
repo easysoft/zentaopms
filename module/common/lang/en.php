@@ -140,7 +140,7 @@ $lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' =
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Test|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = 'Story|my|story|';
+$lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = 'Project|my|project|';
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');

@@ -22,6 +22,7 @@
     ?>
   </div>
 </div>
+<form method='post' id='myStoryForm'>
 <table class='table-1 tablesorter fixed colored'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
@@ -39,10 +40,19 @@
     </tr>
   </thead>
   <tbody>
+    <?php
+    $canBatchEdit  = common::hasPriv('story', 'batchEdit');
+    $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedbyme';
+    ?>
     <?php foreach($stories as $key => $story):?>
-      <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
-      <tr class='a-center'>
-      <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
+    <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+    <tr class='a-center'>
+      <td>
+        <?php if($canBatchEdit or $canBatchClose):?>
+        <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
+        <?php endif;?>
+        <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
+      </td>
       <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
       <td><?php echo $story->productTitle;?></td>
       <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
@@ -63,7 +73,33 @@
     </tr>
     <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='10'><?php echo $pager->show();?></td></tr></tfoot>
+  <tfoot>
+  <tr>
+    <td colspan='10' class='a-right'>
+      <div class='f-left'>
+      <?php
+      if(count($stories))
+      {
+          if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
+         
+          if($canBatchEdit)
+          {
+              $actionLink = $this->createLink('story', 'batchEdit');
+              echo html::commonButton($lang->edit, "onclick=\"changeAction('myStoryForm', 'batchEdit', '$actionLink')\"");
+          }
+          if($canBatchClose)
+          {
+              $actionLink = $this->createLink('story', 'batchClose');
+              echo html::commonButton($lang->close, "onclick=\"changeAction('myStoryForm', 'batchClose', '$actionLink')\"");
+          }
+      }
+      ?>
+      </div>
+      <?php $pager->show();?>
+    </td>
+  </tr>
+  </tfoot>
 </table>
+</form>
 <script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

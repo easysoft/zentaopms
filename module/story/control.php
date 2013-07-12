@@ -319,7 +319,7 @@ class story extends control
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
 
         /* The stories of a product. */
-        if(!$projectID)
+        if($productID and !$projectID)
         {
             $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
             $product = $this->product->getByID($productID);
@@ -327,7 +327,7 @@ class story extends control
 
         }
         /* The stories of a project. */
-        else
+        elseif($productID and $projectID)
         {
             $this->lang->story->menu = $this->lang->project->menu;
             $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
@@ -335,6 +335,15 @@ class story extends control
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
             $project = $this->project->getByID($projectID);
             $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+        }
+        /* The stories of my. */
+        elseif(!$productID and !$projectID)
+        {
+            $this->lang->story->menu = $this->lang->my->menu;
+            $this->lang->set('menugroup.story', 'my');
+            $this->lang->story->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->view->title = $this->lang->story->batchEdit;
         }
 
         /* Get the module and productplan of edited stories. */
@@ -361,7 +370,6 @@ class story extends control
         $this->view->productID         = $productID;
         $this->view->storyIDList       = $storyIDList;
         $this->view->stories           = $stories;
-
         $this->display();
     }
 

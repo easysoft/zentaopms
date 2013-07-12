@@ -140,7 +140,7 @@ $lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule'
 $lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = '需求|my|story|';
+$lang->my->menu->story          = array('link' => '需求|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = '项目|my|project|';
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile|', 'alias' => 'editprofile');
