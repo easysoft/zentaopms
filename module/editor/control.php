@@ -17,11 +17,13 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index($type = 'editor')
     {
+        $this->app->loadLang('extension');
         $this->view->title      = $this->lang->editor->common;
         $this->view->position[] = $this->lang->editor->common;
         $this->view->moduleList = $this->editor->getModules();
+        $this->view->tab        = $type;
         $this->display();
     }
 

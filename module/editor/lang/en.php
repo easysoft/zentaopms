@@ -1,5 +1,6 @@
 <?php
-$lang->editor->common    = 'Extension editor';
+$lang->editor->common    = 'Editor';
+$lang->editor->api       = 'API';
 $lang->editor->index     = 'Index';
 $lang->editor->newMethod = 'New method';
 $lang->editor->extend    = 'Extend';

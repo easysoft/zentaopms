@@ -11,6 +11,11 @@
  */
 class extension extends control
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->app->loadLang('editor');
+    }
     /**
      * Browse extensions.
      *

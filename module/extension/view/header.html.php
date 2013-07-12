@@ -3,12 +3,17 @@
 <div id='featurebar'>
   <div class='f-left'>
   <?php 
-  echo '<span id="installed">'  . html::a(inlink('browse', "type=installed"),   $lang->extension->installed)   . '</span>';
-  echo '<span id="deactivated">'. html::a(inlink('browse', "type=deactivated"), $lang->extension->deactivated) . '</span>';
-  echo '<span id="available">'  . html::a(inlink('browse', "type=available"),   $lang->extension->available )  . '</span>';
-  echo '<span id="obtain">  '   . html::a(inlink('obtain'), $lang->extension->obtain) . '</span>';
+  echo '<span>'  . $lang->extension->common . '：</span>';
+  echo '<span id="installed">'  . html::a($this->createLink('extension', 'browse', "type=installed"),   $lang->extension->installed)   . '</span>';
+  echo '<span id="deactivated">'. html::a($this->createLink('extension', 'browse', "type=deactivated"), $lang->extension->deactivated) . '</span>';
+  echo '<span id="available">'  . html::a($this->createLink('extension', 'browse', "type=available"),   $lang->extension->available )  . '</span>';
+  echo '<span id="obtain">  '   . html::a($this->createLink('extension', 'obtain'), $lang->extension->obtain) . '</span>';
   common::printLink('extension', 'upload', '', $lang->extension->upload, '', "class='iframe'");
-  ?>
+
+  echo "<span class='pl-10px'>"  . $lang->editor->common . '&' . $lang->editor->api . '：</span>';
+  echo "<span id='editor'>" . html::a($this->createLink('editor', 'index', 'type=editor'), $lang->editor->common) . '</span>';
+  echo "<span id='api'>" . html::a($this->createLink('editor', 'index', 'type=api'), $lang->editor->api) . '</span>';
+?>
   </div>
   <script>$('#<?php echo $tab;?>').addClass('active')</script>
 </div>

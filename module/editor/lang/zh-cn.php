@@ -1,5 +1,6 @@
 <?php
-$lang->editor->common    = '扩展编辑器';
+$lang->editor->common    = '编辑器';
+$lang->editor->api       = 'API';
 $lang->editor->index     = '首页';
 $lang->editor->newMethod = '新增方法';
 $lang->editor->extend    = '扩展';
