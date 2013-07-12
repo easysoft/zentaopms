@@ -37,7 +37,12 @@ class company extends control
     /**
      * Browse departments and users of a company.
      * 
-     * @param  int    $deptID 
+     * @param  int    $param 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
