@@ -144,6 +144,22 @@ class extensionModel extends model
     }
 
     /**
+     * Check incompatible extension
+     * 
+     * @param  array    $versions 
+     * @access public
+     * @return array
+     */
+    public function checkIncompatible($versions)
+    {
+        $apiURL = $this->apiRoot . 'apiCheckCompatible-' . helper::safe64Encode(json_encode($versions)) . '.json';
+        $data = $this->fetchAPI($apiURL);
+        if(isset($data->incompatibleExts)) return (array)$data->incompatibleExts;
+        return array();
+
+    }
+
+    /**
      * Download an extension.
      * 
      * @param  string    $extension 
@@ -804,6 +820,13 @@ class extensionModel extends model
         return $this->dao->update(TABLE_EXTENSION)->data($data)->where('code')->eq($extension)->exec();
     }
 
+    /**
+     * Check depends extension.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return array
+     */
     public function checkDepends($extension)
     {
         $result        = array();
@@ -820,6 +843,15 @@ class extensionModel extends model
         return $result;
     }
 
+    /**
+     * Compare for limit data.
+     * 
+     * @param  string $version 
+     * @param  array  $limit 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
     public function compare4Limit($version, $limit, $type = 'between')
     {
         $result = false;

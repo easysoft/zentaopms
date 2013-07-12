@@ -69,7 +69,23 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            $this->view->result = 'success';
+            $this->loadModel('extension');
+            $extensions = $this->extension->getLocalExtensions('installed');
+
+            foreach($extensions as $code => $extension) $versions[$code] = $extension->version;
+
+            $incompatibleExts = $this->extension->checkIncompatible($versions);
+            $extensionsName   = array();
+
+            foreach($incompatibleExts as $extension)
+            {
+                $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+                $this->extension->removePackage($extension);
+                $extensionsName[] = $extensions[$extension]->name;
+            }
+
+            $this->view->extensionsName = $extensionsName;
+            $this->view->result         = 'success';
         }
         else
         {

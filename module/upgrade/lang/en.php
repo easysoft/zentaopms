@@ -37,6 +37,7 @@ $lang->upgrade->fromVersion   = 'From version';
 $lang->upgrade->toVersion     = 'To version';
 $lang->upgrade->confirm       = 'Confirm the sql to executed.';
 $lang->upgrade->sureExecute   = 'Execute';
+$lang->upgrade->forbiddenExt  = 'Because it is incompatible with this version, the following extension automatically disabled, ：';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';

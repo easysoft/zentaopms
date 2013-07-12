@@ -27,4 +27,13 @@
     </td>
   </tr>
 </table>
+<?php
+if(!empty($extensionsName))
+{
+    echo "<h3>{$lang->upgrade->forbiddenExt}</h3>";
+    echo '<ul>';
+    foreach($incompatibleExts as $extensionName) echo "<li>$extensionName</li>";
+    echo '</ul>';
+}
+?>
 <?php include '../../common/view/footer.lite.html.php';?>
