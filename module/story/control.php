@@ -568,6 +568,15 @@ class story extends control
         $this->display();
     }
 
+    function batchReview($result, $reason = '')
+    {
+        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+        foreach($storyIDList as $storyID)
+        {
+    //        $this->story->review($storyID);
+        }
+    }
+
     /**
      * Close a story.
      * 

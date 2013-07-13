@@ -465,10 +465,17 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $planID = 0)
+    public function ajaxGetPlans($productID, $planID = 0, $dropMenu = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);
-        die(html::select('plan', $plans, $planID));
+        if(!$dropMenu) die(html::select('plan', $plans, $planID));
+
+        echo "<ul>";
+        foreach($plans as $plan)
+        {
+            echo "<li><a>" . $plan . "</a></li>";
+        }
+        echo "</ul>";
     }
 
     /**

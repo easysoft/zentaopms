@@ -17,10 +17,6 @@
   </tr>
   </thead>
   <tbody>
-  <?php 
-  $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-  $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
-  ?>
   <?php foreach($stories as $key => $story):?>
   <?php
   $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
@@ -28,9 +24,7 @@
   ?>
   <tr class='a-center'>
     <td>
-      <?php if($canBatchEdit or $canBatchClose):?>
       <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
-      <?php endif;?>
       <?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?>
     </td>
     <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri];?>'><?php echo $lang->story->priList[$story->pri]?></span></td>
@@ -62,19 +56,18 @@
       <?php
       if(count($stories))
       {
-          if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
-         
-          if($canBatchEdit)
-          {
-              $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
-              echo html::commonButton($lang->edit, "onclick=\"changeAction('productStoryForm', 'batchEdit', '$actionLink')\"");
-          }
-          if($canBatchClose)
-          {
-              $actionLink = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-              echo html::commonButton($lang->close, "onclick=\"changeAction('productStoryForm', 'batchClose', '$actionLink')\"");
-          }
+          echo html::selectAll() . html::selectReverse();
+
+          $canBatchEdit  = common::hasPriv('story', 'batchEdit');
+          $disabled = $canBatchEdit ? '' : 'disabled';
+          $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
+
+          echo "<div class='groupButton'>";
+          echo html::commonButton($lang->edit, "onclick=\"changeAction('productStoryForm', 'batchEdit', '$actionLink')\" $disabled");
+          echo html::commonButton($lang->more, "onclick=\"toggleSubMenu(this.id, 'top', 0)\" id='moreAction'");
+          echo "</div>";
       }
+
       echo $summary;
       ?>
       </div>
@@ -83,3 +76,67 @@
   </tr>
   </tfoot>
 </table>
+
+<div id='moreActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
+  $disabled      = $canBatchClose ? '' : 'disabled';
+  $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
+  echo "<li>" . html::a('#', $lang->close, '', "onclick=\"changeAction('productStoryForm', 'batchClose', '$actionLink')\" $disabled") . "</li>";
+  echo "<li>" . html::a('#', $lang->story->review,  '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'") . "</li>";
+  echo "<li>" . html::a('#', $lang->story->planAB,  '', "onmouseover='ajaxShowMenu(this.id, $productID)' onmouseout='toggleSubMenu(this.id)' id='planItem'") . "</li>";
+  echo "<li>" . html::a('#', $lang->story->stageAB, '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='stageItem'") . "</li>";
+  ?>
+  </ul>
+</div>
+
+<div id='reviewItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($lang->story->reviewResultList['']);
+  unset($lang->story->reviewResultList['revert']);
+  foreach($lang->story->reviewResultList as $key => $result)
+  {
+      $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+      echo "<li>";
+      if($key == 'reject')
+      {
+          echo html::a('#', $result, '', "onmouseover='toggleSubMenu(this.id, \"right\", 2)' id='rejectItem'");
+      }
+      else
+      {
+          echo html::a('#', $result, '', "onclick=\"changeAction('productStoryForm', 'batchReview', '$actionLink')\"");
+      }
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>
+
+<div id='rejectItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  foreach($lang->story->reasonList as $key => $reason)
+  {
+      $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+      echo "<li>";
+      echo html::a('#', $reason, '', "onclick=\"changeAction('productStoryForm', 'batchReview', '$actionLink')\"");
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>
+
+<div id='planItemMenu' class='hidden listMenu'></div>
+
+<div id='stageItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  foreach($lang->story->stageList as $key => $stage)
+  {
+      echo "<li><a href='#'>$stage</a></li>";
+  }
+  ?>
+  </ul>
+</div>
