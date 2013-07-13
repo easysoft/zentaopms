@@ -117,6 +117,10 @@
 <div id='rejectItemMenu' class='hidden listMenu'>
   <ul>
   <?php
+  unset($lang->story->reasonList['']);
+  unset($lang->story->reasonList['subdivided']);
+  unset($lang->story->reasonList['duplicate']);
+
   foreach($lang->story->reasonList as $key => $reason)
   {
       $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
