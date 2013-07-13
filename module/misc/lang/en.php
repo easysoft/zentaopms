@@ -46,4 +46,5 @@ $lang->misc->zentao->service['install']    = 'Install service';
 $lang->misc->zentao->service['fixissue']   = 'Issue support';
 $lang->misc->zentao->service['servicemore']= 'More...';
 
+$lang->misc->noGDLib   = "Can't find GD libary, the entrance of mobile browser： %s.";
 $lang->misc->copyright = "Copyright &copy;2009-2013 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>";

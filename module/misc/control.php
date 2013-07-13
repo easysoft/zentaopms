@@ -123,15 +123,16 @@ class misc extends control
     /**
      * Create qrcode for mobile login.
      * 
-     * @param  string $mode     template|qrcode
      * @access public
      * @return void
      */
-    public function qrCode($mode = 'template')
+    public function qrCode()
     {
-        $ciqrcode = $this->app->loadClass('qrcode');
         $loginAPI = common::getSysURL() . $this->config->webRoot;
         if($this->loadModel('user')->isLogon()) $loginAPI .= "?sid=" . session_ID();
+
+        if(!extension_loaded('gd')) die(printf($this->lang->misc->noGDLib, $loginAPI));
+        $ciqrcode = $this->app->loadClass('qrcode');
         QRcode::png($loginAPI, false, 4, 9);
     }
 }

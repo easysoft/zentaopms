@@ -525,7 +525,7 @@ class commonModel extends model
     public static function printQRCodeLink($color = '')
     {
         global $lang;
-        if(extension_loaded('gd')) echo html::a(helper::createLink('misc', 'qrCode'), $lang->user->mobileLogin, '', "class='qrCode $color'");
+        echo html::a(helper::createLink('misc', 'qrCode'), $lang->user->mobileLogin, '', "class='qrCode $color'");
     }
 
     /**
