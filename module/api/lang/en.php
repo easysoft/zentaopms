@@ -12,3 +12,14 @@
 $lang->api = new stdclass();
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
+
+$lang->api->position  = 'Position';
+$lang->api->startLine = "%s, line %s";
+$lang->api->desc      = 'Desc';
+$lang->api->test      = 'Test';
+$lang->api->noParam   = 'No params in this method';
+$lang->api->submit    = 'submit';
+$lang->api->url       = 'Request url';
+$lang->api->result    = 'Result';
+$lang->api->status    = 'status';
+$lang->api->data      = 'data';

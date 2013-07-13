@@ -47,4 +47,43 @@ class api extends control
         $this->output     = json_encode($output);
         die($this->output);
     }
+
+    public function view($filePath, $action)
+    {
+        if($filePath)
+        {
+            $host = common::getSysURL() . $this->config->webRoot;
+            $filePath = helper::safe64Decode($filePath);
+            if($action == 'extendModel')
+            {
+                $method = $this->api->getMethod($filePath, 'Model');
+            }
+            elseif($action == 'extendControl')
+            {
+                $method = $this->api->getMethod($filePath);
+            }
+
+            if(!empty($_POST))
+            {
+                $param = '';
+                foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
+                $param   = trim($param, '&') . "&{$this->config->sessionVar}=" . session_id();
+                $url     = rtrim($host, '/') . $this->createLink($method->className, $method->methodName, $param, 'json');
+                $content = file_get_contents($url);
+                $result  = json_decode($content);
+                $status  = $result->status;
+                $data    = json_decode($result->data);
+                $data    = '<xmp>' . print_r($data, true) . '</xmp>';
+
+                $response['result']  = 'success';
+                $response['status'] = $status;
+                $response['url']    = $url;
+                $response['data']   = $data;
+                $this->send($response);
+            }
+            $this->view->method   = $method;
+            $this->view->filePath = $filePath;
+            $this->display();
+        }
+    }
 }

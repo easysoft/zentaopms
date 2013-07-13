@@ -11,5 +11,21 @@
  */
 class apiModel extends model
 {
-}
+    public function getMethod($filePath, $ext = '')
+    {
+        $fileName  = dirname($filePath);
+        $className = basename(dirname(dirname($filePath)));
+        if(!class_exists($className)) include($fileName);
+        $methodName = basename($filePath);
 
+        $method = new ReflectionMethod($className . $ext, $methodName);
+        $data   = new stdClass();
+        $data->startLine  = $method->getStartLine();
+        $data->comment    = $method->getDocComment();
+        $data->parameters = $method->getParameters();
+        $data->className  = $className;
+        $data->methodName = $methodName;
+        $data->fileName   = $fileName;
+        return $data;
+    }
+}
