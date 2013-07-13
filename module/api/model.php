@@ -21,11 +21,22 @@ class apiModel extends model
         $method = new ReflectionMethod($className . $ext, $methodName);
         $data   = new stdClass();
         $data->startLine  = $method->getStartLine();
+        $data->endLine    = $method->getEndLine();
         $data->comment    = $method->getDocComment();
         $data->parameters = $method->getParameters();
         $data->className  = $className;
         $data->methodName = $methodName;
         $data->fileName   = $fileName;
+        $data->post       = false;
+
+        $file = file($fileName);
+        for($i = $data->startLine - 1; $i <= $data->endLine; $i++)
+        {
+            if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
+            {
+                $data->post = true; 
+            }
+        }
         return $data;
     }
 }

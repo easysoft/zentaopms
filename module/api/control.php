@@ -48,11 +48,19 @@ class api extends control
         die($this->output);
     }
 
+    /**
+     * The interface of api.
+     * 
+     * @param  int    $filePath 
+     * @param  int    $action 
+     * @access public
+     * @return void
+     */
     public function view($filePath, $action)
     {
         if($filePath)
         {
-            $host = common::getSysURL() . $this->config->webRoot;
+            $host     = common::getSysURL() . $this->config->webRoot;
             $filePath = helper::safe64Decode($filePath);
             if($action == 'extendModel')
             {
@@ -66,21 +74,40 @@ class api extends control
             if(!empty($_POST))
             {
                 $param = '';
-                foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
-                $param   = trim($param, '&') . "&{$this->config->sessionVar}=" . session_id();
-                $url     = rtrim($host, '/') . $this->createLink($method->className, $method->methodName, $param, 'json');
+                if($action == 'extendModel')
+                {
+                    foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
+                    $param = ltrim($param, ',');
+                    $url   = rtrim($host, '/') . inlink('getModel',  "moduleName={$method->className}&methodName={$method->methodName}&params=$param", 'json');
+                    $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+                    $url  .= $this->config->sessionVar . '=' . session_id();
+                }
+                else
+                {
+                    foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
+                    $param = ltrim($param, '&');
+                    $url   = rtrim($host, '/') . $this->createLink($method->className, $method->methodName, $param, 'json');
+                    $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+                    $url  .= $this->config->sessionVar . '=' . session_id();
+                }
+
+                /* Unlock session. After new request, restart session. */
+                session_write_close();
                 $content = file_get_contents($url);
+                session_start();
+
                 $result  = json_decode($content);
                 $status  = $result->status;
                 $data    = json_decode($result->data);
                 $data    = '<xmp>' . print_r($data, true) . '</xmp>';
 
                 $response['result']  = 'success';
-                $response['status'] = $status;
-                $response['url']    = $url;
-                $response['data']   = $data;
+                $response['status']  = $status;
+                $response['url']     = $url;
+                $response['data']    = $data;
                 $this->send($response);
             }
+
             $this->view->method   = $method;
             $this->view->filePath = $filePath;
             $this->display();

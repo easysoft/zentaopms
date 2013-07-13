@@ -2,7 +2,7 @@
 <?php include '../../common/view/form.html.php';?>
 <table class='table-1'>
   <caption>
-    <?php echo 'GET ' . $filePath?>
+    <?php echo $method->post ? 'GET/POST ' . $filePath : 'GET ' . $filePath?>
   </caption>
   <tr>
     <td>
@@ -18,7 +18,7 @@
   </tr>
   <tr>
     <td>
-      <?php echo "<p class='strong'>{$lang->api->test}</p>"?>
+      <?php echo "<p class='strong'>{$lang->api->debug}</p>"?>
       <?php if($method->parameters):?>
       <form method='post' id='apiForm'>
         <table>
