@@ -4,6 +4,7 @@ $lang->editor->api       = 'API';
 $lang->editor->index     = '首页';
 $lang->editor->newMethod = '新增方法';
 $lang->editor->extend    = '扩展';
+$lang->editor->api       = 'API';
 $lang->editor->newLang   = '新增语言';
 $lang->editor->newConfig = '新增配置';
 $lang->editor->newHook   = '新增钩子';

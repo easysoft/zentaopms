@@ -4,6 +4,7 @@ $lang->editor->api       = 'API';
 $lang->editor->index     = 'Index';
 $lang->editor->newMethod = 'New method';
 $lang->editor->extend    = 'Extend';
+$lang->editor->api       = 'API';
 $lang->editor->newLang   = 'New language';
 $lang->editor->newConfig = 'New config';
 $lang->editor->newHook   = 'New hook';

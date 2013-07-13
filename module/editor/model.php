@@ -334,9 +334,11 @@ class editorModel extends model
             $parentDir = basename(dirname($filePath));
             $action = 'extendOther';
             if($parentDir == 'control.php') $action = 'extendControl';
-            if($parentDir == 'model.php') $action = 'extendModel';
+            if($parentDir == 'model.php')   $action = 'extendModel';
+
             $tree .= "$file " . html::a($this->getExtendLink($filePath, $action), $this->lang->editor->extend, 'editWin');
-            if($parentDir == 'lang') $tree .= html::a($this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), $this->lang->editor->newLang, 'editWin');
+            if($action != 'extendOther') $tree .= html::a($this->getAPILink($filePath, $action), $this->lang->editor->api, 'editWin');
+            if($parentDir == 'lang')     $tree .= html::a($this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), $this->lang->editor->newLang, 'editWin');
             if(basename($filePath) == 'config.php') $tree .= html::a($this->getExtendLink($filePath, "newConfig"), $this->lang->editor->newConfig, 'editWin');
         }
         return $tree;
@@ -354,6 +356,20 @@ class editorModel extends model
     public function getExtendLink($filePath, $action, $isExtends = '')
     {
         return inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=$action&isExtends=$isExtends");
+    }
+
+    /**
+     * Get api link. 
+     * 
+     * @param  int    $filePath 
+     * @param  int    $action 
+     * @param  string $type 
+     * @access public
+     * @return string
+     */
+    public function getAPILink($filePath, $action)
+    {
+        return helper::createLink('api', 'view', "filePath=" . helper::safe64Encode($filePath) . "&action=$action");
     }
 
     /**
