@@ -31,8 +31,10 @@ function changeAction(formName, actionName, actionLink)
  * @access public
  * @return void
  */
-function toggleSubMenu(currentID, position = 'right', menuIndex = 1)
+function toggleSubMenu(currentID, position, menuIndex)
 {
+    if(typeof(position)  == 'undefined') position  = 'right';
+    if(typeof(menuIndex) == 'undefined') menuIndex = 1;
     if(menuIndex)
     {
         currentMenu = $('#' + currentID).parent().parent().parent().attr('id');
