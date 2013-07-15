@@ -38,21 +38,21 @@ function toggleSubMenu(currentID, position, menuIndex)
     if(menuIndex)
     {
         currentMenu = $('#' + currentID).parent().parent().parent().attr('id');
-        $('#' + currentID + 'Menu').bind('mouseover',  
-                function(){
-                $('#' + currentMenu).show();
-                return $('#' + currentID + 'Menu').show()
-                });
+        $('#' + currentID + 'Menu').bind('mouseover', function()
+        {
+            $('#' + currentMenu).show();
+            return $('#' + currentID + 'Menu').show()
+        });
 
-        $('#' + currentID).parent().bind('mouseleave', 
-                function(){
-                return $('#' + currentID + 'Menu').hide()
-                });
+        $('#' + currentID).parent().bind('mouseleave', function()
+        {
+            return $('#' + currentID + 'Menu').hide()
+        });
 
-        $('#' + currentID + 'Menu').bind('mouseleave', 
-                function(){
-                return $('#' + currentID + 'Menu').hide()
-                });
+        $('#' + currentID + 'Menu').bind('mouseleave', function()
+        {
+            return $('#' + currentID + 'Menu').hide()
+        });
     }
 
     var offset     = $('#' + currentID).offset();
@@ -76,8 +76,8 @@ function toggleSubMenu(currentID, position, menuIndex)
         {
             currentMenu = $('#' + currentID).parent().parent().parent().attr('id');
             rootID      = currentMenu.replace('Menu', '');
-            topOffset   = $('#' + rootID).offset().top - $('#' + currentMenu).height();
-            leftOffset  = $('#' + rootID).offset().left + $('#' + rootID).width() + $('#' + currentMenu).width() + 30;
+            topOffset   = $('#' + rootID).offset().top - $('#' + currentID + 'Menu').height();
+            leftOffset  = $('#' + rootID).offset().left + $('#' + rootID).parent().width() + $('#' + currentMenu).width();
             $('#' + currentID + 'Menu').css({top: topOffset, left:leftOffset});
         }
     }
