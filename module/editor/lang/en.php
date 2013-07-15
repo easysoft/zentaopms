@@ -35,20 +35,9 @@ $lang->editor->notWritable   = "Can not writable, maybe no power. please try chm
 $lang->editor->notDelete     = "Can not delete, please check power!";
 $lang->editor->emptyFileName = 'Please write file name';
 
-$lang->editor->translate['config.php']  = 'Config file';
-$lang->editor->translate['config']      = 'Config extend';
-$lang->editor->translate['control.php'] = 'Control file';
-$lang->editor->translate['control']     = 'Control extend';
-$lang->editor->translate['model.php']   = 'Model file';
-$lang->editor->translate['model']       = 'Model extend';
-$lang->editor->translate['view']        = 'View file';
-$lang->editor->translate['lang']        = 'Language file';
-$lang->editor->translate['en']          = 'English';
-$lang->editor->translate['zh-cn']       = 'Chinese Simple';
-$lang->editor->translate['zh-tw']       = 'Chinese Traditional';
-$lang->editor->translate['js']          = 'Javascript';
-$lang->editor->translate['css']         = 'Css';
-$lang->editor->translate['ext']         = 'Extend file';
+$lang->editor->translate['config.php']  = 'config';
+$lang->editor->translate['control.php'] = 'Control';
+$lang->editor->translate['model.php']   = 'model';
 
 $lang->editor->modules['action']      = 'Logs';
 $lang->editor->modules['admin']       = 'Admin';

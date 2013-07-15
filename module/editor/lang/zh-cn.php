@@ -35,20 +35,9 @@ $lang->editor->notWritable   = "无法写入，可能没有权限。请尝试执
 $lang->editor->notDelete     = '无法删除，请检查权限！';
 $lang->editor->emptyFileName = '请写入一个文件名！';
 
-$lang->editor->translate['config.php']  = '配置文件';
-$lang->editor->translate['config']      = '配置扩展';
-$lang->editor->translate['control.php'] = '控制文件';
-$lang->editor->translate['control']     = '控制扩展';
-$lang->editor->translate['model.php']   = '模型文件';
-$lang->editor->translate['model']       = '模型扩展';
-$lang->editor->translate['view']        = '模板文件';
-$lang->editor->translate['lang']        = '语言文件';
-$lang->editor->translate['en']          = '英文';
-$lang->editor->translate['zh-cn']       = '中文简体';
-$lang->editor->translate['zh-tw']       = '中文繁体';
-$lang->editor->translate['js']          = 'JS脚本';
-$lang->editor->translate['css']         = 'CSS样式';
-$lang->editor->translate['ext']         = '扩展文件';
+$lang->editor->translate['config.php']  = 'config';
+$lang->editor->translate['control.php'] = 'control';
+$lang->editor->translate['model.php']   = 'model';
 
 $lang->editor->modules['action']      = '系统日志';
 $lang->editor->modules['admin']       = '后台管理';

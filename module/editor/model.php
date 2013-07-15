@@ -300,25 +300,7 @@ class editorModel extends model
     public function addLink4File($filePath, $file)
     {
         $tree = '';
-        if(isset($this->module->$file) and !is_object($this->module->$file) and !is_array($this->module->$file))
-        {
-           $file = "<span title='$file'>" . $this->module->$file . '</span>';
-        }
-        elseif(isset($this->lang->editor->translate[$file]))
-        {
-            if(strpos($filePath, $this->pathFix . 'ext' . $this->pathFix) !== false and $file == 'config.php')
-            {
-                $file = "<span title='$file'>$file</span>";
-            }
-            else
-            {
-                $file = "<span title='$file'>" . $this->lang->editor->translate[$file] . '</span>';
-            }
-        }
-        else
-        {
-            $file = "<span title='$file'>$file</span>";
-        }
+        $file = "<span title='$file'>$file</span>";
         if(strpos($filePath, $this->pathFix . 'ext' . $this->pathFix) !== false)
         {
             $tree .= "$file " . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit, 'editWin');
