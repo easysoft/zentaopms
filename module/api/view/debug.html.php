@@ -31,7 +31,7 @@
           <tr>
             <td align='center' colspan="2">
               <?php echo html::submitButton($lang->api->submit)?>
-            <td>
+            </td>
           </tr>
         </table>
       <?php else:?>
