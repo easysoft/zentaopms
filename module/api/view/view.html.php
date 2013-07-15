@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/form.html.php';?>
-<table class='table-1'>
+<table class='table-1' id='api'>
   <caption>
     <?php echo $method->post ? 'GET/POST ' . $filePath : 'GET ' . $filePath?>
   </caption>
