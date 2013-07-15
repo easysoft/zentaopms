@@ -16,6 +16,7 @@ $lang->story->batchCreate = "Batch";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Changed';
 $lang->story->review      = 'Review';
+$lang->story->batchReview = 'Batch review';
 $lang->story->edit        = "Edit";
 $lang->story->batchEdit   = "Batch edit";
 $lang->story->close       = 'Close';

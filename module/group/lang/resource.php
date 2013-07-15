@@ -151,6 +151,7 @@ $lang->resource->story->delete      = 'delete';
 $lang->resource->story->view        = 'view';
 $lang->resource->story->change      = 'lblChange';
 $lang->resource->story->review      = 'lblReview';
+$lang->resource->story->batchReview = 'batchReview';
 $lang->resource->story->close       = 'lblClose';
 $lang->resource->story->batchClose  = 'batchClose';
 $lang->resource->story->activate    = 'lblActivate';
@@ -165,11 +166,12 @@ $lang->story->methodOrder[25] = 'delete';
 $lang->story->methodOrder[30] = 'view';
 $lang->story->methodOrder[35] = 'change';
 $lang->story->methodOrder[40] = 'review';
-$lang->story->methodOrder[45] = 'close';
-$lang->story->methodOrder[50] = 'batchClose';
-$lang->story->methodOrder[55] = 'activate';
-$lang->story->methodOrder[60] = 'tasks';
-$lang->story->methodOrder[65] = 'report';
+$lang->story->methodOrder[45] = 'batchReview';
+$lang->story->methodOrder[50] = 'close';
+$lang->story->methodOrder[55] = 'batchClose';
+$lang->story->methodOrder[60] = 'activate';
+$lang->story->methodOrder[65] = 'tasks';
+$lang->story->methodOrder[70] = 'report';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

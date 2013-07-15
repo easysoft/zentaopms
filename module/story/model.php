@@ -479,6 +479,50 @@ class storyModel extends model
     }
 
     /**
+     * Batch review stories.
+     * 
+     * @param  array   $storyIDList 
+     * @access public
+     * @return array
+     */
+    function batchReview($storyIDList, $result, $reason)
+    {
+        $now     = helper::now();
+        $date    = helper::today();
+        $actions = array();
+        $this->loadModel('action');
+        foreach($storyIDList as $storyID)
+        {
+            $oldStory = $this->getById($storyID);
+            if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
+
+            $story = new stdClass();
+            $story->reviewedDate   = $date;
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            if($result == 'pass') $story->status = 'active';
+            if($reason == 'done') $story->stage = 'released';
+            if($result == 'reject')
+            {
+                $story->status     = 'closed';
+                $story->closedBy   = $this->app->user->account;
+                $story->closedDate = $now;
+                $story->assignedTo = closed;
+                $this->action->create('story', $storyID, 'Closed', '', ucfirst($reason));
+            }
+
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+            $this->setStage($storyID);
+
+            if(strpos('done,postponed', $reason) !== false) $result = 'pass';
+            $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result));
+            $this->action->logHistory($actions[$storyID], array());
+        }
+
+        return $actions;
+    }
+
+    /**
      * Close a story.
      * 
      * @param  int    $storyID 

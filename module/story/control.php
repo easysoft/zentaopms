@@ -568,13 +568,22 @@ class story extends control
         $this->display();
     }
 
+    /**
+     * Batch review stories.
+     * 
+     * @param  string $result 
+     * @param  string $reason 
+     * @access public
+     * @return void
+     */
     function batchReview($result, $reason = '')
     {
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        foreach($storyIDList as $storyID)
-        {
-    //        $this->story->review($storyID);
-        }
+        $actions     = $this->story->batchReview($storyIDList, $result, $reason);
+
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($actions as $storyID => $actionID) $this->sendMail($storyID, $actionID);
+        die(js::locate($this->session->storyList, 'parent'));
     }
 
     /**

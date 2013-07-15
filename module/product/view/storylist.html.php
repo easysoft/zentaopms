@@ -59,7 +59,7 @@
           echo html::selectAll() . html::selectReverse();
 
           $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-          $disabled = $canBatchEdit ? '' : 'disabled';
+          $disabled   = $canBatchEdit ? '' : 'disabled';
           $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
 
           echo "<div class='groupButton'>";
