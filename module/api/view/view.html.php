@@ -19,8 +19,8 @@
   <tr>
     <td>
       <?php echo "<p class='strong'>{$lang->api->debug}</p>"?>
-      <?php if($method->parameters):?>
       <form method='post' id='apiForm'>
+      <?php if($method->parameters):?>
         <table>
           <?php foreach($method->parameters as $param):?>
           <tr>
@@ -34,10 +34,11 @@
             <td>
           </tr>
         </table>
-      </form>
       <?php else:?>
-      <?php echo $lang->api->noParam;?>
+      <?php echo html::hidden('noparam', '0') . $lang->api->noParam . html::submitButton($lang->api->submit);?>
       <?php endif;?>
+      </form>
+      <?php if($method->post) echo "<p>{$lang->api->post}</p>"?>
     </td>
   </tr>
   <tr>

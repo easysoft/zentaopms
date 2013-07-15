@@ -76,16 +76,22 @@ class api extends control
                 $param = '';
                 if($action == 'extendModel')
                 {
-                    foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
-                    $param = ltrim($param, ',');
+                    if(!isset($_POST['noparam']))
+                    {
+                        foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
+                        $param = ltrim($param, ',');
+                    }
                     $url   = rtrim($host, '/') . inlink('getModel',  "moduleName={$method->className}&methodName={$method->methodName}&params=$param", 'json');
                     $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
                     $url  .= $this->config->sessionVar . '=' . session_id();
                 }
                 else
                 {
-                    foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
-                    $param = ltrim($param, '&');
+                    if(!isset($_POST['noparam']))
+                    {
+                        foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
+                        $param = ltrim($param, '&');
+                    }
                     $url   = rtrim($host, '/') . $this->createLink($method->className, $method->methodName, $param, 'json');
                     $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
                     $url  .= $this->config->sessionVar . '=' . session_id();
