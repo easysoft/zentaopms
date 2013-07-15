@@ -56,7 +56,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function view($filePath, $action)
+    public function debug($filePath, $action)
     {
         if($filePath)
         {

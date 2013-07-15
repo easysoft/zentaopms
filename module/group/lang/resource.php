@@ -703,6 +703,7 @@ $lang->webapp->methodOrder[35] = 'uninstall';
 /* Others. */
 $lang->resource->api = new stdclass();
 $lang->resource->api->getModel    = 'getModel';
+$lang->resource->api->debug       = 'debug';
 
 $lang->api->methodOrder[5] = 'getModel';
 

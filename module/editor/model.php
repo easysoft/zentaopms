@@ -369,7 +369,7 @@ class editorModel extends model
      */
     public function getAPILink($filePath, $action)
     {
-        return helper::createLink('api', 'view', "filePath=" . helper::safe64Encode($filePath) . "&action=$action");
+        return helper::createLink('api', 'debug', "filePath=" . helper::safe64Encode($filePath) . "&action=$action");
     }
 
     /**
