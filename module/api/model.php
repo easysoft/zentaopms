@@ -39,4 +39,48 @@ class apiModel extends model
         }
         return $data;
     }
+
+    /**
+     * Request the api.
+     * 
+     * @param  string $moduleName 
+     * @param  string $methodName 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function request($moduleName, $methodName, $action)
+    {
+        $host  = common::getSysURL() . $this->config->webRoot;
+        $param = '';
+        if($action == 'extendModel')
+        {
+            if(!isset($_POST['noparam']))
+            {
+                foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
+                $param = ltrim($param, ',');
+            }
+            $url   = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
+            $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+            $url  .= $this->config->sessionVar . '=' . session_id();
+        }
+        else
+        {
+            if(!isset($_POST['noparam']))
+            {
+                foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
+                $param = ltrim($param, '&');
+            }
+            $url   = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
+            $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+            $url  .= $this->config->sessionVar . '=' . session_id();
+        }
+
+        /* Unlock session. After new request, restart session. */
+        session_write_close();
+        $content = file_get_contents($url);
+        session_start();
+
+        return array('url' => $url, 'content' => $content);
+    }
 }

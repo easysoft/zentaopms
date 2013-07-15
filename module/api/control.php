@@ -60,7 +60,6 @@ class api extends control
     {
         if($filePath)
         {
-            $host     = common::getSysURL() . $this->config->webRoot;
             $filePath = helper::safe64Decode($filePath);
             if($action == 'extendModel')
             {
@@ -73,43 +72,15 @@ class api extends control
 
             if(!empty($_POST))
             {
-                $param = '';
-                if($action == 'extendModel')
-                {
-                    if(!isset($_POST['noparam']))
-                    {
-                        foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
-                        $param = ltrim($param, ',');
-                    }
-                    $url   = rtrim($host, '/') . inlink('getModel',  "moduleName={$method->className}&methodName={$method->methodName}&params=$param", 'json');
-                    $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
-                    $url  .= $this->config->sessionVar . '=' . session_id();
-                }
-                else
-                {
-                    if(!isset($_POST['noparam']))
-                    {
-                        foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
-                        $param = ltrim($param, '&');
-                    }
-                    $url   = rtrim($host, '/') . $this->createLink($method->className, $method->methodName, $param, 'json');
-                    $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
-                    $url  .= $this->config->sessionVar . '=' . session_id();
-                }
-
-                /* Unlock session. After new request, restart session. */
-                session_write_close();
-                $content = file_get_contents($url);
-                session_start();
-
-                $result  = json_decode($content);
-                $status  = $result->status;
-                $data    = json_decode($result->data);
+                $result  = $this->api->request($method->className, $method->methodName, $action);
+                $content = json_decode($result['content']);
+                $status  = $content->status;
+                $data    = json_decode($content->data);
                 $data    = '<xmp>' . print_r($data, true) . '</xmp>';
 
                 $response['result']  = 'success';
                 $response['status']  = $status;
-                $response['url']     = $url;
+                $response['url']     = $result['url'];
                 $response['data']    = $data;
                 $this->send($response);
             }
