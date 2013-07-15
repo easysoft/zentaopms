@@ -651,6 +651,33 @@ class storyModel extends model
     }
 
     /**
+     * Batch change the stage of story.
+     * 
+     * @param  string    $stage 
+     * @access public
+     * @return array
+     */
+    public function batchChangeStage($storyIDList, $stage)
+    {
+        $now         = helper::now();
+        $allChanges  = array();
+        foreach($storyIDList as $storyID)
+        {
+            $oldStory = $this->getById($storyID);
+            if($oldStory->status == 'draft') continue;
+
+            $story = new stdclass();
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            $story->stage          = $stage;
+
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Activate a story.
      * 
      * @param  int    $storyID 

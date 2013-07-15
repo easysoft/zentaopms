@@ -151,7 +151,8 @@
   <?php
   foreach($lang->story->stageList as $key => $stage)
   {
-      echo "<li><a href='#'>$stage</a></li>";
+      $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
+      echo "<li>" . html::a('#', $stage, '', "onclick=\"changeAction('$actionLink',true)\"") . "</li>";
   }
   ?>
   </ul>
