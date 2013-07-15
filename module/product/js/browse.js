@@ -11,15 +11,15 @@ function browseByModule()
 /**
  * Change form action.
  * 
- * @param  formName   $formName 
- * @param  actionName $actionName 
- * @param  actionLink $actionLink 
+ * @param  url  $actionLink 
+ * @param  bool $hiddenwin 
  * @access public
  * @return void
  */
-function changeAction(formName, actionName, actionLink)
+function changeAction(actionLink, hiddenwin)
 {
-    $('#' + formName).attr('action', actionLink).submit();
+    if(hiddenwin) $('form').attr('target', 'hiddenwin');
+    $('form').attr('action', actionLink).submit();
 }
 
 /**
@@ -82,12 +82,6 @@ function toggleSubMenu(currentID, position, menuIndex)
         }
     }
     $('#' + currentID + 'Menu').toggle();
-}
-
-function ajaxShowMenu(currentID, productID)
-{
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + "&plan=0&showMenu=true"), function(data){ $('#' + currentID + 'Menu').html(data);});
-    toggleSubMenu(currentID);
 }
 
 $(function()

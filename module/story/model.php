@@ -624,6 +624,33 @@ class storyModel extends model
     }
 
     /**
+     * Batch change the plan of story.
+     * 
+     * @param  array  $storyIDList 
+     * @param  int    $planID 
+     * @access public
+     * @return array 
+     */
+    public function batchChangePlan($storyIDList, $planID)
+    {
+        $now         = helper::now();
+        $allChanges  = array();
+        foreach($storyIDList as $storyID)
+        {
+            $oldStory = $this->getById($storyID);
+
+            $story = new stdclass();
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            $story->plan           = $planID;
+
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Activate a story.
      * 
      * @param  int    $storyID 

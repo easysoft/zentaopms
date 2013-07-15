@@ -63,7 +63,7 @@
           $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
 
           echo "<div class='groupButton'>";
-          echo html::commonButton($lang->edit, "onclick=\"changeAction('productStoryForm', 'batchEdit', '$actionLink')\" $disabled");
+          echo html::commonButton($lang->edit, "onclick=\"changeAction('$actionLink')\" $disabled");
           echo html::commonButton($lang->more, "onclick=\"toggleSubMenu(this.id, 'top', 0)\" id='moreAction'");
           echo "</div>";
       }
@@ -83,9 +83,9 @@
   $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
   $disabled      = $canBatchClose ? '' : 'disabled';
   $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-  echo "<li>" . html::a('#', $lang->close, '', "onclick=\"changeAction('productStoryForm', 'batchClose', '$actionLink')\" $disabled") . "</li>";
+  echo "<li>" . html::a('#', $lang->close, '', "onclick=\"changeAction('$actionLink',true)\" $disabled") . "</li>";
   echo "<li>" . html::a('#', $lang->story->review,  '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'") . "</li>";
-  echo "<li>" . html::a('#', $lang->story->planAB,  '', "onmouseover='ajaxShowMenu(this.id, $productID)' onmouseout='toggleSubMenu(this.id)' id='planItem'") . "</li>";
+  echo "<li>" . html::a('#', $lang->story->planAB,  '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='planItem'") . "</li>";
   echo "<li>" . html::a('#', $lang->story->stageAB, '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='stageItem'") . "</li>";
   ?>
   </ul>
@@ -106,7 +106,7 @@
       }
       else
       {
-          echo html::a('#', $result, '', "onclick=\"changeAction('productStoryForm', 'batchReview', '$actionLink')\"");
+          echo html::a('#', $result, '', "onclick=\"changeAction('$actionLink',true)\"");
       }
       echo "</li>";
   }
@@ -125,14 +125,26 @@
   {
       $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
       echo "<li>";
-      echo html::a('#', $reason, '', "onclick=\"changeAction('productStoryForm', 'batchReview', '$actionLink')\"");
+      echo html::a('#', $reason, '', "onclick=\"changeAction('$actionLink',true)\"");
       echo "</li>";
   }
   ?>
   </ul>
 </div>
 
-<div id='planItemMenu' class='hidden listMenu'></div>
+<div id='planItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($plans['']);
+  $plans = array(0 => '&nbsp;') + $plans;
+  foreach($plans as $planID => $plan)
+  {
+      $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
+      echo "<li>" . html::a('#', $plan, '', "onclick=\"changeAction('$actionLink',true)\"") . "</li>";
+  }
+  ?>
+  </ul>
+</div>
 
 <div id='stageItemMenu' class='hidden listMenu'>
   <ul>
