@@ -9,10 +9,7 @@
   echo '<span id="available">'  . html::a($this->createLink('extension', 'browse', "type=available"),   $lang->extension->available )  . '</span>';
   echo '<span id="obtain">  '   . html::a($this->createLink('extension', 'obtain'), $lang->extension->obtain) . '</span>';
   common::printLink('extension', 'upload', '', $lang->extension->upload, '', "class='iframe'");
-
-  echo "<span class='pl-10px'>"  . $lang->editor->common . '&' . $lang->editor->api . '：</span>';
-  echo "<span id='editor'>" . html::a($this->createLink('editor', 'index', 'type=editor'), $lang->editor->common) . '</span>';
-  echo "<span id='api'>" . html::a($this->createLink('editor', 'index', 'type=api'), $lang->editor->api) . '</span>';
+  echo "<span id='editor'>" . html::a($this->createLink('editor', 'index', 'type=editor'), $lang->editor->common . '&' . $lang->editor->api) . '</span>';
 ?>
   </div>
   <script>$('#<?php echo $tab;?>').addClass('active')</script>
