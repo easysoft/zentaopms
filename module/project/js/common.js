@@ -24,9 +24,7 @@ function switchGroup(projectID, groupBy)
 function convertStringToDate(dateString)
 {
     dateString = dateString.split('-');
-    dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
-    
-    return Date.parse(dateString);
+    return new Date(dateString[0], dateString[1] - 1, dateString[2]);
 }
 
 /**
@@ -60,17 +58,36 @@ function computeDaysDelta(date1, date2)
  * @access public
  * @return void
  */
-function computeWorkDays()
+function computeWorkDays(currentID)
 {
-    beginDate = $('#begin').val();
-    endDate   = $('#end').val();
+    isBactchEdit = false;
+    if(currentID)
+    {
+        index = currentID.replace('begins[', '');
+        index = index.replace('ends[', '');
+        index = index.replace(']', '');
+        if(!isNaN(index)) isBactchEdit = true;
+    }
+
+    if(isBactchEdit)
+    {
+        beginDate = $('#begins\\[' + index + '\\]').val();
+        endDate   = $('#ends\\[' + index + '\\]').val();
+    }
+    else
+    {
+        beginDate = $('#begin').val();
+        endDate   = $('#end').val();
+    }
+
     if(beginDate && endDate) 
     {
-      $('#days').val(computeDaysDelta(beginDate, endDate));
+        if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
+        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
     }
     else if($('input[checked="true"]').val()) 
     {
-      computeEndDate();
+        computeEndDate();
     }
 }
 
@@ -98,6 +115,6 @@ $(function()
     setModal4List('iframe', 'taskList');
     $(".date").bind('dateSelected', function()
     {
-        computeWorkDays();
+        computeWorkDays(this.id);
     })
 });

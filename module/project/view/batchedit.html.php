@@ -31,8 +31,8 @@
     <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='text-1'");?></td>
     <td><?php echo html::select("PMs[$projectID]",      $pmUsers, $projects[$projectID]->PM, 'class=text-1');?></td>
     <td><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=text-1');?></td>
-    <td><?php echo html::input("begins[$projectID]",    $projects[$projectID]->begin, "class='text-1 date'");?></td>
-    <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='text-1 date'");?></td>
+    <td><?php echo html::input("begins[$projectID]",    $projects[$projectID]->begin, "class='text-1 date' onchange='computeWorkDays(this.id)'");?></td>
+    <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='text-1 date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='w-100px'") . $lang->project->day;?></td>
   </tr>
   <?php endforeach;?>
