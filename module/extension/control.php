@@ -206,11 +206,8 @@ class extension extends control
                 {
                     if($this->extension->compare4Limit($installedExts[$code]->version, $limit)) $hasConflicts = true;
                 }
-                $extVersion = '';
-                if($limit['min'] == 'all') $extVersion = 'all';
-                if($limit['min'] and $limit['min']!= 'all') $extVersion .= '>=V' . $limit['min'];
-                if($limit['max']) $extVersion .= ' <=V' . $limit['max'];
-                if($hasConflicts)$conflictsExt .= $installedExts[$code]->name . "($extVersion) ";
+
+                if($hasConflicts)$conflictsExt .= $installedExts[$code]->name . " ";
             }
 
             if($hasConflicts)
