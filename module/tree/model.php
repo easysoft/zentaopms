@@ -253,7 +253,7 @@ class treeModel extends model
             if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
             {
                 if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-                $treeMenu[$module->parent] .= "<li>$linkHtml";  
+                $treeMenu[$module->parent] .= "<li class='closed'>$linkHtml";  
                 $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
             }
             else
@@ -347,7 +347,7 @@ class treeModel extends model
                 if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
                 {
                     if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-                    $treeMenu[$module->parent] .= "<li>$linkHtml";  
+                    $treeMenu[$module->parent] .= "<li class='closed'>$linkHtml";  
                     $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
                 }
                 else
@@ -364,7 +364,7 @@ class treeModel extends model
                 $treeMenu[$module->parent] .= "</li>\n";
             }
 
-            $lastMenu = "<ul class='tree'>" . @array_pop($treeMenu) . "</ul>\n";
+            $lastMenu = "<ul class='tree'>" . @$treeMenu[0] . "</ul>\n";
             $menu .= $lastMenu . '</li>';
         }
         return $menu;
