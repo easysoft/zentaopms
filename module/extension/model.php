@@ -214,22 +214,22 @@ class extensionModel extends model
     {
         /* Init the data. */
         $data = new stdclass();
-        $data->name          = $extension;
-        $data->code          = $extension;
-        $data->version       = 'unknown';
-        $data->author        = 'unknown';
-        $data->desc          = $extension;
-        $data->site          = 'unknown';
-        $data->license       = 'unknown';
-        $data->zentaoVersion = '';
-        $data->type          = '';
-        $data->depends       = '';
+        $data->name             = $extension;
+        $data->code             = $extension;
+        $data->version          = 'unknown';
+        $data->author           = 'unknown';
+        $data->desc             = $extension;
+        $data->site             = 'unknown';
+        $data->license          = 'unknown';
+        $data->zentaoCompatible = '';
+        $data->type             = '';
+        $data->depends          = '';
 
         $info = $this->parseExtensionCFG($extension);
         foreach($info as $key => $value) if(isset($data->$key)) $data->$key = $value;
-        if(isset($info->zentaoversion))        $data->zentaoVersion = $info->zentaoversion;
-        if(isset($info->zentao['compatible'])) $data->zentaoVersion = $info->zentao['compatible'];
-        if(isset($info->depends))              $data->depends       = json_encode($info->depends);
+        if(isset($info->zentaoversion))        $data->zentaoCompatible = $info->zentaoversion;
+        if(isset($info->zentao['compatible'])) $data->zentaoCompatible = $info->zentao['compatible'];
+        if(isset($info->depends))              $data->depends          = json_encode($info->depends);
 
         return $data;
     }
@@ -801,7 +801,7 @@ class extensionModel extends model
     {
         $result        = array();
         $extensionInfo = $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fetch();
-        $dependsExts   = $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->fetchAll();
+        $dependsExts   = $this->dao->select('*')->from(TABLE_EXTENSION)->where('depends')->like("%$extension%")->andWhere('status')->ne('available')->fetchAll();
         if($dependsExts)
         {
             foreach($dependsExts as $dependsExt)

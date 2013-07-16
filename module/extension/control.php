@@ -41,7 +41,7 @@ class extension extends control
 
                     $extension = $extensions[$release->code];
                     $extension->viewLink = $release->viewLink;
-                    if(isset($release->latestRelease) and $extension->version != $release->latestRelease->releaseVersion and $this->extension->checkVersion($release->latestRelease->zentaoVersion))
+                    if(isset($release->latestRelease) and $extension->version != $release->latestRelease->releaseVersion and $this->extension->checkVersion($release->latestRelease->zentaoCompatible))
                     {
                         $upgradeLink = inlink('upgrade', "extension=$release->code&downLink=" . helper::safe64Encode($release->latestRelease->downLink) . "&md5={$release->latestRelease->md5}&type=$release->type");
                         $upgradeLink = ($release->latestRelease->charge or !$release->latestRelease->public) ? $release->latestRelease->downLink : $upgradeLink;
@@ -254,8 +254,8 @@ class extension extends control
         }
 
         /* Check version compatible. */
-        $zentaoVersion = $condition->zentao['compatible'];
-        if(!$this->extension->checkVersion($zentaoVersion) and $ignoreCompatible == 'no')
+        $zentaoCompatible = $condition->zentao['compatible'];
+        if(!$this->extension->checkVersion($zentaoCompatible) and $ignoreCompatible == 'no')
         {
             $ignoreLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&type=$type&overridePackage=$overridePackage&ignoreCompatible=yes&overrideFile=$overrideFile&agreeLicense=$agreeLicense&upgrade=$upgrade");
             $returnLink = inlink('obtain');

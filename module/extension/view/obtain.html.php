@@ -49,7 +49,7 @@
               <?php 
               if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion) 
               {
-                  printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoVersion);
+                  printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible);
               }?>
             </div>
           </caption> 
@@ -62,7 +62,22 @@
                 echo "{$lang->extension->downloads}:  {$extension->downloads} ";
                 echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
                 echo "{$lang->extension->grade}: ",   html::printStars($extension->stars);
-                echo " {$lang->extension->depends}: ",   $currentRelease->depends;
+                echo " {$lang->extension->depends}: ";
+                if($currentRelease->depends)
+                {
+                    foreach(json_decode($currentRelease->depends) as $code => $limit)
+                    {
+                        echo $code;
+                        if($limit != 'all')
+                        {
+                            echo '(';
+                            if(!empty($limit['min'])) echo '>= v' . $limit['min'];
+                            if(!empty($limit['max'])) echo '<= v' . $limit['min'];
+                            echo ')';
+                        }
+                        echo ' ';
+                    }
+                }
                 ?>
               </div>
             </td>
@@ -76,7 +91,7 @@
                   {
                       if(isset($installeds[$extension->code]))
                       {
-                          if($installeds[$extension->code]->version != $extension->latestRelease->releaseVersion and $this->extension->checkVersion($extension->latestRelease->zentaoVersion))
+                          if($installeds[$extension->code]->version != $extension->latestRelease->releaseVersion and $this->extension->checkVersion($extension->latestRelease->zentaoCompatible))
                           {
                               $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5=$currentRelease->md5&type=$extension->type");
                               echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
