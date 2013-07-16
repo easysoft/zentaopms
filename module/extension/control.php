@@ -198,8 +198,7 @@ class extension extends control
         if($conflicts)
         {
             $conflictsExt = '';
-            $limits = $this->extension->parseCondition($conflicts);
-            foreach($limits as $code => $limit)
+            foreach($conflicts as $code => $limit)
             {
                 $hasConflicts = false;
                 if(isset($installedExts[$code]))
@@ -222,8 +221,7 @@ class extension extends control
         if($depends)
         {
             $dependsExt = '';
-            $limits = $this->extension->parseCondition($depends);
-            foreach($limits as $code => $limit)
+            foreach($depends as $code => $limit)
             {
                 $noDepends = false;
                 if(isset($installedExts[$code]))
@@ -236,9 +234,15 @@ class extension extends control
                 }
 
                 $extVersion = '';
-                if($limit['min'] == 'all') $extVersion = 'all';
-                if($limit['min'] and $limit['min']!= 'all') $extVersion .= '>=V' . $limit['min'];
-                if($limit['max']) $extVersion .= ' <=V' . $limit['max'];
+                if($limit == 'all')
+                {
+                    $extVersion = 'all';
+                }
+                else
+                {
+                    if(!empty($limit['min'])) $extVersion .= '>=V' . $limit['min'];
+                    if(!empty($limit['max'])) $extVersion .= ' <=V' . $limit['max'];
+                }
                 if($noDepends)$dependsExt .= $code . "($extVersion) ";
             }
 

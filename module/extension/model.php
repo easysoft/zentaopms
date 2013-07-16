@@ -229,6 +229,7 @@ class extensionModel extends model
         foreach($info as $key => $value) if(isset($data->$key)) $data->$key = $value;
         if(isset($info->zentaoversion))        $data->zentaoVersion = $info->zentaoversion;
         if(isset($info->zentao['compatible'])) $data->zentaoVersion = $info->zentao['compatible'];
+        if(isset($info->depends))              $data->depends       = json_encode($info->depends);
 
         return $data;
     }
@@ -353,37 +354,6 @@ class extensionModel extends model
         if(isset($info->zentaoversion)) $condition->zentao['compatible'] =  $info->zentaoversion;
 
         return $condition;
-    }
-
-    /**
-     * Parse condition 
-     * 
-     * @param  string    $condition 
-     * @access public
-     * @return array
-     */
-    public function parseCondition($condition)
-    {
-        $limits     = array();
-        $extensions = explode(') ', $condition);
-        foreach($extensions as $extension)
-        {
-            $code = substr($extension, 0, strpos($extension, '('));
-            $versions = trim(substr($extension, strpos($extension, '(') + 1), ')');
-            if($versions == 'all')
-            {
-                $limits[$code]['min'] = 'all';
-                $limits[$code]['max'] = '';
-            }
-            else
-            {
-                list($min, $max) = explode(',', $versions);
-                $limits[$code]['min'] = $min;
-                $limits[$code]['max'] = $max;
-            }
-        }
-
-        return $limits;
     }
 
     /**
@@ -836,7 +806,7 @@ class extensionModel extends model
         {
             foreach($dependsExts as $dependsExt)
             {
-                $depends = $this->parseCondition($dependsExt->depends);
+                $depends = json_decode($dependsExt->depends, true);
                 if($this->compare4Limit($extensionInfo->version, $depends[$extension])) $result[] = $dependsExt->name;
             }
         }
@@ -855,11 +825,18 @@ class extensionModel extends model
     public function compare4Limit($version, $limit, $type = 'between')
     {
         $result = false;
-        if(empty($limit)) return false;
+        if(empty($limit)) return true;
 
-        if($limit['min'] == 'all') $result = true;
-        if($limit['min'] != 'all' and $limit['min'] and $version >= $limit['min']) $result = true;
-        if($limit['max'] and $version <= $limit['max']) $result = true;
+        if($limit == 'all')
+        {
+            $result = true;
+        }
+        else
+        {
+            if(!empty($limit['min']) and $version >= $limit['min']) $result = true;
+            if(!empty($limit['max']) and $version <= $limit['max']) $result = true;
+            if(!empty($limit['max']) and $version > $limit['max'] and $result) $result = false;
+        }
 
         if($type != 'between') return !$result;
         return $result;
