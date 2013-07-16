@@ -153,16 +153,17 @@ class adminModel extends model
         foreach($result as $item) 
         {
             $table = current((array)$item); 
-            if(strpos($table, 'company') !== false) continue;
-            if(strpos($table, 'group')   !== false) continue;
-            if(strpos($table, 'user')    !== false) 
+            if(strpos($table, $this->config->db->prefix) === false) continue;
+            if($table == $this->config->db->prefix . 'company') continue;
+            if($table == $this->config->db->prefix . 'group') continue;
+            if($table == $this->config->db->prefix . 'user') 
             {
                 $deleteUsers = array('productManager', 'projectManager', 'testManager', 'dev1', 'dev2', 'dev3', 'tester1', 'tester2', 'tester3');
                 $this->dao->delete()->from($table)->where('account')->in($deleteUsers)->exec();
                 if(dao::isError()) return false;
                 continue;
             }
-            if(strpos($table, 'config') !== false)
+            if($table == $this->config->db->prefix . 'config') 
             {
                 $this->loadModel('setting')->deleteItems('key=showDemoUsers');
                 if(dao::isError()) return false;
