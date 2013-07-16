@@ -253,6 +253,7 @@ class taskModel extends model
             $task->closedDate     = "";
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
+            $this->setStatus($task);
             if(isset($this->post->assignedTos[$taskID])) 
             {
                 $task->assignedDate = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
