@@ -124,6 +124,8 @@ $lang->user->loginWithDemoUser    = 'Login with demo user:';
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = 'Letters/underline/numbers, three above';
 $lang->user->placeholder->password1 = 'Six above';
+$lang->user->placeholder->role      = '';
+$lang->user->placeholder->group     = '';
 $lang->user->placeholder->join      = 'The date the employee joined the company';
 $lang->user->placeholder->commiter  = 'The account in version control systems';
 

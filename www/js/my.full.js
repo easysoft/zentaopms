@@ -249,7 +249,7 @@ function setHelpLink()
 }
 
 /**
- * Set paceholder 
+ * Set paceholder. 
  * 
  * @access public
  * @return void
@@ -260,7 +260,14 @@ function setPlaceholder()
     {
         for(var key in holders)
         {
-            $("#"+key).attr('placeholder', holders[key]);
+            if($('#' + key).prop('tagName') == 'INPUT')
+            {
+                $("#" + key).attr('placeholder', holders[key]);
+            }
+            else
+            {
+                $("#" + key).parent().append(holders[key]);
+            }
         }
     }
 }
