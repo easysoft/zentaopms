@@ -152,7 +152,7 @@ class extensionModel extends model
      */
     public function checkIncompatible($versions)
     {
-        $apiURL = $this->apiRoot . 'apiCheckCompatible-' . helper::safe64Encode(json_encode($versions)) . '.json';
+        $apiURL = $this->apiRoot . 'apiCheckIncompatible-' . helper::safe64Encode(json_encode($versions)) . '.json';
         $data = $this->fetchAPI($apiURL);
         if(isset($data->incompatibleExts)) return (array)$data->incompatibleExts;
         return array();

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
- * @version     $Id$
+ * @version     $Id: control.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 class convert extends control

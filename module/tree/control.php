@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
- * @version     $Id$
+ * @version     $Id: control.php 5002 2013-07-03 08:25:39Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class tree extends control

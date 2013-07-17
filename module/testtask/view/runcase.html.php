@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id$
+ * @version     $Id: runcase.html.php 4723 2013-05-03 05:19:29Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -58,4 +58,5 @@
     </tr>
   </table>
 </form>
+<?php $case = $run->case; include './results.html.php'; ?>
 <?php include '../../common/view/footer.lite.html.php';?>

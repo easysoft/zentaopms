@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id$
+ * @version     $Id: control.php 5005 2013-07-03 08:39:11Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class user extends control
@@ -582,8 +582,6 @@ class user extends control
     /**
      * User login, identify him and authorize him.
      * 
-     * @param  string $referer 
-     * @param  string $from 
      * @access public
      * @return void
      */

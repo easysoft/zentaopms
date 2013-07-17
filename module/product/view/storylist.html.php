@@ -59,7 +59,7 @@
           echo html::selectAll() . html::selectReverse();
 
           $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-          $disabled   = $canBatchEdit ? '' : 'disabled';
+          $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
           $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
 
           echo "<div class='groupButton'>";
@@ -80,13 +80,21 @@
 <div id='moreActionMenu' class='listMenu hidden'>
   <ul>
   <?php 
+  $class = "class='disabled'";
+
   $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
-  $disabled      = $canBatchClose ? '' : 'disabled';
   $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-  echo "<li>" . html::a('#', $lang->close, '', "onclick=\"changeAction('$actionLink',true)\" $disabled") . "</li>";
-  echo "<li>" . html::a('#', $lang->story->review,  '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'") . "</li>";
-  echo "<li>" . html::a('#', $lang->story->planAB,  '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='planItem'") . "</li>";
-  echo "<li>" . html::a('#', $lang->story->stageAB, '', "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='stageItem'") . "</li>";
+  $misc = $canBatchClose ? "onclick=changeAction('$actionLink')" : $class;
+  echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+
+  $misc = common::hasPriv('story', 'batchReview') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'" : $class;
+  echo "<li>" . html::a('#', $lang->story->review,  '', $misc) . "</li>";
+
+  $misc = common::hasPriv('story', 'batchChangePlan') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='planItem'" : $class;
+  echo "<li>" . html::a('#', $lang->story->planAB,  '', $misc) . "</li>";
+
+  $misc = common::hasPriv('story', 'batchChangeStage') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='stageItem'" : $class;
+  echo "<li>" . html::a('#', $lang->story->stageAB, '', $misc) . "</li>";
   ?>
   </ul>
 </div>
@@ -149,6 +157,7 @@
 <div id='stageItemMenu' class='hidden listMenu'>
   <ul>
   <?php
+  $lang->story->stageList[''] = '&nbsp;';
   foreach($lang->story->stageList as $key => $stage)
   {
       $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");

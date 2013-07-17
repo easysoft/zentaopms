@@ -6,9 +6,13 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id$
+ * @version     $Id: sendmail.html.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
+?>
+<?php
+$onlybody = isonlybody() ? true : false;
+if($onlybody) $_GET['onlybody'] = 'no';
 ?>
 <table width='98%' align='center'>
   <tr class='header'>
@@ -24,8 +28,7 @@
       <?php 
       if(strpos($story->spec, 'src="data/upload'))
       {
-        $story->spec = str_replace('<img src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
-        $story->spec = str_replace('<img alt="" src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
+        $story->spec = preg_replace('/<img (.*) src="/', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
       }
       echo $story->spec;
       ?>
@@ -37,3 +40,4 @@
     <td><?php include '../../common/view/mail.html.php';?></td>
   </tr>
 </table>
+<?php if($onlybody) $_GET['onlybody'] = 'yes';?>

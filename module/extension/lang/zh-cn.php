@@ -99,6 +99,6 @@ $lang->extension->errorTargetPathNotWritable   = '目标路径 <strong>%s </stro
 $lang->extension->errorTargetPathNotExists     = '目标路径 <strong>%s </strong>不存在。';
 $lang->extension->errorInstallDB               = '执行数据库语句失败。错误信息如下：%s';
 $lang->extension->errorConflicts               = '与插件“%s”冲突！';
-$lang->extension->errorDepends                 = '没有安装依赖插件“%s”';
+$lang->extension->errorDepends                 = '以下依赖插件没有安装或版本不正确：<br /><br /> %s';
 $lang->extension->errorIncompatible            = '该插件与您的禅道版本不兼容';
 $lang->extension->errorUninstallDepends        = '插件“%s”依赖该插件，不能卸载';

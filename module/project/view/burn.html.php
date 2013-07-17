@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id$
+ * @version     $Id: burn.html.php 4164 2013-01-20 08:27:55Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>

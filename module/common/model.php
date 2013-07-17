@@ -245,9 +245,9 @@ class commonModel extends model
         $this->config->locate->params = '';
 
         $todo    = $this->lang->my->menu->todo['link'];
-        $task    = $this->lang->my->menu->task;
-        $story   = $this->lang->my->menu->story;
-        $bug     = $this->lang->my->menu->bug;
+        $task    = $this->lang->my->menu->task['link'];
+        $story   = $this->lang->my->menu->story['link'];
+        $bug     = $this->lang->my->menu->bug['link'];
         $project = $this->lang->menu->project . '|locate=no&&status=isdoing';
         $product = $this->lang->menu->product . '|locate=no';
 
@@ -294,7 +294,7 @@ class commonModel extends model
     {
         global $app, $lang;
         echo "<ul>\n";
-
+ 
         /* Set the main main menu. */
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;

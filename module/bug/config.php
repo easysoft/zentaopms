@@ -38,9 +38,14 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedDate, files';
 
 $config->bug->editor = new stdclass();
-$config->bug->editor->create = array('id' => 'steps', 'tools' => 'bugTools');
-$config->bug->editor->edit   = array('id' => 'steps,comment', 'tools' => 'bugTools');
-$config->bug->editor->view   = array('id' => 'comment', 'tools' => 'bugTools');
+$config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
+$config->bug->editor->edit       = array('id' => 'steps,comment', 'tools' => 'bugTools');
+$config->bug->editor->view       = array('id' => 'comment', 'tools' => 'bugTools');
+$config->bug->editor->confirmbug = array('id' => 'comment', 'tools' => 'bugTools');
+$config->bug->editor->assignto   = array('id' => 'comment', 'tools' => 'bugTools');
+$config->bug->editor->resolve    = array('id' => 'comment', 'tools' => 'bugTools');
+$config->bug->editor->close      = array('id' => 'comment', 'tools' => 'bugTools');
+$config->bug->editor->activate   = array('id' => 'comment', 'tools' => 'bugTools');
 
 global $lang;
 $config->bug->search['module']                   = 'bug';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id$
+ * @version     $Id: control.php 5145 2013-07-15 06:47:26Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class story extends control
@@ -645,7 +645,7 @@ class story extends control
             {
                 foreach($allChanges as $storyID => $changes)
                 {
-                    $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comments[$storyID], ucfirst($this->post->closedReasons[$storyID]));
+                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]));
                     $this->action->logHistory($actionID);
                     $this->sendMail($storyID, $actionID);
                 }

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id$
+ * @version     $Id: model.php 5035 2013-07-06 05:21:58Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>

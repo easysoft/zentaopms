@@ -10,6 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php
+$onlybody = isonlybody() ? true : false;
+if($onlybody) $_GET['onlybody'] = 'no';
+?>
 <table width='98%' align='center'>
   <tr class='header'>
     <td>
@@ -24,8 +28,7 @@
       <?php 
       if(strpos($testtask->desc, 'src="data/upload'))
       {
-        $testtask->desc = str_replace('<img src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $testtask->desc);
-        $testtask->desc = str_replace('<img alt="" src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $testtask->desc);
+        $testtask->desc = preg_replace('/<img (.*) src="/', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot, $testtask->desc);
       }
       echo $testtask->desc;
       ?>
@@ -37,3 +40,4 @@
     <td><?php include '../../common/view/mail.html.php';?></td>
   </tr>
 </table>
+<?php if($onlybody) $_GET['onlybody'] = 'yes';?>

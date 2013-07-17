@@ -115,6 +115,8 @@
           </table>
         <?php endforeach;?>
         <?php if($pager) $pager->show();?>
+      <?php elseif($pager):?>
+        <?php $pager->show()?>
       <?php else:?>
         <div class='box-title'><?php echo $lang->extension->errorOccurs;?></div>
         <div class='box-content'><?php echo $lang->extension->errorGetExtensions;?></div>

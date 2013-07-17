@@ -76,3 +76,4 @@ $config->product->edit->requiredFields   = 'name,code';
 $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id$
+ * @version     $Id: create.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>

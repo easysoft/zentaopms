@@ -8,7 +8,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     config
- * @version     $Id$
+ * @version     $Id: config.php 5068 2013-07-08 02:41:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 /* Judge class config and function getWebRoot exists or not, make sure php shells can work. */
