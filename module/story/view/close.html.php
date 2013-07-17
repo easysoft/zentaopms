@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id$
+ * @version     $Id: close.html.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>
@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='8' class='area-1'");?></td>
+      <td><?php echo html::textarea('comment', '', "rows='8' class='w-p98'");?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'>

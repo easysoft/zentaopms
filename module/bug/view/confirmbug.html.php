@@ -12,6 +12,7 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
+include '../../common/view/kindeditor.html.php';
 include '../../common/view/autocomplete.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('userList', array_keys($users));
@@ -31,7 +32,7 @@ js::set('page', 'confirmbug');
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
+      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'>
