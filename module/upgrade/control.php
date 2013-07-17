@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id$
+ * @version     $Id: control.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 class upgrade extends control
@@ -69,6 +69,24 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
+            $this->view->result = 'success';
+        }
+        else
+        {
+            $this->view->result = 'fail';
+            $this->view->errors = $this->upgrade->getError();
+        }
+        $this->display();
+    }
+
+    /**
+     * Ajax check extension.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckExtension()
+    {
             $this->loadModel('extension');
             $extensions = $this->extension->getLocalExtensions('installed');
 
@@ -84,14 +102,15 @@ class upgrade extends control
                 $extensionsName[] = $extensions[$extension]->name;
             }
 
-            $this->view->extensionsName = $extensionsName;
-            $this->view->result         = 'success';
-        }
-        else
-        {
-            $this->view->result = 'fail';
-            $this->view->errors = $this->upgrade->getError();
-        }
-        $this->display();
+            $data = '';
+            if($extensionsName)
+            {
+                $data .= "<h3>{$this->lang->upgrade->forbiddenExt}</h3>";
+                $data .= '<ul>';
+                foreach($extensionsName as $extensionName) $data .= "<li>$extensionName</li>";
+                $data .= '</ul>';
+            }
+
+            die($data);
     }
 }
