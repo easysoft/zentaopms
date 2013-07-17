@@ -605,7 +605,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function isClickable($product, $action)
+    public static function isClickable($product, $action)
     {
         $action = strtolower($action);
 

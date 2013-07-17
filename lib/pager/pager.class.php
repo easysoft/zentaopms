@@ -133,7 +133,7 @@ class pager
      * @access public
      * @return object
      */
-    public function init($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public static function init($recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         return new pager($recTotal, $recPerPage, $pageID);
     }

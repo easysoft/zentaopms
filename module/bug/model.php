@@ -1241,7 +1241,7 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function isClickable($object, $action)
+    public static function isClickable($object, $action)
     {
         $action = strtolower($action);
 

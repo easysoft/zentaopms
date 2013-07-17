@@ -1315,7 +1315,7 @@ class taskModel extends model
      * @access public
      * @return bool
      */
-    public function isClickable($task, $action)
+    public static function isClickable($task, $action)
     {
         $action = strtolower($action);
 

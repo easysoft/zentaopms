@@ -254,6 +254,7 @@ class projectModel extends model
             /* Add the creator to team. */
             if($copyProjectID == '' or !$creatorExists)
             {
+                $member = new stdclass();
                 $member->project  = $projectID;
                 $member->account  = $this->app->user->account;
                 $member->role     = $this->lang->user->roleList[$this->app->user->role];

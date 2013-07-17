@@ -890,7 +890,7 @@ class dao
      * @access public
      * @return bool
      */
-    public function isError()
+    public static function isError()
     {
         return !empty(dao::$errors);
     }
@@ -902,7 +902,7 @@ class dao
      * @access public
      * @return array
      */
-    public function getError($join = false)
+    public static function getError($join = false)
     {
         $errors = dao::$errors;
         dao::$errors = array();     // Must clear it.
@@ -1076,7 +1076,7 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function factory($table = '')
+    public static function factory($table = '')
     {
         return new sql($table);
     }
@@ -1088,7 +1088,7 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function select($field = '*')
+    public static function select($field = '*')
     {
         $sqlobj = self::factory();
         $sqlobj->sql = "SELECT $field ";
@@ -1102,7 +1102,7 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function update($table)
+    public static function update($table)
     {
         $sqlobj = self::factory();
         $sqlobj->sql = "UPDATE $table SET ";
@@ -1116,7 +1116,7 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function insert($table)
+    public static function insert($table)
     {
         $sqlobj = self::factory();
         $sqlobj->sql = "INSERT INTO $table SET ";
@@ -1130,7 +1130,7 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function replace($table)
+    public static function replace($table)
     {
         $sqlobj = self::factory();
         $sqlobj->sql = "REPLACE $table SET ";
@@ -1143,7 +1143,7 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function delete()
+    public static function delete()
     {
         $sqlobj = self::factory();
         $sqlobj->sql = "DELETE ";

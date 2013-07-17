@@ -1480,7 +1480,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function isClickable($story, $action)
+    public static function isClickable($story, $action)
     {
         $action = strtolower($action);
 

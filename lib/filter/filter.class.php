@@ -332,7 +332,7 @@ class fixer
      * @access public
      * @return object fixer object.
      */
-    public function input($scope)
+    public static function input($scope)
     {
         return new fixer($scope);
     }

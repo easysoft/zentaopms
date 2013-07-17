@@ -110,7 +110,7 @@ class common extends control
      * @access public
      * @return void
      */
-    public function setMenuVars($menu, $key, $params)
+    public static function setMenuVars($menu, $key, $params)
     {
         if(is_array($params))
         {
@@ -406,7 +406,7 @@ class common extends control
      * @access public
      * @return string
      */
-    public function getSysURL()
+    public static function getSysURL()
     {
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
