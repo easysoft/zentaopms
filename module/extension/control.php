@@ -200,16 +200,13 @@ class extension extends control
             $conflictsExt = '';
             foreach($conflicts as $code => $limit)
             {
-                $hasConflicts = false;
                 if(isset($installedExts[$code]))
                 {
-                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit)) $hasConflicts = true;
+                    if($this->extension->compare4Limit($installedExts[$code]->version, $limit)) $conflictsExt .= $installedExts[$code]->name . " ";
                 }
-
-                if($hasConflicts)$conflictsExt .= $installedExts[$code]->name . " ";
             }
 
-            if($hasConflicts)
+            if($conflictsExt)
             {
                 $this->view->error = sprintf($this->lang->extension->errorConflicts, $conflictsExt);
                 die($this->display());
@@ -234,16 +231,14 @@ class extension extends control
                 }
 
                 $extVersion = '';
-                if($limit == 'all')
+                if($limit != 'all')
                 {
-                    $extVersion = 'all';
+                    $extVersion .= '(';
+                    if(!empty($limit['min'])) $extVersion .= '>=v' . $limit['min'];
+                    if(!empty($limit['max'])) $extVersion .= ' <=v' . $limit['max'];
+                    $extVersion .=')';
                 }
-                else
-                {
-                    if(!empty($limit['min'])) $extVersion .= '>=V' . $limit['min'];
-                    if(!empty($limit['max'])) $extVersion .= ' <=V' . $limit['max'];
-                }
-                if($noDepends)$dependsExt .= $code . "($extVersion) ";
+                if($noDepends)$dependsExt .= $code . $extVersion . ' ' . html::a(inlink('obtain', 'type=bycode&param=' . helper::safe64Encode($code)), $this->lang->extension->installExt, '_blank') . '<br />';
             }
 
             if($noDepends)
