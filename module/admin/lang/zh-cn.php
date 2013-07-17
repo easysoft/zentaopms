@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id$
+ * @version     $Id: zh-cn.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '后台管理';

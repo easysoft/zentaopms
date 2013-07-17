@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id$
+ * @version     $Id: login.html.php 5084 2013-07-10 01:31:38Z wyd621@gmail.com $
  */
 include '../../common/view/header.lite.html.php';
 include '../../common/view/colorbox.html.php';

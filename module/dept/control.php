@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
- * @version     $Id$
+ * @version     $Id: control.php 4157 2013-01-20 07:09:42Z wwccss $
  * @link        http://www.zentao.net
  */
 class dept extends control

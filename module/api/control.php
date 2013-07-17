@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
- * @version     $Id$
+ * @version     $Id: control.php 5143 2013-07-15 06:11:59Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 class api extends control

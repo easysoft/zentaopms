@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id$
+ * @version     $Id: en.php 4966 2013-07-02 02:59:25Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = 'ID';

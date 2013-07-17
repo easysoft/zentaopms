@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id$
+ * @version     $Id: control.php 5144 2013-07-15 06:37:03Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class product extends control

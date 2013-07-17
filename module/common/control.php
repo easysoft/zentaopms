@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
- * @version     $Id$
+ * @version     $Id: control.php 5036 2013-07-06 05:26:44Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 class common extends control

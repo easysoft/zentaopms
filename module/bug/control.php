@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id$
+ * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class bug extends control

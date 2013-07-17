@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id$
+ * @version     $Id: model.php 4726 2013-05-03 05:51:27Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>

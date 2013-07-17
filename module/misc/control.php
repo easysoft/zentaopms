@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
- * @version     $Id$
+ * @version     $Id: control.php 5128 2013-07-13 08:59:49Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class misc extends control

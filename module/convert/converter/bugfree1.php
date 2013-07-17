@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
- * @version     $Id$
+ * @version     $Id: bugfree1.php 5028 2013-07-06 02:59:41Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 class bugfree1ConvertModel extends bugfreeConvertModel

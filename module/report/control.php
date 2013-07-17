@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id$
+ * @version     $Id: control.php 4622 2013-03-28 01:09:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class report extends control

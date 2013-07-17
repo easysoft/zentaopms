@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id$
+ * @version     $Id: control.php 5106 2013-07-12 01:28:54Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class task extends control

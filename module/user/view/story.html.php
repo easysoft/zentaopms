@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     dashboard
- * @version     $Id$
+ * @version     $Id: story.html.php 4771 2013-05-05 07:41:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>

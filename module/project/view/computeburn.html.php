@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Fu Jia <fujia@cnezsoft.com>
  * @package     project
- * @version     $Id$
+ * @version     $Id: computeburn.html.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id$
+ * @version     $Id: task.html.php 4894 2013-06-25 01:28:39Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
