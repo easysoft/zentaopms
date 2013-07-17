@@ -424,6 +424,19 @@ class helper
             chdir($cwd);
         }
     }
+
+    /**
+     * Remove UTF8 Bom 
+     * 
+     * @param  string    $string
+     * @access public
+     * @return string
+     */
+    public static function removeUTF8Bom($string)
+    {
+        if(substr($string, 0, 3) == pack('CCC', 239, 187, 191)) return substr($string, 3);
+        return $string;
+    }
 }
 
 /**
@@ -464,25 +477,6 @@ function getTime()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
-}
-
-/**
- * Save the sql.
- * 
- * @access protected
- * @return void
- */
-function saveSQL()
-{
-    if(!class_exists('dao')) return;
-    global $app;
-    $sqlLog = $app->getLogRoot() . 'sql.' . date('Ymd') . '.log';
-    $fh = @fopen($sqlLog, 'a');
-    if(!$fh) return false;
-    fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
-    foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
-    fwrite($fh, "\n");
-    fclose($fh);
 }
 
 /**
@@ -560,17 +554,4 @@ function getWebRoot()
 function isonlybody()
 {
     return (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes');
-}
-
-/**
- * Remove UTF8 Bom 
- * 
- * @param  string    $string
- * @access public
- * @return string
- */
-function removeUTF8Bom($string)
-{
-    if(substr($string, 0, 3) == pack('CCC', 239, 187, 191)) return substr($string, 3);
-    return $string;
 }

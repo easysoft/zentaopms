@@ -305,6 +305,7 @@ class router
 
         $this->loadConfig('common');
         $this->setDebug();
+        $this->setErrorHandler();
 
         $this->connectDB();
 
@@ -407,7 +408,7 @@ class router
         {
             $this->appRoot = realpath($appRoot) . $this->pathFix;
         }
-        if(!is_dir($this->appRoot)) $this->error("The app you call not noud in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
+        if(!is_dir($this->appRoot)) $this->triggerError("The app you call not noud in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
     }
 
     /**
@@ -511,11 +512,19 @@ class router
      */
     public function setDebug()
     {
-        if(isset($this->config->debug) and $this->config->debug)
-        {
-            error_reporting(E_ALL & ~ E_STRICT);
-            register_shutdown_function('saveSQL');
-        }
+        if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+    }
+
+    /**
+     * Set the error handler.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setErrorHandler()
+    {
+        set_error_handler(array($this, 'saveError'));
+        register_shutdown_function(array($this, 'shutdown'));
     }
 
     /**
@@ -801,7 +810,7 @@ class router
         }
         else
         {
-            $this->error("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, $exit = true);
+            $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, $exit = true);
         }
     }
 
@@ -959,7 +968,7 @@ class router
         $this->controlFile = $this->moduleRoot . $this->moduleName . $this->pathFix . 'control.php';
         if(!is_file($this->controlFile))
         {
-            $this->error("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
+            $this->triggerError("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
             return false;
         }
         return true;
@@ -1094,11 +1103,11 @@ class router
 
         /* Set the class name of the control. */
         $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-        if(!class_exists($className)) $this->error("the control $className not found", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
 
         /* Create a instance of the control. */
         $module = new $className();
-        if(!method_exists($module, $methodName)) $this->error("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
+        if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
         $this->control = $module;
 
         /* include default value for module*/
@@ -1219,7 +1228,7 @@ class router
                 }
                 else
                 {
-                    if($defaultValue === '_NOT_SET') $this->error("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                    if($defaultValue === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
                 }
                 $i ++;
             }
@@ -1235,7 +1244,7 @@ class router
                 }
                 else
                 {
-                    if($defaultValue === '_NOT_SET') $this->error("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                    if($defaultValue === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
                 }
             }
         }
@@ -1289,47 +1298,6 @@ class router
     //-------------------- Tool methods.------------------//
     
     /**
-     * The error handler.
-     * 
-     * @param string    $message    error message
-     * @param string    $file       the file error occers
-     * @param int       $line       the line error occers
-     * @param bool      $exit       exit the program or not
-     * @access public
-     * @return void
-     */
-    public function error($message, $file, $line, $exit = false)
-    {
-        /* Log the error info. */
-        $log = "ERROR: $message in $file on line $line";
-        if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";; 
-        $trace = debug_backtrace();
-        extract($trace[0]);
-        extract($trace[1]);
-        $log .= ", last called by $file on line $line through function $function.\n";
-        error_log($log);
-
-        /* If exit, output the error. */
-        if($exit)
-        {
-            if($this->config->debug)
-            {
-                if(PHP_SAPI != 'cli')
-                {
-                    $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
-                    $htmlError .= "<body>$log</body></html>";
-                    die($htmlError);
-                }
-                else
-                {
-                    die($log);
-                }
-            }
-            die();
-        }
-    }
-
-    /**
      * Load a class file.
      * 
      * First search in $appLibRoot, then $coreLibRoot.
@@ -1354,7 +1322,7 @@ class router
             $classFile = $this->coreLibRoot . $className;
             if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
             $classFile .= '.class.php';
-            if(!helper::import($classFile)) $this->error("class file $classFile not found", __FILE__, __LINE__, $exit = true);
+            if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, $exit = true);
         }
 
         /* If staitc, return. */
@@ -1362,7 +1330,7 @@ class router
 
         /* Instance it. */
         global $$className;
-        if(!class_exists($className)) $this->error("the class $className not found in $classFile", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($className)) $this->triggerError("the class $className not found in $classFile", __FILE__, __LINE__, $exit = true);
         if(!is_object($$className)) $$className = new $className();
         return $$className;
     }
@@ -1550,6 +1518,101 @@ class router
         {
             self::error($exception->getMessage(), __FILE__, __LINE__, $exit = true);
         }
+    }
+
+    //-------------------- Error methods.------------------//
+    
+    /**
+     * The shutdown handler.
+     * 
+     * @access public
+     * @return void
+     */
+    public function shutdown()
+    {
+        /* If debug on, save sql lines. */
+        if(!empty($this->config->debug)) $this->saveSQL();
+
+        /* If any error occers, save it. */
+        $error = error_get_last();
+        if($error) $this->saveError($error['type'], $error['message'], $error['file'], $error['line']);
+    }
+
+    /**
+     * Trriger an error.
+     * 
+     * @param string    $message    error message
+     * @param string    $file       the file error occers
+     * @param int       $line       the line error occers
+     * @param bool      $exit       exit the program or not
+     * @access public
+     * @return void
+     */
+    public function triggerError($message, $file, $line, $exit = false)
+    {
+        /* Set the error info. */
+        $log = "ERROR: $message in $file on line $line";
+        if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";; 
+        $trace = debug_backtrace();
+        extract($trace[0]);
+        extract($trace[1]);
+        $log .= ", last called by $file on line $line through function $function.\n";
+
+        /* Trigger it. */
+        trigger_error($log, $exit ? E_USER_ERROR : E_USER_WARNING);
+    }
+
+    /**
+     * Save error info.
+     * 
+     * @param  int    $level 
+     * @param  string $message 
+     * @param  string $file 
+     * @param  int    $line 
+     * @access public
+     * @return void
+     */
+    public function saveError($level, $message, $file, $line)
+    {
+        /* Set the error info. */
+        $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
+        $errorLog .= "when visiting <strong>" . $this->getURI() . "</strong>\n";
+
+        /* Save to log file. */
+        $errorFile = $this->getLogRoot() . 'php.' . date('Ymd') . '.log';
+        $fh = @fopen($errorFile, 'a');
+        if($fh) fwrite($fh, strip_tags($errorLog)) && fclose($fh);
+
+        /* If error level is serious, die.  */
+        if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
+        {
+            echo $level;
+            if(empty($this->config->debug)) die();
+            if(PHP_SAPI == 'cli') die($errorLog);
+
+            $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
+            $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
+            die($htmlError);
+        }
+    }
+
+    /**
+     * Save the sql.
+     * 
+     * @access protected
+     * @return void
+     */
+    public function saveSQL()
+    {
+        if(!class_exists('dao')) return;
+
+        $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log';
+        $fh = @fopen($sqlLog, 'a');
+        if(!$fh) return false;
+        fwrite($fh, date('Ymd H:i:s') . ": " . $this->getURI() . "\n");
+        foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
+        fwrite($fh, "\n");
+        fclose($fh);
     }
 }
 
