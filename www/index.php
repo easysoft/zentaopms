@@ -49,4 +49,4 @@ $common->checkPriv();
 $app->loadModule();
 
 /* Flush the buffer. */
-echo removeUTF8Bom(ob_get_clean());
+echo helper::removeUTF8Bom(ob_get_clean());
