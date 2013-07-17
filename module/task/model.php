@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id$
+ * @version     $Id: model.php 5154 2013-07-16 05:51:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
@@ -274,15 +274,15 @@ class taskModel extends model
 
             switch($task->status)
             {
-            case 'done':
-            {
-                $task->left = 0;
-                if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
-                if($task->closedReason)  $task->closedDate = $now;
-                $task->finishedDate = $oldTask->status == 'done' ?  $oldTask->finishedDate : $now;
-            }
-            break;
-        case 'cancel':
+                case 'done':
+                {
+                    $task->left = 0;
+                    if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
+                    if($task->closedReason)  $task->closedDate = $now;
+                    $task->finishedDate = $oldTask->status == 'done' ?  $oldTask->finishedDate : $now;
+                    }
+                break;
+                case 'cancel':
                 {
                     $task->assignedTo   = $oldTask->openedBy;
                     $task->assignedDate = $now;
@@ -290,19 +290,19 @@ class taskModel extends model
                     if(!$task->canceledBy)   $task->canceledBy   = $this->app->user->account;
                     if(!$task->canceledDate) $task->canceledDate = $now;
                 }
-            break;
-        case 'closed':
-                    {
-                        if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
-                        if(!$task->closedDate) $task->closedDate = $now;
-                    }
-            break;
-        case 'wait':
-                        {
-                            if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
-                            if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
-                        }
-        default:break;
+                break;
+                case 'closed':
+                {
+                    if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
+                    if(!$task->closedDate) $task->closedDate = $now;
+                }
+                break;
+                case 'wait':
+                {
+                    if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
+                    if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
+                }
+                default:break;
             }
             if($task->assignedTo) $task->assignedDate = $now;
 
@@ -453,7 +453,7 @@ class taskModel extends model
         {
             $consumed += $estimate->consumed;
             $left      = $estimate->left;
-            $work      = $estimate->work;
+            $work      = htmlspecialchars($estimate->work);
             $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate) 
                 ->autoCheck()
                 ->exec();

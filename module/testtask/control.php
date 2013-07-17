@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id$
+ * @version     $Id: control.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 class testtask extends control
@@ -557,6 +557,8 @@ class testtask extends control
         $this->view->run      = $run;
         $this->view->preCase  = $preCase;
         $this->view->nextCase = $nextCase;
+        $this->view->results  = $this->testtask->getResults(0, $caseID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());
     }
