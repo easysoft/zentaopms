@@ -582,6 +582,8 @@ class user extends control
     /**
      * User login, identify him and authorize him.
      * 
+     * @param  string $referer 
+     * @param  string $from 
      * @access public
      * @return void
      */
