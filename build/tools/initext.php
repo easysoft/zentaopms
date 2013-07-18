@@ -37,6 +37,8 @@ foreach($modules as $module)
     $extControl   = $extRoot . DIRECTORY_SEPARATOR . 'control';
     $extModel     = $extRoot . DIRECTORY_SEPARATOR . 'model';
     $extView      = $extRoot . DIRECTORY_SEPARATOR . 'view';
+    $extCSS       = $extRoot . DIRECTORY_SEPARATOR . 'css';
+    $extJS        = $extRoot . DIRECTORY_SEPARATOR . 'js';
     $extConfig    = $extRoot . DIRECTORY_SEPARATOR . 'config';
     $extLang      = $extRoot . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
 
@@ -45,8 +47,18 @@ foreach($modules as $module)
     if(!file_exists($extControl)) mkdir($extControl, 0777);      
     if(!file_exists($extModel))   mkdir($extModel,   0777);
     if(!file_exists($extView))    mkdir($extView,    0777);
+    if(!file_exists($extCSS))     mkdir($extCSS,     0777);
+    if(!file_exists($extJS))      mkdir($extJS,      0777);
     if(!file_exists($extConfig))  mkdir($extConfig,  0777);
     if(!file_exists($extLang))    mkdir($extLang,    0777);
+
+    /* Touch .gitkeep file. */
+    touch($extControl . '/.gitkeep');
+    touch($extModel   . '/.gitkeep');
+    touch($extView    . '/.gitkeep');
+    touch($extCSS     . '/.gitkeep');
+    touch($extJS      . '/.gitkeep');
+    touch($extConfig  . '/.gitkeep');
 
     /* 创建语言目录。*/
     $langs = array_keys($config->langs);
@@ -54,6 +66,7 @@ foreach($modules as $module)
     {
         $langPath = $extLang . $lang;
         if(!file_exists($langPath)) mkdir($langPath, 0777);
+        touch($langPath . '/.gitkeep');
     }
 
     echo "init $module ... \n";
