@@ -13,7 +13,6 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
-include '../../common/view/chosen.html.php';
 include '../../common/view/autocomplete.html.php';
 include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
