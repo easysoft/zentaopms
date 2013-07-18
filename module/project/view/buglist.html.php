@@ -1,4 +1,3 @@
-<?php $_GET['onlybody'] = 'no';?>
 <table class='table-1 fixed colored tablesorter' id='bugList'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'>

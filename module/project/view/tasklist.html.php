@@ -1,4 +1,3 @@
-<?php $_GET['onlybody'] = 'no';?>
 <table class='table-1 fixed colored tablesorter datatable' id='taskList'>
   <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
   <thead>

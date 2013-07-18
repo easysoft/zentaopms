@@ -444,6 +444,7 @@ EOT;
     public static function backButton($misc = '')
     {
         global $lang;
+        if(isonlybody()) return false;
         return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='button-b' $misc/>";
     }
 
@@ -474,7 +475,9 @@ EOT;
      */
     public static function linkButton($label = '', $link = '', $target = 'self', $misc = '')
     {
-        global $config;
+        global $config, $lang;
+
+        if(isonlybody() and $lang->goback == $label) return false;
 
         /* if page has onlybody param then add this param in all link. the param hide header and footer. */
         if(strpos($link, 'onlybody=') === false and isonlybody())
@@ -737,7 +740,8 @@ EOT;
     static public function closeColorbox($window = 'self')
     {
         $js  = self::start();
-        $js .= "$window.$.colorbox.close()";
+        $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
+        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.colorbox.close();}";
         $js .= self::end();
         return $js;
     }

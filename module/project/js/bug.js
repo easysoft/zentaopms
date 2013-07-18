@@ -13,7 +13,7 @@ function setModal4List(colorboxClass, replaceID)
             saveWindowSize();
 
             var link = self.location.href;
-            $.get(link, {onlybody: "yes"}, function(data)
+            $.get(link, {ajax: "yes"}, function(data)
             {
                 $('#' + replaceID).replaceWith(data)
                 setModal4List(colorboxClass, replaceID)

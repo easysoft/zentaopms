@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(isonlybody()) die(include './caselist.html.php');?>
+<?php if(isset($_GET['ajax']) and $_GET['ajax'] == 'yes') die(include './caselist.html.php');?>
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';

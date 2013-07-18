@@ -1,4 +1,3 @@
-<?php $_GET['onlybody'] = 'no';?>
 <table class='table-1 colored tablesorter datatable' id='bugList'>
   <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <thead>
@@ -45,9 +44,9 @@
     <td class='a-center'><nobr>
       <?php
       $params = "bugID=$bug->id";
-      common::printIcon('bug', 'resolve', $params, '', 'list');
-      common::printIcon('bug', 'close',   $params, '', 'list');
-      common::printIcon('bug', 'edit',    $params, '', 'list');
+      common::printIcon('bug', 'resolve', $params, $bug, 'list', '', '', 'iframe', true);
+      common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
+      common::printIcon('bug', 'edit',    $params, $bug, 'list');
       ?>
       </nobr>
     </td>

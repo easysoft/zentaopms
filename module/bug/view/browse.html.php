@@ -11,7 +11,7 @@
  */
 ?>
 <?php
-if(isonlybody())
+if(isset($_GET['ajax']) and $_GET['ajax'] == 'yes')
 {
     if($customed) die(include './buglist.custom.html.php');
     die(include './buglist.html.php');

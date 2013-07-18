@@ -73,7 +73,7 @@
       $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
   }
 
-  common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
+  common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin', 'showinonlybody');
   if($todo->account == $app->user->account)
   {
       common::printIcon('todo', 'edit',   "todoID=$todo->id");

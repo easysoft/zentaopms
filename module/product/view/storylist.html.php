@@ -1,4 +1,3 @@
-<?php $_GET['onlybody'] = 'no';?>
 <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
   <thead>
   <tr class='colhead'>
@@ -41,7 +40,7 @@
       $vars = "story={$story->id}";
       common::printIcon('story', 'change',     $vars, $story, 'list');
       common::printIcon('story', 'review',     $vars, $story, 'list');
-      common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+      common::printIcon('story', 'close',      $vars, $story, 'list');
       common::printIcon('story', 'edit',       $vars, $story, 'list');
       common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'list', 'createCase');
       ?>

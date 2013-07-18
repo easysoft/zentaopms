@@ -81,7 +81,7 @@
           common::printIcon('task', 'create', $param, '', 'list');
 
           $lang->task->batchCreate = $lang->project->batchWBS;
-          common::printIcon('task', 'batchCreate', $param . "&iframe=1", '', 'list', '', '', 'batchWBS', true);
+          common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list');
 
           $lang->project->unlinkStory = $lang->unlink;
           common::printIcon('project', 'unlinkStory', $param, '', 'list', '', 'hiddenwin');

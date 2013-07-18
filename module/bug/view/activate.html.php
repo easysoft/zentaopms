@@ -32,11 +32,7 @@
       <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'>
-        <?php echo html::submitButton();?>
-        <input type='button' value='<?php echo $lang->bug->buttonToList;?>' class='button-s' 
-         onclick='location.href="<?php echo $this->session->bugList;?>"' />
-      </td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
