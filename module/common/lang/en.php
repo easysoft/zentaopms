@@ -15,6 +15,7 @@ $lang->comma        = ',';
 $lang->dot          = '.';
 $lang->at           = ' at ';
 $lang->downArrow    = '↓';
+$lang->null         = '空';
 
 $lang->zentaoPMS    = 'ZenTaoPMS';
 $lang->welcome      = "Welcome to『%s』{$lang->colon} {$lang->zentaoPMS}";
