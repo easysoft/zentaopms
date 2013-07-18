@@ -150,7 +150,7 @@ class company extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             /* reset company in session. */
-            $company = $this->loadModel('company')->getByDomain();
+            $company = $this->loadModel('company')->getFirst();
             $this->session->set('company', $company);
 
             die(js::reload('parent.parent'));

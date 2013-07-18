@@ -50,19 +50,6 @@ class companyModel extends model
     }
     
     /**
-     * get company by domain.
-     * 
-     * @param   string  $domain     if empty, use current HTTP_HOST.
-     * @access  public
-     * @return  object
-     */
-    public function getByDomain($domain = '')
-    {
-        if(empty($domain)) $domain = $this->server->http_host;
-        return $this->dao->findByPMS($domain)->from(TABLE_COMPANY)->fetch();
-    }
-
-    /**
      * Get company info by id.
      * 
      * @param  int    $companyID 

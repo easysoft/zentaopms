@@ -43,10 +43,6 @@
       <td><?php echo html::input('backyard', '', "class='text-1'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->pms;?></th>
-      <td><?php echo html::input('pms', '', "class='text-1'");?></td>
-    </tr>  
-    <tr>
       <th class='rowhead'><?php echo $lang->company->guest;?></th>
       <td><?php echo html::radio('guest', $lang->company->guestList);?></td>
     </tr>  
