@@ -55,7 +55,9 @@
       <?php
       if(count($stories))
       {
+          echo "<div class='groupButton'>";
           echo html::selectAll() . html::selectReverse();
+          echo "</div>";
 
           $canBatchEdit  = common::hasPriv('story', 'batchEdit');
           $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
@@ -63,7 +65,7 @@
 
           echo "<div class='groupButton'>";
           echo html::commonButton($lang->edit, "onclick=\"changeAction('$actionLink')\" $disabled");
-          echo html::commonButton($lang->more, "onclick=\"toggleSubMenu(this.id, 'top', 0)\" id='moreAction'");
+          echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
           echo "</div>";
       }
 
@@ -143,7 +145,7 @@
   <ul>
   <?php
   unset($plans['']);
-  $plans = array(0 => '&nbsp;') + $plans;
+  $plans = array(0 => $lang->null) + $plans;
   foreach($plans as $planID => $plan)
   {
       $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
@@ -156,7 +158,7 @@
 <div id='stageItemMenu' class='hidden listMenu'>
   <ul>
   <?php
-  $lang->story->stageList[''] = '&nbsp;';
+  $lang->story->stageList[''] = $lang->null;
   foreach($lang->story->stageList as $key => $stage)
   {
       $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
