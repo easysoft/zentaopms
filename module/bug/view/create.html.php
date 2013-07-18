@@ -21,7 +21,7 @@ js::set('userList', array_keys($users));
 js::set('page', 'create');
 ?>
 
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform' class='ajaxForm'>
+<form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table class='table-1'> 
     <caption><?php echo $lang->bug->create;?></caption>
     <tr>

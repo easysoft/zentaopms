@@ -867,7 +867,7 @@ class story extends control
 
         /* Send it. */
         $this->loadModel('mail')->send($toList, $productName . ':' . 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
-        if($this->mail->isError()) echo js::error($this->mail->getError());
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
     /**
      * The report page.
