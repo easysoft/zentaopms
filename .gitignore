@@ -1,4 +1,7 @@
 config/my.php
-tmp/
+tmp/extension/*
+tmp/model/*
+tmp/cache/*
+tmp/log/*
 www/data/
 release
