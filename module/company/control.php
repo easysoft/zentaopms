@@ -109,34 +109,6 @@ class company extends control
     }
 
     /**
-     * Create a company.
-     * 
-     * @access public
-     * @return void
-     */
-    public function create()
-    {
-        if(!empty($_POST))
-        {
-            $this->company->create();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('admin', 'browsecompany'), 'parent'));
-        }
-
-        $this->lang->set('menugroup.company', 'admin');
-        $this->lang->company->menu      = $this->lang->admin->menu;
-        $this->lang->company->menuOrder = $this->lang->admin->menuOrder;
-
-        $title      = $this->lang->admin->common . $this->lang->colon . $this->lang->company->create;
-        $position[] = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
-        $position[] = $this->lang->company->create;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-
-        $this->display();
-    }
-
-    /**
      * Edit a company.
      * 
      * @access public
@@ -178,29 +150,6 @@ class company extends control
         $this->view->position[] = $this->lang->company->view;
         $this->view->company    = $this->company->getById($this->app->company->id);
         $this->display();
-    }
-
-    /**
-     * Delete a company.
-     * 
-     * @param  int    $companyID 
-     * @param  string $confirm      yes|no
-     * @access public
-     * @return void
-     */
-    public function delete($companyID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            echo js::confirm($this->lang->company->confirmDelete, $this->createLink('company', 'delete', "companyID=$companyID&confirm=yes"));
-            exit;
-        }
-        else
-        {
-            $this->company->delete($companyID);
-            echo js::locate($this->createLink('admin', 'browseCompany'), 'parent');
-            exit;
-        }
     }
 
     /**

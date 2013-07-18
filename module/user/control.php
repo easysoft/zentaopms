@@ -597,7 +597,6 @@ class user extends control
         {
             if(strpos($this->referer, $loginLink) === false and 
                strpos($this->referer, $denyLink)  === false and 
-               strpos($this->referer, $this->app->company->pms) !== false
             )
             {
                 $this->locate($this->referer);

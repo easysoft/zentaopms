@@ -62,23 +62,6 @@ class companyModel extends model
     }
 
     /**
-     * Create a company.
-     * 
-     * @access public
-     * @return void
-     */
-    public function create()
-    {
-        $company = fixer::input('post')->get();
-        $this->dao->insert(TABLE_COMPANY)
-            ->data($company)
-            ->autoCheck()
-            ->batchCheck($this->config->company->create->requiredFields, 'notempty')
-            ->batchCheck('name,pms', 'unique')
-            ->exec();
-    }
-
-    /**
      * Update a company.
      * 
      * @access public
@@ -94,20 +77,8 @@ class companyModel extends model
             ->data($company)
             ->autoCheck()
             ->batchCheck($this->config->company->edit->requiredFields, 'notempty')
-            ->batchCheck('name,pms', 'unique', "id != '$companyID'")
+            ->batchCheck('name', 'unique', "id != '$companyID'")
             ->where('id')->eq($companyID)
             ->exec();
-    }
-    
-    /**
-     * Delete a company.
-     * 
-     * @param  int    $companyID 
-     * @access public
-     * @return void
-     */
-    public function delete($companyID)
-    {
-        return $this->dao->delete()->from(TABLE_COMPANY)->where('id')->eq((int)$companyID)->limit(1)->exec();
     }
 }

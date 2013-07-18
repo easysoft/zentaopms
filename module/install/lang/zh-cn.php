@@ -102,8 +102,6 @@ $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
 $lang->install->getPriv  = '设置帐号';
 $lang->install->company  = '公司名称';
-$lang->install->pms      = 'PMS地址';
-$lang->install->pmsNote  = '即通过什么地址可以访问到禅道项目管理，设置域名或者IP地址即可，不需要http';
 $lang->install->account  = '管理员帐号';
 $lang->install->password = '管理员密码';
 $lang->install->errorEmptyPassword = '密码不能为空';

@@ -1,9 +1,7 @@
 <?php
 $config->company = new stdclass();
-$config->company->create = new stdclass();
 $config->company->edit   = new stdclass();
-$config->company->create->requiredFields = 'name,pms';
-$config->company->edit->requiredFields   = 'name,pms';
+$config->company->edit->requiredFields   = 'name';
 
 global $lang, $app;
 $app->loadLang('action');
