@@ -390,9 +390,8 @@ class installModel extends model
         /* Insert a company. */
         $company = new stdclass();
         $company->name   = $this->post->company;
-        $company->pms    = $this->post->pms;
         $company->admins = ",{$this->post->account},";
-        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name, pms', 'notempty')->check('pms', 'unique')->exec();
+        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name', 'notempty')->exec();
 
         if(!dao::isError())
         {

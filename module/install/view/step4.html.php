@@ -32,10 +32,6 @@
     <td><?php echo html::input('company');?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->install->pms;?></th>
-    <td><?php echo html::input('pms', $pmsDomain) . "<span class='f-12px'>{$lang->install->pmsNote}</span>";?></td>
-  </tr>
-  <tr>
     <th class='rowhead'><?php echo $lang->install->account;?></th>
     <td><?php echo html::input('account');?></td>
   </tr>
