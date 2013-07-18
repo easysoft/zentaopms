@@ -38,8 +38,8 @@
 
       common::printIcon('story', 'change',     "storyID=$story->id", $story);
       common::printIcon('story', 'review',     "storyID=$story->id", $story);
-      common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
-      common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
+      common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
+      common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
       common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'createCase');
 
       common::printDivider();

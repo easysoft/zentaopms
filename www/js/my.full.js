@@ -749,7 +749,7 @@ function selectItem(SelectID)
  * @access public
  * @return void
  */
-function setModal4List(colorboxClass, replaceID)
+function setModal4List(colorboxClass, replaceID, callback)
 {
     $('.' + colorboxClass).colorbox(
     {
@@ -760,16 +760,20 @@ function setModal4List(colorboxClass, replaceID)
 
         onCleanup:function()
         {
+            var selfClose = $.cookie('selfClose');
+            if(selfClose != 1) return;
             saveWindowSize();
 
             var link = self.location.href;
-            $.get(link, {onlybody:"yes"}, function(data)
+            $.get(link, {ajax:"yes"}, function(data)
             {
                 $('#' + replaceID).replaceWith(data);
-                setModal4List(colorboxClass, replaceID);
+                setModal4List(colorboxClass, replaceID, callback);
 
                 $('.colored').colorize();
                 $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+                if(typeof(callback) == 'function') callback();
+                $.cookie('selfClose', 0);
             });
         }
     });

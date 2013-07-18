@@ -65,7 +65,7 @@
         <?php
         common::printIcon('story', 'change',     "storyID=$story->id", $story, 'list');
         common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list');
-        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', '', '', 'iframe', true);
+        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list');
         common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list');
         common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'createCase');
         ?>

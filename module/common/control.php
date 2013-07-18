@@ -231,6 +231,8 @@ class common extends control
      */
     public static function printCommentIcon($module)
     {
+        if(isonlybody()) return false;
+
         global $lang;
 
         if(!common::hasPriv($module, 'edit')) return false;
@@ -255,6 +257,8 @@ class common extends control
      */
     public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false)
     {
+        if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
+
         global $app, $lang;
 
         /* Judge the $method of $module clickable or not, default is clickable. */
@@ -339,6 +343,7 @@ class common extends control
     public function printRPN($backLink, $preAndNext = '')
     {
         global $lang;
+        if(isonlybody()) return false;
 
         echo "<span class='link-button'>";
         echo html::a($backLink, '&nbsp;', '', "class='icon-goback' title={$lang->goback}");

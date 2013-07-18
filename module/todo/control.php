@@ -125,6 +125,7 @@ class todo extends control
                 $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+            if(isonlybody())die(js::closeColorbox('parent.parent'));
             die(js::locate(inlink('view', "todoID=$todoID"), 'parent'));
         }
 

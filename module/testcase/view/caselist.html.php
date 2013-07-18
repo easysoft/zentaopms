@@ -1,4 +1,3 @@
-<?php $_GET['onlybody'] = 'no';?>
 <table class='table-1 colored tablesorter datatable fixed' id='caseList'>
   <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <thead>

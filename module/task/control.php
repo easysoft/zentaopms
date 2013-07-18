@@ -157,7 +157,7 @@ class task extends control
 
             /* Locate the browser. */
             if($iframe) die(js::reload('parent.parent'));
-            die(js::locate($taskLink, 'parent'));
+            die(js::locate($storyLink, 'parent'));
         }
 
         $stories = $this->story->getProjectStoryPairs($projectID);
