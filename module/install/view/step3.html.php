@@ -25,7 +25,6 @@ if(!isset($error))
 \$config->db->password    = '$dbPassword';
 \$config->db->prefix      = '$dbPrefix';
 \$config->webRoot         = getWebRoot();
-\$config->default->domain = '$domain';
 \$config->default->lang   = '$defaultLang';
 \$config->mysqldump       = '$mysqldump';
 EOT;

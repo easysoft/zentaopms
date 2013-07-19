@@ -50,19 +50,6 @@ class companyModel extends model
     }
     
     /**
-     * get company by domain.
-     * 
-     * @param   string  $domain     if empty, use current HTTP_HOST.
-     * @access  public
-     * @return  object
-     */
-    public function getByDomain($domain = '')
-    {
-        if(empty($domain)) $domain = $this->server->http_host;
-        return $this->dao->findByPMS($domain)->from(TABLE_COMPANY)->fetch();
-    }
-
-    /**
      * Get company info by id.
      * 
      * @param  int    $companyID 
@@ -72,23 +59,6 @@ class companyModel extends model
     public function getByID($companyID = '')
     {
         return $this->dao->findById((int)$companyID)->from(TABLE_COMPANY)->fetch();
-    }
-
-    /**
-     * Create a company.
-     * 
-     * @access public
-     * @return void
-     */
-    public function create()
-    {
-        $company = fixer::input('post')->get();
-        $this->dao->insert(TABLE_COMPANY)
-            ->data($company)
-            ->autoCheck()
-            ->batchCheck($this->config->company->create->requiredFields, 'notempty')
-            ->batchCheck('name,pms', 'unique')
-            ->exec();
     }
 
     /**
@@ -107,20 +77,8 @@ class companyModel extends model
             ->data($company)
             ->autoCheck()
             ->batchCheck($this->config->company->edit->requiredFields, 'notempty')
-            ->batchCheck('name,pms', 'unique', "id != '$companyID'")
+            ->batchCheck('name', 'unique', "id != '$companyID'")
             ->where('id')->eq($companyID)
             ->exec();
-    }
-    
-    /**
-     * Delete a company.
-     * 
-     * @param  int    $companyID 
-     * @access public
-     * @return void
-     */
-    public function delete($companyID)
-    {
-        return $this->dao->delete()->from(TABLE_COMPANY)->where('id')->eq((int)$companyID)->limit(1)->exec();
     }
 }

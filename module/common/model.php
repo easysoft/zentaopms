@@ -47,21 +47,14 @@ class commonModel extends model
     public function setCompany()
     {        
         $httpHost = $this->server->http_host;
-        if(strpos($httpHost, ":"))
-        {
-            $httpHost = explode(":", $httpHost);
-            $httpHost = $httpHost[0];
-        }
 
-        if($this->session->company and $this->session->company->pms == $httpHost)
+        if($this->session->company)
         {
             $this->app->company = $this->session->company;
         }
         else
         {
-            $company = $this->loadModel('company')->getByDomain();
-            if(!$company and isset($this->config->default->domain)) $company = $this->company->getByDomain($this->config->default->domain);
-            if(!$company) $company = $this->company->getFirst();
+            $company = $this->loadModel('company')->getFirst();
             if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
             $this->session->set('company', $company);
             $this->app->company  = $company;

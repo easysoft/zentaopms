@@ -243,6 +243,7 @@ class mailModel extends model
     {
         if(!$this->config->mail->turnon) return;
 
+        ob_start();
         /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
         if($includeMe == false)
         {
@@ -283,6 +284,11 @@ class mailModel extends model
         {
             $this->errors[] = trim(strip_tags($e->getMessage()));
         }
+
+        $message = ob_get_contents();
+        ob_clean();
+
+        return $message;
     }
 
     /**

@@ -486,17 +486,13 @@ $lang->svn->methodOrder[15] = 'apiSync';
 $lang->resource->company = new stdclass();
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
-$lang->resource->company->create = 'create';
 $lang->resource->company->edit   = 'edit';
 $lang->resource->company->view   = 'view';
-$lang->resource->company->delete = 'delete';
 $lang->resource->company->dynamic= 'dynamic';
 
 $lang->company->methodOrder[0]  = 'index';
 $lang->company->methodOrder[5]  = 'browse';
-$lang->company->methodOrder[10] = 'create';
 $lang->company->methodOrder[15] = 'edit';
-$lang->company->methodOrder[20] = 'delete';
 $lang->company->methodOrder[25] = 'dynamic';
 
 /* Department. */

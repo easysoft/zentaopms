@@ -693,6 +693,6 @@ class testtask extends control
             $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
         }
         $this->loadModel('mail')->send($this->post->owner, $mailTitle, $mailContent); 
-        if($this->mail->isError()) echo js::error($this->mail->getError());
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 }

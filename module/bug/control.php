@@ -940,7 +940,7 @@ class bug extends control
 
         /* Send it. */
         $this->loadModel('mail')->send($toList, $productName . ':' . 'BUG #'. $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
-        if($this->mail->isError()) echo js::error($this->mail->getError());
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 
     /**

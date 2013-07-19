@@ -96,7 +96,6 @@ class install extends control
                 $this->view->app       = $this->app;
                 $this->view->lang      = $this->lang;
                 $this->view->config    = $this->config;
-                $this->view->domain    = $this->server->HTTP_HOST;
                 $this->view->title     = $this->lang->install->saveConfig;
                 $this->view->mysqldump = $this->install->getMySQLDump();
                 $this->display();
@@ -142,7 +141,6 @@ class install extends control
         }
         else
         {
-            $this->view->pmsDomain = $this->server->HTTP_HOST;
             $this->display();
         }
     }

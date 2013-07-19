@@ -1586,7 +1586,6 @@ class router
         /* If error level is serious, die.  */
         if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
         {
-            echo $level;
             if(empty($this->config->debug)) die();
             if(PHP_SAPI == 'cli') die($errorLog);
 

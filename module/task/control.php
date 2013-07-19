@@ -800,7 +800,7 @@ class task extends control
 
         /* Send emails. */
         $this->loadModel('mail')->send($toList, $projectName . ':' . 'TASK#' . $task->id . $this->lang->colon . $task->name, $mailContent, $ccList);
-        if($this->mail->isError()) echo js::error($this->mail->getError());
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
     
     /**

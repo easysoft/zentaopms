@@ -42,10 +42,6 @@
     <td><?php echo $company->backyard;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->pms;?></th>
-    <td><?php echo $company->pms;?></td>
-  </tr>  
-  <tr>
     <th class='rowhead'><?php echo $lang->company->guest;?></th>
     <td><?php echo $lang->company->guestList[$company->guest];?></td>
   </tr>  

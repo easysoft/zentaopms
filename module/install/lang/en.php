@@ -102,8 +102,6 @@ $lang->install->errorNotSaveConfig = "Hasn't save the config file. ";
 
 $lang->install->getPriv  = 'Set admin';
 $lang->install->company  = 'Company name';
-$lang->install->pms      = 'ZenTaoPMS domain';
-$lang->install->pmsNote  = 'The domain name or ip address of ZenTaoPMS, no http://';
 $lang->install->account  = 'Administrator';
 $lang->install->password = 'Admin password';
 $lang->install->errorEmptyPassword = "Can't be empty";
