@@ -149,7 +149,6 @@ class ssoModel extends model
     public function createKey()
     {
         return md5(rand());
-
     }
 
     /**
