@@ -65,6 +65,7 @@ class searchModel extends model
             /* Skip empty values. */
             if($this->post->$valueName == false) continue; 
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
+            if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
 
             /* Set and or. */
             $andOr = strtoupper($this->post->$andOrName);
@@ -192,7 +193,19 @@ class searchModel extends model
             if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values']  = $users;
             if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values']  = $products;
             if($params[$fieldName]['values'] == 'projects') $params[$fieldName]['values']  = $projects;
-            if(is_array($params[$fieldName]['values'])) $params[$fieldName]['values']  = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
+            if(is_array($params[$fieldName]['values']))
+            {
+                /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */
+                if(isset($params[$fieldName]['values'][0]) and $params[$fieldName]['values'][0] !== '')
+                {
+                    $params[$fieldName]['values'] = array('ZERO' => $params[$fieldName]['values'][0]) + $params[$fieldName]['values'];
+                    unset($params[$fieldName]['values'][0]);
+                }
+                else
+                {
+                    $params[$fieldName]['values']  = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
+                }
+            }
         }
         return $params;
     }
