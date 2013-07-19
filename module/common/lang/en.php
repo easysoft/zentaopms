@@ -274,6 +274,7 @@ $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' 
 $lang->admin->menu->clearData = array('link' => 'Clear data|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
+$lang->admin->menu->sso       = array('link' => 'sso|sso|browse', 'subModule' => 'sso');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -281,6 +282,7 @@ $lang->action    = new stdclass();
 $lang->extension = new stdclass();
 $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
+$lang->sso       = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -288,6 +290,7 @@ $lang->action->menu    = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
+$lang->sso->menu       = $lang->admin->menu;
 
 /* Groups. */
 $lang->menugroup = new stdclass();

@@ -137,7 +137,7 @@ class commonModel extends model
     {
         if($module == 'user' and strpos('login|logout|deny', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
-        if($module == 'sso') return true;
+        if($module == 'sso'  and strpos('auth|depts|users', $method) !== false) return true;
 
         if($this->loadModel('user')->isLogon())
         {
