@@ -51,6 +51,8 @@ $lang->moduleOrder[140] = 'tree';
 $lang->moduleOrder[145] = 'api';
 $lang->moduleOrder[150] = 'file';
 $lang->moduleOrder[155] = 'misc';
+$lang->moduleOrder[160] = 'sso';
+$lang->moduleOrder[165] = 'webapp';
 
 $lang->resource = new stdclass();
 
@@ -618,6 +620,18 @@ $lang->resource->admin->checkDB   = 'checkDB';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
+
+/* SSO. */
+$lang->resource->sso = new stdclass();
+$lang->resource->sso->browse = 'browse';
+$lang->resource->sso->create = 'create';
+$lang->resource->sso->edit   = 'edit';
+$lang->resource->sso->delete = 'delete';
+
+$lang->sso->methodOrder[0]  = 'browse';
+$lang->sso->methodOrder[5]  = 'create';
+$lang->sso->methodOrder[10] = 'edit';
+$lang->sso->methodOrder[15] = 'delete';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();
