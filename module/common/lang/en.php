@@ -275,7 +275,7 @@ $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' 
 $lang->admin->menu->clearData = array('link' => 'Clear data|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->admin->menu->sso       = array('link' => 'sso|sso|browse', 'subModule' => 'sso');
+$lang->admin->menu->sso       = array('link' => 'SSO|sso|browse', 'subModule' => 'sso');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
