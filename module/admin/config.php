@@ -12,3 +12,21 @@ $config->url->service   = 'http://www.cnezsoft.com/article-browse-1078.html';
 $config->admin->flow2Ext['onlyTest']  = 'zentaotest';
 $config->admin->flow2Ext['onlyTask']  = 'zentaotask';
 $config->admin->flow2Ext['onlyStory'] = 'zentaostory';
+
+$config->win2Unix->renameTables = array(
+            'zt_casestep'        => 'zt_caseStep'       ,
+            'zt_doclib'          => 'zt_docLib'         ,
+            'zt_grouppriv'       => 'zt_groupPriv'      ,
+            'zt_productplan'     => 'zt_productPlan'    ,
+            'zt_projectproduct'  => 'zt_projectProduct' ,
+            'zt_projectstory'    => 'zt_projectStory'   ,
+            'zt_storyspec'       => 'zt_storySpec'      ,
+            'zt_taskestimate'    => 'zt_taskEstimate'   ,
+            'zt_testresult'      => 'zt_testResult'     ,
+            'zt_testrun'         => 'zt_testRun'        ,
+            'zt_testtask'        => 'zt_testTask'       ,
+            'zt_usercontact'     => 'zt_userContact'    ,
+            'zt_usergroup'       => 'zt_userGroup'      ,
+            'zt_userquery'       => 'zt_userQuery'      ,
+            'zt_usertpl'         => 'zt_userTPL'        
+        );
