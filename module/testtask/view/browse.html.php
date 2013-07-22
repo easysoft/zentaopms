@@ -11,22 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
     <div class='f-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
   </caption>
   <thead>
+  <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
-    <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th><?php echo $lang->testtask->name;?></th>
-    <th><?php echo $lang->testtask->project;?></th>
-    <th><?php echo $lang->testtask->build;?></th>
-    <th class='w-user'><?php echo $lang->testtask->owner;?></th>
-    <th class='w-80px'><?php echo $lang->testtask->begin;?></th>
-    <th class='w-80px'><?php echo $lang->testtask->end;?></th>
-    <th class='w-50px'><?php echo $lang->statusAB;?></th>
+    <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
+    <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
+    <th>               <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+    <th>               <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
+    <th class='w-user'><?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
+    <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
+    <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
+    <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
     <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
@@ -35,7 +36,7 @@
   <tr class='a-center'>
     <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='a-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
-    <td class='a-left' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
+    <td class='a-left' title="<?php echo $task->projectName?>"><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
     <td class='a-left' title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>
@@ -52,5 +53,6 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>

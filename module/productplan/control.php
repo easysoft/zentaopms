@@ -104,17 +104,25 @@ class productplan extends control
      * Browse plans.
      * 
      * @param  int    $product 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($product = 0)
+    public function browse($product = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($product);
         $products               = $this->product->getPairs();
         $this->view->title      = $products[$product] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
-        $this->view->plans      = $this->productplan->getList($product);
+        $this->view->plans      = $this->productplan->getList($product, $pager);
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -150,19 +158,47 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0)
+    public function linkStory($planID = 0, $browseType = '', $param = 0)
     {
         $this->session->set('storyList', $this->app->getURI(true));
 
         if(!empty($_POST['stories'])) $this->productplan->linkStory($planID);
 
+        $this->loadModel('story');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
+        $products = $this->product->getPairs();
+
+        /* Build search form. */
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['product']);
+        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'linkStory', "planID=$planID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+        unset($this->lang->story->statusList['closed']);
+        $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->story->getBySearch($plan->product, $queryID, 'id');
+            foreach($allStories as $key => $story)
+            {
+                if($story->status == 'closed') unset($allStories[$key]);
+            }
+        }
+        else
+        {
+            $allStories = $this->story->getProductStories($this->view->product->id, $moduleID = '0', $status = 'draft,active,changed');
+        }
+
         $this->view->title      = $this->lang->productplan->linkStory;
         $this->view->position[] = $this->lang->productplan->linkStory;
-        $this->view->allStories = $this->loadModel('story')->getProductStories($this->view->product->id, $moduleID = '0', $status = 'draft,active,changed');
+        $this->view->allStories = $allStories;
         $this->view->planStories= $this->story->getPlanStories($planID);
-        $this->view->products   = $this->product->getPairs();
+        $this->view->products   = $products;
         $this->view->plan       = $plan;
         $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
