@@ -275,6 +275,7 @@ $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule'
 $lang->admin->menu->clearData = array('link' => '清除数据|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
+$lang->admin->menu->sso       = array('link' => '单点登录|sso|browse', 'subModule' => 'sso');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -282,6 +283,7 @@ $lang->action    = new stdclass();
 $lang->extension = new stdclass();
 $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
+$lang->sso       = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -289,6 +291,7 @@ $lang->action->menu    = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
+$lang->sso->menu       = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -311,6 +314,7 @@ $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->sso         = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

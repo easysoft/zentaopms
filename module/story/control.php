@@ -786,6 +786,7 @@ class story extends control
      */
     public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0)
     {
+        if($moduleID) $moduleID = $this->loadModel('tree')->getAllChildID($moduleID);
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
         die(html::select('story', $stories, $storyID, "class=''"));
     }
