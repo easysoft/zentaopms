@@ -66,10 +66,10 @@ class testtask extends control
         $this->view->position[]  = $this->lang->testtask->common;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
-        $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProductTasks($productID);
+        $this->view->tasks       = $this->testtask->getProductTasks($productID, $orderBy, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->pager       = $pager;
 
         $this->display();
     }

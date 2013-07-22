@@ -104,17 +104,25 @@ class productplan extends control
      * Browse plans.
      * 
      * @param  int    $product 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($product = 0)
+    public function browse($product = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($product);
         $products               = $this->product->getPairs();
         $this->view->title      = $products[$product] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
-        $this->view->plans      = $this->productplan->getList($product);
+        $this->view->plans      = $this->productplan->getList($product, $pager);
+        $this->view->pager      = $pager;
         $this->display();
     }
 
