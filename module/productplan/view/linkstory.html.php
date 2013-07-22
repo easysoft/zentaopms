@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<div id='querybox'></div>
 <form method='post' id='unlinkedStoriesForm'>
   <table class='table-1 tablesorter a-center fixed'> 
     <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedStories;?></caption>
@@ -111,4 +112,5 @@
     </tbody>
   </table>
 </form>
+<script>$(function(){ajaxGetSearchForm()})</script>
 <?php include '../../common/view/footer.html.php';?>
