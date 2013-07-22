@@ -60,11 +60,11 @@
         <table class='table-1 a-left fixed'>
           <tr>
             <th class='rowhead'><?php echo $lang->testtask->project;?></th>
-            <td><?php echo $task->projectName;?></td>
+            <td><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->testtask->build;?></th>
-            <td><?php $task->buildName ? print($task->buildName) : print($task->build);?></td>
+            <td><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->testtask->owner;?></th>

@@ -35,7 +35,7 @@
   <tr class='a-center'>
     <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='a-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
-    <td class='a-left' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
+    <td class='a-left' title="<?php echo $task->projectName?>"><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
     <td class='a-left' title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>
