@@ -52,8 +52,8 @@
     </tbody>
     <tfoot>
     <tr>
-      <td colspan='8' class='a-left'>
-          <?php if(count($allStories)) echo html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') .  html::submitButton($lang->story->linkStory);?>
+      <td colspan='9' class='a-left'>
+        <?php if(count($allStories)) echo html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') .  html::submitButton($lang->story->linkStory);?>
       </td>
     </tr>
     </tfoot>
