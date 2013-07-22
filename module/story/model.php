@@ -1049,12 +1049,13 @@ class storyModel extends model
     /**
      * Get stories pairs of a project.
      * 
-     * @param  int    $projectID 
-     * @param  int    $productID 
+     * @param  int           $projectID 
+     * @param  int           $productID 
+     * @param  array|string  $moduleIds 
      * @access public
      * @return array
      */
-    public function getProjectStoryPairs($projectID = 0, $productID = 0)
+    public function getProjectStoryPairs($projectID = 0, $productID = 0, $moduleIds = 0)
     {
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -1065,6 +1066,7 @@ class storyModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($moduleIds)->andWhere('t2.module')->in($moduleIds)->fi()
             ->fetchAll();
         if(!$stories) return array();
         return $this->formatStories($stories);
