@@ -49,6 +49,10 @@ $lang->testtask->lastRunTime    = 'Time';
 $lang->testtask->lastRunResult  = 'Result';
 $lang->testtask->report         = 'Report';
 
+$lang->testtask->legendDesc      = 'Desc';
+$lang->testtask->legendReport    = 'Report';
+$lang->testtask->legendBasicInfo = 'Basic info';
+
 $lang->testtask->statusList['wait']    = 'Pending';
 $lang->testtask->statusList['doing']   = 'In progress';
 $lang->testtask->statusList['done']    = 'Done';

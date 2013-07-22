@@ -49,6 +49,10 @@ $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
 $lang->testtask->report         = '测试总结';
 
+$lang->testtask->legendDesc      = '任务描述';
+$lang->testtask->legendReport    = '测试总结';
+$lang->testtask->legendBasicInfo = '基本信息';
+
 $lang->testtask->statusList['wait']    = '未开始';
 $lang->testtask->statusList['doing']   = '进行中';
 $lang->testtask->statusList['done']    = '已完成';
