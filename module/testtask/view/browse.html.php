@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
@@ -52,6 +53,6 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tr><td colspan='9'><?php $pager->show();?></td></tr>
+  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>
