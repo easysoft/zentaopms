@@ -45,5 +45,6 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <tr><td colspan='6'><?php $pager->show();?></td></tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>
