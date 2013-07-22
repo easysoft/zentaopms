@@ -757,7 +757,6 @@ class story extends control
         $this->loadModel('task');
         $this->view->tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
         $this->display();
-        exit;
     }
 
     /**
@@ -769,10 +768,15 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjectStories($projectID, $productID = 0, $storyID = 0)
+    public function ajaxGetProjectStories($projectID, $productID = 0, $moduleID = 0, $storyID = 0)
     {
-        $stories = $this->story->getProjectStoryPairs($projectID, $productID);
-        die(html::select('story', $stories, $storyID));
+        if($moduleID) 
+        {
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $moduleID = $this->tree->getAllChildID($moduleID);
+        }
+        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID);
+        die(html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();'));
     }
 
     /**
@@ -786,7 +790,11 @@ class story extends control
      */
     public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0)
     {
-        if($moduleID) $moduleID = $this->loadModel('tree')->getAllChildID($moduleID);
+        if($moduleID) 
+        {
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $moduleID = $this->tree->getAllChildID($moduleID);
+        }
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
         die(html::select('story', $stories, $storyID, "class=''"));
     }
