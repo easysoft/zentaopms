@@ -69,6 +69,18 @@ function setAfter()
     }
 }
 
+function setStories(moduleID, projectID, productID)
+{
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID + '&moduleID=' + moduleID);
+    $.get(link, function(stories)
+    {
+        if(!stories) stories = '<select id="story" name="story"></select>';
+        $('#story').replaceWith(stories);
+        $('#story_chzn').remove();
+        $("#story").chosen({no_results_text: ''});
+    });
+}
+
 $(document).ready(function()
 {
     setPreview();

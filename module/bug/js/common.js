@@ -156,7 +156,7 @@ function loadProjectTasks(projectID)
  */
 function loadProjectStories(projectID)
 {
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&storyID=' + oldStoryID);
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&moduleID=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
 

@@ -804,6 +804,24 @@ class treeModel extends model
     }
 
     /**
+     * Get the module that its type == 'story'.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function getStoryModule($moduleID)
+    {
+        $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        while($module->id and $module->type != 'story')
+        {
+            $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($module->parent)->fetch();
+        }
+       
+        return $module->id;
+    }
+
+    /**
      * Update modules' order.
      * 
      * @param  array   $orders 
