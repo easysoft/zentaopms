@@ -1,5 +1,6 @@
 <?php
 $config->bug = new stdClass();
+$config->bug->batchCreate = 10;
 
 $config->bug->create  = new stdclass();
 $config->bug->edit    = new stdclass();

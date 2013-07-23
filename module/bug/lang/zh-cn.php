@@ -69,6 +69,7 @@ $lang->bug->toCase           = '生成用例';
 /* 方法列表。*/
 $lang->bug->index              = '首页';
 $lang->bug->create             = '提Bug';
+$lang->bug->batchCreate        = '批量添加';
 $lang->bug->confirmBug         = '确认';
 $lang->bug->edit               = '编辑';
 $lang->bug->batchEdit          =  '批量编辑';
@@ -357,4 +358,5 @@ $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</stron
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->mailto = '输入用户名自动选择';
+$lang->bug->placeholder->mailto       = '输入用户名自动选择';
+$lang->bug->placeholder->chooseBuilds = '选择相关版本...';

@@ -69,6 +69,7 @@ $lang->bug->toCase           = 'To case';
 /* Actions. */
 $lang->bug->index              = 'Index';
 $lang->bug->create             = 'Create Bug';
+$lang->bug->batchCreate        = 'Batch create';
 $lang->bug->confirmBug         = 'Confirm Bug';
 $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch edit';
@@ -357,5 +358,5 @@ $lang->bug->action->tostory  = array('main' => '$date, To story by <strong>$acto
 $lang->bug->action->totask   = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->mailto   = 'you can input the user account to select users to mail to.';
-$lang->bug->placeholder->keywords = 'keywords';
+$lang->bug->placeholder->mailto       = 'you can input the user account to select users to mail to.';
+$lang->bug->placeholder->chooseBuilds = 'Choose builds...';
