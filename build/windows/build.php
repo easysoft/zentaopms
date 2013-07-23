@@ -7,18 +7,13 @@ include '../../lib/zfile/zfile.class.php';
 $file = new zfile();
 
 /* set xampp package and 7-zip command. */
-if(count($argv) != 4) die("php build.php xampp.7z 7zip output.\n");
-$xampp      = $argv[1] . '\xampp.7z';
-$phpmyadmin = $argv[1] . '\phpmyadmin.7z';
-$sevenz     = $argv[2];
-$output     = $argv[3];
+if(count($argv) != 2) die("php build.php sourceDir.\n");
+$sourceDir  = $argv[1];
+$xampp      = $sourceDir . '\xampp';
+$phpmyadmin = $sourceDir . '\phpmyadmin';
+$output     = $sourceDir . '\release';
 
-chdir($output);
-
-/* extract the xampp package. */
-echo "extracting xampp package ...";
-echo `$sevenz x -y $xampp`;
-echo `$sevenz x -y $phpmyadmin`;
+chdir($sourceDir);
 
 /* rm useless files. */
 error_reporting(E_ALL);
@@ -38,6 +33,8 @@ $file->batchRemoveFile('./xampp/*.txt');
 $file->batchRemoveFile('./xampp/*.bat');
 $file->batchRemoveFile('./xampp/*.exe');
 $file->batchRemoveFile('./xampp/*.ini');
+$file->batchRemoveFile('./xampp/*.log');
+$file->batchRemoveFile('./xampp/*.dat');
 
 /* Process apache module. */
 $file->batchRemoveFile('./xampp/apache/*.txt');
@@ -71,6 +68,8 @@ $file->removeDir('./xampp/apache/icons');
 $file->removeDir('./xampp/apache/include');
 $file->removeDir('./xampp/apache/lib');
 $file->removeDir('./xampp/apache/conf/extra');
+$file->removeDir('./xampp/apache/conf/original');
+$file->removeFile('./xampp/apache/conf/openssl.cnf');
 $file->batchRemoveFile('./xampp/apache/logs/*.log');
 $file->batchRemoveFile('./xampp/apache/*.pl');
 $file->removeDir('./xampp/apache/manual');
@@ -113,6 +112,8 @@ $file->removeDir('./xampp/mysql/include');
 $file->removeDir('./xampp/mysql/lib');
 $file->removeDir('./xampp/mysql/scripts');
 $file->removeDir('./xampp/mysql/sql-bench');
+$file->removeDir('./xampp/mysql/docs');
+$file->removeDir('./xampp/mysql/support-files');
 
 /* Process mysql's bin directory. */
 $file->rename('./xampp/mysql/bin', './xampp/mysql/binold');
@@ -215,7 +216,7 @@ $file->removeDir('./xampp/php/extold');
 
 /* Process phpmyadmin. */
 $file->removeDir('./xampp/phpMyAdmin');
-$file->copyDir('./phpMyAdmin-3.5.5-all-languages', './xampp/phpmyadmin/');
+$file->copyDir('./phpmyadmin', './xampp/phpmyadmin/');
 $file->mkdir('./xampp/phpmyadmin/locale.new');
 $file->copyDir('./xampp/phpmyadmin/locale/zh_CN', './xampp/phpmyadmin/locale.new/zh_CN');
 $file->copyDir('./xampp/phpmyadmin/locale/zh_TW', './xampp/phpmyadmin/locale.new/zh_TW');
@@ -227,6 +228,8 @@ $file->removeDir('./xampp/phpmyadmin/themes/original/');
 $file->removeDir('./xampp/phpmyadmin/examples/');
 $file->removeDir('./xampp/phpmyadmin/js/openlayers/');
 $file->removeDir('./xampp/phpmyadmin/libraries/tcpdf/');
+$file->removeDir('./xampp/phpmyadmin/doc');
+$file->removeDir('./xampp/phpmyadmin/doc');
 $file->batchRemoveFile('./xampp/phpmyadmin/Documentation*');
 
 /* Process the svn. */
@@ -239,6 +242,9 @@ $file->copyFile($buildDir . '/index.php', './xampp/htdocs/index.php');
 
 /* Copy ioncube loader. */
 $file->copyFile($buildDir . '/ioncube_loader_win_5.4.dll', './xampp/php/ext/ioncube_loader_win_5.4.dll');
+
+/* Copy opcache so file. */
+$file->copyFile($buildDir . '/php_opcache.dll', './xampp/php/ext/php_opcache.dll');
 
 /* Copy serive bat file. */
 $file->copyDir($buildDir . '/services', './xampp/services');
