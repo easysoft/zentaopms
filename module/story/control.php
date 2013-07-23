@@ -785,18 +785,23 @@ class story extends control
      * @param  int    $productID 
      * @param  int    $moduleID 
      * @param  int    $storyID 
+     * @param  string $onlyOption 
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0)
+    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0, $onlyOption = 'false')
     {
-        if($moduleID) 
+        if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
-        die(html::select('story', $stories, $storyID, "class=''"));
+        $select  = html::select('story' . $index, $stories, $storyID, "class=''");
+
+        /* If only need options, remove select wrap. */
+        if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));
+        die($select);
     }
 
     /**

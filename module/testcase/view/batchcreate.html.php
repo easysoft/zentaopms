@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
+<?php js::set('productID', $productID);?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table-1 fixed'> 
     <caption><?php echo $lang->testcase->batchCreate;?></caption>
@@ -32,9 +33,9 @@
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class=select-1");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=select-1");?></td>
-      <td class='a-left'style='overflow:visible'><?php echo html::select("story[$i]", $stories, $story, 'class=select-1');?></td>
+      <td class='a-left'style='overflow:visible'><?php echo html::select("story[$i]", '', $story, 'class="select-1 storySelect"');?></td>
       <td><?php echo html::input("title[$i]", '', "class='text-1'");?></td>
-    </tr>  
+    </tr>
     <?php endfor;?>
     <tr><td colspan='5' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
