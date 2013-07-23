@@ -17,7 +17,7 @@ $config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleToo
 $config->testcase->exportFields = '
     id, product, module, story,
     title, precondition, stepDesc, stepExpect, keywords,
-    pri, type, stage, status, frequency,
+    pri, type, stage, status, lastRunResult, frequency,
     openedBy, openedDate, lastEditedBy, lastEditedDate, 
     version,linkCase';
 

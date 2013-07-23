@@ -60,6 +60,7 @@ $lang->testcase->batchEdit          =  "批量编辑 ";
 $lang->testcase->delete             = "删除";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->import             = "导入用例";
+$lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出";
 $lang->testcase->confirmStoryChange = '确认需求变动';
 

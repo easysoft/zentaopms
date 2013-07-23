@@ -30,6 +30,8 @@ js::set('moduleID'  , $moduleID);
     ?>
   </div>
   <div class='f-right'>
+    <?php common::printIcon('testcase', 'import', "productID=$productID", '', 'button', 'export', '', 'export');?>
+    <?php common::printIcon('testcase', 'exportTemplet', "productID=$productID", '', 'button', 'export', '', 'export');?>
     <?php if($browseType != 'needconfirm') common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy"); ?>
     <?php common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
     <?php common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID"); ?>
