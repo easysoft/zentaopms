@@ -342,7 +342,7 @@ class common extends control
      */
     public function printRPN($backLink, $preAndNext = '')
     {
-        global $lang;
+        global $lang, $app;
         if(isonlybody()) return false;
 
         echo "<span class='link-button'>";
@@ -351,18 +351,20 @@ class common extends control
 
         if(isset($preAndNext->pre) and $preAndNext->pre) 
         {
+            $id = (!$_SESSION[$typeOnlyCondition] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
-            $title = '#' . $preAndNext->pre->id . ' ' . $title;
+            $title = '#' . $preAndNext->pre->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a($this->inLink('view', "ID={$preAndNext->pre->id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$title}'");
+            echo html::a($this->inLink('view', "ID={$preAndNext->pre->$id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$title}'");
             echo "</span>";
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
         {
+            $id = (!$_SESSION[$typeOnlyCondition] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
-            $title = '#' . $preAndNext->next->id . ' ' . $title;
+            $title = '#' . $preAndNext->next->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a($this->inLink('view', "ID={$preAndNext->next->id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
+            echo html::a($this->inLink('view', "ID={$preAndNext->next->$id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
             echo "</span>";
         }
     }

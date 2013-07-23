@@ -60,6 +60,7 @@ $lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->import             = "Import";
+$lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export";
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 

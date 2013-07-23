@@ -17,7 +17,7 @@ $config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleToo
 $config->testcase->exportFields = '
     id, product, module, story,
     title, precondition, stepDesc, stepExpect, keywords,
-    pri, type, stage, status, frequency,
+    pri, type, stage, status, lastRunResult, frequency,
     openedBy, openedDate, lastEditedBy, lastEditedDate, 
     version,linkCase';
 
@@ -25,16 +25,16 @@ global $lang;
 $config->testcase->search['module']                   = 'testcase';
 $config->testcase->search['fields']['title']          = $lang->testcase->title;
 $config->testcase->search['fields']['id']             = $lang->testcase->id;
-$config->testcase->search['fields']['module']         = $lang->testcase->module;
 $config->testcase->search['fields']['keywords']       = $lang->testcase->keywords;
 $config->testcase->search['fields']['lastEditedBy']   = $lang->testcase->lastEditedByAB;
 $config->testcase->search['fields']['type']           = $lang->testcase->type;
 
-$config->testcase->search['fields']['pri']            = $lang->testcase->pri;
 $config->testcase->search['fields']['openedBy']       = $lang->testcase->openedBy;
 $config->testcase->search['fields']['status']         = $lang->testcase->status;
 $config->testcase->search['fields']['product']        = $lang->testcase->product;
 $config->testcase->search['fields']['stage']          = $lang->testcase->stage;
+$config->testcase->search['fields']['module']         = $lang->testcase->module;
+$config->testcase->search['fields']['pri']            = $lang->testcase->pri;
 
 $config->testcase->search['fields']['openedDate']     = $lang->testcase->openedDate;
 $config->testcase->search['fields']['lastEditedDate'] = $lang->testcase->lastEditedDateAB;
