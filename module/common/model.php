@@ -627,7 +627,6 @@ class commonModel extends model
             $nextID = $tmpObjectIDs[$nextKey];
             $preAndNextObject->next = $objects[$objectIDs[$nextID]];
         }
-
         return $preAndNextObject;
     }
 

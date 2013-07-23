@@ -23,6 +23,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></span> ";
     echo "<span id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</span>";
     echo "<span id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</span>";
+    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><span class='icon-search'></span>{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
@@ -33,6 +34,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     ?>
   </div>
 </div>
+<div id='querybox'></div>
 
 <form method='post' name='casesform'>
 <table class='cont-lt1'>

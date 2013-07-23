@@ -337,6 +337,56 @@ class bug extends control
     }
 
     /**
+     * Batch create. 
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($productID, $projectID = 0, $moduleID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $actions = $this->bug->batchCreate($productID);
+            foreach($actions as $bugID => $action) $this->sendmail($bugID, $actionID);
+            die(js::locate($this->session->bugList, 'parent'));
+        }
+
+        /* Get product, then set menu. */
+        $productID = $this->product->saveState($productID, $this->products);
+        $this->bug->setMenu($this->products, $productID);
+
+        /* If projectID is setted, get builds and stories of this project. */
+        if($projectID)
+        {
+            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $stories = $this->story->getProjectStoryPairs($projectID);
+        }
+        else
+        {
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+            $stories = $this->story->getProductStoryPairs($productID);
+        }
+
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->batchCreate;
+
+        $this->view->projectBuilds    = $projectBuilds;
+        $this->view->productID        = $productID;
+        $this->view->stories          = $stories;
+        $this->view->builds           = $builds;
+        $this->view->users            = $this->user->getPairs('nodeleted,devfirst');
+        $this->view->projects         = $this->product->getProjectPairs($productID, $params = 'nodeleted');
+        $this->view->projectID        = $projectID;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
+        $this->view->moduleID         = $moduleID;
+        $this->display();
+    }
+
+    /**
      * View a bug.
      * 
      * @param  int    $bugID 

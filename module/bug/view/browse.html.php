@@ -48,6 +48,7 @@ js::set('customed', $customed);
     common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
     if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy");
     common::printIcon('bug', 'customFields');
+    common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
     common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
     ?>
   </div>

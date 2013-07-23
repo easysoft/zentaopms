@@ -64,6 +64,45 @@ class bugModel extends model
     }
 
     /**
+     * Batch create 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($productID)
+    {
+        $this->loadModel('action');
+        $now     = helper::now();
+        $data    = fixer::input('post')->get();
+        $actions = array();
+        for($i = 0; $i < $this->config->bug->batchCreate; $i++)
+        {
+            if(empty($data->titles[$i])) continue;
+            $bug = new stdClass();
+            $bug->openedBy    = $this->app->user->account;
+            $bug->openedDate  = $now;
+            $bug->product     = $productID;
+            $bug->module      = $data->modules[$i];
+            $bug->project     = $data->projects[$i];
+            $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
+            $bug->title       = $data->titles[$i];
+            $bug->steps       = $data->stepses[$i];
+            $bug->type        = $data->types[$i];
+            $bug->severity    = $data->severities[$i];
+            $bug->os          = $data->oses[$i];
+            $bug->browser     = $data->browsers[$i];
+
+            $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
+            $bugID = $this->dao->lastInsertID();
+
+            if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
+            $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
+        }
+        return $actions;
+    }
+
+    /**
      * Get bugs of a module.
      * 
      * @param  int             $productID 
