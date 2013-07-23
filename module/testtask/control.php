@@ -215,6 +215,7 @@ class testtask extends control
         /* Set the browseType and moduleID. */
         $browseType = strtolower($browseType);
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
@@ -231,12 +232,61 @@ class testtask extends control
         {
             $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $orderBy, $pager);
         }
+        /* By search. */
+        elseif($browseType == 'bysearch')
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('testcaseQuery', $query->sql);
+                    $this->session->set('testcaseForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('testcaseQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+            }
+
+            $queryProductID = $productID;
+            $allProduct     = "`product` = 'all'";
+            $caseQuery      = $this->session->testcaseQuery;
+            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
+            {
+                $products  = array_keys($this->loadModel('product')->getPrivProducts());
+                $caseQuery = str_replace($allProduct, '1', $this->session->testcaseQuery);
+                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+                $queryProductID = 'all';
+            }
+
+            $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
+            $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
+            $this->view->runs = $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->where($caseQuery)
+                ->andWhere('t1.task')->eq($taskID)
+                ->orderBy(strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy))
+                ->page($pager)
+                ->fetchAll();
+        }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         /* Save testcaseIDs session for get the pre and next testcase. */
         $testcaseIDs = '';
         foreach($this->view->runs as $run) $testcaseIDs .= ',' . $run->case;
         $this->session->set('testcaseIDs', $testcaseIDs . ',');
+
+        /* Build the search form. */
+        $this->loadModel('testcase');
+        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
