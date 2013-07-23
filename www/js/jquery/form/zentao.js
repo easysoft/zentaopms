@@ -42,11 +42,13 @@ $.extend(
                 /* The result.message is just a object. */
                 if($.type(response.message) == 'object')
                 {
+                    var triggered = new Array();
                     $.each(response.message, function(key, value)
                     {
                         /* Define the id of the error objecjt and it's label. */
                         var errorOBJ   = '#' + key;
                         var errorLabel =  key + 'Label';
+                        var i          = triggered.push(false);
 
                         /* Create the error message. */
                         var errorMSG = '<div id="'  + errorLabel + '" class="text-error">';
@@ -58,11 +60,19 @@ $.extend(
                         $(errorOBJ).parent().append(errorMSG);
                         $(errorOBJ).css('margin-bottom', 0);
                         $(errorOBJ).css('border-color','#953B39')
-                        $(errorOBJ).focus(function()
+
+                        $(errorOBJ).bind('keydown mousedown', function()
                         {
-                            $(this).removeAttr('style')
-                            $('#' + errorLabel).remove(); 
+                            if(!triggered[i])
+                            {
+                                $(this).removeAttr('style')
+                                $('#' + errorLabel).remove(); 
+                                triggered[i] = true;
+                            }
                         });
+
+                        if(i == 1)$(errorOBJ).focus();
+
                         setTimeout(function(){$('#' + errorLabel).remove();}, 5000);
                     })
                 }
