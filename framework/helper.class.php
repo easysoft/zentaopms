@@ -177,6 +177,9 @@ class helper
             return $mergedModelFile;
         }
 
+        /* If loaded zend opcache module, turn off cache when create tmp model file to avoid the conflics. */
+        if(extension_loaded('Zend OPcache')) ini_set('opcache.enable', 0);
+
         /* Update the cache file. */
         $modelClass       = $moduleName . 'Model';
         $extModelClass    = 'ext' . $modelClass;

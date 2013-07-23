@@ -69,6 +69,7 @@ function setAfter()
     }
 }
 
+/* Get select of stories.*/
 function setStories(moduleID, projectID, productID)
 {
     link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID + '&moduleID=' + moduleID);
