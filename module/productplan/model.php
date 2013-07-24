@@ -182,6 +182,6 @@ class productplanModel extends model
     {
         $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fields('plan')->fetch('plan');
         $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
-        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $bugID);
+        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
     }
 }
