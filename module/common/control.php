@@ -340,7 +340,7 @@ class common extends control
      * @access public
      * @return void
      */
-    public function printRPN($backLink, $preAndNext = '')
+    static public function printRPN($backLink, $preAndNext = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
