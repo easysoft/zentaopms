@@ -58,5 +58,11 @@
     </tr>
   </table>
 </form>
-<?php $case = $run->case; include './results.html.php'; ?>
+<?php 
+ob_start();
+$case    = $run->case; include './results.html.php'; 
+$results = ob_get_contents();
+ob_clean();
+echo preg_replace("/<h1>[\s\S]*<\/h1>|<fieldset>[\s\S]*<\/fieldset>/", "", $results);
+?>
 <?php include '../../common/view/footer.lite.html.php';?>
