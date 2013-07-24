@@ -901,12 +901,19 @@ class user extends control
      */
     public function ajaxGetContactUsers($contactListID)
     {
-        $list = $this->user->getContactListByID($contactListID);
-        if($list)
+        if(!$contactListID) 
         {
-            $users = str_replace(',', ', ', $list->userList) . ', ';
-            echo $users;
+            $users = $this->user->getPairs('nodeleted,devfirst');
+            echo html::select('mailto[]', $users, '', "class='text-1' multiple");
         }
-        die();
+        else
+        {
+            $list = $this->user->getContactListByID($contactListID);
+            if($list)
+            {
+                $users = explode(',', $list->userList);
+                echo html::select('mailto[]', $users, '', "class='text-1' multiple");
+            }
+        }
     }
 }

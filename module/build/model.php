@@ -122,7 +122,11 @@ class buildModel extends model
             ->remove('allchecker')
             ->add('project', (int)$projectID)->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $this->updateLinkedBug($build);
+            return $this->dao->lastInsertID();
+        }
     }
 
     /**
@@ -149,6 +153,42 @@ class buildModel extends model
             ->where('id')->eq((int)$buildID)
             ->check('name','unique', "id != $buildID AND product = {$build->product}")
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldBuild, $build);
+        if(!dao::isError())
+        {
+            $this->updateLinkedBug($build);
+            return common::createChanges($oldBuild, $build);
+        }
+    }
+
+    /**
+     * Update linked bug to resolved.
+     * 
+     * @param  object    $build 
+     * @access public
+     * @return void
+     */
+    public function updateLinkedBug($build)
+    {
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+        $now  = helper::now();
+
+        $this->loadModel('action');
+        foreach($bugs as $bug)
+        {
+            if($bug->status == 'resolved') continue;
+
+            $bug->resolvedBy     = $this->app->user->account;
+            $bug->resolvedDate   = $now;
+            $bug->status         = 'resolved';
+            $bug->confirmed      = 1;
+            $bug->assignedDate   = $now;
+            $bug->assignedTo     = $bug->openedBy;
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->resolution     = 'fixed';
+            $bug->resolvedBuild  = $build->name;
+            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
+            $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed');
+        }
     }
 }

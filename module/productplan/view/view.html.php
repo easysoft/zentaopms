@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='titlebar' <?php if($plan->deleted) echo "class='deleted'";?>>PLAN #<?php echo $plan->id . ' ' . $plan->title;?></div>
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchUnlinkStory');?>">
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>">
   <table class='cont-rt5'>
     <tr valign='top'>
       <td>
@@ -27,6 +27,7 @@
          $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
          if(!$plan->deleted)
          {
+            common::printIcon('productplan', 'linkBug',  "planID=$plan->id");
             common::printIcon('productplan', 'linkStory',"planID=$plan->id");
             common::printIcon('productplan', 'edit',     "planID=$plan->id");
             common::printIcon('productplan', 'delete',   "planID=$plan->id", '', 'button', '', 'hiddenwin');
@@ -103,7 +104,7 @@
     <tfoot>
     <tr>
       <td colspan='9'>
-        <div class='a-left'>
+        <div class='f-left'>
         <?php 
         if(count($planStories) and $canBatchUnlink)
         {
@@ -112,7 +113,7 @@
         }
         ?>
         </div>
-        <div class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </div>
+        <div class='f-right'><?php echo $summary;?> </div>
       </td>
     </tr>
     </tfoot>

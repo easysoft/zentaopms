@@ -22,8 +22,15 @@ $lang->productplan->batchUnlinkStory = "Batch Remove";
 $lang->productplan->linkedStories    = 'Stories linked';
 $lang->productplan->unlinkedStories  = 'Stories unlinked';
 
+$lang->productplan->linkBug          = "Link bug";
+$lang->productplan->unlinkBug        = "Remove bug";
+$lang->productplan->batchUnlinkBug   = "Batch Remove";
+$lang->productplan->linkedBugs       = 'Bugs linked';
+$lang->productplan->unlinkedBugs     = 'Bugs unlinked';
+
 $lang->productplan->confirmDelete      = "Are you sure to delete this plan?";
 $lang->productplan->confirmUnlinkStory = "Are you sure to remove this story?";
+$lang->productplan->confirmUnlinkBug   = "Are you sure to remove this bug?";
 
 $lang->productplan->basicInfo ='Basic Info';
 

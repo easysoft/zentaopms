@@ -277,16 +277,16 @@ class testcase extends control
      * 
      * @param  int   $productID 
      * @param  int   $moduleID 
-     * @param  int   $testcaseID
+     * @param  int   $storyID
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $moduleID = 0)
+    public function batchCreate($productID, $moduleID = 0, $storyID = 0)
     {
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseID = $this->testcase->batchCreate($productID);
+            $caseID = $this->testcase->batchCreate($productID, $storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&browseType=byModule&param=$moduleID"), 'parent'));
         }
@@ -310,10 +310,10 @@ class testcase extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->productID        = $productID;
+        $this->view->story            = $storyID ? $this->story->getByID($storyID) : '';
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->stories          = $this->story->getProductStoryPairs($productID);
         $this->view->type             = $type;
         $this->view->title            = $title;
 

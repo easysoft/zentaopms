@@ -928,10 +928,11 @@ class treeModel extends model
      * Delete a module.
      * 
      * @param  int    $moduleID 
+     * @param  null   $null      compatible with that of model::delete()
      * @access public
      * @return void
      */
-    public function delete($moduleID)
+    public function delete($moduleID, $null = null)
     {
         $module  = $this->getById($moduleID);
         $childs  = $this->getAllChildId($moduleID);

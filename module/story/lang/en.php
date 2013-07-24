@@ -265,4 +265,7 @@ $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
 
 $lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = 'Estimate the story point.';
-$lang->story->placeholder->mailto   = 'Mail to';
+
+$lang->story->chosen = new stdClass();
+$lang->story->chosen->reviewedBy = 'Choose users who review...';
+$lang->story->chosen->mailto     = 'Choose users to mail...';

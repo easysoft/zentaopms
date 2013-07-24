@@ -233,4 +233,6 @@ $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder = new stdclass();
 $lang->task->placeholder->estimate = 'The estimated time for this task';
-$lang->task->placeholder->mailto   = 'Mail to'; 
+
+$lang->task->chosen = new stdclass();
+$lang->task->chosen->mailto = 'Choose users to mail...'; 

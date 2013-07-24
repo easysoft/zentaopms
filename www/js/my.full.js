@@ -483,11 +483,12 @@ function setExport()
  */
 function setMailto(mailto, contactListID)
 {
-    if(!contactListID) return;
     link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID);
     $.get(link, function(users)
     {
-        $('#' + mailto).val(users);
+        $('#' + mailto).replaceWith(users);
+        $('#' + mailto + '_chzn').remove();
+        $('#' + mailto).chosen({no_results_text: noResultsMatch});
     });
 }
 

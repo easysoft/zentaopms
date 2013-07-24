@@ -13,10 +13,10 @@
 <?php 
 include '../../common/view/header.html.php';
 include '../../common/view/kindeditor.html.php';
-include '../../common/view/autocomplete.html.php';
+include '../../common/view/chosen.html.php';
 js::set('holders', $lang->bug->placeholder);
-js::set('userList', array_keys($users));
 js::set('page', 'assignedto');
+js::set('mailto', $lang->bug->chosen->mailto);
 ?>
 <form method='post' target='hiddenwin'>
   <table class='table-1'>
@@ -27,7 +27,7 @@ js::set('page', 'assignedto');
     </tr>  
     <tr>
       <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
-      <td><?php echo html::input('mailto', $bug->mailto, 'class="text-1"');?></td>
+      <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="text-1" multiple');?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

@@ -61,7 +61,7 @@
   </table>
 </form>
 
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchUnlinkStory');?>" id='linkedStoriesForm'>
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>" id='linkedStoriesForm'>
   <table class='table-1 tablesorter a-center fixed'> 
     <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
     <thead>

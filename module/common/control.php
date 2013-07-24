@@ -340,7 +340,7 @@ class common extends control
      * @access public
      * @return void
      */
-    public function printRPN($backLink, $preAndNext = '')
+    static public function printRPN($backLink, $preAndNext = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
@@ -355,7 +355,7 @@ class common extends control
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a($this->inLink('view', "ID={$preAndNext->pre->$id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$title}'");
+            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$title}'");
             echo "</span>";
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
@@ -364,7 +364,7 @@ class common extends control
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a($this->inLink('view', "ID={$preAndNext->next->$id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
+            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
             echo "</span>";
         }
     }

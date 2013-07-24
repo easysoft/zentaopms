@@ -152,4 +152,36 @@ class productplanModel extends model
         $this->loadModel('story')->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
     }
+
+    /**
+     * Link bugs.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
+    public function linkBug($planID)
+    {
+        $this->loadModel('story');
+        $this->loadModel('action');
+        foreach($this->post->bugs as $bugID)
+        {
+            $this->dao->update(TABLE_BUG)->set('plan')->eq((int)$planID)->where('id')->eq((int)$bugID)->exec();
+            $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
+        }
+    }
+
+    /**
+     * Unlink bug. 
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
+    public function unlinkBug($bugID)
+    {
+        $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fields('plan')->fetch('plan');
+        $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
+        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
+    }
 }

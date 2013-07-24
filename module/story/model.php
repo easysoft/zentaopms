@@ -119,6 +119,7 @@ class storyModel extends model
             ->setIF($projectID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->remove('files,labels,spec,verify,needNotReview,newStory')
+            ->join('mailto', ',')
             ->get();
 
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
@@ -333,6 +334,8 @@ class storyModel extends model
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->remove('files,labels,comment')
+            ->join('reviewedBy', ',')
+            ->join('mailto', ',')
             ->get();
 
         $this->dao->update(TABLE_STORY)
@@ -459,7 +462,9 @@ class storyModel extends model
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
+            ->join('reviewedBy', ',')
             ->get();
+
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')

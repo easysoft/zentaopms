@@ -64,7 +64,7 @@ js::set('customed', $customed);
     }
 ?>
 
-<form method='post' action='<?php echo $this->inLink('batchEdit', "productID=$productID");?>'>
+<form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
   <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>' id='treebox'>

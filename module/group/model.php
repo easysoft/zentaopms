@@ -182,10 +182,11 @@ class groupModel extends model
      * Delete a group.
      * 
      * @param  int    $groupID 
+     * @param  null   $null      compatible with that of model::delete()
      * @access public
      * @return void
      */
-    public function delete($groupID)
+    public function delete($groupID, $null = null)
     {
         $this->dao->delete()->from(TABLE_GROUP)->where('id')->eq($groupID)->exec();
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
