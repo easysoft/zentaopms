@@ -354,9 +354,11 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Histories';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => $lang->bug->resolutionList);
-$lang->bug->action->tostory  = array('main' => '$date, To story by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
-$lang->bug->action->totask   = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
+$lang->bug->action->resolved         = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => $lang->bug->resolutionList);
+$lang->bug->action->tostory          = array('main' => '$date, To story by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
+$lang->bug->action->totask           = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
+$lang->bug->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。'); 
+$lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose builds...';

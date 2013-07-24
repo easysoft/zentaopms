@@ -23,7 +23,7 @@ $lang->productplan->linkedStories    = '已关联需求列表';
 $lang->productplan->unlinkedStories  = '未关联需求列表';
 
 $lang->productplan->linkBug          = "关联Bug";
-$lang->productplan->unlinkBug        = "移除需求";
+$lang->productplan->unlinkBug        = "移除Bug";
 $lang->productplan->batchUnlinkBug   = "批量移除";
 $lang->productplan->linkedBugs       = '已关联Bug列表';
 $lang->productplan->unlinkedBugs     = '未关联Bug列表';
