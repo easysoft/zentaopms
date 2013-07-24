@@ -3,7 +3,7 @@ cd lampp
 
 # rm useless files.
 rm -fr RELEASENOTES
-rm -fr  error
+rm -fr error
 rm -fr icons
 rm -fr licenses
 rm -fr logs/*
@@ -12,8 +12,17 @@ rm -fr cgi-bin
 rm -fr libexec
 rm -fr phpmyadmin
 rm -fr php
-rm -fr tmp/*
-chmod -R 777 tmp
+rm -fr temp/*
+rm -fr apache2
+rm -fr ctlscript.sh
+rm -fr manager-linux.run
+rm -fr pear
+rm -fr proftpd
+rm -fr properties.ini
+rm -fr uninstall*
+rm -fr mysql
+rm -fr img
+chmod -R 777 temp
 
 # rm useless settings.
 rm -fr etc/proftpd.conf
@@ -45,14 +54,14 @@ cp ../php.ini etc/php.ini
 mv bin bin.bak
 mkdir bin
 cd bin.bak 
-cp htpasswd apachectl my_print_defaults mysql mysql.server mysqld_safe mysqldump php php-config phpize httpd ../bin/
+cp htpasswd apachectl my_print_defaults mysql mysql.server mysqld_safe mysqldump php php-config phpize httpd gettext ../bin/
 cd ../
 rm -fr bin.bak
 
 # fix bug of the mysqld_safe
-sed -e 's/\/opt\/lampp\/\/opt\/lampp\/sbin/\/opt\/lampp\/sbin/g' bin/mysqld_safe > bin/mysqld_safe.new
-mv bin/mysqld_safe.new bin/mysqld_safe
-chmod a+rx bin/mysqld_safe
+#sed -e 's/\/opt\/lampp\/\/opt\/lampp\/sbin/\/opt\/lampp\/sbin/g' bin/mysqld_safe > bin/mysqld_safe.new
+#mv bin/mysqld_safe.new bin/mysqld_safe
+#chmod a+rx bin/mysqld_safe
 
 # rm useless binaries at sbin directory, keep mysqld.
 mv sbin sbin.bak
@@ -65,49 +74,40 @@ mv share share.bak
 mkdir share
 mv share.bak/english share/
 mv share.bak/lampp share
-echo >share/lampp/allons
+mv share.bak/xampp share
 rm -fr share.bak
-
-rm -fr share/lampp/alladdons
-touch share/lampp/alladdons
-chmod a+rx share/lampp/alladdons
 
 # process lib directory.
 mkdir libnew
-cp lib/VERSION libnew/
-cp lib/ioncube.so libnew/
-cp lib/libapr-1.so.0 libnew/
-cp lib/libaprutil-1.so.0 libnew/
-cp lib/libc-client.so libnew/
-cp lib/libcrypto.so.1.0.0 libnew/
-cp lib/libct.so.3 libnew/
-cp lib/libcurl.so.4 libnew/
-cp lib/libexpat.so.0 libnew/
-cp lib/libexslt.so.0 libnew/
-cp lib/libfreetype.so.6 libnew/
-cp lib/libgcc_s.so.1 libnew/
-cp lib/libgdbm.so.2 libnew/
-cp lib/libiconv.so.2 libnew/
-cp lib/libicudata.so.42 libnew/
-cp lib/libicui18n.so.42 libnew/
-cp lib/libicuio.so.42 libnew/
-cp lib/libicuuc.so.42 libnew/
-cp lib/libintl.so.2 libnew/
-cp lib/libjpeg.so.62 libnew/
-cp lib/liblber-2.4.so.2 libnew/
-cp lib/libldap-2.4.so.2 libnew/
-cp lib/libmcrypt.so.4 libnew/
-cp lib/libncurses.so.5 libnew/
-cp lib/libpcre.so.0 libnew/
-cp lib/libpng12.so.0 libnew/
-cp lib/libpq.so.4 libnew/
-cp lib/libsqlite3.so.0 libnew/
-cp lib/libssl.so.1.0.0 libnew/
-cp lib/libstdc++.so.5 libnew/
-cp lib/libsybdb.so.5 libnew/
-cp lib/libxml2.so.2 libnew/
-cp lib/libxslt.so.1 libnew/
-cp lib/libz.so.1 libnew/
+cp  lib/VERSION libnew/
+cp  lib/libapr-1.so.0 libnew/
+cp  lib/libaprutil-1.so.0 libnew/
+cp  lib/libcrypto.so.1.0.0 libnew/
+cp  lib/libcurl.so.4 libnew/
+cp  lib/libexslt.so.0 libnew/
+cp  lib/libfreetype.so.6 libnew/
+cp  lib/libgcc_s.so.1 libnew/
+cp  lib/libiconv.so.2 libnew/
+cp  lib/liblber-2.4.so.2.5.4 libnew/
+cp  lib/libmcrypt.so.4 libnew/
+cp  lib/libncurses.so.5 libnew/
+cp  lib/libpcre.so.0 libnew/
+cp  lib/libsqlite3.so.0 libnew/
+cp  lib/libssl.so.1.0.0 libnew/
+cp  lib/libstdc++.so.5 libnew/
+cp  lib/libsybdb.so.5 libnew/
+cp  lib/libxml2.so.2 libnew/
+cp  lib/libxslt.so.1 libnew/
+cp  lib/libz.so.1 libnew/
+cp  lib/libct.so.4 libnew/
+cp  lib/libpng15.so.15 libnew/
+cp  lib/libjpeg.so.8 libnew/
+cp  lib/libbz2.so  libnew/
+cp  lib/libicui18n.so.48  libnew/
+cp  lib/libicuuc.so.48 libnew/
+cp  lib/libicudata.so.48  libnew/
+cp  lib/libicuio.so.48 libnew/
+cp  lib/libbz2.so libnew/
 
 rm -fr lib
 mv libnew lib
@@ -117,6 +117,7 @@ rm -fr var/perl
 rm -fr var/proftpd*
 rm -fr var/mysql/cdcol
 rm -fr var/mysql/*.err
+rm -fr var/mysql/*.pid
 rm -fr var/mysql/ib*
 rm -fr var/mysql/test
 rm -fr var/mysql/phpmyadmin
@@ -199,7 +200,7 @@ cp ../Makefile .
 cp ../start .
 cp ../start88 .
 cp ../stop .
-cp ../lamppctl ./lampp
+#cp ../lamppctl ./lampp
 cp ../../windows/index.php htdocs/
 
 # make the auth file
@@ -208,8 +209,7 @@ touch auth/users
 cp ../adduser.sh auth/
 
 # process the phpmyadmin
-7z x $1/phpmyadmin.7z
-mv phpMyAdmin-3.5.5-all-languages phpmyadmin
+tar xvf $1/phpmyadmin.tar.gz
 mv phpmyadmin/locale phpmyadmin/locale.bak
 mkdir phpmyadmin/locale
 mv phpmyadmin/locale.bak/en_GB phpmyadmin/locale
@@ -221,6 +221,7 @@ rm -fr phpmyadmin/js/openlayers
 rm -fr phpmyadmin/libraries/tcpdf
 rm -fr phpmyadmin/Documentation*
 rm -fr phpmyadmin/themes/original
+rm -fr phpmyadmin/doc
 
 # copy the ioncube loader.
 cp ../*.so lib/
