@@ -13,12 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('userList', array_keys($users)); ?>
 <?php js::set('oldStoryID', $task->story); ?>
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject); ?>
 <?php js::set('changeProjectConfirmed', false); ?>
+<?php js::set('mailto', $lang->task->chosen->mailto);?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>
@@ -82,7 +81,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->task->mailto;?></td>
-            <td><?php echo html::input('mailto', $task->mailto, 'class="text-1"');?></td>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="text-1" multiple');?></td>
           </tr>
         </table>
       </fieldset>

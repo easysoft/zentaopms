@@ -51,6 +51,7 @@ class bugModel extends model
             ->specialChars('title,keyword')
             ->cleanInt('product, module, severity')
             ->join('openedBuild', ',')
+            ->join('mailto', ',')
             ->remove('files, labels')
             ->get();
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
@@ -208,6 +209,7 @@ class bugModel extends model
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')
+            ->join('mailto', ',')
             ->setIF($this->post->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->resolvedBy  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($this->post->resolution  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
@@ -332,6 +334,7 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
             ->remove('comment')
+            ->join('mailto', ',')
             ->get();
 
         $this->dao->update(TABLE_BUG)
@@ -358,6 +361,7 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
+            ->join('mailto', ',')
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();

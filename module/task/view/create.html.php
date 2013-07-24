@@ -13,11 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders',  $lang->task->placeholder);?>
-<?php js::set('userList', array_keys($users));?>
+<?php js::set('holders', $lang->task->placeholder);?>
+<?php js::set('mailto',  $lang->task->chosen->mailto);?>
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1 a-left'> 
     <caption>
@@ -84,8 +83,8 @@
       <th class='rowhead'><?php echo $lang->task->mailto;?></th>
       <td>
         <?php
-        echo html::input('mailto', $task->mailto, 'class="text-1"');
-        if($contactLists) echo html::select('', $contactLists, '', "onchange=\"setMailto('mailto', this.value)\"");
+        echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), 'class="text-1" multiple');
+        if($contactLists) echo html::select('', $contactLists, '', "class='f-right' onchange=\"setMailto('mailto', this.value)\"");
         ?>
       </td>
     </tr>

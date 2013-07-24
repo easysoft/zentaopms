@@ -41,6 +41,7 @@ class taskModel extends model
                 ->setDefault('openedBy',   $this->app->user->account)
                 ->setDefault('openedDate', helper::now())
                 ->remove('after,files,labels')
+                ->join('mailto', ',')
                 ->get();
 
             if($assignedTo) $task->assignedDate = helper::now();
@@ -171,6 +172,7 @@ class taskModel extends model
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->remove('comment,files,labels')
+            ->join('mailto', ',')
             ->get();
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
 

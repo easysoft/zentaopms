@@ -1,7 +1,8 @@
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/autocomplete.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php if(isset($users)) js::set('userList', array_keys($users)); ?>
+<?php js::set('reviewedBy', $lang->story->chosen->reviewedBy);?>
+<?php js::set('mailto',     $lang->story->chosen->mailto);?>
 <script language='Javascript'>
 function loadProduct(productID)
 {
@@ -10,8 +11,12 @@ function loadProduct(productID)
     $('#moduleIdBox').load(moduleLink);
     $('#planIdBox').load(planLink);
 }
-$(function() {
-    $("#reviewedBy").autocomplete(userList,{multiple: true,mustMatch: true});
-    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+
+$(function() 
+{
+    $("#reviewedBy").chosen({no_results_text:noResultsMatch});                                                   
+    $("#mailto").chosen({no_results_text:noResultsMatch});                                                   
+    $("#reviewedBy_chzn .chzn-choices li.search-field input").attr('value', reviewedBy);      
+    $("#mailto_chzn .chzn-choices li.search-field input").attr('value', mailto);      
 })
 </script>

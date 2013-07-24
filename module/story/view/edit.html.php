@@ -84,6 +84,10 @@
             <td class='rowhead'><?php echo $lang->story->keywords;?></td>
             <td><?php echo html::input('keywords', $story->keywords, 'class=text-1');?></td>
           </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->story->mailto;?></td>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='select-1' multiple");?></td>
+          </tr>
         </table>
       </fieldset>
       <fieldset>
@@ -100,7 +104,7 @@
           <?php if($story->reviewedBy):?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->reviewedBy;?></td>
-            <td><?php echo html::textarea('reviewedBy', $story->reviewedBy, 'class="area-1"');?></td>
+            <td><?php echo html::select('reviewedBy[]', $users, str_replace(' ', '', $story->reviewedBy), 'class="area-1" multiple');?></td>
           </tr>
           <?php endif;?>
           <?php if($story->status == 'closed'):?>
@@ -131,11 +135,7 @@
             <td class='rowhead'><?php echo $lang->story->childStories;?></td>
             <td><?php echo html::input('childStories', $story->childStories, "class='text-1'");?></td>
           </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->story->mailto;?></td>
-            <td><?php echo html::textarea('mailto', $story->mailto, "class='area-1'");?></td>
-          </tr>
-        </table>
+       </table>
       </fieldset>
     </td>
   </tr>

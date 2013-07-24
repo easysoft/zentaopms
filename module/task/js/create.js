@@ -85,5 +85,6 @@ $(document).ready(function()
 {
     setPreview();
     $("#story").chosen({no_results_text: noResultsMatch});
-    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    $("#mailto").chosen({no_results_text: noResultsMatch});
+    $("#mailto_chzn .chzn-choices li.search-field input").attr('value', mailto);      
 });

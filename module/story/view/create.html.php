@@ -60,8 +60,8 @@
       <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
       <td>
         <?php 
-        echo html::input('mailto', $mailto, 'class="text-1"'); 
-        if($contactLists) echo html::select('', $contactLists, '', "onchange=\"setMailto('mailto', this.value)\"");
+        echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), 'class="text-1" multiple'); 
+        if($contactLists) echo html::select('', $contactLists, '', "class='f-right' onchange=\"setMailto('mailto', this.value)\"");
         ?>
       </td>
     </tr>

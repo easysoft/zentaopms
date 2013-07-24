@@ -49,7 +49,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::input('reviewedBy', $app->user->account . ', ', 'class=text-1');?></td>
+      <td><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='text-1' multiple");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>
