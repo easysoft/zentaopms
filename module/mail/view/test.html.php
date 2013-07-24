@@ -28,7 +28,7 @@ if(isset($error))
       <?php 
       echo html::select('to', $users, $app->user->account);
       echo html::submitButton($lang->mail->test);
-      echo html::linkButton($lang->mail->edit, $this->inLink('edit'));
+      echo html::linkButton($lang->mail->edit, inLink('edit'));
       ?>
     </td>
   </tr>

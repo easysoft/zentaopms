@@ -14,8 +14,8 @@
 <?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 colored tablesorter'>
   <caption class='caption-tr'>
-    <?php if($type == 'hidden') echo html::a($this->inLink('trash', "type=all"),    $lang->goback);?>
-    <?php if($type == 'all')    echo html::a($this->inLink('trash', "type=hidden"), $lang->action->dynamic->hidden);?>
+    <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback);?>
+    <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), $lang->action->dynamic->hidden);?>
   </caption>
   <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <thead>
