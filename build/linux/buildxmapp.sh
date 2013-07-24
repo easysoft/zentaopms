@@ -223,4 +223,4 @@ rm -fr phpmyadmin/Documentation*
 rm -fr phpmyadmin/themes/original
 
 # copy the ioncube loader.
-cp ../ioncube_loader_lin_5.4.so lib/
+cp ../*.so lib/
