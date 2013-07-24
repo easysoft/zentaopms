@@ -242,4 +242,99 @@ class productplan extends control
         }
         die(js::reload('parent'));
     }
+
+    /**
+     * Link bugs.
+     * 
+     * @param  int    $planID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @access public
+     * @return void
+     */
+    public function linkBug($planID = 0, $browseType = '', $param = 0)
+    {
+        $this->session->set('bugList', $this->app->getURI(true));
+
+        if(!empty($_POST['bugs'])) $this->productplan->linkBug($planID);
+
+        $this->loadModel('bug');
+        $plan = $this->productplan->getByID($planID);
+        $this->commonAction($plan->product);
+        $products  = $this->product->getPairs();
+        $productID = $plan->product;
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Build the search form. */
+        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID={$plan->product}&browseType=bySearch&queryID=myQueryID");
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID);
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id');
+            foreach($allBugs as $key => $bug)
+            {
+                if($bug->status != 'active') unset($allBugs[$key]);
+            }
+        }
+        else
+        {
+            $projects = $this->loadModel('project')->getPairs();
+            $projects[0] = '';
+            $allBugs= $this->loadModel('bug')->getAllBugs($this->view->product->id, $projects, 'id_desc');
+        }
+
+        $this->view->title      = $this->lang->productplan->linkBug;
+        $this->view->position[] = $this->lang->productplan->linkBug;
+        $this->view->allBugs    = $allBugs;
+        $this->view->planBugs   = $this->bug->getPlanBugs($planID);
+        $this->view->products   = $products;
+        $this->view->plan       = $plan;
+        $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Unlink story 
+     * 
+     * @param  int    $bugID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
+    public function unlinkBug($bugID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->productplan->confirmUnlinkBug, $this->createLink('productplan', 'unlinkbug', "bugID=$bugID&confirm=yes")));
+        }
+        else
+        {
+            $this->productplan->unlinkBug($bugID);
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * Batch unlink story. 
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkBug($confirm = 'no')
+    {
+        foreach($this->post->unlinkBugs as $bugID)
+        {
+            $this->productplan->unlinkBug($bugID);
+        }
+        die(js::reload('parent'));
+    }
 }

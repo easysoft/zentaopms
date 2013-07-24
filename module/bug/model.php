@@ -123,6 +123,29 @@ class bugModel extends model
     }
 
     /**
+     * Get bug list of a plan.
+     * 
+     * @param  int    $planID 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return void
+     */
+    public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    {
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('plan')->eq((int)$planID)
+            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        
+        return $bugs;
+    }
+
+    /**
      * Get info of a bug.
      * 
      * @param  int    $bugID 
@@ -999,12 +1022,15 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getAllBugs($productID, $projects, $orderBy, $pager)
+    public function getAllBugs($productID, $projects, $orderBy, $pager = null)
     {
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
-            ->andWhere('project')->in(array_keys($projects))
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+        $bugs = $this->dao->select('t1.*, t2.title as planTitle')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t1.project')->in(array_keys($projects))
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll(); 
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 

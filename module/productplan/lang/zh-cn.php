@@ -22,8 +22,15 @@ $lang->productplan->batchUnlinkStory = "批量移除";
 $lang->productplan->linkedStories    = '已关联需求列表';
 $lang->productplan->unlinkedStories  = '未关联需求列表';
 
+$lang->productplan->linkBug          = "关联Bug";
+$lang->productplan->unlinkBug        = "移除需求";
+$lang->productplan->batchUnlinkBug   = "批量移除";
+$lang->productplan->linkedBugs       = '已关联Bug列表';
+$lang->productplan->unlinkedBugs     = '未关联Bug列表';
+
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该需求吗？";
+$lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
 
 $lang->productplan->basicInfo ='基本信息';
 

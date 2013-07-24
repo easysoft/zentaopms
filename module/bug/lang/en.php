@@ -25,6 +25,7 @@ $lang->bug->severityAB       = 'S';
 $lang->bug->pri              = 'Priority';
 $lang->bug->type             = 'Type';
 $lang->bug->os               = 'OS';
+$lang->bug->plan             = 'Plan';
 $lang->bug->hardware         = 'Hardware';
 $lang->bug->browser          = 'Browser';
 $lang->bug->machine          = 'Machine';

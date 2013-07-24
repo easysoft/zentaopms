@@ -25,6 +25,7 @@ $lang->bug->severityAB       = '级别';
 $lang->bug->pri              = '优先级';
 $lang->bug->type             = 'Bug类型';
 $lang->bug->os               = '操作系统';
+$lang->bug->plan             = '所属计划';
 $lang->bug->hardware         = '硬件平台';
 $lang->bug->browser          = '浏览器';
 $lang->bug->machine          = '机器硬件';
