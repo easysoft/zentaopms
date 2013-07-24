@@ -57,7 +57,7 @@
   </table>
 </form>
 
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchUnlinkBug');?>" id='linkedBugsForm'>
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>" id='linkedBugsForm'>
   <table class='table-1 tablesorter a-center fixed'> 
     <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedBugs;?></caption>
     <thead>

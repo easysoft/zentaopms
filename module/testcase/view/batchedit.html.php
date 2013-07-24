@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit');?>">
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit');?>">
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></caption>
     <tr>

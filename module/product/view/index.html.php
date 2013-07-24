@@ -26,7 +26,7 @@
   </tr>
 </table>
 <?php else:?>
-<form method='post' action='<?php echo $this->inLink('batchEdit', "productID=$productID");?>'>
+<form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
   <table class='table-1 colored fixed'>
     <tr class='colhead'>
       <th class='w-id'>   <?php echo $lang->idAB;?></th>

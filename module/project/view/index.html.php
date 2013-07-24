@@ -19,7 +19,7 @@
   <?php echo html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']);?>
   <?php echo html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->statusList['done']);?>
 </h3>
-<form method='post' action='<?php echo $this->inLink('batchEdit', "projectID=$projectID");?>'>
+<form method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
 <table class='table-1 fixed colored'>
   <tr class='colhead'>
     <th class='w-id'>   <?php echo $lang->idAB;?></th>

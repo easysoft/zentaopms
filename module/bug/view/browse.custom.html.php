@@ -11,7 +11,7 @@
     </td>
     <td class='divider'></td>
     <td>
-      <form method='post' action='<?php echo $this->inLink('batchEdit', "productID=$productID");?>'>
+      <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
       <?php include './buglist.custom.html.php'?>
       </form>
     </td>

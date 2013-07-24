@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo $this->inLink('batchEdit');?>'>
+<form method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
   <table class='table-1 colored fixed'>
     <tr class='colhead'>
       <th class='w-id'>   <?php echo $lang->idAB;?></th>
