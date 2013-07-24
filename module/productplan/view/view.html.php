@@ -27,6 +27,7 @@
          $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
          if(!$plan->deleted)
          {
+            common::printIcon('productplan', 'linkBug',  "planID=$plan->id");
             common::printIcon('productplan', 'linkStory',"planID=$plan->id");
             common::printIcon('productplan', 'edit',     "planID=$plan->id");
             common::printIcon('productplan', 'delete',   "planID=$plan->id", '', 'button', '', 'hiddenwin');
