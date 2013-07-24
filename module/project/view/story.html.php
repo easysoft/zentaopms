@@ -110,7 +110,7 @@
                   echo html::commonButton($lang->close, "onclick=\"changeAction('projectStoryForm', 'batchClose', '$actionLink')\"");
               }
           }
-          printf($lang->product->storySummary, count($stories), $totalEstimate);
+          echo $summary;
           ?>
           </div>
         </td>

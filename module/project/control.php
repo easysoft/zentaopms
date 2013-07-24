@@ -537,6 +537,7 @@ class project extends control
         $this->view->position   = $position;
         $this->view->productID  = $productID;
         $this->view->stories    = $stories;
+        $this->view->summary    = $this->product->summary($stories);
         $this->view->orderBy    = $orderBy;
         $this->view->storyTasks = $storyTasks;
         $this->view->tabID      = 'story';

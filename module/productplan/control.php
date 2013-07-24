@@ -145,6 +145,7 @@ class productplan extends control
         $this->view->position[] = $this->lang->productplan->view;
         $this->view->planStories= $this->loadModel('story')->getPlanStories($planID);
         $this->view->products   = $products;
+        $this->view->summary    = $this->product->summary($this->view->planStories);
         $this->view->plan       = $plan;
         $this->view->actions    = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

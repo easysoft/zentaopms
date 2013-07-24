@@ -593,8 +593,17 @@ class productModel extends model
     public function summary($stories)
     {
         $totalEstimate = 0.0;
-        foreach($stories as $key => $story) $totalEstimate += $story->estimate; 
-        return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate);
+        $storyIDs      = array();
+
+        foreach($stories as $key => $story)
+        {
+            $totalEstimate += $story->estimate;
+            $storyIDs[] = $story->id;
+        }
+
+        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIDs)->fetchAll();
+
+        return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, round(count($cases) / count($stories), 2) * 100 . "%");
     }
 
     /**
