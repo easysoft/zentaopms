@@ -364,7 +364,7 @@ class common extends control
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a($this->inLink('view', "ID={$preAndNext->next->$id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
+            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
             echo "</span>";
         }
     }
