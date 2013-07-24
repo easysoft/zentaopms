@@ -103,7 +103,7 @@
     <tfoot>
     <tr>
       <td colspan='9'>
-        <div class='a-left'>
+        <div class='f-left'>
         <?php 
         if(count($planStories) and $canBatchUnlink)
         {
@@ -112,7 +112,7 @@
         }
         ?>
         </div>
-        <div class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </div>
+        <div class='f-right'><?php echo $summary;?> </div>
       </td>
     </tr>
     </tfoot>
