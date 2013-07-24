@@ -39,13 +39,13 @@
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
         <th class='w-50px'>                  <?php echo $lang->story->taskCount;?></th>
-        <th class='w-80px {sorter:false}'>  <?php echo $lang->actions;?></th>
+        <th class='w-120px {sorter:false}'>  <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
       <?php
       $totalEstimate = 0;
-      $canBatchEdit = common::hasPriv('story', 'batchEdit');
+      $canBatchEdit  = common::hasPriv('story', 'batchEdit');
       $canBatchClose = common::hasPriv('story', 'batchClose');
       ?>
       <?php foreach($stories as $key => $story):?>
@@ -82,6 +82,8 @@
 
           $lang->task->batchCreate = $lang->project->batchWBS;
           common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list');
+
+          if($productID) common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'createCase');
 
           $lang->project->unlinkStory = $lang->unlink;
           common::printIcon('project', 'unlinkStory', $param, '', 'list', '', 'hiddenwin');
