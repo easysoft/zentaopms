@@ -13,7 +13,7 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/chosen.html.php';
-include '../../common/view/autocomplete.html.php';
+include '../../common/view/chosen.html.php';
 include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
@@ -25,7 +25,7 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('userList'               , array_keys($users));
+js::set('mailto'                 , $lang->bug->chosen->mailto);
 ?>
 
 <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>
@@ -119,6 +119,10 @@ js::set('userList'               , array_keys($users));
             <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
             <td><?php echo html::input('keywords', $bug->keywords, 'class="text-3"');?></td>
           </tr>
+          <tr>
+            <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="text-3" multiple');?></td>
+          </tr>
         </table>
       </fieldset>
 
@@ -185,10 +189,6 @@ js::set('userList'               , array_keys($users));
       <fieldset>
         <legend><?php echo $lang->bug->legendMisc;?></legend>
         <table class='table-1 a-left'>
-          <tr>
-            <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
-            <td><?php echo html::input('mailto', $bug->mailto, 'class="text-3"');?></td>
-          </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
             <td><?php echo html::input('linkBug', $bug->linkBug, 'class="text-3"');?></td>

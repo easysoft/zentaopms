@@ -13,12 +13,12 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
-include '../../common/view/autocomplete.html.php';
+include '../../common/view/chosen.html.php';
 include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
-js::set('userList', array_keys($users));
 js::set('page', 'create');
+js::set('mailto', $lang->bug->chosen->mailto);
 ?>
 
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
@@ -85,8 +85,8 @@ js::set('page', 'create');
       <th class='rowhead'><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
       <td>
         <?php 
-        echo html::input('mailto', $mailto, 'class=text-1');
-        if($contactLists) echo html::select('', $contactLists, '', "onchange=\"setMailto('mailto', this.value)\"");
+        echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), 'class=text-1 multiple');
+        if($contactLists) echo html::select('', $contactLists, '', "class='f-right' onchange=\"setMailto('mailto', this.value)\"");
         ?>
       </td>
     </tr>

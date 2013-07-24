@@ -359,5 +359,7 @@ $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</stron
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->mailto       = '输入用户名自动选择';
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
+
+$lang->bug->chosen = new stdClass();
+$lang->bug->chosen->mailto = '输入用户名自动选择...';

@@ -359,5 +359,7 @@ $lang->bug->action->tostory  = array('main' => '$date, To story by <strong>$acto
 $lang->bug->action->totask   = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->mailto       = 'you can input the user account to select users to mail to.';
 $lang->bug->placeholder->chooseBuilds = 'Choose builds...';
+
+$lang->bug->chosen = new stdClass();
+$lang->bug->chosen->mailto = 'Select users to mail...';
