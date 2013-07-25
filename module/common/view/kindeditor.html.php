@@ -53,9 +53,21 @@ $(document).ready(function()
                 uploadJson: createLink('file', 'ajaxUpload'),
                 allowFileManager:true,
                 langType:'<?php echo $editorLang?>',
-                afterBlur: function(){this.sync();}
+                afterBlur: function(){this.sync();},
+                afterCreate : function()
+                {
+                    if(!K.GECKO) return false;
+                    var doc = this.edit.doc; 
+                    K(doc.body).bind('paste', function()
+                    {
+                        setTimeout(function()
+                        {
+                            $.post(createLink('file', 'ajaxEditorImage'), {editor: K(doc.body).html()}, function(data){K(doc.body).html(data);})
+                        }, 80);
+                    });
+                }
             });
         });
-    })
+    });
 })
 </script>

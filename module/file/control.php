@@ -291,4 +291,19 @@ class file extends control
         $this->view->file = $this->file->getById($fileID);
         $this->display();
     }
+
+    /**
+     * Ajax replace editor image 
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxEditorImage()
+    {
+        if($_POST)
+        {
+            $data = $this->file->replaceEditorImage($this->post->editor);
+            echo str_replace('\"', '"', $data);
+        }
+    }
 }

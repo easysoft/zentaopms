@@ -236,4 +236,33 @@ class fileModel extends model
         }
     }
 
+    /**
+     * Replace editor image 
+     * 
+     * @param  string    $data 
+     * @access public
+     * @return string
+     */
+    public function replaceEditorImage($data)
+    {
+        preg_match_all('/<img src=\\\"(data:image\/(\w+);base64,(.+))\\\" .+ \/>/U', $data, $out);
+        foreach($out[3] as $id => $base64Image)
+        {
+            $imageData = base64_decode($base64Image);
+
+            $file['extension'] = $out[2][$id];
+            $file['pathname']  = $this->setPathName($id, $file['extension']);
+            $file['size']      = strlen($imageData);
+            $file['addedBy']   = $this->app->user->account;
+            $file['addedDate'] = helper::today();
+            $file['title']     = 'Paste in editor';
+
+            file_put_contents($this->savePath . $file['pathname'], $imageData);
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+            $data = str_replace($out[1][$id], $this->webPath . $file['pathname'], $data);
+        }
+
+        return $data;
+    }
 }
