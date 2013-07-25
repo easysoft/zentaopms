@@ -39,14 +39,13 @@ mv phpmyadmin/config.inc.php.3308 phpmyadmin/config.inc.php
 # change directory permissions.
 chmod a+rx lampp
 chown nobody -R var/mysql
-chmod 777 tmp
+chmod 777 temp
 chmod a+rx -R zentao
 chmod 777 -R zentao/tmp
 chmod 777 -R zentao/www/data
 chmod 777 zentao/module
 find zentao/ -name ext |xargs chmod -R 777
 
-# init the shells in zentao/bin
 # init the shells in zentao/bin
 if [ ! -f ./zentao/bin/backup.sh ]; then  
   ip=`ifconfig |grep inet|head -n 1 |awk -F':' '{print $2}' |awk -F ' ' '{print $1}'`
@@ -55,4 +54,5 @@ if [ ! -f ./zentao/bin/backup.sh ]; then
 fi  
 
 # start apache, mysql.
-./lampp start
+./lampp startapache
+./lampp startmysql

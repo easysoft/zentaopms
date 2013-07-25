@@ -73,12 +73,14 @@ class testcaseModel extends model
     }
     
     /**
-     * Create a batch case.
+     * Batch create cases.
      * 
+     * @param  int    $productID 
+     * @param  int    $storyID 
      * @access public
      * @return void
      */
-    function batchCreate($productID)
+    function batchCreate($productID, $storyID)
     {
         $now   = helper::now();
         $cases = fixer::input('post')->get();
@@ -90,7 +92,7 @@ class testcaseModel extends model
                 $data[$i]->product    = $productID;
                 $data[$i]->module     = $cases->module[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->module) : $cases->module[$i];
                 $data[$i]->type       = $cases->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $cases->type[$i]; 
-                $data[$i]->story      = $cases->story[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->story) : $cases->story[$i]; 
+                $data[$i]->story      = $storyID ? $storyID : ($cases->story[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->story) : $cases->story[$i]); 
                 $data[$i]->title      = htmlspecialchars($cases->title[$i]);
                 $data[$i]->openedBy   = $this->app->user->account;
                 $data[$i]->openedDate = $now;

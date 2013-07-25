@@ -5,4 +5,5 @@ then
   exit
 fi
 
-./lampp stop
+./lampp stopapache
+./lampp stopmysql
