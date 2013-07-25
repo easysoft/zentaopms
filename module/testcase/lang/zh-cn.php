@@ -43,6 +43,7 @@ $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->allProduct       = '所有产品';
 $lang->testcase->fromBug          = '来源Bug';
 $lang->testcase->toBug            = '生成Bug';
+$lang->testcase->changed          = '用例变更';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID     = '编号';
@@ -62,6 +63,7 @@ $lang->testcase->browse             = "用例列表";
 $lang->testcase->import             = "导入用例";
 $lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出";
+$lang->testcase->confirmChange      = '确认用例变动';
 $lang->testcase->confirmStoryChange = '确认需求变动';
 
 $lang->testcase->deleteStep   = '删除';

@@ -171,7 +171,17 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->status;?></td>
-            <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+            <td>
+              <?php 
+              echo $lang->testcase->statusList[$case->status];
+              if($case->version > $case->currentVersion)
+              {
+                  echo " (<span class='warning'>{$lang->testcase->changed}</span> ";
+                  echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                  echo ")";
+              }
+              ?>
+            </td>
           </tr>
            <tr>
             <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></td>

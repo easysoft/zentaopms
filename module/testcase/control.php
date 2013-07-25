@@ -501,6 +501,21 @@ class testcase extends control
     }
 
     /**
+     * Confirm testcase changed. 
+     * 
+     * @param  int    $caseID 
+     * @access public
+     * @return void
+     */
+    public function confirmChange($caseID)
+    {
+        $case = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
+        $this->loadModel('action')->create('case', $caseID, 'caseconfirmed', '', $case->version);
+        die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+    }
+
+    /**
      * Confirm story changes.
      * 
      * @param  int   $caseID 

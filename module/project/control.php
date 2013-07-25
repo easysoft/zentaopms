@@ -146,6 +146,7 @@ class project extends control
         {
             $modules = $this->tree->getProjectModule($projectID, $productID);
             $tasks   = $this->loadModel('task')->getTasksByModule($projectID, $modules, $orderBy, $pager);
+            $this->view->productID = $productID;
         }
         elseif($status == 'byModule') 
         {
