@@ -6,7 +6,7 @@
 class control {}
 
 /* set module root path and included the resource of group module. */
-$moduleRoot = '../../module/';
+$moduleRoot = '../module/';
 include $moduleRoot . '/group/lang/resource.php';
 foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile)
 {
