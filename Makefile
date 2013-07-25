@@ -27,9 +27,8 @@ tgz:
 	rm -fr zentaopms/tmp/model/*
 	cp VERSION zentaopms/
 	# combine js and css files.
-	mkdir -p zentaopms/build/tools && cp build/tools/minifyfront.php zentaopms/build/tools/
-	cd zentaopms/build/tools/ && php ./minifyfront.php
-	rm -fr zentaopms/build
+	cp -fr tools zentaopms/tools && cd zentaopms/tools/ && php ./minifyfront.php
+	rm -fr zentaopms/tools
 	# create the restart file for svn.
 	# touch zentaopms/module/svn/restart
 	# delee the unused files.
