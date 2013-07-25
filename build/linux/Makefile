@@ -1,7 +1,5 @@
-VERSION=$(shell head -n 1 zentao/VERSION)
-
-all: 7z
-7z:
+all: common zentao
+common:
 	sudo ./lampp stop
 	sudo rm -fr logs/*
 	sudo rm -fr var/mysql/*.err
@@ -12,6 +10,8 @@ all: 7z
 	sudo mv lampp/Makefile .
 	sudo chmod a+rx lampp/start*
 	sudo chmod a+rx lampp/start88
+zentao:	
+	VERSION=$(shell head -n 1 zentao/VERSION)
 	sudo 7z a -sfx ZenTaoPMS.${VERSION}.linux.7z lampp
 clean:
 	sudo mv lampp lampp.bak
