@@ -17,7 +17,7 @@ $(document).ready(function()
                     }
                 }
             }
-            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + module + '&storyID=0&onlyOption=true');
+            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + module + '&storyID='+ $(this).val() + '&onlyOption=true');
             $(this).load(link, function()
             {
                 $('#story' + index).trigger("liszt:updated");
