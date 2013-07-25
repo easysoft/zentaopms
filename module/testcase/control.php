@@ -501,6 +501,21 @@ class testcase extends control
     }
 
     /**
+     * Confirm testcase changed. 
+     * 
+     * @param  int    $caseID 
+     * @access public
+     * @return void
+     */
+    public function confirmChange($caseID)
+    {
+        $case = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
+        $this->loadModel('action')->create('case', $caseID, 'caseconfirmed', '', $case->version);
+        die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+    }
+
+    /**
      * Confirm story changes.
      * 
      * @param  int   $caseID 
@@ -659,6 +674,198 @@ class testcase extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->display();
+    }
+
+    /**
+     * Export templet 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function exportTemplet($productID)
+    {
+        if($_POST)
+        {
+            $fields['module']       = $this->lang->testcase->module;
+            $fields['story']        = $this->lang->testcase->story;
+            $fields['title']        = $this->lang->testcase->title;
+            $fields['stepDesc']     = $this->lang->testcase->stepDesc;
+            $fields['stepExpect']   = $this->lang->testcase->stepExpect;
+            $fields['keywords']     = $this->lang->testcase->keywords;
+            $fields['type']         = $this->lang->testcase->type;
+            $fields['pri']          = $this->lang->testcase->pri;
+            $fields['stage']        = $this->lang->testcase->stage;
+            $fields['precondition'] = $this->lang->testcase->precondition;
+            $this->post->set('fields', $fields);
+            $this->post->set('kind', 'testcase');
+            $this->post->set('rows', array());
+            $this->post->set('extraNum',   $this->post->num);
+            $this->post->set('fileName', 'templet');
+            $this->fetch('file', 'export2csv', $_POST);
+        }
+
+        $this->display();
+    }
+
+    /**
+     * Import csv 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function import($productID)
+    {
+        if($_FILES)
+        {
+            $file = $this->loadModel('file')->getUpload('file');
+            $file = $file[0];
+
+            $fc = file_get_contents($file['tmpname']);
+            if( $this->post->encode != "utf-8")
+            {
+                if(function_exists('mb_convert_encoding'))
+                {
+                    $fc = @mb_convert_encoding($fc, 'utf-8', $this->post->encode);
+                }
+                elseif(function_exists('iconv'))
+                {
+                    $fc = @iconv($this->post->encode, 'utf-8', $fc);
+                }
+            }
+            file_put_contents($this->file->savePath . $file['pathname'], $fc);
+
+            $fileName = $this->file->savePath . $file['pathname'];
+            $this->session->set('importFile', $fileName);
+
+            die(js::locate(inlink('showImport', "productID=$productID"), 'parent.parent'));
+        }
+        $this->display();
+    }
+
+    /**
+     * Show import data
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function showImport($productID)
+    {
+        if($_POST)
+        {
+            $this->testcase->createFromImport($productID);
+            die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+        }
+        $this->testcase->setMenu($this->products, $productID);
+
+        $file       = $this->session->importFile;
+        $caseLang   = $this->lang->testcase;
+        $caseConfig = $this->config->testcase;
+        $fields     = explode(',', $caseConfig->exportFields);
+        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        $csv = file_get_contents($file);
+        $header = substr($csv, 0, strpos($csv, "\n"));
+        $csv    = substr($csv, strpos($csv, "\n") + 1);
+
+        foreach(explode(',', $header) as $title)
+        {
+            $field = array_search(trim($title), $fields);
+            $columnKey[] = $field ? $field : '';
+        }
+
+        $row = 1;
+        $endField = $field;
+        $caseData = array();
+        $stepData = array();
+        while($csv)
+        {
+            $case = new stdclass();
+            foreach($columnKey as $field)
+            {
+                $delimiter = $field == $endField ? "\n" : ',';
+                $pos       = strpos($csv, $delimiter);
+                $cellValue = substr($csv, 0, $pos);
+                if($field == 'story')
+                {
+                    $case->$field = substr($cellValue, 1);
+                }
+                elseif($field == 'module')
+                {
+                    $case->$field = array_search($cellValue, $modules);
+                }
+                elseif(in_array($field, $caseConfig->export->listFields))
+                {   
+                    $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
+                }
+                elseif($field != 'stepDesc' and $field != 'stepExpect')
+                {
+                    $case->$field = $cellValue;
+                }
+
+                else
+                {
+                    $delimiter = $csv[0] == '"' ? '",' : ',';
+                    $pos = strpos($csv, $delimiter);
+                    $cellValue = substr($csv, 0, $pos);
+                    if($cellValue[0] == '"')$cellValue = substr($cellValue, 1);
+
+                    $steps    = explode("\n", $cellValue);
+                    $stepKey  = str_replace('step', '', strtolower($field));
+                    $caseStep = array();
+                    foreach($steps as $step)
+                    {
+                        $step = trim($step);
+                        if(empty($step)) continue;
+                        if(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
+                        {
+                            $num     = $out[1];
+                            $sign    = $out[2];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strpos($step, $sign) + $signbit));
+                            if(!empty($step)) $caseStep[$num] = $step;
+                        }
+                        else
+                        {
+                            if(isset($num)) $caseStep[$num] .= "\n" . $step;
+                        }
+                    }
+                    unset($num);
+                    unset($sign);
+                    $stepData[$row][$stepKey] = $caseStep;
+                }
+                $csv = substr($csv, $pos + strlen($delimiter));
+            }
+            $caseData[$row] = $case;
+            unset($case);
+            $row++;
+        }
+
+        if(empty($caseData))
+        {
+            echo js::alert($this->lang->excel->noData);
+            die(js::locate($this->createLink('testcase', 'browse')));
+        }
+
+        $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
+        $this->view->position[] = $this->lang->testcase->showImport;
+
+        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->modules   = $modules;
+        $this->view->cases     = $this->dao->select('id, module, story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $this->view->caseData  = $caseData;
+        $this->view->stepData  = $stepData;
+        $this->view->productID = $productID;
+        $this->view->product   = $this->products[$productID];
         $this->display();
     }
 }

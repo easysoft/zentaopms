@@ -77,6 +77,7 @@ $lang->action->desc->commented      = '$date, commented by <strong>$actor</stron
 $lang->action->desc->activated      = '$date, activated by <strong>$actor</strong>.';
 $lang->action->desc->moved          = '$date, moved by <strong>$actor</strong>, previouse is "$extra".';
 $lang->action->desc->confirmed      = '$date, confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>.';
+$lang->action->desc->caseconfirmed  = '$date, confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>.';
 $lang->action->desc->bugconfirmed   = '$date, confirmed by <strong>$actor</strong>.';
 $lang->action->desc->frombug        = '$date, from Bug by <strong>$actor</strong> BugID:<strong>$extra</strong>.';
 $lang->action->desc->started        = '$date, started by <strong>$actor</strong>.';

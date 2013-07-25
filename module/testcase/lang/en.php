@@ -43,6 +43,7 @@ $lang->testcase->lastEditedDateAB = 'Last edited date';
 $lang->testcase->allProduct       = 'All product';
 $lang->testcase->fromBug          = 'From bug';
 $lang->testcase->toBug            = 'To bug';
+$lang->testcase->changed          = 'Changed';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID     = 'ID';
@@ -62,6 +63,8 @@ $lang->testcase->browse             = "Browse";
 $lang->testcase->import             = "Import";
 $lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export";
+$lang->testcase->export             = "Export";
+$lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 
 $lang->testcase->deleteStep   = 'Delete';

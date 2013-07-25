@@ -77,6 +77,7 @@ $lang->action->desc->commented      = '$date, 由 <strong>$actor</strong> 添加
 $lang->action->desc->activated      = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->moved          = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"。' . "\n";
 $lang->action->desc->confirmed      = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>。' . "\n";
+$lang->action->desc->caseconfirmed  = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->bugconfirmed   = '$date, 由 <strong>$actor</strong> 确认Bug。' . "\n";
 $lang->action->desc->frombug        = '$date, 由 <strong>$actor</strong> Bug转化而来，Bug编号为 <strong>$extra</strong>。';
 $lang->action->desc->started        = '$date, 由 <strong>$actor</strong> 启动。' . "\n";
