@@ -326,7 +326,7 @@ class treeModel extends model
             }
             else
             {
-                $menu .= "<li>" . html::a(helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id"), $product);
+                $menu .= "<li>" . html::a(helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id"), $product, '_self', "id='product$id'");
             }
 
             /* tree menu. */
