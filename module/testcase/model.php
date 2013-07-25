@@ -388,4 +388,154 @@ class testcaseModel extends model
 
         return true;
     }
+
+    /**
+     * Create from import 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function createFromImport($productID)
+    {
+        $this->loadModel('action');
+        $this->loadModel('story');
+        $this->loadModel('file');
+        $now = helper::now();
+
+        if(!empty($_POST['id']))
+        {
+            $oldSteps = $this->dao->select('t2.*')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.case')
+                ->where('t1.id')->in(($_POST['id']))
+                ->andWhere('t1.product')->eq($productID)
+                ->andWhere('t1.version=t2.version')
+                ->orderBy('t2.id')
+                ->fetchGroup('case');
+            $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
+        }
+
+        foreach($this->post->product as $key => $product)
+        {
+            dao::getError();
+            $caseData = new stdclass();
+
+            $caseData->product      = $product;
+            $caseData->module       = $this->post->module[$key];
+            $caseData->story        = (int)$this->post->story[$key];
+            $caseData->title        = $this->post->title[$key];
+            $caseData->pri          = (int)$this->post->pri[$key];
+            $caseData->type         = $this->post->type[$key];
+            $caseData->status       = $this->post->status[$key];
+            $caseData->stage        = join(',', $this->post->stage[$key]);
+            $caseData->frequency    = $this->post->frequency[$key];
+            $caseData->linkCase     = $this->post->linkCase[$key];
+            $caseData->precondition = $this->post->precondition[$key];
+
+            if(isset($this->config->testcase->create->requiredFields))
+            {
+                $requiredFields = explode(',', $this->config->testcase->create->requiredFields);
+                $invalid = false;
+                foreach($requiredFields as $requiredField)
+                {
+                    $requiredField = trim($requiredField);
+                    if(empty($caseData->$requiredField)) $invalid = true;
+                }
+                if($invalid) continue;
+            }
+
+            if(!empty($_POST['id'][$key]))
+            {
+                $caseID      = $this->post->id[$key];
+                $stepChanged = false;
+                $steps       = array();
+                if(!isset($oldSteps[$caseID])) continue;
+                $oldStep     = $oldSteps[$caseID];
+
+                /* Remove the empty setps in post. */
+                foreach($this->post->desc[$key] as $id => $desc)
+                {
+                    $desc = trim($desc);
+                    if(empty($desc))continue;
+                    $step = new stdclass();
+                    $step->desc = $desc;
+                    $step->expect = trim($this->post->expect[$key][$id]);
+                    $steps[] = $step;
+                    unset($step);
+                }
+
+                /* If step count changed, case changed. */
+                if(count($oldStep) != count($steps))
+                {
+                    $stepChanged = true;
+                }
+                else
+                {
+                    /* Compare every step. */
+                    foreach($oldStep as $id => $oldStep)
+                    {
+                        if(trim($oldStep->desc) != trim($steps[$id]->desc) or trim($oldStep->expect) != $steps[$id]->expect)
+                        {
+                            $stepChanged = true;
+                            break;
+                        }
+                    }
+                }
+
+                $version = $stepChanged ? $oldStep->version + 1 : $oldStep->version;
+                $caseData->version        = $version;
+                $changes = common::createChanges($oldCases[$caseID], $caseData); 
+                if(!$changes and !$stepChanged) continue;
+
+                if($changes or $stepChanged)
+                {
+                    $caseData->lastEditedBy   = $this->app->user->account;
+                    $caseData->lastEditedDate = $now;
+                    $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
+                    if($stepChanged)
+                    {
+                        foreach($steps as $id => $step)
+                        {
+                            $step = (array)$step;
+                            if(empty($step['desc'])) continue;
+                            $stepData = '';
+                            $stepData->case    = $caseID;
+                            $stepData->version = $version;
+                            $stepData->desc    = htmlspecialchars($step['desc']);
+                            $stepData->expect  = htmlspecialchars($step['expect']);
+                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                        }
+                    }
+                    $oldCases[$caseID]->steps = $this->joinStep($oldSteps[$caseID]);
+                    $caseData->steps = $this->joinStep($steps);
+                    $changes = common::createChanges($oldCases[$caseID], $caseData);
+                    $actionID = $this->action->create('case', $caseID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+            else
+            {
+                $caseData->version    = 1;
+                $caseData->openedBy   = $this->app->user->account;
+                $caseData->openedDate = $now;
+                $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
+
+                if(!dao::isError())
+                {
+                    $caseID = $this->dao->lastInsertID();
+                    foreach($this->post->desc[$key] as $id => $desc)
+                    {
+                        $desc = trim($desc);
+                        if(empty($desc)) continue;
+                        $stepData->case = $caseID;
+                        $stepData->version = 1;
+                        $stepData->desc    = htmlspecialchars($desc);
+                        $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
+                        $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                    }
+                    $this->action->create('case', $caseID, 'Opened');
+                }
+            }
+        }
+    }
 }
