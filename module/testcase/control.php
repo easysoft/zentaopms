@@ -793,8 +793,12 @@ class testcase extends control
             foreach($columnKey as $field)
             {
                 $delimiter = $field == $endField ? "\n" : ',';
+                $delimiter = $csv[0] == '"' ? '"' . $delimiter : $delimiter;
                 $pos       = strpos($csv, $delimiter);
                 $cellValue = substr($csv, 0, $pos);
+
+                if($cellValue and $cellValue[0] == '"')$cellValue = substr($cellValue, 1);
+
                 if($field == 'story')
                 {
                     $case->$field = substr($cellValue, 1);
@@ -814,11 +818,6 @@ class testcase extends control
 
                 else
                 {
-                    $delimiter = $csv[0] == '"' ? '",' : ',';
-                    $pos = strpos($csv, $delimiter);
-                    $cellValue = substr($csv, 0, $pos);
-                    if($cellValue[0] == '"')$cellValue = substr($cellValue, 1);
-
                     $steps    = explode("\n", $cellValue);
                     $stepKey  = str_replace('step', '', strtolower($field));
                     $caseStep = array();
