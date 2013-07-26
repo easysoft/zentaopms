@@ -62,7 +62,11 @@ $(document).ready(function()
                     {
                         setTimeout(function()
                         {
-                            $.post(createLink('file', 'ajaxEditorImage'), {editor: K(doc.body).html()}, function(data){K(doc.body).html(data);})
+                            var html = K(doc.body).html();
+                            if(html.search(/<img src="data:.+;base64,/) > -1)
+                            {
+                                $.post(createLink('file', 'ajaxEditorImage'), {editor: html}, function(data){K(doc.body).html(data);});
+                            }
                         }, 80);
                     });
                 }
