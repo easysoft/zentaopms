@@ -1,8 +1,6 @@
 VERSION=$(shell head -n 1 VERSION)
 
 all: tgz
-linux: tgz build4linux
-
 clean:
 	rm -fr zentaopms
 	rm -fr *.tar.gz
