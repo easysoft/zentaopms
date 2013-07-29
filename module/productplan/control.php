@@ -276,6 +276,7 @@ class productplan extends control
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'linkBug', "planID=$planID&browseType=bySearch&queryID=myQueryID");   
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
