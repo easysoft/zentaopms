@@ -28,6 +28,7 @@ $lang->testcase->lastEditedBy     = '最后修改者';
 $lang->testcase->lastEditedDate   = '最后修改日期';
 $lang->testcase->version          = '用例版本';
 $lang->testcase->result           = '测试结果';
+$lang->testcase->lastRunResult    = '结果';
 $lang->testcase->real             = '实际情况';
 $lang->testcase->keywords         = '关键词';
 $lang->testcase->files            = '附件';

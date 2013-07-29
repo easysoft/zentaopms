@@ -28,6 +28,7 @@ $lang->testcase->lastEditedBy     = 'Last edited by';
 $lang->testcase->lastEditedDate   = 'Last edited date';
 $lang->testcase->version          = 'Version';
 $lang->testcase->result           = 'Result';
+$lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->real             = 'Real';
 $lang->testcase->keywords         = 'Keywords';
 $lang->testcase->files            = 'Files';
