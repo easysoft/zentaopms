@@ -37,8 +37,8 @@
     <td><?php echo $plan->end;?></td>
     <td class='a-center'>
       <?php
-      common::printIcon('productplan', 'linkBug', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list');
+      common::printIcon('productplan', 'linkBug', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'delete', "planID=$plan->id", '', 'list', '', 'hiddenwin');
       ?>

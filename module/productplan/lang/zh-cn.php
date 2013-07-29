@@ -9,13 +9,16 @@
  * @version     $Id: zh-cn.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->productplan->common    = '产品计划';
-$lang->productplan->browse    = "浏览计划";
-$lang->productplan->index     = "计划列表";
-$lang->productplan->create    = "创建计划";
-$lang->productplan->edit      = "编辑计划";
-$lang->productplan->delete    = "删除计划";
-$lang->productplan->view      = "计划详情";
+$lang->productplan->common     = '产品计划';
+$lang->productplan->browse     = "浏览计划";
+$lang->productplan->index      = "计划列表";
+$lang->productplan->create     = "创建计划";
+$lang->productplan->edit       = "编辑计划";
+$lang->productplan->delete     = "删除计划";
+$lang->productplan->view       = "计划详情";
+$lang->productplan->bugSummary = "本页共 <strong>%s</strong> 个Bug";
+$lang->productplan->basicInfo  = '基本信息';
+
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->linkStory        = "关联需求";
 $lang->productplan->unlinkStory      = "移除需求";
@@ -32,8 +35,6 @@ $lang->productplan->unlinkedBugs     = '未关联Bug列表';
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该需求吗？";
 $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
-
-$lang->productplan->basicInfo ='基本信息';
 
 $lang->productplan->id      = '编号';
 $lang->productplan->product = '产品';
