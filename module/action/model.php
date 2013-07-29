@@ -25,17 +25,18 @@ class actionModel extends model
      * @param  string $actionType 
      * @param  string $comment 
      * @param  string $extra        the extra info of this action, according to different modules and actions, can set different extra.
+     * @param  string $actor
      * @access public
      * @return int
      */
-    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
+    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '')
     {
         $action = new stdclass();
 
         $objectType = str_replace('`', '', $objectType);
         $action->objectType = strtolower($objectType);
         $action->objectID   = $objectID;
-        $action->actor      = $this->app->user->account;
+        $action->actor      = $actor ? $actor : $this->app->user->account;
         $action->action     = strtolower($actionType);
         $action->date       = helper::now();
         $action->comment    = $comment;

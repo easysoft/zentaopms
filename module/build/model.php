@@ -120,7 +120,7 @@ class buildModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->remove('allchecker')
-            ->add('project', (int)$projectID)->get();
+            ->add('project', (int)$projectID)->remove('resolvedBy')->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
         if(!dao::isError())
         {
@@ -145,7 +145,7 @@ class buildModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->remove('allchecker')
+            ->remove('allchecker,resolvedBy')
             ->get();
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
@@ -172,12 +172,18 @@ class buildModel extends model
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
         $now  = helper::now();
 
+        $resolvedPairs = array();
+        foreach($this->post->bugs as $key => $bugID)
+        {
+            if(isset($_POST['resolvedBy'][$key]))$resolvedPairs[$bugID] = $this->post->resolvedBy[$key];
+        }
+
         $this->loadModel('action');
         foreach($bugs as $bug)
         {
             if($bug->status == 'resolved') continue;
 
-            $bug->resolvedBy     = $this->app->user->account;
+            $bug->resolvedBy     = $resolvedPairs[$bug->id];
             $bug->resolvedDate   = $now;
             $bug->status         = 'resolved';
             $bug->confirmed      = 1;
@@ -188,7 +194,7 @@ class buildModel extends model
             $bug->resolution     = 'fixed';
             $bug->resolvedBuild  = $build->name;
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
-            $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed');
+            $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed', $bug->resolvedBy);
         }
     }
 }
