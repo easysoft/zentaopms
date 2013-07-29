@@ -174,7 +174,7 @@
             <td>
               <?php 
               echo $lang->testcase->statusList[$case->status];
-              if($case->version > $case->currentVersion)
+              if($case->version > $case->currentVersion and $from == 'testtask')
               {
                   echo " (<span class='warning'>{$lang->testcase->changed}</span> ";
                   echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');

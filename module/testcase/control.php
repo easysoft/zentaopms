@@ -323,12 +323,13 @@ class testcase extends control
     /**
      * View a test case.
      * 
-     * @param  int   $caseID 
-     * @param  int   $version 
+     * @param  int    $caseID 
+     * @param  int    $version 
+     * @param  string $from 
      * @access public
      * @return void
      */
-    public function view($caseID, $version = 0)
+    public function view($caseID, $version = 0, $from = 'testcase')
     {
         $case = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -341,6 +342,7 @@ class testcase extends control
         $this->view->position[] = $this->lang->testcase->view;
 
         $this->view->case           = $case;
+        $this->view->from           = $from;
         $this->view->version        = $version ? $version : $case->version;
         $this->view->productName    = $this->products[$productID];
         $this->view->modulePath     = $this->tree->getParents($case->module);
