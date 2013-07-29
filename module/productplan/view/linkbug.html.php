@@ -95,7 +95,7 @@
       <td colspan='7' class='a-left'>
       <?php 
       echo html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm');
-      echo html::submitButton($lang->productplan->batchUnlinkBug);
+      echo html::submitButton($lang->productplan->batchUnlink);
       ?>
       </td>
     </tr>

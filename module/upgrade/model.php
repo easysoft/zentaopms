@@ -90,6 +90,9 @@ class upgradeModel extends model
                 $this->addPriv4_1();
                 $this->processTaskFinish();
                 $this->deleteCompany();
+            case '4_2_beta':
+                $this->execSQL($this->getUpgradeFile('4.2'));
+
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
 

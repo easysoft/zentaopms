@@ -165,7 +165,7 @@ class mailModel extends model
         $this->mta = self::$instance;
         $this->mta->CharSet = $this->config->charset;
         $funcName = "set{$this->config->mail->mta}";
-        if(!method_exists($this, $funcName)) $this->app->error("The MTA {$this->config->mail->mta} not supported now.", __FILE__, __LINE__, $exit = true);
+        if(!method_exists($this, $funcName)) $this->app->triggerError("The MTA {$this->config->mail->mta} not supported now.", __FILE__, __LINE__, $exit = true);
         $this->$funcName();
     }
 

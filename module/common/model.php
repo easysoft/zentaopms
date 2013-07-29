@@ -55,7 +55,7 @@ class commonModel extends model
         else
         {
             $company = $this->loadModel('company')->getFirst();
-            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
+            if(!$company) $this->app->triggerError(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
             $this->session->set('company', $company);
             $this->app->company  = $company;
         }

@@ -103,7 +103,7 @@
       <td colspan='9' class='a-left'>
       <?php 
       echo html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm');
-      echo html::submitButton($lang->productplan->batchUnlinkStory);
+      echo html::submitButton($lang->productplan->batchUnlink);
       ?>
       </td>
     </tr>
