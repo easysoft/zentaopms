@@ -77,7 +77,7 @@ $(document).ready(function()
                                 var contentType = arr[0].split(";")[0].split(":")[1];
 
                                 html = '<img src="' + result + '" alt="" />';
-                                $.post(createLink('file', 'ajaxEditorImage'), {editor: html}, function(data){cmd.inserthtml(data);});
+                                $.post(createLink('file', 'ajaxPasteImage'), {editor: html}, function(data){cmd.inserthtml(data);});
                             };
 
                             reader.readAsDataURL(file);
@@ -94,7 +94,7 @@ $(document).ready(function()
                                 var html = K(doc.body).html();
                                 if(html.search(/<img src="data:.+;base64,/) > -1)
                                 {
-                                    $.post(createLink('file', 'ajaxEditorImage'), {editor: html}, function(data){K(doc.body).html(data);});
+                                    $.post(createLink('file', 'ajaxPasteImage'), {editor: html}, function(data){K(doc.body).html(data);});
                                 }
                             }, 80);
                         });

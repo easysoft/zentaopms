@@ -237,30 +237,31 @@ class fileModel extends model
     }
 
     /**
-     * Replace editor image 
+     * Paste image in kindeditor at firefox and chrome. 
      * 
      * @param  string    $data 
      * @access public
      * @return string
      */
-    public function replaceEditorImage($data)
+    public function pasteImage($data)
     {
-        preg_match_all('/<img src=\\\"(data:image\/(\w+);base64,(.+))\\\" .+ \/>/U', $data, $out);
-        foreach($out[3] as $id => $base64Image)
+        ini_set('pcre.backtrack_limit', strlen($data));
+        preg_match_all('/<img src=\\\"(data:image\/(\S+);base64,(\S+))\\\" .+ \/>/U', $data, $out);
+        foreach($out[3] as $key => $base64Image)
         {
             $imageData = base64_decode($base64Image);
 
-            $file['extension'] = $out[2][$id];
-            $file['pathname']  = $this->setPathName($id, $file['extension']);
+            $file['extension'] = $out[2][$key];
+            $file['pathname']  = $this->setPathName($key, $file['extension']);
             $file['size']      = strlen($imageData);
             $file['addedBy']   = $this->app->user->account;
             $file['addedDate'] = helper::today();
-            $file['title']     = 'Paste in editor';
+            $file['title']     = basename($file['pathname']);
 
             file_put_contents($this->savePath . $file['pathname'], $imageData);
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-            $data = str_replace($out[1][$id], $this->webPath . $file['pathname'], $data);
+            $data = str_replace($out[1][$key], $this->webPath . $file['pathname'], $data);
         }
 
         return $data;
