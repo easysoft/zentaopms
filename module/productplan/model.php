@@ -33,14 +33,15 @@ class productplanModel extends model
      * 
      * @param  int    $product 
      * @param  object $pager
+     * @param  string $orderBy
      * @access public
      * @return object
      */
-    public function getList($product = 0, $pager = null)
+    public function getList($product = 0, $pager = null, $orderBy)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin desc')
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
     }

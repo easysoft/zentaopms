@@ -17,11 +17,11 @@ function loadProjectBuilds(productID, projectID, index)
 {
     if(projectID)
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild');
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=''&index=" + index);
     }
     else
     {
-        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild');
+        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=''&index=" + index);
     }
 
     $.get(link, function(builds)
