@@ -71,3 +71,4 @@ $lang->upgrade->fromVersions['4_0_beta2'] = '4.0 BETA2';
 $lang->upgrade->fromVersions['4_0']       = '4.0';
 $lang->upgrade->fromVersions['4_0_1']     = '4.0.1';
 $lang->upgrade->fromVersions['4_1']       = '4.1';
+$lang->upgrade->fromVersions['4_2_beta']  = '4.2.beta';
