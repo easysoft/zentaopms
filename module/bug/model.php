@@ -85,7 +85,7 @@ class bugModel extends model
             $bug->openedDate  = $now;
             $bug->product     = $productID;
             $bug->module      = $data->modules[$i];
-            $bug->project     = $data->projects[$i];
+            $bug->project     = $data->projects[$i] ? $data->projects[$i] : 0;
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->title       = $data->titles[$i];
             $bug->steps       = $data->stepses[$i];

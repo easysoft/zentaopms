@@ -11,19 +11,19 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1 tablesorter fixed' id="productplan">
   <caption class='caption-tr'>
     <div class='f-left'><?php echo $lang->productplan->browse;?></div>
     <div class='f-right'><?php common::printIcon('productplan', 'create', "productID=$product->id");?></div>
   </caption>
   <thead>
+  <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
-    <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th><?php echo $lang->productplan->title;?></th>
-    <th class='w-p50'><?php echo $lang->productplan->desc;?></th>
-    <th class='w-100px'><?php echo $lang->productplan->begin;?></th>
-    <th class='w-100px'><?php echo $lang->productplan->end;?></th>
+    <th class='w-id'>    <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+    <th>                 <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+    <th class='w-p50'>   <?php common::printOrderLink('desc',  $orderBy, $vars, $lang->productplan->desc);?></th>
+    <th class='w-100px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+    <th class='w-100px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
     <th class="w-80px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>

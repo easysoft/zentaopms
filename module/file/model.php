@@ -236,4 +236,34 @@ class fileModel extends model
         }
     }
 
+    /**
+     * Paste image in kindeditor at firefox and chrome. 
+     * 
+     * @param  string    $data 
+     * @access public
+     * @return string
+     */
+    public function pasteImage($data)
+    {
+        ini_set('pcre.backtrack_limit', strlen($data));
+        preg_match_all('/<img src=\\\"(data:image\/(\S+);base64,(\S+))\\\" .+ \/>/U', $data, $out);
+        foreach($out[3] as $key => $base64Image)
+        {
+            $imageData = base64_decode($base64Image);
+
+            $file['extension'] = $out[2][$key];
+            $file['pathname']  = $this->setPathName($key, $file['extension']);
+            $file['size']      = strlen($imageData);
+            $file['addedBy']   = $this->app->user->account;
+            $file['addedDate'] = helper::today();
+            $file['title']     = basename($file['pathname']);
+
+            file_put_contents($this->savePath . $file['pathname'], $imageData);
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+            $data = str_replace($out[1][$key], $this->webPath . $file['pathname'], $data);
+        }
+
+        return $data;
+    }
 }

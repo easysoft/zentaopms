@@ -14,6 +14,9 @@ $config->testcase->editor = new stdclass();
 $config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleTools');
 
+$config->testcase->export   = new stdclass();
+$config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');
+
 $config->testcase->exportFields = '
     id, product, module, story,
     title, precondition, stepDesc, stepExpect, keywords,

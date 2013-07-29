@@ -1,8 +1,6 @@
 VERSION=$(shell head -n 1 VERSION)
 
 all: tgz
-linux: tgz build4linux
-
 clean:
 	rm -fr zentaopms
 	rm -fr *.tar.gz
@@ -27,9 +25,8 @@ tgz:
 	rm -fr zentaopms/tmp/model/*
 	cp VERSION zentaopms/
 	# combine js and css files.
-	mkdir -p zentaopms/build/tools && cp build/tools/minifyfront.php zentaopms/build/tools/
-	cd zentaopms/build/tools/ && php ./minifyfront.php
-	rm -fr zentaopms/build
+	cp -fr tools zentaopms/tools && cd zentaopms/tools/ && php ./minifyfront.php
+	rm -fr zentaopms/tools
 	# create the restart file for svn.
 	# touch zentaopms/module/svn/restart
 	# delee the unused files.
@@ -65,17 +62,3 @@ phpdoc:
 	phpdoc -d bin,framework,config,lib,module,www -t api.chm -o chm:default:default -ti ZenTaoPMSAPI²Î¿¼ÊÖ²á -s on -pp on -i *test*
 doxygen:
 	doxygen doc/doxygen/doxygen.conf
-build4linux:	
-	unzip ZenTaoPMS.$(VERSION).zip
-	rm -fr ZenTaoPMS.$(VERSION).zip
-	# build xmapp.
-	cd ./build/linux/ && ./buildxmapp.sh $(xampp)
-	mv ./build/linux/lampp ./
-saas:	
-	mkdir backup
-	mkdir tmp/model
-	mkdir tmp/extension
-	mkdir www/data/upload -p
-	chmod 777 backup
-	chmod 777 -R tmp
-	chmod 777 -R www/data

@@ -278,6 +278,8 @@ class my extends control
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.status')->ne('done')
                 ->andWhere('t3.status')->ne('done')
+                ->andWhere('t3.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($type == 'donebyme')
@@ -286,6 +288,7 @@ class my extends control
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.status')->eq('done')
+                ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($type == 'openedbyme')

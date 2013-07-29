@@ -88,7 +88,7 @@ class file extends control
         if($mode == 'open')
         {
             if(file_exists($file->realPath))$this->locate($file->webPath);
-            $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+            $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
         }
         else
         {
@@ -101,7 +101,7 @@ class file extends control
             }
             else
             {
-                $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+                $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
             }
         }
     }
@@ -290,5 +290,20 @@ class file extends control
 
         $this->view->file = $this->file->getById($fileID);
         $this->display();
+    }
+
+    /**
+     * Paste image in kindeditor at firefox and chrome. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxPasteImage()
+    {
+        if($_POST)
+        {
+            $data = $this->file->pasteImage($this->post->editor);
+            echo str_replace('\"', '"', $data);
+        }
     }
 }
