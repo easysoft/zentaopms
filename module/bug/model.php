@@ -230,6 +230,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->setDefault('project,module,project,story,task,duplicateBug', 0)
             ->setDefault('openedBuild', '')
+            ->setDefault('plan', 0)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')

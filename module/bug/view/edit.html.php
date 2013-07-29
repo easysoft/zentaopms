@@ -20,6 +20,7 @@ js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
 js::set('changeProjectConfirmed' , false);
 js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
+js::set('planID'                 , $bug->plan);
 js::set('oldProjectID'           , $bug->project);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
@@ -82,7 +83,12 @@ js::set('mailto'                 , $lang->bug->chosen->mailto);
               <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
             </td>
           </tr>
-
+          <tr>
+            <td class='rowhead'><?php echo $lang->bug->productplan;?></td>
+            <td>
+              <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, 'class=select-3');?></span>
+            </td>
+          </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->type;?></td>
             <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, 'class=select-3');?>

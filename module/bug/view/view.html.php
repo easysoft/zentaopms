@@ -84,10 +84,6 @@
             <th class='rowhead'><?php echo $lang->bug->product;?></th>
             <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?>
           </tr>
-          <tr valign='middle'>
-            <th class='rowhead'><?php echo $lang->bug->productplan;?></th>
-            <td><?php if(!$bug->plan or !common::printLink('productplan', 'linkBug', "planID=$bug->plan", $bug->planName)) echo $bug->planName;?>
-          </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->bug->module;?></th>
             <td> 
@@ -106,6 +102,10 @@
               }
               ?>
             </td>
+          </tr>
+          <tr valign='middle'>
+            <th class='rowhead'><?php echo $lang->bug->productplan;?></th>
+            <td><?php if(!$bug->plan or !common::printLink('productplan', 'linkBug', "planID=$bug->plan", $bug->planName)) echo $bug->planName;?>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->type;?></td>
