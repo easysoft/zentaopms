@@ -76,7 +76,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               <?php printf('%03d', $run->case);?>
             </td>
             <td><span class='<?php echo 'pri' . $run->pri?>'><?php echo $run->pri?></span></td>
-            <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
+            <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask"), $run->title, '_blank');?>
             </td>
             <td><?php echo $lang->testcase->typeList[$run->type];?></td>
             <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>

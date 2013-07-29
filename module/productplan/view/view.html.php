@@ -27,8 +27,8 @@
          $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
          if(!$plan->deleted)
          {
-            common::printIcon('productplan', 'linkBug',  "planID=$plan->id");
             common::printIcon('productplan', 'linkStory',"planID=$plan->id");
+            common::printIcon('productplan', 'linkBug',  "planID=$plan->id");
             common::printIcon('productplan', 'edit',     "planID=$plan->id");
             common::printIcon('productplan', 'delete',   "planID=$plan->id", '', 'button', '', 'hiddenwin');
          }
@@ -109,11 +109,59 @@
         if(count($planStories) and $canBatchUnlink)
         {
             echo html::selectAll() . html::selectReverse();
-            echo html::submitButton($lang->productplan->batchUnlinkStory);
+            echo html::submitButton($lang->productplan->batchUnlink);
         }
         ?>
         </div>
         <div class='f-right'><?php echo $summary;?> </div>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</form>
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>">
+  <table class='table-1 tablesorter a-center fixed'>
+    <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedBugs;?></caption>
+    <thead>
+    <tr class='colhead'>
+      <th class='w-id'>    <?php echo $lang->idAB;?></th>
+      <th class='w-pri'>   <?php echo $lang->priAB;?></th>
+      <th>                 <?php echo $lang->bug->title;?></th>
+      <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
+      <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
+    </tr>
+    </thead>
+    <tbody>
+      <?php $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkBug');?>
+      <?php foreach($planBugs as $bug):?>
+      <tr>
+        <td class='a-center'>
+          <?php if($canBatchUnlink):?>
+          <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+          <?php endif;?>
+          <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
+        </td>
+        <td><span class='<?php echo 'pri' . $bug->pri?>'><?php echo $bug->pri;?></span></td>
+        <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+        <td><?php echo $users[$bug->openedBy];?></td>
+        <td><?php echo $users[$bug->assignedTo];?></td>
+        <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+        <td><?php common::printIcon('productplan', 'unlinkBug', "bug=$bug->id", '', 'list', '', 'hiddenwin');?></td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan='7'>
+        <div class='f-left'>
+          <?php 
+          echo html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm');
+          echo html::submitButton($lang->productplan->batchUnlink);
+          ?>
+        </div>
+        <div class='f-right'><?php echo sprintf($lang->productplan->bugSummary, count($planStories));?> </div>
       </td>
     </tr>
     </tfoot>

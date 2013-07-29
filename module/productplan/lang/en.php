@@ -9,30 +9,32 @@
  * @version     $Id: en.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->productplan->common    = 'Plan';
-$lang->productplan->browse    = "Browse";
-$lang->productplan->index     = "Index";
-$lang->productplan->create    = "Create";
-$lang->productplan->edit      = "Edit";
-$lang->productplan->delete    = "Delete";
-$lang->productplan->view      = "Info";
+$lang->productplan->common     = 'Plan';
+$lang->productplan->browse     = "Browse";
+$lang->productplan->index      = "Index";
+$lang->productplan->create     = "Create";
+$lang->productplan->edit       = "Edit";
+$lang->productplan->delete     = "Delete";
+$lang->productplan->view       = "Info";
+$lang->productplan->bugSummary = "Total %s bugs in this page";
+$lang->productplan->basicInfo  = 'Basic Info';
+
+$lang->productplan->batchUnlink      = "Batch Remove";
 $lang->productplan->linkStory        = "Link story";
 $lang->productplan->unlinkStory      = "Remove story";
-$lang->productplan->batchUnlinkStory = "Batch Remove";
+$lang->productplan->batchUnlinkStory = "Batch Remove Stories";
 $lang->productplan->linkedStories    = 'Stories linked';
 $lang->productplan->unlinkedStories  = 'Stories unlinked';
 
 $lang->productplan->linkBug          = "Link bug";
 $lang->productplan->unlinkBug        = "Remove bug";
-$lang->productplan->batchUnlinkBug   = "Batch Remove";
+$lang->productplan->batchUnlinkBug   = "Batch Remove Bugs";
 $lang->productplan->linkedBugs       = 'Bugs linked';
 $lang->productplan->unlinkedBugs     = 'Bugs unlinked';
 
 $lang->productplan->confirmDelete      = "Are you sure to delete this plan?";
 $lang->productplan->confirmUnlinkStory = "Are you sure to remove this story?";
 $lang->productplan->confirmUnlinkBug   = "Are you sure to remove this bug?";
-
-$lang->productplan->basicInfo ='Basic Info';
 
 $lang->productplan->id      = 'ID';
 $lang->productplan->product = 'Product';

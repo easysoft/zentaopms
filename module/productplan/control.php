@@ -143,15 +143,16 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product);
-        $products               = $this->product->getPairs();
-        $this->view->title      = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
-        $this->view->position[] = $this->lang->productplan->view;
-        $this->view->planStories= $this->loadModel('story')->getPlanStories($planID);
-        $this->view->products   = $products;
-        $this->view->summary    = $this->product->summary($this->view->planStories);
-        $this->view->plan       = $plan;
-        $this->view->actions    = $this->loadModel('action')->getList('productplan', $planID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $products                = $this->product->getPairs();
+        $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
+        $this->view->position[]  = $this->lang->productplan->view;
+        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID);
+        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID);
+        $this->view->products    = $products;
+        $this->view->summary     = $this->product->summary($this->view->planStories);
+        $this->view->plan        = $plan;
+        $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
