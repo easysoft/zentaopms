@@ -185,6 +185,9 @@ $lang->resource->productplan->view             = 'view';
 $lang->resource->productplan->linkStory        = 'linkStory';
 $lang->resource->productplan->unlinkStory      = 'unlinkStory';
 $lang->resource->productplan->batchUnlinkStory = 'batchUnlinkStory';
+$lang->resource->productplan->linkBug          = 'linkBug';
+$lang->resource->productplan->unlinkBug        = 'unlinkBug';
+$lang->resource->productplan->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->productplan->methodOrder[5]  = 'browse';
 $lang->productplan->methodOrder[10] = 'create';
@@ -194,6 +197,9 @@ $lang->productplan->methodOrder[25] = 'view';
 $lang->productplan->methodOrder[30] = 'linkStory';
 $lang->productplan->methodOrder[35] = 'unlinkStory';
 $lang->productplan->methodOrder[40] = 'batchUnlinkStory';
+$lang->productplan->methodOrder[45] = 'linkBug';
+$lang->productplan->methodOrder[50] = 'unlinkBug';
+$lang->productplan->methodOrder[55] = 'batchUnlinkBug';
 
 /* Release. */
 $lang->resource->release = new stdclass();
