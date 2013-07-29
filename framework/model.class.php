@@ -179,7 +179,7 @@ class model
 
         if(!helper::import($modelFile)) return false;
         $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-        if(!class_exists($modelClass)) $this->app->error(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
 
         $this->$moduleName = new $modelClass();
         return $this->$moduleName;

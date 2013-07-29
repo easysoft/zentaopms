@@ -237,7 +237,7 @@ class control
         }
 
         $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-        if(!class_exists($modelClass)) $this->app->error(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
 
         $this->$moduleName = new $modelClass();
         $this->dao = $this->$moduleName->dao;
@@ -300,7 +300,7 @@ class control
         $extHookFiles = glob($viewExtPath . $this->viewPrefix . $methodName . "*.{$viewType}.hook.php");
 
         $viewFile = file_exists($extViewFile) ? $extViewFile : $mainViewFile;
-        if(!is_file($viewFile)) $this->app->error("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+        if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
         return $viewFile;
     }
@@ -542,14 +542,14 @@ class control
         $file2Included     = file_exists($actionExtFile) ? $actionExtFile : $moduleControlFile;
 
         /* Load the control file. */
-        if(!is_file($file2Included)) $this->app->error("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
+        if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
         $currentPWD = getcwd();
         chdir(dirname($file2Included));
         if($moduleName != $this->moduleName) helper::import($file2Included);
         
         /* Set the name of the class to be called. */
         $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-        if(!class_exists($className)) $this->app->error(" The class $className not found", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($className)) $this->app->triggerError(" The class $className not found", __FILE__, __LINE__, $exit = true);
 
         /* Parse the params, create the $module control object. */
         if(!is_array($params)) parse_str($params, $params);
