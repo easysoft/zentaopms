@@ -16,15 +16,16 @@ $lang->productplan->create    = "Create";
 $lang->productplan->edit      = "Edit";
 $lang->productplan->delete    = "Delete";
 $lang->productplan->view      = "Info";
+$lang->productplan->batchUnlink      = "Batch Remove";
 $lang->productplan->linkStory        = "Link story";
 $lang->productplan->unlinkStory      = "Remove story";
-$lang->productplan->batchUnlinkStory = "Batch Remove";
+$lang->productplan->batchUnlinkStory = "Batch Remove Stories";
 $lang->productplan->linkedStories    = 'Stories linked';
 $lang->productplan->unlinkedStories  = 'Stories unlinked';
 
 $lang->productplan->linkBug          = "Link bug";
 $lang->productplan->unlinkBug        = "Remove bug";
-$lang->productplan->batchUnlinkBug   = "Batch Remove";
+$lang->productplan->batchUnlinkBug   = "Batch Remove Bugs";
 $lang->productplan->linkedBugs       = 'Bugs linked';
 $lang->productplan->unlinkedBugs     = 'Bugs unlinked';
 

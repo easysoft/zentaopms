@@ -16,15 +16,16 @@ $lang->productplan->create    = "创建计划";
 $lang->productplan->edit      = "编辑计划";
 $lang->productplan->delete    = "删除计划";
 $lang->productplan->view      = "计划详情";
+$lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->linkStory        = "关联需求";
 $lang->productplan->unlinkStory      = "移除需求";
-$lang->productplan->batchUnlinkStory = "批量移除";
+$lang->productplan->batchUnlinkStory = "批量移除需求";
 $lang->productplan->linkedStories    = '已关联需求列表';
 $lang->productplan->unlinkedStories  = '未关联需求列表';
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
-$lang->productplan->batchUnlinkBug   = "批量移除";
+$lang->productplan->batchUnlinkBug   = "批量移除Bug";
 $lang->productplan->linkedBugs       = '已关联Bug列表';
 $lang->productplan->unlinkedBugs     = '未关联Bug列表';
 
