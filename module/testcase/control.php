@@ -513,7 +513,6 @@ class testcase extends control
     {
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
-        $this->loadModel('action')->create('case', $caseID, 'caseconfirmed', '', $case->version);
         die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
     }
 
