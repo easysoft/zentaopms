@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($task->deleted) echo "class='deleted'";?>>TASK #<?php echo $task->id . ' ' . $task->title;?></div>
+  <div id='main' <?php if($task->deleted) echo "class='deleted'";?>>TESTTASK #<?php echo $task->id . ' ' . $task->title;?></div>
   <div>
     <?php
     $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");
