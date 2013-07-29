@@ -17,14 +17,16 @@
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->bug->project . $lang->colon . $lang->bug->batchCreate;?></caption>
     <tr>
-      <th class='w-20px'>    <?php echo $lang->idAB;?></th> 
-      <th class='w-100px'>   <?php echo $lang->bug->module;?></th>
-      <th class='w-100px'>   <?php echo $lang->bug->project;?></th>
+      <th class='w-20px'>     <?php echo $lang->idAB;?></th> 
+      <th class='w-100px'>    <?php echo $lang->bug->module;?></th>
+      <th class='w-100px'>    <?php echo $lang->bug->project;?></th>
       <th class='w-150px red'><?php echo $lang->bug->openedBuild;?></th>
-      <th class='red'>       <?php echo $lang->bug->title;?></th>
-      <th>                   <?php echo $lang->bug->steps;?></th>
-      <th class='w-120px'>   <?php echo $lang->bug->lblTypeAndSeverity;?></th>
-      <th class='w-220px'>   <?php echo $lang->bug->lblSystemBrowserAndHardware;?></th>
+      <th class='red'>        <?php echo $lang->bug->title;?></th>
+      <th>                    <?php echo $lang->bug->steps;?></th>
+      <th class='w-100px'>    <?php echo $lang->typeAB;?></th>
+      <th class='w-80px'>     <?php echo $lang->bug->severity;?></th>
+      <th class='w-120px'>    <?php echo $lang->bug->os;?></th>
+      <th class='w-100px'>    <?php echo $lang->bug->browser;?></th>
     </tr>
 
    <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
@@ -35,14 +37,10 @@
       <td class='a-left chosenBox' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1' multiple");?></td>
       <td><?php echo html::input("titles[$i]", '', 'class=select-1');?></td>
       <td><?php echo html::textarea("stepses[$i]", '', "rows='1' class=text-1");?></td>
-      <td>
-        <?php echo html::select("types[$i]", $lang->bug->typeList, '');?> 
-        <?php echo html::select("severities[$i]", $lang->bug->severityList, '');?>
-      </td>
-      <td>
-        <?php echo html::select("oses[$i]", $lang->bug->osList, '');?>
-        <?php echo html::select("browsers[$i]", $lang->bug->browserList, '');?>
-      </td>
+      <td><?php echo html::select("types[$i]", $lang->bug->typeList, '');?></td>
+      <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '');?></td>
+      <td><?php echo html::select("oses[$i]", $lang->bug->osList, '');?></td>
+      <td><?php echo html::select("browsers[$i]", $lang->bug->browserList, '');?></td>
     </tr>
     <?php endfor;?>
     <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
