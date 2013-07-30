@@ -39,7 +39,8 @@ function unlink(projectID, storyID)
             {
                 if(data.result == 'success') 
                 {
-                    $('#story' + storyID).remove();
+                    url = createLink('project', 'story', 'projectID=' + projectID);
+                    $('#projectStoryForm').load(url + ' #storyList', function(){sortTable();});
                 }
             }
         });

@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <form method='post' id='projectStoryForm'>
-  <table class='table-1 fixed colored tablesorter datatable'>
+  <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
     <caption class='caption-tl pb-10px'>
       <div class='f-left'><?php echo $lang->project->story;?></div>
       <div class='f-right'>
@@ -88,7 +88,7 @@
           if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list');
 
           $lang->project->unlinkStory = $lang->unlink;
-          echo html::a('javascript:void(0)', '&nbsp;', '', "class='icon-green-project-unlinkStory' title='$lang->unlink' onclick='unlink($project->id,$story->id)'");
+          echo html::a("javascript:unlink($project->id,$story->id)", '&nbsp;', '', "class='icon-green-project-unlinkStory' title='$lang->unlink''");
           ?>
         </td>
       </tr>
