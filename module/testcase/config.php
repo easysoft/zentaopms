@@ -12,7 +12,7 @@ $config->testcase->batchEdit->columns = 7;
 
 $config->testcase->editor = new stdclass();
 $config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->testcase->editor->view = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 
 $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');

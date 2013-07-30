@@ -75,6 +75,13 @@ function toggleOrder(obj)
     $("#historyItem li").reverseOrder();
 }
 
+function toggleComment(actionID)
+{
+    $('.comment' + actionID).toggle();
+    $('#lastCommentBox').toggle();
+    $('.ke-container').css('width', '100%');
+}
+
 $(function(){
     var diffButton = "<span onclick='toggleStripTags(this)' class='hidden changeDiff diff-all hand' title='<?php echo $lang->action->original?>'>&nbsp;</span>";
     var newBoxID = ''
@@ -114,6 +121,7 @@ $(function(){
   <ol id='historyItem'>
     <?php $i = 1; ?>
     <?php foreach($actions as $action):?>
+    <?php $canEditComment = (end($actions) == $action and $action->comment and $this->methodName == 'view' and $action->actor == $this->app->user->account);?>
     <li value='<?php echo $i ++;?>'>
       <?php
       if(isset($users[$action->actor])) $action->actor = $users[$action->actor];
@@ -124,13 +132,35 @@ $(function(){
         <?php $this->action->printAction($action);?>
         <?php if(!empty($action->history)) echo "<span id='switchButton$i' class='hand change-show' onclick=switchChange($i)>&nbsp;</span>";?>
       </span>
+      <?php if($canEditComment):?>
+      <span class='link-button f-right comment<?php echo $action->id;?>'><?php echo html::a('#lastCommentBox', '&nbsp;', '', "class='icon-green-common-edit' onclick='toggleComment($action->id)'")?></span>
+      <?php endif;?>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>
         <div class='changes hidden' id='changeBox<?php echo $i;?>'>
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
-      <?php if($action->comment) echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment; ?>
-      <?php if(!empty($action->comment)) echo "</div>";?>
+        <?php 
+        if($action->comment) 
+        {
+            echo "<div class='comment$action->id'>";
+            echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment; 
+            echo "</div>";
+        }
+        ?>
+
+        <?php if($canEditComment):?>
+        <div class='hidden' id='lastCommentBox'>
+          <form method='post' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>
+            <table align='center' class='table-1'>
+              <tr><td><?php echo html::textarea('lastComment', $action->comment,"rows='5' class='w-p100'");?></td></tr>
+              <tr><td><?php echo html::submitButton() . html::commonButton($lang->goback, "onclick='toggleComment($action->id)' class='button-s'");?></td></tr>
+            </table>
+          </form>
+        </div>
+        <?php endif;?>
+
+        <?php if(!empty($action->comment)) echo "</div>";?>
       <?php endif;?>
     </li>
     <?php endforeach;?>

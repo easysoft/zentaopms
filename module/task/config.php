@@ -20,7 +20,7 @@ $config->task->batchEdit->columns = 13;
 $config->task->editor = new stdclass();
 $config->task->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->edit     = array('id' => 'desc,comment', 'tools' => 'simpleTools');
-$config->task->editor->view     = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->task->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->task->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->task->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->task->editor->finish   = array('id' => 'comment', 'tools' => 'simpleTools');

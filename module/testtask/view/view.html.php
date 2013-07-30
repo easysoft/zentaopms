@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div id='main' <?php if($task->deleted) echo "class='deleted'";?>>TESTTASK #<?php echo $task->id . ' ' . $task->title;?></div>
   <div>
