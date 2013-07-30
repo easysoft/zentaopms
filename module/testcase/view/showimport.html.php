@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <form target='hiddenwin' method='post'>
+<?php if($hasEdit):?>
 <table class='table-1'>
   <caption class='caption-tl'><?php echo $lang->testcase->editHaved?></caption>
   <tr class='colhead'>
@@ -51,6 +52,8 @@
   <?php unset($caseData[$key]);?>
   <?php endforeach;?>
 </table>
+<?php endif;?>
+<?php if($hasNew):?>
 <table class='table-1'>
   <caption class='caption-tl'><?php echo $lang->testcase->addNew?></caption>
   <tr class='colhead'>
@@ -98,6 +101,7 @@
   </tr>
   <?php endforeach;?>
 </table>
+<?php endif;?>
 <p><?php echo html::submitButton() . html::backButton()?></p>
 </form>
 <?php include '../../common/view/footer.html.php';?>
