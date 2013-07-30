@@ -260,6 +260,9 @@ class productplan extends control
     {
         $this->session->set('bugList', $this->app->getURI(true));
 
+        $projects = $this->loadModel('project')->getPairs();
+        $projects[0] = '';
+
         if(!empty($_POST['bugs'])) $this->productplan->linkBug($planID);
 
         $this->loadModel('bug');
@@ -270,9 +273,10 @@ class productplan extends control
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Build the search form. */
-        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID={$plan->product}&browseType=bySearch&queryID=myQueryID");
+        $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'linkBug', "planID=$planID&browseType=bySearch&queryID=myQueryID");   
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
@@ -281,7 +285,7 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id');
+            $allBugs = $this->bug->getBySearch($plan->product, $projects, $queryID, 'id_desc');
             foreach($allBugs as $key => $bug)
             {
                 if($bug->status != 'active') unset($allBugs[$key]);
@@ -340,5 +344,19 @@ class productplan extends control
             $this->productplan->unlinkBug($bugID);
         }
         die(js::reload('parent'));
+    }
+
+    /**
+     * AJAX: get plans of a product in html select.
+     * 
+     * @param  int    $productID 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPlans($productID, $planID = 0)
+    {
+        $plans = $this->productplan->getPairs($productID);
+        die(html::select('plan', $plans, $planID, 'class=select-3'));
     }
 }
