@@ -23,6 +23,7 @@ $lang->todo->export       = "Export";
 $lang->todo->delete       = "Delete";
 $lang->todo->browse       = "Browse";
 $lang->todo->import2Today = "Import to today";
+$lang->todo->import       = "Import to";
 $lang->todo->changeStatus = "Change";
 
 $lang->todo->id          = 'ID';

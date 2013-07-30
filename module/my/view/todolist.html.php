@@ -64,7 +64,8 @@
       if(common::hasPriv('todo', 'import2Today') and $importFuture)
       {
           $actionLink = $this->createLink('todo', 'import2Today');
-          echo html::commonButton($lang->todo->import2Today, "onclick=\"changeAction('todoform', 'import2Today', '$actionLink')\"");
+          echo html::commonButton($lang->todo->import, "onclick=\"changeAction('todoform', 'import2Today', '$actionLink')\"");
+          echo html::input('date', date('Y-m-d'), "class='date w-80px'");
       }
       ?>
       </div>

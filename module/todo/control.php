@@ -333,8 +333,8 @@ class todo extends control
     public function import2Today($todoID = 0)
     {
         $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
-        $today      = date::today();
-        $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todoIDList)->exec();
+        $date       = !empty($_POST['date']) ? $_POST['date'] : date::today();
+        $this->dao->update(TABLE_TODO)->set('date')->eq($date)->where('id')->in($todoIDList)->exec();
         $this->locate($this->session->todoList);
     }
 
