@@ -669,4 +669,20 @@ class actionModel extends model
             ->andWhere('extra')->eq(self::CAN_UNDELETED)
             ->exec();
     }
+
+    /**
+     * Update comment of a action.
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
+    public function updateComment($actionID)
+    {
+        $this->dao->update(TABLE_ACTION)
+            ->set('date')->eq(helper::now())
+            ->set('comment')->eq($this->post->lastComment)
+            ->where('id')->eq($actionID)
+            ->exec();
+    }
 }

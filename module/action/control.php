@@ -100,4 +100,18 @@ class action extends control
             die(js::reload('parent'));
         }
     }
+
+    /**
+     * Edit comment of a action.
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
+    public function editComment($actionID)
+    {
+        if(!strip_tags($this->post->lastComment)) die(js::locate($this->server->http_referer, 'parent'));
+        $this->action->updateComment($actionID);
+        die(js::locate($this->server->http_referer, 'parent'));
+    }
 }

@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('holders', $lang->task->placeholder);?>
 <?php js::set('mailto',  $lang->task->chosen->mailto);?>

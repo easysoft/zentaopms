@@ -255,6 +255,7 @@ class webappModel extends model
     {
         $webapp = $this->getLocalAppByID($webappID);
         $data = fixer::input('post')->remove('files,customWidth,customHeight')->get();
+        if(strpos($data->url, 'http://') !== 0) $data->url = 'http://' . $data->url;
         if($data->size == 'custom') $data->size = (float)$this->post->customWidth . 'x' . (float)$this->post->customHeight;
 
         $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->check('url', 'unique', "id != $webappID")->exec();
@@ -291,6 +292,7 @@ class webappModel extends model
             ->add('addedDate', helper::now())
             ->add('author', $this->app->user->account)
             ->remove('files,customWidth,customHeight')->get();
+        if(strpos($data->url, 'http://') !== 0) $data->url = 'http://' . $data->url;
         if($data->size == 'custom') $data->size = (float)$this->post->customWidth . 'x' . (float)$this->post->customHeight;
         $this->dao->insert(TABLE_WEBAPP)->data($data)
             ->autocheck()
