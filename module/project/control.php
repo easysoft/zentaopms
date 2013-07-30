@@ -1441,9 +1441,16 @@ class project extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->project->unlinkStory($projectID, $storyID);
-            echo js::locate($this->app->session->storyList, 'parent');
-            exit;
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 
