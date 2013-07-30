@@ -46,6 +46,7 @@ function loadAll(productID)
         loadProductStories(productID);
         loadProductProjects(productID); 
         loadProductBuilds(productID);
+        loadProductPlans(productID);
     }
 }
 
@@ -161,6 +162,18 @@ function loadProjectStories(projectID)
     $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
 
+/**
+ * Load product plans. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadProductPlans(productID)
+{
+    link = createLink('productplan', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
+    $('#planIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
+}
 /**
  * Load builds of a project.
  * 

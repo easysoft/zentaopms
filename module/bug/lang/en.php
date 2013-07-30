@@ -13,6 +13,7 @@
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'ID';
 $lang->bug->product          = 'Product';
+$lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->path             = 'Path';
 $lang->bug->project          = 'Project';
