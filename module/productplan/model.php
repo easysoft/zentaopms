@@ -37,7 +37,7 @@ class productplanModel extends model
      * @access public
      * @return object
      */
-    public function getList($product = 0, $pager = null, $orderBy)
+    public function getList($product = 0, $pager = null, $orderBy = 'begin_desc')
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
