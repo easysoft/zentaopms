@@ -4,8 +4,12 @@ js::import($jsRoot . 'jquery/tablesorter/min.js');
 js::import($jsRoot . 'jquery/tablesorter/metadata.js');
 ?>
 <script language='javascript'>
-$(function() {
 
+/* sort table after page load. */
+$(function() { sortTable(); } );
+
+function sortTable()
+{
     $('.tablesorter').tablesorter(
         {
             widgets: ['zebra'], 
@@ -32,5 +36,5 @@ $(function() {
             }
         }
     );
-});
+}
 </script>
