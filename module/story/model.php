@@ -648,8 +648,10 @@ class storyModel extends model
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->plan           = $planID;
+            if($planID) $story->stage = 'planned';
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            if(!$planID) $this->setStage($storyID);
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
         return $allChanges;
