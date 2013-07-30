@@ -782,7 +782,8 @@ class testcase extends control
         foreach(explode(',', $header) as $title)
         {
             $field = array_search(trim(trim($title, '"')), $fields);
-            $columnKey[] = $field ? $field : '';
+            if(!$field) continue;
+            $columnKey[] = $field;
         }
 
         $row = 1;
