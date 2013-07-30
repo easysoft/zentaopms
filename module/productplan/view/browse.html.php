@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
+<?php js::set('productID', $productID)?>
 <table class='table-1 tablesorter fixed' id="productplan">
   <caption class='caption-tr'>
     <div class='f-left'><?php echo $lang->productplan->browse;?></div>
@@ -40,7 +42,7 @@
       common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'linkBug', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
-      common::printIcon('productplan', 'delete', "planID=$plan->id", '', 'list', '', 'hiddenwin');
+      echo html::a("javascript:deletePlan($plan->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->productplan->delete}'");
       ?>
     </td>
   </tr>
