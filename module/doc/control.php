@@ -417,8 +417,16 @@ class doc extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->doc->delete(TABLE_DOC, $docID);
-            die(js::locate($this->session->docList, 'parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 }
