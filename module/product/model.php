@@ -325,11 +325,13 @@ class productModel extends model
      */
     public function getProjectPairs($productID, $param = 'all')
     {
+        $projectList  = array_keys($this->loadModel('project')->getPairs());
         $projects = array();
         $datas = $this->dao->select('t2.id, t2.name, t2.deleted')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t2.id')->in($projectList)
             ->orderBy('t1.project desc')
             ->fetchAll();
 

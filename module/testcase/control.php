@@ -767,6 +767,7 @@ class testcase extends control
         $caseConfig = $this->config->testcase;
         $fields     = explode(',', $caseConfig->exportFields);
         $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+        $stories    = $this->loadModel('story')->getProductStoryPairs($productID);
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
@@ -780,14 +781,17 @@ class testcase extends control
 
         foreach(explode(',', $header) as $title)
         {
-            $field = array_search(trim($title), $fields);
-            $columnKey[] = $field ? $field : '';
+            $field = array_search(trim(trim($title, '"')), $fields);
+            if(!$field) continue;
+            $columnKey[] = $field;
         }
 
         $row = 1;
         $endField = $field;
         $caseData = array();
         $stepData = array();
+        $hasEdit  = false;
+        $hasNew   = false;
         while($csv)
         {
             $case = new stdclass();
@@ -802,7 +806,23 @@ class testcase extends control
 
                 if($field == 'story')
                 {
-                    $case->$field = substr($cellValue, 1);
+                    if($cellValue == 0)
+                    {
+                        $cese->$field = 0;
+                    }
+                    elseif(preg_match('/^#\d+$/', $cellValue))
+                    {
+                        $case->$field = substr($cellValue, 1);
+                    }
+                    else
+                    {
+                        $selectedID = 0;
+                        foreach($stories as $id => $story)
+                        {
+                            if(strpos($story, $cellValue) !== false) $selectedID = $id;
+                        }
+                        $case->$field = $selectedID;
+                    }
                 }
                 elseif($field == 'module')
                 {
@@ -845,6 +865,16 @@ class testcase extends control
                 }
                 $csv = substr($csv, $pos + strlen($delimiter));
             }
+
+            if(!empty($case->id))
+            {
+                $hasEdit = true;
+            }
+            else
+            {
+                $hasNew = true;
+            }
+
             $caseData[$row] = $case;
             unset($case);
             $row++;
@@ -859,13 +889,15 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;
 
-        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productID);
+        $this->view->stories   = $stories;
         $this->view->modules   = $modules;
         $this->view->cases     = $this->dao->select('id, module, story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $this->view->caseData  = $caseData;
         $this->view->stepData  = $stepData;
         $this->view->productID = $productID;
         $this->view->product   = $this->products[$productID];
+        $this->view->hasEdit   = $hasEdit;
+        $this->view->hasNew    = $hasNew;
         $this->display();
     }
 }
