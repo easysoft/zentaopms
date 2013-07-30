@@ -48,7 +48,12 @@
             </td>
             <td> 
               <?php
-              foreach($sons as $sonDept) echo html::input("depts[id$sonDept->id]", $sonDept->name) . '<br />';
+              $maxOrder = 0;
+              foreach($sons as $sonDept)
+              {
+                  if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
+                  echo html::input("depts[id$sonDept->id]", $sonDept->name) . '<br />';
+              }
               for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]") . '<br />';
              ?>
             </td>
@@ -56,7 +61,7 @@
           <tr>
             <td></td>
             <td>
-              <?php echo html::submitButton() . html::backButton();?>
+              <?php echo html::submitButton() . html::backButton() . html::hidden('maxOrder', $maxOrder);?>
               <input type='hidden' value='<?php echo $deptID;?>' name='parentDeptID' />
             </td>
           </tr>

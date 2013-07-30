@@ -256,6 +256,7 @@ class deptModel extends model
             $parentPath = ',';
         }
 
+        $i = 1;
         foreach($childs as $deptID => $deptName)
         {
             if(empty($deptName)) continue;
@@ -264,10 +265,12 @@ class deptModel extends model
                 $dept->name   = strip_tags($deptName);
                 $dept->parent = $parentDeptID;
                 $dept->grade  = $grade;
+                $dept->order  = $this->post->maxOrder + $i * 10;
                 $this->dao->insert(TABLE_DEPT)->data($dept)->exec();
                 $deptID = $this->dao->lastInsertID();
                 $childPath = $parentPath . "$deptID,";
                 $this->dao->update(TABLE_DEPT)->set('path')->eq($childPath)->where('id')->eq($deptID)->exec();
+                $i++;
             }
             else
             {
