@@ -21,3 +21,7 @@ $lang->dept->users       = "Users";
 
 $lang->dept->saveButton    = " Save (S) ";
 $lang->dept->confirmDelete = "Are you sure to delete this department?"; 
+
+$lang->dept->error = new stdclass();
+$lang->dept->error->hasSons  = "Can't delete this dept, because that has child.";
+$lang->dept->error->hasUsers = "Can't delete this dept, because that has users.";
