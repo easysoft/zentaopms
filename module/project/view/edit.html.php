@@ -67,7 +67,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
-      <td id='productsBox'><?php echo html::checkbox("products", $allProducts, $linkedProducts);?></td>
+      <td class='a-left chosenBox' id='productsBox'><?php echo html::select("products[]", $allProducts, $linkedProducts, "class='select-1' multiple");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->goal;?></th>
