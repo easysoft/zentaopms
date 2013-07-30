@@ -88,7 +88,7 @@
           if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list');
 
           $lang->project->unlinkStory = $lang->unlink;
-          echo html::a("javascript:unlink($project->id,$story->id)", '&nbsp;', '', "class='icon-green-project-unlinkStory' title='$lang->unlink''");
+          echo html::a("javascript:unlink($project->id,$story->id)", '&nbsp;', '', "class='icon-green-project-unlinkStory' title='$lang->unlink'");
           ?>
         </td>
       </tr>
