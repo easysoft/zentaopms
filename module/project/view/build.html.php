@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
-<?php js::set('projectID', $project->id)?>
+<?php js::set('projectID', $projectID)?>
 <table class='table-1 tablesorter fixed' id='buildlist'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->project->build;?></div>

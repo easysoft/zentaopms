@@ -1,3 +1,10 @@
+/**
+ * Delete build. 
+ * 
+ * @param  int    buildID 
+ * @access public
+ * @return void
+ */
 function deleteBuild(buildID)
 {
     if(confirm(confirmDelete))
