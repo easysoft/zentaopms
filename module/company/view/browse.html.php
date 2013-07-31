@@ -68,7 +68,7 @@ js::set('deptID', $deptID);
           <td><?php echo $user->phone;?></td>
           <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
           <td><?php echo $user->join;?></td>
-          <td><?php echo date('Y-m-d', $user->last);?></td>
+          <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
           <td class='a-left'>
             <?php 
