@@ -61,12 +61,18 @@ $lang->testcase->edit               = "编辑";
 $lang->testcase->batchEdit          =  "批量编辑 ";
 $lang->testcase->delete             = "删除";
 $lang->testcase->browse             = "用例列表";
-$lang->testcase->import             = "导入用例";
+$lang->testcase->import             = "导入";
+$lang->testcase->importID           = "行号";
 $lang->testcase->showImport         = "显示导入内容";
 $lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出";
 $lang->testcase->confirmChange      = '确认用例变动';
 $lang->testcase->confirmStoryChange = '确认需求变动';
+
+$lang->testcase->editHaved = '修改已有用例';
+$lang->testcase->addNew    = '添加新用例';
+
+$lang->testcase->num = '导入用例个数：';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
