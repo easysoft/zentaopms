@@ -13,40 +13,41 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<div id='featurebar'>
-  <div class='f-left'>
-    <?php 
-    foreach($lang->todo->periods as $period => $label)
-    {
-        $vars = "date=$period";
-        if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
-        echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span>';
-    }
-    echo "<span id='byDate'>" . html::input('date', $date,"class='w-date date' onchange='changeDate(this.value)'") . '</span>';
-
-    if($type == 'bydate') 
-    {
-        if($date == date('Y-m-d'))
-        {
-            $type = 'today'; 
-        }
-        else if($date == date('Y-m-d', strtotime('-1 day')))
-        {
-            $type = 'yesterday'; 
-        }
-    }
-    ?>
-    <script>$('#<?php echo $type;?>').addClass('active')</script>
-  </div>
-  <div class='f-right'>
-    <?php 
-    common::printIcon('todo', 'export', "account=$account&orderBy=id_desc");
-    common::printIcon('todo', 'batchCreate');
-    common::printIcon('todo', 'create', "date=" . str_replace('-', '', $date));
-    ?>
-  </div>
-</div>
+<?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <form method='post' id='todoform'>
+  <div id='featurebar'>
+    <div class='f-left'>
+      <?php 
+      foreach($lang->todo->periods as $period => $label)
+      {
+          $vars = "date=$period";
+          if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
+          echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span>';
+      }
+      echo "<span id='byDate'>" . html::input('date', $date,"class='w-date date' onchange='changeDate(this.value)'") . '</span>';
+
+      if($type == 'bydate') 
+      {
+          if($date == date('Y-m-d'))
+          {
+              $type = 'today'; 
+          }
+          else if($date == date('Y-m-d', strtotime('-1 day')))
+          {
+              $type = 'yesterday'; 
+          }
+      }
+      ?>
+      <script>$('#<?php echo $type;?>').addClass('active')</script>
+    </div>
+    <div class='f-right'>
+      <?php 
+      common::printIcon('todo', 'export', "account=$account&orderBy=id_desc");
+      common::printIcon('todo', 'batchCreate');
+      common::printIcon('todo', 'create', "date=" . str_replace('-', '', $date));
+      ?>
+    </div>
+  </div>
   <table class='table-1 tablesorter colored' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>

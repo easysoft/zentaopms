@@ -14,6 +14,8 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
+<?php js::set('request', $this->app->getURI(true))?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
@@ -41,8 +43,8 @@ var browseType = '<?php echo $browseType;?>';
       </div>
     </td>
     <td class='divider'></td>
-    <td>
-      <table class='table-1 fixed colored tablesorter datatable'>
+    <td id='docbox'>
+      <table class='table-1 fixed colored tablesorter datatable' id='doclist'>
         <thead>
           <tr class='colhead'>
             <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -70,7 +72,7 @@ var browseType = '<?php echo $browseType;?>';
               <?php 
               $vars = "doc={$doc->id}";
               common::printIcon('doc', 'edit',   $vars, '', 'list');
-              common::printIcon('doc', 'delete', $vars, '', 'list', '', 'hiddenwin');
+              echo html::a("javascript:deleteDoc($doc->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
               ?>
             </td>
           </tr>

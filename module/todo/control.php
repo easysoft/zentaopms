@@ -278,9 +278,18 @@ class todo extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todoID)->exec();
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+
             $this->loadModel('action')->create('todo', $todoID, 'erased');
-            die(js::locate($this->session->todoList, 'parent'));
+            $this->send($response);
         }
     }
 
