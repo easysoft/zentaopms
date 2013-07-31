@@ -20,4 +20,37 @@ function changeAction(formName, actionName, actionLink)
     $('#' + formName).attr('action', actionLink).submit();
 }
 
+/**
+ * Delete todo. 
+ * 
+ * @param  int    todoID 
+ * @access public
+ * @return void
+ */
+function deleteTodo(todoID)
+{
+    if(confirm(confirmDelete))
+    {
+        url = createLink('todo', 'delete','todoID=' + todoID + '&confrim=yes');
+        $.ajax(
+        {
+            type:     'GET', 
+            url:      url,
+            dataType: 'json', 
+            success:  function(data) 
+            {
+                if(data.result == 'success') 
+                {
+                    url = createLink('my', 'todo');
+                    $('#todo').load(url + ' #todoList', function()
+                    {
+                        $('.colored').colorize();
+                        $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+                    });
+                }
+            }
+        });
+    }
+}
+
 $(".colorbox").colorbox({width:960, height:550, iframe:true, transition:'none'});

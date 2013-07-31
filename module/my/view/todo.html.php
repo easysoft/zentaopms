@@ -14,6 +14,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
     <div class='f-left'>
@@ -48,7 +49,9 @@
       ?>
     </div>
   </div>
-  <?php include "./todolist.html.php"?>
+  <div id='todo'>
+    <?php include "./todolist.html.php"?>
+  </div>
 </form>
 <?php js::set('listName', 'todoList')?>
 <?php include '../../common/view/footer.html.php';?>

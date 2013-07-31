@@ -33,7 +33,7 @@
       <?php 
       common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
       common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', '', '', 'iframe', true);
-      common::printIcon('todo', 'delete', "id=$todo->id", '', 'list', '', 'hiddenwin');
+      echo html::a("javascript:deleteTodo($todo->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->todo->delete}'");
       ?>
     </td>
   </tr>
