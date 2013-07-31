@@ -443,9 +443,17 @@ class testtask extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $task = $this->testtask->getByID($taskID);
             $this->testtask->delete(TABLE_TESTTASK, $taskID);
-            die(js::locate(inlink('browse', "product=$task->product"), 'parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 
