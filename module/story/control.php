@@ -91,7 +91,7 @@ class story extends control
                 break;
             }
         }
-        $users = $this->user->getPairs('nodeleted|pdfirst');
+        $users = $this->user->getPairs('nodeleted|pdfirst|noclosed');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 
         /* Set menu. */
