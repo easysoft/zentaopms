@@ -12,9 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('productID', $product->id)?>
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
-<table align='center' class='table-6 tablesorter' id='releaselist'>
+<table align='center' class='table-6 tablesorter' id='releaseList'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->release->browse;?></div>
     <div class='f-right'><?php common::printIcon('release', 'create', "product=$product->id");?></div>
@@ -38,7 +37,8 @@
     <td class='a-center'>
       <?php
       common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
-      echo html::a("javascript:deleteRelease($release->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->release->delete}'");
+      $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->release->delete}'");
       ?>
     </td>
   </tr>
