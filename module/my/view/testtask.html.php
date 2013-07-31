@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -22,7 +23,7 @@
     ?>
   </div>
 </div>
-<table class='table-1 tablesorter fixed colored'>
+<table class='table-1 tablesorter fixed colored' id='taskList'>
   <?php $vars = "orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>
@@ -51,7 +52,9 @@
       common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
-      common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'list', '', 'hiddenwin');
+
+      $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->testtask->delete}'");
       ?>
     </td>
   </tr>
