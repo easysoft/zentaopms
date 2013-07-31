@@ -113,7 +113,7 @@ function computeEndDate(delta)
 $(function() 
 {
     $(".chosenBox select").chosen({no_results_text: noResultsMatch});
-    setModal4List('iframe', 'taskList');
+    if(typeof(replaceID) != 'undefined') setModal4List('iframe', replaceID);
     $(".date").bind('dateSelected', function()
     {
         computeWorkDays(this.id);
