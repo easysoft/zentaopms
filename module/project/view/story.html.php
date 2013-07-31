@@ -12,8 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <form method='post' id='projectStoryForm'>
-  <table class='table-1 fixed colored tablesorter datatable'>
+  <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
     <caption class='caption-tl pb-10px'>
       <div class='f-left'><?php echo $lang->project->story;?></div>
       <div class='f-right'>
@@ -53,7 +54,7 @@
       $storyLink      = $this->createLink('story', 'view', "storyID=$story->id");
       $totalEstimate += $story->estimate;
       ?>
-      <tr class='a-center'>
+      <tr class='a-center' id="story<?php echo $story->id?>">
         <td>
           <?php if($canBatchEdit or $canBatchClose):?>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
@@ -87,7 +88,7 @@
           if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list');
 
           $lang->project->unlinkStory = $lang->unlink;
-          common::printIcon('project', 'unlinkStory', $param, '', 'list', '', 'hiddenwin');
+          echo html::a("javascript:unlink($project->id,$story->id)", '&nbsp;', '', "class='icon-green-project-unlinkStory' title='$lang->unlink'");
           ?>
         </td>
       </tr>

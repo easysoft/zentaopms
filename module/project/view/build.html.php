@@ -12,7 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table class='table-1 tablesorter fixed'>
+<?php js::set('confirmDelete', $lang->build->confirmDelete)?>
+<?php js::set('projectID', $projectID)?>
+<table class='table-1 tablesorter fixed' id='buildlist'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->project->build;?></div>
     <div class='f-right'><?php common::printIcon('build', 'create', "project=$project->id");?></div>
@@ -45,7 +47,7 @@
       $lang->project->bug = $lang->project->viewBug;
       common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", '', 'list');
       common::printIcon('build', 'edit',   "buildID=$build->id");
-      common::printIcon('build', 'delete', "buildID=$build->id", '', 'list', '', 'hiddenwin');
+      echo html::a("javascript:deleteBuild($build->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->build->delete}'");
       ?>
     </td>
   </tr>

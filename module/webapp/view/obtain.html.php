@@ -84,6 +84,7 @@
     </td>
   </tr>
 </table>
+<?php js::set('installed', $lang->webapp->installed)?>
 <script>
 $('#<?php echo $type;?>').addClass('active')
 $('#module<?php echo $moduleID;?>').addClass('active')

@@ -94,9 +94,17 @@ class productplan extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $plan = $this->productplan->getById($planID);
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
-            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 

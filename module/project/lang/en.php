@@ -193,6 +193,7 @@ $lang->project->setTeam               = 'Set team';
 $lang->project->linkStory             = 'Link story';
 $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back（Automatically after 5 seconds）';
+$lang->project->linkProduct           = 'Select product to link...';
 
 /* Report. */
 $lang->project->charts = new stdclass();

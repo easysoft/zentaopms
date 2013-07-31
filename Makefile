@@ -30,7 +30,7 @@ tgz:
 	# create the restart file for svn.
 	# touch zentaopms/module/svn/restart
 	# delee the unused files.
-	find zentaopms -name .svn |xargs rm -fr
+	find zentaopms -name .gitkeep |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/

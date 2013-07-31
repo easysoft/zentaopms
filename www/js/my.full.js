@@ -794,9 +794,10 @@ function setModal4List(colorboxClass, replaceID, callback)
             saveWindowSize();
 
             var link = self.location.href;
-            $.get(link, {ajax:"yes"}, function(data)
+            $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
+            $('#tmpDiv').load(link + ' #' + replaceID, function()
             {
-                $('#' + replaceID).replaceWith(data);
+                $('#tmpDiv').replaceWith($('#tmpDiv').html());
                 setModal4List(colorboxClass, replaceID, callback);
 
                 $('.colored').colorize();

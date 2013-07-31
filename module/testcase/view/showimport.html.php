@@ -57,6 +57,7 @@
 <table class='table-1'>
   <caption class='caption-tl'><?php echo $lang->testcase->addNew?></caption>
   <tr class='colhead'>
+    <th><?php echo $lang->testcase->importID?></th>
     <th><?php echo $lang->testcase->title?></th>
     <th><?php echo $lang->testcase->module?></th>
     <th><?php echo $lang->testcase->story?></th>
@@ -77,6 +78,7 @@
   </tr>
   <?php foreach($caseData as $key => $case):?>
   <tr valign='top' align='center'>
+    <td><?php echo $key + 1?></td>
     <td><?php echo html::input("title[$key]", $case->title, "class='text-1' style='margin-top:2px'")?></td>
     <td><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : '', "class='select-2'") . html::hidden("product[$key]", $productID)?></td>
     <td><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : '', "class='select-2'")?></td>

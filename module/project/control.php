@@ -1349,8 +1349,16 @@ class project extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->project->unlinkMember($projectID, $account);
-            die(js::locate($this->inlink('team', "projectID=$projectID"), 'parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 
@@ -1441,9 +1449,16 @@ class project extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->project->unlinkStory($projectID, $storyID);
-            echo js::locate($this->app->session->storyList, 'parent');
-            exit;
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 

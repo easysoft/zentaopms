@@ -87,5 +87,4 @@ function toggleSubMenu(currentID, position, menuIndex)
 $(function()
 {
     if(browseType == 'bysearch') ajaxGetSearchForm();
-    setModal4List('iframe', 'storyList');
 })

@@ -1,4 +1,13 @@
-if($('a.iframe').size()) $("a.iframe").colorbox({width:450, height:190, iframe:true, transition:'none', scrolling:true});
+if($('a.iframe').size())
+{
+    $("a.iframe").colorbox({width:450, height:190, iframe:true, transition:'none', scrolling:true, onCleanup:function()
+    {
+        var selfClose = $.cookie('selfClose');
+        if(selfClose != 1) return;
+        $(this).replaceWith("<input type='button' value='" + installed + "' disabled='disabled' style='color:gray' class='button-c'>");
+        $.cookie('selfClose', 0);
+    }});
+}
 if($('a.webapp').size()) $("a.webapp").colorbox({width:700, height:400, iframe:true, transition:'none', scrolling:true});
 if($('a.apiapp').size()) $("a.apiapp").colorbox({width:700, height:330, iframe:true, transition:'none', scrolling:true});
 if($('a.popup').size()) $("a.popup").colorbox({width:900, height:600, iframe:true, transition:'none', scrolling:true});

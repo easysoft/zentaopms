@@ -12,7 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table align='center' class='table-5 tablesorter'>
+<?php js::set('confirmUnlinkMember', $lang->project->confirmUnlinkMember)?>
+<?php js::set('projectID', $project->id)?>
+<table align='center' class='table-5 tablesorter' id='memberlist'>
   <thead>
   <tr class='colhead'>
     <th><?php echo $lang->team->account;?></th>
@@ -40,7 +42,11 @@
     <td><?php echo $member->days;?></td>
     <td><?php echo $member->hours;?></td>
     <td><?php echo $memberHours;?></td>
-    <td><?php common::printIcon('project', 'unlinkMember', "projectID=$project->id&account=$member->account", '', 'list', '', 'hiddenwin');?></td>
+    <td>
+      <?php 
+      echo html::a("javascript:unlinkMember($project->id, \"$member->account\")", '&nbsp;', '', "class='icon-green-project-unlinkMember' title='{$lang->project->unlinkMember}'");
+      ?>
+    </td>
   </tr>
   <?php endforeach;?>
   </tbody>     

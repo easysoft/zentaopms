@@ -183,9 +183,9 @@ class product extends control
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst');
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
         $this->display();
     }
 
