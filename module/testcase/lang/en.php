@@ -62,12 +62,18 @@ $lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->import             = "Import";
+$lang->testcase->importID           = "Linenum";
 $lang->testcase->showImport         = "Show import";
 $lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export";
 $lang->testcase->export             = "Export";
 $lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
+
+$lang->testcase->editHaved = 'Modify existing case';
+$lang->testcase->addNew    = 'Add new case';
+  
+$lang->testcase->num = 'The number of cases';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Insert before';

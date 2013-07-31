@@ -402,7 +402,7 @@ EOT;
         {
             $bugSummary[$bug->openedBy][$bug->resolution] = empty($bugSummary[$bug->openedBy][$bug->resolution]) ? 1 : $bugSummary[$bug->openedBy][$bug->resolution] + 1;
             $bugSummary[$bug->openedBy]['all']            = empty($bugSummary[$bug->openedBy]['all']) ? 1 : $bugSummary[$bug->openedBy]['all'] + 1;
-            if($bug->status == 'resolved')
+            if($bug->status == 'resolved' or $bug->status == 'closed')
             {
                 $bugSummary[$bug->openedBy]['resolved'] = empty($bugSummary[$bug->openedBy]['resolved']) ? 1 : $bugSummary[$bug->openedBy]['resolved'] + 1;
             }
