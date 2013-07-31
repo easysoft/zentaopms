@@ -234,8 +234,16 @@ class productplan extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->productplan->unlinkStory($storyID);
-            die(js::reload('parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 
@@ -333,8 +341,16 @@ class productplan extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $this->productplan->unlinkBug($bugID);
-            die(js::reload('parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 
