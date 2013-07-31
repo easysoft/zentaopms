@@ -28,6 +28,7 @@ $lang->todayIs      = '%s, ';
 $lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
 
 $lang->reset        = 'Reset';
+$lang->refresh      = 'Refresh';
 $lang->edit         = 'Edit';
 $lang->copy         = 'Copy';
 $lang->delete       = 'Delete';

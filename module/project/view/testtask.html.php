@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table class='table-1 colored tablesorter fixed'>
+<?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
+<table class='table-1 colored tablesorter fixed' id='taskList'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
     <div class='f-right'><?php common::printIcon('testtask', 'create', "product=0&project=$projectID");?></div>
@@ -44,7 +45,9 @@
       common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
-      common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'list', '', 'hiddenwin');
+
+      $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->testtask->delete}'");
       ?>
     </td>
   </tr>

@@ -46,7 +46,7 @@ class mail extends control
             die(js::locate(inlink('edit'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->mail->detect;
+        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->detect;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->detect;
 
@@ -79,7 +79,7 @@ class mail extends control
             $this->locate(inlink('detect'));
         }
 
-        $this->view->title      = $this->lang->mail->edit;
+        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->edit;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->edit;
 
@@ -119,7 +119,7 @@ class mail extends control
 
             $this->session->set('mailConfig', '');
 
-            $this->view->title      = $this->lang->mail->save;
+            $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
             $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
             $this->view->position[] = $this->lang->mail->save;
 
@@ -152,10 +152,22 @@ class mail extends control
             die(js::alert($this->lang->mail->successSended));
         }
 
-        $this->view->title      = $this->lang->mail->test;
+        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->test;
         $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
         $this->display();
+    }
+
+    /**
+     * Reset the email config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function reset()
+    {
+        $this->dao->delete('*')->from(TABLE_CONFIG)->where('module')->eq('mail')->exec(); 
+        $this->locate(inlink('detect'));
     }
 }

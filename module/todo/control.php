@@ -55,15 +55,13 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
-        $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
-        $position[] = $this->lang->todo->create;
-
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->date     = strftime("%Y-%m-%d", strtotime($date));
-        $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time     = date::now();
-        $this->display();
+        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
+        $this->view->position[] = $this->lang->todo->common;
+        $this->view->position[] = $this->lang->todo->create;
+        $this->view->date       = strftime("%Y-%m-%d", strtotime($date));
+        $this->view->time       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time       = date::now();
+        $this->display();      
     }
 
     /**
@@ -95,14 +93,12 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
-        $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
-        $position[] = $this->lang->todo->create;
-
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->date     = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
-        $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time     = date::now();
+        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
+        $this->view->position[] = $this->lang->todo->common;
+        $this->view->position[] = $this->lang->todo->batchCreate;
+        $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time       = date::now();
 
         $this->display();
     }
@@ -134,13 +130,11 @@ class todo extends control
         if($todo->private and $this->app->user->account != $todo->account) die('private');
        
         $todo->date = strftime("%Y-%m-%d", strtotime($todo->date));
-        $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
-        $position[] = $this->lang->todo->edit;
-
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->todo     = $todo;
+        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
+        $this->view->position[] = $this->lang->todo->common;
+        $this->view->position[] = $this->lang->todo->edit;
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->todo       = $todo;
         $this->display();
     }
 
@@ -195,7 +189,7 @@ class todo extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
 
             /* Assign. */
-            $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->batchEdit;
+            $title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
             $position[] = $this->lang->todo->common;
             $position[] = $this->lang->todo->batchEdit;
 
@@ -278,18 +272,25 @@ class todo extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todoID)->exec();
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-
             $this->loadModel('action')->create('todo', $todoID, 'erased');
-            $this->send($response);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
+            die(js::locate($this->session->todoList, 'parent'));
         }
     }
 

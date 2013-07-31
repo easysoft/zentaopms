@@ -149,6 +149,7 @@ class testtask extends control
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
         if($projectID != 0) 
@@ -181,6 +182,7 @@ class testtask extends control
 
         $this->view->title      = "TASK #$task->id $task->name/" . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->view;
 
         $this->view->productID = $productID;
@@ -290,6 +292,7 @@ class testtask extends control
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
         $this->view->productID   = $productID;
@@ -341,6 +344,7 @@ class testtask extends control
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->edit;
 
         $this->view->task      = $task;
@@ -384,6 +388,7 @@ class testtask extends control
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->start;
         $this->view->actions    = $actions;
         $this->display();
@@ -422,6 +427,7 @@ class testtask extends control
 
         $this->view->testtask   = $this->testtask->getById($taskID);
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->close;
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->close;
         $this->view->actions    = $actions;
         $this->display();
@@ -445,6 +451,22 @@ class testtask extends control
         {
             $task = $this->testtask->getByID($taskID);
             $this->testtask->delete(TABLE_TESTTASK, $taskID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::locate(inlink('browse', "product=$task->product"), 'parent'));
         }
     }
@@ -485,8 +507,9 @@ class testtask extends control
         /* Save session. */
         $this->testtask->setMenu($this->products, $productID);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->linkCase;
+        $this->view->title      = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->linkCase;
 
         /* Get cases. */
@@ -543,10 +566,25 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function unlinkCase($rowID)
+    public function unlinkCase($rowID, $confirm = 'no')
     {
-        $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
-        die(js::reload('parent'));
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->testtask->confirmUnlinkCase, $this->createLink('testtask', 'unlinkCase', "rowID=$rowID&confirm=yes")));
+        }
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
+            $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
+        }
     }
 
     /**
@@ -659,6 +697,7 @@ class testtask extends control
         $this->view->caseIDList = $caseIDList;
         $this->view->productID  = $productID;
         $this->view->title      = $this->lang->testtask->batchRun;
+        $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->batchRun;
         $this->display();
     }

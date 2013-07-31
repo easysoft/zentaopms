@@ -28,18 +28,35 @@ js::set('mailto', $lang->bug->chosen->mailto);
       <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
       <td>
         <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='select-3'");?>
-        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()'");?></span>
+        <span id='moduleIdBox'>
+        <?php
+        echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()'");
+        if(count($moduleOptionMenu) == 1)
+        {
+            echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug"), $lang->tree->manage, '_blank');
+            echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+        }
+        ?>
+        </span>
       </td>
-     </tr>  
-     <tr>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->bug->project;?></th>
       <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=select-3 onchange=loadProjectRelated(this.value)');?></span></td>
-     </tr>
-     <tr>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
       <td>
-        <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');?></span>
-        <?php if(count($builds) == 1) echo $lang->build->notice;?>
+        <span id='buildBox'>
+        <?php 
+        echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');
+        if(count($builds) == 1 and $projectID) 
+        {
+            echo html::a($this->createLink('build', 'create', "projectID=$projectID"), $lang->build->create, '_blank');
+            echo html::a("javascript:loadProjectsBuilds($projectID)", $lang->refresh);
+        }
+        ?>
+        </span>
       </td>
     </tr>
     <tr>

@@ -6,9 +6,19 @@
 <script language='Javascript'>
 function loadProduct(productID)
 {
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story');
-    planLink   = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&planID=' + $('#plan').val());
+    loadProductModules(productID);
+    loadProductPlans(productID);
+}
+
+function loadProductModules(productID)
+{
+    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&rootModuleID=0&returnType=html&needManage=true');
     $('#moduleIdBox').load(moduleLink);
+}
+
+function loadProductPlans(productID)
+{
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&planID=' + $('#plan').val() + '&needCreate=true');
     $('#planIdBox').load(planLink);
 }
 

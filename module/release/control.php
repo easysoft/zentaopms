@@ -67,7 +67,7 @@ class release extends control
         unset($builds['trunk']);
 
         $this->commonAction($productID);
-        $this->view->title      = $this->lang->release->create;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->create;
         $this->view->builds     = $builds;
         $this->view->productID  = $productID;
@@ -115,7 +115,7 @@ class release extends control
             $bugs    = array();
         }
 
-        $this->view->title      = $this->lang->release->edit;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
@@ -177,16 +177,24 @@ class release extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $this->release->delete(TABLE_RELEASE, $releaseID);
-            if(dao::isError())
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
             }
-            $this->send($response);
+            die(js::locate($this->session->releaseList, 'parent'));
         }
     }
 

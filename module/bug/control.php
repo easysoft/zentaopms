@@ -199,7 +199,9 @@ class bug extends control
         }
 
         $this->bug->setMenu($this->products, $productID);
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
@@ -491,7 +493,7 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID);
 
         /* Set header and position. */
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->edit;
+        $this->view->title      = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->edit;
 
@@ -566,7 +568,7 @@ class bug extends control
 
             /* Set product menu. */
             $this->bug->setMenu($this->products, $productID);
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
+            $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         }
         /* The bugs of my. */
@@ -576,7 +578,7 @@ class bug extends control
             $this->lang->set('menugroup.bug', 'my');
             $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->bug->batchEdit;
+            $this->view->title = "BUG" . $this->lang->bug->batchEdit;
         }
         /* Initialize vars.*/
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');

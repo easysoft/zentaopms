@@ -115,6 +115,7 @@ class task extends control
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);
+        $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->create;
 
         $this->view->title            = $title;
@@ -162,9 +163,10 @@ class task extends control
 
         $stories = $this->story->getProjectStoryPairs($projectID);
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-        $title      = $project->name . $this->lang->colon . $this->lang->task->create;
+        $title      = $project->name . $this->lang->colon . $this->lang->task->batchCreate;
         $position[] = html::a($taskLink, $project->name);
-        $position[] = $this->lang->task->create;
+        $position[] = $this->lang->task->common;
+        $position[] = $this->lang->task->batchCreate;
 
         $this->view->title    = $title;
         $this->view->position = $position;
@@ -192,7 +194,6 @@ class task extends control
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $this->view->project->id);
         $this->view->position[] = html::a($this->createLink('project', 'browse', "project={$this->view->task->project}"), $this->view->project->name);
-
     }
 
     /**
@@ -249,7 +250,8 @@ class task extends control
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
 
         if(!isset($members[$this->view->task->assignedTo])) $members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
-        $this->view->title      = $this->lang->task->edit;
+        $this->view->title      = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
+        $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noletter', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
@@ -308,10 +310,11 @@ class task extends control
             $this->project->setMenu($this->project->getPairs(), $project->id);
             $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
             $members = $members + array('closed' => 'Closed');
-            $this->view->title   = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
-            $this->view->project = $project;
-            $this->view->modules = $this->tree->getOptionMenu($projectID, $viewType = 'task');
-            $this->view->members = $members;
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[] = html::a($this->createLink('project', 'browse', "project=$project->id"), $project->name);
+            $this->view->project    = $project;
+            $this->view->modules    = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+            $this->view->members    = $members;
         }
         /* The tasks of my. */
         else
@@ -395,7 +398,8 @@ class task extends control
 
         $title      = "TASK#$task->id $task->name / $project->name";
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
-        $position[] = $task->name;
+        $position[] = $this->lang->task->common;
+        $position[] = $this->lang->task->view;
 
         $this->view->title       = $title;
         $this->view->position    = $position;
@@ -882,6 +886,8 @@ class task extends control
         $this->project->setMenu($this->project->getPairs(), $projectID);
         $this->projects            = $this->project->getPairs();
         $this->view->title         = $this->projects[$projectID] . $this->lang->colon . $this->lang->task->report->common;
+        $this->view->position[]    = $this->projects[$projectID];
+        $this->view->position[]    = $this->lang->task->report->common;
         $this->view->projectID     = $projectID;
         $this->view->browseType    = $browseType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';

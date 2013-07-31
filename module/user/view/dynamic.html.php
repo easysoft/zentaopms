@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<table class='cont-lt1'>
+<table class='cont-lt1 fixed'>
   <tr valign='top'>
     <td class='side'>
       <div class='box-title'><?php echo $lang->user->dynamic;?></div>

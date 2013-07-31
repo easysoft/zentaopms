@@ -27,35 +27,3 @@ $(function(){
         browseBySearch();
     }
 });
-
-/**
- * Delete doc. 
- * 
- * @param  int    $docID 
- * @access public
- * @return void
- */
-function deleteDoc(docID)
-{
-    if(confirm(confirmDelete))
-    {
-        url = createLink('doc', 'delete','docID=' + docID + '&confrim=yes');
-        $.ajax(
-        {
-            type:     'GET', 
-            url:      url,
-            dataType: 'json', 
-            success:  function(data) 
-            {
-                if(data.result == 'success') 
-                {
-                    $('#docbox').load(request + ' #doclist', function()
-                    {
-                        $('.colored').colorize();
-                        $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                    });
-                }
-            }
-        });
-    }
-}

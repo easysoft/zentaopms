@@ -68,10 +68,12 @@ $lang->testtask->unlinkedCases = 'Unlinked';
 $lang->testtask->linkedCases   = 'Linked';
 $lang->testtask->linkByStory   = 'Link by story';
 $lang->testtask->linkByBug     = 'Link by bug';
-$lang->testtask->confirmDelete = 'Are you sure to delete this test task?';
 $lang->testtask->passAll       = 'Pass all';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Fail';
+
+$lang->testtask->confirmDelete     = 'Are you sure to delete this test task?';
+$lang->testtask->confirmUnlinkCase = 'Are you sure to unlink this case?';
 
 $lang->testtask->byModule      = 'By module';
 $lang->testtask->assignedToMe  = 'Assgined to me';

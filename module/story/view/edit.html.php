@@ -52,11 +52,32 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->module;?></td>
-            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $story->module, 'class="select-1"');?></span></td>
+            <td>
+              <span id='moduleIdBox'>
+              <?php
+              echo html::select('module', $moduleOptionMenu, $story->module, 'class="select-1"');
+              if(count($moduleOptionMenu) == 1)
+              {
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
+                  echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
+              }
+              ?>
+              </span>
+            </td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->plan;?></td>
-            <td><span id='planIdBox'><?php echo html::select('plan', $plans, $story->plan, 'class=select-1');?></span></td>
+            <td>
+            <span id='planIdBox'>
+            <?php echo html::select('plan', $plans, $story->plan, 'class=select-1');
+            if(count($plans) == 1) 
+            {
+                echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
+                echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
+            }
+            ?>
+            </span>
+            </td>
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->story->source;?></th>

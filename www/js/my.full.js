@@ -293,8 +293,7 @@ function toggleHelpLink()
  */
 function toggleTreeBox()
 {
-    var treeSliderH = $(window).height() - $('#header').height() - $('#navbar').height() - $('#featurebar').height() - $('#footer').height() - 150;
-
+    var treeSliderH = 50;
     $('.treeSlider').height(treeSliderH);
     $('.treeSlider').toggle
     (
@@ -807,6 +806,48 @@ function setModal4List(colorboxClass, replaceID, callback)
             });
         }
     });
+}
+
+/**
+ * Delete item use ajax.
+ * 
+ * @param  string url 
+ * @param  string replaceID 
+ * @param  string notice 
+ * @access public
+ * @return void
+ */
+function ajaxDelete(url, replaceID, notice)
+{
+    if(confirm(notice))
+    {
+        $.ajax(
+        {
+            type:     'GET', 
+            url:      url,
+            dataType: 'json', 
+            success:  function(data) 
+            {
+                if(data.result == 'success') 
+                {
+                    $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
+                    $('#tmpDiv').load(document.location.href + ' #' + replaceID, function()
+                    {
+                        $('#tmpDiv').replaceWith($('#tmpDiv').html());
+                        if(typeof sortTable == 'function')
+                        {
+                            sortTable(); 
+                        }
+                        else
+                        {
+                            $('.colored').colorize();
+                            $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+                        }
+                    });
+                }
+            }
+        });
+    }
 }
 
 /* Ping the server every some minutes to keep the session. */

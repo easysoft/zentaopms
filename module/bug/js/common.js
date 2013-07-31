@@ -42,7 +42,7 @@ function loadAll(productID)
     {
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen({no_results_text: noResultsMatch});
-        loadModuleMenu(productID); 
+        loadProductModules(productID); 
         loadProductStories(productID);
         loadProductProjects(productID); 
         loadProductBuilds(productID);
@@ -51,15 +51,15 @@ function loadAll(productID)
 }
 
 /**
- * Load module menu.
+ * Load product's modules.
  * 
  * @param  int    $productID 
  * @access public
  * @return void
  */
-function loadModuleMenu(productID)
+function loadProductModules(productID)
 {
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&rootModuleID=0&returnType=html&needManage=true');
     $('#moduleIdBox').load(link);
 }
 
@@ -171,9 +171,11 @@ function loadProjectStories(projectID)
  */
 function loadProductPlans(productID)
 {
-    link = createLink('productplan', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
+    if(typeof(planID) == 'undefined') planID = 0;
+    link = createLink('product', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
     $('#planIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
+
 /**
  * Load builds of a project.
  * 
@@ -186,16 +188,37 @@ function loadProjectBuilds(projectID)
     productID = $('#product').val();
     if(page == 'create') oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
 
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
     if(page == 'create')
     {
-       $('#buildBox').load(link);
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&index=0&needCreate=true");
+        $('#buildBox').load(link);
     }
     else
     {
-       $('#openedBuildBox').load(link);
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+        $('#openedBuildBox').load(link);
 
-       link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
-       $('#resolvedBuildBox').load(link);
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+        $('#resolvedBuildBox').load(link);
     }
+}
+
+/**
+ * Set story field.
+ * 
+ * @param  moduleID $moduleID 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
+function setStories(moduleID, productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
+    $.get(link, function(stories)
+    {
+        if(!stories) stories = '<select id="story" name="story"></select>';
+        $('#story').replaceWith(stories);
+        $('#story_chzn').remove();
+        $("#story").chosen({no_results_text: ''});
+    });
 }

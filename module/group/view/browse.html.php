@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table align='center' class='table-1 tablesorter fixed'>
+<?php js::set('confirmDelete', $lang->group->confirmDelete);?>
+<table align='center' class='table-1 tablesorter fixed' id='groupList'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->group->browse;?></div>
     <div class='f-right'><?php common::printIcon('group', 'create');?></div>
@@ -41,7 +42,10 @@
       <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list');?>
       <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list');?>
       <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list');?>
-      <?php common::printIcon('group', 'delete',       "groupID=$group->id", '', 'list', '', "hiddenwin");?>
+      <?php
+      $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->group->delete}'");
+      ?>
     </td>
   </tr>
   <?php endforeach;?>

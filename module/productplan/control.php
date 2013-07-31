@@ -46,7 +46,7 @@ class productplan extends control
         $this->commonAction($product);
         $lastPlan = $this->productplan->getLast($product);
 
-        $this->view->title = $this->lang->productplan->create;
+        $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->begin = $lastPlan ? $lastPlan->end : '';
         $this->display();
     }
@@ -74,7 +74,7 @@ class productplan extends control
 
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
-        $this->view->title      = $this->lang->productplan->edit;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
         $this->view->plan = $plan;
         $this->display();
@@ -96,17 +96,25 @@ class productplan extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $plan = $this->productplan->getById($planID);
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
-            if(dao::isError())
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
             }
-            $this->send($response);
+            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
         }
     }
 
@@ -209,7 +217,8 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $moduleID = '0', $status = 'draft,active,changed');
         }
 
-        $this->view->title      = $this->lang->productplan->linkStory;
+        $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkStory;
+        $this->view->position[] = html::a($this->createLink('plan', 'view', "planID=$plan->id"), $plan->title);
         $this->view->position[] = $this->lang->productplan->linkStory;
         $this->view->allStories = $allStories;
         $this->view->planStories= $this->story->getPlanStories($planID);
@@ -237,6 +246,22 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkStory($storyID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::reload('parent'));
         }
     }
@@ -308,7 +333,8 @@ class productplan extends control
             $allBugs= $this->loadModel('bug')->getAllBugs($this->view->product->id, $projects, 'id_desc');
         }
 
-        $this->view->title      = $this->lang->productplan->linkBug;
+        $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkBug;
+        $this->view->position[] = html::a($this->createLink('plan', 'view', "planID=$plan->id"), $plan->title);
         $this->view->position[] = $this->lang->productplan->linkBug;
         $this->view->allBugs    = $allBugs;
         $this->view->planBugs   = $this->bug->getPlanBugs($planID);
@@ -336,6 +362,22 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkBug($bugID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::reload('parent'));
         }
     }
@@ -354,19 +396,5 @@ class productplan extends control
             $this->productplan->unlinkBug($bugID);
         }
         die(js::reload('parent'));
-    }
-
-    /**
-     * AJAX: get plans of a product in html select.
-     * 
-     * @param  int    $productID 
-     * @param  int    $planID 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPlans($productID, $planID = 0)
-    {
-        $plans = $this->productplan->getPairs($productID);
-        die(html::select('plan', $plans, $planID, 'class=select-3'));
     }
 }

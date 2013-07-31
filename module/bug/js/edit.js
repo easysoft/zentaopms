@@ -41,3 +41,16 @@ function getList(module)
         $('#taskListIdBox a').attr("href", link);
     }
 }
+
+/**
+ * load stories of module.
+ * 
+ * @access public
+ * @return void
+ */
+function loadModuleRelated()
+{
+    moduleID  = $('#module').val();
+    productID = $('#product').val();
+    setStories(moduleID, productID);
+}

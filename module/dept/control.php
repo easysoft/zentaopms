@@ -34,12 +34,9 @@ class dept extends control
      */
     public function browse($deptID = 0)
     {
-        $title      = $this->lang->dept->manage . $this->lang->colon . $this->app->company->name;
-        $position[] = $this->lang->dept->manage;
-
         $parentDepts = $this->dept->getParents($deptID);
-        $this->view->title       = $title;
-        $this->view->position    = $position;
+        $this->view->title       = $this->lang->dept->manage . $this->lang->colon . $this->app->company->name;
+        $this->view->position[]  = $this->lang->dept->manage;
         $this->view->deptID      = $deptID;
         $this->view->depts       = $this->dept->getTreeMenu($rootDeptID = 0, array('deptmodel', 'createManageLink'));
         $this->view->parentDepts = $parentDepts;

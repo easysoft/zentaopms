@@ -64,6 +64,7 @@ include '../../common/view/header.html.php';
        <?php 
        echo html::submitButton();
        if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
+       echo html::linkButton($lang->mail->reset, inlink('reset'));
        ?>
      </td>
    </tr>

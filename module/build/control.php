@@ -44,13 +44,16 @@ class build extends control
         $bugs    = $this->bug->getProjectBugs($projectID); 
 
         /* Assign. */
-        $this->view->title     = $this->lang->build->create;
-        $this->view->products  = $this->project->getProducts($projectID);
-        $this->view->projectID = $projectID;
-        $this->view->users     = $this->user->getPairs('nodeleted');
-        $this->view->stories   = $stories;
-        $this->view->bugs      = $bugs;
-        $this->view->orderBy   = $orderBy;
+        $project = $this->loadModel('project')->getById($projectID);
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->create;
+        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->build->create;
+        $this->view->products   = $this->project->getProducts($projectID);
+        $this->view->projectID  = $projectID;
+        $this->view->users      = $this->user->getPairs('nodeleted');
+        $this->view->stories    = $stories;
+        $this->view->bugs       = $bugs;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 
@@ -89,7 +92,9 @@ class build extends control
         $bugs    = $this->bug->getProjectBugs($build->project); 
 
         /* Assign. */
-        $this->view->title      = $this->lang->build->edit;
+        $project = $this->loadModel('project')->getById($build->project);
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->edit;
+        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$build->project"), $project->name);
         $this->view->position[] = $this->lang->build->edit;
         $this->view->products   = $this->project->getProducts($build->project);
         $this->view->build      = $build;
@@ -127,6 +132,7 @@ class build extends control
         /* Assign. */
         $projects = $this->project->getPairs();
         $this->view->title      = "BUILD #$build->id $build->name - " . $projects[$build->project];
+        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
         $this->view->position[] = $this->lang->build->view;
         $this->view->products   = $this->project->getProducts($build->project);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -153,17 +159,25 @@ class build extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $build = $this->build->getById($buildID);
             $this->build->delete(TABLE_BUILD, $buildID);
-            if(dao::isError())
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
             }
-            $this->send($response);
+            die(js::locate($this->createLink('project', 'build', "projectID=$build->project"), 'parent'));
         }
     }
 
@@ -191,12 +205,23 @@ class build extends control
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
      * @param  int    $index        the index of batch create bug.
+     * @param  bool   $needCreate   if need to append the link of create build
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $index = 0)
+    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $index = 0, $needCreate = false)
     {
-        if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
+        if($varName == 'openedBuild')   
+        {
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $output = html::select($varName . '[]', $builds , $build, 'size=4 class=select-3 multiple');
+            if(count($builds) == 1 and $needCreate)
+            {
+                $output .= html::a($this->createLink('build', 'create', "projectID=$projectID"), $this->lang->build->create, '_blank');
+                $output .= html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
+            }
+            die($output);
+        }
         if($varName == 'openedBuilds')  die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
         if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'class=select-3'));
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'class=select-3'));

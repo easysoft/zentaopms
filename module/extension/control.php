@@ -88,6 +88,7 @@ class extension extends control
         }
 
         $this->view->title      = $this->lang->extension->obtain;
+        $this->view->position[] = $this->lang->extension->obtain;
         $this->view->moduleTree = $this->extension->getModulesByAPI();
         $this->view->extensions = $extensions;
         $this->view->installeds = $this->extension->getLocalExtensions('installed');
@@ -382,7 +383,8 @@ class extension extends control
 
         $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
-        $this->view->title = $this->lang->extension->activateFinished;
+        $this->view->title      = $this->lang->extension->activateFinished;
+        $this->view->position[] = $this->lang->extension->activateFinished;
         $this->display();
     }
 
@@ -397,7 +399,8 @@ class extension extends control
     {
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
         $this->view->removeCommands = $this->extension->removePackage($extension);
-        $this->view->title = $this->lang->extension->deactivateFinished;
+        $this->view->title      = $this->lang->extension->deactivateFinished;
+        $this->view->position[] = $this->lang->extension->deactivateFinished;
         $this->display();
     }
 
@@ -433,7 +436,8 @@ class extension extends control
     public function erase($extension)
     {
         $this->view->removeCommands = $this->extension->erasePackage($extension);
-        $this->view->title = $this->lang->extension->eraseFinished;
+        $this->view->title      = $this->lang->extension->eraseFinished;
+        $this->view->position[] = $this->lang->extension->eraseFinished;
         $this->display();
     }
 

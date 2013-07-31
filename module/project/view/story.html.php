@@ -87,8 +87,8 @@
           $lang->testcase->batchCreate = $lang->testcase->create;
           if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list');
 
-          $lang->project->unlinkStory = $lang->unlink;
-          echo html::a("javascript:unlink($project->id,$story->id)", '&nbsp;', '', "class='icon-green-project-unlinkStory' title='$lang->unlink'");
+          $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
+          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '&nbsp;', '', "class='icon-green-productplan-unlinkStory' title='{$lang->project->unlinkStory}'");
           ?>
         </td>
       </tr>

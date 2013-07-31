@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
+<?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <div id='titlebar' <?php if($plan->deleted) echo "class='deleted'";?>>PLAN #<?php echo $plan->id . ' ' . $plan->title;?></div>
 <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>">
   <table class='cont-rt5'>
@@ -58,7 +60,7 @@
       </td>
     </tr>
   </table>
-  <table class='table-1 tablesorter a-center fixed'>
+  <table class='table-1 tablesorter a-center fixed' id='storyList'>
     <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
     <thead>
     <tr class='colhead'>
@@ -97,7 +99,12 @@
         <td><?php echo $story->estimate;?></td>
         <td><?php echo $lang->story->statusList[$story->status];?></td>
         <td><?php echo $lang->story->stageList[$story->stage];?></td>
-        <td><?php common::printIcon('productplan', 'unlinkStory', "story=$story->id", '', 'list', '', 'hiddenwin');?></td>
+        <td>
+          <?php
+          $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&confirm=yes");
+          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '&nbsp;', '', "class='icon-green-productplan-unlinkStory' title='{$lang->productplan->unlinkStory}'");
+          ?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>
@@ -120,7 +127,7 @@
   </table>
 </form>
 <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>">
-  <table class='table-1 tablesorter a-center fixed'>
+  <table class='table-1 tablesorter a-center fixed' id='bugList'>
     <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedBugs;?></caption>
     <thead>
     <tr class='colhead'>
@@ -148,7 +155,12 @@
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
         <td><?php echo $lang->bug->statusList[$bug->status];?></td>
-        <td><?php common::printIcon('productplan', 'unlinkBug', "bug=$bug->id", '', 'list', '', 'hiddenwin');?></td>
+        <td>
+          <?php
+          $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
+          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '&nbsp;', '', "class='icon-green-productplan-unlinkBug' title='{$lang->productplan->unlinkBug}'");
+          ?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

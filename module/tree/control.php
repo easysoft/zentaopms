@@ -296,13 +296,24 @@ class tree extends control
      * @param  int    $rootID 
      * @param  string $viewType 
      * @param  int    $rootModuleID 
+     * @param  string $returnType
+     * @param  bool   $needManage
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html')
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html', $needManage = false)
     {
         $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
-        if($returnType == 'html') die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
+        if($returnType == 'html')
+        {
+            $output = html::select("module", $optionMenu, '', "onchange=setAssignedTo()");
+            if(count($optionMenu) == 1 and $needManage)
+            {
+                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType"), $this->lang->tree->manage, '_blank');
+                $output .= html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
+            }
+            die($output);
+        }
         if($returnType == 'json') die(json_encode($optionMenu));
     }
 

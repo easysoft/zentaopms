@@ -352,17 +352,18 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .treeSlider
 {
   position:absolute; 
-  background-color: #F1F1F1; 
+  background-color: #bbb; 
   background-repeat: repeat-x; 
-  border: 1px solid #eee; 
+  border: 1px solid #bbb; 
+  border-left:none;
   cursor: pointer; 
-  width:8px; 
-  left:-15px;
+  width: 8px; 
+  left:-16px;
   border-radius:0px 10px 10px 0px
 }
 .treeSlider span { 
   position:absolute; 
-  top:50%; 
+  top:40%; 
   left:2px; 
   border-bottom: 4px solid transparent; 
   border-top: 4px solid transparent; 

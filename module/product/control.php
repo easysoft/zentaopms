@@ -52,6 +52,7 @@ class product extends control
 
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
+        $this->view->position[]   = $this->lang->product->allProduct;
         $this->view->productStats = $this->product->getStats();
         $this->view->productID    = $productID;
         $this->display();
@@ -72,8 +73,10 @@ class product extends control
         $this->app->loadLang('my');
         $this->view->projectStats  = $this->loadModel('project')->getProjectStats($status, $productID);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->productID = $productID;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+        $this->view->position[] = $this->products[$productID];
+        $this->view->position[] = $this->lang->product->project;
+        $this->view->productID  = $productID;
         $this->display();
     }
 
@@ -114,6 +117,7 @@ class product extends control
         /* Set header and position. */
         $this->view->title      = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
         $this->view->position[] = $this->products[$productID];
+        $this->view->position[] = $this->lang->product->browse;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -314,7 +318,7 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->view->title      = $product->name . ' - ' . $this->lang->product->view;
+        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->view;
         $this->view->product    = $product;
@@ -433,6 +437,7 @@ class product extends control
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
 
         /* Assign. */
@@ -463,13 +468,20 @@ class product extends control
      * 
      * @param  int    $productID 
      * @param  int    $planID 
+     * @param  bool   $needCreate
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $planID = 0)
+    public function ajaxGetPlans($productID, $planID = 0, $needCreate = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);
-        die(html::select('plan', $plans, $planID));
+        $output = html::select('plan', $plans, $planID, "class='select-1'");
+        if(count($plans) == 1 and $needCreate) 
+        {
+            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID"), $this->lang->productplan->create, '_blank');
+            $output .= html::a("javascript:loadProductPlans($productID)", $this->lang->refresh);
+        }
+        die($output);
     }
 
     /**

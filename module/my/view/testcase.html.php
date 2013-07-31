@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php js::set('confirmDelete', $lang->testcase->confirmDelete)?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -68,7 +69,10 @@
         common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'iframe');
         common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
         common::printIcon('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
-        common::printIcon('testcase', 'delete',  "caseID=$case->id", '', 'list', '', 'hiddenwin');
+
+        $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
+        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->testcase->delete}'");
+
         common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'createBug');
         ?>
         </td>

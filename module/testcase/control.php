@@ -249,6 +249,7 @@ class testcase extends control
 
         $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
         $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[] = $this->lang->testcase->common;
         $position[] = $this->lang->testcase->create;
 
         $this->view->title            = $title;
@@ -305,6 +306,7 @@ class testcase extends control
 
         $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[] = $this->lang->testcase->common;
         $position[] = $this->lang->testcase->batchCreate;
 
         $this->view->title            = $title;
@@ -339,6 +341,7 @@ class testcase extends control
 
         $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
 
         $this->view->case           = $case;
@@ -398,6 +401,7 @@ class testcase extends control
         $currentModuleID = $case->module;
         $title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
         /* Set menu. */
@@ -498,6 +502,22 @@ class testcase extends control
         else
         {
             $this->testcase->delete(TABLE_CASE, $caseID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::locate($this->session->caseList, 'parent'));
         }
     }
