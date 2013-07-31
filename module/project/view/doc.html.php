@@ -13,7 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<table class='table-1 fixed colored tablesorter' align='center'>
+<?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
+<?php js::set('projectID', $project->id)?>
+<table class='table-1 fixed colored tablesorter' align='center' id='doclist'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'> <?php echo $lang->project->doc;?></div>
     <div class='f-right'><?php common::printIcon('doc', 'create', "libID=project&moduleID=0&productID=0&projectID=$project->id&from=project");?></div>
@@ -42,9 +44,8 @@
       <td><?php echo $doc->addedDate;?></td>
       <td>
         <?php 
-        $vars = "doc={$doc->id}";
-        common::printIcon('doc', 'edit',   $vars);
-        common::printIcon('doc', 'delete', $vars, '', 'list', '','hiddenwin');
+        common::printIcon('doc', 'edit',   "doc=$doc->id");
+        echo html::a("javascript:deleteDoc($doc->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
         ?>
       </td>
     </tr>

@@ -153,9 +153,17 @@ class build extends control
         }
         else
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
             $build = $this->build->getById($buildID);
             $this->build->delete(TABLE_BUILD, $buildID);
-            die(js::locate($this->createLink('project', 'build', "projectID=$build->project"), 'parent'));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
         }
     }
 
