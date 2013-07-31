@@ -286,6 +286,34 @@ function toggleHelpLink()
 }
 
 /**
+ * Toggle tree menu.
+  
+ * @access public
+ * @return void
+ */
+function toggleTreeBox()
+{
+    var treeSliderH = $(window).height() - $('#header').height() - $('#navbar').height() - $('#featurebar').height() - $('#footer').height() - 15;
+
+    $('.treeSlider').height(treeSliderH);
+    $('.treeSlider').toggle
+    (
+        function()
+        {
+            $('.side').hide()
+            $('.treeSlider span').css("border-right", "0 none");
+            $('.treeSlider span').css("border-left", "4px solid #000000");
+        }, 
+        function()
+        {
+            $('.side').show()
+            $('.treeSlider span').css("border-right", "4px solid #000000");
+            $('.treeSlider span').css("border-left", "0 none");
+        }
+    );
+}
+
+/**
  * Set language.
  * 
  * @access public
@@ -803,6 +831,7 @@ $(document).ready(function()
 
     autoCheck();
     toggleSearch();
+    toggleTreeBox();
 
     hideClearDataLink();
 

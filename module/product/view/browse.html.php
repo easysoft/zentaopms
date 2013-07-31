@@ -38,7 +38,9 @@ var browseType = '<?php echo $browseType;?>';
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
+
 <form method='post' id='productStoryForm'>
+  <div class='treeSlider'><span>&nbsp;</span></div>
   <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>' id='treebox'>
