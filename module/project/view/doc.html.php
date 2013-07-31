@@ -14,8 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
-<?php js::set('projectID', $project->id)?>
-<table class='table-1 fixed colored tablesorter' align='center' id='doclist'>
+<table class='table-1 fixed colored tablesorter' align='center' id='docList'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'> <?php echo $lang->project->doc;?></div>
     <div class='f-right'><?php common::printIcon('doc', 'create', "libID=project&moduleID=0&productID=0&projectID=$project->id&from=project");?></div>
@@ -45,7 +44,8 @@
       <td>
         <?php 
         common::printIcon('doc', 'edit',   "doc=$doc->id");
-        echo html::a("javascript:deleteDoc($doc->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
+        $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
+        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
         ?>
       </td>
     </tr>
