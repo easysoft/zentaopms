@@ -65,6 +65,7 @@ js::set('customed', $customed);
 ?>
 
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
+  <div class='treeSlider'><span>&nbsp;</span></div>
   <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>' id='treebox'>

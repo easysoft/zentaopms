@@ -38,6 +38,8 @@ js::set('moduleID'  , $moduleID);
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
+<form id='batchForm' method='post'>
+<div class='treeSlider'><span>&nbsp;</span></div>
 <table class='cont-lt1'>
   <tr valign='top'>
     <td class='side <?php echo $treeClass;?>'>
@@ -52,10 +54,9 @@ js::set('moduleID'  , $moduleID);
     </td>
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
-      <form id='batchForm' method='post'>
       <?php include 'caselist.html.php';?>
-      </form>
     </td>              
   </tr>              
 </table>              
+</form>
 <?php include '../../common/view/footer.html.php';?>

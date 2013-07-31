@@ -22,6 +22,8 @@
 var browseType  = '<?php echo $browseType;?>';
 </script>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
+<form method='post' id='projectTaskForm'>
+<div class='treeSlider'><span>&nbsp;</span></div>
 <table class='cont-lt2'>
   <tr valign='top'>
     <td class='side'>
@@ -38,12 +40,11 @@ var browseType  = '<?php echo $browseType;?>';
     </td>
     <td class='divider'></td>
     <td>
-      <form method='post' id='projectTaskForm'>
       <?php include "./tasklist.html.php"?>
-      </form>
     </td>
   </tr>
 </table>
+</form>
 <script language='javascript'>
 $('#project<?php echo $projectID;?>').addClass('active')
 $('#<?php echo $browseType;?>Tab').addClass('active')

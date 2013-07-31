@@ -121,3 +121,5 @@
 /* Disabled button and disabled link. */
 .groupButton input[disabled='disabled'] {background:#eee; color:#ccc}
 .listMenu li a.disabled {color:#ccc}
+
+form {position:relative}
