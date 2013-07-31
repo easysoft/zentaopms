@@ -194,6 +194,8 @@ $lang->project->linkStory             = 'Link story';
 $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back（Automatically after 5 seconds）';
 $lang->project->linkProduct           = 'Select product to link...';
+$lang->project->withWeekend           = 'Show weekend';
+$lang->project->noWeekend             = 'Remove weekend';
 
 /* Report. */
 $lang->project->charts = new stdclass();

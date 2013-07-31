@@ -17,6 +17,7 @@
   <?php
   echo $charts; 
   common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
+  echo html::a(inlink('burn', "projectID=$projectID&type=" . ($type == 'noweekend' ? 'withweekend' : 'noweekend')), ($type == 'noweekend' ? $lang->project->withWeekend : $lang->project->noWeekend));
   echo $lang->project->howToUpdateBurn;
   ?>
 </div>

@@ -194,6 +194,8 @@ $lang->project->linkStory             = '关联需求';
 $lang->project->createTask            = '添加任务';
 $lang->project->goback                = '返回项目首页（5秒后将自动跳转）';
 $lang->project->linkProduct           = '选择产品关联...';
+$lang->project->withWeekend           = '显示周末';
+$lang->project->noWeekend             = '去除周末';
 
 /* 统计。*/
 $lang->project->charts = new stdclass();

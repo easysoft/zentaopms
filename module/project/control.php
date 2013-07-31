@@ -662,11 +662,12 @@ class project extends control
     /**
      * Browse burndown chart of a project.
      * 
-     * @param  int    $projectID 
+     * @param  int       $projectID 
+     * @param  string    $type 
      * @access public
      * @return void
      */
-    public function burn($projectID = 0)
+    public function burn($projectID = 0, $type = 'noweekend')
     {
         $this->loadModel('report');
         $project     = $this->commonAction($projectID);
@@ -678,38 +679,61 @@ class project extends control
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->burn;
 
-        /* Create charts by flash. */
-        //$dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
-        //$charts  = $this->report->createJSChart('line', $dataXML, 700, 350);
+        /* Get date list. */
+        if($projectInfo->days <= $maxDays)
+        {
+            $dateList = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type);
+        }
+        else
+        {
+            $today = date('Y-m-d');
+            if($today > $projectInfo->end)
+            {
+                $begin = $projectInfo->begin;
+                $end   = date('Y-m-d', strtotime($projectInfo->begin) + 30 * 24 * 3600);
+            }
+            else
+            {
+                $endDays   = helper::diffDate($projectInfo->end, $today);
+                $endDays   = $endDays > 15 ? 15 : $endDays;
+                $beginDays = $endDays > 15 ? 15 : (30 - $endDays);
 
-        /* Create charts by flot. */
-        $sets     = $this->project->getBurnDataFlot($project->id);
-        $count    = count($sets);
-        $dataJSON = $this->report->createSingleJSON($sets);
+                $begin = date('Y-m-d', strtotime("-$beginDays days"));
+                $begin = $begin > $projectInfo->begin ? $begin : $projectInfo->begin;
+                $end   = date('Y-m-d', strtotime("+$endDays days"));
+                $end   = $end > $projectInfo->end ? $projectInfo->end : $end;
+            }
+            $dateList = $this->project->getDateList($begin, $end, $type);
+        }
 
         $limitJSON     = '[]';
         $baselineJSON  = '[]';
-        $beginMicTime  = $this->project->getMicTime($projectInfo->begin);
-        $endMicTime    = $this->project->getMicTime($projectInfo->end);
-        $maxDayMicTime = $this->project->getMicTime(strtotime($projectInfo->begin) + $maxDays * 24 * 3600);
-        $minDayMicTime = $this->project->getMicTime(time() - $maxDays * 24 * 3600);
         if($projectInfo->days <= $maxDays)
         {
-            $limitJSON    = "[[$beginMicTime, 0], [$endMicTime, 0]]";
             $firstBurn    = reset($sets);
             $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
-            $baselineJSON = "[[$beginMicTime, $firstTime], [$endMicTime, 0]]";
+            $days         = count($dateList) - 1;
+            $rate         = $firstTime / $days;
+            $baselineJSON = '[';
+            foreach($dateList as $i => $date) $baselineJSON .='[' . $i . ',' . ($days - $i) * $rate . '],';
+            $baselineJSON = rtrim($baselineJSON, ',') . ']';
         }
-        elseif($count <= $maxDays)
+        else
         {
-            $limitJSON = "[[$beginMicTime, 0], [$maxDayMicTime, 0]]";
+            $limitJSON = '[';
+            foreach($dateList as $i => $date) $limitJSON .= "[$i, 0],";
+            $limitJSON = rtrim($limitJSON, ',') . ']';
         }
 
-        $flotJSON['data']    = $dataJSON;
-        $flotJSON['limit']   = $limitJSON;
-        $flotJSON['baseline'] = $baselineJSON;
+        $sets = $this->project->getBurnDataFlot($project->id, $maxDays);
 
-        $charts = $this->report->createJSChartFlot($project->name, $flotJSON, $count, 900, 400);
+        $flotJSON['data']     = $this->report->createSingleJSON($sets, $dateList);
+        $flotJSON['limit']    = $limitJSON;
+        $flotJSON['baseline'] = $baselineJSON;
+        $flotJSON['dateList'] = json_encode($dateList);
+        $flotJSON['ticks']    = json_encode(array_keys($dateList));
+
+        $charts = $this->report->createJSChartFlot($project->name, $flotJSON, 900, 400);
 
         /* Assign. */
         $this->view->title     = $title;
@@ -717,6 +741,7 @@ class project extends control
         $this->view->tabID     = 'burn';
         $this->view->charts    = $charts;
         $this->view->projectID = $projectID;
+        $this->view->type      = $type;
 
         $this->display();
     }
