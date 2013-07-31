@@ -293,7 +293,7 @@ function toggleHelpLink()
  */
 function toggleTreeBox()
 {
-    var treeSliderH = $(window).height() - $('#header').height() - $('#navbar').height() - $('#featurebar').height() - $('#footer').height() - 15;
+    var treeSliderH = $(window).height() - $('#header').height() - $('#navbar').height() - $('#featurebar').height() - $('#footer').height() - 150;
 
     $('.treeSlider').height(treeSliderH);
     $('.treeSlider').toggle
