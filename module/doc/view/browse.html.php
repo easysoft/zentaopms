@@ -15,7 +15,6 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
-<?php js::set('request', $this->app->getURI(true))?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
@@ -43,8 +42,8 @@ var browseType = '<?php echo $browseType;?>';
       </div>
     </td>
     <td class='divider'></td>
-    <td id='docbox'>
-      <table class='table-1 fixed colored tablesorter datatable' id='doclist'>
+    <td>
+      <table class='table-1 fixed colored tablesorter datatable' id='docList'>
         <thead>
           <tr class='colhead'>
             <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -70,9 +69,9 @@ var browseType = '<?php echo $browseType;?>';
             <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
             <td>
               <?php 
-              $vars = "doc={$doc->id}";
-              common::printIcon('doc', 'edit',   $vars, '', 'list');
-              echo html::a("javascript:deleteDoc($doc->id)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
+              common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
+              $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
               ?>
             </td>
           </tr>
