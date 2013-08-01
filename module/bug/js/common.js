@@ -202,3 +202,23 @@ function loadProjectBuilds(projectID)
         $('#resolvedBuildBox').load(link);
     }
 }
+
+/**
+ * Set story field.
+ * 
+ * @param  moduleID $moduleID 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
+function setStories(moduleID, productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
+    $.get(link, function(stories)
+    {
+        if(!stories) stories = '<select id="story" name="story"></select>';
+        $('#story').replaceWith(stories);
+        $('#story_chzn').remove();
+        $("#story").chosen({no_results_text: ''});
+    });
+}
