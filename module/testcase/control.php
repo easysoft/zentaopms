@@ -497,16 +497,24 @@ class testcase extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $this->testcase->delete(TABLE_CASE, $caseID);
-            if(dao::isError())
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
             }
-            $this->send($response);
+            die(js::locate($this->session->caseList, 'parent'));
         }
     }
 
