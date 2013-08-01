@@ -393,18 +393,4 @@ class productplan extends control
         }
         die(js::reload('parent'));
     }
-
-    /**
-     * AJAX: get plans of a product in html select.
-     * 
-     * @param  int    $productID 
-     * @param  int    $planID 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPlans($productID, $planID = 0)
-    {
-        $plans = $this->productplan->getPairs($productID);
-        die(html::select('plan', $plans, $planID, 'class=select-3'));
-    }
 }
