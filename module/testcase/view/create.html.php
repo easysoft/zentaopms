@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include './header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
@@ -22,7 +22,7 @@
         <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?>
         <span id='moduleIdBox'>
         <?php 
-        echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=setStories();");
+        echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=loadModuleRelated();");
         if(count($moduleOptionMenu) == 1)
         {
             echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case"), $lang->tree->manage, '_blank');
