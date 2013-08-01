@@ -171,6 +171,7 @@ function loadProjectStories(projectID)
  */
 function loadProductPlans(productID)
 {
+    if(typeof(planID) == 'undefined') planID = 0;
     link = createLink('productplan', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
     $('#planIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
