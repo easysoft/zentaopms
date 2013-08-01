@@ -177,16 +177,24 @@ class release extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $this->release->delete(TABLE_RELEASE, $releaseID);
-            if(dao::isError())
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
             }
-            $this->send($response);
+            die(js::locate($this->session->releaseList, 'parent'));
         }
     }
 
