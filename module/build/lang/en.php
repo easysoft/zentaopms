@@ -38,5 +38,3 @@ $lang->build->bugs               = 'Linked bugs';
 
 $lang->build->finishStories = 'The total demand for a complete %s';
 $lang->build->resolvedBugs  = 'The total solution of bug%s';
-
-$lang->build->notice = "Please create a build in project view's build page.";

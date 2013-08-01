@@ -28,6 +28,7 @@ $lang->todayIs      = '今天是%s，';
 $lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 
 $lang->reset        = '重填';
+$lang->refresh      = '刷新';
 $lang->edit         = '编辑';
 $lang->copy         = '复制';
 $lang->delete       = '删除';
