@@ -158,4 +158,16 @@ class mail extends control
         $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
         $this->display();
     }
+
+    /**
+     * Reset the email config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function reset()
+    {
+        $this->dao->delete('*')->from(TABLE_CONFIG)->where('module')->eq('mail')->exec(); 
+        $this->locate(inlink('detect'));
+    }
 }
