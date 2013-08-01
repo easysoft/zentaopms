@@ -20,7 +20,16 @@
       <th class='rowhead'><?php echo $lang->testcase->lblProductAndModule;?></th>
       <td>
         <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?>
-        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=setStories();");?></span>
+        <span id='moduleIdBox'>
+        <?php 
+        echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=setStories();");
+        if(count($moduleOptionMenu) == 1)
+        {
+            echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case"), $lang->tree->manage, '_blank');
+            echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+        }
+        ?>
+        </span>
       </td>
     </tr>  
     <tr>

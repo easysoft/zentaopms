@@ -463,13 +463,20 @@ class product extends control
      * 
      * @param  int    $productID 
      * @param  int    $planID 
+     * @param  bool   $needCreate
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $planID = 0)
+    public function ajaxGetPlans($productID, $planID = 0, $needCreate = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);
-        die(html::select('plan', $plans, $planID));
+        $output = html::select('plan', $plans, $planID, "class='select-1'");
+        if(count($plans) == 1 and $needCreate) 
+        {
+            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID"), $this->lang->productplan->create, '_blank');
+            $output .= html::a("javascript:loadProductPlans($productID)", $this->lang->refresh);
+        }
+        die($output);
     }
 
     /**

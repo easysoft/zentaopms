@@ -15,7 +15,7 @@ var newRowID = 0;
  */
 function loadAll(productID)
 {
-    loadModuleMenu(productID);
+    loadProductModules(productID);
     loadStory(productID);
 }
 
@@ -26,9 +26,9 @@ function loadAll(productID)
  * @access public
  * @return void
  */
-function loadModuleMenu(productID)
+function loadProductModules(productID)
 {
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case');
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&rootModuleID=0&returnType=html&needManage=true');
     $('#moduleIdBox').load(link);
 }
 

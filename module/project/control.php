@@ -1562,7 +1562,7 @@ class project extends control
     public function ajaxGetMembers($projectID)
     {
         $users = $this->project->getTeamMemberPairs($projectID);
-        die(html::select('assignedTo', $users, ''));
+        die(html::select('assignedTo', $users, '', "class='select-1'"));
     }
 
     /**
