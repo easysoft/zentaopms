@@ -192,7 +192,7 @@ $lang->project->afterInfo             = '项目添加成功，您现在可以进
 $lang->project->setTeam               = '设置团队';
 $lang->project->linkStory             = '关联需求';
 $lang->project->createTask            = '添加任务';
-$lang->project->goback                = '返回项目首页（5秒后将自动跳转）';
+$lang->project->goback                = '返回项目首页';
 $lang->project->linkProduct           = '选择产品关联...';
 
 /* 统计。*/

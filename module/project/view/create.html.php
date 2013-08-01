@@ -20,8 +20,7 @@ var projectID = <?php echo $projectID;?>;
 defaultURL    = createLink('project', 'task', 'projectID=' + projectID);
 $(document).ready(function() 
 {
-    $.fn.colorbox({html:tips, open:true, transition:'none', width:450, height:250});
-    setTimeout( function() {location.href=defaultURL}, 5000);
+    $.fn.colorbox({html:tips, open:true, transition:'none', width:450, height:250, onCleanup:function(){parent.location.href=defaultURL;}});
 });
 </script>
 </body>
