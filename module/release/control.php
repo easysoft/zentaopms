@@ -67,7 +67,7 @@ class release extends control
         unset($builds['trunk']);
 
         $this->commonAction($productID);
-        $this->view->title      = $this->lang->release->create;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->create;
         $this->view->builds     = $builds;
         $this->view->productID  = $productID;
@@ -115,7 +115,7 @@ class release extends control
             $bugs    = array();
         }
 
-        $this->view->title      = $this->lang->release->edit;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;

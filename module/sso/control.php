@@ -9,8 +9,10 @@ class sso extends control
      */
     public function browse()
     {
-        $this->view->title = $this->lang->sso->browse;
-        $this->view->auths = $this->sso->getAuths();
+        $this->view->title      = $this->lang->sso->common . $lang->colon . $this->lang->sso->browse;
+        $this->view->position[] = $this->lang->sso->common;
+        $this->view->position[] = $this->lang->sso->browse;
+        $this->view->auths      = $this->sso->getAuths();
         $this->display();
     }
 
@@ -32,7 +34,9 @@ class sso extends control
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(inlink('browse'), 'parent'));
         }
-        $this->view->title = $this->lang->sso->create;
+        $this->view->title      = $this->lang->sso->common . $this->lang->colon . $this->lang->sso->create;
+        $this->view->position[] = $this->lang->sso->common;
+        $this->view->position[] = $this->lang->sso->create;
         $this->view->key   = $this->sso->createKey();
         $this->display();
     }
@@ -55,6 +59,10 @@ class sso extends control
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(inlink('browse'), 'parent'));
         }
+
+        $this->view->title      = $this->lang->sso->common . $this->lang->colon . $this->lang->sso->edit;
+        $this->view->position[] = $this->lang->sso->common;
+        $this->view->position[] = $this->lang->sso->edit;
 
         $this->view->auth = $this->sso->getAuth($code);
         $this->view->code = $code;

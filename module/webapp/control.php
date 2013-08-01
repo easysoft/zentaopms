@@ -66,6 +66,7 @@ class webapp extends control
         }
 
         $this->view->title      = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->obtain;
+        $this->view->position[] = $this->lang->webapp->obtain;
         $this->view->moduleTree = $this->webapp->getModulesByAPI();
         $this->view->webapps    = $webapps;
         $this->view->installeds = $this->webapp->getLocalApps('appid');
@@ -115,8 +116,9 @@ class webapp extends control
 
         $this->webapp->setMenu();
 
-        $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->create;
-        $this->view->modules = $this->loadModel('tree')->getOptionMenu(0, 'webapp');
+        $this->view->title      = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->create;
+        $this->view->position[] = $this->lang->webapp->create;
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu(0, 'webapp');
         $this->display();
     }
 

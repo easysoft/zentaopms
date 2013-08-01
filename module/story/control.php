@@ -145,6 +145,7 @@ class story extends control
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
+        $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->create;
         $this->view->products         = $products;
         $this->view->users            = $users;
@@ -207,9 +208,10 @@ class story extends control
         $plans = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
         $plans['same'] = $this->lang->story->same;
 
-        $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
+        $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
-        $this->view->position[]       = $this->lang->story->create;
+        $this->view->position[]       = $this->lang->story->common;
+        $this->view->position[]       = $this->lang->story->batchCreate;
         $this->view->products         = $products;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -244,6 +246,7 @@ class story extends control
 
         /* Assign. */
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $this->view->position[]       = $this->lang->story->common;
         $this->view->product          = $product;
         $this->view->products         = $products;
         $this->view->story            = $story;
@@ -279,7 +282,7 @@ class story extends control
   
         /* Assign. */
         $story = $this->story->getById($storyID, 0, true);
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
+        $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', "$story->assignedTo,$story->openedBy,$story->closedBy");
@@ -362,6 +365,7 @@ class story extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
+        $this->view->position[]        = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
@@ -408,7 +412,7 @@ class story extends control
         $this->app->loadLang('project');
 
         /* Assign. */
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->story->change . $this->lang->colon . $this->view->story->title;
+        $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->display();
@@ -438,7 +442,7 @@ class story extends control
         $this->commonAction($storyID);
 
         /* Assign. */
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->story->activate . $this->lang->colon . $this->view->story->title;
+        $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->closedBy);
         $this->view->position[] = $this->lang->story->activate;
         $this->display();
@@ -472,6 +476,7 @@ class story extends control
 
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $position[] = $this->lang->story->common;
         $position[] = $this->lang->story->view;
 
         $this->view->title      = $title;
@@ -549,9 +554,10 @@ class story extends control
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
         if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
 
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
+        $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
-        $this->view->position[] = $this->lang->story->view;
+        $this->view->position[] = $this->lang->story->common;
+        $this->view->position[] = $this->lang->story->review;
 
         $this->view->product = $product;
         $this->view->story   = $story;
@@ -616,9 +622,10 @@ class story extends control
         /* Set the closed reason options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
 
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->close . $this->lang->colon . $story->title;
+        $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
-        $this->view->position[] = $this->lang->close;
+        $this->view->position[] = $this->lang->story->common;
+        $this->view->position[] = $this->lang->story->close;
 
         $this->view->product = $product;
         $this->view->story   = $story;
@@ -663,7 +670,8 @@ class story extends control
         {
             $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
             $product = $this->product->getByID($productID);
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         /* The stories of a project. */
         elseif($projectID)
@@ -916,7 +924,9 @@ class story extends control
         $this->products = $this->product->getPairs();
         $this->product->setMenu($this->products, $productID);
 
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->common;
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
+        $this->view->position[]    = $this->products[$productID];
+        $this->view->position[]    = $this->lang->story->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;

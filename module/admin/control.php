@@ -34,7 +34,8 @@ class admin extends control
 
 		$this->app->loadLang('misc');
 
-        $this->view->title = $this->lang->admin->common;
+        $this->view->title      = $this->lang->admin->common;
+        $this->view->position[] = $this->lang->admin->index;
 		$this->display();
     }
 
@@ -69,8 +70,11 @@ class admin extends control
 			}
 			die($response);
 		}
-		$this->view->register = $this->admin->getRegisterInfo();
-		$this->view->sn       = $this->config->global->sn;
+
+        $this->view->title      = $this->lang->admin->register->caption;
+        $this->view->position[] = $this->lang->admin->register->caption;
+		$this->view->register   = $this->admin->getRegisterInfo();
+		$this->view->sn         = $this->config->global->sn;
 		$this->display();
 	}
 
@@ -93,7 +97,10 @@ class admin extends control
 			}
 			die($response);
 		}
-		$this->view->sn = $this->config->global->sn;
+
+        $this->view->title      = $this->lang->admin->bind->caption;
+        $this->view->position[] = $this->lang->admin->bind->caption;
+		$this->view->sn         = $this->config->global->sn;
 		$this->display();
 	}
 
@@ -170,6 +177,8 @@ class admin extends control
             die(js::locate(inLink('index'), 'parent'));
         }
 
+        $this->view->title      = $this->lang->admin->clearData;
+        $this->view->position[] = $this->lang->admin->clearData;
         $this->display();
     }
 

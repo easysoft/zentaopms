@@ -64,7 +64,7 @@ class doc extends control
         $this->session->set('docList',   $this->app->getURI(true));
 
         /* Set header and position. */
-        $this->view->title      = $this->lang->doc->index . $this->lang->colon . $this->libs[$libID];
+        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->libs[$libID];
         $this->view->position[] = $this->libs[$libID];
 
         /* Load pager. */
@@ -351,7 +351,7 @@ class doc extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
 
-        $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
         $this->view->position[] = $this->lang->doc->edit;
 
