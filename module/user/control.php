@@ -545,15 +545,31 @@ class user extends control
      */
     public function delete($userID, $confirm = 'no')
     {
+        $user = $this->user->getByID($userID);
+        if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
         if($confirm == 'no')
         {
-            $user = $this->user->getByID($userID);
-            if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
             die(js::confirm($this->lang->user->confirmDelete, $this->createLink('user', 'delete', "userID=$userID&confirm=yes")));
         }
         else
         {
             $this->user->delete(TABLE_USER, $userID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::locate($this->session->userList, 'parent'));
         }
     }
