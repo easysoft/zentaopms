@@ -551,10 +551,25 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function unlinkCase($rowID)
+    public function unlinkCase($rowID, $confirm = 'no')
     {
-        $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
-        die(js::reload('parent'));
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->testtask->confirmUnlinkCase, $this->createLink('testtask', 'unlinkCase', "rowID=$rowID&confirm=yes")));
+        }
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+
+            $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            $this->send($response);
+        }
     }
 
     /**
