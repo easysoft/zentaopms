@@ -244,21 +244,27 @@ class mailModel extends model
         if(!$this->config->mail->turnon) return;
 
         ob_start();
+        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
+        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
+
         /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
         if($includeMe == false)
         {
             $account = isset($this->app->user->account) ? $this->app->user->account : '';
-            $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
-            $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
             foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
             foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
-
-            if(!$toList and !$ccList) return;
-            if(!$toList and $ccList) $toList = array(array_shift($ccList));
-            $toList = join(',', $toList);
-            $ccList = join(',', $ccList);
         }
+
+        /* Remove deleted users. */
+        $users = $this->loadModel('user')->getPairs('nodeleted');
+        foreach($toList as $key => $to) if(!isset($users[trim($to)])) unset($toList[$key]);
+        foreach($ccList as $key => $cc) if(!isset($users[trim($cc)])) unset($ccList[$key]);
+
+        if(!$toList and !$ccList) return;
+        if(!$toList and $ccList) $toList = array(array_shift($ccList));
+        $toList = join(',', $toList);
+        $ccList = join(',', $ccList);
 
         /* Get realname and email of users. */
         $this->loadModel('user');
