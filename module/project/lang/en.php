@@ -192,7 +192,7 @@ $lang->project->afterInfo             = 'Successful and you can do:';
 $lang->project->setTeam               = 'Set team';
 $lang->project->linkStory             = 'Link story';
 $lang->project->createTask            = 'Create task';
-$lang->project->goback                = 'Go back（Automatically after 5 seconds）';
+$lang->project->goback                = 'Go back';
 $lang->project->linkProduct           = 'Select product to link...';
 
 /* Report. */

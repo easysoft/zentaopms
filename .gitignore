@@ -1,6 +1,6 @@
 config/my.php
 www/data/
-release
+release/*
 tmp/extensions/*
 tmp/log/*
 tmp/model/*

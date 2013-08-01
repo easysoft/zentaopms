@@ -498,6 +498,22 @@ class testcase extends control
         else
         {
             $this->testcase->delete(TABLE_CASE, $caseID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::locate($this->session->caseList, 'parent'));
         }
     }

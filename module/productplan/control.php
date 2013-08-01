@@ -94,17 +94,25 @@ class productplan extends control
         }
         else
         {
-            $response['result']  = 'success';
-            $response['message'] = '';
-
             $plan = $this->productplan->getById($planID);
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
-            if(dao::isError())
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
             {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
             }
-            $this->send($response);
+            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
         }
     }
 
@@ -235,6 +243,22 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkStory($storyID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::reload('parent'));
         }
     }
@@ -334,6 +358,22 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkBug($bugID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::reload('parent'));
         }
     }

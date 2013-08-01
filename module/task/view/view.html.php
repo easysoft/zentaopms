@@ -121,7 +121,7 @@
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-            <td><?php echo $task->assignedToRealName . $lang->at . $task->assignedDate;?></td> 
+            <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->type;?></th>

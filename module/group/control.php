@@ -233,6 +233,22 @@ class group extends control
         else
         {
             $this->group->delete($groupID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                $this->send($response);
+            }
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
     }

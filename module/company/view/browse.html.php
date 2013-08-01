@@ -15,6 +15,7 @@ include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
 include '../../common/view/colorize.html.php';
 js::set('deptID', $deptID);
+js::set('confirmDelete', $lang->user->confirmDelete);
 ?>
 <table class='cont-lt1'>
   <tr><td colspan='3'><div id='querybox'><?php echo $searchForm?></div></td></tr>
@@ -28,7 +29,7 @@ js::set('deptID', $deptID);
     </td>
     <td class='divider'></td>
     <td>
-      <table class='table-1 tablesorter colored'>
+      <table class='table-1 tablesorter colored' id='userList'>
         <thead>
         <tr class='colhead'>
           <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -73,7 +74,11 @@ js::set('deptID', $deptID);
           <td class='a-left'>
             <?php 
             common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
-            if(strpos($this->app->company->admins, ",{$user->account},") === false) common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
+            if(strpos($this->app->company->admins, ",{$user->account},") === false) 
+            {
+                $deleteURL = $this->createLink('user', 'delete', "userID=$user->id&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"userList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->user->delete}'");
+            }
             if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
             {
                 common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', '', "hiddenwin");

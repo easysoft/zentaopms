@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
+<?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
@@ -46,7 +48,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
     <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 tablesorter datatable mb-zero fixed'>
+      <table class='table-1 colored tablesorter datatable mb-zero fixed' id='caseList'>
         <thead>
           <tr class='colhead'>
             <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
@@ -88,7 +90,10 @@ var moduleID   = '<?php echo $moduleID;?>';
               <?php
               common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'iframe');
               common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
-              common::printIcon('testtask', 'unlinkCase', "id=$run->id", '', 'list', '', 'hiddenwin');
+
+              $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '&nbsp;', '', "class='icon-green-testtask-unlinkCase' title='{$lang->testtask->unlinkCase}'");
+
               common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');
               ?>
             </td>

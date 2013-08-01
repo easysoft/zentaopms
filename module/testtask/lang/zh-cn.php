@@ -68,10 +68,12 @@ $lang->testtask->unlinkedCases = '未关联';
 $lang->testtask->linkedCases   = '已关联';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
-$lang->testtask->confirmDelete = '您确认要删除该测试任务吗？';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
+
+$lang->testtask->confirmDelete     = '您确认要删除该测试任务吗？';
+$lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 
 $lang->testtask->byModule      = '按模块';
 $lang->testtask->assignedToMe  = '指派给我';

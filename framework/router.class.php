@@ -1761,6 +1761,7 @@ class super
         }
         elseif($this->scope == 'server')
         {
+            if($key == 'ajax') return isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? true : false;
             if(isset($_SERVER[$key])) return $_SERVER[$key];
             $key = strtoupper($key);
             if(isset($_SERVER[$key])) return $_SERVER[$key];
