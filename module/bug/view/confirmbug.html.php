@@ -26,6 +26,10 @@ js::set('mailto', $lang->bug->chosen->mailto);
       <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->bug->severity;?></th>
+      <td><?php echo html::select('severity', $lang->bug->severityList, $bug->severity, 'class=select-2');?></td>
+    </tr>  
+    <tr>
       <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
       <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="text-1" multiple');?></td>
     </tr>

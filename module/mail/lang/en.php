@@ -5,6 +5,7 @@ $lang->mail->detect = 'Detect';
 $lang->mail->edit   = 'Configure';
 $lang->mail->save   = 'Successfully saved';
 $lang->mail->test   = 'Testing';
+$lang->mail->reset  = 'Reset';
 
 $lang->mail->turnon      = 'Turnon';
 $lang->mail->fromAddress = 'From email';

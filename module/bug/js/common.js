@@ -171,9 +171,11 @@ function loadProjectStories(projectID)
  */
 function loadProductPlans(productID)
 {
-    link = createLink('productplan', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
+    if(typeof(planID) == 'undefined') planID = 0;
+    link = createLink('product', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
     $('#planIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
+
 /**
  * Load builds of a project.
  * 
@@ -199,4 +201,24 @@ function loadProjectBuilds(projectID)
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
         $('#resolvedBuildBox').load(link);
     }
+}
+
+/**
+ * Set story field.
+ * 
+ * @param  moduleID $moduleID 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
+function setStories(moduleID, productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
+    $.get(link, function(stories)
+    {
+        if(!stories) stories = '<select id="story" name="story"></select>';
+        $('#story').replaceWith(stories);
+        $('#story_chzn').remove();
+        $("#story").chosen({no_results_text: ''});
+    });
 }

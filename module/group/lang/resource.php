@@ -475,12 +475,14 @@ $lang->resource->mail->detect = 'detect';
 $lang->resource->mail->edit   = 'edit';
 $lang->resource->mail->save   = 'save';
 $lang->resource->mail->test   = 'test';
+$lang->resource->mail->reset  = 'reset';
 
 $lang->mail->methodOrder[5]  = 'index';
 $lang->mail->methodOrder[10] = 'detect';
 $lang->mail->methodOrder[15] = 'edit';
 $lang->mail->methodOrder[20] = 'save';
 $lang->mail->methodOrder[25] = 'test';
+$lang->mail->methodOrder[30] = 'reset';
 
 /* Subversion. */
 $lang->resource->svn = new stdclass();

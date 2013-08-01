@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include './header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
@@ -82,7 +82,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->module;?></td>
-            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "class='select-1'");?></span></td>
+            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='select-1'");?></span></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
