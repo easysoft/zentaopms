@@ -113,6 +113,7 @@ class buildModel extends model
      */
     public function create($projectID)
     {
+        $build = new stdclass();
         $build->stories = '';
         $build->bugs    = '';
 
@@ -169,16 +170,20 @@ class buildModel extends model
      */
     public function updateLinkedBug($build)
     {
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+        $bugs = empty($build->bugs) ? '' : $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
         $now  = helper::now();
 
         $resolvedPairs = array();
-        foreach($this->post->bugs as $key => $bugID)
+        if(isset($_POST['bugs']))
         {
-            if(isset($_POST['resolvedBy'][$key]))$resolvedPairs[$bugID] = $this->post->resolvedBy[$key];
+            foreach($this->post->bugs as $key => $bugID)
+            {
+                if(isset($_POST['resolvedBy'][$key]))$resolvedPairs[$bugID] = $this->post->resolvedBy[$key];
+            }
         }
 
         $this->loadModel('action');
+        if(!$bugs) return false;
         foreach($bugs as $bug)
         {
             if($bug->status == 'resolved') continue;

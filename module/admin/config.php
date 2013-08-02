@@ -9,6 +9,7 @@ $config->url->extension = 'http://www.zentao.net/extension-browse.html';
 $config->url->donation  = 'http://www.zentao.net/help-donation.html';
 $config->url->service   = 'http://www.cnezsoft.com/article-browse-1078.html';
 
+$config->win2Unix = new stdclass();
 $config->win2Unix->renameTables = array(
             'zt_casestep'        => 'zt_caseStep'       ,
             'zt_doclib'          => 'zt_docLib'         ,

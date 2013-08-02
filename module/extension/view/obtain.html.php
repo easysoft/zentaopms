@@ -63,7 +63,7 @@
                 echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
                 echo "{$lang->extension->grade}: ",   html::printStars($extension->stars);
                 echo " {$lang->extension->depends}: ";
-                if($currentRelease->depends)
+                if(!empty($currentRelease->depends))
                 {
                     foreach(json_decode($currentRelease->depends) as $code => $limit)
                     {

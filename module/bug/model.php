@@ -286,6 +286,7 @@ class bugModel extends model
             {
                 $oldBug = $this->getByID($bugID);
 
+                $bug = new stdclass();
                 $bug->lastEditedBy   = $this->app->user->account;
                 $bug->lastEditedDate = $now;
                 $bug->type           = $this->post->types[$bugID];

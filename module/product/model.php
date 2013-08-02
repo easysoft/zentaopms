@@ -604,8 +604,9 @@ class productModel extends model
         }
 
         $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIDs)->fetchAll();
+        $rate  = count($stories) == 0 ? 0 : round(count($cases) / count($stories), 2);
 
-        return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, round(count($cases) / count($stories), 2) * 100 . "%");
+        return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, $rate * 100 . "%");
     }
 
     /**

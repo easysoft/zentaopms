@@ -616,6 +616,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
+            if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 

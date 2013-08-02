@@ -35,9 +35,9 @@
   ?>
   <tr>
     <th><?php echo $i;?></th>
-    <td><?php echo nl2br($stepResult['desc']);?></td>
-    <td><?php echo nl2br($stepResult['expect']);?></td>
-    <?php if(!empty($result->stepResults)):?>
+    <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
+    <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
+    <?php if(!empty($stepResult['result'])):?>
     <td class='<?php echo $stepResult['result'];?> a-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
     <td><?php echo $stepResult['real'];?></td>
   </tr>

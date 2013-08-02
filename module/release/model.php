@@ -98,7 +98,7 @@ class releaseModel extends model
 
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         $releaseID = $this->dao->lastInsertID();
-        $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
+        if($release->stories) $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
         if(!dao::isError()) return $releaseID;
     }
 
