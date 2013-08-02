@@ -475,7 +475,7 @@ class product extends control
     public function ajaxGetPlans($productID, $planID = 0, $needCreate = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);
-        $output = html::select('plan', $plans, $planID, "class='select-1'");
+        $output = html::select('plan', $plans, $planID, "class='select-3'");
         if(count($plans) == 1 and $needCreate) 
         {
             $output .= html::a($this->createLink('productplan', 'create', "productID=$productID"), $this->lang->productplan->create, '_blank');
