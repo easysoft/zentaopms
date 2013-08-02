@@ -33,7 +33,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->module;?></th>
-      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3' onchange='setStories(this.value,$project->id,0)'");?></span></td>
+      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3' onchange='setStories(this.value,$project->id)'");?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
