@@ -84,13 +84,14 @@ class dept extends control
      */
     public function delete($deptID, $confirm = 'no')
     {
+        /* Check this dept when delete. */
+        $sons  = $this->dept->getSons($deptID);
+        $users = $this->dept->getUsers($deptID);
+        if($sons)  die(js::alert($this->lang->dept->error->hasSons));
+        if($users) die(js::alert($this->lang->dept->error->hasUsers));
+
         if($confirm == 'no')
         {
-            $sons  = $this->dept->getSons($deptID);
-            $users = $this->dept->getUsers($deptID);
-            if($sons)  die(js::alert($this->lang->dept->error->hasSons));
-            if($users) die(js::alert($this->lang->dept->error->hasUsers));
-
             die(js::confirm($this->lang->dept->confirmDelete, $this->createLink('dept', 'delete', "deptID=$deptID&confirm=yes")));
         }
         else
