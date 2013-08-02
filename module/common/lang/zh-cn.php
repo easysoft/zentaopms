@@ -336,6 +336,7 @@ $lang->error->account         = "『%s』应当为合法的用户名。";
 $lang->error->passwordsame    = "两次密码应当相等。";
 $lang->error->passwordrule    = "密码应该符合规则，长度至少为六位。";
 $lang->error->accessDenied    = '您没有访问权限';
+$lang->error->noData          = '没有数据';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();

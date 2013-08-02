@@ -315,6 +315,7 @@ $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->sso         = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();
@@ -335,6 +336,7 @@ $lang->error->account         = "『%s』should be a valid account.";
 $lang->error->passwordsame    = "Two passwords must be the same";
 $lang->error->passwordrule    = "Password should more than six letters.";
 $lang->error->accessDenied    = 'No purview';
+$lang->error->noData          = 'No data';
 
 /* Pager. */
 $lang->pager = new stdclass();
