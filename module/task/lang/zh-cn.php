@@ -199,6 +199,20 @@ $lang->task->report->tasksPerFinishedBy   = new stdclass();
 $lang->task->report->tasksPerClosedReason = new stdclass();
 $lang->task->report->finishedTasksPerDay  = new stdclass();
 
+$lang->task->report->tasksPerProject->item      ='项目';
+$lang->task->report->tasksPerModule->item       ='模块';
+$lang->task->report->tasksPerAssignedTo->item   ='用户';
+$lang->task->report->tasksPerType->item         ='类型';
+$lang->task->report->tasksPerPri->item          ='优先级';
+$lang->task->report->tasksPerStatus->item       ='状态';
+$lang->task->report->tasksPerDeadline->item     ='日期';
+$lang->task->report->tasksPerEstimate->item     ='预计';
+$lang->task->report->tasksPerLeft->item         ='剩余';
+$lang->task->report->tasksPerConsumed->item     ='消耗';
+$lang->task->report->tasksPerFinishedBy->item   ='用户';
+$lang->task->report->tasksPerClosedReason->item ='原因';
+$lang->task->report->finishedTasksPerDay->item  ='日期';
+
 $lang->task->report->tasksPerProject->graph      = new stdclass();
 $lang->task->report->tasksPerModule->graph       = new stdclass();
 $lang->task->report->tasksPerAssignedTo->graph   = new stdclass();

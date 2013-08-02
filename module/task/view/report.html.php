@@ -42,7 +42,7 @@
               <table class='table-1 colored'>
                 <caption><?php echo $lang->task->report->charts[$chartType];?></caption>
                 <tr>
-                  <th><?php echo $lang->report->item;?></th>
+                  <th><?php echo $lang->task->report->$chartType->item;?></th>
                   <th><?php echo $lang->report->value;?></th>
                   <th><?php echo $lang->report->percent;?></th>
                 </tr>
