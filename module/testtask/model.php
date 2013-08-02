@@ -149,7 +149,12 @@ class testtaskModel extends model
     {
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')->stripTags('name')->get();
-        $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')->where('id')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TESTTASK)->data($task)
+            ->autoCheck()
+            ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
+            ->checkIF($task->end != '', 'end', 'ge', $task->begin)
+            ->where('id')->eq($taskID)
+            ->exec();
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
