@@ -80,7 +80,7 @@ js::set('mailto'                 , $lang->bug->chosen->mailto);
           <tr>
             <td class='rowhead'><?php echo $lang->bug->module;?></td>
             <td>
-              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
+              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()'");?></span>
             </td>
           </tr>
           <tr>
