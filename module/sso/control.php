@@ -9,7 +9,7 @@ class sso extends control
      */
     public function browse()
     {
-        $this->view->title      = $this->lang->sso->common . $lang->colon . $this->lang->sso->browse;
+        $this->view->title      = $this->lang->sso->common . $this->lang->colon . $this->lang->sso->browse;
         $this->view->position[] = $this->lang->sso->common;
         $this->view->position[] = $this->lang->sso->browse;
         $this->view->auths      = $this->sso->getAuths();
