@@ -1,3 +1,4 @@
+<?php include '../../common/view/dropmenu.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
   <?php
@@ -22,9 +23,25 @@
     if(!isset($orderBy))    $orderBy = '';
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
     if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
+
+    echo '<span class="link-button">';
+    echo html::a("#", "&nbsp;", '', "id='importAction' class='icon-green-task-import' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
+    echo html::a("#", $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
+    echo '</span>';
+
     common::printIcon('task', 'batchCreate', "projectID=$projectID");
     common::printIcon('task', 'create', "project=$projectID");
     ?>
   </div>
 </div>
+
+<div id='importActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  echo "<li>" . html::a($this->createLink('project', 'importTask', "project=$project->id"), $lang->project->importTask) . "</li>";
+  echo "<li>" . html::a($this->createLink('project', 'importBug', "projectID=$project->id"), $lang->project->importBug) . "</li>";
+  ?>
+  </ul>
+</div>
+
 <?php foreach(glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php") as $fileName) include_once $fileName; ?>

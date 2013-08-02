@@ -21,8 +21,8 @@
 var browseType  = '<?php echo $browseType;?>';
 </script>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
-<form method='post' id='projectTaskForm'>
 <div class='treeSlider'><span>&nbsp;</span></div>
+<form method='post' id='projectTaskForm'>
 <table class='cont-lt2'>
   <tr valign='top'>
     <td class='side'>
