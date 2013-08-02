@@ -67,17 +67,11 @@ var browseType  = '<?php echo $browseType;?>';
         </tr>
         </thead>
         <tbody>
-        <?php 
-        $canBatchEdit  = common::hasPriv('task', 'batchEdit');
-        $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
-        ?>
         <?php foreach($tasks as $task):?>
         <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
         <tr class='a-center'>
           <td>
-            <?php if($canBatchEdit or $canBatchClose):?>
             <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
-            <?php endif;?>
             <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
           </td>
           <td><span class='<?php echo 'pri'. $lang->task->priList[$task->pri]?>'><?php echo $lang->task->priList[$task->pri];?></span></td>
@@ -121,20 +115,20 @@ var browseType  = '<?php echo $browseType;?>';
           }
           ?>
           <td class='a-right'>
-            <?php
-            common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+          <?php
+          common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+          common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
-            common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            if($browseType == 'needconfirm')
-            {
-                $lang->task->confirmStoryChange = $lang->confirm;
-                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
-            }
-            common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
-            ?>
+          common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+          if($browseType == 'needconfirm')
+          {
+              $lang->task->confirmStoryChange = $lang->confirm;
+              common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+          }
+          common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+          common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+          common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
+          ?>
           </td>
         </tr>
         <?php endforeach;?>
@@ -147,18 +141,19 @@ var browseType  = '<?php echo $browseType;?>';
               <?php 
               if(count($tasks))
               {
-                  if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
+                  $canBatchEdit  = common::hasPriv('task', 'batchEdit');
+                  $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
 
-                  if($canBatchEdit)
-                  {
-                      $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
-                      echo html::commonButton($lang->edit, "onclick=\"changeAction('projectTaskForm', 'batchEdit', '$actionLink')\"");
-                  }
-                  if($canBatchClose)
-                  {
-                      $actionLink = $this->createLink('task', 'batchClose');
-                      echo html::commonButton($lang->close, "onclick=\"changeAction('projectTaskForm', 'batchClose', '$actionLink')\"");
-                  }
+                  echo "<div class='groupButton'>";
+                  echo html::selectAll() . html::selectReverse();
+                  echo "</div>";
+
+                  $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
+                  $misc       = $canBatchEdit ? "onclick=changeAction('$actionLink')" : "disabled='disabled'";
+                  echo "<div class='groupButton dropButton'>";
+                  echo html::commonButton($lang->edit, "onclick=\"changeAction('projectTaskForm', 'batchEdit', '$actionLink')\" $misc");
+                  echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
+                  echo "</div>";
               }
               echo $summary;
               ?>
@@ -172,6 +167,17 @@ var browseType  = '<?php echo $browseType;?>';
   </tr>
 </table>
 </form>
+
+<div id='moreActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $actionLink = $this->createLink('task', 'batchClose');
+  $misc = $canBatchClose ? "onclick=changeAction('projectTaskForm','batchClose','$actionLink')" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
 <?php js::set('replaceID', 'taskList')?>
 <script language='javascript'>
 $('#project<?php echo $projectID;?>').addClass('active')

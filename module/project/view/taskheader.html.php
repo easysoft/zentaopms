@@ -24,7 +24,7 @@
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
     if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
 
-    echo '<span class="link-button">';
+    echo '<span class="link-button dropButton">';
     echo html::a("#", "&nbsp;", '', "id='importAction' class='icon-green-task-import' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
     echo html::a("#", $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
     echo '</span>';
