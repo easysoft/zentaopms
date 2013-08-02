@@ -151,7 +151,7 @@ var browseType  = '<?php echo $browseType;?>';
 
                   $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
                   $misc       = $canBatchEdit ? "onclick=changeAction('$actionLink')" : "disabled='disabled'";
-                  echo "<div class='groupButton'>";
+                  echo "<div class='groupButton dropButton'>";
                   echo html::commonButton($lang->edit, "onclick=\"changeAction('projectTaskForm', 'batchEdit', '$actionLink')\" $misc");
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
                   echo "</div>";
