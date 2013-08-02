@@ -192,7 +192,12 @@ class admin extends control
     {
         if($_POST)
         {
-            if($this->post->flow != 'full') die(js::locate($this->createLink('extension', 'install', "extension={$this->post->flow}"), 'parent'));
+
+            if($this->post->flow != 'full')
+            {
+                $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
+                die(js::locate($this->createLink('extension', 'install', "extension={$this->post->flow}"), 'parent'));
+            }
             die(js::reload( 'parent.parent'));
         }
         $this->display();
