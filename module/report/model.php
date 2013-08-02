@@ -77,18 +77,18 @@ $chartID.render("$divID");
 EOT;
     }
 
-    public function createJSChartFlot($projectName, $flotJSON, $count, $width = 'auto', $height = 500)
+    public function createJSChartFlot($projectName, $flotJSON, $width = 'auto', $height = 500)
     {
         $this->app->loadLang('project');
-        $this->app->loadConfig('project');
         $jsRoot  = $this->app->getWebRoot() . 'js/';
         $width   = $width . 'px';
         $height  = $height . 'px';
-        $maxDays = $this->config->project->maxBurnDay;
 
         $dataJSON     = $flotJSON['data'];
         $limitJSON    = $flotJSON['limit'];
         $baselineJSON = $flotJSON['baseline'];
+        $dateListJSON = $flotJSON['dateList'];
+        $ticksJSON    = $flotJSON['ticks'];
 return <<<EOT
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/excanvas.min.js"></script><![endif]-->
 <script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.min.js"></script>
@@ -100,6 +100,8 @@ $(function ()
     var data     = $dataJSON;
     var limit    = $limitJSON;
     var baseline = $baselineJSON;
+    var dateList = $dateListJSON;
+    var ticks    = $ticksJSON;
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -113,26 +115,14 @@ $(function ()
             'background-color': '#fee',
             opacity: 0.80
         }).appendTo("body").fadeIn(200);
-    } 
+    }
 
-    if($count < $maxDays)
-    {
         var options = {
             series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
             legend: {noColumns: 1},
             grid: { hoverable: true, clickable: true },
-            xaxis: {mode: "time", timeformat: "%m-%d", tickSize:[1, "day"]},
+            xaxis: { ticks:ticks, tickFormatter: function(val) {tick = new Date(dateList[val]);;if(dateList[val] != undefined){return (tick.getMonth() + 1) + '-' + tick.getDate()}else{return ''}}},
             yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
-    }
-    else
-    {
-        var options = {
-            series: {lines:{show: true,  lineWidth: 5}, points: {show: true},hoverable: true},
-            legend: {noColumns: 1},
-            grid: { hoverable: true, clickable: true },
-            xaxis: {mode: "time", timeformat: "%m-%d", ticks:$maxDays, minTickSize:[1, "day"]},
-            yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
-    }
 
     var placeholder = $("#placeholder");
     $("#placeholder").bind("plotselected", function (event, ranges) 
@@ -216,12 +206,12 @@ EOT;
         return $data;
     }
 
-    public function createSingleJSON($sets)
+    public function createSingleJSON($sets, $dateList)
     {
         $data = '[';
-        foreach($sets as $set)
+        foreach($dateList as $i => $date)
         {
-            $data .= "[$set->name, $set->value],";
+            if(isset($sets[$date]))$data .= "[$i, {$sets[$date]->value}],";
         }
         $data = rtrim($data, ',');
         $data .= ']';

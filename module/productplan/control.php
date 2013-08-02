@@ -44,8 +44,10 @@ class productplan extends control
         }
 
         $this->commonAction($product);
+        $lastPlan = $this->productplan->getLast($product);
 
-        $this->view->title = $this->lang->productplan->create;
+        $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
+        $this->view->begin = $lastPlan ? $lastPlan->end : '';
         $this->display();
     }
 
@@ -72,7 +74,7 @@ class productplan extends control
 
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
-        $this->view->title      = $this->lang->productplan->edit;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
         $this->view->plan = $plan;
         $this->display();
@@ -215,7 +217,8 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $moduleID = '0', $status = 'draft,active,changed');
         }
 
-        $this->view->title      = $this->lang->productplan->linkStory;
+        $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkStory;
+        $this->view->position[] = html::a($this->createLink('plan', 'view', "planID=$plan->id"), $plan->title);
         $this->view->position[] = $this->lang->productplan->linkStory;
         $this->view->allStories = $allStories;
         $this->view->planStories= $this->story->getPlanStories($planID);
@@ -330,7 +333,8 @@ class productplan extends control
             $allBugs= $this->loadModel('bug')->getAllBugs($this->view->product->id, $projects, 'id_desc');
         }
 
-        $this->view->title      = $this->lang->productplan->linkBug;
+        $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkBug;
+        $this->view->position[] = html::a($this->createLink('plan', 'view', "planID=$plan->id"), $plan->title);
         $this->view->position[] = $this->lang->productplan->linkBug;
         $this->view->allBugs    = $allBugs;
         $this->view->planBugs   = $this->bug->getPlanBugs($planID);

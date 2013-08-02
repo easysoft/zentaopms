@@ -147,7 +147,8 @@ class group extends control
             $groupPrivs = $this->group->getPrivs($groupID);
 
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[] = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->position[] = $group->name;
+            $this->view->position[] = $this->lang->group->managePriv;
 
             /* Join changelog when be equal or greater than this version.*/
             $realVersion = str_replace('_', '.', $version);
@@ -205,7 +206,8 @@ class group extends control
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
-        $position[] = $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $position[] = $group->name;
+        $position[] = $this->lang->group->manageMember;
 
         $this->view->title      = $title;
         $this->view->position   = $position;

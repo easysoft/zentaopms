@@ -27,7 +27,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
-      <td><?php echo html::input('begin', '', "class='text-3 date'");?></td>
+      <td><?php echo html::input('begin', $begin, "class='text-3 date'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->productplan->end;?></th>

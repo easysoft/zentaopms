@@ -1303,26 +1303,12 @@ class projectModel extends model
             if($count > $itemCounts)  break;
             if($date > $project->end) continue;
 
-            $set->name       = $this->getMicTime($set->name);
             $burnData[$date] = $set;
             $count++;
         }
         $burnData = array_reverse($burnData);
 
         return $burnData;
-    }
-
-    /**
-     * Get microsecond from date. 
-     * 
-     * @param  string|int    $date 
-     * @access public
-     * @return void
-     */
-    public function getMicTime($date)
-    {
-        if(is_numeric($date)) return (string)$date . '000';
-        return (string)strtotime("$date UTC") . '000';
     }
 
     /**
@@ -1494,5 +1480,39 @@ class projectModel extends model
         $link = helper::createLink($module, $method, "projectID=%s");
         if($extra != '') $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
         return $link;
+    }
+
+    /**
+     * Get no weekend date 
+     * 
+     * @param  string    $begin 
+     * @param  string    $end 
+     * @param  string    $type 
+     * @access public
+     * @return array
+     */
+    public function getDateList($begin, $end, $type)
+    {
+        $dateList = array();
+        $date     = $begin;
+        while($date <= $end)
+        {
+            $timestamp = strtotime($date);
+
+            if($type == 'noweekend')
+            {
+                $weekDay = date('w', $timestamp);
+                if($weekDay == 6 or $weekDay == 0)
+                {
+                    $date = date('Y-m-d', $timestamp + 24 * 3600);
+                    continue;
+                }
+            }
+
+            $dateList[] = $date;
+            $date = date('Y-m-d', $timestamp + 24 * 3600);
+        }
+
+        return $dateList;
     }
 }

@@ -29,6 +29,22 @@ class productplanModel extends model
     }
 
     /**
+     * Get last plan.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function getLast($productID)
+    {
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->orderBy('end desc')
+            ->fetch();
+    }
+
+    /**
      * Get list 
      * 
      * @param  int    $product 

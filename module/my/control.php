@@ -82,7 +82,7 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* The header and position. */
+        /* The title and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->position[] = $this->lang->my->todo;
 

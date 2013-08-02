@@ -75,20 +75,17 @@ class user extends control
         $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
-        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
-        $position[] = $this->lang->user->todo;
-
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->tabID    = 'todo';
-        $this->view->date     = $date;
-        $this->view->todos    = $todos;
-        $this->view->user     = $user;
-        $this->view->account  = $account;
-        $this->view->type     = $type;
-        $this->view->status   = $status;
-        $this->view->orderBy  = $orderBy;
-        $this->view->pager    = $pager;
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
+        $this->view->position[] = $this->lang->user->todo;
+        $this->view->tabID      = 'todo';
+        $this->view->date       = $date;
+        $this->view->todos      = $todos;
+        $this->view->user       = $user;
+        $this->view->account    = $account;
+        $this->view->type       = $type;
+        $this->view->status     = $status;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -156,16 +153,14 @@ class user extends control
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Assign. */
-        $title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
-        $position[] = $this->lang->user->task;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->tabID    = 'task';
-        $this->view->tasks    = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager);
-        $this->view->type     = $type;
-        $this->view->account  = $account;
-        $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        $this->view->pager    = $pager;
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
+        $this->view->position[] = $this->lang->user->task;
+        $this->view->tabID      = 'task';
+        $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager);
+        $this->view->type       = $type;
+        $this->view->account    = $account;
+        $this->view->user       = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -199,18 +194,15 @@ class user extends control
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
  
-        $title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
-        $position[] = $this->lang->user->bug;
-
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->tabID    = 'bug';
-        $this->view->bugs     = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
-        $this->view->account  = $account;
-        $this->view->type     = $type;
-        $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->pager    = $pager;
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
+        $this->view->position[] = $this->lang->user->bug;
+        $this->view->tabID      = 'bug';
+        $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
+        $this->view->account    = $account;
+        $this->view->type       = $type;
+        $this->view->user       = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -245,7 +237,6 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $orderBy);
-        
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->account    = $account;
         $this->view->recTotal   = $recTotal;
@@ -334,14 +325,12 @@ class user extends control
         $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
 
-        $title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
-        $position[] = $this->lang->user->project;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->tabID    = 'project';
-        $this->view->projects = $this->user->getProjects($account);
-        $this->view->account  = $account;
-        $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
+        $this->view->position[] = $this->lang->user->project;
+        $this->view->tabID      = 'project';
+        $this->view->projects   = $this->user->getProjects($account);
+        $this->view->account    = $account;
+        $this->view->user       = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         $this->display();
     }
@@ -362,6 +351,7 @@ class user extends control
         $user = $this->user->getById($account);
        
         $this->view->title      = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->position[] = $this->lang->user->common;
         $this->view->position[] = $this->lang->user->profile;
         $this->view->account    = $account;
         $this->view->user       = $user;
@@ -527,11 +517,9 @@ class user extends control
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
-        $position[] = $this->lang->user->edit;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->depts    = $this->dept->getOptionMenu();
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
+        $this->view->position[] = $this->lang->user->batchEdit;
+        $this->view->depts      = $this->dept->getOptionMenu();
         $this->display();
     }
 
@@ -798,8 +786,8 @@ class user extends control
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
 
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->position[] = $this->lang->company->dynamic;
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
+        $this->view->position[] = $this->lang->user->dynamic;
 
         /* Assign. */
         $this->view->period  = $period;
@@ -861,9 +849,12 @@ class user extends control
             $this->view->list = $list;
         }
 
-        $this->view->lists = $this->user->getContactLists($this->app->user->account);
-        $this->view->users = $users;
-        $this->view->mode  = $mode;
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->manageContacts;
+        $this->view->position[] = $this->lang->company->common;
+        $this->view->position[] = $this->lang->user->manageContacts;
+        $this->view->lists      = $this->user->getContactLists($this->app->user->account);
+        $this->view->users      = $users;
+        $this->view->mode       = $mode;
         $this->display();
     }
 

@@ -67,9 +67,6 @@ class company extends control
         $this->config->company->browse->search['queryID']   = $queryID;
         $this->config->company->browse->search['params']['dept']['values'] = array('' => '') + $this->dept->getOptionMenu();
 
-        $title      = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
-        $position[] = $this->lang->dept->common;
-
         if($type == 'bydept')
         {
             $childDeptIds = $this->dept->getAllChildID($deptID);
@@ -93,8 +90,8 @@ class company extends control
             $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $orderBy);
         }
 
-        $this->view->title       = $title;
-        $this->view->position    = $position;
+        $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
+        $this->view->position[]  = $this->lang->dept->common;
         $this->view->users       = $users;
         $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
         $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
