@@ -16,7 +16,6 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php include './taskheader.html.php';?>
 <?php js::set('moduleID', $moduleID);?>
-<?php js::set('productID', $productID);?>
 <script language='Javascript'>
 var browseType  = '<?php echo $browseType;?>';
 </script>

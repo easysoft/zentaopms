@@ -285,14 +285,15 @@ class testcaseModel extends model
         /* Initialize cases from the post data.*/
         foreach($caseIDList as $caseID)
         {
+            $case = new stdclass();
             $case->lastEditedBy   = $this->app->user->account;
-            $caee->lastEditedDate = $now;
+            $case->lastEditedDate = $now;
             $case->pri            = $this->post->pris[$caseID];
             $case->status         = $this->post->statuses[$caseID];
             $case->module         = $this->post->modules[$caseID];
             $case->title          = htmlspecialchars($this->post->titles[$caseID]);
             $case->type           = $this->post->types[$caseID];
-            $case->stage          = implode(',', $this->post->stages[$caseID]);
+            $case->stage          = empty($this->post->stages[$caseID]) ? '' : implode(',', $this->post->stages[$caseID]);
 
             $cases[$caseID] = $case;
             unset($case);
