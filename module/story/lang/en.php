@@ -268,4 +268,3 @@ $lang->story->placeholder->estimate = 'Estimate the story point.';
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose users who review...';
-$lang->story->chosen->mailto     = 'Choose users to mail...';

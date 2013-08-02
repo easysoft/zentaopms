@@ -363,6 +363,3 @@ $lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$acto
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose builds...';
-
-$lang->bug->chosen = new stdClass();
-$lang->bug->chosen->mailto = 'Select users to mail...';

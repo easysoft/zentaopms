@@ -1,7 +1,6 @@
 $(function()
 {
     $(".chosenBox select").chosen({no_results_text: noResultsMatch});
-    $(".chzn-container-multi .chzn-choices li.search-field input").attr('value', chooseBuilds);
 })
 
 /**
@@ -32,6 +31,5 @@ function loadProjectBuilds(productID, projectID, index)
         $('#buildBox' + index + ' select').addClass('select-1');
         $('#buildBox' + index + ' select').attr('id', 'openedBuilds[' + index + '][]');
         $('#buildBox' + index + ' select').chosen({no_results_text: ''});
-        $('#buildBox' + index + ' .chzn-container-multi .chzn-choices li.search-field input').attr('value', chooseBuilds);
     });
 }

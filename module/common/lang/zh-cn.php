@@ -356,7 +356,8 @@ $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
 
-$lang->noResultsMatch = "没有匹配结果";
+$lang->noResultsMatch    = "没有匹配结果";
+$lang->chooseUsersToMail = "选择要发信通知的用户...";
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');

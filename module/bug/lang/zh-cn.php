@@ -363,6 +363,3 @@ $lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$acto
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
-
-$lang->bug->chosen = new stdClass();
-$lang->bug->chosen->mailto = '输入用户名自动选择...';

@@ -87,5 +87,4 @@ $(document).ready(function()
     setPreview();
     $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").chosen({no_results_text: noResultsMatch});
-    $("#mailto_chzn .chzn-choices li.search-field input").attr('value', mailto);      
 });

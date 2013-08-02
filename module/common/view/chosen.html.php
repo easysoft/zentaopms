@@ -10,9 +10,11 @@ if($config->debug)
 #colorbox, #cboxOverlay, #cboxWrapper{z-index:9999;}
 </style>
 <script> 
-noResultsMatch = '<?php echo $lang->noResultsMatch;?>';
+noResultsMatch    = '<?php echo $lang->noResultsMatch;?>';
+chooseUsersToMail = '<?php echo $lang->chooseUsersToMail;?>';
 $(document).ready(function()
 {
+    $("#mailto").attr('data-placeholder', chooseUsersToMail);
     $("#productID").chosen({no_results_text: noResultsMatch});
     $("#projectID").chosen({no_results_text: noResultsMatch});
 });

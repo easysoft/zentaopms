@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<?php js::set('chooseBuilds', $lang->bug->placeholder->chooseBuilds);?>
 <form method='post' target='hiddenwin'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->bug->project . $lang->colon . $lang->bug->batchCreate;?></caption>
@@ -34,7 +33,7 @@
       <td><?php echo $i+1;?></td>
       <td class='a-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='select-1'");?></td>
       <td><?php echo html::select("projects[$i]", $projects, $projectID, "class='select-1' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
-      <td class='a-left chosenBox' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1' multiple");?></td>
+      <td class='a-left chosenBox' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1' multiple data-placeholder='{$lang->bug->placeholder->chooseBuilds}'");?></td>
       <td><?php echo html::input("titles[$i]", '', 'class=select-1');?></td>
       <td><?php echo html::textarea("stepses[$i]", '', "rows='1' class=text-1");?></td>
       <td><?php echo html::select("types[$i]", $lang->bug->typeList, '');?></td>
