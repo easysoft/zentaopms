@@ -59,5 +59,5 @@ function toggleSubMenu(currentID, position, menuIndex)
 
 $(function()
 {
-    $(document).click(function(e){if($(e.target).parent(".dropButton").length==0){ $("div[id$='Menu']").hide();}})
+    $(document).click(function(e){if($(e.target).parent(".dropButton").length==0){ $("div[id$='ActionMenu']").hide();}})
 })
