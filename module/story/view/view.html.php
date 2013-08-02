@@ -194,12 +194,13 @@
         <table class='table-1 fixed'>
           <tr>
             <td>
-              <?php
+<?php
               foreach($story->tasks as $projectTasks)
               {
                   foreach($projectTasks as $task)
                   {
-                      @$projectName = $projects[$task->project];
+                      if(!isset($projects[$task->project])) continue;
+                      $projectName = $projects[$task->project];
                       echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName);
                       echo "<span title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '</span><br />';
                   }

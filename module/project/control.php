@@ -147,7 +147,6 @@ class project extends control
         {
             $modules = $this->tree->getProjectModule($projectID, $productID);
             $tasks   = $this->loadModel('task')->getTasksByModule($projectID, $modules, $orderBy, $pager);
-            $this->view->productID = $productID;
         }
         elseif($status == 'byModule') 
         {
@@ -213,6 +212,7 @@ class project extends control
         $this->view->param       = $param;
         $this->view->projectID   = $projectID;
         $this->view->project     = $project;
+        $this->view->productID   = $productID;
         $this->view->moduleID    = $moduleID;
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
         $this->view->projectTree = $this->project->tree();
@@ -504,6 +504,7 @@ class project extends control
         $this->loadModel('story');
         $this->loadModel('user');
         $this->loadModel('task');
+        $this->app->loadLang('testcase');
 
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true));
