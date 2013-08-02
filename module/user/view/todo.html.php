@@ -14,15 +14,17 @@
 <?php include "../../common/view/datepicker.html.php"; ?>
 <?php include './featurebar.html.php';?>
 <script language='Javascript'>var account='<?php echo $account;?>'</script>
-<div class='todoheader'>
+<div id='featurebar'>
+  <div class='f-left'>
   <?php 
-  foreach($lang->todo->periods as $period => $label)
-  {
-      $vars = "account={$account}&date=$period";
-      if($period == 'before') $vars .= "&status=undone";
-      echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span> ';
-  }
-  ?>
+    foreach($lang->todo->periods as $period => $label)
+    {
+        $vars = "account={$account}&date=$period";
+        if($period == 'before') $vars .= "&status=undone";
+        echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span> ';
+    }
+    ?>
+  </div>
 </div>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
   <table class='table-1 tablesorter'>
@@ -57,8 +59,6 @@
   </table>
 </form>
 <script type='text/javascript'>
-$(function(){
-    $('#<?php echo $type?>').find('a').addClass('active');
-})
+$(function(){$('#<?php echo $type?>').addClass('active');})
 </script>
 <?php include '../../common/view/footer.html.php';?>
