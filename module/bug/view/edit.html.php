@@ -26,7 +26,6 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('mailto'                 , $lang->bug->chosen->mailto);
 ?>
 
 <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>

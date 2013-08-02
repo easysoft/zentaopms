@@ -38,8 +38,8 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
-<form id='batchForm' method='post'>
 <div class='treeSlider'><span>&nbsp;</span></div>
+<form id='batchForm' method='post'>
 <table class='cont-lt1'>
   <tr valign='top'>
     <td class='side <?php echo $treeClass;?>'>

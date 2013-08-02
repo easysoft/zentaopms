@@ -195,6 +195,7 @@ $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
 $lang->story->report->select = 'Select';
 $lang->story->report->create = 'Create';
+$lang->story->report->value  = 'Stories';
 
 $lang->story->report->charts['storysPerProduct']        = 'Product storys';
 $lang->story->report->charts['storysPerModule']         = 'Module storys';
@@ -237,6 +238,19 @@ $lang->story->report->storysPerClosedReason = new stdclass();
 $lang->story->report->storysPerEstimate     = new stdclass();
 $lang->story->report->storysPerChange       = new stdclass();
 
+$lang->story->report->storysPerProduct->item      = 'Product';     
+$lang->story->report->storysPerModule->item       = 'Module';
+$lang->story->report->storysPerSource->item       = 'Source';
+$lang->story->report->storysPerPlan->item         = 'Plan';
+$lang->story->report->storysPerStatus->item       = 'Status';
+$lang->story->report->storysPerStage->item        = 'Stage';
+$lang->story->report->storysPerPri->item          = 'Pri';
+$lang->story->report->storysPerOpenedBy->item     = 'Account';
+$lang->story->report->storysPerAssignedTo->item   = 'Account';
+$lang->story->report->storysPerClosedReason->item = 'Reason';
+$lang->story->report->storysPerEstimate->item     = 'Estimate';
+$lang->story->report->storysPerChange->item       = 'Change';
+
 $lang->story->report->storysPerProduct->graph      = new stdclass();     
 $lang->story->report->storysPerModule->graph       = new stdclass();
 $lang->story->report->storysPerSource->graph       = new stdclass();
@@ -268,4 +282,3 @@ $lang->story->placeholder->estimate = 'Estimate the story point.';
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose users who review...';
-$lang->story->chosen->mailto     = 'Choose users to mail...';

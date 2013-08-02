@@ -16,7 +16,6 @@ include '../../common/view/kindeditor.html.php';
 include '../../common/view/chosen.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'assignedto');
-js::set('mailto', $lang->bug->chosen->mailto);
 ?>
 <form method='post' target='hiddenwin'>
   <table class='table-1'>

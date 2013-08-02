@@ -40,8 +40,8 @@
               <table class='table-1 colored'>
                 <caption><?php echo $lang->story->report->charts[$chartType];?></caption>
                 <tr>
-                  <th><?php echo $lang->report->item;?></th>
-                  <th><?php echo $lang->report->value;?></th>
+                  <th><?php echo $lang->story->report->$chartType->item;?></th>
+                  <th><?php echo $lang->story->report->value;?></th>
                   <th><?php echo $lang->report->percent;?></th>
                 </tr>
                 <?php foreach($datas[$chartType] as $key => $data):?>

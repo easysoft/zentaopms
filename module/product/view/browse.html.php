@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/dropmenu.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
@@ -39,8 +40,8 @@ var browseType = '<?php echo $browseType;?>';
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
+<div class='treeSlider'><span>&nbsp;</span></div>
 <form method='post' id='productStoryForm'>
-  <div class='treeSlider'><span>&nbsp;</span></div>
   <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>' id='treebox'>

@@ -18,7 +18,6 @@ include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
-js::set('mailto', $lang->bug->chosen->mailto);
 ?>
 
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>

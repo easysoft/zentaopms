@@ -69,10 +69,23 @@ function setAfter()
     }
 }
 
-/* Get select of stories.*/
-function setStories(moduleID, projectID, productID)
+/**
+ * load stories of module.
+ * 
+ * @access public
+ * @return void
+ */
+function loadModuleRelated()
 {
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID + '&moduleID=' + moduleID);
+    moduleID  = $('#module').val();
+    projectID = $('#project').val();
+    setStories(moduleID, projectID);
+}
+
+/* Get select of stories.*/
+function setStories(moduleID, projectID)
+{
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
         if(!stories) stories = '<select id="story" name="story"></select>';
@@ -87,5 +100,4 @@ $(document).ready(function()
     setPreview();
     $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").chosen({no_results_text: noResultsMatch});
-    $("#mailto_chzn .chzn-choices li.search-field input").attr('value', mailto);      
 });

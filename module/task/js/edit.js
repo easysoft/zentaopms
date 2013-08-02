@@ -2,7 +2,6 @@ $(function()
 {
     $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").chosen({no_results_text: noResultsMatch});
-    $("#mailto_chzn .chzn-choices li.search-field input").attr('value', mailto);      
     $('.iframe').colorbox({width:900, height:500, iframe:true, transition:'none', onCleanup:function(){parent.location.href=parent.location.href;}});
 })
 
@@ -66,3 +65,32 @@ function loadProjectMembers(projectID)
     link = createLink('project', 'ajaxGetMembers', 'projectID=' + projectID);
     $('#assignedToIdBox').load(link);
 }
+
+/**
+ * load stories of module.
+ * 
+ * @access public
+ * @return void
+ */
+function loadModuleRelated()
+{
+    moduleID  = $('#module').val();
+    projectID = $('#project').val();
+    setStories(moduleID, projectID);
+}
+
+/* Get select of stories.*/
+function setStories(moduleID, projectID)
+{
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&moduleID=' + moduleID);
+    $.get(link, function(stories)
+    {
+        if(!stories) stories = '<select id="story" name="story"></select>';
+        $('#story').replaceWith(stories);
+        $('#story_chzn').remove();
+        $("#story").chosen({no_results_text: ''});
+    });
+}
+
+/* empty function. */
+function setPreview(){}

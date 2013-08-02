@@ -17,7 +17,6 @@
 <?php js::set('oldStoryID', $task->story); ?>
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject); ?>
 <?php js::set('changeProjectConfirmed', false); ?>
-<?php js::set('mailto', $lang->task->chosen->mailto);?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>
@@ -57,7 +56,7 @@
           </tr>  
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->module;?></th>
-            <td><span id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="select-1"');?></span></td>
+            <td><span id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="select-1" onchange="loadModuleRelated()"');?></span></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->story;?></th>

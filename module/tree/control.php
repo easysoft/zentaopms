@@ -306,7 +306,7 @@ class tree extends control
         $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
         if($returnType == 'html')
         {
-            $output = html::select("module", $optionMenu, '', "onchange=setAssignedTo()");
+            $output = html::select("module", $optionMenu, '', "onchange=loadModuleRelated()");
             if(count($optionMenu) == 1 and $needManage)
             {
                 $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType"), $this->lang->tree->manage, '_blank');

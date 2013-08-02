@@ -155,6 +155,7 @@ $lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
 $lang->task->report->select = 'Select';
 $lang->task->report->create = 'Create';
+$lang->task->report->value  = 'Tasks';
 
 $lang->task->report->charts['tasksPerProject']      = 'Project tasks';
 $lang->task->report->charts['tasksPerModule']       = 'Module tasks';
@@ -199,6 +200,20 @@ $lang->task->report->tasksPerFinishedBy   = new stdclass();
 $lang->task->report->tasksPerClosedReason = new stdclass();
 $lang->task->report->finishedTasksPerDay  = new stdclass();
 
+$lang->task->report->tasksPerProject->item      ='Project';
+$lang->task->report->tasksPerModule->item       ='Module';
+$lang->task->report->tasksPerAssignedTo->item   ='Account';
+$lang->task->report->tasksPerType->item         ='Type';
+$lang->task->report->tasksPerPri->item          ='Pri';
+$lang->task->report->tasksPerStatus->item       ='Status';
+$lang->task->report->tasksPerDeadline->item     ='Date';
+$lang->task->report->tasksPerEstimate->item     ='Estimate';
+$lang->task->report->tasksPerLeft->item         ='Left';
+$lang->task->report->tasksPerConsumed->item     ='Consumed';
+$lang->task->report->tasksPerFinishedBy->item   ='Account';
+$lang->task->report->tasksPerClosedReason->item ='Reason';
+$lang->task->report->finishedTasksPerDay->item  ='Date';
+
 $lang->task->report->tasksPerProject->graph      = new stdclass();
 $lang->task->report->tasksPerModule->graph       = new stdclass();
 $lang->task->report->tasksPerAssignedTo->graph   = new stdclass();
@@ -233,6 +248,3 @@ $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder = new stdclass();
 $lang->task->placeholder->estimate = 'The estimated time for this task';
-
-$lang->task->chosen = new stdclass();
-$lang->task->chosen->mailto = 'Choose users to mail...'; 

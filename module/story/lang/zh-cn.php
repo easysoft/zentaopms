@@ -195,6 +195,7 @@ $lang->story->report = new stdclass();
 $lang->story->report->common = '报表';
 $lang->story->report->select = '请选择报表类型';
 $lang->story->report->create = '生成报表';
+$lang->story->report->value  = '需求数';
 
 $lang->story->report->charts['storysPerProduct']        = '产品需求数量';
 $lang->story->report->charts['storysPerModule']         = '模块需求数量';
@@ -237,6 +238,19 @@ $lang->story->report->storysPerClosedReason = new stdclass();
 $lang->story->report->storysPerEstimate     = new stdclass();
 $lang->story->report->storysPerChange       = new stdclass();
 
+$lang->story->report->storysPerProduct->item      = '产品';     
+$lang->story->report->storysPerModule->item       = '模块';
+$lang->story->report->storysPerSource->item       = '来源';
+$lang->story->report->storysPerPlan->item         = '计划';
+$lang->story->report->storysPerStatus->item       = '状态';
+$lang->story->report->storysPerStage->item        = '阶段';
+$lang->story->report->storysPerPri->item          = '优先级';
+$lang->story->report->storysPerOpenedBy->item     = '用户';
+$lang->story->report->storysPerAssignedTo->item   = '用户';
+$lang->story->report->storysPerClosedReason->item = '原因';
+$lang->story->report->storysPerEstimate->item     = '预计工时';
+$lang->story->report->storysPerChange->item       = '变更次数';
+
 $lang->story->report->storysPerProduct->graph      = new stdclass();     
 $lang->story->report->storysPerModule->graph       = new stdclass();
 $lang->story->report->storysPerSource->graph       = new stdclass();
@@ -268,4 +282,3 @@ $lang->story->placeholder->estimate = "完成该需求的工作量";
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = '选择评审人...';
-$lang->story->chosen->mailto     = '输入用户名自动完成...';

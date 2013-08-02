@@ -15,25 +15,16 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('holders', $lang->task->placeholder);?>
-<?php js::set('mailto',  $lang->task->chosen->mailto);?>
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1 a-left'> 
-    <caption>
-      <?php echo $lang->task->create;?>
-      <div class='f-right'>
-      <?php 
-      common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask);
-      common::printLink('project', 'importBug', "projectID=$project->id", $lang->project->importBug);
-      ?>
-      </div>
-    </caption>
+    <caption><?php echo $lang->task->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->task->project;?></th>
       <td><?php echo $project->name;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->module;?></th>
-      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3' onchange='setStories(this.value,$project->id,0)'");?></span></td>
+      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3' onchange='setStories(this.value,$project->id)'");?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
