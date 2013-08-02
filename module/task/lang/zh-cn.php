@@ -248,6 +248,3 @@ $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder = new stdclass();
 $lang->task->placeholder->estimate = '对该任务最初的预计';
-
-$lang->task->chosen = new stdclass();
-$lang->task->chosen->mailto = '输入用户名进行选择...'; 

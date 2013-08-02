@@ -2,7 +2,6 @@ $(function()
 {
     $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").chosen({no_results_text: noResultsMatch});
-    $("#mailto_chzn .chzn-choices li.search-field input").attr('value', mailto);      
     $('.iframe').colorbox({width:900, height:500, iframe:true, transition:'none', onCleanup:function(){parent.location.href=parent.location.href;}});
 })
 

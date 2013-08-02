@@ -15,7 +15,6 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('holders', $lang->task->placeholder);?>
-<?php js::set('mailto',  $lang->task->chosen->mailto);?>
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1 a-left'> 
     <caption>

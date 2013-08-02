@@ -336,6 +336,7 @@ $lang->error->account         = "『%s』应当为合法的用户名。";
 $lang->error->passwordsame    = "两次密码应当相等。";
 $lang->error->passwordrule    = "密码应该符合规则，长度至少为六位。";
 $lang->error->accessDenied    = '您没有访问权限';
+$lang->error->noData          = '没有数据';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -356,7 +357,8 @@ $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
 
-$lang->noResultsMatch = "没有匹配结果";
+$lang->noResultsMatch    = "没有匹配结果";
+$lang->chooseUsersToMail = "选择要发信通知的用户...";
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');

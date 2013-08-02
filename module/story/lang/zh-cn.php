@@ -282,4 +282,3 @@ $lang->story->placeholder->estimate = "完成该需求的工作量";
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = '选择评审人...';
-$lang->story->chosen->mailto     = '输入用户名自动完成...';

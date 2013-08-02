@@ -805,6 +805,11 @@ class testcase extends control
             if(!$field) continue;
             $columnKey[] = $field;
         }
+        if(empty($columnKey))
+        {
+            echo js::alert($this->lang->testcase->errorEncode);
+            die(js::locate(inlink('browse', "productID=$productID")));
+        }
 
         $row = 1;
         $endField = $field;
@@ -856,7 +861,6 @@ class testcase extends control
                 {
                     $case->$field = $cellValue;
                 }
-
                 else
                 {
                     $steps    = explode("\n", $cellValue);
@@ -902,7 +906,7 @@ class testcase extends control
 
         if(empty($caseData))
         {
-            echo js::alert($this->lang->excel->noData);
+            echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('testcase', 'browse')));
         }
 

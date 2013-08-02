@@ -315,6 +315,7 @@ $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->sso         = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();
@@ -335,6 +336,7 @@ $lang->error->account         = "『%s』should be a valid account.";
 $lang->error->passwordsame    = "Two passwords must be the same";
 $lang->error->passwordrule    = "Password should more than six letters.";
 $lang->error->accessDenied    = 'No purview';
+$lang->error->noData          = 'No data';
 
 /* Pager. */
 $lang->pager = new stdclass();
@@ -355,7 +357,8 @@ $lang->downNotify     = "Down notify";
 
 $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
 
-$lang->noResultsMatch = "No results match";
+$lang->noResultsMatch    = "No results match";
+$lang->chooseUsersToMail = "Choose users to mail...";
 
 /* Date times. */
 define('DT_DATETIME1',  'Y-m-d H:i:s');

@@ -18,7 +18,6 @@ $(function()
         $("#story").chosen({no_results_text:noResultsMatch});
         $("#task").chosen({no_results_text:noResultsMatch});
         $("#mailto").chosen({no_results_text:noResultsMatch});
-        $(".chzn-container-multi .chzn-choices li.search-field input").attr('value', mailto);
     }
 });
 
