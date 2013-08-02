@@ -22,3 +22,6 @@ $lang->sso->error->title = 'Please input name';
 $lang->sso->error->code  = 'Please input code';
 $lang->sso->error->key   = 'Please input key';
 $lang->sso->error->ip    = 'Please input IP';
+
+$lang->sso->instruction = <<<EOT
+EOT;
