@@ -155,6 +155,7 @@ $lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
 $lang->task->report->select = 'Select';
 $lang->task->report->create = 'Create';
+$lang->task->report->value  = 'Tasks';
 
 $lang->task->report->charts['tasksPerProject']      = 'Project tasks';
 $lang->task->report->charts['tasksPerModule']       = 'Module tasks';

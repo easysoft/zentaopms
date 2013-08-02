@@ -43,7 +43,7 @@
                 <caption><?php echo $lang->task->report->charts[$chartType];?></caption>
                 <tr>
                   <th><?php echo $lang->task->report->$chartType->item;?></th>
-                  <th><?php echo $lang->report->value;?></th>
+                  <th><?php echo $lang->task->report->value;?></th>
                   <th><?php echo $lang->report->percent;?></th>
                 </tr>
                 <?php foreach($datas[$chartType] as $key => $data):?>

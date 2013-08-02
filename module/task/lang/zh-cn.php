@@ -155,6 +155,7 @@ $lang->task->report = new stdclass();
 $lang->task->report->common = '报表';
 $lang->task->report->select = '请选择报表类型';
 $lang->task->report->create = '生成报表';
+$lang->task->report->value  = '任务数';
 
 $lang->task->report->charts['tasksPerProject']      = '项目任务数统计';
 $lang->task->report->charts['tasksPerModule']       = '模块任务数统计';
