@@ -155,3 +155,5 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonEdit   = 'Edit';
 $lang->testcase->buttonToList = 'Back';
+
+$lang->testcase->errorEncode = 'No data, please select right encode and upload again!';

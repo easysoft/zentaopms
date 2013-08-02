@@ -44,8 +44,10 @@ class productplan extends control
         }
 
         $this->commonAction($product);
+        $lastPlan = $this->productplan->getLast($product);
 
         $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
+        $this->view->begin = $lastPlan ? $lastPlan->end : '';
         $this->display();
     }
 

@@ -154,3 +154,5 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonEdit   = '编辑';
 $lang->testcase->buttonToList = '返回';
+
+$lang->testcase->errorEncode = '无数据，请选择正确的编码重新上传！';
