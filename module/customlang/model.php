@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-class langModel extends model
+class customlangModel extends model
 {
 }
 

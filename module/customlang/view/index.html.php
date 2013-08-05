@@ -10,6 +10,5 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-asdfasdf
+<?php include './header.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-class lang extends control
+class customlang extends control
 {
     public function __construct()
     {
