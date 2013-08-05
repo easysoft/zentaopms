@@ -1,4 +1,4 @@
-<?php include '../../common/view/dropmenu.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/dropmenu.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
   <?php

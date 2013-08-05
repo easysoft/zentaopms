@@ -801,6 +801,8 @@ function setModal4List(colorboxClass, replaceID, callback)
 
                 $('.colored').colorize();
                 $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+                $(".date").datePicker({createButton:true, startDate:startDate})
+                .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
                 if(typeof(callback) == 'function') callback();
                 $.cookie('selfClose', 0);
             });
