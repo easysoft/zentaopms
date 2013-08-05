@@ -1,4 +1,6 @@
 <?php
+$lang->customlang->common   = '语言配置';
+
 $lang->customlang->story    = '需求';
 $lang->customlang->task     = '任务';
 $lang->customlang->bug      = 'Bug';

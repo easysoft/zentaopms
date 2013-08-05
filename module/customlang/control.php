@@ -16,8 +16,28 @@ class customlang extends control
         parent::__construct();
     }
 
-    public function index()
+    public function story($field = 'priList')
     {
+        if(!empty($_POST))
+        {
+            $this->customlang->update('story', $field);
+            if(!dao::getError()) die(js::reload('parent'));
+        }
+
+        $this->app->loadLang('story');
+        $fieldList    = array();
+        $standardList = $this->lang->story->$field;
+        $fieldList    = $this->customlang->getLang('', $this->app->getClientLang(), 'story', $field);
+        $fieldList    = $fieldList ? unserialize($fieldList->value) + $standardList: $standardList;
+
+        $this->view->title        = $this->lang->customlang->common . $this->lang->colon . $this->lang->customlang->story;
+        $this->view->position[]   = $this->lang->customlang->common;
+        $this->view->position[]   = $this->lang->customlang->story;
+        $this->view->standardList = $standardList;
+        $this->view->fieldList    = $fieldList;
+        $this->view->field        = $field;
+        $this->view->canAdd       = strpos($this->config->customlang->story->canAdd, $field) !== false;
+
         $this->display();
     }
 }

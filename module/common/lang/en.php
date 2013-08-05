@@ -272,7 +272,7 @@ $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index      = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension  = array('link' => 'Extension|extension|browse', 'subModule' => 'extension,editor');
-$lang->admin->menu->customlang = array('link' => 'Custom lang|customlang|index', 'subModule' => 'customlang');
+$lang->admin->menu->customlang = array('link' => 'Custom lang|customlang|story', 'subModule' => 'customlang');
 $lang->admin->menu->mail       = array('link' => 'Email|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->clearData  = array('link' => 'Clear data|admin|cleardata');
 $lang->admin->menu->convert    = array('link' => 'Import|convert|index', 'subModule' => 'convert');

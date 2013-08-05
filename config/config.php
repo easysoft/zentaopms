@@ -134,6 +134,7 @@ define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_WEBAPP',        '`' . $config->db->prefix . 'webapp`');
+define('TABLE_CUSTOMLANG',    '`' . $config->db->prefix . 'customLang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;
@@ -150,6 +151,7 @@ $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;
+$config->objectTables['customlang']  = TABLE_CUSTOMLANG;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');
