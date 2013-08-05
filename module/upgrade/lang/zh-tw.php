@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id: zh-tw.php 4989 2013-07-03 07:05:45Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->upgrade->common  = '升級';
@@ -37,6 +37,8 @@ $lang->upgrade->fromVersion   = '原來的版本';
 $lang->upgrade->toVersion     = '升級到';
 $lang->upgrade->confirm       = '確認要執行的SQL語句';
 $lang->upgrade->sureExecute   = '確認執行';
+$lang->upgrade->forbiddenExt  = '以下插件與新版本不兼容，已經自動禁用：';
+$lang->upgrade->checkExtension = '正在檢查插件的兼容性，請稍後 ...';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';
@@ -69,3 +71,4 @@ $lang->upgrade->fromVersions['4_0_beta2'] = '4.0 BETA2';
 $lang->upgrade->fromVersions['4_0']       = '4.0';
 $lang->upgrade->fromVersions['4_0_1']     = '4.0.1';
 $lang->upgrade->fromVersions['4_1']       = '4.1';
+$lang->upgrade->fromVersions['4_2_beta']  = '4.2.beta';

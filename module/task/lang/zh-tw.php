@@ -155,6 +155,7 @@ $lang->task->report = new stdclass();
 $lang->task->report->common = '報表';
 $lang->task->report->select = '請選擇報表類型';
 $lang->task->report->create = '生成報表';
+$lang->task->report->value  = '任務數';
 
 $lang->task->report->charts['tasksPerProject']      = '項目任務數統計';
 $lang->task->report->charts['tasksPerModule']       = '模組任務數統計';
@@ -199,6 +200,20 @@ $lang->task->report->tasksPerFinishedBy   = new stdclass();
 $lang->task->report->tasksPerClosedReason = new stdclass();
 $lang->task->report->finishedTasksPerDay  = new stdclass();
 
+$lang->task->report->tasksPerProject->item      ='項目';
+$lang->task->report->tasksPerModule->item       ='模組';
+$lang->task->report->tasksPerAssignedTo->item   ='用戶';
+$lang->task->report->tasksPerType->item         ='類型';
+$lang->task->report->tasksPerPri->item          ='優先順序';
+$lang->task->report->tasksPerStatus->item       ='狀態';
+$lang->task->report->tasksPerDeadline->item     ='日期';
+$lang->task->report->tasksPerEstimate->item     ='預計';
+$lang->task->report->tasksPerLeft->item         ='剩餘';
+$lang->task->report->tasksPerConsumed->item     ='消耗';
+$lang->task->report->tasksPerFinishedBy->item   ='用戶';
+$lang->task->report->tasksPerClosedReason->item ='原因';
+$lang->task->report->finishedTasksPerDay->item  ='日期';
+
 $lang->task->report->tasksPerProject->graph      = new stdclass();
 $lang->task->report->tasksPerModule->graph       = new stdclass();
 $lang->task->report->tasksPerAssignedTo->graph   = new stdclass();
@@ -233,4 +248,3 @@ $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder = new stdclass();
 $lang->task->placeholder->estimate = '對該任務最初的預計';
-$lang->task->placeholder->mailto   = '輸入用戶名進行選擇'; 

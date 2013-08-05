@@ -28,6 +28,7 @@ $lang->testcase->lastEditedBy     = '最後修改者';
 $lang->testcase->lastEditedDate   = '最後修改日期';
 $lang->testcase->version          = '用例版本';
 $lang->testcase->result           = '測試結果';
+$lang->testcase->lastRunResult    = '結果';
 $lang->testcase->real             = '實際情況';
 $lang->testcase->keywords         = '關鍵詞';
 $lang->testcase->files            = '附件';
@@ -43,6 +44,7 @@ $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->allProduct       = '所有產品';
 $lang->testcase->fromBug          = '來源Bug';
 $lang->testcase->toBug            = '生成Bug';
+$lang->testcase->changed          = '用例變更';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
 $lang->testcase->stepID     = '編號';
@@ -59,9 +61,18 @@ $lang->testcase->edit               = "編輯";
 $lang->testcase->batchEdit          =  "批量編輯 ";
 $lang->testcase->delete             = "刪除";
 $lang->testcase->browse             = "用例列表";
-$lang->testcase->import             = "導入用例";
+$lang->testcase->import             = "導入";
+$lang->testcase->importID           = "行號";
+$lang->testcase->showImport         = "顯示導入內容";
+$lang->testcase->exportTemplet      = "導出模板";
 $lang->testcase->export             = "導出";
+$lang->testcase->confirmChange      = '確認用例變動';
 $lang->testcase->confirmStoryChange = '確認需求變動';
+
+$lang->testcase->editHaved = '修改已有用例';
+$lang->testcase->addNew    = '添加新用例';
+
+$lang->testcase->num = '導入用例個數：';
 
 $lang->testcase->deleteStep   = '刪除';
 $lang->testcase->insertBefore = '之前添加';
@@ -143,3 +154,5 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonEdit   = '編輯';
 $lang->testcase->buttonToList = '返回';
+
+$lang->testcase->errorEncode = '無數據，請選擇正確的編碼重新上傳！';

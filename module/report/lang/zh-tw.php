@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->report->common     = '統計視圖';
@@ -69,7 +69,7 @@ $lang->report->taskTotal     = "總任務數";
 $lang->report->manhourTotal  = "總工時";
 $lang->report->bugTotal      = "共%s個Bug";
 $lang->report->validRate     = "有效率";
-$lang->report->validRateTips = "方案為已解決或延期/狀態為已解決";
+$lang->report->validRateTips = "方案為已解決或延期/狀態為已解決或已關閉";
 $lang->report->unplanned     = '未計劃';
 
 /* daily reminder. */
@@ -84,4 +84,4 @@ $lang->report->mailtitle->bug   = " Bugs(%s),";
 $lang->report->mailtitle->task  = " 任務(%s),";
 $lang->report->mailtitle->todo  = " 待辦(%s),";
 
-$lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';
+$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';

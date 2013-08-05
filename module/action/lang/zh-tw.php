@@ -20,10 +20,11 @@ $lang->action->action     = '動作';
 $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 
-$lang->action->trash    = '資源回收筒';
-$lang->action->undelete = '還原';
-$lang->action->hideOne  = '隱藏';
-$lang->action->hideAll  = '全部隱藏';
+$lang->action->trash       = '資源回收筒';
+$lang->action->undelete    = '還原';
+$lang->action->hideOne     = '隱藏';
+$lang->action->hideAll     = '全部隱藏';
+$lang->action->editComment = '修改備註';
 
 $lang->action->trashTips      = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
 $lang->action->textDiff       = '文本格式';
@@ -77,6 +78,7 @@ $lang->action->desc->commented      = '$date, 由 <strong>$actor</strong> 添加
 $lang->action->desc->activated      = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->moved          = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"。' . "\n";
 $lang->action->desc->confirmed      = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>。' . "\n";
+$lang->action->desc->caseconfirmed  = '$date, 由 <strong>$actor</strong> 確認用例變動，最新版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->bugconfirmed   = '$date, 由 <strong>$actor</strong> 確認Bug。' . "\n";
 $lang->action->desc->frombug        = '$date, 由 <strong>$actor</strong> Bug轉化而來，Bug編號為 <strong>$extra</strong>。';
 $lang->action->desc->started        = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
