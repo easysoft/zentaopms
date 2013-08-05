@@ -59,7 +59,7 @@ class todo extends control
         $this->view->position[] = $this->lang->todo->common;
         $this->view->position[] = $this->lang->todo->create;
         $this->view->date       = strftime("%Y-%m-%d", strtotime($date));
-        $this->view->time       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time       = date::now();
         $this->display();      
     }

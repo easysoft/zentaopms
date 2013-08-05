@@ -63,6 +63,7 @@ $lang->extension->bySearch      = 'Search';
 $lang->extension->byCategory    = 'By Category';
 
 $lang->extension->installFailed            = '%s failed, the reason is:';
+$lang->extension->uninstallFailed          = 'Uninstall failed, the reason is:';
 $lang->extension->installFinished          = 'Good, the extension has been %s successfully.';
 $lang->extension->refreshPage              = 'Refresh';
 $lang->extension->uninstallFinished        = 'Extension has been successfully uninstalled.';
@@ -97,3 +98,7 @@ $lang->extension->errorPackageNotFound         = 'The package file <strong>%s </
 $lang->extension->errorTargetPathNotWritable   = 'Target path <strong>%s </strong>not writable.';
 $lang->extension->errorTargetPathNotExists     = 'Target path <strong>%s </strong>not exists';
 $lang->extension->errorInstallDB               = 'Execute database sql failed, the error is: %s';
+$lang->extension->errorConflicts               = 'With plug-in "%s" Conflict!';
+$lang->extension->errorDepends                 = 'The following dependency plugin is not installed or the version is incorrect:<br /><br /> %s';
+$lang->extension->errorIncompatible            = 'The plug-in with your ZenTao incompatible version';
+$lang->extension->errorUninstallDepends        = 'Plugin "%s" relying on the plug-in, can not uninstall';

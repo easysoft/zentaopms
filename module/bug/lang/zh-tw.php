@@ -13,6 +13,7 @@
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug編號';
 $lang->bug->product          = '所屬產品';
+$lang->bug->productplan      = '所屬計劃';
 $lang->bug->module           = '所屬模組';
 $lang->bug->path             = '模組路徑';
 $lang->bug->project          = '所屬項目';
@@ -25,6 +26,7 @@ $lang->bug->severityAB       = '級別';
 $lang->bug->pri              = '優先順序';
 $lang->bug->type             = 'Bug類型';
 $lang->bug->os               = '操作系統';
+$lang->bug->plan             = '所屬計劃';
 $lang->bug->hardware         = '硬件平台';
 $lang->bug->browser          = '瀏覽器';
 $lang->bug->machine          = '機器硬件';
@@ -69,6 +71,7 @@ $lang->bug->toCase           = '生成用例';
 /* 方法列表。*/
 $lang->bug->index              = '首頁';
 $lang->bug->create             = '提Bug';
+$lang->bug->batchCreate        = '批量添加';
 $lang->bug->confirmBug         = '確認';
 $lang->bug->edit               = '編輯';
 $lang->bug->batchEdit          =  '批量編輯';
@@ -352,9 +355,11 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
-$lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
-$lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->resolved         = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
+$lang->bug->action->tostory          = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->totask           = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 
+$lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。'); 
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->mailto = '輸入用戶名自動選擇';
+$lang->bug->placeholder->chooseBuilds = '選擇相關版本...';

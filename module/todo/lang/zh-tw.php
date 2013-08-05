@@ -23,6 +23,7 @@ $lang->todo->export       = "導出";
 $lang->todo->delete       = "刪除待辦";
 $lang->todo->browse       = "瀏覽待辦";
 $lang->todo->import2Today = "導入到今天";
+$lang->todo->import       = "導入到";
 $lang->todo->changeStatus = "更改";
 
 $lang->todo->id          = '編號';

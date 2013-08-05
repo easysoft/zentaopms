@@ -21,3 +21,7 @@ $lang->dept->users       = "成員列表";
 
 $lang->dept->saveButton    = " 保存 (S) ";
 $lang->dept->confirmDelete = " 您確定刪除該部門嗎？";
+
+$lang->dept->error = new stdclass();
+$lang->dept->error->hasSons  = '該部門有子部門，不能刪除！';
+$lang->dept->error->hasUsers = '該部門有職員，不能刪除！';

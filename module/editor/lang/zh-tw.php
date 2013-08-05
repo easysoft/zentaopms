@@ -1,8 +1,10 @@
 <?php
-$lang->editor->common    = '擴展編輯器';
+$lang->editor->common    = '編輯器';
+$lang->editor->api       = 'API';
 $lang->editor->index     = '首頁';
 $lang->editor->newMethod = '新增方法';
 $lang->editor->extend    = '擴展';
+$lang->editor->api       = 'API';
 $lang->editor->newLang   = '新增語言';
 $lang->editor->newConfig = '新增配置';
 $lang->editor->newHook   = '新增鈎子';
@@ -33,20 +35,9 @@ $lang->editor->notWritable   = "無法寫入，可能沒有權限。請嘗試執
 $lang->editor->notDelete     = '無法刪除，請檢查權限！';
 $lang->editor->emptyFileName = '請寫入一個檔案名！';
 
-$lang->editor->translate['config.php']  = '配置檔案';
-$lang->editor->translate['config']      = '配置擴展';
-$lang->editor->translate['control.php'] = '控制檔案';
-$lang->editor->translate['control']     = '控制擴展';
-$lang->editor->translate['model.php']   = '模型檔案';
-$lang->editor->translate['model']       = '模型擴展';
-$lang->editor->translate['view']        = '模板檔案';
-$lang->editor->translate['lang']        = '語言檔案';
-$lang->editor->translate['en']          = '英文';
-$lang->editor->translate['zh-tw']       = '中文簡體';
-$lang->editor->translate['zh-tw']       = '中文繁體';
-$lang->editor->translate['js']          = 'JS腳本';
-$lang->editor->translate['css']         = 'CSS樣式';
-$lang->editor->translate['ext']         = '擴展檔案';
+$lang->editor->translate['config.php']  = 'config';
+$lang->editor->translate['control.php'] = 'control';
+$lang->editor->translate['model.php']   = 'model';
 
 $lang->editor->modules['action']      = '系統日誌';
 $lang->editor->modules['admin']       = '後台管理';

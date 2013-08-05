@@ -6,23 +6,24 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 5029 2013-07-06 03:00:01Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common = '產品視圖';
-$lang->product->index  = "產品首頁";
-$lang->product->browse = "瀏覽產品";
-$lang->product->dynamic= "動態";
-$lang->product->view   = "產品信息";
-$lang->product->edit   = "編輯產品";
-$lang->product->create = "新增產品";
-$lang->product->read   = "產品詳情";
-$lang->product->delete = "刪除產品";
-$lang->product->close  = "關閉";
-$lang->product->select = '--請選擇產品--';
-$lang->product->mine   = '我負責：';
-$lang->product->other  = '其他：';
-$lang->product->closed = '已關閉&raquo;';
+$lang->product->common    = '產品視圖';
+$lang->product->index     = "產品首頁";
+$lang->product->browse    = "瀏覽產品";
+$lang->product->dynamic   = "動態";
+$lang->product->view      = "產品信息";
+$lang->product->edit      = "編輯產品";
+$lang->product->batchEdit = "批量編輯";
+$lang->product->create    = "新增產品";
+$lang->product->read      = "產品詳情";
+$lang->product->delete    = "刪除產品";
+$lang->product->close     = "關閉";
+$lang->product->select    = '--請選擇產品--';
+$lang->product->mine      = '我負責：';
+$lang->product->other     = '其他：';
+$lang->product->closed    = '已關閉&raquo;';
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -86,5 +87,5 @@ $lang->product->aclList['open']    = '預設設置(有產品視圖權限，即�
 $lang->product->aclList['private'] = '私有產品(只有項目團隊成員才能訪問)';
 $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
-$lang->product->storySummary     = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時。";
-$lang->product->noMatchedProduct = '找不到與"%s"相關的產品';
+$lang->product->storySummary = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時，用例覆蓋率<strong>%s</strong>。";
+$lang->product->noMatched    = '找不到包含"%s"的產品';

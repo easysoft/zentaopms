@@ -124,6 +124,8 @@ $lang->user->loginWithDemoUser    = '使用demo賬號登錄：';
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、數字和下劃線的組合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
+$lang->user->placeholder->role      = '角色影響內容和用戶列表的順序。';
+$lang->user->placeholder->group     = '分組決定用戶的權限列表。';
 $lang->user->placeholder->join      = '入職日期';
 $lang->user->placeholder->commiter  = '版本控制系統(subversion)中的帳號';
 

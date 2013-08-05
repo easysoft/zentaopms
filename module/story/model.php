@@ -222,6 +222,7 @@ class storyModel extends model
                 $storyID = $this->dao->lastInsertID();
                 $this->setStage($storyID);
 
+                $specData[$i] = new stdclass();
                 $specData[$i]->story   = $storyID;
                 $specData[$i]->version = 1;
                 $specData[$i]->title   = htmlspecialchars($stories->title[$i]);
@@ -230,6 +231,7 @@ class storyModel extends model
 
                 $this->loadModel('action');
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
+                $mails[$i] = new stdclass();
                 $mails[$i]->storyID  = $storyID;
                 $mails[$i]->actionID = $actionID;
             }

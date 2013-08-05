@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 4684 2013-04-27 05:49:28Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -16,6 +16,7 @@ $lang->story->batchCreate = "批量添加";
 $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';
+$lang->story->batchReview = '批量評審';
 $lang->story->edit        = "編輯";
 $lang->story->batchEdit   = "批量編輯";
 $lang->story->close       = '關閉';
@@ -29,6 +30,8 @@ $lang->story->bugs        = "Bug";
 $lang->story->linkStory   = '關聯需求';
 $lang->story->export      = "導出";
 $lang->story->reportChart = "統計報表";
+$lang->story->batchChangePlan  = "批量修改計劃";
+$lang->story->batchChangeStage = "批量修改階段";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';
@@ -194,6 +197,7 @@ $lang->story->report = new stdclass();
 $lang->story->report->common = '報表';
 $lang->story->report->select = '請選擇報表類型';
 $lang->story->report->create = '生成報表';
+$lang->story->report->value  = '需求數';
 
 $lang->story->report->charts['storysPerProduct']        = '產品需求數量';
 $lang->story->report->charts['storysPerModule']         = '模組需求數量';
@@ -236,6 +240,19 @@ $lang->story->report->storysPerClosedReason = new stdclass();
 $lang->story->report->storysPerEstimate     = new stdclass();
 $lang->story->report->storysPerChange       = new stdclass();
 
+$lang->story->report->storysPerProduct->item      = '產品';     
+$lang->story->report->storysPerModule->item       = '模組';
+$lang->story->report->storysPerSource->item       = '來源';
+$lang->story->report->storysPerPlan->item         = '計劃';
+$lang->story->report->storysPerStatus->item       = '狀態';
+$lang->story->report->storysPerStage->item        = '階段';
+$lang->story->report->storysPerPri->item          = '優先順序';
+$lang->story->report->storysPerOpenedBy->item     = '用戶';
+$lang->story->report->storysPerAssignedTo->item   = '用戶';
+$lang->story->report->storysPerClosedReason->item = '原因';
+$lang->story->report->storysPerEstimate->item     = '預計工時';
+$lang->story->report->storysPerChange->item       = '變更次數';
+
 $lang->story->report->storysPerProduct->graph      = new stdclass();     
 $lang->story->report->storysPerModule->graph       = new stdclass();
 $lang->story->report->storysPerSource->graph       = new stdclass();
@@ -264,4 +281,6 @@ $lang->story->report->storysPerChange->graph->xAxisName       = '變更次數';
 
 $lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = "完成該需求的工作量";
-$lang->story->placeholder->mailto   = '輸入用戶名自動完成';
+
+$lang->story->chosen = new stdClass();
+$lang->story->chosen->reviewedBy = '選擇評審人...';

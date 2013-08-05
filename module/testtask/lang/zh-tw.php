@@ -49,6 +49,10 @@ $lang->testtask->lastRunTime    = '執行時間';
 $lang->testtask->lastRunResult  = '結果';
 $lang->testtask->report         = '測試總結';
 
+$lang->testtask->legendDesc      = '任務描述';
+$lang->testtask->legendReport    = '測試總結';
+$lang->testtask->legendBasicInfo = '基本信息';
+
 $lang->testtask->statusList['wait']    = '未開始';
 $lang->testtask->statusList['doing']   = '進行中';
 $lang->testtask->statusList['done']    = '已完成';
@@ -64,10 +68,12 @@ $lang->testtask->unlinkedCases = '未關聯';
 $lang->testtask->linkedCases   = '已關聯';
 $lang->testtask->linkByStory   = '按需求關聯';
 $lang->testtask->linkByBug     = '按Bug關聯';
-$lang->testtask->confirmDelete = '您確認要刪除該測試任務嗎？';
 $lang->testtask->passAll       = '全部通過';
 $lang->testtask->pass          = '通過';
 $lang->testtask->fail          = '失敗';
+
+$lang->testtask->confirmDelete     = '您確認要刪除該測試任務嗎？';
+$lang->testtask->confirmUnlinkCase = '您確認要移除該用例嗎？';
 
 $lang->testtask->byModule      = '按模組';
 $lang->testtask->assignedToMe  = '指派給我';

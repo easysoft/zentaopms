@@ -102,8 +102,6 @@ $lang->install->errorNotSaveConfig = '還沒有保存配置檔案';
 
 $lang->install->getPriv  = '設置帳號';
 $lang->install->company  = '公司名稱';
-$lang->install->pms      = 'PMS地址';
-$lang->install->pmsNote  = '即通過什麼地址可以訪問到禪道項目管理，設置域名或者IP地址即可，不需要http';
 $lang->install->account  = '管理員帳號';
 $lang->install->password = '管理員密碼';
 $lang->install->errorEmptyPassword = '密碼不能為空';

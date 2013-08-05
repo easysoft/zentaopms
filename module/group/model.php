@@ -224,7 +224,8 @@ class groupModel extends model
                 {
                     foreach($moduleActions as $actionName)
                     {
-                        $data->group = $groupID;
+                        $data         = new stdclass();
+                        $data->group  = $groupID;
                         $data->module = $moduleName;
                         $data->method = $actionName;
                         $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
@@ -244,7 +245,8 @@ class groupModel extends model
             {
                 foreach($moduleActions as $actionName)
                 {
-                    $data->group = $groupID;
+                    $data         = new stdclass();
+                    $data->group  = $groupID;
                     $data->module = $moduleName;
                     $data->method = $actionName;
                     $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
@@ -268,6 +270,7 @@ class groupModel extends model
         {
             foreach($this->post->groups as $group)
             {
+                $data         = new stdclass();
                 $data->group  = $group;
                 $data->module = $this->post->module;
                 $data->method = $action;
@@ -293,6 +296,7 @@ class groupModel extends model
         if($this->post->members == false) return;
         foreach($this->post->members as $account)
         {
+            $data          = new stdclass();
             $data->account = $account;
             $data->group   = $groupID;
             $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();

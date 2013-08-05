@@ -196,6 +196,7 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
+            ->checkIF($task->deadline != '', 'deadline', 'ge', $task->estStarted)
 
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
@@ -238,6 +239,7 @@ class taskModel extends model
         {
             $oldTask = $this->getById($taskID);
 
+            $task = new stdclass();
             $task->name           = htmlspecialchars($this->post->names[$taskID]);
             $task->module         = isset($this->post->modules[$taskID]) ? $this->post->modules[$taskID] : 0;
             $task->type           = $this->post->types[$taskID];
@@ -438,6 +440,7 @@ class taskModel extends model
             {
                 if(!$record->consumed[$id]) die(js::alert($this->lang->task->error->consumedThisTime));
                 if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
+                $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
                 $estimates[$id]->task     = $taskID;
                 $estimates[$id]->consumed = $record->consumed[$id];

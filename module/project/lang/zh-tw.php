@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 5029 2013-07-06 03:00:01Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -118,6 +118,7 @@ $lang->project->copy            = "複製項目";
 $lang->project->delete          = "刪除項目";
 $lang->project->browse          = "瀏覽項目";
 $lang->project->edit            = "編輯項目";
+$lang->project->batchEdit       = "批量編輯";
 $lang->project->manageMembers   = '團隊管理';
 $lang->project->unlinkMember    = '移除成員';
 $lang->project->unlinkStory     = '移除需求';
@@ -162,23 +163,23 @@ $lang->project->aboveAllProduct = '以上所有產品';
 $lang->project->aboveAllProject = '以上所有項目';
 
 /* 頁面提示。*/
-$lang->project->selectProject    = "請選擇項目";
-$lang->project->beginAndEnd      = '起止時間';
-$lang->project->lblStats         = '工時統計';
-$lang->project->stats            = '可用工時<strong>%s</strong>工時<br />總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
-$lang->project->oneLineStats     = "項目<strong>%s</strong>, 代號為<strong>%s</strong>, 相關產品為<strong>%s</strong>，<strong>%s</strong>開始，<strong>%s</strong>結束，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，預計剩餘<strong>%s</strong>工時。";
-$lang->project->taskSummary      = "本頁共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
-$lang->project->memberHours      = "%s共有 <strong>%s</strong> 個可用工時，";
-$lang->project->groupSummary     = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
-$lang->project->wbs              = "分解任務";
-$lang->project->batchWBS         = "批量分解";
-$lang->project->largeBurnChart   = '點擊查看大圖';
-$lang->project->howToUpdateBurn  = "<a href='http://www.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank'>如何更新?</a>";
-$lang->project->whyNoStories     = "看起來沒有需求可以關聯。請檢查下項目關聯的產品中有沒有需求，而且要確保它們已經審核通過。";
-$lang->project->doneProjects     = '已結束';
-$lang->project->unDoneProjects   = '未結束';
-$lang->project->copyTeam         = '複製團隊';
-$lang->product->noMatchedProject = '找不到與"%s"相關的項目';
+$lang->project->selectProject   = "請選擇項目";
+$lang->project->beginAndEnd     = '起止時間';
+$lang->project->lblStats        = '工時統計';
+$lang->project->stats           = '可用工時<strong>%s</strong>工時<br />總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
+$lang->project->oneLineStats    = "項目<strong>%s</strong>, 代號為<strong>%s</strong>, 相關產品為<strong>%s</strong>，<strong>%s</strong>開始，<strong>%s</strong>結束，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，預計剩餘<strong>%s</strong>工時。";
+$lang->project->taskSummary     = "本頁共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
+$lang->project->memberHours     = "%s共有 <strong>%s</strong> 個可用工時，";
+$lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
+$lang->project->wbs             = "分解任務";
+$lang->project->batchWBS        = "批量分解";
+$lang->project->largeBurnChart  = '點擊查看大圖';
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank'>如何更新?</a>";
+$lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下項目關聯的產品中有沒有需求，而且要確保它們已經審核通過。";
+$lang->project->doneProjects    = '已結束';
+$lang->project->unDoneProjects  = '未結束';
+$lang->project->copyTeam        = '複製團隊';
+$lang->product->noMatched       = '找不到包含"%s"的項目';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您確定刪除項目[%s]嗎？';
@@ -191,7 +192,10 @@ $lang->project->afterInfo             = '項目添加成功，您現在可以進
 $lang->project->setTeam               = '設置團隊';
 $lang->project->linkStory             = '關聯需求';
 $lang->project->createTask            = '添加任務';
-$lang->project->goback                = '返回項目首頁（5秒後將自動跳轉）';
+$lang->project->goback                = '返回項目首頁';
+$lang->project->linkProduct           = '選擇產品關聯...';
+$lang->project->withWeekend           = '顯示周末';
+$lang->project->noWeekend             = '去除周末';
 
 /* 統計。*/
 $lang->project->charts = new stdclass();

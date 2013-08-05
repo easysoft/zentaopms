@@ -159,6 +159,8 @@ $lang->resource->story->batchClose  = 'batchClose';
 $lang->resource->story->activate    = 'lblActivate';
 $lang->resource->story->tasks       = 'tasks';
 $lang->resource->story->report      = 'reportChart';
+$lang->resource->story->batchChangePlan  = 'batchChangePlan';
+$lang->resource->story->batchChangeStage = 'batchChangeStage';
 
 $lang->story->methodOrder[5]  = 'create';
 $lang->story->methodOrder[10] = 'batchCreate';
@@ -398,6 +400,9 @@ $lang->resource->testcase->edit               = 'edit';
 $lang->resource->testcase->batchEdit          = 'batchEdit';
 $lang->resource->testcase->delete             = 'delete';
 $lang->resource->testcase->export             = 'export';
+$lang->resource->testcase->exportTemplet      = 'exportTemplet';
+$lang->resource->testcase->import             = 'import';
+$lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 
@@ -750,6 +755,7 @@ $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
 $lang->resource->action->hideOne  = 'hideOne';
 $lang->resource->action->hideAll  = 'hideAll';
+$lang->resource->action->editComment = 'editComment';
 
 $lang->action->methodOrder[5]  = 'trash';
 $lang->action->methodOrder[10] = 'undelete';

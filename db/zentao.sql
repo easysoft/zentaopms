@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `product` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
+  `plan` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(8) unsigned NOT NULL default '0',
   `storyVersion` smallint(6) NOT NULL default '1',
   `task` mediumint(8) unsigned NOT NULL default '0',

@@ -5,6 +5,7 @@ $lang->mail->detect = '檢測';
 $lang->mail->edit   = '編輯配置';
 $lang->mail->save   = '成功保存';
 $lang->mail->test   = '測試發信';
+$lang->mail->reset  = '重置';
 
 $lang->mail->turnon      = '是否打開';
 $lang->mail->fromAddress = '發信郵箱';

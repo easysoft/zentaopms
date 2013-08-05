@@ -288,6 +288,7 @@ EOT;
         {
             if($bug->project)
             {
+                $projects[$bug->project] = new stdclass();
                 $projects[$bug->project]->bugs = isset($projects[$bug->project]->bugs) ? $projects[$bug->project]->bugs + 1 : 1;
             }
         }

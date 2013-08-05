@@ -353,7 +353,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $actions = $this->bug->batchCreate($productID);
-            foreach($actions as $bugID => $action) $this->sendmail($bugID, $actionID);
+            foreach($actions as $bugID => $actionID) $this->sendmail($bugID, $actionID);
             die(js::locate($this->session->bugList, 'parent'));
         }
 
@@ -377,7 +377,6 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
-        $this->view->projectBuilds    = $projectBuilds;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
