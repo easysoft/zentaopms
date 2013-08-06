@@ -111,8 +111,8 @@ foreach(glob($moduleRoot . '*') as $modulePath)
 
 /* checking actions of every module. */
 echo '-------------lang checking-----------------' . "\n";
-include '../../module/common/lang/zh-cn.php';
-include '../../config/config.php';
+include '../module/common/lang/zh-cn.php';
+include '../config/config.php';
 foreach(glob($moduleRoot . '*') as $modulePath)
 {
     unset($lang);
@@ -142,7 +142,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                     $key = trim($key);
                     $lineNO = $lineNO + 1;
                     echo "module $moduleName need checking, command is:";
-                    echo " vim -O +$lineNO ../../module/$moduleName/lang/zh-cn.php +$lineNO ../../module/$moduleName/lang/en.php \n";
+                    echo " vim -O +$lineNO ../module/$moduleName/lang/zh-cn.php +$lineNO ../module/$moduleName/lang/en.php \n";
                     break;
                 }
             }

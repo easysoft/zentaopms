@@ -66,7 +66,6 @@ $lang->testcase->importID           = "Linenum";
 $lang->testcase->showImport         = "Show import";
 $lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export";
-$lang->testcase->export             = "Export";
 $lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 

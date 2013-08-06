@@ -142,6 +142,7 @@ class upgradeModel extends model
         case '4_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.0'));
         case '4_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.1'));
         case '4_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.1'));
+        case '4_2_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('4.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

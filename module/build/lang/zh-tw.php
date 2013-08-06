@@ -38,5 +38,3 @@ $lang->build->bugs               = '已關聯Bug';
 
 $lang->build->finishStories = '本次共完成需求%s個';
 $lang->build->resolvedBugs  = '本次共解決Bug%s個';
-
-$lang->build->notice = '版本請到[項目視圖]-[版本]創建。';

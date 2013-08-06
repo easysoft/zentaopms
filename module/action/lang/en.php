@@ -20,10 +20,11 @@ $lang->action->action     = 'Action';
 $lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 
-$lang->action->trash    = 'Trash';
-$lang->action->undelete = 'Undelete';
-$lang->action->hideOne  = 'Hide';
-$lang->action->hideAll  = 'Hide all';
+$lang->action->trash       = 'Trash';
+$lang->action->undelete    = 'Undelete';
+$lang->action->hideOne     = 'Hide';
+$lang->action->hideAll     = 'Hide all';
+$lang->action->editComment = 'Edit comment';
 
 $lang->action->trashTips      = "Tips:The deleting actions in zentao are all logic";
 $lang->action->textDiff       = 'Text mode';

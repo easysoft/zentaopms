@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 5029 2013-07-06 03:00:01Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
@@ -15,6 +15,7 @@ $lang->comma        = '，';
 $lang->dot          = '。';
 $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
+$lang->null         = '空';
 
 $lang->zentaoPMS    = '禪道管理';
 $lang->welcome      = "歡迎使用『%s』{$lang->colon} {$lang->zentaoPMS}";
@@ -27,6 +28,7 @@ $lang->todayIs      = '今天是%s，';
 $lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 
 $lang->reset        = '重填';
+$lang->refresh      = '刷新';
 $lang->edit         = '編輯';
 $lang->copy         = '複製';
 $lang->delete       = '刪除';
@@ -137,10 +139,10 @@ $lang->my->menu = new stdclass();
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = '首頁|my|index';
 $lang->my->menu->todo           = array('link' => '待辦|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task           = '任務|my|task|';
-$lang->my->menu->bug            = 'Bug|my|bug|';
-$lang->my->menu->testtask       = array('link' => '測試|my|testtask|', 'alias' => 'testcase');
-$lang->my->menu->story          = '需求|my|story|';
+$lang->my->menu->task           = array('link' => '任務|my|task|', 'subModule' => 'task');
+$lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
+$lang->my->menu->testtask       = array('link' => '測試|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->story          = array('link' => '需求|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = '項目|my|project|';
 $lang->my->menu->dynamic        = '動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '檔案|my|profile|', 'alias' => 'editprofile');
@@ -202,7 +204,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => '測試任務|testtask|browse|productID=%s');
 
@@ -211,7 +213,7 @@ $lang->testcase->menu = new stdclass();
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit', 'subModule' => 'tree');
+$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '測試任務|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun');
 
 $lang->testtask = new stdclass();
@@ -254,7 +256,7 @@ $lang->company->menu->browseGroup  = array('link' => '權限|group|browse', 'sub
 $lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = '動態|company|dynamic|';
 $lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>添加分組|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>批量添加|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->company->menu->addUser      = array('link' => '<span class="icon-add">&nbsp;</span>添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
@@ -269,12 +271,12 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首頁|admin|index');
-$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->editor    = array('link' => '擴展編輯器|editor|index', 'subModule' => 'editor');
+$lang->admin->menu->extension = array('link' => '擴展|extension|browse', 'subModule' => 'extension,editor');
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->clearData = array('link' => '清除數據|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
+$lang->admin->menu->sso       = array('link' => '單點登錄|sso|browse', 'subModule' => 'sso');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -282,6 +284,7 @@ $lang->action    = new stdclass();
 $lang->extension = new stdclass();
 $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
+$lang->sso       = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -289,6 +292,7 @@ $lang->action->menu    = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
+$lang->sso->menu       = $lang->admin->menu;
 
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
@@ -311,6 +315,7 @@ $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->sso         = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
@@ -331,6 +336,7 @@ $lang->error->account         = "『%s』應當為合法的用戶名。";
 $lang->error->passwordsame    = "兩次密碼應當相等。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
+$lang->error->noData          = '沒有數據';
 
 /* 分頁信息。*/
 $lang->pager = new stdclass();
@@ -343,15 +349,16 @@ $lang->pager->last      = "末頁";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方網站";
-$lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a> ";
-$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a> ";
-$lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>捐贈</a> ";
-$lang->proVersion     = "<a href='http://www.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>購買專業版(特惠)！</a> ";
+$lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a> ";
+$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a> ";
+$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐贈</a> ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>購買專業版(特惠)！</a> ";
 $lang->downNotify     = "下載桌面提醒";
 
 $lang->suhosinInfo = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
 
-$lang->noResultsMatch = "沒有匹配結果";
+$lang->noResultsMatch    = "沒有匹配結果";
+$lang->chooseUsersToMail = "選擇要發信通知的用戶...";
 
 /* 時間格式設置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');

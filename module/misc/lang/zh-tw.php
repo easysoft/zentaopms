@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
- * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-tw.php 5128 2013-07-13 08:59:49Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->misc = new stdclass();
@@ -46,4 +46,5 @@ $lang->misc->zentao->service['install']    = '禪道安裝服務';
 $lang->misc->zentao->service['fixissue']   = '禪道問題解決';
 $lang->misc->zentao->service['servicemore']= '更多服務...';
 
+$lang->misc->noGDLib   = "找不到GD庫，請用手機瀏覽器直接訪問：%s";
 $lang->misc->copyright = "版權所有 &copy;2009-2013 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";

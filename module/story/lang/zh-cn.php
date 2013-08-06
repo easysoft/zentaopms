@@ -30,6 +30,8 @@ $lang->story->bugs        = "Bug";
 $lang->story->linkStory   = '关联需求';
 $lang->story->export      = "导出";
 $lang->story->reportChart = "统计报表";
+$lang->story->batchChangePlan  = "批量修改计划";
+$lang->story->batchChangeStage = "批量修改阶段";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';

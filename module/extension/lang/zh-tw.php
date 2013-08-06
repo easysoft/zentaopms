@@ -36,7 +36,7 @@ $lang->extension->name        = '名稱';
 $lang->extension->code        = '插件代號';
 $lang->extension->version     = '版本';
 $lang->extension->compatible  = '適用版本';
-$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禪道<a href="http://www.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
+$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禪道<a href="http://api.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = '作者';
 $lang->extension->license     = '授權';
 $lang->extension->intro       = '詳情';
@@ -48,6 +48,7 @@ $lang->extension->downloads   = '下載量';
 $lang->extension->public      = '下載方式';
 $lang->extension->compatible  = '兼容性';
 $lang->extension->grade       = '評分';
+$lang->extension->depends     = '依賴';
 
 $lang->extension->publicList[0] = '手工下載';
 $lang->extension->publicList[1] = '直接下載';
@@ -62,6 +63,7 @@ $lang->extension->bySearch      = '搜索';
 $lang->extension->byCategory    = '分類瀏覽';
 
 $lang->extension->installFailed            = '%s失敗，錯誤原因如下:';
+$lang->extension->uninstallFailed          = '卸載失敗，錯誤原因如下:';
 $lang->extension->installFinished          = '恭喜您，插件順利的%s成功！';
 $lang->extension->refreshPage              = '刷新頁面';
 $lang->extension->uninstallFinished        = '插件已經成功卸載';
@@ -96,3 +98,7 @@ $lang->extension->errorPackageNotFound         = '包檔案 <strong>%s </strong>
 $lang->extension->errorTargetPathNotWritable   = '目標路徑 <strong>%s </strong>不可寫。';
 $lang->extension->errorTargetPathNotExists     = '目標路徑 <strong>%s </strong>不存在。';
 $lang->extension->errorInstallDB               = '執行資料庫語句失敗。錯誤信息如下：%s';
+$lang->extension->errorConflicts               = '與插件“%s”衝突！';
+$lang->extension->errorDepends                 = '以下依賴插件沒有安裝或版本不正確：<br /><br /> %s';
+$lang->extension->errorIncompatible            = '該插件與您的禪道版本不兼容';
+$lang->extension->errorUninstallDepends        = '插件“%s”依賴該插件，不能卸載';

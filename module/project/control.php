@@ -713,7 +713,7 @@ class project extends control
         $baselineJSON  = '[]';
         if($projectInfo->days <= $maxDays)
         {
-            $firstBurn    = reset($sets);
+            $firstBurn    = empty($sets) ? 0 : reset($sets);
             $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
             $days         = count($dateList) - 1;
             $rate         = $firstTime / $days;
