@@ -270,32 +270,32 @@ $lang->user->menu  = $lang->company->menu;
 /* Admin menu. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => 'Index|admin|index');
-$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension,editor');
-$lang->admin->menu->lang      = array('link' => 'Custom lang|lang|index', 'subModule' => 'lang');
-$lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData = array('link' => 'Clear data|admin|cleardata');
-$lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
-$lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->admin->menu->sso       = array('link' => 'SSO|sso|browse', 'subModule' => 'sso');
+$lang->admin->menu->index      = array('link' => 'Index|admin|index');
+$lang->admin->menu->extension  = array('link' => 'Extension|extension|browse', 'subModule' => 'extension,editor');
+$lang->admin->menu->customlang = array('link' => 'Custom lang|customlang|story', 'subModule' => 'customlang');
+$lang->admin->menu->mail       = array('link' => 'Email|mail|index', 'subModule' => 'mail');
+$lang->admin->menu->clearData  = array('link' => 'Clear data|admin|cleardata');
+$lang->admin->menu->convert    = array('link' => 'Import|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->trashes    = array('link' => 'Trash|action|trash', 'subModule' => 'action');
+$lang->admin->menu->sso        = array('link' => 'SSO|sso|browse', 'subModule' => 'sso');
 
-$lang->convert   = new stdclass();
-$lang->upgrade   = new stdclass();
-$lang->action    = new stdclass();
-$lang->extension = new stdclass();
-$lang->lang      = new stdclass();
-$lang->editor    = new stdclass();
-$lang->mail      = new stdclass();
-$lang->sso       = new stdclass();
+$lang->convert    = new stdclass();
+$lang->upgrade    = new stdclass();
+$lang->action     = new stdclass();
+$lang->extension  = new stdclass();
+$lang->customlang = new stdclass();
+$lang->editor     = new stdclass();
+$lang->mail       = new stdclass();
+$lang->sso        = new stdclass();
 
-$lang->convert->menu   = $lang->admin->menu;
-$lang->upgrade->menu   = $lang->admin->menu;
-$lang->action->menu    = $lang->admin->menu;
-$lang->extension->menu = $lang->admin->menu;
-$lang->lang->menu      = $lang->admin->menu;
-$lang->editor->menu    = $lang->admin->menu;
-$lang->mail->menu      = $lang->admin->menu;
-$lang->sso->menu       = $lang->admin->menu;
+$lang->convert->menu    = $lang->admin->menu;
+$lang->upgrade->menu    = $lang->admin->menu;
+$lang->action->menu     = $lang->admin->menu;
+$lang->extension->menu  = $lang->admin->menu;
+$lang->customlang->menu = $lang->admin->menu;
+$lang->editor->menu     = $lang->admin->menu;
+$lang->mail->menu       = $lang->admin->menu;
+$lang->sso->menu        = $lang->admin->menu;
 
 /* Groups. */
 $lang->menugroup = new stdclass();
