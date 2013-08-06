@@ -84,3 +84,4 @@ $config->project->search['params']['assignedDate']  = array('operator' => '>=', 
 $config->project->search['params']['finishedDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->project->search['params']['closedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->project->search['params']['canceledDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['lastEditedDate']= array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
