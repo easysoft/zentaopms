@@ -1218,6 +1218,7 @@ class router
         /* If the not strict mode, the keys of passed params and defaaul params msut be the same. */
         if(!isset($this->config->strictParams) or $this->config->strictParams == false) 
         {
+            unset($passedParams['onlybody']);
             $passedParams = array_values($passedParams);
             $i = 0;
             foreach($defaultParams as $key => $defaultValue)
