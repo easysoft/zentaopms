@@ -45,9 +45,18 @@ class productplan extends control
 
         $this->commonAction($product);
         $lastPlan = $this->productplan->getLast($product);
+        if($lastPlan)
+        {
+            $timestamp = strtotime($lastPlan->end);
+            $weekday   = date('w', $timestamp);
+            $delta     = 1;
+            if($weekday == '5' or $weekday == '6') $delta = 8 - $weekday;
+
+            $begin = date('Y-m-d', strtotime("+$delta days", $timestamp));
+        }
+        $this->view->begin = $lastPlan ? $begin : '';
 
         $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
-        $this->view->begin = $lastPlan ? $lastPlan->end : '';
         $this->display();
     }
 
