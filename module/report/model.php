@@ -121,7 +121,7 @@ $(function ()
             series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
             legend: {noColumns: 1},
             grid: { hoverable: true, clickable: true },
-            xaxis: { ticks:ticks, tickFormatter: function(val) {tick = new Date(dateList[val]);;if(dateList[val] != undefined){return (tick.getMonth() + 1) + '-' + tick.getDate()}else{return ''}}},
+            xaxis: { ticks:ticks, tickFormatter: function(val) {tick = new Date(dateList[val]);;if(dateList[val] != undefined){return tick.getDate() + '/' + (tick.getMonth() + 1)}else{return ''}}},
             yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
 
     var placeholder = $("#placeholder");
