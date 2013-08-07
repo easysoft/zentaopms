@@ -1,7 +1,7 @@
 <?php
 $lang->custom->common    = 'Custom';
 $lang->custom->index     = 'Index';
-$lang->custom->setCustom = 'Set custom';
+$lang->custom->set       = 'Set custom';
 $lang->custom->restore   = 'restore';
 $lang->custom->key       = 'Key';
 $lang->custom->value     = 'Value';

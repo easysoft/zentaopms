@@ -491,12 +491,12 @@ $lang->mail->methodOrder[30] = 'reset';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index  = 'index';
-$lang->resource->custom->setCustom = 'setCustom';
-$lang->resource->custom->restore  = 'restore';
+$lang->resource->custom->index   = 'index';
+$lang->resource->custom->set     = 'set';
+$lang->resource->custom->restore = 'restore';
 
 $lang->custom->methodOrder[5]  = 'index';
-$lang->custom->methodOrder[10] = 'setCustom';
+$lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'restore';
 
 /* Subversion. */

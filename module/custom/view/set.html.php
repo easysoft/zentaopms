@@ -1,6 +1,6 @@
 <?php
 /**
- * The setCustom view file of custom module of ZenTaoPMS.
+ * The set view file of custom module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -35,13 +35,13 @@ EOT;
 <div id='featurebar'>
   <div class='f-left'>
   <?php
-  echo "<span id='storyTab'>";    common::printLink('custom', 'setCustom', "module=story",    $lang->custom->story);    echo '</span>';
-  echo "<span id='taskTab'>";     common::printLink('custom', 'setCustom', "module=task",     $lang->custom->task);     echo '</span>';
-  echo "<span id='bugTab'>";      common::printLink('custom', 'setCustom', "module=bug",      $lang->custom->bug);      echo '</span>';
-  echo "<span id='testcaseTab'>"; common::printLink('custom', 'setCustom', "module=testcase", $lang->custom->testcase); echo '</span>';
-  echo "<span id='testtaskTab'>"; common::printLink('custom', 'setCustom', "module=testtask", $lang->custom->testtask); echo '</span>';
-  echo "<span id='todoTab'>";     common::printLink('custom', 'setCustom', "module=todo",     $lang->custom->todo);     echo '</span>' ;
-  echo "<span id='userTab'>";     common::printLink('custom', 'setCustom', "module=user",     $lang->custom->user);     echo '</span>';
+  echo "<span id='storyTab'>";    common::printLink('custom', 'set', "module=story",    $lang->custom->story);    echo '</span>';
+  echo "<span id='taskTab'>";     common::printLink('custom', 'set', "module=task",     $lang->custom->task);     echo '</span>';
+  echo "<span id='bugTab'>";      common::printLink('custom', 'set', "module=bug",      $lang->custom->bug);      echo '</span>';
+  echo "<span id='testcaseTab'>"; common::printLink('custom', 'set', "module=testcase", $lang->custom->testcase); echo '</span>';
+  echo "<span id='testtaskTab'>"; common::printLink('custom', 'set', "module=testtask", $lang->custom->testtask); echo '</span>';
+  echo "<span id='todoTab'>";     common::printLink('custom', 'set', "module=todo",     $lang->custom->todo);     echo '</span>' ;
+  echo "<span id='userTab'>";     common::printLink('custom', 'set', "module=user",     $lang->custom->user);     echo '</span>';
   ?>
   </div>
 </div>
@@ -54,7 +54,7 @@ EOT;
         <?php 
           foreach($config->custom->{$module}->fields as $key => $value)
           {
-              echo "<li><span id='{$key}Tab'>" . html::a(inlink('setCustom', "module=$module&field=$key"), $value) . "</span></li>";
+              echo "<li><span id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</span></li>";
           }
         ?>
         </ul>
