@@ -1464,6 +1464,19 @@ class router
             $loadedLangs[] = $langFile;
         }
 
+        /* Merge from the db lang. */
+        if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
+        {
+            foreach($lang->db->custom[$moduleName] as $section => $fields)
+            {
+                foreach($fields as $key => $value)
+                {
+                    unset($lang->{$moduleName}->{$section}[$key]);
+                    $lang->{$moduleName}->{$section}[$key] = $value;
+                }
+            }
+        }
+
         $this->lang = $lang;
         return $lang;
     }

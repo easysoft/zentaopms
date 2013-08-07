@@ -135,13 +135,6 @@ $lang->testcase->stageList['system']     = '系统测试阶段';
 $lang->testcase->stageList['smoke']      = '冒烟测试阶段';
 $lang->testcase->stageList['bvt']        = '版本验证阶段';
 
-$lang->testcase->stageListAB['unittest']   = '单元';
-$lang->testcase->stageListAB['feature']    = '功能';
-$lang->testcase->stageListAB['intergrate'] = '集成';
-$lang->testcase->stageListAB['system']     = '系统';
-$lang->testcase->stageListAB['smoke']      = '冒烟';
-$lang->testcase->stageListAB['bvt']        = '版本';
-
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
