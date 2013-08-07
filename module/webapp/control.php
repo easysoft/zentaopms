@@ -57,6 +57,7 @@ class webapp extends control
         if($type == 'bysearch') $param = helper::safe64Encode($this->post->key);
 
         /* Get results from the api. */
+        $recPerPage = $this->cookie->pagerWebappObtain ? $this->cookie->pagerWebappObtain : $recPerPage;
         $results = $this->webapp->getAppsByAPI($type, $param, $recTotal, $recPerPage, $pageID);
         if($results)
         {
