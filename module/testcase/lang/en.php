@@ -135,13 +135,6 @@ $lang->testcase->stageList['system']      = 'System testing';
 $lang->testcase->stageList['smoke']       = 'Smoking testing';
 $lang->testcase->stageList['bvt']         = 'BVT testing';
 
-$lang->testcase->stageListAB['unittest']   = 'Unit';
-$lang->testcase->stageListAB['feature']    = 'Feature';
-$lang->testcase->stageListAB['intergrate'] = 'Integrate';
-$lang->testcase->stageListAB['system']     = 'System';
-$lang->testcase->stageListAB['smoke']      = 'Smoking';
-$lang->testcase->stageListAB['bvt']        = 'BVT';
-
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
