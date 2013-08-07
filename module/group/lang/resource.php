@@ -39,20 +39,20 @@ $lang->moduleOrder[95]  = 'user';
 
 $lang->moduleOrder[100] = 'admin';
 $lang->moduleOrder[105] = 'extension';
-$lang->moduleOrder[105] = 'extension';
-$lang->moduleOrder[110] = 'editor';
-$lang->moduleOrder[115] = 'convert';
-$lang->moduleOrder[120] = 'action';
+$lang->moduleOrder[110] = 'custom';
+$lang->moduleOrder[115] = 'editor';
+$lang->moduleOrder[120] = 'convert';
+$lang->moduleOrder[125] = 'action';
 
-$lang->moduleOrder[125] = 'mail';
-$lang->moduleOrder[130] = 'svn';
-$lang->moduleOrder[135] = 'search';
-$lang->moduleOrder[140] = 'tree';
-$lang->moduleOrder[145] = 'api';
-$lang->moduleOrder[150] = 'file';
-$lang->moduleOrder[155] = 'misc';
-$lang->moduleOrder[160] = 'sso';
-$lang->moduleOrder[165] = 'webapp';
+$lang->moduleOrder[130] = 'mail';
+$lang->moduleOrder[135] = 'svn';
+$lang->moduleOrder[140] = 'search';
+$lang->moduleOrder[145] = 'tree';
+$lang->moduleOrder[150] = 'api';
+$lang->moduleOrder[155] = 'file';
+$lang->moduleOrder[160] = 'misc';
+$lang->moduleOrder[165] = 'sso';
+$lang->moduleOrder[170] = 'webapp';
 
 $lang->resource = new stdclass();
 
@@ -488,6 +488,16 @@ $lang->mail->methodOrder[15] = 'edit';
 $lang->mail->methodOrder[20] = 'save';
 $lang->mail->methodOrder[25] = 'test';
 $lang->mail->methodOrder[30] = 'reset';
+
+/* custom. */
+$lang->resource->custom = new stdclass();
+$lang->resource->custom->index  = 'index';
+$lang->resource->custom->setCustom = 'setCustom';
+$lang->resource->custom->restore  = 'restore';
+
+$lang->custom->methodOrder[5]  = 'index';
+$lang->custom->methodOrder[10] = 'setCustom';
+$lang->custom->methodOrder[15] = 'restore';
 
 /* Subversion. */
 $lang->resource->svn = new stdclass();

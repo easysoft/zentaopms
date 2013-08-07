@@ -32,21 +32,7 @@
       <td><?php echo html::select("modules[$caseID]",   $moduleOptionMenu, $cases[$caseID]->module, "class='select-1'");?></span></td>
       <td><?php echo html::input("titles[$caseID]",     $cases[$caseID]->title, 'class=text-1'); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::select("types[$caseID]",     $lang->testcase->typeList, $cases[$caseID]->type, 'class=select-1');?></td>
-      <td>
-      <?php 
-      foreach($lang->testcase->stageListAB as $key => $stage)
-      {
-          if(in_array($key, explode(',', $cases[$caseID]->stage)))
-          {
-              echo "<input type='checkbox' name='stages[$caseID][$key]' checked='checked' value='$key'/>$stage "; 
-          }
-          else
-          {
-              echo "<input type='checkbox' name='stages[$caseID][$key]' value='$key'/>$stage "; 
-          }
-      }
-      ?>
-      </td>
+      <td class='a-left' style='overflow:visible'><?php echo html::select("stages[$caseID][]",  $lang->testcase->stageList, $cases[$caseID]->stage, "class='select-1 chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>

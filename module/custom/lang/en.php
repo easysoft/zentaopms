@@ -1,8 +1,10 @@
 <?php
-$lang->custom->common   = 'Custom';
-$lang->custom->custom   = 'Custom';
-$lang->custom->key      = 'Key';
-$lang->custom->value    = 'Value';
+$lang->custom->common    = 'Custom';
+$lang->custom->index     = 'Index';
+$lang->custom->setCustom = 'Set custom';
+$lang->custom->restore   = 'restore';
+$lang->custom->key       = 'Key';
+$lang->custom->value     = 'Value';
 
 $lang->custom->story    = 'Story';
 $lang->custom->task     = 'Task';
@@ -12,5 +14,4 @@ $lang->custom->testtask = 'Test task';
 $lang->custom->todo     = 'Todo';
 $lang->custom->user     = 'User';
 
-$lang->custom->restore = 'restore';
 $lang->custom->confirmRestore = 'Are you sure to restore the default lang setting?';
