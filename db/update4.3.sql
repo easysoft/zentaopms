@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS `zt_custom` (
   `section` varchar(30) NOT NULL,
   `key` varchar(60) NOT NULL,
   `value` text NOT NULL,
+  `system` enum('0','1') NOT NULL default '1',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
