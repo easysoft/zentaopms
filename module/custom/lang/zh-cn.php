@@ -14,4 +14,7 @@ $lang->custom->testtask = '测试任务';
 $lang->custom->todo     = '待办';
 $lang->custom->user     = '用户';
 
+$lang->custom->currentLang = '适用当前语言';
+$lang->custom->allLang     = '适用所有语言';
+
 $lang->custom->confirmRestore = '是否要恢复默认语言配置？';

@@ -1465,15 +1465,14 @@ class router
         }
 
         /* Merge from the db lang. */
-        if($moduleName != 'common' and isset($lang->db->custom))
+        if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
         {
-            foreach($lang->db->custom as $record)
+            foreach($lang->db->custom[$moduleName] as $section => $fields)
             {
-               if($moduleName == $record->module) 
+                foreach($fields as $key => $value)
                 {
-                    if(!$record->key) continue;
-                    unset($lang->{$record->module}->{$record->section}[$record->key]);
-                    $lang->{$record->module}->{$record->section}[$record->key] = $record->value;
+                    unset($lang->{$moduleName}->{$section}[$key]);
+                    $lang->{$moduleName}->{$section}[$key] = $value;
                 }
             }
         }

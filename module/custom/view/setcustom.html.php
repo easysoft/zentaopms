@@ -63,7 +63,7 @@ EOT;
     <td class='divider'></td>
     <td>
       <form method='post'>
-        <table align='center' class='table-1'>
+        <table class='table-1'>
           <caption><?echo $lang->custom->$module . ' >> ' . $config->custom->$module->fields[$field]?></caption>
           <tr>
             <th class='w-100px'><?php echo $lang->custom->key;?></th>
@@ -85,7 +85,18 @@ EOT;
             <?php endif;?>
           </tr>
           <?php endforeach;?>
-          <tfoot><tr><td colspan='<?php $canAdd ? print(3) : print(2);?>' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin')?></td></tr><tfoot>
+          <tfoot>
+            <tr>
+              <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='a-center'>
+              <?php 
+              $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
+              echo html::radio('lang', $appliedTo, 'all');
+              echo html::submitButton();
+              if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin');
+              ?>
+              </td>
+            </tr>
+          <tfoot>
         </table>
       </form>
     </td>

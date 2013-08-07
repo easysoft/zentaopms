@@ -12,17 +12,6 @@
 class custom extends control
 {
     /**
-     * __construct 
-     * 
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Index 
      * 
      * @access public
@@ -44,13 +33,14 @@ class custom extends control
     public function setCustom($module = 'story', $field = 'priList')
     {
         if($module == 'user' and $field == 'priList') $field = 'roleList';
-        $lang = $this->app->getClientLang();
+        $currentLang = $this->app->getClientLang();
 
         $this->app->loadLang($module);
         $fieldList = $this->lang->$module->$field;
         if(!empty($_POST))
         {
-            $this->custom->deleteItems("{$lang}.{$module}.{$field}");
+            $lang = $_POST['lang'];
+            $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
             foreach($_POST['keys'] as $index => $key)
             {
                 $value  = $_POST['values'][$index];
@@ -60,14 +50,15 @@ class custom extends control
             if(!dao::getError()) die(js::reload('parent'));
         }
 
-        $this->view->title        = $this->lang->custom->common . $this->lang->colon . $this->lang->custom->story;
-        $this->view->position[]   = $this->lang->custom->common;
-        $this->view->position[]   = $this->lang->custom->$module;
-        $this->view->fieldList    = $fieldList;
-        $this->view->dbFields     = $this->custom->getItems("{$lang}.{$module}.{$field}");
-        $this->view->field        = $field;
-        $this->view->module       = $module;
-        $this->view->canAdd       = strpos($this->config->custom->$module->canAdd, $field) !== false;
+        $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->custom->story;
+        $this->view->position[]  = $this->lang->custom->common;
+        $this->view->position[]  = $this->lang->custom->$module;
+        $this->view->fieldList   = $fieldList;
+        $this->view->dbFields    = $this->custom->getItems("module=$module&section=$field");
+        $this->view->field       = $field;
+        $this->view->module      = $module;
+        $this->view->currentLang = $currentLang;
+        $this->view->canAdd      = strpos($this->config->custom->$module->canAdd, $field) !== false;
 
         $this->display();
     }
@@ -88,8 +79,7 @@ class custom extends control
             die(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
         }
 
-        $lang = $this->app->getClientLang();
-        $this->custom->deleteItems("{$lang}.{$module}.{$field}");
+        $this->custom->deleteItems("module=$module&section=$field");
         die(js::reload('parent'));
     }
 }

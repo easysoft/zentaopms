@@ -19,7 +19,17 @@ class customModel extends model
      */
     public function getAll()
     {
-        return $this->dao->select('*')->from(TABLE_CUSTOM)->orderBy('id')->fetchAll('id');
+        $allCustomLang = $this->dao->select('*')->from(TABLE_CUSTOM)->orderBy('lang,id')->fetchAll('id');
+
+        $currentLang   = $this->app->getClientLang();
+        $processedLang = array();
+        foreach($allCustomLang as $id => $customLang)
+        {
+            if($customLang->lang != $currentLang and $customLang->lang != 'all') continue;
+            $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+        }
+
+        return $processedLang;
     }
 
     /**
@@ -61,7 +71,7 @@ class customModel extends model
      */
     public function getItems($paramString)
     {
-        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('key');
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->orderBy('lang,id')->fetchAll('key');
     }
 
     /**
@@ -113,4 +123,3 @@ class customModel extends model
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
 }
-

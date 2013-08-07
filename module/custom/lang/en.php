@@ -14,4 +14,7 @@ $lang->custom->testtask = 'Test task';
 $lang->custom->todo     = 'Todo';
 $lang->custom->user     = 'User';
 
+$lang->custom->currentLang = 'For current language';
+$lang->custom->allLang     = 'For all language';
+
 $lang->custom->confirmRestore = 'Are you sure to restore the default lang setting?';
