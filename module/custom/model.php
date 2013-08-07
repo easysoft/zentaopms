@@ -1,20 +1,19 @@
 <?php
 /**
- * The model file of xxx module of ZenTaoCMS.
+ * The model file of custom module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     xxx
+ * @author      Congzhi Chen <congzhi@cnezsoft.com>
+ * @package     custom
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class customModel extends model
 {
     /**
-     * Get config of system and one user.
+     * Get all custom lang.
      *
-     * @param  string $account 
      * @access public
      * @return array
      */
@@ -26,7 +25,7 @@ class customModel extends model
     /**
      * Set value of an item. 
      * 
-     * @param  string      $path     system.common.global.sn or system.common.sn 
+     * @param  string      $path     zh-cn.story.soucreList.customer.1
      * @param  string      $value 
      * @access public
      * @return void
@@ -34,11 +33,13 @@ class customModel extends model
     public function setItem($path, $value = '')
     {
         $level    = substr_count($path, '.');
-        $section = '';
+        $section  = '';
+        $system   = 1;
 
         if($level <= 1) return false;
         if($level == 2) list($lang, $module, $key) = explode('.', $path);
         if($level == 3) list($lang, $module, $section, $key) = explode('.', $path);
+        if($level == 4) list($lang, $module, $section, $key, $system) = explode('.', $path);
 
         $item = new stdclass();
         $item->lang    = $lang;
@@ -46,21 +47,21 @@ class customModel extends model
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
+        $item->system  = $system;
 
         $this->dao->replace(TABLE_CUSTOM)->data($item)->exec();
     }
 
-    public function getStandardList($module, $field)
-    {
-        $this->loadModel($module);
-        $lang = $this->app->getClientLang();
-        $currentList = $this->lang->$module->$field;
-        $dbList = $this->getItems("{$lang}.{$module}.{$field}");
-    }
-
+    /**
+     * Get some items 
+     * 
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return void
+     */
     public function getItems($paramString)
     {
-        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id');
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('key');
     }
 
     /**
@@ -78,7 +79,7 @@ class customModel extends model
     /**
      * Parse the param string for select or delete items.
      * 
-     * @param  string    $paramString     owner=xxx&key=sn and so on.
+     * @param  string    $paramString     lang=xxx&module=story&section=sourceList&key=customer and so on.
      * @access public
      * @return array
      */
@@ -111,6 +112,5 @@ class customModel extends model
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
-
 }
 

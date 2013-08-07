@@ -1472,6 +1472,7 @@ class router
                if($moduleName == $record->module) 
                 {
                     if(!$record->key) continue;
+                    unset($lang->{$record->module}->{$record->section}[$record->key]);
                     $lang->{$record->module}->{$record->section}[$record->key] = $record->value;
                 }
             }
