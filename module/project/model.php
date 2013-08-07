@@ -940,7 +940,8 @@ class projectModel extends model
         $BugToTasks = fixer::input('post')->get();
         foreach($BugToTasks->import as $key => $value)
         {
-            $bug = $this->bug->getById($key);
+            $bug  = $this->bug->getById($key);
+            $task = new stdClass();
             $task->project      = $projectID;
             $task->story        = $bug->story;
             $task->storyVersion = $bug->story;
@@ -975,13 +976,14 @@ class projectModel extends model
             $taskID = $this->dao->lastInsertID();
             if($task->story != false) $this->story->setStage($task->story);
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+            $mails[$key] = new stdClass();
             $mails[$key]->taskID  = $taskID;
             $mails[$key]->actionID = $actionID;
 
             $this->action->create('bug', $key, 'Totask', '', $taskID);
             $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
 
-            if($task->assignedTo and $task->assignedTo != $bug->assignedTo)
+            if(isset($task->assignedTo) and $task->assignedTo and $task->assignedTo != $bug->assignedTo)
             {
                 $newBug = new stdClass();
                 $newBug->lastEditedBy   = $this->app->user->account;
