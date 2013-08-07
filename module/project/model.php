@@ -1439,7 +1439,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function isClickable($project, $action)
+    public static function isClickable($project, $action)
     {
         $action = strtolower($action);
 

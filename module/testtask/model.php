@@ -483,7 +483,7 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    public function isClickable($testtask, $action)
+    public static function isClickable($testtask, $action)
     {
         $action = strtolower($action);
 
