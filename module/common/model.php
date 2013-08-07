@@ -119,6 +119,20 @@ class commonModel extends model
     }
 
     /**
+     * Load custom lang from db.
+     * 
+     * @access public
+     * @return void
+     */
+    public function loadCustomFromDB()
+    {
+        if(!$this->config->db->name) return;
+        $records = $this->loadModel('custom')->getAll();
+        if(!$records) return;
+        $this->lang->db->custom = $records;
+    }
+
+    /**
      * Juage a method of one module is open or not?
      * 
      * @param  string $module 
