@@ -300,12 +300,14 @@ function toggleTreeBox()
         function()
         {
             $('.side').hide()
+            $('.divider').hide()
             $('.treeSlider span').css("border-right", "0 none");
             $('.treeSlider span').css("border-left", "4px solid #000000");
         }, 
         function()
         {
             $('.side').show()
+            $('.divider').show()
             $('.treeSlider span').css("border-right", "4px solid #000000");
             $('.treeSlider span').css("border-left", "0 none");
         }
@@ -460,6 +462,20 @@ function setForm()
         }
         formClicked = false;
     });
+}
+
+/**
+ * Set form action and submit.
+ * 
+ * @param  url    $actionLink 
+ * @param  string $hiddenwin 'hiddenwin'
+ * @access public
+ * @return void
+ */
+function setFormAction(actionLink, hiddenwin)
+{
+  if(hiddenwin) $('form').attr('target', hiddenwin);
+  $('form').attr('action', actionLink).submit();
 }
 
 /**

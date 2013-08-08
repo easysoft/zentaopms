@@ -42,6 +42,10 @@ class build extends control
         $orderBy = 'status_asc, stage_asc, id_desc';
         $stories = $this->story->getProjectStories($projectID, $orderBy);
         $bugs    = $this->bug->getProjectBugs($projectID); 
+        foreach($bugs as $key => $bug)
+        {
+            if($bug->status == 'closed') unset($bugs[$key]);
+        }
 
         /* Assign. */
         $project = $this->loadModel('project')->getById($projectID);

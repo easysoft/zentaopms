@@ -132,14 +132,14 @@ $(function(){
         <?php $this->action->printAction($action);?>
         <?php if(!empty($action->history)) echo "<span id='switchButton$i' class='hand change-show' onclick=switchChange($i)>&nbsp;</span>";?>
       </span>
-      <?php if($canEditComment):?>
-      <span class='link-button f-right comment<?php echo $action->id;?>'><?php echo html::a('#lastCommentBox', '&nbsp;', '', "class='icon-green-common-edit' onclick='toggleComment($action->id)'")?></span>
-      <?php endif;?>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>
         <div class='changes hidden' id='changeBox<?php echo $i;?>'>
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
+        <?php if($canEditComment):?>
+        <span class='link-button f-right comment<?php echo $action->id;?>'><?php echo html::a('#lastCommentBox', '&nbsp;', '', "class='icon-green-common-edit' onclick='toggleComment($action->id)'")?></span>
+        <?php endif;?>
         <?php 
         if($action->comment) 
         {
@@ -148,7 +148,6 @@ $(function(){
             echo "</div>";
         }
         ?>
-
         <?php if($canEditComment):?>
         <div class='hidden' id='lastCommentBox'>
           <form method='post' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>

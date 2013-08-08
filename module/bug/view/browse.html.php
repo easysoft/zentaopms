@@ -14,6 +14,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
 include '../../common/view/colorize.html.php';
+include '../../common/view/dropmenu.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
 js::set('customed', $customed);
@@ -22,7 +23,7 @@ js::set('customed', $customed);
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->bug->moduleBugs . "</a></span> ";
+    echo "<span id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
     echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
     echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
     echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
@@ -31,21 +32,35 @@ js::set('customed', $customed);
     echo "<span id='unclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unclosed&param=0"),      $lang->bug->unclosed)      . "</span>";
     echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
     echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
-    echo "<span id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
     echo "<span id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
     echo "<span id='bysearchTab'><a href='#'><span class='icon-search'></span>{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
     <?php
+
+    echo '<span class="link-button dropButton">';
+    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '</span>';
+
     common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-    if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy");
     common::printIcon('bug', 'customFields');
     common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
     common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
     ?>
   </div>
 </div>
+<div id='exportActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
+  $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+  echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
 <?php 
@@ -58,10 +73,10 @@ js::set('customed', $customed);
 ?>
 
 <div class='treeSlider'><span>&nbsp;</span></div>
-<form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
+<form method='post'>
   <table class='cont-lt1'>
     <tr valign='top'>
-      <td class='side <?php echo $treeClass;?>' id='treebox'>
+      <td class='side' id='treebox'>
         <div class='box-title'><?php echo $productName;?></div>
         <div class='box-content'>
           <?php echo $moduleTree;?>
@@ -71,7 +86,7 @@ js::set('customed', $customed);
           </div>
         </div>
       </td>
-      <td class='divider <?php echo $treeClass;?>'></td>
+      <td class='divider'></td>
       <td>
         <table class='table-1 fixed colored tablesorter datatable' id='bugList'>
           <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -110,14 +125,11 @@ js::set('customed', $customed);
           </tr>
           </thead>
           <tbody>
-          <?php $canBatchEdit = common::hasPriv('bug', 'batchEdit');?>
           <?php foreach($bugs as $bug):?>
           <?php $bugLink = inlink('view', "bugID=$bug->id");?>
           <tr class='a-center'>
             <td class='<?php echo $bug->status;?>' style="font-weight:bold">
-              <?php if($canBatchEdit):?>
               <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
-              <?php endif;?>
               <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
             </td>
             <td><span class='<?php echo 'severity' . $bug->severity;?>'><?php echo $bug->severity;?></span></td>
@@ -170,11 +182,19 @@ js::set('customed', $customed);
               if($browseType == 'needconfirm') $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 7 : 6; 
               ?>
               <td colspan='<?php echo $columns;?>'>
-                <?php if(!empty($bugs) and $canBatchEdit):?>
+                <?php if(!empty($bugs)):?>
                 <div class='f-left'>
                   <?php 
-                  echo html::selectAll() . html::selectReverse(); 
-                  echo html::submitButton($lang->edit);
+                  echo "<div class='groupButton'>";
+                  echo html::selectAll() . html::selectReverse();
+                  echo "</div>";
+
+                  $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID");
+                  $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
+                  echo "<div class='groupButton dropButton'>";
+                  echo html::commonButton($lang->edit, $misc);
+                  echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
+                  echo "</div>";
                  ?>
                 </div>
                 <?php endif?>
@@ -187,4 +207,58 @@ js::set('customed', $customed);
     </tr>
   </table>  
 </form>
+
+<div id='moreActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $class = "class='disabled'";
+
+  $actionLink = $this->createLink('bug', 'batchConfirm');
+  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=setFormAction('$actionLink','hiddenwin')" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
+
+  $misc = common::hasPriv('bug', 'batchResolve') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='resolveItem'" : $class;
+  echo "<li>" . html::a('#', $lang->bug->resolve,  '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
+<div id='resolveItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($lang->bug->resolutionList['']);
+  unset($lang->bug->resolutionList['duplicate']);
+  foreach($lang->bug->resolutionList as $key => $resolution)
+  {
+      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
+      echo "<li>";
+      if($key == 'fixed')
+      {
+          echo html::a('#', $resolution, '', "onmouseover=toggleSubMenu(this.id,'right',2) id='fixedItem'");
+      }
+      else
+      {
+          echo html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      }
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>
+
+<div id='fixedItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($builds['']);
+  foreach($builds as $key => $build)
+  {
+      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
+      echo "<li>";
+      echo html::a('#', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

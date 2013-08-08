@@ -14,12 +14,10 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/dropmenu.html.php';?>
-<script language='Javascript'>
-var browseType = '<?php echo $browseType;?>';
-</script>
+<?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
   <div class='f-left'>
-    <span id='bymoduleTab' onclick='browseByModule()'><?php echo html::a($this->inlink('browse',"productID=$productID"), $lang->product->moduleStory);?></span>
+    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></span>
     <span id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></span>
     <span id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></span>
@@ -28,23 +26,37 @@ var browseType = '<?php echo $browseType;?>';
     <span id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></span>
     <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
     <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
-    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");?>
-    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy");?>
-    <?php common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
-    <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); ?>
+    <?php 
+    echo '<span class="link-button dropButton">';
+    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '</span>';
+
+    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
+    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");
+    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); 
+    ?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
+<div id='exportActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
+  $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+  echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
 
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <div class='treeSlider'><span>&nbsp;</span></div>
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>
     <tr valign='top'>
-      <td class='side <?php echo $treeClass;?>' id='treebox'>
+      <td class='side' id='treebox'>
         <div class='box-title'><?php echo $productName;?></div>
         <div class='box-content'>
           <?php echo $moduleTree;?>
@@ -54,7 +66,7 @@ var browseType = '<?php echo $browseType;?>';
           </div>
         </div>
       </td>
-      <td class='divider <?php echo $treeClass;?>'></td>
+      <td class='divider'></td>
       <td>
         <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
           <thead>
@@ -122,7 +134,7 @@ var browseType = '<?php echo $browseType;?>';
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
 
                   echo "<div class='groupButton dropButton'>";
-                  echo html::commonButton($lang->edit, "onclick=\"changeAction('$actionLink')\" $disabled");
+                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
                   echo "</div>";
               }
@@ -143,7 +155,7 @@ var browseType = '<?php echo $browseType;?>';
 
           $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
           $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-          $misc = $canBatchClose ? "onclick=changeAction('$actionLink')" : $class;
+          $misc = $canBatchClose ? "onclick=setFormAction('$actionLink')" : $class;
           echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
           $misc = common::hasPriv('story', 'batchReview') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'" : $class;
@@ -173,7 +185,7 @@ var browseType = '<?php echo $browseType;?>';
               }
               else
               {
-                  echo html::a('#', $result, '', "onclick=\"changeAction('$actionLink',true)\"");
+                  echo html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
               }
               echo "</li>";
           }
@@ -192,7 +204,7 @@ var browseType = '<?php echo $browseType;?>';
           {
               $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
               echo "<li>";
-              echo html::a('#', $reason, '', "onclick=\"changeAction('$actionLink',true)\"");
+              echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
               echo "</li>";
           }
           ?>
@@ -207,7 +219,7 @@ var browseType = '<?php echo $browseType;?>';
           foreach($plans as $planID => $plan)
           {
               $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-              echo "<li>" . html::a('#', $plan, '', "onclick=\"changeAction('$actionLink',true)\"") . "</li>";
+              echo "<li>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
           }
           ?>
           </ul>
@@ -220,7 +232,7 @@ var browseType = '<?php echo $browseType;?>';
           foreach($lang->story->stageList as $key => $stage)
           {
               $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-              echo "<li>" . html::a('#', $stage, '', "onclick=\"changeAction('$actionLink',true)\"") . "</li>";
+              echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
           }
           ?>
           </ul>
