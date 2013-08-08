@@ -14,6 +14,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
 include '../../common/view/colorize.html.php';
+include '../../common/view/dropmenu.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
 js::set('customed', $customed);
@@ -37,14 +38,29 @@ js::set('customed', $customed);
   </div>
   <div class='f-right'>
     <?php
+
+    echo '<span class="link-button dropButton">';
+    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '</span>';
+
     common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-    if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy");
     common::printIcon('bug', 'customFields');
     common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
     common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
     ?>
   </div>
 </div>
+<div id='exportActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
+  $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+  echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
 <?php 
@@ -57,7 +73,7 @@ js::set('customed', $customed);
 ?>
 
 <div class='treeSlider'><span>&nbsp;</span></div>
-<form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
+<form method='post'>
   <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side' id='treebox'>
@@ -109,14 +125,11 @@ js::set('customed', $customed);
           </tr>
           </thead>
           <tbody>
-          <?php $canBatchEdit = common::hasPriv('bug', 'batchEdit');?>
           <?php foreach($bugs as $bug):?>
           <?php $bugLink = inlink('view', "bugID=$bug->id");?>
           <tr class='a-center'>
             <td class='<?php echo $bug->status;?>' style="font-weight:bold">
-              <?php if($canBatchEdit):?>
               <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
-              <?php endif;?>
               <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
             </td>
             <td><span class='<?php echo 'severity' . $bug->severity;?>'><?php echo $bug->severity;?></span></td>
@@ -169,11 +182,19 @@ js::set('customed', $customed);
               if($browseType == 'needconfirm') $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 7 : 6; 
               ?>
               <td colspan='<?php echo $columns;?>'>
-                <?php if(!empty($bugs) and $canBatchEdit):?>
+                <?php if(!empty($bugs)):?>
                 <div class='f-left'>
                   <?php 
-                  echo html::selectAll() . html::selectReverse(); 
-                  echo html::submitButton($lang->edit);
+                  echo "<div class='groupButton'>";
+                  echo html::selectAll() . html::selectReverse();
+                  echo "</div>";
+
+                  $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID");
+                  $misc       = common::hasPriv('task', 'batchEdit') ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
+                  echo "<div class='groupButton dropButton'>";
+                  echo html::commonButton($lang->edit, $misc);
+                  echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
+                  echo "</div>";
                  ?>
                 </div>
                 <?php endif?>
@@ -186,4 +207,15 @@ js::set('customed', $customed);
     </tr>
   </table>  
 </form>
+
+<div id='moreActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $actionLink = $this->createLink('bug', 'batchResolve');
+  $misc = $canBatchClose ? "onclick=setFormAction('$actionLink')" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->bug->resolve, '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

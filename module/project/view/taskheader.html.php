@@ -22,7 +22,11 @@
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
-    if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
+
+    echo '<span class="link-button dropButton">';
+    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '</span>';
 
     echo '<span class="link-button dropButton">';
     echo html::a("#", "&nbsp;", '', "id='importAction' class='icon-green-task-import' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
@@ -33,6 +37,16 @@
     common::printIcon('task', 'create', "project=$projectID");
     ?>
   </div>
+</div>
+
+<div id='exportActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+  $link = common::hasPriv('task', 'export') ?  $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy") : '#';
+  echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
+  ?>
+  </ul>
 </div>
 
 <div id='importActionMenu' class='listMenu hidden'>
