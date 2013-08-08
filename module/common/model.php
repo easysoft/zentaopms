@@ -129,6 +129,7 @@ class commonModel extends model
         if(!$this->config->db->name) return;
         $records = $this->loadModel('custom')->getAll();
         if(!$records) return;
+        $this->lang->db = new stdclass();
         $this->lang->db->custom = $records;
     }
 
