@@ -190,7 +190,7 @@ js::set('customed', $customed);
                   echo "</div>";
 
                   $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID");
-                  $misc       = common::hasPriv('task', 'batchEdit') ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
+                  $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
                   echo "<div class='groupButton dropButton'>";
                   echo html::commonButton($lang->edit, $misc);
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
@@ -212,7 +212,7 @@ js::set('customed', $customed);
   <ul>
   <?php 
   $actionLink = $this->createLink('bug', 'batchResolve');
-  $misc = $canBatchClose ? "onclick=setFormAction('$actionLink')" : "class='disabled'";
+  $misc = common::hasPriv('bug', 'batchResolve') ? "onclick=setFormAction('$actionLink')" : "class='disabled'";
   echo "<li>" . html::a('#', $lang->bug->resolve, '', $misc) . "</li>";
   ?>
   </ul>

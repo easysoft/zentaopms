@@ -65,7 +65,7 @@ $lang->testcase->import             = "导入";
 $lang->testcase->importID           = "行号";
 $lang->testcase->showImport         = "显示导入内容";
 $lang->testcase->exportTemplet      = "导出模板";
-$lang->testcase->export             = "导出";
+$lang->testcase->export             = "导出数据";
 $lang->testcase->confirmChange      = '确认用例变动';
 $lang->testcase->confirmStoryChange = '确认需求变动';
 
