@@ -5,12 +5,13 @@ $(function()
     if(typeof page == 'undefined') page = '';
     if(page == 'create')
     {
+        productID = $('#product').val();
         changeProductConfirmed = true;
         oldStoryID             = 0;
         oldProjectID           = 0;
         oldOpenedBuild         = '';
         oldTaskID              = 0;
-        setAssignedTo();
+        setAssignedTo(0,productID);
     }
 
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
@@ -42,10 +43,9 @@ function loadAll(productID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen({no_results_text: noResultsMatch});
         loadProductModules(productID); 
-        loadProductStories(productID);
         loadProductProjects(productID); 
         loadProductBuilds(productID);
-        loadProductPlans(productID);
+        loadProductStories(productID);
     }
 }
 
@@ -101,7 +101,7 @@ function loadProductBuilds(productID)
 
     if(page == 'create')
     {
-        $('#buildBox').load(link);
+        $('#buildBox').load(link, function(){ createBuild(); });
     }
     else
     {
@@ -162,20 +162,6 @@ function loadProjectStories(projectID)
 }
 
 /**
- * Load product plans. 
- * 
- * @param  int    $productID 
- * @access public
- * @return void
- */
-function loadProductPlans(productID)
-{
-    if(typeof(planID) == 'undefined') planID = 0;
-    link = createLink('product', 'ajaxGetPlans', 'productID=' + $('#product').val() + '&planID=' + planID);
-    $('#planIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
-}
-
-/**
  * Load builds of a project.
  * 
  * @param  int      $projectID 
@@ -220,4 +206,26 @@ function setStories(moduleID, productID)
         $('#story_chzn').remove();
         $("#story").chosen({no_results_text: ''});
     });
+}
+
+/**
+ * Create builds. 
+ * 
+ * @access public
+ * @return void
+ */
+function createBuild()
+{
+    if($('#openedBuild').find('option').length <= 1) 
+    {
+        if($('#project').val() == '')
+        {
+            $('#buildBox').append(createRelease);
+        }
+        else
+        {
+            $('#buildBox').append(createBuild);
+        }
+        $('#buildBox').append(refresh);
+    }
 }

@@ -100,6 +100,19 @@ class buildModel extends model
             ->where('product')->in($products)
             ->andWhere('deleted')->eq(0)
             ->orderBy('date desc, id desc')->fetchPairs();
+
+        if(strpos($params, 'release') !== false)
+        {
+            $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
+               ->where('product')->in($products)
+               ->andWhere('deleted')->eq(0)
+               ->fetchPairs('build');
+            foreach($builds as $key => $build) 
+            {
+                if($key and isset($releases[$key])) $builds[$key] = $releases[$key]; 
+            }
+        }
+
         if(!$builds) return $sysBuilds;
         return $sysBuilds + $builds;
     }

@@ -18,6 +18,9 @@ include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
+js::set('createRelease', html::a($this->createLink('release', 'create', "productID=$productID"), $lang->release->create, '_blank'));
+js::set('createBuild', html::a($this->createLink('build', 'create', "projectID=$projectID"), $lang->build->create, '_blank'));
+js::set('refresh', html::a("javascript:loadProjectsBuilds($projectID)", $lang->refresh));
 ?>
 
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
@@ -26,7 +29,7 @@ js::set('page', 'create');
     <tr>
       <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
       <td>
-        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='select-3'");?>
+        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='select-3' autocomplete='off'");?>
         <span id='moduleIdBox'>
         <?php
         echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()'");
@@ -47,14 +50,7 @@ js::set('page', 'create');
       <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
       <td>
         <span id='buildBox'>
-        <?php 
-        echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');
-        if(count($builds) == 1 and $projectID) 
-        {
-            echo html::a($this->createLink('build', 'create', "projectID=$projectID"), $lang->build->create, '_blank');
-            echo html::a("javascript:loadProjectsBuilds($projectID)", $lang->refresh);
-        }
-        ?>
+        <?php echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');?>
         </span>
       </td>
     </tr>
