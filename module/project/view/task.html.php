@@ -156,7 +156,7 @@ var browseType  = '<?php echo $browseType;?>';
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
                   echo "</div>";
               }
-              echo $summary;
+              echo "<span class='f-12px'>" . $summary . "</span>";
               ?>
               </div>
               <?php $pager->show();?>
