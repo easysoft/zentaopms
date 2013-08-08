@@ -1,13 +1,3 @@
-/* Browse by module. */
-function browseByModule(active)
-{
-    $('#treebox').removeClass('hidden');
-    $('.divider').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#querybox').addClass('hidden');
-    $('#' + active + 'Tab').removeClass('active');
-}
-
 $(document).ready(function()
 {
     $("a.customFields").colorbox({width:540, height:340, iframe:true, transition:'none'});

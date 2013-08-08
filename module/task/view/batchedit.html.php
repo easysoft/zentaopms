@@ -72,7 +72,8 @@
     </td></tr>
     <?php endif;?>
 
-    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns + 1;?>' class='a-center'>
+    <?php $colspan = (!isset($project) or (isset($project) and $project->type != 'sprint')) ? $this->config->task->batchEdit->columns + 1 : $this->config->task->batchEdit->columns;?>
+    <tr><td colspan='<?php echo $colspan;?>' class='a-center'>
       <?php echo html::submitButton();?>
     </td></tr>
   </table>

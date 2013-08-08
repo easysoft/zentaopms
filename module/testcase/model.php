@@ -381,7 +381,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function isClickable($case, $action)
+    public static function isClickable($case, $action)
     {
         $action = strtolower($action);
 

@@ -52,7 +52,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
@@ -154,7 +154,6 @@ class testcase extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
-        $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
 
         $this->display();
     }

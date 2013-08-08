@@ -1218,6 +1218,7 @@ class router
         /* If the not strict mode, the keys of passed params and defaaul params msut be the same. */
         if(!isset($this->config->strictParams) or $this->config->strictParams == false) 
         {
+            unset($passedParams['onlybody']);
             $passedParams = array_values($passedParams);
             $i = 0;
             foreach($defaultParams as $key => $defaultValue)
@@ -1461,6 +1462,19 @@ class router
             if(in_array($langFile, $loadedLangs)) continue;
             include $langFile;
             $loadedLangs[] = $langFile;
+        }
+
+        /* Merge from the db lang. */
+        if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
+        {
+            foreach($lang->db->custom[$moduleName] as $section => $fields)
+            {
+                foreach($fields as $key => $value)
+                {
+                    unset($lang->{$moduleName}->{$section}[$key]);
+                    $lang->{$moduleName}->{$section}[$key] = $value;
+                }
+            }
         }
 
         $this->lang = $lang;

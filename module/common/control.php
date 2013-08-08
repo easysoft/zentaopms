@@ -25,6 +25,7 @@ class common extends control
         $this->common->setCompany();
         $this->common->setUser();
         $this->common->loadConfigFromDB();
+        $this->common->loadCustomFromDB();
         if($this->app->getViewType() == 'mhtml') $this->common->setMobileMenu();
         $this->app->loadLang('company');
     }
@@ -163,17 +164,19 @@ class common extends control
         if(empty($method)) $method = $app->getMethodName();
         $className = 'header';
 
-        if(strpos($orderBy, $fieldName) !== false)
+        $order = explode('_', $orderBy);
+        $order[0] = trim($order[0], '`');
+        if($order[0] == $fieldName)
         {
-            if(stripos($orderBy, 'desc') !== false)
+            if(isset($order[1]) and $order[1] == 'asc')
             {
-                $orderBy   = str_ireplace('desc', 'asc', $orderBy);
-                $className = 'headerSortUp';
-            }
-            elseif(stripos($orderBy, 'asc')  !== false)
-            {
-                $orderBy = str_ireplace('asc', 'desc', $orderBy);
+                $orderBy   = "`{$order[0]}`_desc";
                 $className = 'headerSortDown';
+            }
+            else
+            {
+                $orderBy = "`{$order[0]}`_asc";
+                $className = 'headerSortUp';
             }
         }
         else

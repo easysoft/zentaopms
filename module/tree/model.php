@@ -883,6 +883,7 @@ class treeModel extends model
             /* The new modules. */
             if(is_numeric($moduleID))
             {
+                $module          = new stdClass();
                 $module->root    = $rootID;
                 $module->name    = strip_tags($moduleName);
                 $module->parent  = $parentModuleID;

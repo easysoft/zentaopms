@@ -1,14 +1,3 @@
-/* Switch to module browse. */
-function browseByModule(active)
-{
-    $('.side').removeClass('hidden');
-    $('.divider').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-    $('#bysearchTab').removeClass('active');
-    $('#querybox').addClass('hidden');
-}
-
 /* Swtich to search module. */
 function browseBySearch(active)
 {
@@ -18,11 +7,6 @@ function browseBySearch(active)
     $('#' + active + 'Tab').removeClass('active');
     $('#bysearchTab').addClass('active');
     $('#bymoduleTab').removeClass('active');
-}
-
-function changeAction(url)
-{
-  $('#batchForm').attr('action', url);
 }
 
 $(document).ready(function()

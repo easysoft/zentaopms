@@ -465,6 +465,20 @@ function setForm()
 }
 
 /**
+ * Set form action and submit.
+ * 
+ * @param  url    $actionLink 
+ * @param  string $hiddenwin 'hiddenwin'
+ * @access public
+ * @return void
+ */
+function setFormAction(actionLink, hiddenwin)
+{
+  if(hiddenwin) $('form').attr('target', hiddenwin);
+  $('form').attr('action', actionLink).submit();
+}
+
+/**
  * Set the max with of image.
  * 
  * @access public

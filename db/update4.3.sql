@@ -1,7 +1,12 @@
-REATE TABLE  `demoTTT`.`zt_customLang` (
-  `id` MEDIUMINT( 8 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-  `lang` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-  `module` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-  `key` VARCHAR( 60 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-  `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-) ENGINE = MYISAM;
+CREATE TABLE IF NOT EXISTS `zt_custom` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `lang` varchar(30) NOT NULL,
+  `module` varchar(30) NOT NULL,
+  `section` varchar(30) NOT NULL,
+  `key` varchar(60) NOT NULL,
+  `value` text NOT NULL,
+  `system` enum('0','1') NOT NULL default '1',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+

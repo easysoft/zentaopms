@@ -93,7 +93,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'allStory', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -162,7 +162,6 @@ class product extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
-        $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
         $this->display();
     }
 

@@ -270,32 +270,32 @@ $lang->user->menu  = $lang->company->menu;
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index      = array('link' => '首页|admin|index');
-$lang->admin->menu->extension  = array('link' => '扩展|extension|browse', 'subModule' => 'extension,editor');
-$lang->admin->menu->customlang = array('link' => '语言配置|customlang|index', 'subModule' => 'customlang');
-$lang->admin->menu->mail       = array('link' => '发信|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData  = array('link' => '清除数据|admin|cleardata');
-$lang->admin->menu->convert    = array('link' => '导入|convert|index', 'subModule' => 'convert');
-$lang->admin->menu->trashes    = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->admin->menu->sso        = array('link' => '单点登录|sso|browse', 'subModule' => 'sso');
+$lang->admin->menu->index     = array('link' => '首页|admin|index');
+$lang->admin->menu->extension = array('link' => '扩展|extension|browse', 'subModule' => 'extension,editor');
+$lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
+$lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
+$lang->admin->menu->clearData = array('link' => '清除数据|admin|cleardata');
+$lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
+$lang->admin->menu->sso       = array('link' => '单点登录|sso|browse', 'subModule' => 'sso');
 
 $lang->convert    = new stdclass();
 $lang->upgrade    = new stdclass();
 $lang->action     = new stdclass();
 $lang->extension  = new stdclass();
-$lang->customlang = new stdclass();
+$lang->custom     = new stdclass();
 $lang->editor     = new stdclass();
 $lang->mail       = new stdclass();
 $lang->sso        = new stdclass();
 
-$lang->convert->menu    = $lang->admin->menu;
-$lang->upgrade->menu    = $lang->admin->menu;
-$lang->action->menu     = $lang->admin->menu;
-$lang->extension->menu  = $lang->admin->menu;
-$lang->customlang->menu = $lang->admin->menu;
-$lang->editor->menu     = $lang->admin->menu;
-$lang->mail->menu       = $lang->admin->menu;
-$lang->sso->menu        = $lang->admin->menu;
+$lang->convert->menu   = $lang->admin->menu;
+$lang->upgrade->menu   = $lang->admin->menu;
+$lang->action->menu    = $lang->admin->menu;
+$lang->extension->menu = $lang->admin->menu;
+$lang->custom->menu    = $lang->admin->menu;
+$lang->editor->menu    = $lang->admin->menu;
+$lang->mail->menu      = $lang->admin->menu;
+$lang->sso->menu       = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -316,6 +316,7 @@ $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
+$lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->sso         = 'admin';
