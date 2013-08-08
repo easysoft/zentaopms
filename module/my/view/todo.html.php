@@ -104,19 +104,19 @@
         if(common::hasPriv('todo', 'batchEdit'))
         {
             $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
-            echo html::commonButton($lang->edit, "onclick=\"changeAction('todoform', 'batchEdit', '$actionLink')\"");
+            echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
 
         }
         if(common::hasPriv('todo', 'batchFinish'))
         {
             $actionLink = $this->createLink('todo', 'batchFinish');
-            echo html::commonButton($lang->todo->finish, "onclick=\"changeAction('todoform', 'batchFinish', '$actionLink')\"");
+            echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
 
         }
         if(common::hasPriv('todo', 'import2Today') and $importFuture)
         {
             $actionLink = $this->createLink('todo', 'import2Today');
-            echo html::commonButton($lang->todo->import, "onclick=\"changeAction('todoform', 'import2Today', '$actionLink')\"");
+            echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
             echo html::input('date', date('Y-m-d'), "class='date w-80px'");
         }
         ?>

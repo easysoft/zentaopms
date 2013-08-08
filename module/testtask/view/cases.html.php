@@ -106,20 +106,25 @@ var moduleID   = '<?php echo $moduleID;?>';
               <?php if($runs):?>
               <div class='f-left'>
 
-              <?php if($canBatchEdit or $canBatchAssign or $canBatchRun) echo html::selectAll() . html::selectReverse(); ?>
-
-              <?php if($canBatchEdit):?>
-              <input class='button-s' value="<?php echo $lang->edit; ?>" type="button" onclick="casesform.action='<?php echo $this->createLink('testcase', 'batchEdit', "from=testtaskCases&productID=$productID");?>';casesform.submit();">
-              <?php endif;?>
-
-              <?php if($canBatchAssign):?>
-              <?php echo html::select('assignedTo', $users);?>
-              <input class='button-s' value="<?php echo $lang->testtask->assign; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
-              <?php endif;?>
-
-              <?php if($canBatchRun):?>
-              <input class='button-s' value="<?php echo $lang->testtask->runCase; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");?>';casesform.submit();">
-              <?php endif;?>
+              <?php 
+              if($canBatchEdit or $canBatchAssign or $canBatchRun) echo html::selectAll() . html::selectReverse();
+              if($canBatchEdit)
+              {
+                  $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
+                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+              }
+              if($canBatchAssign)
+              {
+                  $actionLink = inLink('batchAssign', "taskID=$task->id");
+                  echo html::select('assignedTo', $users);
+                  echo html::commonButton($lang->testtask->assign, "onclick=\"setFormAction('$actionLink')\"");
+              }
+              if($canBatchRun)
+              {
+                  $actionLink = inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");
+                  echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
+              }
+              ?>
 
               </div>
               <?php endif;?>
