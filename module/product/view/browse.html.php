@@ -14,12 +14,10 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/dropmenu.html.php';?>
-<script language='Javascript'>
-var browseType = '<?php echo $browseType;?>';
-</script>
+<?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
   <div class='f-left'>
-    <span id='bymoduleTab' onclick='browseByModule()'><?php echo html::a($this->inlink('browse',"productID=$productID"), $lang->product->moduleStory);?></span>
+    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></span>
     <span id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></span>
     <span id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></span>
@@ -28,7 +26,6 @@ var browseType = '<?php echo $browseType;?>';
     <span id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></span>
     <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
     <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
-    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
@@ -44,7 +41,7 @@ var browseType = '<?php echo $browseType;?>';
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>
     <tr valign='top'>
-      <td class='side <?php echo $treeClass;?>' id='treebox'>
+      <td class='side' id='treebox'>
         <div class='box-title'><?php echo $productName;?></div>
         <div class='box-content'>
           <?php echo $moduleTree;?>
@@ -54,7 +51,7 @@ var browseType = '<?php echo $browseType;?>';
           </div>
         </div>
       </td>
-      <td class='divider <?php echo $treeClass;?>'></td>
+      <td class='divider'></td>
       <td>
         <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
           <thead>

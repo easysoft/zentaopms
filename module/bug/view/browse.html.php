@@ -22,7 +22,7 @@ js::set('customed', $customed);
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->bug->moduleBugs . "</a></span> ";
+    echo "<span id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
     echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
     echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
     echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
@@ -31,7 +31,6 @@ js::set('customed', $customed);
     echo "<span id='unclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unclosed&param=0"),      $lang->bug->unclosed)      . "</span>";
     echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
     echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
-    echo "<span id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
     echo "<span id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
     echo "<span id='bysearchTab'><a href='#'><span class='icon-search'></span>{$lang->bug->byQuery}</a></span> ";
     ?>
@@ -61,7 +60,7 @@ js::set('customed', $customed);
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
   <table class='cont-lt1'>
     <tr valign='top'>
-      <td class='side <?php echo $treeClass;?>' id='treebox'>
+      <td class='side' id='treebox'>
         <div class='box-title'><?php echo $productName;?></div>
         <div class='box-content'>
           <?php echo $moduleTree;?>
@@ -71,7 +70,7 @@ js::set('customed', $customed);
           </div>
         </div>
       </td>
-      <td class='divider <?php echo $treeClass;?>'></td>
+      <td class='divider'></td>
       <td>
         <table class='table-1 fixed colored tablesorter datatable' id='bugList'>
           <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

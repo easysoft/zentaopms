@@ -1,14 +1,3 @@
-/* Switch to module browse. */
-function browseByModule(active)
-{
-    $('.side').removeClass('hidden');
-    $('.divider').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-    $('#bysearchTab').removeClass('active');
-    $('#querybox').addClass('hidden');
-}
-
 /* Swtich to search module. */
 function browseBySearch(active)
 {

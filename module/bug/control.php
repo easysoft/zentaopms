@@ -61,7 +61,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
@@ -148,21 +148,20 @@ class bug extends control
         $position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[] = $this->lang->bug->common;
 
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
-        $this->view->browseType  = $browseType;
-        $this->view->bugs        = $bugs;
-        $this->view->users       = $users;
-        $this->view->pager       = $pager;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->moduleID    = $moduleID;
-        $this->view->customed    = $customed;
-        $this->view->customFields= explode(',', str_replace(' ', '', trim($customFields)));
-        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->productID    = $productID;
+        $this->view->productName  = $this->products[$productID];
+        $this->view->moduleTree   = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
+        $this->view->browseType   = $browseType;
+        $this->view->bugs         = $bugs;
+        $this->view->users        = $users;
+        $this->view->pager        = $pager;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->moduleID     = $moduleID;
+        $this->view->customed     = $customed;
+        $this->view->customFields = explode(',', str_replace(' ', '', trim($customFields)));
 
         $this->display();
     }

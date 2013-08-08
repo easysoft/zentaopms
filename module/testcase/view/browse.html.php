@@ -23,7 +23,6 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testcase->moduleCases . "</a></span> ";
     echo "<span id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</span>";
     echo "<span id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->testcase->needConfirm) . "</span>";
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><span class='icon-search'></span>{$lang->testcase->bySearch}</a></span> ";
@@ -42,7 +41,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
 <form id='batchForm' method='post'>
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>'>
+    <td class='side'>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
@@ -52,7 +51,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
         </div>
       </div>
     </td>
-    <td class='divider <?php echo $treeClass;?>'></td>
+    <td class='divider'></td>
     <td>
       <table class='table-1 colored tablesorter datatable fixed' id='caseList'>
         <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
