@@ -152,6 +152,7 @@ class bug extends control
         $this->view->position     = $position;
         $this->view->productID    = $productID;
         $this->view->productName  = $this->products[$productID];
+        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->moduleTree   = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
         $this->view->browseType   = $browseType;
         $this->view->bugs         = $bugs;
@@ -669,7 +670,7 @@ class bug extends control
     }
 
     /**
-     * Batch confirm. 
+     * Batch confirm bugs. 
      * 
      * @access public
      * @return void
@@ -729,9 +730,25 @@ class bug extends control
         $this->display();
     }
 
-    public function batchResolve()
+    /**
+     * Batch resolve bugs.
+     * 
+     * @param  string    $resolution 
+     * @param  string    $resolvedBuild 
+     * @access public
+     * @return void
+     */
+    public function batchResolve($resolution, $resolvedBuild = '')
     {
-        
+        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($bugIDList as $bugID)
+        {
+            $actionID = $this->action->create('bug', $bugID, 'Resolved', '', $resolution);
+            $this->sendmail($bugID, $actionID);
+        }
+        die(js::locate($this->session->bugList, 'parent'));
     }
 
     /**

@@ -230,9 +230,31 @@ js::set('customed', $customed);
   unset($lang->bug->resolutionList['duplicate']);
   foreach($lang->bug->resolutionList as $key => $resolution)
   {
-      $actionLink = $this->createLink('story', 'batchResolve', "resolution=$key");
+      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
       echo "<li>";
-      echo html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      if($key == 'fixed')
+      {
+          echo html::a('#', $resolution, '', "onmouseover=toggleSubMenu(this.id,'right',2) id='fixedItem'");
+      }
+      else
+      {
+          echo html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      }
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>
+
+<div id='fixedItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($builds['']);
+  foreach($builds as $key => $build)
+  {
+      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
+      echo "<li>";
+      echo html::a('#', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
       echo "</li>";
   }
   ?>
