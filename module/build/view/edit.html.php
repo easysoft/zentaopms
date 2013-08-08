@@ -105,7 +105,7 @@
                           <td class='w-id a-left' id='bug'><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if(strpos(',' . $build->bugs . ',', ',' . $bug->id . ',') !== false) echo 'checked';?>> <?php echo sprintf('%03d', $bug->id);?></td>
                           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                           <td class='w-80px'><?php echo $lang->bug->statusList[$bug->status];?></td>
-                          <td class='w-80px'><?php echo $bug->status == 'resolved' ? substr($users[$bug->resolvedBy], 2) : html::select('resolvedBy[]', $users, $this->app->user->account, "class='w-70px'");?></td>
+                          <td class='w-80px'><?php echo ($bug->status == 'resolved' or $bug->status == 'closed') ? substr($users[$bug->resolvedBy], 2) : html::select('resolvedBy[]', $users, $this->app->user->account, "class='w-70px'");?></td>
                         </tr>
                         <?php endforeach;?>
                       </table>

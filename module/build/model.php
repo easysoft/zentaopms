@@ -125,8 +125,9 @@ class buildModel extends model
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
         if(!dao::isError())
         {
+            $buildID = $this->dao->lastInsertID();
             $this->updateLinkedBug($build);
-            return $this->dao->lastInsertID();
+            return $buildID;
         }
     }
 
@@ -186,7 +187,7 @@ class buildModel extends model
         if(!$bugs) return false;
         foreach($bugs as $bug)
         {
-            if($bug->status == 'resolved') continue;
+            if($bug->status == 'resolved' or $bug->status == 'closed') continue;
 
             $bug->resolvedBy     = $resolvedPairs[$bug->id];
             $bug->resolvedDate   = $now;
