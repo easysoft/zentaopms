@@ -56,7 +56,7 @@ class custom extends control
         $this->view->position[]  = $this->lang->custom->common;
         $this->view->position[]  = $this->lang->custom->$module;
         $this->view->fieldList   = $fieldList;
-        $this->view->dbFields    = $this->custom->getItems("module=$module&section=$field");
+        $this->view->dbFields    = $this->custom->getItems("lang=$currentLang,all&module=$module&section=$field");
         $this->view->field       = $field;
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
