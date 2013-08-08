@@ -1,17 +1,3 @@
-/**
- * Change form action.
- * 
- * @param  url  $actionLink 
- * @param  bool $hiddenwin 
- * @access public
- * @return void
- */
-function changeAction(actionLink, hiddenwin)
-{
-    if(hiddenwin) $('form').attr('target', 'hiddenwin');
-    $('form').attr('action', actionLink).submit();
-}
-
 $(function()
 {
     if(browseType == 'bysearch') ajaxGetSearchForm();

@@ -123,8 +123,8 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
              <div class='f-left'>
              <?php
              if($canBatchEdit or $canBatchRun) echo html::selectAll() . html::selectReverse(); 
-             if($canBatchEdit) echo html::submitButton($lang->edit, "onclick='changeAction(\"" . inLink('batchEdit', "productID=$productID") . "\")'");
-             if($canBatchRun) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
+             if($canBatchEdit) echo html::submitButton($lang->edit, "onclick='setFormAction(\"" . inLink('batchEdit', "productID=$productID") . "\")'");
+             if($canBatchRun) echo html::submitButton($lang->testtask->runCase,  "onclick='setFormAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
              ?>
              </div>
              <?php endif?>

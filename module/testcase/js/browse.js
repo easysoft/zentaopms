@@ -9,11 +9,6 @@ function browseBySearch(active)
     $('#bymoduleTab').removeClass('active');
 }
 
-function changeAction(url)
-{
-  $('#batchForm').attr('action', url);
-}
-
 $(document).ready(function()
 {
     setModal4List('runCase', 'caseList', function(){$(".results").colorbox({width:900, height:550, iframe:true, transition:'none'});});

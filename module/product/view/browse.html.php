@@ -119,7 +119,7 @@
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
 
                   echo "<div class='groupButton dropButton'>";
-                  echo html::commonButton($lang->edit, "onclick=\"changeAction('$actionLink')\" $disabled");
+                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
                   echo "</div>";
               }
@@ -140,7 +140,7 @@
 
           $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
           $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-          $misc = $canBatchClose ? "onclick=changeAction('$actionLink')" : $class;
+          $misc = $canBatchClose ? "onclick=setFormAction('$actionLink')" : $class;
           echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
           $misc = common::hasPriv('story', 'batchReview') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'" : $class;
@@ -170,7 +170,7 @@
               }
               else
               {
-                  echo html::a('#', $result, '', "onclick=\"changeAction('$actionLink',true)\"");
+                  echo html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
               }
               echo "</li>";
           }
@@ -189,7 +189,7 @@
           {
               $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
               echo "<li>";
-              echo html::a('#', $reason, '', "onclick=\"changeAction('$actionLink',true)\"");
+              echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
               echo "</li>";
           }
           ?>
@@ -204,7 +204,7 @@
           foreach($plans as $planID => $plan)
           {
               $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-              echo "<li>" . html::a('#', $plan, '', "onclick=\"changeAction('$actionLink',true)\"") . "</li>";
+              echo "<li>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
           }
           ?>
           </ul>
@@ -217,7 +217,7 @@
           foreach($lang->story->stageList as $key => $stage)
           {
               $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-              echo "<li>" . html::a('#', $stage, '', "onclick=\"changeAction('$actionLink',true)\"") . "</li>";
+              echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
           }
           ?>
           </ul>

@@ -83,12 +83,12 @@
         if($canBatchEdit)
         {
             $actionLink = $this->createLink('task', 'batchEdit', "projectID=0&orderBy=$orderBy");
-            echo html::commonButton($lang->edit, "onclick=\"changeAction('myTaskForm', 'batchEdit', '$actionLink')\"");
+            echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
         }
         if($canBatchClose)
         {
             $actionLink = $this->createLink('task', 'batchClose');
-            echo html::commonButton($lang->close, "onclick=\"changeAction('myTaskForm', 'batchClose', '$actionLink')\"");
+            echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
         }
          ?>
         </div> 
