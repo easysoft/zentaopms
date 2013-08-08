@@ -211,9 +211,30 @@ js::set('customed', $customed);
 <div id='moreActionMenu' class='listMenu hidden'>
   <ul>
   <?php 
-  $actionLink = $this->createLink('bug', 'batchResolve');
-  $misc = common::hasPriv('bug', 'batchResolve') ? "onclick=setFormAction('$actionLink')" : "class='disabled'";
-  echo "<li>" . html::a('#', $lang->bug->resolve, '', $misc) . "</li>";
+  $class = "class='disabled'";
+
+  $actionLink = $this->createLink('bug', 'batchConfirm');
+  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=setFormAction('$actionLink','hiddenwin')" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
+
+  $misc = common::hasPriv('bug', 'batchResolve') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='resolveItem'" : $class;
+  echo "<li>" . html::a('#', $lang->bug->resolve,  '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
+<div id='resolveItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($lang->bug->resolutionList['']);
+  unset($lang->bug->resolutionList['duplicate']);
+  foreach($lang->bug->resolutionList as $key => $resolution)
+  {
+      $actionLink = $this->createLink('story', 'batchResolve', "resolution=$key");
+      echo "<li>";
+      echo html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      echo "</li>";
+  }
   ?>
   </ul>
 </div>

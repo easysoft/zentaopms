@@ -394,6 +394,31 @@ class bugModel extends model
     }
 
     /**
+     * Batch confirm bugs.
+     * 
+     * @param  array $bugIDList 
+     * @access public
+     * @return void
+     */
+    public function batchConfirm($bugIDList)
+    {
+        $now = helper::now();
+        foreach($bugIDList as $bugID)
+        {
+            $oldBug = $this->getById($bugID);
+            if($oldBug->confirmed) continue;
+
+            $bug = new stdclass();
+            $bug->assignedTo     = $this->app->user->account;
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->confirmed      = 1;
+
+            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+        }
+    }
+
+    /**
      * Resolve a bug.
      * 
      * @param  int    $bugID 

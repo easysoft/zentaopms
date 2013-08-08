@@ -667,6 +667,25 @@ class bug extends control
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
+
+    /**
+     * Batch confirm. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchConfirm()
+    {
+        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $this->bug->batchConfirm($bugIDList);
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($bugIDList as $bugID)
+        {
+            $actionID = $this->action->create('bug', $bugID, 'bugConfirmed');
+            $this->sendmail($bugID, $actionID);
+        }
+        die(js::locate($this->session->bugList, 'parent'));
+    }
     
     /**
      * Resolve a bug.
@@ -708,6 +727,11 @@ class bug extends control
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
+    }
+
+    public function batchResolve()
+    {
+        
     }
 
     /**
