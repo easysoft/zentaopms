@@ -29,14 +29,29 @@
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");?>
-    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy");?>
-    <?php common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
-    <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); ?>
+    <?php 
+    echo '<span class="link-button dropButton">';
+    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '</span>';
+
+    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
+    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");
+    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); 
+    ?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
+<div id='exportActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
+  $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+  echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
 
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <div class='treeSlider'><span>&nbsp;</span></div>
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>
