@@ -12,7 +12,7 @@ $(function()
         oldOpenedBuild         = '';
         oldTaskID              = 0;
         setAssignedTo(0,productID);
-        createBuild();
+        notice();
     }
 
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
@@ -102,7 +102,7 @@ function loadProductBuilds(productID)
 
     if(page == 'create')
     {
-        $('#buildBox').load(link, function(){ createBuild(); });
+        $('#buildBox').load(link, function(){ notice(); });
     }
     else
     {
@@ -210,12 +210,12 @@ function setStories(moduleID, productID)
 }
 
 /**
- * Create builds. 
+ * notice for create build.
  * 
  * @access public
  * @return void
  */
-function createBuild()
+function notice()
 {
     if($('#openedBuild').find('option').length <= 1) 
     {
