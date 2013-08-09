@@ -934,8 +934,8 @@ $lang->changelog['4.3.beta'][] = 'sso-delete';
 $lang->changelog['4.3.beta'][] = 'api-debug';
 $lang->changelog['4.3.beta'][] = 'action-editComment';
 
-$lang->changelog['5.0.beta'][] = 'bug-batchConfirm';
-$lang->changelog['5.0.beta'][] = 'bug-batchResolve';
-$lang->changelog['5.0.beta'][] = 'custom-index';
-$lang->changelog['5.0.beta'][] = 'custom-set';
-$lang->changelog['5.0.beta'][] = 'custom-restore';
+$lang->changelog['5.0.beta1'][] = 'bug-batchConfirm';
+$lang->changelog['5.0.beta1'][] = 'bug-batchResolve';
+$lang->changelog['5.0.beta1'][] = 'custom-index';
+$lang->changelog['5.0.beta1'][] = 'custom-set';
+$lang->changelog['5.0.beta1'][] = 'custom-restore';
