@@ -611,13 +611,14 @@ class commonModel extends model
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
             $objects = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->where('id')->eq($objectID)
+                ->beginIF($queryCondition != false)->orWhere($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->fetchAll();
         }
         else
         {
-            $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
+            $objects = $this->dbh->query($queryCondition . "OR id=$objectID ORDER BY $orderBy")->fetchAll();
         }
 
         $tmpObjectIDs = array();
