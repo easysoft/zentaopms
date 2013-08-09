@@ -96,10 +96,27 @@ class buildModel extends model
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
-        $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
+        $productBuilds = $this->dao->select('id,name,project')->from(TABLE_BUILD)
             ->where('product')->in($products)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('date desc, id desc')->fetchPairs();
+            ->orderBy('date desc, id desc')->fetchAll('id');
+        $releases = $this->dao->select('build,name,deleted')->from(TABLE_RELEASE)
+           ->where('product')->in($products)
+           ->fetchAll('build');
+
+        $builds = array();
+        foreach($productBuilds as $key => $build)
+        {
+            if($build->project) 
+            {
+                $builds[$key] = isset($releases[$key]) ? $releases[$key]->name : $build->name;
+            }
+            else if(isset($releases[$key]) and !$releases[$key]->deleted)
+            {
+                $builds[$key] = $releases[$key]->name; 
+            }
+        }
+
         if(!$builds) return $sysBuilds;
         return $sysBuilds + $builds;
     }

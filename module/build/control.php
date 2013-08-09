@@ -197,9 +197,9 @@ class build extends control
      */
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $index = 0)
     {
-        if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
-        if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'class=select-3'));
+        if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, 'size=4 class=select-3 multiple'));
+        if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, 'size=4 class=select-3 multiple'));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, 'class=select-3'));
     }
 
     /**
@@ -217,7 +217,7 @@ class build extends control
     {
         if($varName == 'openedBuild')   
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, 'noempty,release');
             $output = html::select($varName . '[]', $builds , $build, 'size=4 class=select-3 multiple');
             if(count($builds) == 1 and $needCreate)
             {

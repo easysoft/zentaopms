@@ -221,6 +221,7 @@ class bug extends control
     {
         $this->view->users = $this->user->getPairs('nodeleted,devfirst');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        $this->app->loadLang('release');
 
         if(!empty($_POST))
         {
@@ -305,9 +306,10 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release');
             $stories = $this->story->getProductStoryPairs($productID);
         }
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
