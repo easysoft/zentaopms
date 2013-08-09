@@ -9,4 +9,3 @@ CREATE TABLE IF NOT EXISTS `zt_custom` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
