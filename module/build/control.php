@@ -39,13 +39,23 @@ class build extends control
         $this->project->setMenu($this->project->getPairs(), $projectID);
 
         /* Get stories and bugs. */
-        $orderBy = 'status_asc, stage_asc, id_desc';
-        $stories = $this->story->getProjectStories($projectID, $orderBy);
-        $bugs    = $this->bug->getProjectBugs($projectID); 
-        foreach($bugs as $key => $bug)
+        $orderBy     = 'status_asc, stage_asc, id_desc';
+        $stories     = $this->story->getProjectStories($projectID, $orderBy);
+        $projectBugs = $this->bug->getProjectBugs($projectID); 
+        $bugs        = array();
+        foreach($projectBugs as $key => $bug)
         {
-            if($bug->status == 'closed') unset($bugs[$key]);
+            if($bug->status == 'resolved')
+            {
+                $bugs[$key] = $bug;
+                unset($projectBugs[$key]);
+            }
+            else if($bug->status == 'closed') 
+            {
+                unset($projectBugs[$key]);
+            }
         }
+        $bugs += $projectBugs;
 
         /* Assign. */
         $project = $this->loadModel('project')->getById($projectID);
