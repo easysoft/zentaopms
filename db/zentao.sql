@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `guest` enum('1','0') NOT NULL default '0',
   `admins` char(255) default NULL,
   `deleted` enum('0','1') NOT NULL default '0',
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
