@@ -487,9 +487,9 @@ class product extends control
      * Drop menu page.
      * 
      * @param  int    $productID 
-     * @param  int    $module 
-     * @param  int    $method 
-     * @param  int    $extra 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
      * @access public
      * @return void
      */
