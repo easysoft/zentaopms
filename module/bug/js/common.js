@@ -12,6 +12,7 @@ $(function()
         oldOpenedBuild         = '';
         oldTaskID              = 0;
         setAssignedTo(0,productID);
+        notice();
     }
 
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
@@ -101,7 +102,7 @@ function loadProductBuilds(productID)
 
     if(page == 'create')
     {
-        $('#buildBox').load(link, function(){ createBuild(); });
+        $('#buildBox').load(link, function(){ notice(); });
     }
     else
     {
@@ -209,23 +210,24 @@ function setStories(moduleID, productID)
 }
 
 /**
- * Create builds. 
+ * notice for create build.
  * 
  * @access public
  * @return void
  */
-function createBuild()
+function notice()
 {
     if($('#openedBuild').find('option').length <= 1) 
     {
         if($('#project').val() == '')
         {
-            $('#buildBox').append(createRelease);
+            $('#buildBox').append('<a href="' + createLink('release', 'create','productID=' + $('#product').val()) + '" target="_blank">' + createRelease + '</a>');
+            $('#buildBox').append('<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>');
         }
         else
         {
-            $('#buildBox').append(createBuild);
+            $('#buildBox').append('<a href="' + createLink('build', 'create','projectID=' + $('#project').val()) + '" target="_blank">' + createBuild + '</a>');
+            $('#buildBox').append('<a href="javascript:loadProjectBuilds(' + $('project').val() + ')">' + refresh + '</a>');
         }
-        $('#buildBox').append(refresh);
     }
 }

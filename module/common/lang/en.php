@@ -316,6 +316,7 @@ $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
+$lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->sso         = 'admin';

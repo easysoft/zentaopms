@@ -238,7 +238,9 @@ class bug extends control
 
             $actionID = $this->action->create('bug', $bugID, 'Opened');
             $this->sendmail($bugID, $actionID);
-            $response['locate'] = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
+
+            $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
+            $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
             $this->send($response);
         }
 

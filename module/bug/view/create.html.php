@@ -18,9 +18,9 @@ include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
-js::set('createRelease', html::a($this->createLink('release', 'create', "productID=$productID"), $lang->release->create, '_blank'));
-js::set('createBuild', html::a($this->createLink('build', 'create', "projectID=$projectID"), $lang->build->create, '_blank'));
-js::set('refresh', html::a("javascript:loadProjectsBuilds($projectID)", $lang->refresh));
+js::set('createRelease', $lang->release->create);
+js::set('createBuild', $lang->build->create);
+js::set('refresh', $lang->refresh);
 ?>
 
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
@@ -44,13 +44,13 @@ js::set('refresh', html::a("javascript:loadProjectsBuilds($projectID)", $lang->r
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->bug->project;?></th>
-      <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=select-3 onchange=loadProjectRelated(this.value)');?></span></td>
+      <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=select-3 onchange=loadProjectRelated(this.value) autocomplete="off"');?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
       <td>
         <span id='buildBox'>
-        <?php echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');?>
+        <?php echo html::select('openedBuild[]', $builds, $buildID, 'size=4 multiple=multiple class=select-3');?>
         </span>
       </td>
     </tr>
