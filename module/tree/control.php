@@ -303,7 +303,14 @@ class tree extends control
      */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html', $needManage = false)
     {
-        $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
+        if($viewType = 'task')
+        {
+            $optionMenu = $this->tree->getTaskOptionMenu($rootID); 
+        }
+        else
+        {
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
+        }
         if($returnType == 'html')
         {
             $output = html::select("module", $optionMenu, '', "onchange=loadModuleRelated()");
