@@ -151,7 +151,7 @@ $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;
-$config->objectTables['custom']      = TABLE_CUSTOM;
+$config->objectTables['custom']      = TABLE_LANG;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');
