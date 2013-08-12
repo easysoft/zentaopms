@@ -61,7 +61,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
@@ -148,21 +148,21 @@ class bug extends control
         $position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[] = $this->lang->bug->common;
 
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
-        $this->view->browseType  = $browseType;
-        $this->view->bugs        = $bugs;
-        $this->view->users       = $users;
-        $this->view->pager       = $pager;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->moduleID    = $moduleID;
-        $this->view->customed    = $customed;
-        $this->view->customFields= explode(',', str_replace(' ', '', trim($customFields)));
-        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->productID    = $productID;
+        $this->view->productName  = $this->products[$productID];
+        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->moduleTree   = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
+        $this->view->browseType   = $browseType;
+        $this->view->bugs         = $bugs;
+        $this->view->users        = $users;
+        $this->view->pager        = $pager;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->moduleID     = $moduleID;
+        $this->view->customed     = $customed;
+        $this->view->customFields = explode(',', str_replace(' ', '', trim($customFields)));
 
         $this->display();
     }
@@ -221,6 +221,7 @@ class bug extends control
     {
         $this->view->users = $this->user->getPairs('nodeleted,devfirst');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        $this->app->loadLang('release');
 
         if(!empty($_POST))
         {
@@ -237,7 +238,9 @@ class bug extends control
 
             $actionID = $this->action->create('bug', $bugID, 'Opened');
             $this->sendmail($bugID, $actionID);
-            $response['locate'] = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
+
+            $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
+            $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
             $this->send($response);
         }
 
@@ -305,9 +308,10 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release');
             $stories = $this->story->getProductStoryPairs($productID);
         }
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
@@ -668,6 +672,25 @@ class bug extends control
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
+
+    /**
+     * Batch confirm bugs. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchConfirm()
+    {
+        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $this->bug->batchConfirm($bugIDList);
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($bugIDList as $bugID)
+        {
+            $actionID = $this->action->create('bug', $bugID, 'bugConfirmed');
+            $this->sendmail($bugID, $actionID);
+        }
+        die(js::locate($this->session->bugList, 'parent'));
+    }
     
     /**
      * Resolve a bug.
@@ -709,6 +732,27 @@ class bug extends control
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
+    }
+
+    /**
+     * Batch resolve bugs.
+     * 
+     * @param  string    $resolution 
+     * @param  string    $resolvedBuild 
+     * @access public
+     * @return void
+     */
+    public function batchResolve($resolution, $resolvedBuild = '')
+    {
+        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($bugIDList as $bugID)
+        {
+            $actionID = $this->action->create('bug', $bugID, 'Resolved', '', $resolution);
+            $this->sendmail($bugID, $actionID);
+        }
+        die(js::locate($this->session->bugList, 'parent'));
     }
 
     /**

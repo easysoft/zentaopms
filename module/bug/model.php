@@ -394,6 +394,31 @@ class bugModel extends model
     }
 
     /**
+     * Batch confirm bugs.
+     * 
+     * @param  array $bugIDList 
+     * @access public
+     * @return void
+     */
+    public function batchConfirm($bugIDList)
+    {
+        $now = helper::now();
+        foreach($bugIDList as $bugID)
+        {
+            $oldBug = $this->getById($bugID);
+            if($oldBug->confirmed) continue;
+
+            $bug = new stdclass();
+            $bug->assignedTo     = $this->app->user->account;
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->confirmed      = 1;
+
+            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+        }
+    }
+
+    /**
      * Resolve a bug.
      * 
      * @param  int    $bugID 
@@ -424,6 +449,38 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
+    }
+
+    /**
+     * Batch resolve bugs.
+     * 
+     * @param  array    $bugIDList 
+     * @param  string   $resolution 
+     * @param  string   $resolvedBuild
+     * @access public
+     * @return void
+     */
+    public function batchResolve($bugIDList, $resolution, $resolvedBuild)
+    {
+        $now = helper::now();
+        foreach($bugIDList as $bugID)
+        {
+            $oldBug = $this->getById($bugID);
+            if($oldBug->status != 'active') continue;
+            $bug = new stdClass();
+            $bug->resolution     = $resolution;
+            $bug->resolvedBuild  = $resolution == 'fixed' ? $resolvedBuild : '';
+            $bug->resolvedBy     = $this->app->user->account;
+            $bug->resolvedDate   = $now;
+            $bug->status         = 'resolved';
+            $bug->confirmed      = 1;
+            $bug->assignedTo     = $oldBug->openedBy;
+            $bug->assignedDate   = $now;
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+
+            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+        }
     }
 
     /**

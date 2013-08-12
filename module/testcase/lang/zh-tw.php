@@ -65,7 +65,7 @@ $lang->testcase->import             = "導入";
 $lang->testcase->importID           = "行號";
 $lang->testcase->showImport         = "顯示導入內容";
 $lang->testcase->exportTemplet      = "導出模板";
-$lang->testcase->export             = "導出";
+$lang->testcase->export             = "導出數據";
 $lang->testcase->confirmChange      = '確認用例變動';
 $lang->testcase->confirmStoryChange = '確認需求變動';
 
@@ -134,13 +134,6 @@ $lang->testcase->stageList['intergrate'] = '整合測試階段';
 $lang->testcase->stageList['system']     = '系統測試階段';
 $lang->testcase->stageList['smoke']      = '冒煙測試階段';
 $lang->testcase->stageList['bvt']        = '版本驗證階段';
-
-$lang->testcase->stageListAB['unittest']   = '單元';
-$lang->testcase->stageListAB['feature']    = '功能';
-$lang->testcase->stageListAB['intergrate'] = '整合';
-$lang->testcase->stageListAB['system']     = '系統';
-$lang->testcase->stageListAB['smoke']      = '冒煙';
-$lang->testcase->stageListAB['bvt']        = '版本';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';

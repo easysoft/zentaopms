@@ -39,20 +39,20 @@ $lang->moduleOrder[95]  = 'user';
 
 $lang->moduleOrder[100] = 'admin';
 $lang->moduleOrder[105] = 'extension';
-$lang->moduleOrder[105] = 'extension';
-$lang->moduleOrder[110] = 'editor';
-$lang->moduleOrder[115] = 'convert';
-$lang->moduleOrder[120] = 'action';
+$lang->moduleOrder[110] = 'custom';
+$lang->moduleOrder[115] = 'editor';
+$lang->moduleOrder[120] = 'convert';
+$lang->moduleOrder[125] = 'action';
 
-$lang->moduleOrder[125] = 'mail';
-$lang->moduleOrder[130] = 'svn';
-$lang->moduleOrder[135] = 'search';
-$lang->moduleOrder[140] = 'tree';
-$lang->moduleOrder[145] = 'api';
-$lang->moduleOrder[150] = 'file';
-$lang->moduleOrder[155] = 'misc';
-$lang->moduleOrder[160] = 'sso';
-$lang->moduleOrder[165] = 'webapp';
+$lang->moduleOrder[130] = 'mail';
+$lang->moduleOrder[135] = 'svn';
+$lang->moduleOrder[140] = 'search';
+$lang->moduleOrder[145] = 'tree';
+$lang->moduleOrder[150] = 'api';
+$lang->moduleOrder[155] = 'file';
+$lang->moduleOrder[160] = 'misc';
+$lang->moduleOrder[165] = 'sso';
+$lang->moduleOrder[170] = 'webapp';
 
 $lang->resource = new stdclass();
 
@@ -355,11 +355,13 @@ $lang->resource->bug->browse             = 'browse';
 $lang->resource->bug->create             = 'create';
 $lang->resource->bug->batchCreate        = 'batchCreate';
 $lang->resource->bug->confirmBug         = 'confirmBug';
+$lang->resource->bug->batchConfirm       = 'batchConfirm';
 $lang->resource->bug->view               = 'view';
 $lang->resource->bug->edit               = 'edit';
 $lang->resource->bug->batchEdit          = 'batchEdit';
 $lang->resource->bug->assignTo           = 'assignTo';
 $lang->resource->bug->resolve            = 'resolve';
+$lang->resource->bug->batchResolve       = 'batchResolve';
 $lang->resource->bug->activate           = 'activate';
 $lang->resource->bug->close              = 'close';
 $lang->resource->bug->report             = 'reportChart';
@@ -375,19 +377,21 @@ $lang->bug->methodOrder[5]  = 'browse';
 $lang->bug->methodOrder[10] = 'create';
 $lang->bug->methodOrder[15] = 'batchCreate';
 $lang->bug->methodOrder[20] = 'confirmBug';
-$lang->bug->methodOrder[25] = 'view';
-$lang->bug->methodOrder[30] = 'edit';
-$lang->bug->methodOrder[35] = 'assignTo';
-$lang->bug->methodOrder[40] = 'resolve';
-$lang->bug->methodOrder[45] = 'activate';
-$lang->bug->methodOrder[50] = 'close';
-$lang->bug->methodOrder[55] = 'report';
-$lang->bug->methodOrder[60] = 'export';
-$lang->bug->methodOrder[65] = 'confirmStoryChange';
-$lang->bug->methodOrder[70] = 'delete';
-$lang->bug->methodOrder[75] = 'saveTemplate';
-$lang->bug->methodOrder[80] = 'deleteTemplate';
-$lang->bug->methodOrder[85] = 'customFields';
+$lang->bug->methodOrder[25] = 'batchConfirm';
+$lang->bug->methodOrder[30] = 'view';
+$lang->bug->methodOrder[35] = 'edit';
+$lang->bug->methodOrder[40] = 'assignTo';
+$lang->bug->methodOrder[45] = 'resolve';
+$lang->bug->methodOrder[50] = 'batchResolve';
+$lang->bug->methodOrder[55] = 'activate';
+$lang->bug->methodOrder[60] = 'close';
+$lang->bug->methodOrder[65] = 'report';
+$lang->bug->methodOrder[70] = 'export';
+$lang->bug->methodOrder[75] = 'confirmStoryChange';
+$lang->bug->methodOrder[80] = 'delete';
+$lang->bug->methodOrder[85] = 'saveTemplate';
+$lang->bug->methodOrder[90] = 'deleteTemplate';
+$lang->bug->methodOrder[95] = 'customFields';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -488,6 +492,16 @@ $lang->mail->methodOrder[15] = 'edit';
 $lang->mail->methodOrder[20] = 'save';
 $lang->mail->methodOrder[25] = 'test';
 $lang->mail->methodOrder[30] = 'reset';
+
+/* custom. */
+$lang->resource->custom = new stdclass();
+$lang->resource->custom->index   = 'index';
+$lang->resource->custom->set     = 'set';
+$lang->resource->custom->restore = 'restore';
+
+$lang->custom->methodOrder[5]  = 'index';
+$lang->custom->methodOrder[10] = 'set';
+$lang->custom->methodOrder[15] = 'restore';
 
 /* Subversion. */
 $lang->resource->svn = new stdclass();
@@ -889,3 +903,39 @@ $lang->changelog['4.0'][] = 'action-hideOne';
 $lang->changelog['4.0'][] = 'action-hideAll';
 $lang->changelog['4.0'][] = 'task-editEstimate';
 $lang->changelog['4.0'][] = 'task-deleteEstimate';
+
+$lang->changelog['4.1'][] = 'todo-batchFinish';
+$lang->changelog['4.1'][] = 'productplan-batchUnlinkStory';
+$lang->changelog['4.1'][] = 'company-view';
+$lang->changelog['4.1'][] = 'user-story';
+$lang->changelog['4.1'][] = 'user-testTask';
+$lang->changelog['4.1'][] = 'user-testCase';
+
+$lang->changelog['4.2.beta'][] = 'tree-browseTask';
+
+$lang->changelog['4.3.beta'][] = 'product-batchEdit';
+$lang->changelog['4.3.beta'][] = 'project-batchEdit';
+$lang->changelog['4.3.beta'][] = 'story-batchReview';
+$lang->changelog['4.3.beta'][] = 'story-batchChangePlan';
+$lang->changelog['4.3.beta'][] = 'story-batchChangeStage';
+$lang->changelog['4.3.beta'][] = 'productplan-linkBug';
+$lang->changelog['4.3.beta'][] = 'productplan-unlinkBug';
+$lang->changelog['4.3.beta'][] = 'productplan-batchUnlinkBug';
+$lang->changelog['4.3.beta'][] = 'bug-batchCreate';
+$lang->changelog['4.3.beta'][] = 'testcase-exportTemplet';
+$lang->changelog['4.3.beta'][] = 'testcase-import';
+$lang->changelog['4.3.beta'][] = 'testcase-showImport';
+$lang->changelog['4.3.beta'][] = 'testcase-confirmChange';
+$lang->changelog['4.3.beta'][] = 'mail-reset';
+$lang->changelog['4.3.beta'][] = 'sso-browse';
+$lang->changelog['4.3.beta'][] = 'sso-create';
+$lang->changelog['4.3.beta'][] = 'sso-edit';
+$lang->changelog['4.3.beta'][] = 'sso-delete';
+$lang->changelog['4.3.beta'][] = 'api-debug';
+$lang->changelog['4.3.beta'][] = 'action-editComment';
+
+$lang->changelog['5.0.beta1'][] = 'bug-batchConfirm';
+$lang->changelog['5.0.beta1'][] = 'bug-batchResolve';
+$lang->changelog['5.0.beta1'][] = 'custom-index';
+$lang->changelog['5.0.beta1'][] = 'custom-set';
+$lang->changelog['5.0.beta1'][] = 'custom-restore';

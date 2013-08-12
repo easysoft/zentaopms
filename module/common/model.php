@@ -119,6 +119,21 @@ class commonModel extends model
     }
 
     /**
+     * Load custom lang from db.
+     * 
+     * @access public
+     * @return void
+     */
+    public function loadCustomFromDB()
+    {
+        if(!$this->config->db->name) return;
+        $records = $this->loadModel('custom')->getAll();
+        if(!$records) return;
+        $this->lang->db = new stdclass();
+        $this->lang->db->custom = $records;
+    }
+
+    /**
      * Juage a method of one module is open or not?
      * 
      * @param  string $module 
@@ -596,13 +611,14 @@ class commonModel extends model
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
             $objects = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->where('id')->eq($objectID)
+                ->beginIF($queryCondition != false)->orWhere($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->fetchAll();
         }
         else
         {
-            $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
+            $objects = $this->dbh->query($queryCondition . "OR id=$objectID ORDER BY $orderBy")->fetchAll();
         }
 
         $tmpObjectIDs = array();

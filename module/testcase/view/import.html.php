@@ -1,7 +1,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <table class='table-1 mt-10px'>
-  <caption><?php echo $lang->testcase->importCase?></caption>
+  <caption><?php echo $lang->testcase->import?></caption>
   <tr>
     <td align='center'>
       <input type='file' name='file'/>

@@ -333,7 +333,7 @@ class todoModel extends model
      * @access public
      * @return bool
      */
-    public function isClickable($todo, $action)
+    public static function isClickable($todo, $action)
     {
         $action = strtolower($action);
 

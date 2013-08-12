@@ -139,12 +139,10 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `zipcode` char(10) default NULL,
   `website` char(120) default NULL,
   `backyard` char(120) default NULL,
-  `pms` char(120) default NULL,
   `guest` enum('1','0') NOT NULL default '0',
   `admins` char(255) default NULL,
   `deleted` enum('0','1') NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `pms` (`pms`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
@@ -156,6 +154,18 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `value` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique` (`owner`,`module`,`section`,`key`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_custom`;
+CREATE TABLE IF NOT EXISTS `zt_custom` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `lang` varchar(30) NOT NULL,
+  `module` varchar(30) NOT NULL,
+  `section` varchar(30) NOT NULL,
+  `key` varchar(60) NOT NULL,
+  `value` text NOT NULL,
+  `system` enum('0','1') NOT NULL default '1',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dept`;
 CREATE TABLE IF NOT EXISTS `zt_dept` (
@@ -225,8 +235,9 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `license` text NOT NULL,
   `type` varchar(20) NOT NULL default 'extension',
   `site` varchar(150) NOT NULL,
-  `zentaoVersion` varchar(100) NOT NULL,
+  `zentaoCompatible` varchar(100) NOT NULL,
   `installedTime` datetime NOT NULL,
+  `depends` varchar(100) NOT NULL,
   `dirs` text NOT NULL,
   `files` text NOT NULL,
   `status` varchar(20) NOT NULL,

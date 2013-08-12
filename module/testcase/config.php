@@ -1,4 +1,5 @@
 <?php
+$config->testcase = new stdclass();
 $config->testcase->defaultSteps = 3;
 $config->testcase->batchCreate  = 10;
 

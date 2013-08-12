@@ -140,23 +140,22 @@ var browseType  = '<?php echo $browseType;?>';
             <td colspan='<?php echo $columns;?>'>
               <div class='f-left'>
               <?php 
+              $canBatchEdit  = common::hasPriv('task', 'batchEdit');
+              $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
               if(count($tasks))
               {
-                  $canBatchEdit  = common::hasPriv('task', 'batchEdit');
-                  $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
-
                   echo "<div class='groupButton'>";
                   echo html::selectAll() . html::selectReverse();
                   echo "</div>";
 
                   $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
-                  $misc       = $canBatchEdit ? "onclick=changeAction('$actionLink')" : "disabled='disabled'";
+                  $misc       = $canBatchEdit ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
                   echo "<div class='groupButton dropButton'>";
-                  echo html::commonButton($lang->edit, "onclick=\"changeAction('projectTaskForm', 'batchEdit', '$actionLink')\" $misc");
+                  echo html::commonButton($lang->edit, $misc);
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
                   echo "</div>";
               }
-              echo $summary;
+              echo "<span class='f-12px'>" . $summary . "</span>";
               ?>
               </div>
               <?php $pager->show();?>
@@ -173,7 +172,7 @@ var browseType  = '<?php echo $browseType;?>';
   <ul>
   <?php 
   $actionLink = $this->createLink('task', 'batchClose');
-  $misc = $canBatchClose ? "onclick=changeAction('projectTaskForm','batchClose','$actionLink')" : "class='disabled'";
+  $misc = $canBatchClose ? "onclick=setFormAction('$actionLink','hiddenwin')" : "class='disabled'";
   echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
   ?>
   </ul>
