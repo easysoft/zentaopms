@@ -155,8 +155,8 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique` (`owner`,`module`,`section`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_custom`;
-CREATE TABLE IF NOT EXISTS `zt_custom` (
+-- DROP TABLE IF EXISTS `zt_lang`;
+CREATE TABLE IF NOT EXISTS `zt_lang` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `lang` varchar(30) NOT NULL,
   `module` varchar(30) NOT NULL,

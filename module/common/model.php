@@ -126,6 +126,7 @@ class commonModel extends model
      */
     public function loadCustomFromDB()
     {
+        if(defined('IN_UPGRADE')) return;
         if(!$this->config->db->name) return;
         $records = $this->loadModel('custom')->getAll();
         if(!$records) return;
