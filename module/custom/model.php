@@ -19,7 +19,7 @@ class customModel extends model
      */
     public function getAll()
     {
-        $allCustomLang = $this->dao->select('*')->from(TABLE_CUSTOM)->orderBy('lang,id')->fetchAll('id');
+        $allCustomLang = $this->dao->select('*')->from(TABLE_LANG)->orderBy('lang,id')->fetchAll('id');
 
         $currentLang   = $this->app->getClientLang();
         $processedLang = array();
@@ -59,7 +59,7 @@ class customModel extends model
         $item->value   = $value;
         $item->system  = $system;
 
-        $this->dao->replace(TABLE_CUSTOM)->data($item)->exec();
+        $this->dao->replace(TABLE_LANG)->data($item)->exec();
     }
 
     /**
@@ -116,7 +116,7 @@ class customModel extends model
      */
     public function createDAO($params, $method = 'select')
     {
-        return $this->dao->$method('*')->from(TABLE_CUSTOM)->where('1 = 1')
+        return $this->dao->$method('*')->from(TABLE_LANG)->where('1 = 1')
             ->beginIF($params['lang'])->andWhere('lang')->in($params['lang'])->fi()
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()

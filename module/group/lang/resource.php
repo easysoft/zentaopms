@@ -903,3 +903,39 @@ $lang->changelog['4.0'][] = 'action-hideOne';
 $lang->changelog['4.0'][] = 'action-hideAll';
 $lang->changelog['4.0'][] = 'task-editEstimate';
 $lang->changelog['4.0'][] = 'task-deleteEstimate';
+
+$lang->changelog['4.1'][] = 'todo-batchFinish';
+$lang->changelog['4.1'][] = 'productplan-batchUnlinkStory';
+$lang->changelog['4.1'][] = 'company-view';
+$lang->changelog['4.1'][] = 'user-story';
+$lang->changelog['4.1'][] = 'user-testTask';
+$lang->changelog['4.1'][] = 'user-testCase';
+
+$lang->changelog['4.2.beta'][] = 'tree-browseTask';
+
+$lang->changelog['4.3.beta'][] = 'product-batchEdit';
+$lang->changelog['4.3.beta'][] = 'project-batchEdit';
+$lang->changelog['4.3.beta'][] = 'story-batchReview';
+$lang->changelog['4.3.beta'][] = 'story-batchChangePlan';
+$lang->changelog['4.3.beta'][] = 'story-batchChangeStage';
+$lang->changelog['4.3.beta'][] = 'productplan-linkBug';
+$lang->changelog['4.3.beta'][] = 'productplan-unlinkBug';
+$lang->changelog['4.3.beta'][] = 'productplan-batchUnlinkBug';
+$lang->changelog['4.3.beta'][] = 'bug-batchCreate';
+$lang->changelog['4.3.beta'][] = 'testcase-exportTemplet';
+$lang->changelog['4.3.beta'][] = 'testcase-import';
+$lang->changelog['4.3.beta'][] = 'testcase-showImport';
+$lang->changelog['4.3.beta'][] = 'testcase-confirmChange';
+$lang->changelog['4.3.beta'][] = 'mail-reset';
+$lang->changelog['4.3.beta'][] = 'sso-browse';
+$lang->changelog['4.3.beta'][] = 'sso-create';
+$lang->changelog['4.3.beta'][] = 'sso-edit';
+$lang->changelog['4.3.beta'][] = 'sso-delete';
+$lang->changelog['4.3.beta'][] = 'api-debug';
+$lang->changelog['4.3.beta'][] = 'action-editComment';
+
+$lang->changelog['5.0.beta1'][] = 'bug-batchConfirm';
+$lang->changelog['5.0.beta1'][] = 'bug-batchResolve';
+$lang->changelog['5.0.beta1'][] = 'custom-index';
+$lang->changelog['5.0.beta1'][] = 'custom-set';
+$lang->changelog['5.0.beta1'][] = 'custom-restore';

@@ -194,7 +194,7 @@
         <table class='table-1 fixed'>
           <tr>
             <td>
-<?php
+              <?php
               foreach($story->tasks as $projectTasks)
               {
                   foreach($projectTasks as $task)

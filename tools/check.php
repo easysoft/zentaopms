@@ -53,6 +53,9 @@ $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
 $whiteList[] = 'webapp-ajaxaddview';
 $whiteList[] = 'report-remind';
+$whiteList[] = 'sso-auth';
+$whiteList[] = 'sso-depts';
+$whiteList[] = 'sso-users';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
