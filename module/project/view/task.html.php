@@ -140,11 +140,10 @@ var browseType  = '<?php echo $browseType;?>';
             <td colspan='<?php echo $columns;?>'>
               <div class='f-left'>
               <?php 
+              $canBatchEdit  = common::hasPriv('task', 'batchEdit');
+              $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
               if(count($tasks))
               {
-                  $canBatchEdit  = common::hasPriv('task', 'batchEdit');
-                  $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
-
                   echo "<div class='groupButton'>";
                   echo html::selectAll() . html::selectReverse();
                   echo "</div>";

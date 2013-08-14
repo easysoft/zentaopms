@@ -126,6 +126,7 @@ class commonModel extends model
      */
     public function loadCustomFromDB()
     {
+        if(defined('IN_UPGRADE')) return;
         if(!$this->config->db->name) return;
         $records = $this->loadModel('custom')->getAll();
         if(!$records) return;
@@ -153,7 +154,7 @@ class commonModel extends model
             if(stripos($method, 'downnotify') !== false) return true;
         }
 
-        if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
+        if(stripos($method, 'ajaxgetdropmenu') !== false and $this->app->user->account == 'guest') return true;
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
@@ -611,13 +612,14 @@ class commonModel extends model
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
             $objects = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->where('id')->eq($objectID)
+                ->beginIF($queryCondition != false)->orWhere($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->fetchAll();
         }
         else
         {
-            $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
+            $objects = $this->dbh->query($queryCondition . "OR id=$objectID ORDER BY $orderBy")->fetchAll();
         }
 
         $tmpObjectIDs = array();

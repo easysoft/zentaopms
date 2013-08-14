@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `zt_custom` (
+CREATE TABLE IF NOT EXISTS `zt_lang` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `lang` varchar(30) NOT NULL,
   `module` varchar(30) NOT NULL,
@@ -9,4 +9,3 @@ CREATE TABLE IF NOT EXISTS `zt_custom` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-

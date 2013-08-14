@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* Judge my.php exists or not. */
+define('IN_UPGRADE', true);
 $myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
 if(!file_exists($myConfig))
 {

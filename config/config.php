@@ -17,7 +17,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version      = '4.2';             // The version of zentaopms. Don't change it.
+$config->version      = '5.0.beta1';        // The version of zentaopms. Don't change it.
 $config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
@@ -134,7 +134,7 @@ define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_WEBAPP',        '`' . $config->db->prefix . 'webapp`');
-define('TABLE_CUSTOM',        '`' . $config->db->prefix . 'custom`');
+define('TABLE_LANG',          '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['story']       = TABLE_STORY;
@@ -151,7 +151,7 @@ $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;
-$config->objectTables['custom']      = TABLE_CUSTOM;
+$config->objectTables['custom']      = TABLE_LANG;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');
