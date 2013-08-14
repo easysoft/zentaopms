@@ -552,7 +552,7 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
-                ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('status')->ne('suspended')->fi()
+                ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->orderBy('code')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -562,7 +562,8 @@ class projectModel extends model
         {
             return $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->where('iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF($status == 'isdoing')->andWhere('status')->ne('done')->andWhere('status')->ne('suspended')->fi()
+                ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('code')
                 ->beginIF($limit)->limit($limit)->fi()
