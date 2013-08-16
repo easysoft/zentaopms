@@ -619,7 +619,7 @@ class commonModel extends model
         }
         else
         {
-            $objects = $this->dbh->query($queryCondition . "OR id=$objectID ORDER BY $orderBy")->fetchAll();
+            $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
         }
 
         $tmpObjectIDs = array();

@@ -13,8 +13,11 @@ $.extend(
             {
                 $.enableForm(formID);
 
+                /* try parse to json when response is json's string. */
+                try{if(typeof(response) == 'string') response = JSON.parse(response);}catch(e){}
+
                 /* The response is not an object, some error occers, alert it. */
-                if($.type(response) != 'object')
+                if(typeof(response) != 'object')
                 {
                     if(response) return alert(response);
                     return alert('No response.');
