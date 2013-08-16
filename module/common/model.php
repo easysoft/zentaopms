@@ -126,6 +126,7 @@ class commonModel extends model
      */
     public function loadCustomFromDB()
     {
+        if(defined('IN_UPGRADE')) return;
         if(!$this->config->db->name) return;
         $records = $this->loadModel('custom')->getAll();
         if(!$records) return;
@@ -153,7 +154,7 @@ class commonModel extends model
             if(stripos($method, 'downnotify') !== false) return true;
         }
 
-        if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
+        if(stripos($method, 'ajaxgetdropmenu') !== false and $this->app->user->account == 'guest') return true;
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
