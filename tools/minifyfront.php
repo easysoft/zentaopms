@@ -21,7 +21,6 @@ $jsFiles[] = $jqueryRoot . 'datepicker/date.js';
 $jsFiles[] = $jqueryRoot . 'datepicker/min.js';
 $jsFiles[] = $jqueryRoot . 'alert/min.js';
 $jsFiles[] = $jqueryRoot . 'colorize/min.js';
-$jsFiles[] = $jqueryRoot . 'dropmenu/dropmenu.js';
 
 /* Combine these js files. */
 $allJSFile  = $jsRoot . 'all.js';
@@ -71,7 +70,6 @@ foreach($langs as $lang)
         $cssCode .= file_get_contents($themeRoot . 'default/treeview.css');
         $cssCode .= file_get_contents($themeRoot . 'default/datepicker.css');
         $cssCode .= file_get_contents($themeRoot . 'default/alert.css');
-        $cssCode .= file_get_contents($themeRoot . 'default/dropmenu.css');
 
         /* Css file for current lang and current them. */
         $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
