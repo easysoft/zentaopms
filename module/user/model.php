@@ -115,7 +115,14 @@ class userModel extends model
         if(!$rawCommiters) return array();
 
         $commiters = array();
-        foreach($rawCommiters as $commiter) $commiters[$commiter->commiter] = $commiter->realname ? $commiter->realname : $commiter->account;
+        foreach($rawCommiters as $commiter)
+        {
+            $userCommiters = explode(',', $commiter->commiter);
+            foreach($userCommiters as $userCommiter)
+            {
+                $commiters[$userCommiter] = $commiter->realname ? $commiter->realname : $commiter->account;
+            }
+        }
 
         return $commiters;
     }
