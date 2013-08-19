@@ -814,8 +814,6 @@ class testcase extends control
         $endField = $field;
         $caseData = array();
         $stepData = array();
-        $hasEdit  = false;
-        $hasNew   = false;
         while($csv)
         {
             $case = new stdclass();
@@ -889,15 +887,6 @@ class testcase extends control
                 $csv = substr($csv, $pos + strlen($delimiter));
             }
 
-            if(!empty($case->id))
-            {
-                $hasEdit = true;
-            }
-            else
-            {
-                $hasNew = true;
-            }
-
             $caseData[$row] = $case;
             unset($case);
             $row++;
@@ -919,8 +908,6 @@ class testcase extends control
         $this->view->stepData  = $stepData;
         $this->view->productID = $productID;
         $this->view->product   = $this->products[$productID];
-        $this->view->hasEdit   = $hasEdit;
-        $this->view->hasNew    = $hasNew;
         $this->display();
     }
 }

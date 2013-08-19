@@ -69,8 +69,7 @@ $lang->testcase->export             = "Export data";
 $lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 
-$lang->testcase->editHaved = 'Modify existing case';
-$lang->testcase->addNew    = 'Add new case';
+$lang->testcase->new = 'New';
   
 $lang->testcase->num = 'The number of cases';
 
