@@ -1035,6 +1035,7 @@ class story extends control
                 if(isset($storyLang->statusList[$story->status]))       $story->status       = $storyLang->statusList[$story->status];
                 if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
                 if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
+                if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];
 
                 if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
                 if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo];
