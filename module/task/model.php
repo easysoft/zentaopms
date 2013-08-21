@@ -387,9 +387,9 @@ class taskModel extends model
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('assignedTo', $this->app->user->account)
-            ->setDefault('assignedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now) 
+            ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
             ->remove('comment')->get();
         if($this->post->left == 0)
         {
