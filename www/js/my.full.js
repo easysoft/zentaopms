@@ -327,6 +327,7 @@ function showTreeBox(treeType)
 function toggleTreeBox()
 {
     var treeType = $('.treeSlider').attr('id');
+    if(typeof treeType == 'undefined') return;
     if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
 
     $('.treeSlider').toggle
