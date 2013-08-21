@@ -52,7 +52,7 @@
 </div>
 
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
-<div class='treeSlider'><span>&nbsp;</span></div>
+<div class='treeSlider' id='storyTree'><span>&nbsp;</span></div>
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>
     <tr valign='top'>

@@ -72,7 +72,7 @@ js::set('customed', $customed);
     }
 ?>
 
-<div class='treeSlider'><span>&nbsp;</span></div>
+<div class='treeSlider' id='bugTree'><span>&nbsp;</span></div>
 <form method='post'>
   <table class='cont-lt1'>
     <tr valign='top'>
