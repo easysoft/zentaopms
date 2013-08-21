@@ -644,7 +644,7 @@ class story extends control
      */
     public function batchClose($productID = 0, $projectID = 0)
     {
-        if($this->post->closedReasons)
+        if($this->post->comments)
         {
             $allChanges = $this->story->batchClose();
 

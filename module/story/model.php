@@ -579,51 +579,49 @@ class storyModel extends model
 
         /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
         if($this->session->showSuhosinInfo) array_pop($storyIDList);
-        if(!empty($storyIDList))
+        foreach($storyIDList as $storyID)
         {
-            foreach($storyIDList as $storyID)
+            $oldStory = $this->getById($storyID);
+            if(!$oldStory->status == 'closed') continue;
+
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            $story->closedBy       = $this->app->user->account;
+            $story->closedDate     = $now;
+            $story->assignedTo     = 'closed';
+            $story->assignedDate   = $now;
+            $story->status         = 'closed';
+
+            $story->closedReason   = $this->post->closedReasons[$storyID];
+            $story->duplicateStory = $this->post->duplicateStoryIDList[$storyID] ? $this->post->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
+            $story->childStories   = $this->post->childStoriesIDList[$storyID] ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
+
+            if($story->closedReason == 'done') $story->stage = 'released';
+            if($story->closedReason != 'done') $story->plan  = 0;
+
+            $stories[$storyID] = $story;
+            unset($story);
+        }
+
+        foreach($stories as $storyID => $story)
+        {
+            if(!$story->closedReason) continue;
+
+            $oldStory = $this->getById($storyID);
+
+            $this->dao->update(TABLE_STORY)->data($story)
+                ->autoCheck()
+                ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+                ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
+                ->where('id')->eq($storyID)->exec();
+
+            if(!dao::isError()) 
             {
-                $oldStory = $this->getById($storyID);
-
-                $story->lastEditedBy   = $this->app->user->account;
-                $story->lastEditedDate = $now;
-                $story->closedBy       = $this->app->user->account;
-                $story->closedDate     = $now;
-                $story->assignedTo     = 'closed';
-                $story->assignedDate   = $now;
-                $story->status         = 'closed';
-
-                $story->closedReason   = $this->post->closedReasons[$storyID];
-                $story->duplicateStory = $this->post->duplicateStoryIDList[$storyID] ? $this->post->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
-                $story->childStories   = $this->post->childStoriesIDList[$storyID] ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
-
-                if($story->closedReason == 'done') $story->stage = 'released';
-                if($story->closedReason != 'done') $story->plan  = 0;
-
-                $stories[$storyID] = $story;
-                unset($story);
+                $allChanges[$storyID] = common::createChanges($oldStory, $story);
             }
-
-            foreach($stories as $storyID => $story)
+            else
             {
-                if(!$story->closedReason) continue;
-
-                $oldStory = $this->getById($storyID);
-
-                $this->dao->update(TABLE_STORY)->data($story)
-                    ->autoCheck()
-                    ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                    ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
-                    ->where('id')->eq($storyID)->exec();
-
-                if(!dao::isError()) 
-                {
-                    $allChanges[$storyID] = common::createChanges($oldStory, $story);
-                }
-                else
-                {
-                    die(js::error('story#' . $storyID . dao::getError(true)));
-                }
+                die(js::error('story#' . $storyID . dao::getError(true)));
             }
         }
 
