@@ -43,6 +43,7 @@ $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '开始日期';
 $lang->productplan->end     = '结束日期';
 
+$lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '两星期';
 $lang->productplan->endList[31]  = '一个月';
 $lang->productplan->endList[62]  = '两个月';
