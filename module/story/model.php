@@ -989,6 +989,7 @@ class storyModel extends model
             $queryProductID = 'all';
         }
         $storyQuery = $storyQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+        if($projectID != '') $storyQuery .= " AND `status` != 'draft'"; 
         $storyQuery = $this->loadModel('search')->replaceDynamic($storyQuery);
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
