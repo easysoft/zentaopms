@@ -115,7 +115,8 @@ class testcase extends control
 
             $queryProductID = $productID;
             $allProduct     = "`product` = 'all'";
-            $caseQuery      = $this->session->testcaseQuery;
+
+            $caseQuery      = '(' . $this->session->testcaseQuery;
             if(strpos($this->session->testcaseQuery, $allProduct) !== false)
             {
                 $products  = array_keys($this->loadModel('product')->getPrivProducts());
@@ -123,6 +124,7 @@ class testcase extends control
                 $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
                 $queryProductID = 'all';
             }
+            $caseQuery .= ')';
 
             $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
