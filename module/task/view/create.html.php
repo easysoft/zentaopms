@@ -31,6 +31,10 @@
       <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, 'class=select-3');?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->task->type;?></th>
+      <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-3 onchange="setOwners(this.value)"');?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->task->story;?></th>
       <td>
         <?php echo html::select('story', $stories, $task->story, 'class=select-1 onchange=setPreview();');?>
@@ -64,10 +68,6 @@
     <tr>
       <th class='rowhead'><?php echo $lang->task->deadline;?></th>
       <td><?php echo html::input('deadline', $task->deadline, "class='text-3 date'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->type;?></th>
-      <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-3 onchange="setOwners(this.value)"');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->mailto;?></th>

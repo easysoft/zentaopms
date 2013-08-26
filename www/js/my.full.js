@@ -286,6 +286,39 @@ function toggleHelpLink()
 }
 
 /**
+ * Hide tree box 
+ * 
+ * @param  string $treeType 
+ * @access public
+ * @return void
+ */
+function hideTreeBox(treeType)
+{
+    $.cookie(treeType, 'hide', {expires:config.cookieLife, path:config.webRoot});
+    $('.side').hide();
+    $('.divider').hide();
+    $('.treeSlider span').css("border-right", "0 none");
+    $('.treeSlider span').css("border-left", "4px solid #000000");
+
+}
+
+/**
+ * Show tree box 
+ * 
+ * @param  string $treeType 
+ * @access public
+ * @return void
+ */
+function showTreeBox(treeType)
+{
+    $.cookie(treeType, 'show', {expires:config.cookieLife, path:config.webRoot});
+    $('.side').show();
+    $('.divider').show();
+    $('.treeSlider span').css("border-right", "4px solid #000000");
+    $('.treeSlider span').css("border-left", "0 none");
+}
+
+/**
  * Toggle tree menu.
   
  * @access public
@@ -293,23 +326,21 @@ function toggleHelpLink()
  */
 function toggleTreeBox()
 {
-    var treeSliderH = 50;
-    $('.treeSlider').height(treeSliderH);
+    var treeType = $('.treeSlider').attr('id');
+    if(typeof treeType == 'undefined') return;
+    if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
+
     $('.treeSlider').toggle
     (
         function()
         {
-            $('.side').hide()
-            $('.divider').hide()
-            $('.treeSlider span').css("border-right", "0 none");
-            $('.treeSlider span').css("border-left", "4px solid #000000");
+            if($.cookie(treeType) == 'hide') return showTreeBox(treeType);
+            hideTreeBox(treeType);
         }, 
         function()
         {
-            $('.side').show()
-            $('.divider').show()
-            $('.treeSlider span').css("border-right", "4px solid #000000");
-            $('.treeSlider span').css("border-left", "0 none");
+            if($.cookie(treeType) == 'show') return hideTreeBox(treeType);
+            showTreeBox(treeType);
         }
     );
 }

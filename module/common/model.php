@@ -619,7 +619,7 @@ class commonModel extends model
         }
         else
         {
-            $objects = $this->dbh->query($queryCondition . "OR id=$objectID ORDER BY $orderBy")->fetchAll();
+            $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
         }
 
         $tmpObjectIDs = array();
@@ -682,9 +682,6 @@ class commonModel extends model
         {
             $orderBy = explode('limit', $orderBy[1]);
             $orderBy = str_replace('t1.', '', $orderBy[0]);
-
-            /* Fix bug #448. I don't know why too. */
-            if($orderBy == 'yes') $orderBy = '';
 
             $this->session->set($objectType . 'OrderBy', $orderBy);
         }

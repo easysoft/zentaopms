@@ -52,7 +52,7 @@
 </div>
 
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
-<div class='treeSlider'><span>&nbsp;</span></div>
+<div class='treeSlider' id='storyTree'><span>&nbsp;</span></div>
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>
     <tr valign='top'>
@@ -153,7 +153,7 @@
           <?php 
           $class = "class='disabled'";
 
-          $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory';
+          $canBatchClose = common::hasPriv('story', 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
           $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
           $misc = $canBatchClose ? "onclick=setFormAction('$actionLink')" : $class;
           echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";

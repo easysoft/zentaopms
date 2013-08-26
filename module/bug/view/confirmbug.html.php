@@ -30,7 +30,7 @@ js::set('page', 'confirmbug');
     </tr>  
     <tr>
       <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
-      <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="text-1" multiple');?></td>
+      <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="w-p98" multiple');?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

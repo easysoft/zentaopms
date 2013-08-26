@@ -387,9 +387,9 @@ class taskModel extends model
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('assignedTo', $this->app->user->account)
-            ->setDefault('assignedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now) 
+            ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
             ->remove('comment')->get();
         if($this->post->left == 0)
         {
@@ -440,6 +440,7 @@ class taskModel extends model
             {
                 if(!$record->consumed[$id]) die(js::alert($this->lang->task->error->consumedThisTime));
                 if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
+                if(strlen($record->work[$id]) > 255) die(js::alert($this->lang->task->error->work));
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
                 $estimates[$id]->task     = $taskID;

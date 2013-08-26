@@ -46,13 +46,14 @@ $lang->moduleOrder[125] = 'action';
 
 $lang->moduleOrder[130] = 'mail';
 $lang->moduleOrder[135] = 'svn';
-$lang->moduleOrder[140] = 'search';
-$lang->moduleOrder[145] = 'tree';
-$lang->moduleOrder[150] = 'api';
-$lang->moduleOrder[155] = 'file';
-$lang->moduleOrder[160] = 'misc';
-$lang->moduleOrder[165] = 'sso';
-$lang->moduleOrder[170] = 'webapp';
+$lang->moduleOrder[140] = 'git';
+$lang->moduleOrder[145] = 'search';
+$lang->moduleOrder[150] = 'tree';
+$lang->moduleOrder[155] = 'api';
+$lang->moduleOrder[160] = 'file';
+$lang->moduleOrder[165] = 'misc';
+$lang->moduleOrder[170] = 'sso';
+$lang->moduleOrder[175] = 'webapp';
 
 $lang->resource = new stdclass();
 
@@ -512,6 +513,16 @@ $lang->resource->svn->apiSync = 'apiSync';
 $lang->svn->methodOrder[5]  = 'diff';
 $lang->svn->methodOrder[10] = 'cat';
 $lang->svn->methodOrder[15] = 'apiSync';
+
+/* Git. */
+$lang->resource->git = new stdclass();
+$lang->resource->git->diff    = 'diff';
+$lang->resource->git->cat     = 'cat';
+$lang->resource->git->apiSync = 'apiSync';
+
+$lang->git->methodOrder[5]  = 'diff';
+$lang->git->methodOrder[10] = 'cat';
+$lang->git->methodOrder[15] = 'apiSync';
 
 /* Company. */
 $lang->resource->company = new stdclass();

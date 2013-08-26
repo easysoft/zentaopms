@@ -538,5 +538,8 @@ class testcaseModel extends model
                 }
             }
         }
+
+        unlink($this->session->importFile);
+        unset($_SESSION['importFile']);        
     }
 }

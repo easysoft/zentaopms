@@ -39,7 +39,7 @@ class actionModel extends model
         $action->actor      = $actor ? $actor : $this->app->user->account;
         $action->action     = strtolower($actionType);
         $action->date       = helper::now();
-        $action->comment    = $comment;
+        $action->comment    = ltrim($comment, "<br />");
         $action->extra      = $extra;
 
         /* Get product and project for this object. */
@@ -193,6 +193,7 @@ class actionModel extends model
         foreach($actions as $actionID => $action)
         {
             if(strtolower($action->action) == 'svncommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
+            if(strtolower($action->action) == 'gitcommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
             $actions[$actionID] = $action;
         }
@@ -605,7 +606,7 @@ class actionModel extends model
             if($history->diff != '')
             {
                 $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff      = $history->field != 'subversion' ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = ($history->field != 'subversion' and $history->field != 'git') ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
                 $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
                 $history->diff      = nl2br($history->diff);
                 $history->noTagDiff = preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff);

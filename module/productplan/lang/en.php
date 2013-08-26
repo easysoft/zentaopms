@@ -43,6 +43,7 @@ $lang->productplan->desc    = 'Desc';
 $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
 
+$lang->productplan->endList[7]   = 'One Weeks';
 $lang->productplan->endList[14]  = 'Two Weeks';
 $lang->productplan->endList[31]  = 'One Month';
 $lang->productplan->endList[62]  = 'Two Months';

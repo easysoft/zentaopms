@@ -44,7 +44,7 @@ $(document).ready(function()
 
         KindEditor.ready(function(K)
         {
-            keEditor = K.create('#' + editorID,
+            editor = K.create('#' + editorID,
             {
                 items:editorTool,
                 filterMode:true, 

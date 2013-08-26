@@ -149,6 +149,7 @@ $lang->task->error->consumedNumber   = '"Consumed" must be number';
 $lang->task->error->consumedSmall    = '"Consumed" must be more than consumed before';
 $lang->task->error->consumedThisTime = 'Please input "hours"';
 $lang->task->error->left             = 'Please input "left"';
+$lang->task->error->work             = '"Comment" must be less than 255 characters';
 
 /* Report. */
 $lang->task->report = new stdclass();

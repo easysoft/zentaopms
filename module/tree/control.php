@@ -303,7 +303,7 @@ class tree extends control
      */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html', $needManage = false)
     {
-        if($viewType = 'task')
+        if($viewType == 'task')
         {
             $optionMenu = $this->tree->getTaskOptionMenu($rootID); 
         }

@@ -87,14 +87,14 @@ class releaseModel extends model
             $buildID = $this->dao->lastInsertID();
         }
 
-            $release = fixer::input('post')
-                ->stripTags('name')
-                ->add('product', (int)$productID)
-                ->join('stories', ',')
-                ->join('bugs', ',')
-                ->remove('allchecker')
-                ->setIF($this->post->build ==false, 'build', $buildID)
-                ->get();
+       $release = fixer::input('post')
+           ->stripTags('name')
+           ->add('product', (int)$productID)
+           ->join('stories', ',')
+           ->join('bugs', ',')
+           ->setIF($this->post->build == false, 'build', $buildID)
+           ->remove('allchecker')
+           ->get();
 
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         $releaseID = $this->dao->lastInsertID();
