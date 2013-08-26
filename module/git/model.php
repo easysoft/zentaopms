@@ -98,6 +98,7 @@ class gitModel extends model
             $this->printLog("get " . count($logs) . " logs");
 
             $this->printLog('begin parsing logs');
+            $latestRevision = $logs[0]->revision;
             foreach($logs as $log)
             {
                 $this->printLog("parsing log {$log->revision}");
@@ -112,7 +113,7 @@ class gitModel extends model
                 if($objects)
                 {
                     $this->printLog('extract' . 
-                        'story:' . join(' ', $objects['stories']) . 
+                        ' story:' . join(' ', $objects['stories']) . 
                         ' task:' . join(' ', $objects['tasks']) . 
                         ' bug:'  . join(',', $objects['bugs']));
 
@@ -122,10 +123,10 @@ class gitModel extends model
                 {
                     $this->printLog('no objects found' . "\n");
                 }
-                if($log->revision > $savedRevision) $savedRevision = $log->revision;
             }
-            $this->saveLastRevision($savedRevision);
-            $this->printLog("save revision $savedRevision");
+
+            $this->saveLastRevision($latestRevision);
+            $this->printLog("save revision $latestRevision");
             $this->deleteRestartFile();
             $this->printLog("\n\nrepo $name finished");
         }
@@ -243,15 +244,16 @@ class gitModel extends model
         /* The git log command. */
         if($fromRevision)
         {
-            $cmd = "cd $this->repoRoot; $this->client log --stat -r $fromRevision:HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "cd $this->repoRoot; $this->client log --stat $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         else
         {
             $cmd = "cd $this->repoRoot; $this->client log  --stat --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
-        exec($cmd, $list);
+        exec($cmd, $list, $return);
 
-        if(!$list) die("Some error occers: \nThe command is $cmd\n");
+        if(!$list and $return) die("Some error occers: \nThe command is $cmd\n");
+        if(!$list and !$return) exit;
 
         /* Process logs. */
         $logs = array();
@@ -296,7 +298,7 @@ class gitModel extends model
         {
             if(strpos($change, '|') === false) continue;
             list($entry, $modify) = explode('|', $change);
-            $entry = trim($entry);
+            $entry = '/' . trim($entry);
             $parsedLog->files['M'][] = $entry;
         }
 
@@ -378,7 +380,7 @@ class gitModel extends model
         $path = str_replace('%2F', '/', urlencode($path));
         $path = str_replace('%3A', ':', $path);
 
-        $cmd = $this->client . " diff $revision^ $revision $url";
+        $cmd = "cd $repo->path;$this->client diff $revision^ $revision $path";
         $diff = `$cmd`;
         return $diff;
     }
@@ -403,7 +405,8 @@ class gitModel extends model
         $path = str_replace('%2F', '/', urlencode($path));
         $path = str_replace('%3A', ':', $path);
 
-        $cmd  = $this->client . " show -r $revision $path";
+        $subPath = substr($path, strlen($repo->path) + 1);
+        $cmd  = "cd $repo->path;$this->client show $revision:$subPath";
         $code = `$cmd`;
         return $code;
     }
@@ -437,7 +440,7 @@ class gitModel extends model
         $action->action  = 'gitcommited';
         $action->date    = $log->date;
         $action->comment = $this->iconvComment($log->msg);
-        $action->extra   = $log->revision;
+        $action->extra   = substr($log->revision, 0, 10);
 
         $changes = $this->createActionChanges($log, $repoRoot);
 
@@ -559,7 +562,7 @@ class gitModel extends model
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
         }
-        $changes->field = 'subversion';
+        $changes->field = 'git';
         $changes->old   = '';
         $changes->new   = '';
         $changes->diff  = trim($diff);
@@ -629,7 +632,7 @@ class gitModel extends model
     {
         if(!file_exists($this->logFile)) return 0;
         if(file_exists($this->restartFile)) return 0;
-        return (int)trim(file_get_contents($this->logFile));
+        return trim(file_get_contents($this->logFile));
     }
 
     /**

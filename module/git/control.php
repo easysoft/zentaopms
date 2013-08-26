@@ -32,7 +32,7 @@ class git extends control
      */
     public function diff($path, $revision)
     {
-        $url = helper::safe64Decode($path);
+        $path = helper::safe64Decode($path);
         $this->view->url      = $path;
         $this->view->revision = $revision;
         $this->view->diff     = $this->git->diff($path, $revision);
@@ -50,7 +50,7 @@ class git extends control
      */
     public function cat($path, $revision)
     {
-        $url = helper::safe64Decode($url);
+        $path = helper::safe64Decode($path);
         $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->code     = $this->git->cat($path, $revision);
@@ -69,12 +69,24 @@ class git extends control
         if($this->post->logs)
         {
             $repoRoot = $this->post->repoRoot;
-            $logs = stripslashes($this->post->logs);
-            $logs = simplexml_load_string($logs);
-            foreach($logs->logentry as $entry)
+            $list     = json_decode($this->post->logs);
+
+            $logs = array();
+            $i    = 0;
+            foreach($list as $line) 
             {
-                $parsedLogs[] = $this->git->convertLog($entry);
+                if(!$line) 
+                {
+                    $i++;
+                    continue;
+                }
+                $logs[$i][] = $line;
             }
+            foreach($logs as $log)
+            {
+                $parsedLogs[] = $this->convertLog($log);
+            }
+
             $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             foreach($parsedLogs as $log)
             {
