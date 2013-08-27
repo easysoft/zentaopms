@@ -950,3 +950,7 @@ $lang->changelog['5.0.beta1'][] = 'bug-batchResolve';
 $lang->changelog['5.0.beta1'][] = 'custom-index';
 $lang->changelog['5.0.beta1'][] = 'custom-set';
 $lang->changelog['5.0.beta1'][] = 'custom-restore';
+
+$lang->changelog['5.0.beta2'][] = 'git-diff';
+$lang->changelog['5.0.beta2'][] = 'git-cat';
+$lang->changelog['5.0.beta2'][] = 'git-apiSync';
