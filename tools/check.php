@@ -45,6 +45,7 @@ $whiteList[] = 'user-deny';
 $whiteList[] = 'user-logout';
 $whiteList[] = 'user-setreferer';
 $whiteList[] = 'svn-run';
+$whiteList[] = 'git-run';
 $whiteList[] = 'admin-ignore';
 $whiteList[] = 'admin-register';
 $whiteList[] = 'admin-win2unix';

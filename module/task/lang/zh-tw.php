@@ -149,6 +149,7 @@ $lang->task->error->consumedNumber   = '"已經消耗"必須為數字';
 $lang->task->error->consumedSmall    = '"已經消耗"必須大於之前消耗';
 $lang->task->error->consumedThisTime = '請填寫"工時"';
 $lang->task->error->left             = '請填寫"剩餘"';
+$lang->task->error->work             = '"備註"必須小於255個字元';
 
 /* 統計報表。*/
 $lang->task->report = new stdclass();

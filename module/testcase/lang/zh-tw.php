@@ -69,8 +69,7 @@ $lang->testcase->export             = "導出數據";
 $lang->testcase->confirmChange      = '確認用例變動';
 $lang->testcase->confirmStoryChange = '確認需求變動';
 
-$lang->testcase->editHaved = '修改已有用例';
-$lang->testcase->addNew    = '添加新用例';
+$lang->testcase->new = '新增';
 
 $lang->testcase->num = '導入用例個數：';
 
