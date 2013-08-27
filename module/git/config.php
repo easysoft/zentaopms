@@ -18,7 +18,7 @@ $config->git->encodings = 'utf-8, gbk';
 $config->git->client    = '/usr/bin/git';
 
 $i = 1;
-$config->git->repos[$i]['path'] = '/home/z/pms';
+$config->git->repos[$i]['path'] = '';
 
 /*
 $i ++;
