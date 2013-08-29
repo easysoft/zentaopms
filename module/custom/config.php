@@ -47,6 +47,6 @@ $config->custom->todo->fields['statusList'] = '状态';
 $config->custom->todo->canAdd = 'priList,typeList';
 
 $config->custom->user = new stdClass();
-$config->custom->user->fields['roleList']   = '角色';
+$config->custom->user->fields['roleList']   = '职位';
 $config->custom->user->fields['statusList'] = '状态';
 $config->custom->user->canAdd = 'roleList';
