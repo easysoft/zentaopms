@@ -55,12 +55,3 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Bind with community account';
 $lang->admin->bind->action  = 'bind';
 $lang->admin->bind->success = "Bind success";
-
-$lang->admin->selectFlow = 'How do you plan to use zentao?';
-
-$lang->admin->flowList['full']        = 'All features(including product, project, plan, release, story, task, bug, case, testtask, doc and so on.)';
-$lang->admin->flowList['zentaotest']  = 'Only testing(including product, release, bug, case, testtask, doc and so on.)';
-$lang->admin->flowList['zentaotask']  = 'Only task (including project, task, doc and so on.)';
-$lang->admin->flowList['zentaostory'] = 'Only story(including product, story, plan, release, doc and so on.)';
-
-$lang->admin->flowNotice = "<span class='red'>You can remove testing, task or story extension in admin->extension panel to use all features again.</span>";

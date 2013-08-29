@@ -181,22 +181,4 @@ class admin extends control
         $this->view->position[] = $this->lang->admin->clearData;
         $this->display();
     }
-
-    /**
-     * Set flow.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setFlow()
-    {
-        if($_POST)
-        {
-            if($this->post->flow != 'full') die(js::locate($this->createLink('extension', 'install', "extension={$this->post->flow}"), 'parent'));
-
-            $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
-            die(js::reload( 'parent.parent'));
-        }
-        $this->display();
-    }
 }
