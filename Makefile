@@ -51,6 +51,8 @@ zstory:
 	cp -fr storyext/module/* zentaostory/module/
 	find zentaostory/ -name ext |xargs chmod -R 777
 	echo zentaostory > zentaostory/.flow
+	sed -e 's/zentao/story/g' zentaostory/www/.ztaccess > .ztaccess.bak
+	mv .ztaccess.bak zentaostory/www/.ztaccess
 	zip -r -9 ZenTaoStory.$(VERSION).zip zentaostory
 	rm -fr storyext
 	rm -fr zentaostory
@@ -60,6 +62,8 @@ ztask:
 	cp -fr taskext/module/* zentaotask/module/
 	find zentaotask/ -name ext |xargs chmod -R 777
 	echo zentaotask > zentaotask/.flow
+	sed -e 's/zentao/task/g' zentaotask/www/.ztaccess > .ztaccess.bak
+	mv .ztaccess.bak zentaotask/www/.ztaccess
 	zip -r -9 ZenTaoTask.$(VERSION).zip zentaotask
 	rm -fr taskext
 	rm -fr zentaotask
@@ -69,6 +73,8 @@ ztest:
 	cp -fr testext/module/* zentaotest/module/
 	find zentaotest/ -name ext |xargs chmod -R 777
 	echo zentaotest > zentaotest/.flow
+	sed -e 's/zentao/test/g' zentaotest/www/.ztaccess > .ztaccess.bak
+	mv .ztaccess.bak zentaotest/www/.ztaccess
 	zip -r -9 ZenTaoTest.$(VERSION).zip zentaotest
 	rm -fr testext
 	rm -fr zentaotest
