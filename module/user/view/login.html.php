@@ -26,13 +26,18 @@ include '../../common/view/colorbox.html.php';
       <td class='rowhead' valign='top'>Language:</td>  
       <td><?php echo html::select('lang', $config->langs, $this->app->getClientLang(), 'class=select-2 onchange=selectLang(this.value)');?></td>
     </tr>
-    <tr><td></td><td id='keeplogin'><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td></tr>
+    <tr>
+      <td></td>
+      <td id='keeplogin'>
+      <?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?>
+      <?php commonModel::printQRCodeLink('white');?>
+      </td>
+    </tr>
     <tr>
       <td colspan='2' class='a-center'>
       <?php 
       echo html::submitButton($lang->login);
       if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
-      commonModel::printQRCodeLink('white');
       echo html::hidden('referer', $referer);
       ?>
       </td>
