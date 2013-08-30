@@ -83,7 +83,6 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('4.0'));
             case '4_0_1':  
                 $this->execSQL($this->getUpgradeFile('4.0.1'));
-                $this->processFlow();
                 $this->addPriv4_0_1();
             case '4_1':
                 $this->execSQL($this->getUpgradeFile('4.1'));
@@ -625,29 +624,6 @@ class upgradeModel extends model
                 self::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
             }
         }
-    }
-
-    /**
-     * Process flow.
-     * 
-     * @access public
-     * @return void
-     */
-    public function processFlow()
-    {
-        /* First delete all flow records. */
-        $this->setting->deleteItems('owner=system&module=common&section=global&key=flow');
-
-        /* Search the extension table to check zentaotest, zentaotask, zentaostory exists or not. */
-        $flow = 'full';
-        $extension = $this->dao->select('code')->from(TABLE_EXTENSION)
-            ->where('code')->in('zentaotest,zentaotask,zentaostory')
-            ->andWhere('status')->eq('installed')
-            ->fetch('code');
-        if($extension) $flow = 'only' . ucfirst(str_replace('zentao', '', $extension));
-
-        /* Update database again. */
-        $this->setting->setItem('system.common.global.flow', $flow, 0);
     }
 
     /**
