@@ -46,5 +46,5 @@ $lang->misc->zentao->service['install']    = '禅道安装服务';
 $lang->misc->zentao->service['fixissue']   = '禅道问题解决';
 $lang->misc->zentao->service['servicemore']= '更多服务...';
 
-$lang->misc->noGDLib   = "找不到GD库，请用手机浏览器直接访问：%s";
+$lang->misc->noGDLib   = "请用手机浏览器直接访问：%s";
 $lang->misc->copyright = "版权所有 &copy;2009-2013 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a>";
