@@ -86,7 +86,7 @@
     <td class="side">
       <fieldset>
         <legend><?php echo $lang->build->basicInfo?></legend>
-        <table class='table-1 a-left'>
+        <table class='table-1 a-left fixed'>
           <tr>
             <th width='25%' class='a-right'><?php echo $lang->build->product;?></th>
             <td><?php echo $build->productName;?></td>

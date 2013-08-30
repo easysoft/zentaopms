@@ -35,8 +35,8 @@
         <?php
         if($task->status == 'wait' or $task->status == 'doing')
         {
-            common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', '', true);
-            common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', '', 'hiddenwin');
+            common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', 'showinonlybody', true);
+            common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', '', 'hiddenwin', 'showinonlybody');
         }
         ?>
       </td>
