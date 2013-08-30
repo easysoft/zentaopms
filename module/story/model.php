@@ -582,7 +582,7 @@ class storyModel extends model
         foreach($storyIDList as $storyID)
         {
             $oldStory = $this->getById($storyID);
-            if(!$oldStory->status == 'closed') continue;
+            if($oldStory->status == 'closed') continue;
 
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
