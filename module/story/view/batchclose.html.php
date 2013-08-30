@@ -44,15 +44,16 @@
         <?php echo html::input("childStoriesIDList[$storyID]", '', "class=w-30px placeholder='{$lang->idAB}'");?>
         </div>
       </td>
+      <td><?php echo html::input("comments[$storyID]", '', "class='area-1'");?></td>
       <?php else:?>  
       <td>
         <div class='f-left'>
           <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, $stories[$storyID]->closedReason, 'class="w-70px" disabled="disabled"');?>
         </div>
       </td>
+      <td><?php echo html::input("comments[$storyID]", '', "class='area-1' disabled='disabled'");?></td>
       <?php endif;?>
 
-      <td><?php echo html::input("comments[$storyID]", '', "class='area-1'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
