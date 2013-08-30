@@ -60,7 +60,7 @@ class custom extends control
         $this->view->field       = $field;
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
-        $this->view->canAdd      = strpos($this->config->custom->$module->canAdd, $field) !== false;
+        $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
 
         $this->display();
     }

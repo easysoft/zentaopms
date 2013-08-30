@@ -35,24 +35,23 @@ EOT;
 <div id='featurebar'>
   <div class='f-left'>
   <?php
-  echo "<span id='storyTab'>";    common::printLink('custom', 'set', "module=story",    $lang->custom->story);    echo '</span>';
-  echo "<span id='taskTab'>";     common::printLink('custom', 'set', "module=task",     $lang->custom->task);     echo '</span>';
-  echo "<span id='bugTab'>";      common::printLink('custom', 'set', "module=bug",      $lang->custom->bug);      echo '</span>';
-  echo "<span id='testcaseTab'>"; common::printLink('custom', 'set', "module=testcase", $lang->custom->testcase); echo '</span>';
-  echo "<span id='testtaskTab'>"; common::printLink('custom', 'set', "module=testtask", $lang->custom->testtask); echo '</span>';
-  echo "<span id='todoTab'>";     common::printLink('custom', 'set', "module=todo",     $lang->custom->todo);     echo '</span>' ;
-  echo "<span id='userTab'>";     common::printLink('custom', 'set', "module=user",     $lang->custom->user);     echo '</span>';
+  foreach($lang->custom->object as $object => $name)
+  {
+      echo "<span id='{$object}Tab'>"; 
+      common::printLink('custom', 'set', "module=$object",  $name); 
+      echo '</span>';
+  }
   ?>
   </div>
 </div>
 <table class='cont-lt2'>
   <tr valign='top'>
     <td class='side'>
-      <div class='box-title'><?php echo $lang->custom->$module?></div>
+      <div class='box-title'><?php echo $lang->custom->object[$module]?></div>
       <div class='box-content'>
         <ul class='tree'>
         <?php 
-          foreach($config->custom->{$module}->fields as $key => $value)
+          foreach($lang->custom->{$module}->fields as $key => $value)
           {
               echo "<li><span id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</span></li>";
           }
@@ -64,7 +63,7 @@ EOT;
     <td>
       <form method='post'>
         <table class='table-1'>
-          <caption><?echo $lang->custom->$module . ' >> ' . $config->custom->$module->fields[$field]?></caption>
+          <caption><?echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></caption>
           <tr>
             <th class='w-100px'><?php echo $lang->custom->key;?></th>
             <th><?php echo $lang->custom->value;?></th>
