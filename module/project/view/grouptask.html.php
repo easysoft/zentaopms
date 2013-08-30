@@ -13,19 +13,20 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treetable.html.php';?>
 <?php include './taskheader.html.php';?>
-<table class='table-1' id='treetable'>
+<table class='table-1 fixed' id='treetable'>
   <tr class='colhead'>
-    <th></th>
+    <th class='w-120px'></th>
     <th><?php echo $lang->task->name;?></th>
     <th class='w-pri'> <?php echo $lang->priAB;?></th>
     <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
     <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
-    <th><?php echo $lang->task->estimateAB;?></th>
-    <th><?php echo $lang->task->consumedAB;?></th>
-    <th><?php echo $lang->task->leftAB;?></th>
-    <th><?php echo $lang->typeAB;?></th>
-    <th><?php echo $lang->task->deadlineAB;?></th>
-    <th colspan='2' class='a-left'><?php echo $lang->task->status;?></th>
+    <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
+    <th class='w-50px'><?php echo $lang->task->consumedAB;?></th>
+    <th class='w-50px'><?php echo $lang->task->leftAB;?></th>
+    <th class='w-50px'><?php echo $lang->typeAB;?></th>
+    <th class='w-80px'><?php echo $lang->task->deadlineAB;?></th>
+    <th class='w-80px'><?php echo $lang->task->status;?></th>
+    <th class='w-50px'><?php echo $lang->actions;?></th>
   </tr>
   <?php  
     $taskSum       = 0;
