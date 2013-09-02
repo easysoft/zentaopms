@@ -110,6 +110,7 @@ echo "0      1    *   *     *     $basePath/dailyreminder.sh   # dailyreminder."
 echo "1      1    *   *     *     $basePath/backup.sh          # backup database and file." >> $basePath/cron/sys.cron
 echo "1      23   *   *     *     $basePath/computeburn.sh     # compute burndown chart."   >> $basePath/cron/sys.cron
 echo "1-59/2 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron
+echo "1-59/2 *    *   *     *     $basePath/syncgit.sh         # sync git"                  >> $basePath/cron/sys.cron
 cron="$phpcli $basePath/php/crond.php"
 echo $cron > $basePath/cron.sh
 echo "cron.sh ok"

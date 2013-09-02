@@ -10,12 +10,12 @@
  *
  * 例子：
  * $config->git->client = '/usr/bin/git';                       // c:\git\git.exe
- * $config->git->repos['pms']['path'] = '/home/user/repo/pms';      // c:\repo\pms
+ * $config->git->repos['pms']['path'] = '/home/user/repo/pms';  // c:\repo\pms
  *
  */
 $config->git = new stdClass();
 $config->git->encodings = 'utf-8, gbk';  
-$config->git->client    = '/usr/bin/git';
+$config->git->client    = '';
 
 $i = 1;
 $config->git->repos[$i]['path'] = '';

@@ -95,7 +95,8 @@ echo #min   hour day month week  command. >> %sysCron%
 echo 0      1    *   *     *     %baseDir%dailyreminder.bat # daily reminder.           >> %sysCron%
 echo 1      1    *   *     *     %baseDir%backup.bat        # backup database and file. >> %sysCron%
 echo 1      23   *   *     *     %baseDir%computeburn.bat   # compute burndown chart.   >> %sysCron%
-echo 1-59/2 *    *   *     *     %baseDir%svnrun.bat        # sync subversion.          >> %sysCron%
+echo 1-59/2 *    *   *     *     %baseDir%syncsvn.bat       # sync subversion.          >> %sysCron%
+echo 1-59/2 *    *   *     *     %baseDir%syncgit.bat       # sync git.                 >> %sysCron%
 
 :: return 0 when success.
 exit /b 0
