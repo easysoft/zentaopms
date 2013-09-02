@@ -36,8 +36,8 @@ function loadAll(productID)
 
     if(!changeProductConfirmed)
     {
-      firstChoice = confirm(confirmChangeProduct);
-      changeProductConfirmed = true;    // Only notice the user one time.
+        firstChoice = confirm(confirmChangeProduct);
+        changeProductConfirmed = true;    // Only notice the user one time.
     }
     if(changeProductConfirmed || firstChoice)
     {
@@ -221,7 +221,7 @@ function notice()
     {
         if($('#project').val() == '')
         {
-            $('#buildBox').append('<a href="' + createLink('release', 'create','productID=' + $('#product').val()) + '" target="_blank">' + createRelease + '</a>');
+            $('#buildBox').append('<a href="' + createLink('release', 'create','productID=' + $('#product').val()) + '" target="_blank">' + createRelease + ' </a>');
             $('#buildBox').append('<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>');
         }
         else

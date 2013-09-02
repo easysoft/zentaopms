@@ -67,12 +67,21 @@ echo checkdb.bat ok
 
 :: create syncsvn.bat
 if %requestType% == 'PATH_INFO' (
-  SET svnrun= %phpcli% %baseDir%ztcli "%pmsRoot%/svn-run"
+  SET syncsvn= %phpcli% %baseDir%ztcli "%pmsRoot%/svn-run"
 )else (
-  SET svnrun= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=svn&f=run"
+  SET syncsvn= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=svn&f=run"
 )
-echo %svnrun% > %baseDir%svnrun.bat
-echo svnrun.bat ok
+echo %syncsvn% > %baseDir%syncsvn.bat
+echo syncsvn.bat ok
+
+:: create syncgit.bat
+if %requestType% == 'PATH_INFO' (
+  SET syncgit= %phpcli% %baseDir%ztcli "%pmsRoot%/git-run"
+)else (
+  SET syncgit= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=git&f=run"
+)
+echo %syncgit% > %baseDir%syncgit.bat
+echo syncgit.bat ok
 
 :: create crond.bat
 SET cron= %phpcli% %baseDir%php\crond.php
@@ -86,7 +95,8 @@ echo #min   hour day month week  command. >> %sysCron%
 echo 0      1    *   *     *     %baseDir%dailyreminder.bat # daily reminder.           >> %sysCron%
 echo 1      1    *   *     *     %baseDir%backup.bat        # backup database and file. >> %sysCron%
 echo 1      23   *   *     *     %baseDir%computeburn.bat   # compute burndown chart.   >> %sysCron%
-echo 1-59/2 *    *   *     *     %baseDir%svnrun.bat        # sync subversion.          >> %sysCron%
+echo 1-59/2 *    *   *     *     %baseDir%syncsvn.bat       # sync subversion.          >> %sysCron%
+echo 1-59/2 *    *   *     *     %baseDir%syncgit.bat       # sync git.                 >> %sysCron%
 
 :: return 0 when success.
 exit /b 0
