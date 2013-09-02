@@ -55,12 +55,3 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption  = '關聯社區賬號';
 $lang->admin->bind->action   = '關聯';
 $lang->admin->bind->success  = "關聯賬戶成功";
-
-$lang->admin->selectFlow = '您計劃如何使用禪道？';
-
-$lang->admin->flowList['full']        = '所有功能（包括產品、項目、需求、計劃、發佈、任務、Bug、用例、測試任務和文檔等功能。）';
-$lang->admin->flowList['zentaotest']  = '僅測試管理（包括產品、版本、Bug、用例、測試任務和文檔管理等功能。)';
-$lang->admin->flowList['zentaotask']  = '僅任務管理（包括項目、任務和文檔管理。)';
-$lang->admin->flowList['zentaostory'] = '僅需求管理（包括產品、需求、計劃、發佈和文檔管理等功能。）';
-
-$lang->admin->flowNotice = "<span class='red'>註：如果您使用的不是所有功能，後續可以到“管理->插件”中，卸載相應的插件，即可重新使用禪道所有功能。</span>";
