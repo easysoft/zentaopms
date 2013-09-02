@@ -91,6 +91,15 @@ fi
 echo $syncsvn > $basePath/syncsvn.sh
 echo "syncsvn.sh ok"
 
+# syncgit.
+if [ $requestType == 'PATH_INFO' ]; then
+  syncgit="$phpcli $basePath/ztcli '$pmsRoot/git-run'";
+else
+  syncgit="$phpcli $basePath/ztcli '$pmsRoot/?m=git&f=run'";
+fi
+echo $syncgit > $basePath/syncgit.sh
+echo "syncgit.sh ok"
+
 # cron
 if [ ! -d "$basePath/cron" ]; then 
   mkdir $basePath/cron
