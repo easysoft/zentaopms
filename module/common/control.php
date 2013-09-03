@@ -22,6 +22,7 @@ class common extends control
         parent::__construct();
         $this->common->startSession();
         $this->common->sendHeader();
+        $this->common->setCompany();
         $this->common->setUser();
         $this->common->loadConfigFromDB();
         $this->common->loadCustomFromDB();
