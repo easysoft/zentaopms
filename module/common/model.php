@@ -37,31 +37,6 @@ class commonModel extends model
     }
 
     /**
-     * Set the commpany.
-     *
-     * First, search company by the http host. If not found, search by the default domain. Last, use the first as the default. 
-     * After get the company, save it to session.
-     * @access public
-     * @return void
-     */
-    public function setCompany()
-    {        
-        $httpHost = $this->server->http_host;
-
-        if($this->session->company)
-        {
-            $this->app->company = $this->session->company;
-        }
-        else
-        {
-            $company = $this->loadModel('company')->getFirst();
-            if(!$company) $this->app->triggerError(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
-            $this->session->set('company', $company);
-            $this->app->company  = $company;
-        }
-    }
-
-    /**
      * Set the user info.
      * 
      * @access public
