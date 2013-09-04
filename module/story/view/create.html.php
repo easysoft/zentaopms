@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>

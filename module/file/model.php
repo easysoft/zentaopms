@@ -249,8 +249,10 @@ class fileModel extends model
      */
     public function pasteImage($data)
     {
+        $data = str_replace('\"', '"', $data);
+
         ini_set('pcre.backtrack_limit', strlen($data));
-        preg_match_all('/<img src=\\\"(data:image\/(\S+);base64,(\S+))\\\" .+ \/>/U', $data, $out);
+        preg_match_all('/<img src="(data:image\/(\S+);base64,(\S+))" .+ \/>/U', $data, $out);
         foreach($out[3] as $key => $base64Image)
         {
             $imageData = base64_decode($base64Image);
