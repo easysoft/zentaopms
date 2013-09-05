@@ -302,8 +302,7 @@ class file extends control
     {
         if($_POST)
         {
-            $data = $this->file->pasteImage($this->post->editor);
-            echo str_replace('\"', '"', $data);
+            echo $this->file->pasteImage($this->post->editor);
         }
     }
 }

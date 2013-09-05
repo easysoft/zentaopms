@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $lang->story->change;?></caption>
