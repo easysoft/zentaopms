@@ -531,14 +531,14 @@ function setImageSize(image, maxWidth)
 }
 
 /**
- * Set the subversion link.
+ * Set the repo link.
  * 
  * @access public
  * @return void
  */
-function setSubversionLink()
+function setRepoLink()
 {
-    if($('.svnlink').size()) $('.svnlink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+    if($('.repolink').size()) $('.repolink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
 /* Set the colorbox of export. */
@@ -917,7 +917,7 @@ $(document).ready(function()
     setAbout();
     setQRCode();
     setExport();
-    setSubversionLink();
+    setRepoLink();
 
     autoCheck();
     toggleSearch();
