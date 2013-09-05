@@ -257,8 +257,12 @@ class webappModel extends model
 
         $data = fixer::input('post')->remove('files,customWidth,customHeight')->get();
 
-        $data->url = trim($data->url);
-        if(strpos($data->url, 'http://') !== 0) $data->url = 'http://' . $data->url;
+        if(isset($data->url))
+        {
+            $data->url = trim($data->url);
+            if(strpos($data->url, 'http://') !== 0) $data->url = 'http://' . $data->url;
+        }
+
         if($data->size == 'custom') $data->size = (float)$this->post->customWidth . 'x' . (float)$this->post->customHeight;
 
         $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->check('url', 'unique', "id != $webappID")->exec();
