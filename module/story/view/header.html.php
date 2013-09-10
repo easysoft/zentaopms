@@ -1,5 +1,4 @@
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
 function loadProduct(productID)

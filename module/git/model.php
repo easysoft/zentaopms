@@ -556,8 +556,8 @@ class gitModel extends model
             foreach($actionFiles as $file)
             {
                 $param = array('url' => helper::safe64Encode($repoRoot . $file), 'revision' => $log->revision);
-                $catLink  = trim(html::a(helper::createLink('git', 'cat',  $param, 'html'), 'view', '', "class='gitlink'"));
-                $diffLink = trim(html::a(helper::createLink('git', 'diff', $param, 'html'), 'diff', '', "class='gitlink'"));
+                $catLink  = trim(html::a(helper::createLink('git', 'cat',  $param, 'html'), 'view', '', "class='repolink'"));
+                $diffLink = trim(html::a(helper::createLink('git', 'diff', $param, 'html'), 'diff', '', "class='repolink'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }

@@ -694,7 +694,7 @@ class router
         elseif(isset($_COOKIE['lang']))
         {
             $this->clientLang = $_COOKIE['lang'];
-        }    
+        }
         elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
         {
             if(strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ',') === false)

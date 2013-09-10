@@ -549,8 +549,8 @@ class svnModel extends model
             foreach($actionFiles as $file)
             {
                 $param = array('url' => helper::safe64Encode($repoRoot . $file), 'revision' => $log->revision);
-                $catLink  = trim(html::a(helper::createLink('svn', 'cat',  $param, 'html'), 'view', '', "class='svnlink'"));
-                $diffLink = trim(html::a(helper::createLink('svn', 'diff', $param, 'html'), 'diff', '', "class='svnlink'"));
+                $catLink  = trim(html::a(helper::createLink('svn', 'cat',  $param, 'html'), 'view', '', "class='repolink'"));
+                $diffLink = trim(html::a(helper::createLink('svn', 'diff', $param, 'html'), 'diff', '', "class='repolink'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
