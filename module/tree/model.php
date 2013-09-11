@@ -364,8 +364,9 @@ class treeModel extends model
                 $treeMenu[$module->parent] .= "</li>\n";
             }
 
-            $lastMenu = "<ul class='tree'>" . @$treeMenu[0] . "</ul>\n";
-            $menu .= $lastMenu . '</li>';
+            $tree     = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            $lastMenu = "<ul class='tree'>" . $tree . "</ul>\n";
+            $menu    .= $lastMenu . '</li>';
         }
         return $menu;
     }
