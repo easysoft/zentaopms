@@ -348,7 +348,7 @@ class commonModel extends model
             if(common::hasPriv($module, $method))
             {
                 $link  = helper::createLink($module, $method, $vars);
-                echo "<li $active><nobr><a href='$link' $active id='menu$menuKey'>$menuLabel</a></nobr></li>\n";
+                echo "<li $active><a href='$link' $active id='menu$menuKey'>$menuLabel</a></li>\n";
             }
         }
 
@@ -384,7 +384,7 @@ class commonModel extends model
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
         echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
-		echo "<input type='button' id='objectSwitcher' onclick='shortcut()' />";
+		echo "<a href='javascript:shortcut();return false;' id='objectSwitcher' class='icon-circle-arrow-right'></a>";
         echo "</li>";
         echo "</ul>\n";
     }

@@ -81,7 +81,7 @@ $lang->common->common = '公有模組';
 
 /* 主導航菜單。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盤|my|index';
+$lang->menu->my       = '<i class="icon-home"></i> 我的地盤|my|index';
 $lang->menu->product  = '產品|product|index';
 $lang->menu->project  = '項目|project|index';
 $lang->menu->qa       = '測試|qa|index';

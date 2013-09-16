@@ -271,7 +271,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 /* Header. */
-#header{padding:2px 15px 0 15px; background:#003366; border-bottom:1px solid #e4e4e4;}
+#header{padding:2px 20px 0 20px; background:#003366; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
 #topbar, #topbar a {color:#ACCADF}
@@ -289,19 +289,18 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Main menu. */
 #mainmenu ul { height:30px; line-height:30px}
-#mainmenu li {padding:0 15px; border-right:3px solid #002242; color:white; font-size:14px; background:#1A4F85}
-#mainmenu a  {color:#E5E5E5; font-weight:normal;}
-#mainmenu .active   {background-color:#e5e5e5;}
-#mainmenu .active a {color:#33a52e; font-weight:bold;}
-#mainmenu #mainbg{padding-left:16px; padding-bottom:2px; background:url(images/main/zt-icons.png); background-position:-182px -443px;}
-#mainmenu .active #mainbg{background-position:-122px -443px;}
+#mainmenu li {margin-right: 3px;font-size:14px;}
+#mainmenu li>a  {display: inline-block;white-space:nowrap;padding:1px 15px; color:#E5E5E5; font-weight:normal; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
+#mainmenu li>a:hover{background-color: #2e6dad;color: #fff;-webkit-box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
+#mainmenu li.active>a{background-color:#e5e5e5;color:#21841d; font-weight:bold;}
 
-#mainmenu #searchbox{float:right; border:none; background:#E5E5E5 url(images/main/search_bg.png) repeat-x bottom; height:100%;}
+#mainmenu #searchbox{float:right; background-color: #e5e5e5;padding: 1px 5px;margin: 0;-moz-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); -webkit-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1);}
 #mainmenu .button-s{border:none; padding:2px}
 
 #searchType  {border:1px solid #ccc; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
 #searchQuery {height:16px; border:1px solid #ccc; background: #E5E5E5; color:gray; font-size:12px}
-#searchbox #objectSwitcher{ border:none; width:16px; height:18px; background:url(images/main/zt-icons.png); background-position:-162px -443px;}
+#searchQuery:focus,#searchType:focus{color: #333;background: #fff;}
+#mainmenu li>a#objectSwitcher{background: #e5e5e5;color: gray;padding: 0 3px;-webkit-box-shadow: none;box-shadow:none;}
 
 /* Module menu. */
 #modulemenu    {margin-bottom:0px; font-size:14px; border:2px solid #e5e5e5;}

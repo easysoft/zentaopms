@@ -81,7 +81,7 @@ $lang->common->common = 'Common module';
 
 /* The main menu. */
 $lang->menu = new stdclass();
-$lang->menu->my       = '<span id="mainbg">&nbsp;</span>Dashboard|my|index';
+$lang->menu->my       = '<i class="icon-home"></i> Dashboard|my|index';
 $lang->menu->product  = 'Product|product|index';
 $lang->menu->project  = 'Project|project|index';
 $lang->menu->qa       = 'Test|qa|index';

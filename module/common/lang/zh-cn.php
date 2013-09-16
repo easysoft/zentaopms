@@ -81,7 +81,7 @@ $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盘|my|index';
+$lang->menu->my       = '<i class="icon-home"></i> 我的地盘|my|index';
 $lang->menu->product  = '产品|product|index';
 $lang->menu->project  = '项目|project|index';
 $lang->menu->qa       = '测试|qa|index';
