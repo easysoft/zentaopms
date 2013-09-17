@@ -6,17 +6,15 @@
 <?php if($onlybody != 'yes'):?>
 </div>
 <div id='footer'>
-  <table class='cont' >
-    <tr>
-      <td class='w-p50 'id='crumbs'><?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?></td>
-      <td class='a-right' id='poweredby'>
-        <span>Powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
-        <?php echo $lang->proVersion;?>
-        <?php commonModel::printNotifyLink();?>
-        <?php commonModel::printQRCodeLink();?>
-      </td>
-    </tr>
-  </table>
+  <div id="crumbs">
+    <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
+  </div>
+  <div id="poweredby">
+    <span>Powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
+    <?php echo $lang->proVersion;?>
+    <?php commonModel::printNotifyLink();?>
+    <?php commonModel::printQRCodeLink();?>
+  </div>
 </div>
 <?php endif;?>
 <?php 
