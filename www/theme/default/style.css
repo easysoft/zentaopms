@@ -339,7 +339,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
 /* Feature bar. */
-#featurebar                {height:34px; line-height:34px;background-color: #edf3fe; padding:8px 10px; border-bottom: 1px solid #e7edf7;margin: -20px -20px 20px -20px;}
+#featurebar                {height:34px; line-height:34px;background-color: #f8fafe; padding:8px 10px; border-bottom: 1px solid #e7edf7;margin: -20px -20px 20px -20px;}
 #featurebar span           {font-size:14px;}
 #featurebar a              {text-decoration:none;  display: inline-block;padding: 0px 7px; line-height: 34px;height: 34px; font-size:14px;-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
 #featurebar a:hover        {color:#000;background-color: #e5e5e5;}
@@ -351,6 +351,10 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #featurebar .active input   {border:2px solid #009900;}
 
 #featurebar .dp-choose-date {padding:0px;}
+
+/* Querybox */
+#querybox{margin: -20px -20px 20px -20px;}
+#querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 
 /* Tree slider. */
 .treeSlider
@@ -473,11 +477,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-goback {padding:2px 8px; background:url(images/main/zt-icons.png) 0px    -42px;}
 .icon-pre    {padding:2px 8px; background:url(images/main/zt-icons.png) -20px  -42px;}
 .icon-next   {padding:2px 8px; background:url(images/main/zt-icons.png) -40px  -42px;}
-#searchicon  {padding:2px 8px; background:url(images/main/zt-icons.png) -102px -80px; margin-left:10px;}
-#searchmore  {padding:2px 8px; background:url(images/main/zt-icons.png) -62px  -80px no-repeat; margin-right:10px;}
-#searchlite  {padding:2px 8px; background:url(images/main/zt-icons.png) -82px  -80px no-repeat; margin-right:10px}
 .icon-add    {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -3px no-repeat;}
-.icon-delete {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -100px  -3px no-repeat;}
 .icon-add:hover, .icon-delete:hover {cursor:pointer}
 .icon-allProducts, .icon-allProjects {padding:2px 10px 2px 8px; background:url(images/main/zt-icons.png) 0px  -161px;}
 
