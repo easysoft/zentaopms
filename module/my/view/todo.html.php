@@ -42,13 +42,13 @@
     </div>
     <div class='f-right'>
       <?php 
-      common::printIcon('todo', 'export', "account=$account&orderBy=id_desc", '', 'button', 'icon-signout');
-      common::printIcon('todo', 'batchCreate', '', '', 'button', 'icon-plus-sign');
-      common::printIcon('todo', 'create', "date=" . str_replace('-', '', $date), '', 'button', 'icon-plus');
+      common::printIcon('todo', 'export', "account=$account&orderBy=id_desc");
+      common::printIcon('todo', 'batchCreate');
+      common::printIcon('todo', 'create', "date=" . str_replace('-', '', $date));
       ?>
     </div>
   </div>
-  <table class='data-table tablesorter colored' id='todoList'>
+  <table class='table-1 tablesorter colored' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>
@@ -81,11 +81,11 @@
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
       <td class='a-right'>
         <?php 
-        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'icon-ok-circle icon-large', 'hiddenwin');
-        common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', 'icon-edit icon-large', '', 'iframe', true);
+        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
+        common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', '', '', 'iframe', true);
 
         $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");
-        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-trash icon-large"></i>', '', "class='link-icon' title='{$lang->todo->delete}'");
+        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->todo->delete}'");
         ?>
       </td>
     </tr>

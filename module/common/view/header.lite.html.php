@@ -25,8 +25,6 @@ $clientTheme  = $this->app->getClientTheme();
       css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
       echo '<![endif]-->';
 
-      css::import($defaultTheme . 'button.css', $config->version);
-
       css::import($defaultTheme . 'yui.css',   $config->version);
       css::import($defaultTheme . 'style.css', $config->version);
       css::import($langTheme, $config->version);

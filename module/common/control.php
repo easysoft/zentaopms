@@ -321,7 +321,7 @@ class common extends control
             }
             else
             {
-                echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon' title='$title'", false);
+                echo html::a($link, "<i class='$class'></i><i class='icon-bolt'></i>", $target, "class='link-icon' title='$title'", false);
             }
         }
         else

@@ -162,12 +162,12 @@ js::set('customed', $customed);
             <td class='a-right'>
               <?php
               $params = "bugID=$bug->id";
-              common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'icon-search icon-large', '', 'iframe', true);
-              common::printIcon('bug', 'assignTo',   $params, '', 'list', 'icon-hand-right icon-large', '', 'iframe', true);
-              common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'icon-ok-circle icon-large', '', 'iframe', true);
-              common::printIcon('bug', 'close',      $params, $bug, 'list', 'icon-off icon-large', '', 'iframe', true);
-              common::printIcon('bug', 'edit',       $params, '', 'list', 'icon-edit icon-large');
-              common::printIcon('bug', 'create',     "product=$bug->product&extra=bugID=$bug->id", $bug, 'list', 'icon-copy icon-large');
+              common::printIcon('bug', 'confirmBug', $params, $bug, 'list', '', '', 'iframe', true);
+              common::printIcon('bug', 'assignTo',   $params, '',   'list', '', '', 'iframe', true);
+              common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
+              common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+              common::printIcon('bug', 'edit',       $params, $bug, 'list');
+              common::printIcon('bug', 'create',     "product=$bug->product&extra=bugID=$bug->id", $bug, 'list', 'copy');
               ?>
             </td>
             <?php endif;?>
