@@ -1,7 +1,7 @@
 <div class='block linkbox1' id='productbox'>
 <?php if(empty($productStats)):?>
 <table class='table-1 a-center' height='138px'>
-  <caption><span class='icon-allProducts'>&nbsp;</span><?php echo $lang->my->home->products;?></caption>
+  <caption><i class="icon icon-th icon-large"></i>&nbsp; <?php echo $lang->my->home->products;?></caption>
   <tr>
     <td valign='middle'>
       <table class='a-left bd-none' align='center'>
@@ -16,7 +16,7 @@
 <?php else:?>
   <table class='table-1 colored fixed'>
     <tr class='colhead'>
-      <th class='w-150px'><div class='f-left'><span class='icon-allProjects'>&nbsp;</span><?php echo $lang->product->name;?></div></th>
+      <th class='w-150px'><div class='f-left'><i class="icon icon-th icon-large"></i>&nbsp; <?php echo $lang->product->name;?></div></th>
       <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
       <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
       <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>

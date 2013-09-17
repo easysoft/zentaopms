@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
+$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
 $lang->colon        = '::';
 $lang->comma        = '，';
 $lang->dot          = '。';
@@ -136,7 +136,7 @@ $lang->index->menu->project = '浏览项目|project|browse';
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
+$lang->my->menu->account        = '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>';
 $lang->my->menu->index          = '首页|my|index';
 $lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
@@ -165,8 +165,8 @@ $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s
 $lang->product->menu->view    = array('link' => '维护|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '项目|product|project|status=all&productID=%s';
-$lang->product->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加产品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加产品|product|create', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<i class="icon-th"></i>&nbsp;所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -191,8 +191,8 @@ $lang->project->menu->team      = array('link' => '团队|project|team|projectID
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '维护|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>添加项目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<i class="icon-plus"></i>&nbsp;添加项目|project|create', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;所有项目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -228,7 +228,7 @@ $lang->doc->menu->browse  = array('link' => '文档|doc|browse|libID=%s', 'alias
 $lang->doc->menu->edit    = '编辑|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '分类|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加文档库|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
 
 /* 统计视图菜单设置。*/
 $lang->report = new stdclass();
@@ -255,9 +255,9 @@ $lang->company->menu->dept         = array('link' => '部门|dept|browse', 'subM
 $lang->company->menu->browseGroup  = array('link' => '权限|group|browse', 'subModule' => 'group');
 $lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = '动态|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>添加分组|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<span class="icon-add">&nbsp;</span>添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<i class="icon-plus"></i>&nbsp;添加分组|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
