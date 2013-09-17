@@ -31,13 +31,12 @@
   <div class='f-right'>
     <?php 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
-    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
-    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");
-    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); 
+    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'icon-bar-chart');
+    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'button', 'icon-plus-sign');
+    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID", '', 'button', 'icon-plus'); 
     ?>
   </div>
 </div>

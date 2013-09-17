@@ -31,15 +31,14 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
   </div>
   <div class='f-right'>
     <?php 
-    common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export');
+    common::printIcon('testcase', 'import', "productID=$productID", '', 'button', 'icon-signin');
 
-    echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
-    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '<span class="link-button dropButton">'; 
+    echo html::a("#", "<i class='icon-signout'></i>" . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
-    common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");
-    common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID");
+    common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'button', 'icon-plus-sign');
+    common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID", '', 'button', 'icon-plus');
     ?>
   </div>
 </div>

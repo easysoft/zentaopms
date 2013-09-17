@@ -21,20 +21,18 @@
     <?php 
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
+    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'icon-bar-chart');
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
-    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='importAction' class='icon-green-task-import' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
-    echo html::a("#", $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
+    echo html::a("#", "<i class='icon-signin'></i> " . $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
     echo '</span>';
 
-    common::printIcon('task', 'batchCreate', "projectID=$projectID");
-    common::printIcon('task', 'create', "project=$projectID");
+    common::printIcon('task', 'batchCreate', "projectID=$projectID", '', 'button', 'icon-plus-sign');
+    common::printIcon('task', 'create', "project=$projectID", '', 'button', 'icon-plus');
     ?>
   </div>
 </div>

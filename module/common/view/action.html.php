@@ -138,7 +138,7 @@ $(function(){
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
         <?php if($canEditComment):?>
-        <span class='link-button f-right comment<?php echo $action->id;?>'><?php echo html::a('#lastCommentBox', '&nbsp;', '', "class='icon-green-common-edit' onclick='toggleComment($action->id)'")?></span>
+        <span class='link-button f-right comment<?php echo $action->id;?>'><?php echo html::a('#lastCommentBox', '<i class="icon-edit-sign icon-large"></i>', '', "onclick='toggleComment($action->id)'")?></span>
         <?php endif;?>
         <?php 
         if($action->comment) 
