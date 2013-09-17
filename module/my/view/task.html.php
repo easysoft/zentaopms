@@ -25,7 +25,7 @@
   </div>
 </div>
 <form method='post' id='myTaskForm'>
-  <table class='table-1 tablesorter fixed colored' id='tasktable'>
+  <table class='table-1 data-table tablesorter fixed colored' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>
@@ -62,12 +62,12 @@
       <td><?php echo $users[$task->openedBy];?></td>
       <td class='a-right'>
         <?php 
-        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'edit', "taskID=$task->id", '', 'list');
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', 'icon-hand-right icon-large', '', 'iframe', true);
+        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', 'icon-play-circle icon-large', '', 'iframe', true);
+        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'icon-time icon-large', '', 'iframe', true);
+        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list', 'icon-ok-sign icon-large', '', 'iframe', true);
+        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', 'icon-off icon-large', '', 'iframe', true);
+        common::printIcon('task', 'edit', "taskID=$task->id", '', 'list', 'icon-edit icon-large');
         ?>
       </td>
     </tr>

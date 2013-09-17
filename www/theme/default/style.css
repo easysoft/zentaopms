@@ -9,7 +9,8 @@
 * @link        http://www.zentao.net
 */
 /*-----------------------BASE SETTING----------------------------*/
-body     {margin:0; text-align:left; color:#141414;background: #e5e5e5;}
+html{background: #e5e5e5;}
+body     {margin:0; text-align:left; color:#141414;background: #e5e5e5;padding-bottom: 40px;}
 fieldset {border:1px solid #efefef; padding:8px 10px 8px 15px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 del{background:#fcc;}
@@ -177,6 +178,11 @@ table.tablesorter thead tr .header         {background-image: url(./images/table
 table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 table.tablesorter thead tr .headerSortDown {background-image: url(./images/tablesorter/desc.gif); background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 
+/* data table. */
+table.data-table{border: none;width: 100%;}
+table.data-table td:first-child{padding-left: 20px;}
+table.data-table td:last-child{padding-right: 20px;}
+
 /*-----------------------HEIGHT SETTING--------------------------*/
 .h-5px   {height:5px}
 .h-10px  {height:10px}
@@ -342,7 +348,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
 /* Feature bar. */
-#featurebar                {height:34px; line-height:34px;background-color: #f8fafe; padding:8px 10px; border-bottom: 1px solid #e7edf7;margin: 0;}
+#featurebar                {height:34px; line-height:34px;background-color: #f8fafe; padding:8px 10px; border-bottom: 1px solid #e1e1e1;margin: 0;}
 #featurebar span           {font-size:14px;}
 #featurebar a              {text-decoration:none;  display: inline-block;padding: 0px 7px; line-height: 34px;height: 34px; font-size:14px;-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
 #featurebar a:hover        {color:#000;background-color: #e5e5e5;}
@@ -468,6 +474,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------ICONS --------------------*/
 .icon{color: #888;}
+.link-icon{color: #036;display: inline-block;margin-right: 5px;}
+.link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
+.link-icon.disabled,.link-icon.disabled:hover,.link-icon .disabled,.link-icon .disabled:hover{color: #ccc;}
 
 
 /* Common icons. */

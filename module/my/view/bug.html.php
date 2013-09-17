@@ -23,7 +23,7 @@
   </div>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-  <table class='table-1 fixed tablesorter colored' id='bugList'>
+  <table class='table-1 data-table fixed tablesorter colored' id='bugList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>
@@ -56,11 +56,11 @@
       <td class='a-right'>
         <?php
         $params = "bugID=$bug->id";
-        common::printIcon('bug', 'confirmBug', $params, $bug, 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'assignTo',   $params, '', 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'edit',       $params, '', 'list');
+        common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'icon-search icon-large', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   $params, '', 'list', 'icon-hand-right icon-large', '', 'iframe', true);
+        common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'icon-ok-circle icon-large', '', 'iframe', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'list', 'icon-off icon-large', '', 'iframe', true);
+        common::printIcon('bug', 'edit',       $params, '', 'list', 'icon-edit icon-large');
         ?>
       </td>
     </tr>
