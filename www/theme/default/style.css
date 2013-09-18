@@ -30,6 +30,9 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 i.disabled,i.disabled:hover{color: #ccc;}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 6px;}
 
+.icon-green-bug-icon-wrench:before,.icon-gray-bug-icon-wrench:before{content: "\f085";}
+.icon-green-group-managepriv:before,.icon-gray-group-managepriv:before{content: "\f023";}
+.icon-green-group-managemember:before,.icon-gray-group-managemember:before{content: "\f0c0";}
 .icon-webapp-manage:before{content: "\f085";}
 .icon-webapp-obtain:before{content: "\f07a";}
 .icon-webapp-create:before{content: "\f0d0";}
@@ -64,6 +67,7 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-todo-batchCreate:before,.icon-gray-todo-batchCreate:before,
 .icon-green-testcase-batchCreate:before,.icon-gray-testcase-batchCreate:before,
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
+.icon-green-bug-batchCreate:before,.icon-gray-bug-batchCreate:before,
 .icon-green-story-batchCreate:before,.icon-gray-story-batchCreate:before{content: "\f055";}
 .icon-green-common-report:before,.icon-gray-common-report:before{content: "\f080";}
 .icon-green-story-create:before,.icon-gray-story-create:before,
@@ -75,6 +79,7 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-testtask-create:before,.icon-gra-ytesttask-create:before,
 .icon-green-task-create:before,.icon-gray-task-create:before,
 .icon-green-bug-create:before,.icon-gray-bug-create:before,
+.icon-green-group-create:before,.icon-gray-group-create:before,
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
 
 /*-----------------------BUTTONS -----------------------------------*/
@@ -89,6 +94,7 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .btn.disabled,.btn[disabled=disabled] {background: #eeeeee;color: #ccc; border: 1px solid #dfdfdf;text-shadow: 0 1px 0 #fff;}
 .button-s,.button-c{min-width: 80px;}
 .groupButton .button-c,.groupButton .button-s{margin-right: 0}
+.button-d{opacity: 0.6;}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px; background:#e5e5e5;}
@@ -560,8 +566,6 @@ table.data-table td:last-child{padding-right: 20px;}
 
 .icon-green-common-comment {padding:2px 8px; background:url(images/main/zt-icons.png) -20px 0px no-repeat;} 
 
-.icon-green-group-create {padding:2px 8px;  background:url(images/main/zt-icons.png) 0px -202px;}
-
 /* Story icons. */
 .icon-green-story-toStory    {padding:2px 8px; background:url(images/main/zt-icons.png) 0px   -202px;}
 
@@ -593,8 +597,6 @@ table.data-table td:last-child{padding-right: 20px;}
 .severity6 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) -100px -383px; text-indent:-9999px;}
 
 .icon-green-bug-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
-
-#featurebar .f-right .icon-green-bug-batchCreate {padding:2px 8px;  background:url(images/main/zt-icons.png) -20px -320px;} 
 
 .icon-green-bug-activate   {padding:2px 8px;  background:url(images/main/zt-icons.png) -120px -241px;} 
 .icon-gray-bug-activate    {padding:2px 8px;  background:url(images/main/zt-icons.png) -120px -261px;} 

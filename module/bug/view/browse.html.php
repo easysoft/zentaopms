@@ -43,10 +43,10 @@ js::set('customed', $customed);
     echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
-    common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'icon-bar-chart');
+    common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
     common::printIcon('bug', 'customFields', '', '', 'button', 'icon-wrench');
-    common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID", '', 'button', 'icon-plus-sign');
-    common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", '', 'button', 'icon-plus');
+    common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
+    common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
     ?>
   </div>
 </div>
