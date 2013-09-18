@@ -178,6 +178,11 @@ table.tablesorter thead tr .header         {background-image: url(./images/table
 table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 table.tablesorter thead tr .headerSortDown {background-image: url(./images/tablesorter/desc.gif); background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 
+/* data table. */
+table.data-table{border: none;width: 100%;}
+table.data-table td:first-child{padding-left: 20px;}
+table.data-table td:last-child{padding-right: 20px;}
+
 /*-----------------------HEIGHT SETTING--------------------------*/
 .h-5px   {height:5px}
 .h-10px  {height:10px}
@@ -469,7 +474,10 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------ICONS --------------------*/
 .icon{color: #888;}
-
+.icon-arrow  {padding-left:10px; background:url(images/main/zt-icons.png) -102px -443px;}
+.link-icon{color: #036;display: inline-block;margin-right: 5px;}
+.link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
+.link-icon.disabled,.link-icon.disabled:hover,.link-icon .disabled,.link-icon .disabled:hover{color: #ccc;}
 
 /* Common icons. */
 #featurebar .f-right .icon-goback {padding:0px 9px}
@@ -482,7 +490,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-goback {padding:2px 8px; background:url(images/main/zt-icons.png) 0px    -42px;}
 .icon-pre    {padding:2px 8px; background:url(images/main/zt-icons.png) -20px  -42px;}
 .icon-next   {padding:2px 8px; background:url(images/main/zt-icons.png) -40px  -42px;}
+#searchicon  {padding:2px 8px; background:url(images/main/zt-icons.png) -102px -80px; margin-left:10px;}
+/*#searchmore  {padding:2px 8px; background:url(images/main/zt-icons.png) -62px  -80px no-repeat; margin-right:10px;}*/
+/*#searchlite  {padding:2px 8px; background:url(images/main/zt-icons.png) -82px  -80px no-repeat; margin-right:10px}*/
 .icon-add    {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -3px no-repeat;}
+.icon-delete {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -100px  -3px no-repeat;}
 .icon-add:hover, .icon-delete:hover {cursor:pointer}
 .icon-allProducts, .icon-allProjects {padding:2px 10px 2px 8px; background:url(images/main/zt-icons.png) 0px  -161px;}
 
