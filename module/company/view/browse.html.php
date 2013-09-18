@@ -77,7 +77,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             if(strpos($this->app->company->admins, ",{$user->account},") === false) 
             {
                 $deleteURL = $this->createLink('user', 'delete', "userID=$user->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"userList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->user->delete}'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"userList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->user->delete}'");
             }
             if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
             {

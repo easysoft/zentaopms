@@ -43,7 +43,7 @@
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
 
       $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->productplan->delete}'");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->productplan->delete}'");
       ?>
     </td>
   </tr>

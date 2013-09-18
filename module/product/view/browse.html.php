@@ -34,9 +34,9 @@
     echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
-    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'icon-bar-chart');
-    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'button', 'icon-plus-sign');
-    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID", '', 'button', 'icon-plus'); 
+    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
+    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");
+    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); 
     ?>
   </div>
 </div>

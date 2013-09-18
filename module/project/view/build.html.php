@@ -47,7 +47,7 @@
       common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", '', 'list');
       common::printIcon('build', 'edit',   "buildID=$build->id");
       $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->build->delete}'");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->build->delete}'");
       ?>
     </td>
   </tr>
