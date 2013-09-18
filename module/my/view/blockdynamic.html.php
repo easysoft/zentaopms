@@ -1,7 +1,7 @@
 <div class='dynamic'>
 <table class='table-1 colored fixed'>
   <caption>
-    <div class='f-left'><i class="icon icon-quote-right icon-large"></i>&nbsp; <?php echo $lang->my->home->latest;?></div>
+    <div class='f-left'><i class="icon icon-quote-right"></i>&nbsp; <?php echo $lang->my->home->latest;?></div>
     <div class='f-right'><?php common::printLink('company', 'dynamic', '', $lang->more . "&nbsp;<i class='icon-th icon icon-double-angle-right'></i>");?></div>
   </caption>
   <?php 

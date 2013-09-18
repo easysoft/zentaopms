@@ -1,7 +1,7 @@
 <div class='block linkbox2'>
 <table class='table-1 fixed colored'>
   <caption>
-    <div class='f-left'><i class='icon icon-list-ul icon-large'></i>&nbsp; <?php echo $lang->my->todo;?></div>
+    <div class='f-left'><i class='icon icon-list-ul'></i>&nbsp; <?php echo $lang->my->todo;?></div>
     <div class='f-right'><?php echo html::a($this->createLink('my', 'todo'), $lang->more . "&nbsp;<i class='icon-th icon icon-double-angle-right'></i>");?></div>
   </caption>
   <?php 

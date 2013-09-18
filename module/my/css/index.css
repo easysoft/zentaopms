@@ -8,4 +8,7 @@
 #row1 .table-1, #row1 caption{border:none}
 #row2 .table-1, #row2 caption{border:none}
 
+caption{line-height: 20px;padding-bottom: 8px;}
 caption .f-left {padding-left:0px}
+
+.outer th i[class^="icon-"], .outer th i[class*=" icon-"]{font-size: 16px;}

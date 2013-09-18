@@ -26,9 +26,9 @@ a  {text-decoration:none;}
 .icon{color: #888;}
 .link-icon{color: #036;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
-i,[class^="icon-"],[class*=" icon-"],.link-icon [class^="icon-"],.link-icon [class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
+i[class^="icon-"],i[class*=" icon-"],.link-icon [class^="icon-"],.link-icon [class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 i.disabled,i.disabled:hover{color: #ccc;}
-.outer td i{font-size: 20px;margin-right: 6px;}
+.outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 20px;margin-right: 6px;}
 
 .icon-webapp-manage:before{content: "\f085";}
 .icon-webapp-obtain:before{content: "\f07a";}
@@ -76,6 +76,9 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-task-create:before,.icon-gray-task-create:before,
 .icon-green-bug-create:before,.icon-gray-bug-create:before,
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
+
+/*-----------------------BUTTONS -----------------------------------*/
+
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px; background:#e5e5e5;}
@@ -418,8 +421,9 @@ table.data-table td:last-child{padding-right: 20px;}
 #featurebar .dp-choose-date {display: inline-block; height: 16px;text-indent: -9999em;width: 16px;}
 
 /* Querybox */
-#querybox{margin: -20px -20px 20px -20px;}
+#querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
+#querybox td{vertical-align: middle;}
 
 /* Tree slider. */
 .treeSlider
