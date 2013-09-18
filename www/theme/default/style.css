@@ -78,12 +78,12 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
 
 /*-----------------------BUTTONS -----------------------------------*/
-.btn,a.btn,.button-s,.button-c,.button-b{background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;padding: 7px 12px;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 12px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
+.btn,a.btn,.button-s,.button-c,.button-b,#reversechecker,#allchecker{background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;padding: 8px 15px;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 14px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
 .button-s,.btn-primary {background-color: #06a400;border: 1px solid #069900;text-shadow: none;color: #fff;}
 .btn.mini {padding: 7px 12px;line-height: 1;}
-.btn.large,.button-s,.button-c,.button-b {padding: 7px 20px;line-height: 2;font-size: 14px;}
+.btn.large {padding: 7px 20px;line-height: 2;font-size: 14px;}
 .btn.danger{background-color: #d20b0b;border-color: transparent;text-shadow: none;color: #fff;}
-.btn:hover,.button-c:hover,.button-b:hover {background-color: #eee; border-color: #999;-webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);-moz-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);text-decoration: none;}
+.btn:hover,.button-c:hover,.button-b:hover,#allchecker:hover,#reversechecker:hover {background-color: #eee; border-color: #999;-webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);-moz-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);text-decoration: none;}
 .btn.danger:hover{background-color: #d92525;border-color: #ca0000;}
 .btn.btn-primary:hover,.button-s:hover {background-color: #10ab00;border-color: #0b7700;}
 .btn.disabled,.btn[disabled=disabled] {background: #eeeeee;color: #ccc; border: 1px solid #dfdfdf;text-shadow: 0 1px 0 #fff;}
@@ -183,10 +183,7 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .area-1, .area-2, .area-3, .area-4, .area-5,
 #fileform input[type="file"]{border:1px solid #ccc}
 
-.button-s{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer}
 .button-r{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer; color:gray}
-.button-b{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer;}
-.button-c{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer}
 .button-d{color:blue; font-size:14px; cursor:pointer}
 
 /*-----------------------TABLE SETTING----------------------------*/
