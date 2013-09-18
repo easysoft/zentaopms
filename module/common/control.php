@@ -313,17 +313,14 @@ class common extends control
             if($type == 'button')
             {
                 echo "<span class='link-button'>";
-                // echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", true);
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    // echo html::a($link, $title, $target, "class='$extraClass'", true);
                     echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='$extraClass'", true);
                 }
                 echo "</span>";
             }
             else
             {
-                // echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", false);
                 echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon' title='$title'", false);
             }
         }
@@ -332,7 +329,7 @@ class common extends control
             if($type == 'list')
             {
                 $class = "icon-$color-$module-$icon";
-                echo "<span class='$class' title='$title'>&nbsp;</span>";
+                echo "<i class='disabled $class' title='$title'></i>";
             }
         }
     }
@@ -351,7 +348,7 @@ class common extends control
         if(isonlybody()) return false;
 
         echo "<span class='link-button'>";
-        echo html::a($backLink, '&nbsp;', '', "class='icon-goback' title={$lang->goback}");
+        echo html::a($backLink, '<i class="icon-goback icon-large"></i>', '', "class='link-icon' title={$lang->goback}");
         echo "</span>";
 
         if(isset($preAndNext->pre) and $preAndNext->pre) 
