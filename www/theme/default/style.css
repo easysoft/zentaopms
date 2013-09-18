@@ -26,9 +26,9 @@ a  {text-decoration:none;}
 .icon{color: #888;}
 .link-icon{color: #036;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
-i[class^="icon-"],i[class*=" icon-"],.link-icon [class^="icon-"],.link-icon [class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
+i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 i.disabled,i.disabled:hover{color: #ccc;}
-.outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 20px;margin-right: 6px;}
+.outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 6px;}
 
 .icon-webapp-manage:before{content: "\f085";}
 .icon-webapp-obtain:before{content: "\f07a";}
@@ -78,7 +78,17 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
 
 /*-----------------------BUTTONS -----------------------------------*/
-
+.btn,a.btn,.button-s,.button-c,.button-b{background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;padding: 7px 12px;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 12px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
+.button-s,.btn-primary {background-color: #06a400;border: 1px solid #069900;text-shadow: none;color: #fff;}
+.btn.mini {padding: 7px 12px;line-height: 1;}
+.btn.large,.button-s,.button-c,.button-b {padding: 7px 20px;line-height: 2;font-size: 14px;}
+.btn.danger{background-color: #d20b0b;border-color: transparent;text-shadow: none;color: #fff;}
+.btn:hover,.button-c:hover,.button-b:hover {background-color: #eee; border-color: #999;-webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);-moz-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);text-decoration: none;}
+.btn.danger:hover{background-color: #d92525;border-color: #ca0000;}
+.btn.btn-primary:hover,.button-s:hover {background-color: #10ab00;border-color: #0b7700;}
+.btn.disabled,.btn[disabled=disabled] {background: #eeeeee;color: #ccc; border: 1px solid #dfdfdf;text-shadow: 0 1px 0 #fff;}
+.button-s,.button-c{min-width: 80px;}
+.groupButton .button-c,.groupButton .button-s{margin-right: 0}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px; background:#e5e5e5;}
@@ -598,6 +608,7 @@ table.data-table td:last-child{padding-right: 20px;}
 .icon-green-testcase-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
 
 .link-button a{color:#036; font-weight:normal; font-size:14px;} 
+.link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
 
 /* Effort icons. */
