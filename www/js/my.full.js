@@ -408,7 +408,7 @@ function setOuterBox()
     var winWidth  = window.screen.width;
     var winHeight = $(window).height();
     var headerH   = $('#header').height();
-    var navbarH   = $('#modulemenu').parent().parent().height();
+    var navbarH   = $('#modulemenu').height();
     var footerH   = $('#footer').height() + 15;
 
     var outerH = winHeight - headerH - footerH - navbarH - 37;
