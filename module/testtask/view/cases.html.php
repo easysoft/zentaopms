@@ -92,7 +92,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
 
               $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '&nbsp;', '', "class='icon-green-testtask-unlinkCase' title='{$lang->testtask->unlinkCase}'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-green-testtask-unlinkCase"></i>', '', "class='link-icon' title='{$lang->testtask->unlinkCase}'");
 
               common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');
               ?>

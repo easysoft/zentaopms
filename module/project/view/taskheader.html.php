@@ -21,7 +21,7 @@
     <?php 
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'icon-bar-chart');
+    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
 
     echo '<span class="link-button dropButton">';
     echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
@@ -31,8 +31,8 @@
     echo html::a("#", "<i class='icon-signin'></i> " . $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
     echo '</span>';
 
-    common::printIcon('task', 'batchCreate', "projectID=$projectID", '', 'button', 'icon-plus-sign');
-    common::printIcon('task', 'create', "project=$projectID", '', 'button', 'icon-plus');
+    common::printIcon('task', 'batchCreate', "projectID=$projectID");
+    common::printIcon('task', 'create', "project=$projectID");
     ?>
   </div>
 </div>
