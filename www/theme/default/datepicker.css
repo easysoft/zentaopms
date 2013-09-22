@@ -1,10 +1,20 @@
 a.dp-choose-date {
+  display: inline-block;
   width: 16px;
   height: 16px;
   padding: 0;
+  padding-left: 4px;
   margin: 0;
   overflow: hidden;
-  background: url(images/datepicker/calendar.png) no-repeat; 
+  /*background: url(images/datepicker/calendar.png) no-repeat; */
+}
+a.dp-choose-date:before{
+  font-family: FontAwesome;
+  content: "\f073";
+  color: #036;
+}
+a.dp-choose-date:hover:before{
+  color: #000;
 }
 
 table.jCalendar {
