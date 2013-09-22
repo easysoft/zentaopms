@@ -17,3 +17,5 @@
 
 small{font-weight:normal}
 #webapps .button-c{min-width: inherit;}
+ul#webapps>li{border: 1px solid #ddd;width: 25%;padding: 1%;margin: 0 20px 20px 0;}
+ul#webapps>li>table{border: none;}
