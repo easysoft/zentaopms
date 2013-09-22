@@ -709,6 +709,7 @@ class project extends control
             $dateList = $this->project->getDateList($begin, $end, $type);
         }
 
+        $sets          = $this->project->getBurnDataFlot($project->id, $maxDays);
         $limitJSON     = '[]';
         $baselineJSON  = '[]';
         if($projectInfo->days <= $maxDays)
@@ -727,8 +728,6 @@ class project extends control
             foreach($dateList as $i => $date) $limitJSON .= "[$i, 0],";
             $limitJSON = rtrim($limitJSON, ',') . ']';
         }
-
-        $sets = $this->project->getBurnDataFlot($project->id, $maxDays);
 
         $flotJSON['data']     = $this->report->createSingleJSON($sets, $dateList);
         $flotJSON['limit']    = $limitJSON;
