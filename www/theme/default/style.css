@@ -106,6 +106,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .groupButton .button-c,.groupButton .button-s{margin-right: 0}
 .groupButton #allchecker{margin-right: 0;}
 .groupButton #moreAction{border: 1px solid #DCDCDC;}
+.groupButton #moreAction:hover{border-color: #999;}
 .button-d{filter: alpha(opacity=50);-moz-opacity:0.5;opacity: 0.5;cursor: not-allowed;}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
@@ -561,15 +562,13 @@ table.data-table td:last-child{padding-right: 20px;}
 
 /* Common icons. */
 #featurebar .f-right .icon-goback {padding:0px 9px}
-.pri1        {background:url(images/main/zt-icons.png) -1px   -143px; text-indent:-9999px; display:block; width:17px; margin:0 auto;}
-.pri2        {background:url(images/main/zt-icons.png) -21px  -143px; text-indent:-9999px; display:block; width:17px; margin:0 auto;}
-.pri3        {background:url(images/main/zt-icons.png) -41px  -143px; text-indent:-9999px; display:block; width:17px; margin:0 auto;}
-.pri4        {background:url(images/main/zt-icons.png) -61px  -143px; text-indent:-9999px; display:block; width:17px; margin:0 auto;}
-.pri5        {background:url(images/main/zt-icons.png) -81px  -143px; text-indent:-9999px; display:block; width:17px; margin:0 auto;}
-.pri6        {background:url(images/main/zt-icons.png) -101px -143px; text-indent:-9999px; display:block; width:17px; margin:0 auto;}
+.pri1,.pri2,.pri3,.pri4,.pri5,.pri6{display:inline-block;width: 14px;height: 14px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68;}
+.pri2{border-color: #25367e;color: #25367e}
+.pri3{border-color: #2c4a9b;color: #2c4a9b}
+.pri4{border-color: #475da8;color: #475da8}
+.pri5{border-color: #6989c5;color: #6989c5}
+.pri6{border-color: #9ebee5;color: #9ebee5}
 #searchicon  {padding:2px 8px; background:url(images/main/zt-icons.png) -102px -80px; margin-left:10px;}
-/*#searchmore  {padding:2px 8px; background:url(images/main/zt-icons.png) -62px  -80px no-repeat; margin-right:10px;}*/
-/*#searchlite  {padding:2px 8px; background:url(images/main/zt-icons.png) -82px  -80px no-repeat; margin-right:10px}*/
 .icon-add    {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -3px no-repeat;}
 .icon-delete {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -100px  -3px no-repeat;}
 .icon-add:hover, .icon-delete:hover {cursor:pointer}
@@ -598,7 +597,7 @@ table.data-table td:last-child{padding-right: 20px;}
 .icon-green-task-deleteEstimate  {padding:2px 8px; background:url(images/main/zt-icons.png) -60px 0px no-repeat;}
 
 /* Bug icons. */
-.severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;font-size: 8px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;}
+.severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;line-height: 16px;font-weight: bold; text-align: center; font-size: 12px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;}
 .severity1 {background-color: #d71319;}
 .severity2 {background-color: #d83615;}
 .severity3 {background-color: #db7c12;}
@@ -622,7 +621,6 @@ table.data-table td:last-child{padding-right: 20px;}
 
 /* Effort icons. */
 .icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -2px;} 
-
 
 /* Todo icons. */
 .log-asc     {padding:2px 6px; background:url(images/main/zt-icons.png) -2px   -422px;}
