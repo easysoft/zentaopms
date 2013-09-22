@@ -598,12 +598,13 @@ table.data-table td:last-child{padding-right: 20px;}
 .icon-green-task-deleteEstimate  {padding:2px 8px; background:url(images/main/zt-icons.png) -60px 0px no-repeat;}
 
 /* Bug icons. */
-.severity1 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) 0px    -383px; text-indent:-9999px;}
-.severity2 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) -19px  -383px; text-indent:-9999px;}
-.severity3 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) -40px  -383px; text-indent:-9999px;}
-.severity4 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) -60px  -383px; text-indent:-9999px;}
-.severity5 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) -80px  -383px; text-indent:-9999px;}
-.severity6 {width:17px; margin:0px auto; display:block; background:url(images/main/zt-icons.png) -100px -383px; text-indent:-9999px;}
+.severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;font-size: 8px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;}
+.severity1 {background-color: #d71319;}
+.severity2 {background-color: #d83615;}
+.severity3 {background-color: #db7c12;}
+.severity4 {background-color: #dcbe1a;}
+.severity5 {background-color: #d0d836;}
+.severity6 {background-color: #99c323;}
 
 .icon-green-bug-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
 
