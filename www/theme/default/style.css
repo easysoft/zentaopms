@@ -211,6 +211,7 @@ th{vertical-align: middle;}
 tfoot      {border-top:1px solid #e4e4e4}
 tfoot .f-left{ color:gray}
 tfoot .f-left strong{ color:#141414}
+tfoot td{vertical-align: middle;}
 
 caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px 2px 6px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:13px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
@@ -540,7 +541,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #searchform .searchSelect, #searchform .searchInput, #searchform #queryID{background:#f9f9f9;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
-.box-title  {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:6px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-title  {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:8px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
 .box-content{border:1px solid #e4e4e4; padding:5px}
 .done      {color:#078F0E;}
 .wait      {color:#888;}
