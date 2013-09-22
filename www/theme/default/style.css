@@ -444,8 +444,6 @@ table.data-table td:last-child{padding-right: 20px;}
 #featurebar .active select  {border:2px solid #009900;}
 #featurebar .active input   {border:2px solid #009900;}
 
-#featurebar .dp-choose-date {display: inline-block; height: 16px;text-indent: -9999em;width: 16px;}
-
 /* Querybox */
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
