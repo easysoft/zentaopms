@@ -433,10 +433,10 @@ table.data-table td:last-child{padding-right: 20px;}
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
 /* Feature bar. */
-#featurebar        {height:34px; line-height:34px;background-color: #f8fafe; padding:8px 10px; border-bottom: 1px solid #e7edf7;margin: -20px -20px 20px -20px;}
+#featurebar,.outer>table>caption{height:34px; line-height:34px;background-color: #f8fafe; padding:8px 10px; border-bottom: 1px solid #e7edf7;margin: -20px -20px 20px -20px;}
 #featurebar span   {font-size:14px;}
-#featurebar a      {text-decoration:none;  display: inline-block;padding: 0px 7px; line-height: 34px;height: 34px; font-size:14px;-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
-#featurebar a:hover{color:#000;background-color: #e5e5e5;}
+#featurebar a,.outer>table>caption a{text-decoration:none;  display: inline-block;padding: 0px 7px; line-height: 34px;height: 34px; font-size:14px;-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
+#featurebar a:hover,.outer>table>caption a:hover{color:#000;background-color: #e5e5e5;}
 #featurebar #bysearchTab a {border:none;}
 #featurebar select {font-size:12px; height:22px; margin-top:3px;}
 
