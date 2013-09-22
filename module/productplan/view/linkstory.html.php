@@ -99,7 +99,7 @@
         <td>
           <?php
           $unlinkURL = $this->createLink('productplan', 'unlinkStory', "storyID=$story->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '&nbsp;', '', "class='icon-green-productplan-unlinkStory' title='{$lang->productplan->unlinkStory}'");
+          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->productplan->unlinkStory}'");
           ?>
         </td>
       </tr>

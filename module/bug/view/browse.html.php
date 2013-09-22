@@ -40,7 +40,7 @@ js::set('customed', $customed);
     <?php
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
     common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
@@ -63,12 +63,12 @@ js::set('customed', $customed);
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
 <?php 
-    if($customed)
-    {
-        include './browse.custom.html.php'; 
-        include '../../common/view/footer.lite.html.php';
-        exit;
-    }
+if($customed)
+{
+    include './browse.custom.html.php'; 
+    include '../../common/view/footer.lite.html.php';
+    exit;
+}
 ?>
 
 <div class='treeSlider' id='bugTree'><span>&nbsp;</span></div>

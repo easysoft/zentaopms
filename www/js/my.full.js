@@ -411,7 +411,7 @@ function setOuterBox()
     var navbarH   = $('#modulemenu').height();
     var footerH   = $('#footer').height() + 15;
 
-    var outerH = winHeight - headerH - footerH - navbarH - 37;
+    var outerH = winHeight - headerH - footerH - navbarH - 47;
     if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
     if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
     $('.outer').css('min-height', outerH);
