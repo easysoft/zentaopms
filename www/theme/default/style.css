@@ -9,8 +9,8 @@
 * @link        http://www.zentao.net
 */
 /*-----------------------BASE SETTING----------------------------*/
-html{background: #e5e5e5;}
-body     {margin:0; text-align:left; color:#141414;background: #e5e5e5;padding-bottom: 40px;}
+/*html{background: #e5e5e5;}*/
+body     {margin:0; text-align:left; color:#141414;padding-bottom: 40px;}
 fieldset {border:1px solid #efefef; padding:8px 10px 8px 15px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 del{background:#fcc;}
@@ -23,13 +23,16 @@ a  {text-decoration:none;}
 
 /*-----------------------ICONS-----------------------------------*/
 /* icons use fontawesome */
-.icon{color: #888;}
+.icon{filter: alpha(opacity=50);-moz-opacity:0.5;opacity: 0.5;}
 .link-icon{color: #036;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
-i.disabled,i.disabled:hover{color: #ccc;}
-.outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 6px;}
+.outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
 
+.icon-green-project-suspend:before,.icon-gray-project-suspend:before{content: "\f04c"}
+.icon-green-project-putoff:before,.icon-gray-project-putoff:before{content: "\f073";}
+.icon-green-story-activate:before,.icon-gray-story-activate:before,
+.icon-green-project-activate:before,.icon-gray-project-activate:before{content: "\f011";color:#058100;}
 .icon-green-bug-icon-wrench:before,.icon-gray-bug-icon-wrench:before{content: "\f085";}
 .icon-green-group-managepriv:before,.icon-gray-group-managepriv:before{content: "\f023";}
 .icon-green-group-managemember:before,.icon-gray-group-managemember:before{content: "\f0c0";}
@@ -47,23 +50,26 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-testtask-linkCase:before,.icon-gray-testtask-linkCase:before,
 .icon-green-project-linkStory:before,.icon-green-project-linkStory:before {content: "\f0c1";}
 .icon-green-testtask-unlinkCase:before,.icon-gray-testtask-unlinkCase:before{content: "\f127";}
-.icon-green-testcase-createCase:before,.icon-gray-testcase-createCase:before{content: "\f118";}
 .icon-green-story-change:before,.icon-gray-story-change:before{content: "\f074";}
 .icon-green-bug-confirmBug:before,.icon-gray-bug-confirmBug:before,
 .icon-green-story-review:before,.icon-gray-story-review:before{content: "\f002";}
 .icon-green-task-close:before,.icon-gray-task-close:before,
 .icon-green-story-close:before,.icon-gray-story-close:before,
 .icon-green-product-close:before,.icon-gray-product-close:before,
-.icon-green-bug-close:before,.icon-gray-bug-close:before{content: "\f011";}
+.icon-green-project-close:before,.icon-gray-project-close:before,
+.icon-green-testtask-close:before,.icon-gray-testtask-close:before,
+.icon-green-bug-close:before,.icon-gray-bug-close:before{content: "\f011";color: red;}
 .icon-green-task-recordEstimate:before,.icon-gray-task-recordEstimate:before{content: "\f017";}
-.icon-green-task-start:before,.icon-gray-task-start:before{content: "\f144";}
+.icon-green-task-start:before,.icon-gray-task-start:before,
+.icon-green-testtask-start:before,.icon-gray-testtask-start:before,
+.icon-green-project-start:before,.icon-gray-project-start:before{content: "\f04b";}
 .icon-green-task-assignTo:before,.icon-gray-task-assignTo:before,.icon-green-bug-assignTo:before,.icon-gray-bug-assignTo:before{content: "\f0a4";}
 .icon-green-common-delete:before,.icon-gray-common-delete:before{content: "\f00d";}
-.icon-green-common-edit:before,.icon-gray-common-edit:before{content: "\f044";}
+.icon-green-common-edit:before,.icon-gray-common-edit:before{content: "\f040";}
 .icon-green-todo-finish:before,.icon-gray-todo-finish:before,
 .icon-green-bug-resolve:before,.icon-gray-bug-resolve:before,
 .icon-green-task-finish:before,.icon-gray-task-finish:before{content: "\f05d";}
-.icon-green-common-export:before,.icon-gray-common-export:before {content: "\f08b";}
+.icon-green-common-export:before,.icon-gray-common-export:before {content: "\f093";}
 .icon-green-todo-batchCreate:before,.icon-gray-todo-batchCreate:before,
 .icon-green-testcase-batchCreate:before,.icon-gray-testcase-batchCreate:before,
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
@@ -81,23 +87,28 @@ i.disabled,i.disabled:hover{color: #ccc;}
 .icon-green-bug-create:before,.icon-gray-bug-create:before,
 .icon-green-group-create:before,.icon-gray-group-create:before,
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
+i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before{color: #ccc;}
+
+.icon-green-testcase-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -582px;}
+.icon-gray-testcase-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -604px;}
 
 /*-----------------------BUTTONS -----------------------------------*/
-.btn,a.btn,.button-s,.button-c,.button-b,#reversechecker,#allchecker{background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;padding: 8px 15px;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 14px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
+.btn,a.btn,.button-s,.button-c,.button-b,#reversechecker,#allchecker{background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;padding: 5px 15px;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 14px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
 .button-s,.btn-primary {background-color: #06a400;border: 1px solid #069900;text-shadow: none;color: #fff;}
 .btn.mini {padding: 7px 12px;line-height: 1;}
 .btn.large {padding: 7px 20px;line-height: 2;font-size: 14px;}
 .btn.danger{background-color: #d20b0b;border-color: transparent;text-shadow: none;color: #fff;}
 .btn:hover,.button-c:hover,.button-b:hover,#allchecker:hover,#reversechecker:hover {background-color: #eee; border-color: #999;-webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);-moz-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);text-decoration: none;}
 .btn.danger:hover{background-color: #d92525;border-color: #ca0000;}
-.btn.btn-primary:hover,.button-s:hover {background-color: #10ab00;border-color: #0b7700;}
-.btn.disabled,.btn[disabled=disabled] {background: #eeeeee;color: #ccc; border: 1px solid #dfdfdf;text-shadow: 0 1px 0 #fff;}
+.btn.btn-primary:hover,.button-s:hover {background-color: #058100;border-color: #0b7700;}
+.btn.disabled,.btn[disabled=disabled] {cursor: not-allowed；background: #eeeeee;color: #ccc; border: 1px solid #dfdfdf;text-shadow: 0 1px 0 #fff;}
 .button-s,.button-c{min-width: 80px;}
 .groupButton .button-c,.groupButton .button-s{margin-right: 0}
-.button-d{opacity: 0.6;}
+.button-d{filter: alpha(opacity=50);-moz-opacity:0.5;opacity: 0.5;cursor: not-allowed;}
+/*.button-d.button-s{color: #eee}*/
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
-#wrap{ padding:0 19px; background:#e5e5e5;}
+#wrap{ padding:0 19px 20px 19px; background:#e5e5e5;}
 #wrap .outer {text-align:left; padding:20px;background:#fff;border:1px solid #cfcfcf;-webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
 
 .cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
@@ -190,7 +201,6 @@ i.disabled,i.disabled:hover{color: #ccc;}
 #fileform input[type="file"]{border:1px solid #ccc}
 
 .button-r{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer; color:gray}
-.button-d{color:blue; font-size:14px; cursor:pointer}
 
 /*-----------------------TABLE SETTING----------------------------*/
 table      {border:1px solid #e4e4e4;border-collapse: collapse;border-spacing: 0;}
@@ -389,7 +399,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #mainmenu li>a#objectSwitcher{background: #e5e5e5;color: gray;padding: 0 3px;-webkit-box-shadow: none;box-shadow:none;}
 
 /* Module menu. */
-#modulemenu    {padding: 0 20px;height: 50px;font-size:14px;}
+#modulemenu    {padding: 0 20px;height: 50px;font-size:14px;background-color: #e5e5e5;}
 #modulemenu li {color:#0033cc;padding:8px 4px 8px 0;line-height: 30px;}
 #modulemenu li a{display: inline-block; padding: 2px 8px; font-weight:normal; font-size:14px; color:#003366}
 #modulemenu li>a:hover{background: #d1d1d1;color: #000;}
@@ -569,8 +579,6 @@ table.data-table td:last-child{padding-right: 20px;}
 /* Story icons. */
 .icon-green-story-toStory    {padding:2px 8px; background:url(images/main/zt-icons.png) 0px   -202px;}
 
-.icon-green-story-activate   {padding:2px 8px; background:url(images/main/zt-icons.png) -100px  -201px;}
-
 .icon-green-story-createCase {padding:2px 8px; background:url(images/main/zt-icons.png) -120px -201px;}
 .icon-gray-story-createCase  {padding:2px 8px; background:url(images/main/zt-icons.png)  -120px -221px;}
 
@@ -606,7 +614,7 @@ table.data-table td:last-child{padding-right: 20px;}
 /* Case icons. */
 .icon-green-testcase-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
 
-.link-button a{color:#036; font-weight:normal; font-size:14px;} 
+.link-button a{color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
 .link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
 
