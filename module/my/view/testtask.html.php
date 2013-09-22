@@ -54,7 +54,7 @@
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
 
       $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->testtask->delete}'");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->testtask->delete}'");
       ?>
     </td>
   </tr>

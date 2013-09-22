@@ -38,7 +38,7 @@
       <?php
       common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
       $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->release->delete}'");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->release->delete}'");
       ?>
     </td>
   </tr>

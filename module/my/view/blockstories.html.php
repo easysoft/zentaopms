@@ -2,7 +2,7 @@
 <table class='table-1 fixed colored'>
   <caption>
     <div class='f-left'><span class='icon-story'>&nbsp;</span> <?php echo $lang->my->story;?></div>
-    <div class='f-right'><?php echo html::a($this->createLink('my', 'story'), $lang->more . "<span class='icon-more'></span>");?></div>
+    <div class='f-right'><?php echo html::a($this->createLink('my', 'story'), $lang->more . "&nbsp;<i class='icon-th icon icon-double-angle-right'></i>");?></div>
   </caption>
   <?php 
   foreach($stories as $story)

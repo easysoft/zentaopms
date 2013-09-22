@@ -26,16 +26,15 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
     <?php
     echo "<span id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</span>";
     echo "<span id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->testcase->needConfirm) . "</span>";
-    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><span class='icon-search'></span>{$lang->testcase->bySearch}</a></span> ";
+    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
     <?php 
-    common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export');
+    common::printIcon('testcase', 'import', "productID=$productID");
 
-    echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
-    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo '<span class="link-button dropButton">'; 
+    echo html::a("#", "<i class='icon-signout icon-green-common-export'></i>" . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
     common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");
@@ -121,7 +120,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
               common::printIcon('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
               $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->testcase->delete}'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->testcase->delete}'");
 
               common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'createBug');
               ?>

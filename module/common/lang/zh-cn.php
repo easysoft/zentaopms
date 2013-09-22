@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
+$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
 $lang->colon        = '::';
 $lang->comma        = '，';
 $lang->dot          = '。';
@@ -81,7 +81,7 @@ $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盘|my|index';
+$lang->menu->my       = '<i class="icon-home"></i> 我的地盘|my|index';
 $lang->menu->product  = '产品|product|index';
 $lang->menu->project  = '项目|project|index';
 $lang->menu->qa       = '测试|qa|index';
@@ -136,7 +136,7 @@ $lang->index->menu->project = '浏览项目|project|browse';
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
+$lang->my->menu->account        = '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>';
 $lang->my->menu->index          = '首页|my|index';
 $lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
@@ -165,8 +165,8 @@ $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s
 $lang->product->menu->view    = array('link' => '维护|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '项目|product|project|status=all&productID=%s';
-$lang->product->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加产品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加产品|product|create', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<i class="icon-th"></i>&nbsp;所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -191,8 +191,8 @@ $lang->project->menu->team      = array('link' => '团队|project|team|projectID
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '维护|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>添加项目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<i class="icon-plus"></i>&nbsp;添加项目|project|create', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;所有项目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -228,7 +228,7 @@ $lang->doc->menu->browse  = array('link' => '文档|doc|browse|libID=%s', 'alias
 $lang->doc->menu->edit    = '编辑|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '分类|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加文档库|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
 
 /* 统计视图菜单设置。*/
 $lang->report = new stdclass();
@@ -255,9 +255,9 @@ $lang->company->menu->dept         = array('link' => '部门|dept|browse', 'subM
 $lang->company->menu->browseGroup  = array('link' => '权限|group|browse', 'subModule' => 'group');
 $lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = '动态|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>添加分组|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<span class="icon-add">&nbsp;</span>添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<i class="icon-plus"></i>&nbsp;添加分组|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
@@ -353,10 +353,10 @@ $lang->pager->last      = "末页";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方网站";
-$lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a> ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠</a> ";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>购买专业版(特惠)！</a> ";
+$lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
+$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a>&nbsp; ";
+$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'><i class='icon-heart'></i> 捐赠</a>&nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>购买专业版(特惠)！</a>&nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";

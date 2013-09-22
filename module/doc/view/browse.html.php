@@ -21,7 +21,7 @@ var browseType = '<?php echo $browseType;?>';
 <div id='featurebar'>
   <div class='f-left'>
     <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
-    <span id='bysearchTab'><a href='#'><span class='icon-search'></span><?php echo $lang->doc->searchDoc;?></a></span>
+    <span id='bysearchTab'><a href='#'><i class='icon-search icon icon-large'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></span>
   </div>
   <div class='f-right'>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc");?>
@@ -71,7 +71,7 @@ var browseType = '<?php echo $browseType;?>';
               <?php 
               common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
               $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->doc->delete}'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
               ?>
             </td>
           </tr>

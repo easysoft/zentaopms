@@ -9,7 +9,7 @@
  * @version     $Id: en.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
+$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
 $lang->colon        = '::';
 $lang->comma        = ',';
 $lang->dot          = '.';
@@ -81,7 +81,7 @@ $lang->common->common = 'Common module';
 
 /* The main menu. */
 $lang->menu = new stdclass();
-$lang->menu->my       = '<span id="mainbg">&nbsp;</span>Dashboard|my|index';
+$lang->menu->my       = '<i class="icon-home"></i> Dashboard|my|index';
 $lang->menu->product  = 'Product|product|index';
 $lang->menu->project  = 'Project|project|index';
 $lang->menu->qa       = 'Test|qa|index';
@@ -136,7 +136,7 @@ $lang->index->menu->project = 'Projects|project|browse';
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
+$lang->my->menu->account        = '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>';
 $lang->my->menu->index          = 'Index|my|index';
 $lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
@@ -192,7 +192,7 @@ $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s'
 $lang->project->menu->product   = array('link' => 'Product|project|manageproducts|projectID=%s', 'alias' => 'edit,start,suspend,delay,close');
 $lang->project->menu->view      = 'Manage|project|view|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>New|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>Projects|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;Projects|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

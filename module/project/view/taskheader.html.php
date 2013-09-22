@@ -14,7 +14,7 @@
     echo html::select('groupBy', $lang->project->groups, isset($groupBy) ? $groupBy : '', "onchange='switchGroup($projectID, this.value)'");
     echo "</span>";
 
-    if($this->methodName == 'task') echo "<span id='bysearchTab'><a href='#'><span class='icon-search'></span>{$lang->project->byQuery}</a></span> ";
+    if($this->methodName == 'task') echo "<span id='bysearchTab'><a href='#'><i class='icon-search icon icon-large'></i>&nbsp;{$lang->project->byQuery}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
@@ -24,13 +24,11 @@
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
-    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='importAction' class='icon-green-task-import' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
-    echo html::a("#", $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
+    echo html::a("#", "<i class='icon-signin'></i> " . $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
     echo '</span>';
 
     common::printIcon('task', 'batchCreate', "projectID=$projectID");

@@ -44,7 +44,7 @@
       <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list');?>
       <?php
       $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->group->delete}'");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->group->delete}'");
       ?>
     </td>
   </tr>

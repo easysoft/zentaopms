@@ -457,9 +457,9 @@ EOT;
      * @access public
      * @return string the common button tag.
      */
-    public static function commonButton($label = '', $misc = '')
+    public static function commonButton($label = '', $misc = '', $class = '')
     {
-        return " <input type='button' value='$label' $misc class='button-c' /> ";
+        return " <input type='button' value='$label' $misc class='button-c $class' /> ";
     }
 
     /**

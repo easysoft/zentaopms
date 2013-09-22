@@ -85,7 +85,7 @@
         common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', '', '', 'iframe', true);
 
         $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");
-        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->todo->delete}'");
+        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->todo->delete}'");
         ?>
       </td>
     </tr>

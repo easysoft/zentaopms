@@ -196,7 +196,7 @@ foreach($fieldParams as $fieldName => $param)
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform'>
 <table class='table-1'>
   <tr valign='middle'>
-    <th width='10'><span id='searchicon'>&nbsp;</span></th>
+    <th width='50'><i class="icon icon-search icon-large"></i></th>
     <td class='a-right'>
       <nobr>
       <?php
@@ -296,12 +296,12 @@ foreach($fieldParams as $fieldName => $param)
     <td width='250' class='a-center'>
       <?php
       echo html::select('queryID', $queries, $queryID, 'class=select-1 onchange=executeQuery(this.value)');
-      if(common::hasPriv('search', 'deleteQuery')) echo html::a('javascript:deleteQuery()', '&nbsp;', '', 'class="icon-delete"');
+      if(common::hasPriv('search', 'deleteQuery')) echo html::a('javascript:deleteQuery()', '<i class="link-icon icon-remove"></i>', '', '');
       ?>
     </td>
-    <th width='10' class='a-center' style='cursor:pointer; padding:0'>
-      <span id='searchmore' onclick='showmore()'>&nbsp;</span>
-      <span id='searchlite' onclick='showlite()' class='hidden'>&nbsp;</span>
+    <th width='50' class='a-center' style='cursor:pointer; padding:0'>
+      <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x link-icon"></i></a>
+      <a id="searchlite" href="javascript:showlite()" class="hidden"><i class="icon-double-angle-up icon-2x link-icon"></i></a>
       <?php echo html::hidden('formType', 'lite');?>
     </th>
   </tr>

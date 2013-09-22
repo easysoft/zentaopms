@@ -1,5 +1,5 @@
 html {background-color:#06294e;}
-body {background-image:url(theme/default/images/main/loginbg.png); background-position:center top; background-repeat:no-repeat;}
+body {background:#06294E url(theme/default/images/main/loginbg.png) center top no-repeat;}
 form {padding-top:200px; text-align:center}
 
 table, tr, td, th, input{ border:none;}
@@ -11,7 +11,7 @@ table, tr, td, th, input{ border:none;}
 .select-2{width:150px}
 
 #welcome     {background:none; border:none; color:#FFF; padding-top:8px; font-size:14px; font-weight:normal}
-#poweredby   {color:#fff; margin-top:30px; height:50px; text-align:center; line-height:1}
+#poweredby   {color:#fff; margin-top:30px; height:50px; text-align:center; line-height:1;float: none;}
 #poweredby a {color:#fff}
 #keeplogin   {color:white; font-size:14px}
 .button-s, .button-c {padding:3px 5px 3px 5px;height:30px; width:80px; font-size:14px; font-weight:bold; border:none}

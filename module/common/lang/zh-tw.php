@@ -9,7 +9,7 @@
  * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
+$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
 $lang->colon        = '::';
 $lang->comma        = '，';
 $lang->dot          = '。';
@@ -81,7 +81,7 @@ $lang->common->common = '公有模組';
 
 /* 主導航菜單。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盤|my|index';
+$lang->menu->my       = '<i class="icon-home"></i> 我的地盤|my|index';
 $lang->menu->product  = '產品|product|index';
 $lang->menu->project  = '項目|project|index';
 $lang->menu->qa       = '測試|qa|index';
@@ -136,7 +136,7 @@ $lang->index->menu->project = '瀏覽項目|project|browse';
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
+$lang->my->menu->account        = '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>';
 $lang->my->menu->index          = '首頁|my|index';
 $lang->my->menu->todo           = array('link' => '待辦|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => '任務|my|task|', 'subModule' => 'task');
@@ -166,7 +166,7 @@ $lang->product->menu->view    = array('link' => '維護|product|view|productID=%
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '項目|product|project|status=all&productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加產品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有產品|product|index|locate=no&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<i class="icon-th"></i>&nbsp;所有產品|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -192,7 +192,7 @@ $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=
 $lang->project->menu->product   = '產品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '維護|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>添加項目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有項目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;所有項目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

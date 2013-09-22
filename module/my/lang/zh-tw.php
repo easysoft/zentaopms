@@ -31,7 +31,7 @@ $lang->my->storyMenu->closedByMe   = '由我關閉';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        =  '最新動態';
-$lang->my->home->action        =  "%s, %s <i>%s</i> %s <a href='%s'>%s</a>。";
+$lang->my->home->action        =  "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
 $lang->my->home->projects      =  '項目';
 $lang->my->home->products      =  '產品';
 $lang->my->home->projectHome   = '訪問項目主頁';

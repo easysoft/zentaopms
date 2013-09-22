@@ -25,7 +25,7 @@
     <th class='w-p50'>   <?php common::printOrderLink('desc',  $orderBy, $vars, $lang->productplan->desc);?></th>
     <th class='w-100px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
     <th class='w-100px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-    <th class="w-80px {sorter: false}"><?php echo $lang->actions;?></th>
+    <th class="w-100px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -43,7 +43,7 @@
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
 
       $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '&nbsp;', '', "class='icon-green-common-delete' title='{$lang->productplan->delete}'");
+      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->productplan->delete}'");
       ?>
     </td>
   </tr>

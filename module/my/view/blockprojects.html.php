@@ -1,7 +1,7 @@
 <div class='block linkbox1' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
 <table class='table-1 a-center' height='138px'>
-  <caption><span class='icon-allProjects'>&nbsp;</span><?php echo $lang->my->home->projects;?></caption>
+  <caption><i class="icon icon-th-large"></i>&nbsp;<?php echo $lang->my->home->projects;?></caption>
   <tr>
     <td valign='middle'>
       <table class='a-left bd-none' align='center'>
@@ -16,7 +16,7 @@
 <?php else:?>
   <table class='table-1 fixed colored'>
     <tr class='colhead'>
-      <th class='w-150px'><div class='f-left'><span class='icon-allProjects'>&nbsp;</span> <?php echo $lang->project->name;?></div></th>
+      <th class='w-150px'><div class='f-left'><i class="icon icon-th-large"></i>&nbsp; <?php echo $lang->project->name;?></div></th>
       <th><?php echo $lang->project->end;?></th>
       <th><?php echo $lang->statusAB;?></th>
       <th><?php echo $lang->project->totalEstimate;?></th>

@@ -7,7 +7,7 @@ include 'chosen.html.php';
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <div id='header'>
-  <table class='cont' id='topbar'>
+  <table class='cont navbar' id='topbar'>
     <tr>
       <td class='w-p50'>
         <?php
@@ -19,11 +19,13 @@ include 'chosen.html.php';
       <td class='a-right'><?php commonModel::printTopBar();?></td>
     </tr>
   </table>
-  <table class='cont' id='navbar'>
+  <table class='cont navbar' id='navbar'>
     <tr><td id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></td></tr>
   </table>
 </div>
-<table class='cont' id='navbar'><tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr></table>
+<div class="navbar" id="modulemenu">
+  <?php commonModel::printModuleMenu($this->moduleName);?>
+</div>
 <div id='wrap'>
 <?php endif;?>
   <div class='outer'>

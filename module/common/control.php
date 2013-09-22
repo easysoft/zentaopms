@@ -240,7 +240,7 @@ class common extends control
 
         if(!common::hasPriv($module, 'edit')) return false;
         echo "<span class='link-button'>";
-        echo html::a('#commentBox', '&nbsp;', '', "class='icon-green-common-comment' title='$lang->comment' onclick='setComment()'");
+        echo html::a('#commentBox', '<i class="icon-comments-alt"></i>', '', "title='$lang->comment' onclick='setComment()'");
         echo "</span>";
     }
 
@@ -313,16 +313,15 @@ class common extends control
             if($type == 'button')
             {
                 echo "<span class='link-button'>";
-                echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", true);
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    echo html::a($link, $title, $target, "class='$extraClass'", true);
+                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='$extraClass'", true);
                 }
                 echo "</span>";
             }
             else
             {
-                echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", false);
+                echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon' title='$title'", false);
             }
         }
         else
@@ -330,7 +329,7 @@ class common extends control
             if($type == 'list')
             {
                 $class = "icon-$color-$module-$icon";
-                echo "<span class='$class' title='$title'>&nbsp;</span>";
+                echo "<i class='disabled $class' title='$title'></i>";
             }
         }
     }
@@ -349,7 +348,7 @@ class common extends control
         if(isonlybody()) return false;
 
         echo "<span class='link-button'>";
-        echo html::a($backLink, '&nbsp;', '', "class='icon-goback' title={$lang->goback}");
+        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "class='link-icon' title={$lang->goback}");
         echo "</span>";
 
         if(isset($preAndNext->pre) and $preAndNext->pre) 
@@ -358,7 +357,7 @@ class common extends control
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$title}'");
+            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '<i class="icon-pre icon-chevron-sign-left"></i>', '', "id='pre' class='link-icon' title='{$title}'");
             echo "</span>";
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
@@ -367,7 +366,7 @@ class common extends control
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title;
             echo "<span class='link-button'>";
-            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
+            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '<i class="icon-pre icon-chevron-sign-right"></i>', '', "id='next' class='link-icon' title='$title'");
             echo "</span>";
         }
     }

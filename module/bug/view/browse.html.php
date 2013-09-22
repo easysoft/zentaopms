@@ -33,19 +33,18 @@ js::set('customed', $customed);
     echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
     echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
     echo "<span id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
-    echo "<span id='bysearchTab'><a href='#'><span class='icon-search'></span>{$lang->bug->byQuery}</a></span> ";
+    echo "<span id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
     <?php
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "&nbsp;", '', "id='exportAction' class='icon-green-common-export' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
-    echo html::a("#", $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-signout'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
     echo '</span>';
 
     common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-    common::printIcon('bug', 'customFields');
+    common::printIcon('bug', 'customFields', '', '', 'button', 'icon-wrench');
     common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
     common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
     ?>
