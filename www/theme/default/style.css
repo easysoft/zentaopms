@@ -97,7 +97,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 
 /*-----------------------BUTTONS -----------------------------------*/
 .btn,a.btn,.button-s,.button-c,.button-b,#reversechecker,#allchecker{padding: 4px 15px;background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 14px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
-.button-s,.btn-primary {background-color: #06a400;border: 1px solid #069900;text-shadow: none;color: #fff;}
+.button-s,.btn-primary,a.btn-primary {background-color: #06a400;border: 1px solid #069900;text-shadow: none;color: #fff;}
 .btn.mini {padding: 3px 12px;line-height: 1;}
 .btn.large {padding: 7px 20px;line-height: 2;font-size: 14px;}
 .btn.danger{background-color: #d20b0b;border-color: transparent;text-shadow: none;color: #fff;}
