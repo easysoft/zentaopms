@@ -9,6 +9,7 @@
  * @version     $Id: login.html.php 5084 2013-07-10 01:31:38Z wyd621@gmail.com $
  */
 include '../../common/view/header.lite.html.php';
+// include '../../common/view/colorbox.html.php';
 ?>
 
 <div id="container">
@@ -19,7 +20,15 @@ include '../../common/view/header.lite.html.php';
       <div class="nav">
         <a href="###" id="lang" class="btn" title="Change Language/更换语言/更換語言"><?php echo $config->langs[$this->app->getClientLang()]; ?> <i class="icon-caret-down"></i></a>
         <a href="###" id="mobile" class="btn" title="<?php echo $lang->user->mobileLogin; ?>"><i class="icon-mobile-phone icon-2x"></i></a>
-        div.
+        <ul class="droppanel" id="langs">
+          <?php foreach($config->langs as $key => $value):?>
+          <li><a href="###" data-value="<?php echo $key; ?>" class="<?php echo $key==$this->app->getClientLang()?'active':''; ?>"><?php echo $value; ?></a></li>
+          <?php endforeach;?>
+        </ul>
+        <div class="droppanel" id="qrcode">
+          <h4><i class="icon-mobile-phone icon-large"></i> <?php echo $lang->user->mobileLogin ?></h4>
+          <img src="<?php commonModel::getQRCodeLink(); ?>" alt="">
+        </div>
       </div>
     </div>
     <div class="panel-content" id="login-form">
@@ -50,9 +59,7 @@ include '../../common/view/header.lite.html.php';
         </table>
       </form>
     </div>
-    <div class="panel-content" id="mobile-access">
-      
-    </div>
+
     <?php if(isset($demoUsers)):?>  
     <div id='demoUsers' class="panel-foot">
       <span><?php echo $lang->user->loginWithDemoUser; ?></span>
@@ -77,4 +84,42 @@ include '../../common/view/header.lite.html.php';
   </div>
 </div>
 
+<!-- <form method='post' target='hiddenwin'>
+  <table align='center' class='table-4'> 
+    <tr>
+      <td class='rowhead' valign='top'>Language:</td>  
+      <td><?php echo html::select('lang', $config->langs, $this->app->getClientLang(), 'class=select-2 onchange=selectLang(this.value)');?></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td id='keeplogin'>
+      <?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?>
+      <?php commonModel::printQRCodeLink('white');?>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2' class='a-center'>
+      <?php 
+      echo html::submitButton($lang->login);
+      if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
+      echo html::hidden('referer', $referer);
+      ?>
+      </td>
+    </tr>  
+  </table>
+
+  <?php if(isset($demoUsers)):?>  
+  <div id='demoUsers'>  
+    <?php
+    echo "<span>" . $lang->user->loginWithDemoUser . "</span>";
+    $sign = $config->requestType == 'GET' ? '&' : '?';
+    if(isset($demoUsers['productManager'])) echo html::a(inlink('login') . $sign . "account=productManager&password=123456", $demoUsers['productManager'], 'hiddenwin');
+    if(isset($demoUsers['projectManager'])) echo html::a(inlink('login') . $sign . "account=projectManager&password=123456", $demoUsers['projectManager'], 'hiddenwin');
+    if(isset($demoUsers['testManager']))    echo html::a(inlink('login') . $sign . "account=testManager&password=123456",    $demoUsers['testManager'],    'hiddenwin');
+    if(isset($demoUsers['dev1']))           echo html::a(inlink('login') . $sign . "account=dev1&password=123456",           $demoUsers['dev1'],           'hiddenwin');
+    if(isset($demoUsers['tester1']))        echo html::a(inlink('login') . $sign . "account=tester1&password=123456",        $demoUsers['tester1'],        'hiddenwin');
+    ?>  
+  </div>  
+  <?php endif;?>  
+</form> -->
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -540,6 +540,18 @@ class commonModel extends model
     }
 
     /**
+     * Print QR code Link. 
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function getQRCodeLink()
+    {
+        echo helper::createLink('misc', 'qrCode');
+    }
+
+    /**
      * Diff two string. (see phpt)
      * 
      * @param string $text1 
