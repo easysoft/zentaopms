@@ -1,6 +1,7 @@
 a,.tree a,#modulemenu li a {color: #195d00}
 a:hover,.tree a:hover{color: #268f00}
 #header,#topbar select {background:#195d00}
+#modulemenu li{color: #444;}
 #modulemenu li.active>a,#modulemenu li.active>a:hover{color: #444}
 #mainmenu li>a {background:#227c00}
 #mainmenu li>a:hover {background:#268f00}

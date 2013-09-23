@@ -425,7 +425,7 @@ table.data-table td:last-child{padding-right: 20px;}
 
 /* Module menu. */
 #modulemenu    {padding: 0 20px;height: 50px;font-size:14px;background-color: #e5e5e5;}
-#modulemenu li {color:#0033cc;padding:8px 4px 8px 0;line-height: 30px;}
+#modulemenu li {color:#003366;padding:8px 4px 8px 0;line-height: 30px;}
 #modulemenu li a{display: inline-block; padding: 2px 8px; font-weight:normal; font-size:14px; color:#003366}
 #modulemenu li>a:hover{background: #d1d1d1;color: #000;}
 #modulemenu li.active>a,#modulemenu li.active>a:hover {color:#21841d; font-weight:bold; }

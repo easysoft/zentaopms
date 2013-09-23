@@ -1,7 +1,16 @@
-#header {background:#990000}
-#mainmenu ul{background:#cc0000}
-#mainmenu ul li{background:#cc0000}
-#mainmenu a {color:#fff}
-#mainmenu a:hover {color:yellow;}
-#mainmenu .active a{color:#990000}
+a,.tree a,#modulemenu li a {color: #990000}
+a:hover,.tree a:hover{color: #c70202}
+#header,#topbar select {background:#990000}
+#modulemenu li{color: #444;}
+#modulemenu li.active>a,#modulemenu li.active>a:hover{color: #444}
+#mainmenu li>a {background:#b20101}
+#mainmenu li>a:hover {background:#c70202}
+#mainmenu li.active>a,#mainmenu li.active>a:hover{background-color: #e5e5e5;color: #444}
 #topbar select{background:#990000}
+caption,#featurebar,.outer>table.table-1>caption{background-color: #fff3f3}
+.link-button a,.link-icon{color: #990000}
+select:focus,textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,
+input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus {border-color: #990000;outline: 0;}
+
+.button-s,.btn-primary{background-color:#b20101;border-color: #990000; }
+.button-s:hover,.btn-primary:hover{background-color:#990000;border-color: #880101 };
