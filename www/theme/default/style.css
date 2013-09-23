@@ -29,6 +29,7 @@ a  {text-decoration:none;}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
 
+.icon-green-task-cancel:before,.icon-gray-task-cancel:before{content: "\f05e"}
 .icon-green-story-toStory:before,.icon-gray-story-toStory:before{content: "\f064"}
 .icon-green-project-suspend:before,.icon-gray-project-suspend:before{content: "\f04c"}
 .icon-green-project-putoff:before,.icon-gray-project-putoff:before{content: "\f073";}
@@ -128,7 +129,7 @@ input[type="datetime"][readonly],input[type="datetime-local"][readonly],input[ty
 input[type="month"][readonly],input[type="time"][readonly],input[type="week"][readonly],
 input[type="number"][readonly],input[type="email"][readonly],input[type="url"][readonly],
 input[type="search"][readonly],input[type="tel"][readonly],input[type="color"][readonly]{cursor: not-allowed;background-color: #e9e9e9;}
-
+select[multiple]{height: auto;}
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px 20px 19px; background:#e5e5e5;}
 #wrap .outer {text-align:left; padding:20px;background:#fff;border:1px solid #cfcfcf;-webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
@@ -608,8 +609,6 @@ table.data-table td:last-child{padding-right: 20px;}
 
 .icon-green-task-activate {padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -241px;} 
 .icon-gray-task-activate  {padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -262px;} 
-
-.icon-green-task-cancel   {padding:2px 8px; background:url(images/main/zt-icons.png) -141px -242px;} 
 
 .icon-green-task-editEstimate    {padding:2px 8px; background:url(images/main/zt-icons.png)  0px  0px no-repeat;} 
 .icon-green-task-deleteEstimate  {padding:2px 8px; background:url(images/main/zt-icons.png) -60px 0px no-repeat;}
