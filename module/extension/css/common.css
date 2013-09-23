@@ -11,3 +11,4 @@
 #license{width:100%; height:190px; border:1px solid #e4e4e4}
 
 small{font-weight:normal}
+.exttable .button-c,.exttable .button-s{width: auto;min-width: inherit;}
