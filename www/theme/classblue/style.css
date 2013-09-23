@@ -1,22 +1,19 @@
-/* Designed by silver, www.yanhonglu.com. */
-#header{background:url(./images/bg.header.gif) repeat; border:none}
+a,.tree a,#modulemenu li>a {color: #004ec9}
+a:hover,.tree a:hover{color: #4d90fe}
+#header,#topbar select {background:#145bcc}
+#modulemenu li{color: #444;}
+#modulemenu li.active>a,#modulemenu li.active>a:hover{color: #444}
+#mainmenu li>a {background:#3280fc}
+#mainmenu li>a:hover {background:#4d90fe}
+#mainmenu li.active>a,#mainmenu li.active>a:hover{background-color: #e5e5e5;color: #444}
+#topbar select{background:#145bcc}
+caption,#featurebar,.outer>table.table-1>caption{background-color: #ebf2f9}
+.link-button a,.link-icon{color: #145bcc}
+select:focus,textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,
+input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus {border-color: #145bcc;outline: 0;}
 
-#companyname{color:black}
+.button-s,.btn-primary{background-color:#3280fc;border-color: #145bcc; }
+.button-s:hover,.btn-primary:hover{background-color:#145bcc;border-color: #004ec9;}
 
-#topbar   {color:black; margin: 1px 5px;}
-#topbar a {color:black; text-decoration:none}
-#topbar select {color:black; background:#efefef url(./images/bg.header.gif) repeat-x}
-#topbar .w-p50 {padding-left:8px}
-
-#mainmenu   ul{background:none}
-#mainmenu   ul li{background:none}
-
-#mainmenu li{border:none; height:30px; line-height:30px;}
-#mainmenu .active {background:url(./images/bg.menu.gif) no-repeat center 2px; width:85px;}
-
-#mainmenu #searchbox{height:28px; margin-top:2px;}
-
-#modulemenu select{border:1px solid #e4e4e4; background:#fff}
-
-#modulemenu #projectID   {background:#EAEAEA}
-#modulemenu #productID   {background:#EAEAEA}
+table,#wrap .outer,#modulemenu li>a,#featurebar a, .outer>table.table-1>caption a{-moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px;}
+#mainmenu li>a,#searchbox,#featurebar,.outer>table.table-1>caption{-webkit-border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-webkit-border-bottom-right-radius:0em;-webkit-border-bottom-left-radius:0em;-moz-border-radius-topleft:4px;-moz-border-radius-topright:4px;-moz-border-radius-bottomright:0em;-moz-border-radius-bottomleft:0em;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-right-radius:0em;border-bottom-left-radius:0em;}
