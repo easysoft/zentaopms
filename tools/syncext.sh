@@ -20,11 +20,11 @@ if [ $? -ne 0 ]; then
 fi
 
 # Get $src and $dest.
-src=$1
-dest=$2
+src=$1/
+dest=$2/
 
 # Rsync when the shell load first. 
-rsync -aqP --exclude='*.svn' $src/ $dest
+rsync -aqP --exclude='*.svn' $src $dest
 echo `date "+%H:%M:%S"` sync $src to $dest succssfully.
 
 # Watch the $src directory, and sync files to destination.
