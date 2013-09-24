@@ -317,11 +317,17 @@ class common extends control
                 {
                     echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='$extraClass'", true);
                 }
+                else
+                {
+                    $class = "icon-$color-$module-$icon";
+                    echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
+                }
                 echo "</span>";
             }
             else
             {
-                echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon' title='$title'", false);
+                $class = "icon-$color-$module-$icon";
+                echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
             }
         }
         else
