@@ -45,6 +45,6 @@
     <th class='rowhead'><?php echo $lang->company->guest;?></th>
     <td><?php echo $lang->company->guestList[$company->guest];?></td>
   </tr>  
-  <tr><td colspan='2' class='a-center'><?php common::printLink('company', 'edit', '', $lang->edit, '', 'id=editCompany', true, true);?></td></tr>
+  <tr><td colspan='2' class='a-center'><?php common::printLink('company', 'edit', '', '<i class="icon-pencil"></i> ' . $lang->edit, '', 'id="editCompany" class="btn"', true, true);?></td></tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>

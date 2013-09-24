@@ -111,9 +111,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .button-s,.btn-primary,a.btn-primary {background-color: #06a400;border: 1px solid #069900;text-shadow: none;color: #fff;}
 .btn.mini {padding: 3px 12px;line-height: 1;}
 .btn.large {padding: 7px 20px;line-height: 2;font-size: 14px;}
-.btn.danger{background-color: #d20b0b;border-color: transparent;text-shadow: none;color: #fff;}
+.btn-danger{background-color: #d20b0b;border-color: transparent;text-shadow: none;color: #fff;}
 .btn:hover,.button-c:hover,.button-b:hover,#allchecker:hover,#reversechecker:hover,#moreAction:hover {background-color: #eee; border-color: #999;-webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);-moz-box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);box-shadow: 0 2px 1px rgba(0, 0, 0, 0.05);text-decoration: none;}
-.btn.danger:hover{background-color: #d92525;border-color: #ca0000;}
+.btn-danger:hover{background-color: #d92525;border-color: #ca0000;}
 .btn.btn-primary:hover,.button-s:hover {background-color: #058100;border-color: #0b7700;}
 .btn.disabled,.btn[disabled=disabled] {cursor: not-allowed；background: #eeeeee;color: #ccc; border: 1px solid #dfdfdf;text-shadow: 0 1px 0 #fff;}
 .button-s,.button-c{min-width: 80px;}
