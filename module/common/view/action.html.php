@@ -83,7 +83,7 @@ function toggleComment(actionID)
 }
 
 $(function(){
-    var diffButton = "<span onclick='toggleStripTags(this)' class='hidden changeDiff diff-all hand' title='<?php echo $lang->action->original?>'>&nbsp;</span>";
+    var diffButton = "<span onclick='toggleStripTags(this)' class='hidden changeDiff diff-all hand' title='<?php echo $lang->action->original?>'></span>";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function(){
@@ -105,15 +105,15 @@ $(function(){
 <fieldset>
   <legend>
   <?php echo $lang->history?>
-    <span onclick='toggleOrder(this)' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'>&nbsp;</span>";?></span>
-    <span onclick='toggleShow(this);' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'>&nbsp;</span>";?></span>
+    <span onclick='toggleOrder(this)' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'></span>";?></span>
+    <span onclick='toggleShow(this);' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'></span>";?></span>
   </legend>
 <?php else:?>
 <table class='table-1' id='actionbox'>
   <caption>
     <?php echo $lang->history?>
-    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'>&nbsp;</span>";?></span>
-    <span onclick='toggleShow();' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'>&nbsp;</span>";?></span>
+    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'></span>";?></span>
+    <span onclick='toggleShow();' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'></span>";?></span>
   </caption>
   <tr><td>
 <?php endif;?>
@@ -130,7 +130,7 @@ $(function(){
       ?>
       <span>
         <?php $this->action->printAction($action);?>
-        <?php if(!empty($action->history)) echo "<span id='switchButton$i' class='hand change-show' onclick=switchChange($i)>&nbsp;</span>";?>
+        <?php if(!empty($action->history)) echo "<span id='switchButton$i' class='hand change-show' onclick=switchChange($i)></span>";?>
       </span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>
