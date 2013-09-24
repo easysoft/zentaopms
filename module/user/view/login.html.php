@@ -24,7 +24,7 @@ include '../../common/view/header.lite.html.php';
           <?php foreach($config->langs as $key => $value):?>
           <li><a href="###" data-value="<?php echo $key; ?>" class="<?php echo $key==$this->app->getClientLang()?'active':''; ?>"><?php echo $value; ?></a></li>
           <?php endforeach;?>
-        </ul>
+        </ul> 
         <div class="droppanel" id="qrcode">
           <h4><i class="icon-mobile-phone icon-large"></i> <?php echo $lang->user->mobileLogin ?></h4>
           <img src="<?php commonModel::getQRCodeLink(); ?>" alt="">
