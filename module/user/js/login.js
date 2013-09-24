@@ -23,8 +23,8 @@ $(document).ready(function()
     });
 
     $("#mobile").click(function(event) {
-      $("#qrcode").toggle();
-      event.stopPropagation();
-      return false;
+        $("#qrcode").toggle();
+        event.stopPropagation();
+        return false;
     });
 })
