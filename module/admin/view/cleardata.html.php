@@ -18,7 +18,7 @@
     <tr>
       <td class='a-center'>
         <span><?php echo $this->lang->admin->pleaseInputYes . html::input('sure', '', "class='text-2' onkeyup='showClearButton()' autocomplete='off'");?></span>
-        <?php echo html::submitButton($lang->admin->clearData, "class='hidden'");?>
+        <?php echo html::submitButton($lang->admin->clearData, "class='hidden btn btn-danger'");?>
       </td>
     </tr>
   </table>
