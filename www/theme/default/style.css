@@ -481,7 +481,8 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
-@media(max-width:1500px){#querybox .button-c,#querybox .button-s{width: auto;}}
+@media(max-width:1500px){input[type="text"],select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
+@media(max-width:1280px){input[type="text"],select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
 
 /* Tree slider. */
 .treeSlider
