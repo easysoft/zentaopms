@@ -420,13 +420,13 @@ table.data-table td:last-child{padding-right: 20px;}
 #companyname{color:#ffcc00; font-size:14px}
 
 /* Main menu. */
-#mainmenu ul { height:30px; line-height:30px}
+#mainmenu ul { height:32px; line-height:30px}
 #mainmenu li {margin-right: 3px;font-size:14px;}
-#mainmenu li>a  {display: inline-block;white-space:nowrap;padding:1px 15px; color:#E5E5E5; font-weight:normal; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
+#mainmenu li>a  {display: inline-block;white-space:nowrap;padding:2px 15px; color:#E5E5E5; font-weight:normal; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
 #mainmenu li>a:hover{background-color: #2e6dad;color: #fff;-webkit-box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
 #mainmenu li.active>a{background-color:#e5e5e5;color:#21841d; font-weight:bold;}
 
-#mainmenu #searchbox{float:right; background-color: #e5e5e5;padding: 1px 5px;margin: 0;-moz-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); -webkit-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1);}
+#mainmenu #searchbox{height: 32px; float:right; background-color: #e5e5e5;padding: 1px 5px;margin: 0;-moz-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); -webkit-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1);}
 #mainmenu .button-s{border:none; padding:2px}
 
 #searchType  {border:1px solid #ccc; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
@@ -481,6 +481,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
+@media(max-width:1500px){#querybox .button-c,#querybox .button-s{width: auto;}}
 
 /* Tree slider. */
 .treeSlider
