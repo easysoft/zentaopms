@@ -29,6 +29,9 @@ a  {text-decoration:none;}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
 
+.icon-green-testcase-import:before,.icon-gray-testcase-import:before,
+.icon-green-common-import:before,.icon-gray-common-import:before{content: "\f019";}
+.icon-green-common-exportTemplet:before,.icon-gray-common-exportTemplet:before{content: "\f093";}
 .icon-allProducts:before{content: "\f00a";}
 .icon-allProjects:before{content: "\f009";}
 .icon-delete:before{content: "\F014";}
@@ -48,7 +51,6 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-webapp-obtain:before{content: "\f07a";}
 .icon-webapp-create:before{content: "\f0d0";}
 .icon-green-testtask-cases:before,.icon-gray-testtask-cases:before{content: "\f118";}
-.icon-green-testcase-import:before,.icon-gray-testcase-import:before{content: "\f090";}
 .icon-green-testtask-results:before,.icon-gray-testtask-results:before{content: "\f11e";}
 .icon-green-testtask-runCase:before,.icon-gray-testtask-runCase:before{content: "\f04b";}
 .icon-green-common-copy:before,.icon-gray-common-copy:before{content: "\f0c5";}
@@ -491,8 +493,8 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
-@media(max-width:1500px){input[type="text"],select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
-@media(max-width:1280px){input[type="text"],select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
+@media(max-width:1500px){#querybox input[type="text"],select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
+@media(max-width:1280px){#querybox input[type="text"],select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
 
 /* Tree slider. */
 .treeSlider
