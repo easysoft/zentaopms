@@ -95,7 +95,7 @@ class misc extends control
         $notifyDir   = $this->app->getBasePath() . 'www/data/notify/';
         $packageFile = $notifyDir . 'notify.zip';
         $tmpDir      = $notifyDir . 'notify';
-        $loginFile   = $tmpDir . '/notify/logininfo';
+        $loginFile   = $tmpDir . '/tmp/.logininfo';
 
         $this->app->loadClass('pclzip', true);
         $sourceZip = new pclzip($packageFile);
@@ -103,9 +103,9 @@ class misc extends control
         if($files == 0) die("Error : ".$sourceZip->errorInfo(true));
 
         $loginInfo = new stdclass();
-        $loginInfo->account    = $this->app->user->account;
-        $loginInfo->password   = $this->app->user->password;
-        $loginInfo->zentaoRoot = common::getSysURL() . $this->config->webRoot;
+        $loginInfo->account   = $this->app->user->account;
+        $loginInfo->password  = $this->app->user->password;
+        $loginInfo->zentaourl = common::getSysURL() . $this->config->webRoot;
         $loginInfo = json_encode($loginInfo);
 
         file_put_contents($loginFile, $loginInfo);
