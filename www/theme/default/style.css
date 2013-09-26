@@ -151,7 +151,7 @@ input[type="datetime"][readonly],input[type="datetime-local"][readonly],input[ty
 input[type="month"][readonly],input[type="time"][readonly],input[type="week"][readonly],
 input[type="number"][readonly],input[type="email"][readonly],input[type="url"][readonly],
 input[type="search"][readonly],input[type="tel"][readonly],input[type="color"][readonly]{cursor: not-allowed;background-color: #e9e9e9;}
-select[multiple]{height: a}
+select[multiple]{height: auto}
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px 20px 19px; background:#e5e5e5;}
 #wrap .outer {text-align:left; padding:20px;background:#fff;border:1px solid #cfcfcf;-webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
