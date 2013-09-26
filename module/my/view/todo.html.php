@@ -84,8 +84,11 @@
         common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
         common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', '', '', 'iframe', true);
 
-        $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");
-        echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->todo->delete}'");
+        if(common::hasPriv('todo', 'delete'))
+        {
+            $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");
+            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->todo->delete}'");
+        }
         ?>
       </td>
     </tr>

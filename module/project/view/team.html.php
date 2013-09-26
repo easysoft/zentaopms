@@ -43,8 +43,11 @@
     <td><?php echo $memberHours;?></td>
     <td>
       <?php 
-      $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-remove"></i>', '', "class='link-icon' title='{$lang->project->unlinkMember}'");
+      if (common::hasPriv('project', 'unlinkMember'))
+      {
+          $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
+          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-remove"></i>', '', "class='link-icon' title='{$lang->project->unlinkMember}'");
+      }
       ?>
     </td>
   </tr>

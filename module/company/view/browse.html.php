@@ -74,7 +74,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='a-left'>
             <?php 
             common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
-            if(strpos($this->app->company->admins, ",{$user->account},") === false) 
+            if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
                 $deleteURL = $this->createLink('user', 'delete', "userID=$user->id&confirm=yes");
                 echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"userList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->user->delete}'");

@@ -70,8 +70,11 @@ var browseType = '<?php echo $browseType;?>';
             <td>
               <?php 
               common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
-              $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
+              if(common::hasPriv('doc', 'delete'))
+              {
+                  $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
+              }
               ?>
             </td>
           </tr>

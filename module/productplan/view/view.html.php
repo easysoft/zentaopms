@@ -101,8 +101,11 @@
         <td><?php echo $lang->story->stageList[$story->stage];?></td>
         <td>
           <?php
-          $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->productplan->unlinkStory}'");
+          if(common::hasPriv('productplan', 'unlinkStory'))
+          {
+              $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->productplan->unlinkStory}'");
+          }
           ?>
         </td>
       </tr>
@@ -157,8 +160,11 @@
         <td><?php echo $lang->bug->statusList[$bug->status];?></td>
         <td>
           <?php
-          $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '&nbsp;', '', "class='icon-green-productplan-unlinkBug' title='{$lang->productplan->unlinkBug}'");
+          if(common::hasPriv('productplan', 'unlinkBug'))
+          {
+              $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '&nbsp;', '', "class='icon-green-productplan-unlinkBug' title='{$lang->productplan->unlinkBug}'");
+          }
           ?>
         </td>
       </tr>

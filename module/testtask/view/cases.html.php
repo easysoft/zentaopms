@@ -91,8 +91,11 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase');
               common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
 
-              $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-green-testtask-unlinkCase"></i>', '', "class='link-icon' title='{$lang->testtask->unlinkCase}'");
+              if(common::hasPriv('testtask', 'unlinkCase'))
+              {
+                  $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-green-testtask-unlinkCase"></i>', '', "class='link-icon' title='{$lang->testtask->unlinkCase}'");
+              }
 
               common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');
               ?>

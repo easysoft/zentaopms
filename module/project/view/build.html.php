@@ -46,8 +46,11 @@
       $lang->project->bug = $lang->project->viewBug;
       common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", '', 'list');
       common::printIcon('build', 'edit',   "buildID=$build->id");
-      $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-      echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->build->delete}'");
+      if(common::hasPriv('build', 'delete'))
+      {
+          $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->build->delete}'");
+      }
       ?>
     </td>
   </tr>
