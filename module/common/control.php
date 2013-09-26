@@ -170,19 +170,19 @@ class common extends control
         {
             if(isset($order[1]) and $order[1] == 'asc')
             {
-                $orderBy   = "`{$order[0]}`_desc";
+                $orderBy   = "{$order[0]}_desc";
                 $className = 'headerSortDown';
             }
             else
             {
-                $orderBy = "`{$order[0]}`_asc";
+                $orderBy = "{$order[0]}_asc";
                 $className = 'headerSortUp';
             }
         }
         else
         {
             
-            $orderBy   = "`" . trim($fieldName, '`') . "`" . '_' . 'asc';
+            $orderBy   = "" . trim($fieldName, '`') . "" . '_' . 'asc';
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));

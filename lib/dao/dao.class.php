@@ -1527,7 +1527,22 @@ class sql
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
-        $order = str_replace(array('|', '', '_'), ' ', $order);
+        $order  = str_replace(array('|', '', '_'), ' ', $order);
+
+        /* Add "`" in order. */
+        $orders = explode(',', $order);
+        foreach($orders as $i => $order)
+        {
+            $orderParse = explode(' ', trim($order));
+            foreach($orderParse as $key => $value)
+            {
+                $value = trim($value);
+                if(empty($value) or $value == 'desc' or $value == 'asc') continue;
+                $orderParse[$key] = "`" . trim($value, '`') . "`";
+            }
+            $orders[$i] = join(' ', $orderParse);
+        }
+        $order = join(',', $orders);
 
         $this->sql .= ' ' . DAO::ORDERBY . " $order";
         return $this;
