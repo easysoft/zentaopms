@@ -22,7 +22,7 @@
       <th class='w-70px'><?php echo $lang->todo->pri;?></th>
       <th class='w-p40 red'><?php echo $lang->todo->name;?></th>
       <th><?php echo $lang->todo->desc;?></th>
-      <th class='w-150px'><?php echo $lang->todo->beginAndEnd;?></th>
+      <th class='w-200px'><?php echo $lang->todo->beginAndEnd;?></th>
     </tr>
 
     <?php $pri = 3;?>
