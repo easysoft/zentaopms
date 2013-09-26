@@ -312,6 +312,7 @@ class todo extends control
             $cancelURL   = $this->server->HTTP_REFERER;
             die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
         }
+        if(isonlybody())die(js::reload('parent.parent'));
         die(js::reload('parent'));
     }
 

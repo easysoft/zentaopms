@@ -88,7 +88,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
             <td class='a-center'>
               <?php
-              common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'iframe');
+              common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase');
               common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
 
               $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");

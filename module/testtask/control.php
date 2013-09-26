@@ -613,6 +613,10 @@ class testtask extends control
         {
             $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            /* set cookie for ajax load caselist when close colorbox. */
+            setcookie('selfClose', 1);
+
             if($preAndNext->next)
             {
                 $nextRunID   = $runID ? $preAndNext->next->id : 0;
@@ -622,8 +626,7 @@ class testtask extends control
             }
             else
             {
-                echo js::reload('parent');
-                die(js::closeWindow());
+                die(js::closeColorbox('parent'));
             }
         }
 
