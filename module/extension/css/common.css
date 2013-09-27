@@ -4,7 +4,7 @@
 .success  {color:green; font-size:14px}
 
 .exttable td {padding:10px 5px 5px 10px}
-.exttable caption{background:#efefef; border-color:#CCC9C9; margin-left:0}
+#wrap table.table-1.exttable>caption{background:#efefef; border-color:#CCC9C9; margin:0px;padding: 2px 8px}
 .exttable {border-color:#CCC9C9; border-top:none;}
 .exttable td{border-color:#CCC9C9}
 
