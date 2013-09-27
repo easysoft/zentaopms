@@ -8,6 +8,7 @@ $config->action->objectNameFields['task']        = 'name';
 $config->action->objectNameFields['build']       = 'name';
 $config->action->objectNameFields['bug']         = 'title';
 $config->action->objectNameFields['testcase']    = 'title';
+$config->action->objectNameFields['case']        = 'title';
 $config->action->objectNameFields['testtask']    = 'name';
 $config->action->objectNameFields['user']        = 'account';
 $config->action->objectNameFields['doc']         = 'title';
