@@ -1537,7 +1537,7 @@ class sql
             foreach($orderParse as $key => $value)
             {
                 $value = trim($value);
-                if(empty($value) or $value == 'desc' or $value == 'asc') continue;
+                if(empty($value) or strtolower($value) == 'desc' or strtolower($value) == 'asc') continue;
                 $orderParse[$key] = "`" . trim($value, '`') . "`";
             }
             $orders[$i] = join(' ', $orderParse);
