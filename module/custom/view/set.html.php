@@ -23,8 +23,8 @@ $itemRow = <<<EOT
       <input type='text' class="w-p98" value="" name="values[]">
     </td>
     <td class='a-left'>
-      <a href='javascript:onclick=addItem(this)' class='link-icon'><i class='icon-add'></i></a>
-      <a href='javascript:onclick=delItem(this)' class='link-icon'><i class='icon-delete'></i></a>
+      <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
+      <a href='javascript:void()' class='link-icon' onclick='delItem(this)'><i class='icon-delete'></i></a>
     </td>
   </tr>
 EOT;
@@ -78,7 +78,7 @@ EOT;
             </td>
             <?php if($canAdd):?>
             <td class='a-left'>
-              <a href='javascript:onclick=addItem(this)' class='link-icon'><i class='icon-add'></i></a>
+              <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
               <?php if(!$system):?><a href='javascript:onclick=delItem(this)' class='link-icon'><i class='icon-delete'></i></a><?php endif;?>
             </td>
             <?php endif;?>
