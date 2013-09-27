@@ -151,7 +151,8 @@ input[type="datetime"][readonly],input[type="datetime-local"][readonly],input[ty
 input[type="month"][readonly],input[type="time"][readonly],input[type="week"][readonly],
 input[type="number"][readonly],input[type="email"][readonly],input[type="url"][readonly],
 input[type="search"][readonly],input[type="tel"][readonly],input[type="color"][readonly]{cursor: not-allowed;background-color: #e9e9e9;}
-select[multiple]{height: auto}
+select[multiple]{height: auto;}
+
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px 20px 19px; background:#e5e5e5;}
 #wrap .outer {text-align:left; padding:20px;background:#fff;border:1px solid #cfcfcf;-webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
@@ -228,6 +229,7 @@ select[multiple]{height: auto}
 .select-1 {width: 90%}
 .select-2 {width: 125px}
 .select-3 {width: 245px} 
+select.select-3{width: 255px;}
 .select-4 {width: 360px}
 .select-5 {width: 480px}
 
@@ -236,9 +238,6 @@ select[multiple]{height: auto}
 .area-3{width: 240px}
 .area-4{width: 360px}
 .area-5{width: 480px}
-
-.text-1, .text-2, .text-3, .text-4, .text-5 {padding:3px 0}
-.select-1, .select-2, .select-3, .select-4, .select-5 {padding:3px 0}
 
 .text-1, .text-2, .text-3, .text-4, .text-5, 
 .select-1, .select-2, .select-3, .select-4, .select-5, 

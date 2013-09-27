@@ -1,7 +1,9 @@
 .block {border:1px solid #efefef; height:225px;}
-.dynamic{border:1px solid #efefef;}
-.linkbox1{height:180px; overflow-y:auto}
+.dynamic{border:1px solid #efefef;height: 434px;overflow: hidden;}
+.dynamic td{padding: 5px 5px;}
+.linkbox1{height:205px; overflow-y:auto}
 .linkbox2{height:225px; overflow-y:auto}
+#projectbox{margin-bottom: 23px;}
 
 #row1{margin-bottom:20px}
 #row2{margin-bottom:10px}

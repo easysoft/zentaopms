@@ -17,7 +17,7 @@
   <table class='cont' id='row1'>
     <tr valign='top'>
       <td width='66%' style='padding-right:20px'>
-        <?php include './blockprojects.html.php';?> <br />
+        <?php include './blockprojects.html.php';?>
         <?php include './blockproducts.html.php';?>
       </td>
       <td width='33%'><?php if(common::hasPriv('company', 'dynamic')) include './blockdynamic.html.php';?></td>
