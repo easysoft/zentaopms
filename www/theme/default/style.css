@@ -88,6 +88,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-testcase-batchCreate:before,.icon-gray-testcase-batchCreate:before,
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
 .icon-green-bug-batchCreate:before,.icon-gray-bug-batchCreate:before,
+.icon-green-effort-batchCreate:before,.icon-gray-effort-batchCreate:before
 .icon-green-story-batchCreate:before,.icon-gray-story-batchCreate:before{content: "\f055";}
 .icon-green-common-report:before,.icon-gray-common-report:before{content: "\f080";}
 .icon-green-story-create:before,.icon-gray-story-create:before,
@@ -223,6 +224,7 @@ select[multiple]{height: auto;}
 .text-1 {width: 90%}
 .text-2 {width: 120px}
 .text-3 {width: 240px}
+select.text-3 {width: 250px}
 .text-4 {width: 360px}
 .text-5 {width: 480px}
 
@@ -373,7 +375,7 @@ table.data-table td:last-child{padding-right: 20px;}
 .w-pri      {width:30px;}
 .w-severity {width:40px;}
 .w-hour     {width:40px;}
-.w-date     {width:70px;}
+.w-date     {width:80px;}
 .w-user     {width:60px;}
 .w-status   {width:50px}
 .w-type     {width:80px}
@@ -492,8 +494,8 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
-@media(max-width:1500px){#querybox input[type="text"],select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
-@media(max-width:1280px){#querybox input[type="text"],select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
+@media(max-width:1500px){#querybox input[type="text"],#querybox select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
+@media(max-width:1280px){#querybox input[type="text"],#querybox select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
 
 /* Tree slider. */
 .treeSlider
@@ -506,7 +508,7 @@ table.data-table td:last-child{padding-right: 20px;}
   cursor: pointer; 
   width: 8px; 
   height: 50px;
-  left: 16px;
+  left: 20px;
   border-radius:0px 10px 10px 0px
 }
 .treeSlider span { 
@@ -538,7 +540,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #dataform{margin-top:20px; padding:0 30px}
 #dataform caption{font-size:14px; padding:5px 5px 5px 10px}
 #dataform .rowhead{font-size:11.5px; font-weight:1.2; border:none}
-#dataform tr, #createform td, #createform th{border:none; background:#fcfcfc}
+#dataform tr, #createform td, #createform th{border:none;}
 
 .actionlink{font-size:14px; font-weight:bold; padding-top:8px}
 .actionlink span{padding:5px 3px}
@@ -637,7 +639,8 @@ table.data-table td:last-child{padding-right: 20px;}
 /* Case icons. */
 .icon-green-testcase-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
 
-.link-button a{color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
+.link-button{display: inline-block;}
+.link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
 .link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
 
