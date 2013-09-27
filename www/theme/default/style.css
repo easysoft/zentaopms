@@ -88,6 +88,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-testcase-batchCreate:before,.icon-gray-testcase-batchCreate:before,
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
 .icon-green-bug-batchCreate:before,.icon-gray-bug-batchCreate:before,
+.icon-green-effort-batchCreate:before,.icon-gray-effort-batchCreate:before
 .icon-green-story-batchCreate:before,.icon-gray-story-batchCreate:before{content: "\f055";}
 .icon-green-common-report:before,.icon-gray-common-report:before{content: "\f080";}
 .icon-green-story-create:before,.icon-gray-story-create:before,
@@ -223,6 +224,7 @@ select[multiple]{height: auto;}
 .text-1 {width: 90%}
 .text-2 {width: 120px}
 .text-3 {width: 240px}
+select.text-3 {width: 250px}
 .text-4 {width: 360px}
 .text-5 {width: 480px}
 
@@ -492,8 +494,8 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
-@media(max-width:1500px){#querybox input[type="text"],select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
-@media(max-width:1280px){#querybox input[type="text"],select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
+@media(max-width:1500px){#querybox input[type="text"],#querybox select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
+@media(max-width:1280px){#querybox input[type="text"],#querybox select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
 
 /* Tree slider. */
 .treeSlider
