@@ -42,7 +42,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-project-putoff:before,.icon-gray-project-putoff:before{content: "\f073";}
 .icon-green-story-activate:before,.icon-gray-story-activate:before,
 .icon-green-bug-activate:before,.icon-gray-bug-activate:before,
-.icon-green-task-activate:before,.icon-gray-task-activate:before
+.icon-green-task-activate:before,.icon-gray-task-activate:before,
 .icon-green-project-activate:before,.icon-gray-project-activate:before{content: "\f011";color:#058100;}
 .icon-green-bug-icon-wrench:before,.icon-gray-bug-icon-wrench:before{content: "\f085";}
 .icon-green-group-managepriv:before,.icon-gray-group-managepriv:before{content: "\f023";}
@@ -78,7 +78,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-task-assignTo:before,.icon-gray-task-assignTo:before,.icon-green-bug-assignTo:before,.icon-gray-bug-assignTo:before{content: "\f0a4";}
 .icon-green-common-delete:before,.icon-gray-common-delete:before,
 .icon-green-task-deleteEstimate:before,.icon-gray-task-deleteEstimate:before{content: "\f00d";}
-.icon-green-common-edit:before,.icon-gray-common-edit:before
+.icon-green-common-edit:before,.icon-gray-common-edit:before,
 .icon-green-task-editEstimate:before,.icon-gray-task-editEstimate:before{content: "\f040";}
 .icon-green-todo-finish:before,.icon-gray-todo-finish:before,
 .icon-green-bug-resolve:before,.icon-gray-bug-resolve:before,
@@ -88,7 +88,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-testcase-batchCreate:before,.icon-gray-testcase-batchCreate:before,
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
 .icon-green-bug-batchCreate:before,.icon-gray-bug-batchCreate:before,
-.icon-green-effort-batchCreate:before,.icon-gray-effort-batchCreate:before
+.icon-green-effort-batchCreate:before,.icon-gray-effort-batchCreate:before,
 .icon-green-story-batchCreate:before,.icon-gray-story-batchCreate:before{content: "\f055";}
 .icon-green-common-report:before,.icon-gray-common-report:before{content: "\f080";}
 .icon-green-story-create:before,.icon-gray-story-create:before,
