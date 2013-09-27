@@ -1538,7 +1538,12 @@ class sql
             {
                 $value = trim($value);
                 if(empty($value) or strtolower($value) == 'desc' or strtolower($value) == 'asc') continue;
-                $orderParse[$key] = "`" . trim($value, '`') . "`";
+                $field = trim($value, '`');
+                /* such as t1.id field. */
+                if(strpos($value, '.') !== false) list($table, $field) = explode('.', $field);
+                $field = "`$field`";
+                $orderParse[$key] = isset($table) ? $table . '.' . $field :  $field;
+                unset($table);
             }
             $orders[$i] = join(' ', $orderParse);
         }
