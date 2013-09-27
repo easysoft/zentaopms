@@ -576,8 +576,7 @@ class task extends control
                     if($change['field'] == 'status')
                     {
                         $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                        $cancelURL  = $this->server->HTTP_REFERER;
-                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
+                        echo js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, '', 'parent');
                     }
                 }
             }
