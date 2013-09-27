@@ -65,6 +65,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-story-change:before,.icon-gray-story-change:before{content: "\f074";}
 .icon-green-bug-confirmBug:before,.icon-gray-bug-confirmBug:before,
 .icon-green-task-confirmStoryChange:before,.icon-gray-task-confirmStoryChange:before,
+.icon-green-testcase-confirmStoryChange:before,.icon-gray-testcase-confirmStoryChange:before,
 .icon-green-story-review:before,.icon-gray-story-review:before{content: "\f002";}
 .icon-green-task-close:before,.icon-gray-task-close:before,
 .icon-green-story-close:before,.icon-gray-story-close:before,
@@ -638,9 +639,8 @@ table.data-table td:last-child{padding-right: 20px;}
 
 #featurebar .f-right .icon-green-bug-customFields {padding:2px 8px;  background:url(images/main/zt-icons.png) -141px -282px;} 
 
-/* Case icons. */
-.icon-green-testcase-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
 
+/* Link-button. */
 .link-button{display: inline-block;}
 .link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
 .link-button a i{font-size: 18px;}
