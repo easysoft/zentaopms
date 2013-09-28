@@ -306,8 +306,12 @@ fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
 
 /* copyed from tablesorter plugin. */
 table.tablesorter thead tr div{padding:0; margin:0} 
+table.tablesorter thead tr .header{cursor:pointer;}
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red;}
 table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:red}
+table.tablesorter thead tr .header:after   {font-family: FontAwesome; font-weight: normal;content: "  \f0dc";font-size: 14px;}
+table.tablesorter thead tr .headerSortUp:after  {font-family: FontAwesome; font-weight: normal;content: "  \f0d8";font-size: 14px;color:red;}
+table.tablesorter thead tr .headerSortDown:after{font-family: FontAwesome; font-weight: normal;content: "  \f0d7";font-size: 14px;color:red;}
 table.tablesorter thead tr .header a:after   {font-family: FontAwesome; font-weight: normal;content: "  \f0dc";font-size: 14px;}
 table.tablesorter thead tr .headerSortUp a:after  {font-family: FontAwesome; font-weight: normal;content: "  \f0d8";font-size: 14px;color:red;}
 table.tablesorter thead tr .headerSortDown a:after{font-family: FontAwesome; font-weight: normal;content: "  \f0d7";font-size: 14px;color:red;}
