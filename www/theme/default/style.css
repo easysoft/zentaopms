@@ -106,6 +106,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-group-create:before,.icon-gray-group-create:before,
 .icon-add:before,
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
+.icon-green-effort-createForObject:before{content: "\f017"}
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before{color: #ccc;}
 
@@ -646,6 +647,7 @@ table.data-table td:last-child{padding-right: 20px;}
 .link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
 .link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
+<<<<<<< HEAD:www/theme/default/style.css
 
 /* Effort icons. */
 .icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -2px;} 
