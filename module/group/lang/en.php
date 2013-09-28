@@ -43,6 +43,7 @@ $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 
 $lang->group->versions['']          = 'History';
+$lang->group->versions['5_1']       = 'Zentao 5.1';
 $lang->group->versions['5_0_beta2'] = 'Zentao 5.0.beta2';
 $lang->group->versions['5_0_beta1'] = 'Zentao 5.0.beta1';
 $lang->group->versions['4_3_beta']  = 'Zentao 4.3.beta';
