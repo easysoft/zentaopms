@@ -31,7 +31,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
   </div>
   <div class='f-right'>
     <?php 
-    common::printIcon('testcase', 'import', "productID=$productID");
+    common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement');
 
     echo '<span class="link-button dropButton">'; 
     echo html::a("#", "<i class='icon-green-common-export'></i>" . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");

@@ -6,8 +6,8 @@ KindEditor.lang({'savetemplate' : '<?php echo $lang->bug->saveTemplate;?>'});
 foreach($templates as $key => $template)
 {
     echo "<span id='tplBox$template->id'>";
-    echo $lang->arrow. "<span id='tplTitleBox$template->id' onclick='setTemplate($template->id)' style='text-decoration:underline; color:blue' class='hand'>$template->title</span>";
-    echo html::commonButton('&nbsp;', "onclick=deleteTemplate($template->id) class='icon-remove icon-large'");
+    echo '&nbsp; ' . $lang->arrow. " <span id='tplTitleBox$template->id' onclick='setTemplate($template->id)' style='text-decoration:underline; color:blue' class='hand'>$template->title</span>";
+    echo "&nbsp; <a href='javascript:void();' onclick='deleteTemplate($template->id)' class='link-icon'><i class='icon-remove icon-sm'></i></a>";
     echo "<span id='template$template->id' class='hidden'>$template->content</span>";
     echo '<br /></span>';
 }
