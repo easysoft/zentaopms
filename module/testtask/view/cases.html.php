@@ -36,7 +36,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     ?>
   </div>
 </div>
-<div id='querybox'></div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
 <form method='post' name='casesform'>
 <table class='cont-lt1'>

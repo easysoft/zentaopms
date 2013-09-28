@@ -73,7 +73,7 @@
       <th class='rowhead'><?php echo $lang->task->mailto;?></th>
       <td>
         <?php
-        echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), 'class="text-1" multiple');
+        echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), 'multiple');
         if($contactLists) echo html::select('', $contactLists, '', "class='f-right' onchange=\"setMailto('mailto', this.value)\"");
         ?>
       </td>

@@ -91,6 +91,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
 .icon-green-bug-batchCreate:before,.icon-gray-bug-batchCreate:before,
 .icon-green-effort-batchCreate:before,.icon-gray-effort-batchCreate:before,
+.icon-green-user-batchCreate:before,.icon-gray-user-batchCreate:before,
 .icon-green-story-batchCreate:before,.icon-gray-story-batchCreate:before{content: "\f055";}
 .icon-green-common-report:before,.icon-gray-common-report:before{content: "\f080";}
 .icon-green-story-create:before,.icon-gray-story-create:before,
@@ -646,3 +647,7 @@ table.data-table td:last-child{padding-right: 20px;}
 .link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
 .link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
+<<<<<<< HEAD:www/theme/default/style.css
+
+/* Effort icons. */
+.icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -2px;} 

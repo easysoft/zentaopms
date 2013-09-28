@@ -544,7 +544,7 @@ function setRepoLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:600, height:200, iframe:true, transition:'none', scrolling:true});
+   if($('.export').size()) $(".export").colorbox({width:650, height:250, iframe:true, transition:'none', scrolling:true});
 }
 
 /**

@@ -165,8 +165,8 @@ $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 
 $lang->product->menu->view    = array('link' => 'Manage|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = 'Projects|product|project|status=all&productID=%s';
-$lang->product->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New|product|create', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-th">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -256,7 +256,7 @@ $lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subM
 $lang->company->menu->view         = array('link' => 'Company|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
 $lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>Add Group|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<span class="icon-green-user-batchCreate">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
 $lang->company->menu->addUser      = array('link' => '<span class="icon-add">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();

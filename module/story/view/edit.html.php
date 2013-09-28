@@ -47,14 +47,14 @@
         <table class='table-1'>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->story->product;?></td>
-            <td><?php echo html::select('product', $products, $story->product, 'class="select-1" onchange="loadProduct(this.value)";');?></td>
+            <td><?php echo html::select('product', $products, $story->product, 'class="select-3" onchange="loadProduct(this.value)";');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->module;?></td>
             <td>
               <span id='moduleIdBox'>
               <?php
-              echo html::select('module', $moduleOptionMenu, $story->module, 'class="select-1"');
+              echo html::select('module', $moduleOptionMenu, $story->module, 'class="select-3"');
               if(count($moduleOptionMenu) == 1)
               {
                   echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
@@ -68,7 +68,7 @@
             <td class='rowhead'><?php echo $lang->story->plan;?></td>
             <td>
             <span id='planIdBox'>
-            <?php echo html::select('plan', $plans, $story->plan, 'class=select-1');
+            <?php echo html::select('plan', $plans, $story->plan, 'class=select-3');
             if(count($plans) == 1) 
             {
                 echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
@@ -80,7 +80,7 @@
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->story->source;?></th>
-            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=select-1');?></td>
+            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=select-3');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->status;?></td>
@@ -89,12 +89,12 @@
           <?php if($story->status != 'draft'):?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->stage;?></td>
-            <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, 'class=select-1');?></td>
+            <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, 'class=select-3');?></td>
           </tr>
           <?php endif;?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->pri;?></td>
-            <td><?php echo html::select('pri', $lang->story->priList, $story->pri, 'class=select-1');?></td>
+            <td><?php echo html::select('pri', $lang->story->priList, $story->pri, 'class=select-3');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->estimate;?></td>
@@ -106,7 +106,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->mailto;?></td>
-            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='select-1' multiple");?></td>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='select-3' multiple");?></td>
           </tr>
         </table>
       </fieldset>
@@ -119,7 +119,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->assignedTo;?></td>
-            <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-1"');?></td>
+            <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-3"');?></td>
           </tr>
           <?php if($story->reviewedBy):?>
           <tr>
@@ -130,11 +130,11 @@
           <?php if($story->status == 'closed'):?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->closedBy;?></td>
-            <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="select-1"');?></td>
+            <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="select-3"');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->closedReason;?></td>
-            <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, 'class="select-1"');?></td>
+            <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, 'class="select-3"');?></td>
           </tr>
           <?php endif;?>
         </table>

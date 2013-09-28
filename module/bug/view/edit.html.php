@@ -44,7 +44,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <div class='w-p90'><?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12'");?></div>
+           <?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12' class='area-1'");?>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>
@@ -72,14 +72,12 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->product;?></td>
-            <td>
-              <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value);");?>
-            </td>
+            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->module;?></td>
             <td>
-              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()'");?></span>
+              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='select-3'");?></span>
             </td>
           </tr>
           <tr>
@@ -122,11 +120,11 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
-            <td><?php echo html::input('keywords', $bug->keywords, 'class="text-3"');?></td>
+            <td><?php echo html::input('keywords', $bug->keywords, 'class="text-1"');?></td>
           </tr>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
-            <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="text-3" multiple');?></td>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="text-1" multiple');?></td>
           </tr>
         </table>
       </fieldset>
@@ -167,7 +165,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
-            <td><?php echo html::input('resolvedDate', $bug->resolvedDate, 'class=text-3');?></td>
+            <td><?php echo html::input('resolvedDate', $bug->resolvedDate, 'class=text-1');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
@@ -179,7 +177,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
             <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
-            <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=text-3');?></td>
+            <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=text-1');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->closedBy;?></td>
@@ -187,7 +185,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->closedDate;?></td>
-            <td><?php echo html::input('closedDate', $bug->closedDate, 'class=text-3');?></td>
+            <td><?php echo html::input('closedDate', $bug->closedDate, 'class=text-1');?></td>
           </tr>
         </table>
       </fieldset>
@@ -196,11 +194,11 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table-1 a-left'>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
-            <td><?php echo html::input('linkBug', $bug->linkBug, 'class="text-3"');?></td>
+            <td><?php echo html::input('linkBug', $bug->linkBug, 'class="text-1"');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->case;?></td>
-            <td><?php echo html::input('case', $bug->case, 'class="text-3"');?></td>
+            <td><?php echo html::input('case', $bug->case, 'class="text-1"');?></td>
           </tr>
         </table>
       </fieldset>
