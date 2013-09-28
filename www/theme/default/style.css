@@ -45,6 +45,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-bug-activate:before,.icon-gray-bug-activate:before,
 .icon-green-task-activate:before,.icon-gray-task-activate:before,
 .icon-green-project-activate:before,.icon-gray-project-activate:before{content: "\f011";color:#058100;}
+.icon-green-bug-customFields:before,.icon-gray-bug-customFields:before,
 .icon-green-bug-icon-wrench:before,.icon-gray-bug-icon-wrench:before{content: "\f085";}
 .icon-green-group-managepriv:before,.icon-gray-group-managepriv:before{content: "\f023";}
 .icon-green-group-managemember:before,.icon-gray-group-managemember:before{content: "\f0c0";}
@@ -60,13 +61,15 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-bug-createBug:before,.icon-gray-bug-createBug:before{content: "\f188";}
 .icon-green-productplan-linkStory:before,.icon-gray-productplan-linkStory:before,
 .icon-green-testtask-linkCase:before,.icon-gray-testtask-linkCase:before,
-.icon-green-project-linkStory:before,.icon-green-project-linkStory:before {content: "\f0c1";}
+.icon-green-project-linkStory:before,.icon-gray-project-linkStory:before {content: "\f0c1";}
+.icon-green-project-unlinkStory:before,.icon-gray-project-unlinkStory:before,
 .icon-green-testtask-unlinkCase:before,.icon-gray-testtask-unlinkCase:before{content: "\f127";}
 .icon-green-story-change:before,.icon-gray-story-change:before{content: "\f074";}
 .icon-green-bug-confirmBug:before,.icon-gray-bug-confirmBug:before,
 .icon-green-task-confirmStoryChange:before,.icon-gray-task-confirmStoryChange:before,
 .icon-green-bug-confirmStoryChange:before,.icon-gray-testcase-confirmStoryChange:before,
 .icon-green-testcase-confirmStoryChange:before,.icon-gray-testcase-confirmStoryChange:before,
+.icon-green-bug-confirmStoryChange:before,.icon-gray-bug-confirmStoryChange:before,
 .icon-green-story-review:before,.icon-gray-story-review:before{content: "\f002";}
 .icon-green-task-close:before,.icon-gray-task-close:before,
 .icon-green-story-close:before,.icon-gray-story-close:before,
@@ -80,6 +83,9 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-project-start:before,.icon-gray-project-start:before{content: "\f04b";}
 .icon-green-task-assignTo:before,.icon-gray-task-assignTo:before,.icon-green-bug-assignTo:before,.icon-gray-bug-assignTo:before{content: "\f0a4";}
 .icon-green-common-delete:before,.icon-gray-common-delete:before,
+.icon-green-productplan-unlinkBug:before,.icon-gray-productplan-unlinkBug:before,
+.icon-green-productplan-unlinkStory:before,.icon-gray-productplan-unlinkStory:before,
+.icon-green-project-unlinkStory:before,.icon-gray-project-unlinkStory:before,
 .icon-green-task-deleteEstimate:before,.icon-gray-task-deleteEstimate:before{content: "\f00d";}
 .icon-green-common-edit:before,.icon-gray-common-edit:before,
 .icon-green-task-editEstimate:before,.icon-gray-task-editEstimate:before{content: "\f040";}
@@ -108,11 +114,12 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-add:before,
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
 .icon-green-effort-createForObject:before{content: "\f017"}
+.icon-arrow:before{content: "\f105";}
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before{color: #ccc;}
 
-.icon-green-testcase-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -582px;}
-.icon-gray-testcase-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -604px;}
+.icon-green-testcase-createCase,.icon-green-story-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -582px;}
+.icon-gray-testcase-createCase,.icon-gray-story-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -604px;}
 
 .change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-sort{display: inline-block; font-family: FontAwesome;border: 1px solid #555;color: #555; font-size: 13px;font-weight: lighter; width: 14px;height: 13px;line-height: 13px;text-align: center;}
 .change-show:hover,.change-hide:hover,.log-desc:hover,.log-asc:hover,.diff-all:hover,.diff-sort:hover{background-color: #333;color: #fff}
@@ -586,7 +593,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #poweredby {float: right;margin-right: 20px;}
 
 /* Debug. */
-.debugwin  {display:block; width:50px; height:20px; bottom:50px; border-left:10px solid red; position:fixed;}
+.debugwin  {display:block; width:50px; height:20px; bottom:50px; position:fixed;}
 
 /* Pager. */
 .pager {margin-bottom:0}
@@ -613,8 +620,6 @@ table.data-table td:last-child{padding-right: 20px;}
 .button-create{}
 
 /*-----------------------ICONS --------------------*/
-.icon-arrow  {padding-left:10px; background:url(images/main/zt-icons.png) -102px -443px;}
-
 /* Common icons. */
 #featurebar .f-right .icon-goback {padding:0px 9px}
 .pri1,.pri2,.pri3,.pri4,.pri5,.pri6{display:inline-block;width: 14px;height: 14px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68;}
@@ -623,13 +628,6 @@ table.data-table td:last-child{padding-right: 20px;}
 .pri4{border-color: #475da8;color: #475da8}
 .pri5{border-color: #6989c5;color: #6989c5}
 .pri6{border-color: #9ebee5;color: #9ebee5}
-
-/* Story icons. */
-.icon-green-story-createCase {padding:2px 8px; background:url(images/main/zt-icons.png) -120px -201px;}
-.icon-gray-story-createCase  {padding:2px 8px; background:url(images/main/zt-icons.png)  -120px -221px;}
-
-.icon-green-project-unlinkStory {padding:2px 5px 2px 10px; background:url(images/main/zt-icons.png) -60px 0px;}
-.icon-green-productplan-unlinkStory, .icon-green-productplan-unlinkBug{padding:2px 5px 2px 10px; background:url(images/main/zt-icons.png) -60px 0px;}
 
 /* Bug icons. */
 .severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;line-height: 16px;font-weight: bold; text-align: center; font-size: 12px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;}
@@ -645,7 +643,3 @@ table.data-table td:last-child{padding-right: 20px;}
 .link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;} 
 .link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
-<<<<<<< HEAD:www/theme/default/style.css
-
-/* Effort icons. */
-.icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -2px;} 
