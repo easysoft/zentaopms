@@ -587,30 +587,26 @@ function setComment()
  */
 function autoCheck()
 {
-    $('.tablesorter tr :checkbox').click(function()
-    {
-        if($(this).attr('checked'))
-        {
-            $(this).attr('checked', false);
-        }
-        else
-        {
-            $(this).attr('checked', true);
-        }
-        return;
-    });
+    $('.tablesorter tr :checkbox').click(function(){clickInCheckbox = 1;});
 
     $('.tablesorter tr').click(function()
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
-            if($(this).find(':checkbox').attr('checked'))
+            if(typeof(clickInCheckbox) != 'undefined' && clickInCheckbox == 1)
             {
-                $(this).find(':checkbox').attr('checked', false);
+                clickInCheckbox = 0;
             }
             else
             {
-                $(this).find(':checkbox').attr('checked', true);
+                if($(this).find(':checkbox').attr('checked'))
+                {
+                    $(this).find(':checkbox').attr('checked', false);
+                }
+                else
+                {
+                    $(this).find(':checkbox').attr('checked', true);
+                }
             }
         }
     });
