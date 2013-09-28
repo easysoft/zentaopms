@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    $("a.customFields").colorbox({width:540, height:340, iframe:true, transition:'none'});
+    $("a.customFields").colorbox({width:680, height:400, iframe:true, transition:'none'});
     $('#' + browseType + 'Tab').addClass('active'); 
     $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();

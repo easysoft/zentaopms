@@ -48,7 +48,7 @@
     <caption><?php echo $lang->task->logEfforts;?></caption>
     <tr>
       <th class="w-id"><?php echo $lang->idAB;?></th>
-      <th class="w-100px"><?php echo $lang->task->date;?></th>
+      <th class="w-120px"><?php echo $lang->task->date;?></th>
       <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
       <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
       <th><?php echo $lang->comment;?></th>

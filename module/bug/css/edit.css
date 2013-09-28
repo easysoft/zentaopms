@@ -1,4 +1,2 @@
-#product, #module, #project, #story, #task, #resolvedBuild{width:220px}
-#steps    {width:100%}
-.select-3 {width:220px}
-.text-3   {width:215px}
+select.select-3,#mailto,#module,#story-chzn {width:230px}
+.text-1   {width:220px}

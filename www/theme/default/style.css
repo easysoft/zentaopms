@@ -91,6 +91,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-task-batchCreate:before,.icon-gray-task-batchCreate:before,
 .icon-green-bug-batchCreate:before,.icon-gray-bug-batchCreate:before,
 .icon-green-effort-batchCreate:before,.icon-gray-effort-batchCreate:before,
+.icon-green-user-batchCreate:before,.icon-gray-user-batchCreate:before,
 .icon-green-story-batchCreate:before,.icon-gray-story-batchCreate:before{content: "\f055";}
 .icon-green-common-report:before,.icon-gray-common-report:before{content: "\f080";}
 .icon-green-story-create:before,.icon-gray-story-create:before,
