@@ -95,6 +95,7 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('4.3'));
             case '5_0_beta1':
             case '5_0_beta2':
+            case '5_0':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
