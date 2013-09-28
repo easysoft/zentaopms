@@ -39,7 +39,7 @@ class actionModel extends model
         $action->actor      = $actor ? $actor : $this->app->user->account;
         $action->action     = strtolower($actionType);
         $action->date       = helper::now();
-        $action->comment    = trim(strip_tags($comment)) ? $comment : '';
+        $action->comment    = trim(strip_tags($comment, "<img>")) ? $comment : '';
         $action->extra      = $extra;
 
         /* Get product and project for this object. */
