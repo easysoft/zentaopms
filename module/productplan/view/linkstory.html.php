@@ -20,7 +20,7 @@
       <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedStories;?></caption>
       <thead>
       <tr class='colhead'>
-        <th class='w-id'>    <?php echo $lang->idAB;?></th>
+        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
         <th class='w-200px'> <?php echo $lang->story->plan;?></th>
         <th>                 <?php echo $lang->story->title;?></th>
@@ -68,7 +68,7 @@
       <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
       <thead>
       <tr class='colhead'>
-        <th class='w-id'>    <?php echo $lang->idAB;?></th>
+        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
         <th>                 <?php echo $lang->story->title;?></th>
         <th class='w-user'>  <?php echo $lang->openedByAB;?></th>

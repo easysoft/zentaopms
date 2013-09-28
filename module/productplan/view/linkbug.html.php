@@ -20,7 +20,7 @@
       <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedBugs;?></caption>
       <thead>
       <tr class='colhead'>
-        <th class='w-id'>    <?php echo $lang->idAB;?></th>
+        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
         <th class='w-200px'> <?php echo $lang->bug->plan;?></th>
         <th>                 <?php echo $lang->bug->title;?></th>
@@ -64,7 +64,7 @@
       <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedBugs;?></caption>
       <thead>
       <tr class='colhead'>
-        <th class='w-id'>    <?php echo $lang->idAB;?></th>
+        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
         <th>                 <?php echo $lang->bug->title;?></th>
         <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
