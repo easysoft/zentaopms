@@ -5,13 +5,15 @@ $(function()
     if(typeof page == 'undefined') page = '';
     if(page == 'create')
     {
-        productID = $('#product').val();
+        productID  = $('#product').val();
+        moduleID   = $('#module').val();
+        assignedto = $('#assignedTo').val();
         changeProductConfirmed = true;
         oldStoryID             = 0;
         oldProjectID           = 0;
         oldOpenedBuild         = '';
         oldTaskID              = 0;
-        setAssignedTo(0,productID);
+        if(!assignedto)setAssignedTo(moduleID, productID);
         notice();
     }
 
@@ -202,7 +204,7 @@ function setStories(moduleID, productID)
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
-        if(!stories) stories = '<select id="story" name="story"></select>';
+        if(!stories) stories = '<select id="story" name="story" class="select-3"></select>';
         $('#story').replaceWith(stories);
         $('#story_chzn').remove();
         $("#story").chosen({no_results_text: ''});
