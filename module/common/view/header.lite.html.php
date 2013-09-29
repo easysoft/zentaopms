@@ -16,10 +16,11 @@ $clientTheme  = $this->app->getClientTheme();
 
   js::exportConfigVars();
   css::import($themeRoot . 'fontawesome/min.css',   $config->version);
-  echo '<!--[if lt IE 8]>';
-  css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
-  css::import($defaultTheme . 'style.ie7.css', $config->version);
-  echo '<![endif]-->';
+  if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 7.0"))
+  {
+      css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
+      css::import($defaultTheme . 'style.ie7.css', $config->version);
+  }
   if($config->debug)
   {
       js::import($jsRoot . 'jquery/lib.js', $config->version);
