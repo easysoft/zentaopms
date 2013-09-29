@@ -135,10 +135,10 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')->stripTags('name')
+            ->setDefault('product', 0)
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->remove('allchecker')
-            ->add('project', (int)$projectID)->remove('resolvedBy')->get();
+            ->add('project', (int)$projectID)->remove('resolvedBy,allchecker')->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
         if(!dao::isError())
         {
