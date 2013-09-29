@@ -13,21 +13,21 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
+<div id='featurebar'>
+  <div class='f-left'><?php echo $lang->project->story;?></div>
+  <div class='f-right'>
+    <?php 
+    common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc");
+
+    $this->lang->story->create = $this->lang->project->createStory;
+    if($productID) common::printIcon('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id");
+
+    common::printIcon('project', 'linkStory', "project=$project->id");
+    ?>
+  </div>
+</div>
 <form method='post' id='projectStoryForm'>
   <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
-    <caption class='caption-tl pb-10px'>
-      <div class='f-left'><?php echo $lang->project->story;?></div>
-      <div class='f-right'>
-        <?php 
-        common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc");
-
-        $this->lang->story->create = $this->lang->project->createStory;
-        if($productID) common::printIcon('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id");
-
-        common::printIcon('project', 'linkStory', "project=$project->id");
-        ?>
-      </div>
-    </caption>
     <thead>
       <tr class='colhead'>
       <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
