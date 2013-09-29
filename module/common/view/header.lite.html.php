@@ -15,6 +15,7 @@ $clientTheme  = $this->app->getClientTheme();
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
+  css::import($themeRoot . 'fontawesome/min.css',   $config->version);
   echo '<!--[if lt IE 8]>';
   css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
   css::import($defaultTheme . 'style.ie7.css', $config->version);
@@ -23,8 +24,6 @@ $clientTheme  = $this->app->getClientTheme();
   {
       js::import($jsRoot . 'jquery/lib.js', $config->version);
       js::import($jsRoot . 'my.min.js',     $config->version);
-
-      css::import($themeRoot . 'fontawesome/min.css',   $config->version);
 
       css::import($defaultTheme . 'yui.css',   $config->version);
       css::import($defaultTheme . 'style.css', $config->version);
