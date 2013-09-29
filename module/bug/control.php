@@ -291,13 +291,14 @@ class bug extends control
         {
             $bug = $this->bug->getById($bugID);
             extract((array)$bug);
-            $projectID = $bug->project;
-            $moduleID  = $bug->module;
-            $taskID    = $bug->task;
-            $storyID   = $bug->story;
-            $buildID   = $bug->openedBuild;
-            $severity  = $bug->severity;
-            $type      = $bug->type;
+            $projectID  = $bug->project;
+            $moduleID   = $bug->module;
+            $taskID     = $bug->task;
+            $storyID    = $bug->story;
+            $buildID    = $bug->openedBuild;
+            $severity   = $bug->severity;
+            $type       = $bug->type;
+            $assignedTo = $bug->assignedTo;
         }
 
         /* If projectID is setted, get builds and stories of this project. */

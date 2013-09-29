@@ -842,10 +842,14 @@ function setModal4List(colorboxClass, replaceID, callback)
                 $('#tmpDiv').replaceWith($('#tmpDiv').html());
                 setModal4List(colorboxClass, replaceID, callback);
 
-                $('.colored').colorize();
+                try{$('.colored').colorize();}catch(err){}
                 $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                $(".date").datePicker({createButton:true, startDate:startDate})
-                .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+                try
+                {
+                    $(".date").datePicker({createButton:true, startDate:startDate})
+                    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+                }
+                catch(err){}
                 if(typeof(callback) == 'function') callback();
                 $.cookie('selfClose', 0);
             });
