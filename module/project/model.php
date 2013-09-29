@@ -1496,24 +1496,25 @@ class projectModel extends model
      */
     public function getDateList($begin, $end, $type)
     {
+        $begin    = strtotime($begin);
+        $end      = strtotime($end);
         $dateList = array();
         $date     = $begin;
         while($date <= $end)
         {
-            $timestamp = strtotime($date);
-
+            /* Remove weekend when type is noweekend.*/
             if($type == 'noweekend')
             {
-                $weekDay = date('w', $timestamp);
+                $weekDay = date('w', $date);
                 if($weekDay == 6 or $weekDay == 0)
                 {
-                    $date = date('Y-m-d', $timestamp + 24 * 3600);
+                    $date += 24 * 3600;
                     continue;
                 }
             }
 
-            $dateList[] = $date;
-            $date = date('Y-m-d', $timestamp + 24 * 3600);
+            $dateList[] = date('m/d/Y', $date);
+            $date += 24 * 3600;
         }
 
         return $dateList;

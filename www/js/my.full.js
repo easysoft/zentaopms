@@ -411,7 +411,7 @@ function setOuterBox()
     var navbarH   = $('#modulemenu').height();
     var footerH   = $('#footer').height() + 15;
 
-    var outerH = winHeight - headerH - footerH - navbarH - 47;
+    var outerH = winHeight - headerH - footerH - navbarH - 50;
     if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
     if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
     $('.outer').css('min-height', outerH);
@@ -544,7 +544,7 @@ function setRepoLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:650, height:250, iframe:true, transition:'none', scrolling:true});
+   if($('.export').size()) $(".export").colorbox({width:650, height:240, iframe:true, transition:'none', scrolling:true});
 }
 
 /**
@@ -842,10 +842,14 @@ function setModal4List(colorboxClass, replaceID, callback)
                 $('#tmpDiv').replaceWith($('#tmpDiv').html());
                 setModal4List(colorboxClass, replaceID, callback);
 
-                $('.colored').colorize();
+                try{$('.colored').colorize();}catch(err){}
                 $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                $(".date").datePicker({createButton:true, startDate:startDate})
-                .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+                try
+                {
+                    $(".date").datePicker({createButton:true, startDate:startDate})
+                    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+                }
+                catch(err){}
                 if(typeof(callback) == 'function') callback();
                 $.cookie('selfClose', 0);
             });

@@ -805,7 +805,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
-        $select  = html::select('story', $stories, $storyID, "class=''");
+        $select  = html::select('story', $stories, $storyID, "class='select-3'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));

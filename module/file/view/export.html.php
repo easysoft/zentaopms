@@ -54,7 +54,6 @@ function switchEncode(fileType)
         echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value)');
         echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "" : "class='hidden'");
         echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all');
-        echo "<br/><br/>";
         echo html::submitButton();
         ?>
       </td>
