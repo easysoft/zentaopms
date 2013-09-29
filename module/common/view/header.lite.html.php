@@ -27,6 +27,10 @@ $clientTheme  = $this->app->getClientTheme();
 
       css::import($defaultTheme . 'yui.css',   $config->version);
       css::import($defaultTheme . 'style.css', $config->version);
+      echo '<!--[if lt IE 8]>';
+      css::import($defaultTheme . 'style.ie7.css', $config->version);
+      echo '<![endif]-->';
+
       css::import($langTheme, $config->version);
       if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);
   }
