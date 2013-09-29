@@ -15,21 +15,19 @@ $clientTheme  = $this->app->getClientTheme();
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
+  echo '<!--[if lt IE 8]>';
+  css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
+  css::import($defaultTheme . 'style.ie7.css', $config->version);
+  echo '<![endif]-->';
   if($config->debug)
   {
       js::import($jsRoot . 'jquery/lib.js', $config->version);
       js::import($jsRoot . 'my.min.js',     $config->version);
 
       css::import($themeRoot . 'fontawesome/min.css',   $config->version);
-      echo '<!--[if lt IE 8]>';
-      css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
-      echo '<![endif]-->';
 
       css::import($defaultTheme . 'yui.css',   $config->version);
       css::import($defaultTheme . 'style.css', $config->version);
-      echo '<!--[if lt IE 8]>';
-      css::import($defaultTheme . 'style.ie7.css', $config->version);
-      echo '<![endif]-->';
 
       css::import($langTheme, $config->version);
       if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);

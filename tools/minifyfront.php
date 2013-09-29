@@ -70,6 +70,7 @@ foreach($langs as $lang)
         $cssCode .= file_get_contents($themeRoot . 'default/treeview.css');
         $cssCode .= file_get_contents($themeRoot . 'default/datepicker.css');
         $cssCode .= file_get_contents($themeRoot . 'default/alert.css');
+        $cssCode .= file_get_contents($themeRoot . 'fontawesome/min.css');
 
         /* Css file for current lang and current them. */
         $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
