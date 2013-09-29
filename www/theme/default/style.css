@@ -594,7 +594,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #poweredby {float: right;margin-right: 20px;}
 
 /* Debug. */
-.debugwin  {display:block; width:50px; height:20px; bottom:50px; position:fixed;}
+.debugwin  {display:none; width:50px; height:20px; bottom:50px; position:fixed;}
 
 /* Pager. */
 .pager {margin-bottom:0}
