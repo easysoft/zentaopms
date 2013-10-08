@@ -6,7 +6,7 @@ html,body{background-color: #036;}
 #login-panel .panel-head h3{margin: 0 0 0 20px;padding: 0;line-height: 70px;}
 #login-panel .panel-head .nav{float: right;position: absolute;right: 0;top: 0;padding: 0;}
 #login-panel .panel-head .nav .btn{clear: both;display: block;margin: 10px 10px 0 0;position: absolute;top: 6px;right: 6px;border-color: #ccc;}
-#login-panel .panel-head .nav #mobile{background-color: #0053a6;border-color: #036;color: #fff;}
+#login-panel .panel-head .nav #mobile{background-color: #0053a6;border-color: #036;color: #fff;height: 28px;}
 #login-panel .panel-head .nav #mobile:hover{background-color: #036;}
 #login-panel .panel-head .nav #mobile i{margin: 0;padding: 0;}
 #login-panel .panel-head .nav #lang{right: 60px;padding: 8px;width: auto;word-spacing:nowrap; overflow:visible;min-width: 80px;text-align: center;}
