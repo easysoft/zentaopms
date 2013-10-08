@@ -500,7 +500,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #featurebar a:hover,.outer>table.table-1>caption a:hover{color:#000;background-color: #e5e5e5;}
 #featurebar #bysearchTab a {border:none;}
 #featurebar select {font-size:12px; height:30px;}
-#featurebar .dp-choose-date{overflow: inherit;}
+#featurebar .dp-choose-date,#wrap .outer>table.table-1>caption .dp-choose-date,#wrap .outer>form>table.table-1>caption .dp-choose-date{overflow: inherit;}
 
 #featurebar .active a       {color:#333; font-weight:bold;}
 #featurebar .active select  {border:2px solid #009900;}
