@@ -11,3 +11,6 @@ caption,#featurebar,.outer>table.table-1>caption{background-color: #f0f8f0}
 .link-button a,.link-icon{color: #195d00}
 select:focus,textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,
 input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus {border-color: #195d00;outline: 0;}
+
+.button-s,.btn-primary{background-color: #06a400;border: 1px solid #069900; }
+.button-s:hover,.btn-primary:hover{background-color: #058100;border-color: #0b7700; };
