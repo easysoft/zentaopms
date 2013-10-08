@@ -1,9 +1,8 @@
-.listMenu 
+.listMenu
 {
-    position:absolute; 
-    background:#fff; 
+    position:absolute;
+    background:#fff;
     border: 1px solid #ccc;
-    /*border-radius: 6px 6px 6px 6px;*/
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     max-height:400px;
     overflow:auto;
@@ -58,6 +57,7 @@
 .groupButton
 {
   display:inline-block;
+  +display:inline;
 }
 
 .groupButton > input[type='button'], .groupButton > button, #allchecker, #reversechecker
@@ -66,15 +66,10 @@
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
-  /*background-color: #F5F5F5;*/
-  /*background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);*/
-  /*background-repeat: repeat-x;*/
-  /*border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #B3B3B3;*/
   border-image: none;
   border-radius: 0px;
   border-style: solid;
   border-width: 1px;
-  /*box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);*/
   cursor: pointer;
   display: inline-block;
   font-size: 14px;
@@ -108,7 +103,7 @@
   padding:10px 5px;
 }
 
-.groupButton button .caret 
+.groupButton button .caret
 {
   border-bottom: 4px solid #000000;
   border-left: 4px solid transparent;
