@@ -88,8 +88,10 @@ function setStories(moduleID, projectID)
     link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
+        var storyID = $('#story').val();
         if(!stories) stories = '<select id="story" name="story"></select>';
         $('#story').replaceWith(stories);
+        $('#story').val(storyID);
         $('#story_chzn').remove();
         $("#story").chosen({no_results_text: ''});
     });
