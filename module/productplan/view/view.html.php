@@ -179,7 +179,7 @@
           echo html::submitButton($lang->productplan->batchUnlink);
           ?>
         </div>
-        <div class='f-right'><?php echo sprintf($lang->productplan->bugSummary, count($planStories));?> </div>
+        <div class='f-right'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?> </div>
       </td>
     </tr>
     </tfoot>
