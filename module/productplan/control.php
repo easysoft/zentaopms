@@ -227,7 +227,7 @@ class productplan extends control
         }
 
         $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkStory;
-        $this->view->position[] = html::a($this->createLink('plan', 'view', "planID=$plan->id"), $plan->title);
+        $this->view->position[] = html::a($this->createLink('productPlan', 'view', "planID=$plan->id"), $plan->title);
         $this->view->position[] = $this->lang->productplan->linkStory;
         $this->view->allStories = $allStories;
         $this->view->planStories= $this->story->getPlanStories($planID);
@@ -343,7 +343,7 @@ class productplan extends control
         }
 
         $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkBug;
-        $this->view->position[] = html::a($this->createLink('plan', 'view', "planID=$plan->id"), $plan->title);
+        $this->view->position[] = html::a($this->createLink('productPlan', 'view', "planID=$plan->id"), $plan->title);
         $this->view->position[] = $this->lang->productplan->linkBug;
         $this->view->allBugs    = $allBugs;
         $this->view->planBugs   = $this->bug->getPlanBugs($planID);
