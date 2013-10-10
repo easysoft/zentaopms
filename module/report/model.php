@@ -211,6 +211,7 @@ EOT;
         $data = '[';
         foreach($dateList as $i => $date)
         {
+            $date = date('Y-m-d', strtotime($date));
             if(isset($sets[$date]))$data .= "[$i, {$sets[$date]->value}],";
         }
         $data = rtrim($data, ',');
