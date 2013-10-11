@@ -114,6 +114,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .icon-green-build-create:before,.icon-gray-build-create:before{content: "\f067";}
 .icon-green-effort-createForObject:before{content: "\f017"}
 .icon-arrow:before{content: "\f105";}
+.icon-green-user-unlock:before,.icon-green-user-unlock:before {content: "\f09C";}
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before{color: #ccc;}
 
