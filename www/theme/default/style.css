@@ -509,8 +509,9 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
-@media(max-width:1500px){#querybox input[type="text"],#querybox select{max-width: 80px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 60px;}}
-@media(max-width:1280px){#querybox input[type="text"],#querybox select{max-width: 60px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 40px;}}
+@media(max-width:1628px){#querybox input[type="text"],#querybox select{max-width: 115px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 80px;}}
+@media(max-width:1500px){#querybox input[type="text"],#querybox select{max-width: 85px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 65px;}}
+@media(max-width:1280px){#querybox input[type="text"],#querybox select{max-width: 70px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 50px;}}
 
 /* Tree slider. */
 .treeSlider{position:absolute;background-color: #bbb;background-repeat: repeat-x;border: 1px solid #bbb;border-left:none;cursor: pointer;width: 8px;height: 50px;left: 20px;border-radius:0px 10px 10px 0px}
