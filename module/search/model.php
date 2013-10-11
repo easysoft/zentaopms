@@ -63,7 +63,7 @@ class searchModel extends model
             $valueName    = "value$i";
 
             /* Skip empty values. */
-            if($this->post->$valueName == false) continue; 
+            if($this->post->$valueName === false or $this->post->$valueName === '') continue; 
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
 
