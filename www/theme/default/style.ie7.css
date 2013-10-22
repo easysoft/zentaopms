@@ -167,3 +167,5 @@
 .log-asc{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf062;');}
 .diff-all{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf0b2;');}
 .diff-sort{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf036;');}
+.icon-green-user-unlock{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf09C;');}
+.icon-gray-user-unlock{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf09C;');}

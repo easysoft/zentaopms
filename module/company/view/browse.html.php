@@ -71,7 +71,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td><?php echo $user->join;?></td>
           <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
-          <td class='a-left'>
+          <td class='a-left w-80px'>
             <?php 
             common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
