@@ -53,7 +53,7 @@ class searchModel extends model
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
             /* The and or between two groups. */
-            if($i == 1) $where .= '( 1  ';
+            if($i == 1) $where .= '(( 1  ';
             if($i == $groupItems + 1) $where .= " ) $groupAndOr ( 1 ";
 
             /* Set var names. */
@@ -111,7 +111,7 @@ class searchModel extends model
             }
         }
 
-        $where .=" )";
+        $where .=" ))";
 
         /* Save to session. */
         $querySessionName = $this->post->module . 'Query';
