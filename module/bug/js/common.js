@@ -48,6 +48,7 @@ function loadAll(productID)
         loadProductModules(productID); 
         loadProductProjects(productID); 
         loadProductBuilds(productID);
+        loadProductplans(productID);
         loadProductStories(productID);
     }
 }
@@ -92,7 +93,20 @@ function loadProductProjects(productID)
 }
 
 /**
- * loadProductBuilds 
+ * Load product plans.
+ * 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
+function loadProductplans(productID)
+{
+    link = createLink('productplan', 'ajaxGetProductplans', 'productID=' + productID);
+    $('#planIdBox').load(link);
+}
+
+/**
+ * Load product builds. 
  * 
  * @param  productID $productID 
  * @access public

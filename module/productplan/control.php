@@ -184,6 +184,19 @@ class productplan extends control
     }
 
     /**
+     * Ajax: Get product plans. 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductplans($productID)
+    {
+        $plans = $this->productplan->getPairs($productID);
+        die(html::select('plan', $plans, '', 'class=select-3'));
+    }
+
+    /**
      * Link stories.
      * 
      * @param  int    $planID 
