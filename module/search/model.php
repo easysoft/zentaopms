@@ -53,7 +53,7 @@ class searchModel extends model
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
             /* The and or between two groups. */
-            if($i == 1) $where .= '( 1  ';
+            if($i == 1) $where .= '(( 1  ';
             if($i == $groupItems + 1) $where .= " ) $groupAndOr ( 1 ";
 
             /* Set var names. */
@@ -63,7 +63,7 @@ class searchModel extends model
             $valueName    = "value$i";
 
             /* Skip empty values. */
-            if($this->post->$valueName == false) continue; 
+            if($this->post->$valueName === false or $this->post->$valueName === '') continue; 
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
 
@@ -111,7 +111,7 @@ class searchModel extends model
             }
         }
 
-        $where .=" )";
+        $where .=" ))";
 
         /* Save to session. */
         $querySessionName = $this->post->module . 'Query';
