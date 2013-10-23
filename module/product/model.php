@@ -562,8 +562,12 @@ class productModel extends model
         if($products === null)
         {
             $groupSql = '';
-            foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+            if(isset($this->app->user->groups))
+            {
+                foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+            }
             $groupSql = !empty($groupSql) ? '(' . substr($groupSql, 0, strlen($groupSql) - 4) . ')' : '1 != 1';
+
             $products = $this->dao->select('distinct t1.id')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.project')
@@ -595,15 +599,15 @@ class productModel extends model
     public function summary($stories)
     {
         $totalEstimate = 0.0;
-        $storyIDs      = array();
+        $storyIdList   = array();
 
         foreach($stories as $key => $story)
         {
             $totalEstimate += $story->estimate;
-            $storyIDs[] = $story->id;
+            $storyIdList[] = $story->id;
         }
 
-        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIDs)->fetchAll();
+        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->fetchAll();
         $rate  = count($stories) == 0 ? 0 : round(count($cases) / count($stories), 2);
 
         return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, $rate * 100 . "%");

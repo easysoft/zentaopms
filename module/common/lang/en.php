@@ -44,6 +44,7 @@ $lang->save         = 'Save';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'View';
 $lang->goback       = 'Back';
+$lang->goPC         = 'PC';
 $lang->go           = 'GO';
 $lang->more         = 'More';
 

@@ -854,10 +854,10 @@ class router
      * Mostly, the var name of PATH_INFO is  PATH_INFO, but may be ORIG_PATH_INFO.
      * 
      * @param   string  $varName    PATH_INFO, ORIG_PATH_INFO
-     * @access  private
+     * @access  public
      * @return  string the PATH_INFO
      */
-    private function getPathInfo($varName)
+    public function getPathInfo($varName)
     {
         $value = @getenv($varName);
         if(isset($_SERVER[$varName])) $value = $_SERVER[$varName];

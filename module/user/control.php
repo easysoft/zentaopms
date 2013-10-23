@@ -651,6 +651,7 @@ class user extends control
                     {
                         $path = substr($this->post->referer, strrpos($this->post->referer, '/') + 1);
                         $path = rtrim($path, '.html');
+                        if(empty($path)) $path = $this->config->requestFix;
                         list($module, $method) = explode($this->config->requestFix, $path);
                     }
                     else
