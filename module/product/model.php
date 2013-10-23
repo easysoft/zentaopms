@@ -562,8 +562,12 @@ class productModel extends model
         if($products === null)
         {
             $groupSql = '';
-            foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+            if(isset($this->app->user->groups))
+            {
+                foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+            }
             $groupSql = !empty($groupSql) ? '(' . substr($groupSql, 0, strlen($groupSql) - 4) . ')' : '1 != 1';
+
             $products = $this->dao->select('distinct t1.id')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.project')
