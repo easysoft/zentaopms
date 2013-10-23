@@ -595,15 +595,15 @@ class productModel extends model
     public function summary($stories)
     {
         $totalEstimate = 0.0;
-        $storyIDs      = array();
+        $storyIdList   = array();
 
         foreach($stories as $key => $story)
         {
             $totalEstimate += $story->estimate;
-            $storyIDs[] = $story->id;
+            $storyIdList[] = $story->id;
         }
 
-        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIDs)->fetchAll();
+        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->fetchAll();
         $rate  = count($stories) == 0 ? 0 : round(count($cases) / count($stories), 2);
 
         return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, $rate * 100 . "%");
