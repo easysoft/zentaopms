@@ -43,9 +43,9 @@
     <td><span class='<?php echo 'severity' . $lang->bug->severityList[$bug->severity]?>'><?php echo $lang->bug->severityList[$bug->severity]?></span></td>
     <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri]?>'><?php echo $lang->bug->priList[$bug->pri]?></span></td>
     <td class='a-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
-    <td><?php echo $users[$bug->openedBy];?></td>
-    <td><?php echo $users[$bug->assignedTo];?></td>
-    <td><?php echo $users[$bug->resolvedBy];?></td>
+    <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
+    <td><?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?></td>
+    <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
     <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
     <td class='a-right'>
       <?php
