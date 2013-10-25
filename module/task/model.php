@@ -257,6 +257,7 @@ class taskModel extends model
             $task->closedDate     = "";
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
+            $task->consumed       = $oldTask->consumed;
             $this->setStatus($task);
             if(isset($this->post->assignedTos[$taskID])) 
             {

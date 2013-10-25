@@ -814,12 +814,12 @@ class treeModel extends model
     public function getStoryModule($moduleID)
     {
         $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
-        while($module->id and $module->type != 'story')
+        if($module->id and $module->type != 'story')
         {
             $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($module->parent)->fetch();
         }
        
-        return $module->id;
+        return empty($module) ? 0 : $module->id;
     }
 
     /**
@@ -973,6 +973,7 @@ class treeModel extends model
                 if(!isset($modules[$parentModuleID]) and $parentModuleID != 0) continue;
                 if($parentModuleID == 0)
                 {
+                    $parentModule = new stdclass();
                     $parentModule->grade = 0;
                     $parentModule->path  = ',';
                 }

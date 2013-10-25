@@ -33,7 +33,7 @@ js::set('customed', $customed);
     echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
     echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
     echo "<span id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
-    echo "<span id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></span> ";
+    echo "<span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
@@ -145,14 +145,14 @@ if($customed)
             <td class='a-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
             <td><?php $lang->bug->confirmStoryChange = $lang->confirm; common::printIcon('bug', 'confirmStoryChange', "bugID=$bug->id", '', 'list', '', 'hiddenwin')?></td>
             <?php else:?>
-            <td><?php echo $users[$bug->openedBy];?></td>
+            <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
             <td><?php echo substr($bug->openedDate, 5, 11)?></td>
             <?php endif;?>
 
-            <td <?php if($bug->assignedTo == $this->app->user->account) echo 'class="red"';?>><?php echo $users[$bug->assignedTo];?></td>
-            <td><?php echo $users[$bug->resolvedBy];?></td>
+            <td <?php if($bug->assignedTo == $this->app->user->account) echo 'class="red"';?>><?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?></td>
+            <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy)?></td>
             <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>

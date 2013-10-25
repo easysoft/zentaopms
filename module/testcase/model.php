@@ -245,6 +245,7 @@ class testcaseModel extends model
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
+                    $step = new stdclass();
                     $step->case    = $caseID;
                     $step->version = $version;
                     $step->desc    = htmlspecialchars($stepDesc);
