@@ -502,6 +502,7 @@ class taskModel extends model
 
         $changes =  common::createChanges($oldTask, $newTask);
         $this->action->logHistory($actionID, $changes);
+        if($task->story) $this->loadModel('story')->setStage($task->story);
     }
 
     /**
