@@ -23,8 +23,8 @@ a {text-decoration:none;}
 /*-----------------------ICONS-----------------------------------*/
 /* icons use fontawesome */
 .icon{filter: alpha(opacity=50);-moz-opacity:0.5;opacity: 0.5;}
-.link-icon{color: #036;display: inline-block;filter: alpha(opacity=85);-moz-opacity:0.85;opacity: 0.85;}
-.link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);filter: alpha(opacity=100);-moz-opacity:1;opacity: 1;}
+.link-icon{color: #036;display: inline-block;}
+.link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
 .outer td i[class^="icon-"].icon-sm,.outer td i[class*=" icon-"].icon-sm{font-size: 0.9em;}
@@ -282,9 +282,8 @@ caption  {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px 2p
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
 
-/*.table-1 tr, .table-2 tr, .table-3 tr, .table-4 tr, .table-5 tr {padding:4px 3px}*/
-.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:8px}
-.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:8px}
+.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:8px 4px}
+.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:8px 4px}
 .side table td,.side table th{padding: 2px 4px;}
 
 .colhead td {text-align:center; background-color:#efefef;}
@@ -510,9 +509,17 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
 #querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
 #querybox td{vertical-align: middle;}
-@media(max-width:1628px){#querybox input[type="text"],#querybox select{max-width: 115px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 80px;}}
-@media(max-width:1500px){#querybox input[type="text"],#querybox select{max-width: 85px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 65px;}}
-@media(max-width:1280px){#querybox input[type="text"],#querybox select{max-width: 70px;} #querybox .button-c,#querybox .button-s{width: auto;min-width: 50px;}}
+#querybox select,#querybox input[type="text"]{min-width: 95px;max-width: 140px;}
+@media(max-width:1610px){
+  #querybox input[type="text"],#querybox select[name='value3'],#querybox select[name='value5']{min-width: 80px;width: 80px;}
+  #querybox .button-c,#querybox .button-s{width: auto;min-width: 42px;}
+  #querybox select[name='operator6'],#querybox select[name='operator5'],  #querybox select[name='operator4'],#querybox select[name='operator3'],  #querybox select[name='operator2'],#querybox select[name='operator1'],  #querybox select[name='groupAndOr'],#querybox select[name='andOr1'],#querybox select[name='andOr2'],#querybox select[name='andOr3'],#querybox select[name='andOr4']{width: 65px;min-width: 65px;}
+  #querybox select[name='queryID'], #querybox select[name='field4'],#querybox select[name='field3'],
+  #querybox select[name='field2'],#querybox select[name='field1']{width: 95px;}
+}
+@media(max-width:1220px){
+  #querybox input[type="text"],#querybox select[name='value3'],#querybox select[name='value5']{min-width: 70px;width: 70px;}
+}
 
 /* Tree slider. */
 .treeSlider{position:absolute;background-color: #bbb;background-repeat: repeat-x;border: 1px solid #bbb;border-left:none;cursor: pointer;width: 8px;height: 50px;left: 20px;border-radius:0px 10px 10px 0px}
