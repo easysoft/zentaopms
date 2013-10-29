@@ -26,7 +26,7 @@
     <span id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></span>
     <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
     <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
-    <span id='bysearchTab' ><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->product->searchStory;?></a></span>
+    <span id='bysearchTab' ><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
     <?php 

@@ -14,7 +14,7 @@
     echo html::select('groupBy', $lang->project->groups, isset($groupBy) ? $groupBy : '', "onchange='switchGroup($projectID, this.value)'");
     echo "</span>";
 
-    if($this->methodName == 'task') echo "<span id='bysearchTab'><a href='#'><i class='icon-search icon icon-large'></i>&nbsp;{$lang->project->byQuery}</a></span> ";
+    if($this->methodName == 'task') echo "<span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon icon-large'></i>&nbsp;{$lang->project->byQuery}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
