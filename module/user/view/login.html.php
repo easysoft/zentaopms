@@ -9,7 +9,6 @@
  * @version     $Id: login.html.php 5084 2013-07-10 01:31:38Z wyd621@gmail.com $
  */
 include '../../common/view/header.lite.html.php';
-// include '../../common/view/colorbox.html.php';
 ?>
 
 <div id="container">
@@ -47,8 +46,7 @@ include '../../common/view/header.lite.html.php';
             <td><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
           </tr>
           <tr>
-            <td class="attr"></td>
-            <td>
+            <td colspan='2' align='center'>
             <?php 
             echo html::submitButton($lang->login);
             if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
