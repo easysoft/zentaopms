@@ -26,7 +26,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
     <?php
     echo "<span id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</span>";
     echo "<span id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->testcase->needConfirm) . "</span>";
-    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
+    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
   <div class='f-right'>
