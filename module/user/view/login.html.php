@@ -43,7 +43,7 @@ include '../../common/view/header.lite.html.php';
           </tr>
           <tr>
             <td class="attr"></td>
-            <td><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
+            <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
           </tr>
           <tr>
             <td colspan='2' align='center'>
