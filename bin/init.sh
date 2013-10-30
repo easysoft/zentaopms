@@ -50,7 +50,7 @@ echo "backup.sh ok"
 if [ $requestType == 'PATH_INFO' ]; then
   computeburn="$phpcli $basePath/ztcli '$pmsRoot/project-computeburn'";
 else
-  computeburn="$phpcli $basePath/ztcli '$pmsRoot/?m=project&f=computeburn'";
+  computeburn="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=project&f=computeburn'";
 fi
 echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
@@ -59,7 +59,7 @@ echo "computeburn.sh ok"
 if [ $requestType == 'PATH_INFO' ]; then
   checkdb="$phpcli $basePath/ztcli '$pmsRoot/report-remind'";
 else
-  checkdb="$phpcli $basePath/ztcli '$pmsRoot/?m=report&f=remind'";
+  checkdb="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=report&f=remind'";
 fi
 echo $checkdb > $basePath/dailyreminder.sh
 echo "dailyreminder.sh ok"
@@ -68,7 +68,7 @@ echo "dailyreminder.sh ok"
 if [ $requestType == 'PATH_INFO' ]; then
   checkdb="$phpcli $basePath/ztcli '$pmsRoot/admin-checkdb'";
 else
-  checkdb="$phpcli $basePath/ztcli '$pmsRoot/?m=admin&f=checkdb'";
+  checkdb="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=admin&f=checkdb'";
 fi
 echo $checkdb > $basePath/checkdb.sh
 echo "checkdb.sh ok"
@@ -77,7 +77,7 @@ echo "checkdb.sh ok"
 if [ $requestType == 'PATH_INFO' ]; then
   win2Unix="$phpcli $basePath/ztcli '$pmsRoot/admin-win2Unix'";
 else
-  win2Unix="$phpcli $basePath/ztcli '$pmsRoot/?m=admin&f=win2Unix'";
+  win2Unix="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=admin&f=win2Unix'";
 fi
 echo $win2Unix > $basePath/win2unix.sh
 echo "win2unix.sh ok"
@@ -86,7 +86,7 @@ echo "win2unix.sh ok"
 if [ $requestType == 'PATH_INFO' ]; then
   syncsvn="$phpcli $basePath/ztcli '$pmsRoot/svn-run'";
 else
-  syncsvn="$phpcli $basePath/ztcli '$pmsRoot/?m=svn&f=run'";
+  syncsvn="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=svn&f=run'";
 fi
 echo $syncsvn > $basePath/syncsvn.sh
 echo "syncsvn.sh ok"
@@ -95,7 +95,7 @@ echo "syncsvn.sh ok"
 if [ $requestType == 'PATH_INFO' ]; then
   syncgit="$phpcli $basePath/ztcli '$pmsRoot/git-run'";
 else
-  syncgit="$phpcli $basePath/ztcli '$pmsRoot/?m=git&f=run'";
+  syncgit="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=git&f=run'";
 fi
 echo $syncgit > $basePath/syncgit.sh
 echo "syncgit.sh ok"

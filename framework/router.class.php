@@ -1592,10 +1592,13 @@ class router
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
         $errorLog .= "when visiting <strong>" . $this->getURI() . "</strong>\n";
 
-        $serverAddr = explode('.', $_SERVER['SERVER_ADDR']);
-        if(!($serverAddr[0] == 10 or ($serverAddr[0] == 172 and $serverAddr[1] >= 16 and $serverAddr[1] <= 131) or ($serverAddr[0] == 192 and $serverAddr[1] == '168')))
+        if(!defined('IN_SHELL'))
         {
-            $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
+            $serverAddr = explode('.', $_SERVER['SERVER_ADDR']);
+            if(!($serverAddr[0] == 10 or ($serverAddr[0] == 172 and $serverAddr[1] >= 16 and $serverAddr[1] <= 131) or ($serverAddr[0] == 192 and $serverAddr[1] == '168')))
+            {
+                $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
+            }
         }
 
         /* Save to log file. */
