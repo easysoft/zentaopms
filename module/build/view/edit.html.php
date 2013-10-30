@@ -44,9 +44,9 @@
       <th class='rowhead'><?php echo $lang->build->linkStoriesAndBugs;?></th>
       <td>
 
-        <table class='w-p90 bd-none' style='margin-bottom:0px'>
+        <table class='bd-none' style='margin-bottom:0px;width:91%'>
           <tr>
-            <td class='w-p50'>
+            <td class='w-p50' style='padding-left:0px;padding-right:8px'>
               <table class='mainTable bd-none'>
                 <tr style='border-bottom:none'>
                   <td style='border-bottom:none;padding:0px'>
@@ -81,7 +81,7 @@
               </table>
             </td>
 
-            <td class='w-p50'>
+            <td class='w-p50' style='padding-left:0px;padding-right:0px;'>
               <table class='mainTable bd-none'>
                 <tr style='border-bottom:none'>
                   <td style='border-bottom:none; padding:0px'>
