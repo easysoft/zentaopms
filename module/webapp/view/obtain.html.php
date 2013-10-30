@@ -48,28 +48,30 @@
             <tr><td valign='top'><div class='webapp-info' title='<?php echo $webapp->abstract?>'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></div></td></tr>
             <tr>
               <td>
-              <?php
-                $url     = $webapp->url;
-                $method  = '';
-                $popup   = '';
-                $target  = '_self';
-                if($webapp->target == 'popup')
-                {
-                    $width  = 0;
-                    $height = 0;
-                    if($webapp->size) list($width, $height) = explode('x', $webapp->size);
-                    $method = "popup($width, $height);";
-                    $popup  = 'popup';
-                }
-                else
-                {
-                    $method = "popup(1024, 600);";
-                    $popup  = 'popup';
-                }
-                echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'");
-                common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $lang->webapp->view, '',  "class='button-c apiapp'");
-                echo html::a($url, $lang->webapp->preview, '', "id='useapp$webapp->id' class='button-c $popup' onclick='$method'");
-              ?>
+                <div class='webapp-actions'>
+                  <?php
+                  $url     = $webapp->url;
+                  $method  = '';
+                  $popup   = '';
+                  $target  = '_self';
+                  if($webapp->target == 'popup')
+                  {
+                      $width  = 0;
+                      $height = 0;
+                      if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+                      $method = "popup($width, $height);";
+                      $popup  = 'popup';
+                  }
+                  else
+                  {
+                      $method = "popup(1024, 600);";
+                      $popup  = 'popup';
+                  }
+                  echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'");
+                  common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $lang->webapp->view, '',  "class='button-c apiapp'");
+                  echo html::a($url, $lang->webapp->preview, '', "id='useapp$webapp->id' class='button-c $popup' onclick='$method'");
+                  ?>
+                </div>
               </td>
             </tr>
           </table>

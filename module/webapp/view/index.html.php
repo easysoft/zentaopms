@@ -26,25 +26,27 @@
             <tr><td valign='top'><div class='webapp-info' title='<?php echo $webapp->abstract?>'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></div></td></tr>
             <tr>
               <td>
-              <?php
-              $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
-              $method  = '';
-              $popup   = '';
-              $target  = '_self';
-              if($webapp->target == 'blank') $target   = '_blank';
-              if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id, \"$webapp->name\");";
-              if($webapp->target == 'popup')
-              {
-                  $width  = 0;
-                  $height = 0;
-                  if($webapp->size) list($width, $height) = explode('x', $webapp->size);
-                  $method = "popup($width, $height);";
-                  $popup  = 'popup';
-              }
-              echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
-              common::printLink('webapp', 'view', "webappID=$webapp->id", $lang->webapp->view, '',  "class='button-c webapp'");
-              common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
-              ?>
+                <div class='webapp-actions'>
+                  <?php
+                  $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
+                  $method  = '';
+                  $popup   = '';
+                  $target  = '_self';
+                  if($webapp->target == 'blank') $target   = '_blank';
+                  if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id, \"$webapp->name\");";
+                  if($webapp->target == 'popup')
+                  {
+                      $width  = 0;
+                      $height = 0;
+                      if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+                      $method = "popup($width, $height);";
+                      $popup  = 'popup';
+                  }
+                  echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
+                  common::printLink('webapp', 'view', "webappID=$webapp->id", $lang->webapp->view, '',  "class='button-c webapp'");
+                  common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
+                  ?>
+                </div>
               </td>
             </tr>
           </table>
