@@ -11,7 +11,7 @@ function browseBySearch(active)
 
 $(document).ready(function()
 {
-    setModal4List('runCase', 'caseList', function(){$(".results").colorbox({width:900, height:550, iframe:true, transition:'none'});});
+    setModal4List('runCase', 'caseList', function(){$(".results").colorbox({width:1024, height:550, iframe:true, transition:'none'});}, 1024);
     $('#' + browseType + 'Tab').addClass('active');
     $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();
@@ -19,5 +19,5 @@ $(document).ready(function()
 
 $(document).ready(function() 
 {
-    $(".results").colorbox({width:900, height:550, iframe:true, transition:'none'});
+    $(".results").colorbox({width:1024, height:550, iframe:true, transition:'none'});
 })

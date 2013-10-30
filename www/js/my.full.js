@@ -820,12 +820,14 @@ function selectItem(SelectID)
  * @access public
  * @return void
  */
-function setModal4List(colorboxClass, replaceID, callback)
+function setModal4List(colorboxClass, replaceID, callback, width, height)
 {
+    if(typeof(width) == 'undefined') width = 900
+    if(typeof(height) == 'undefined') height = 500
     $('.' + colorboxClass).colorbox(
     {
-        width: 900,
-        height: 500,
+        width: width,
+        height: height,
         iframe: true,
         transition: 'none',
 
@@ -840,7 +842,7 @@ function setModal4List(colorboxClass, replaceID, callback)
             $('#tmpDiv').load(link + ' #' + replaceID, function()
             {
                 $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                setModal4List(colorboxClass, replaceID, callback);
+                setModal4List(colorboxClass, replaceID, callback, width, height);
 
                 try{$('.colored').colorize();}catch(err){}
                 $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
