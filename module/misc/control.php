@@ -129,7 +129,7 @@ class misc extends control
     public function qrCode()
     {
         $loginAPI = common::getSysURL() . $this->config->webRoot;
-        if($this->loadModel('user')->isLogon()) $withSessionLoginAPI = $loginAPI . "?sid=" . session_ID();
+        $withSessionLoginAPI = $this->loadModel('user')->isLogon() ? $loginAPI . "?sid=" . session_ID() : $loginAPI;
 
         if(!extension_loaded('gd')) die(printf($this->lang->misc->noGDLib, $loginAPI));
         $ciqrcode = $this->app->loadClass('qrcode');

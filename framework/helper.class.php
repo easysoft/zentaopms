@@ -481,7 +481,7 @@ class helper
             }
         }
 
-        if(strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
+        if(isset($viewType) and strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
         $app->viewType = isset($viewType) ? $viewType : $config->default->view;
     }
 }

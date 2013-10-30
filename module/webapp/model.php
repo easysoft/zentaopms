@@ -223,6 +223,7 @@ class webappModel extends model
         $data   = $this->getAppInfoByAPI($webappID);
         $webapp = $data->webapp;
 
+        $installWebapp = new stdclass();
         $installWebapp->appid     = $webapp->id;
         $installWebapp->module    = $this->post->module;
         $installWebapp->name      = $webapp->name;
