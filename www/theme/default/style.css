@@ -262,7 +262,7 @@ select.select-3{width: 255px;}
 /*-----------------------TABLE SETTING----------------------------*/
 table  {border:1px solid #e4e4e4;border-collapse: collapse;border-spacing: 0;}
 td, tr, th {border:none;}
-td,th{padding: 8px; line-height: 1.428571429;vertical-align: top;}
+td,th{padding: 6px; line-height: 1.428571429;vertical-align: top;}
 th{vertical-align: middle;}
 tfoot  {border-top:1px solid #e4e4e4}
 tfoot .f-left{ color:gray}
@@ -280,8 +280,9 @@ caption  {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px 2p
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
 
-.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:8px 4px}
-.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:8px 4px}
+.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:6px 3px}
+.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:6px 3px}
+form>.table-1 td,form>.table-2 td,form>.table-3 td,form>.table-4 td{padding:4px 3px;}
 .side table td,.side table th{padding: 2px 4px;}
 
 .colhead td {text-align:center; background-color:#efefef;}
