@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . ' ' . $story->title;?>
   <?php if($story->version > 1):?>
