@@ -511,7 +511,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #querybox select,#querybox input[type="text"]{min-width: 95px;max-width: 140px;}
 #querybox input[type="text"]{min-width: 80px;width: 130px;}
 #querybox select[name='value1'],#querybox select[name='value2'],#querybox select[name='value3'],#querybox select[name='value4'],#querybox select[name='value5'],#querybox select[name='value6']{min-width: 80px;width: 140px}
-#querybox .button-c,#querybox .button-s{width: auto;min-width: 42px;}
+#querybox .button-c,#querybox .button-s{width: auto;min-width: 42px; margin-right:5px;}
 #querybox select[name='operator6'],#querybox select[name='operator5'],  #querybox select[name='operator4'],#querybox select[name='operator3'],  #querybox select[name='operator2'],#querybox select[name='operator1'],  #querybox select[name='groupAndOr'],#querybox select[name='andOr1'],#querybox select[name='andOr2'],#querybox select[name='andOr3'],#querybox select[name='andOr4'],#querybox select[name='andOr5'],#querybox select[name='andOr6']{width: 65px;min-width: 65px;}
 #querybox select[name='queryID'], #querybox select[name='field4'],#querybox select[name='field3'],#querybox select[name='field5'],#querybox select[name='field6'],
 #querybox select[name='field2'],#querybox select[name='field1']{width: 95px;}
