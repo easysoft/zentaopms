@@ -190,11 +190,13 @@ class actionModel extends model
             ->andWhere('objectID')->eq($objectID)
             ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
+        $this->loadModel('file');
         foreach($actions as $actionID => $action)
         {
             if(strtolower($action->action) == 'svncommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             if(strtolower($action->action) == 'gitcommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
+            $action->comment = $this->file->setImgSize($action->comment, 910, 'comment');
             $actions[$actionID] = $action;
         }
         return $actions;

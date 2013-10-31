@@ -206,9 +206,9 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function setImgSize($content, $maxSize = 0)
+    public function setImgSize($content, $maxSize = 0, $type = 'content')
     {
-        return str_replace('src="data/upload', 'onload="setImageSize(this,' . $maxSize . ' )" src="data/upload', $content);
+        return str_replace('src="data/upload', 'onload="setImageSize(this,' . $maxSize . ', \'' . $type . '\' )" src="data/upload', $content);
     }
 
     /**

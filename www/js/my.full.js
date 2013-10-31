@@ -515,7 +515,7 @@ function setFormAction(actionLink, hiddenwin)
  * @access public
  * @return void
  */
-function setImageSize(image, maxWidth)
+function setImageSize(image, maxWidth, type)
 {
     /* If not set maxWidth, set it auto. */
     if(!maxWidth)
@@ -523,11 +523,21 @@ function setImageSize(image, maxWidth)
         bodyWidth = $('body').width();
         maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
     }
-    $('.content img').each(function()
+    if(type == 'comment')
     {
-        if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
-    });
-    $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>')
+        $('#actionbox img').each(function()
+        {
+            if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
+        });
+    }
+    else
+    {
+        $('.content img').each(function()
+        {
+            if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
+        });
+    }
+    $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>');
 }
 
 /**
