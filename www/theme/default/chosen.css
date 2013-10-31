@@ -7,13 +7,14 @@
   *display: inline;
 }
 .chzn-container .chzn-drop {
-  background: #fff;
+  background: #fafafa;
   border: 1px solid #aaa;
   border-top: 0;
   position: absolute;
   top: 29px;
   left: 0;
   z-index: 1010;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 /* @end */
 
@@ -23,19 +24,23 @@
   -moz-background-clip   : padding;
   -webkit-background-clip: padding-box;
   background-clip        : padding-box;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #ccc;
   display: block;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
   height: 20px;
   line-height: 20px;
-  padding: 0 0 0 8px;
+  padding:3px 4px;
   color: #444444;
   text-decoration: none;
   -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
-.chzn-container-single .chzn-single.chzn-single-with-drop{border-color: #2564A3;}
+.chzn-container-single .chzn-single.chzn-single-with-drop{border-color: #aaa;background-color: #fafafa;box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);}
 
 .chzn-container-single .chzn-single div {
   position: absolute;
@@ -59,13 +64,7 @@
   z-index: 1010;
 }
 .chzn-container-single .chzn-search input {
-  background: #fff url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px;
-  background: url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px, -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
-  background: url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px, -webkit-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
-  background: url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px, -moz-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
-  background: url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px, -o-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
-  background: url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px, -ms-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
-  background: url('./images/chosen/chosen-sprite.png') no-repeat 100% -22px, linear-gradient(top, #eeeeee 1%, #ffffff 15%);
+  background: #fff url('./images/chosen/chosen-sprite.png') no-repeat 100% -21px;
   margin: 1px 0;
   padding: 4px 20px 4px 5px;
   outline: 0;
@@ -214,7 +213,6 @@
 /* @end */
 
 /* Product and project seleteGroup. */
-.chzn-container-single .chzn-single div b {background: url('./images/chosen/chosen-sprite.png') no-repeat 0 -2px;}
 
 #navbar ul .chzn-results li {margin:0; padding:0px 0px 0px 5px; float:none; text-align:left; list-style-type:none; font-size:14px}
 #navbar ul .chzn-results .active-result {padding:0px 0px 0px 25px;}
