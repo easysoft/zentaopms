@@ -607,7 +607,9 @@ table.data-table td:last-child{padding-right: 20px;}
 /*-----------------------ICONS --------------------*/
 /* Common icons. */
 #featurebar .f-right .icon-goback {padding:0px 9px}
-.pri1,.pri2,.pri3,.pri4,.pri5,.pri6{display:inline-block;width: 14px;height: 14px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68;}
+.pri1,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 14px;height: 14px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68;}
+.pri{border-color: #ccc;color: #ccc;}
+.pri:before{content: '?'}
 .pri2{border-color: #25367e;color: #25367e}
 .pri3{border-color: #2c4a9b;color: #2c4a9b}
 .pri4{border-color: #475da8;color: #475da8}
@@ -615,7 +617,9 @@ table.data-table td:last-child{padding-right: 20px;}
 .pri6{border-color: #9ebee5;color: #9ebee5}
 
 /* Bug icons. */
-.severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;line-height: 16px;font-weight: bold; text-align: center; font-size: 12px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;}
+.severity,.severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;line-height: 16px;font-weight: bold; text-align: center; font-size: 12px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;}
+.severity{background-color: #ccc;}
+.severity:before{content: '?'}
 .severity1 {background-color: #d71319;}
 .severity2 {background-color: #d83615;}
 .severity3 {background-color: #db7c12;}
