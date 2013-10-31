@@ -1645,8 +1645,14 @@ class project extends control
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        foreach($projects as $key => $project)
+        {
+            if(!$this->project->checkPriv($project)) unset($projects[$key]);
+        }
+
         $this->view->link     = $this->project->getProjectLink($module, $method, $extra);
-        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $this->view->projects = $projects;
         $this->view->keywords = $keywords;
         $this->display();
     }
