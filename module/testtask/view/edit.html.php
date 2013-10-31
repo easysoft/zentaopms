@@ -50,11 +50,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
-      <td><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', $task->desc, "rows=10 class='area-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->report;?></th>
-      <td><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='area-1'");?></td>
+      <td><?php echo html::textarea('report', $task->report, "rows=10 class='area-1'");?></td>
     </tr>  
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?> </td>
