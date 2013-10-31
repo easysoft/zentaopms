@@ -607,8 +607,8 @@ table.data-table td:last-child{padding-right: 20px;}
 /*-----------------------ICONS --------------------*/
 /* Common icons. */
 #featurebar .f-right .icon-goback {padding:0px 9px}
-.pri1,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 14px;height: 14px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68;}
-.pri{border-color: #ccc;color: #ccc;}
+.pri1,.pri0,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 14px;height: 14px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68;}
+.pri,.pri0{border-color: #ccc;color: #ccc;}
 .pri:before{content: '?'}
 .pri2{border-color: #25367e;color: #25367e}
 .pri3{border-color: #2c4a9b;color: #2c4a9b}
