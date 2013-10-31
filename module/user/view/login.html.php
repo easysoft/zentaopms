@@ -12,7 +12,6 @@ include '../../common/view/header.lite.html.php';
 ?>
 
 <div id="container">
-  <div id="logo"></div>
   <div id="login-panel">
     <div class="panel-head">
       <h3><?php printf($lang->welcome, $app->company->name);?></h3>
@@ -46,7 +45,8 @@ include '../../common/view/header.lite.html.php';
             <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
           </tr>
           <tr>
-            <td colspan='2' align='center'>
+            <td></td>
+            <td>
             <?php 
             echo html::submitButton($lang->login);
             if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
