@@ -54,7 +54,7 @@ $.extend(
                         var i          = triggered.push(false);
 
                         /* Create the error message. */
-                        var errorMSG = '<div id="'  + errorLabel + '" class="text-error">';
+                        var errorMSG = '<div id="'  + errorLabel + '" class="text-error red">';
                         errorMSG += $.type(value) == 'string' ? value : value.join(';');
                         errorMSG += '</div>';
 
