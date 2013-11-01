@@ -22,7 +22,7 @@ a {text-decoration:none;}
 
 /*-----------------------ICONS-----------------------------------*/
 /* icons use fontawesome */
-.link-icon{color: #2E6DAD;display: inline-block;}
+.link-icon{color: #498cd0;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
@@ -144,6 +144,8 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .groupButton #moreAction{border: 1px solid #DCDCDC;}
 .groupButton #moreAction:hover{border-color: #999;}
 .button-d{filter: alpha(opacity=50);-moz-opacity:0.5;opacity: 0.5;cursor: not-allowed;}
+.button-s{background-color: #d0dee3;border-color: #a3bbc4}
+.button-s:hover{background-color: #b1dff0}
 
 /*---------------------------Form Controls---------------------------*/
 select,textarea,input[type="text"],input[type="password"],input[type="datetime"],input[type="datetime-local"],input[type="date"],
@@ -237,7 +239,7 @@ select{padding: 4px 1px;}
 
 /*-----------------------FORM SETTING----------------------------*/
 .text-1 {width: 90%}
-td>.text-1{padding-left:2px;padding-right: 2px}
+td>.text-1,td>.area-1{padding-left:2px;padding-right: 2px}
 .text-2 {width: 120px}
 .text-3 {width: 240px}
 select.text-3 {width: 250px}
