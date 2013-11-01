@@ -192,6 +192,7 @@ select{padding: 4px 1px;}
 .c-right {clear:right;}
 .c-both {clear:both;}
 .a-center {text-align: center;}
+.v-middle{vertical-align: middle;}
 .a-right {text-align: right;}
 .a-left {text-align: left;}
 
