@@ -1592,13 +1592,10 @@ class router
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
         $errorLog .= "when visiting <strong>" . $this->getURI() . "</strong>\n";
 
-        if(!defined('IN_SHELL'))
+        /* If the ip is pulic, hidden the full path of scripts. */
+        if(!defined('IN_SHELL') and !validater::checkIP($this->server->server_addr, 'private'))
         {
-            $serverAddr = explode('.', $_SERVER['SERVER_ADDR']);
-            if(!($serverAddr[0] == 10 or ($serverAddr[0] == 172 and $serverAddr[1] >= 16 and $serverAddr[1] <= 131) or ($serverAddr[0] == 192 and $serverAddr[1] == '168')))
-            {
-                $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
-            }
+            $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
         }
 
         /* Save to log file. */
