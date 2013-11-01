@@ -192,6 +192,7 @@ select{padding: 4px 1px;}
 .c-right {clear:right;}
 .c-both {clear:both;}
 .a-center {text-align: center;}
+.v-middle{vertical-align: middle;}
 .a-right {text-align: right;}
 .a-left {text-align: left;}
 
@@ -244,7 +245,7 @@ select.text-3 {width: 250px}
 select.select-1 {width: 90%}
 .select-2 {width: 125px}
 .select-3 {width: 245px}
-select.select-3{width: 255px;}
+select.select-3{width: 250px;}
 .select-4 {width: 360px}
 .select-5 {width: 480px}
 td>select{padding-left: 0;padding-right: 0}
@@ -366,6 +367,8 @@ table.data-table td:last-child{padding-right: 20px;}
 .w-p80 {width: 80%}
 .w-p85 {width: 85%}
 .w-p90 {width: 90%}
+.w-p94 {width: 94%}
+.w-p95 {width: 95%}
 .w-p100{width: 100%}
 .w-p98 {width: 98%}
 .w-p99 {width: 99%}
@@ -441,7 +444,7 @@ table.data-table td:last-child{padding-right: 20px;}
 
 /* Top bar. */
 #topbar, #topbar a {color:#ACCADF}
-#topbar {margin:5px 5px 15px 5px}
+#topbar {margin:5px 5px 6px 5px}
 #topbar select {border:none; color:#ACCADF; background:#003366}
 #topbar a {color:#d1e4f2;text-decoration:none;}
 #topbar a:hover {color: #fff;}
