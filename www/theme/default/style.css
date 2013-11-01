@@ -504,6 +504,7 @@ table.data-table td:last-child{padding-right: 20px;}
 #featurebar,#wrap .outer>table.table-1>caption {border-bottom: 1px solid #e7edf7;margin: -20px -20px 20px -20px;}
 #featurebar span {font-size:14px;}
 #featurebar a,.outer>table.table-1>caption a{text-decoration:none; display: inline-block;padding: 0px 5px; line-height: 30px;height: 30px; font-size:14px;-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
+#featurebar .f-left a{padding: 0px 2px;}
 #featurebar a:hover,.outer>table.table-1>caption a:hover{color:#000;background-color: #e5e5e5;}
 #featurebar #bysearchTab a {border:none;}
 #featurebar select {font-size:12px; height:30px;}
