@@ -444,7 +444,7 @@ table.data-table td:last-child{padding-right: 20px;}
 
 /* Top bar. */
 #topbar, #topbar a {color:#ACCADF}
-#topbar {margin:5px 5px 15px 5px}
+#topbar {margin:5px 5px 6px 5px}
 #topbar select {border:none; color:#ACCADF; background:#003366}
 #topbar a {color:#d1e4f2;text-decoration:none;}
 #topbar a:hover {color: #fff;}
