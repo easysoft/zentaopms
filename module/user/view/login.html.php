@@ -25,7 +25,13 @@ include '../../common/view/header.lite.html.php';
         </ul> 
         <div class="droppanel" id="qrcode">
           <h4><i class="icon-mobile-phone icon-large"></i> <?php echo $lang->user->mobileLogin ?></h4>
-          <img src="<?php commonModel::getQRCodeLink(); ?>" alt="">
+          <?php if(extension_loaded('gd')):?>
+          <img src='<?php echo $this->createLink('misc', 'qrcode');?>' />
+          <?php else:?>
+          <table width='300' class='mt-10px bd-none'>
+            <tr><td><?php echo $noGDLib;?></td></tr>
+          </table>
+          <?php endif;?>
         </div>
       </div>
     </div>
