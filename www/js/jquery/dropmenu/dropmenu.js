@@ -43,7 +43,7 @@ function toggleSubMenu(currentID, position, menuIndex)
         {
             currentMenu = $('#' + currentID).parent().parent().parent().attr('id');
             rootID      = currentMenu.replace('Menu', '');
-            topOffset   = $('#' + rootID).offset().top - $('#' + currentID + 'Menu').height() + 20;
+            topOffset   = $('#' + currentID).offset().top - $('#' + currentID + 'Menu').height() + 20;
             leftOffset  = $('#' + rootID).offset().left + $('#' + rootID).parent().width() + $('#' + currentMenu).width();
             $('#' + currentID + 'Menu').css({top: topOffset, left:leftOffset});
         }
