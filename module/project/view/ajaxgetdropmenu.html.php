@@ -2,7 +2,7 @@
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
-<input type='text' class='gray' id='search' value='' onkeyup='searchItems(this.value, "project", projectID, module, method, extra)' autocomplete="off" placeholder='<?php echo $this->app->loadLang('search')->search->common;?>' />
+<input type='text' class='gray' id='search' value='' onkeyup='searchItems(this.value, "project", projectID, module, method, extra)' placeholder='<?php echo $this->app->loadLang('search')->search->common;?>' />
 
 <div id='searchResult'>
   <div id='defaultMenu' class='f-left'>
