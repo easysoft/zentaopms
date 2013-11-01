@@ -182,6 +182,9 @@ select{padding: 4px 1px;}
 .cont-lt4 .side, .cont-rt4 .side {width:300px}
 .cont-lt5 .side, .cont-rt5 .side {width:336px}
 
+.side-search .text-1{width: 54%;margin: 0;}
+.side-search .button-s{padding:2px 0;width: 30%;margin: 0;}
+
 .cont-lt1 .divider,.cont-lt2 .divider,.cont-lt3 .divider,.cont-lt4 .divider,.cont-lt5 .divider {width:10px}
 .cont-rt1 .divider,.cont-rt2 .divider,.cont-rt3 .divider,.cont-rt4 .divider,.cont-rt5 .divider {width:10px}
 
