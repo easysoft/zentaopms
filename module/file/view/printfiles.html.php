@@ -34,7 +34,7 @@ function downloadFile(fileID)
   {
       if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
       common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "class='edit'");
-      if(common::hasPriv('file', 'delete'))   echo "<a class='link-icon' href='###' onclick='deleteFile($file->id)'><i class='icon-delete'></i></a>";
+      if(common::hasPriv('file', 'delete'))   echo "<a class='link-icon' href='###' onclick='deleteFile($file->id)'><i class='icon-remove'></i></a>";
   }
   ?>
   </div>
