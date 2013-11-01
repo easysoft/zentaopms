@@ -54,7 +54,7 @@ $lang->user->update          = "Upgrade";
 $lang->user->delete          = "Delete";
 $lang->user->browse          = "Browse";
 $lang->user->login           = "Login";
-$lang->user->mobileLogin     = "Mobile Login";
+$lang->user->mobileLogin     = "Mobile";
 $lang->user->userView        = "User view";
 $lang->user->editProfile     = "Edit profile";
 $lang->user->editPassword    = "Change password";
@@ -69,7 +69,7 @@ $lang->user->asGuest         = "Guest";
 $lang->user->goback          = "Back";
 $lang->user->allUsers        = 'All users';
 $lang->user->deleted         = '(deleted)';
-$lang->user->select          = '--select user--';
+$lang->user->select          = 'Select user';
 
 $lang->user->profile     = 'Profile';
 $lang->user->project     = 'Project';

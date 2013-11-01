@@ -481,7 +481,7 @@ class helper
             }
         }
 
-        if(strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
+        if(isset($viewType) and strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
         $app->viewType = isset($viewType) ? $viewType : $config->default->view;
     }
 }
@@ -587,8 +587,9 @@ function getWebRoot()
     {
         $url  = parse_url($_SERVER['argv'][1]);
         $path = empty($url['path']) ? '/' : rtrim($url['path'], '/');
-        $path = empty($path) ? '/' : $path;
+        $path = empty($path) ? '/' : preg_replace('/\/www$/', '/www/', $path);
     }
+
     return substr($path, 0, (strrpos($path, '/') + 1));
 }
 

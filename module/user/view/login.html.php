@@ -12,7 +12,6 @@ include '../../common/view/header.lite.html.php';
 ?>
 
 <div id="container">
-  <div id="logo"></div>
   <div id="login-panel">
     <div class="panel-head">
       <h3><?php printf($lang->welcome, $app->company->name);?></h3>
@@ -26,7 +25,13 @@ include '../../common/view/header.lite.html.php';
         </ul> 
         <div class="droppanel" id="qrcode">
           <h4><i class="icon-mobile-phone icon-large"></i> <?php echo $lang->user->mobileLogin ?></h4>
-          <img src="<?php commonModel::getQRCodeLink(); ?>" alt="">
+          <?php if(extension_loaded('gd')):?>
+          <img src='<?php echo $this->createLink('misc', 'qrcode');?>' />
+          <?php else:?>
+          <table width='300' class='mt-10px bd-none'>
+            <tr><td><?php echo $noGDLib;?></td></tr>
+          </table>
+          <?php endif;?>
         </div>
       </div>
     </div>
@@ -46,7 +51,8 @@ include '../../common/view/header.lite.html.php';
             <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
           </tr>
           <tr>
-            <td colspan='2' align='center'>
+            <td></td>
+            <td>
             <?php 
             echo html::submitButton($lang->login);
             if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));

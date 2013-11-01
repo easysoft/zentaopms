@@ -44,9 +44,9 @@
       <th class='rowhead'><?php echo $lang->build->linkStoriesAndBugs;?></th>
       <td>
 
-        <table class='w-p90 bd-none' style='margin-bottom:0px'>
+        <table class='bd-none' style='margin-bottom:0px;width:91%'>
           <tr>
-            <td class='w-p50'>
+            <td class='w-p50' style='padding-left:0px;padding-right:8px'>
               <table class='mainTable bd-none'>
                 <tr style='border-bottom:none'>
                   <td style='border-bottom:none;padding:0px'>
@@ -81,7 +81,7 @@
               </table>
             </td>
 
-            <td class='w-p50'>
+            <td class='w-p50' style='padding-left:0px;padding-right:0px;'>
               <table class='mainTable bd-none'>
                 <tr style='border-bottom:none'>
                   <td style='border-bottom:none; padding:0px'>
@@ -121,7 +121,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
-      <td><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='15' class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', $build->desc, "rows='15' class='area-1'");?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton() .html::hidden('project', $build->project);?></td></tr>
   </table>

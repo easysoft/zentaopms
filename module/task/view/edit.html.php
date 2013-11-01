@@ -30,7 +30,7 @@
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->task->desc;?></legend>
-            <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='area-1'");?>
+            <?php echo html::textarea('desc', $task->desc, "rows='8' class='area-1'");?>
           </fieldset>
           <fieldset>
             <legend><?php echo $lang->comment;?></legend>

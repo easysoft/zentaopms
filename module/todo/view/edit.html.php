@@ -41,7 +41,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-      <td><?php echo html::textarea('desc', htmlspecialchars($todo->desc), "rows=8 class=area-1");?></td>
+      <td><?php echo html::textarea('desc', $todo->desc, "rows=8 class=area-1");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->status;?></th>

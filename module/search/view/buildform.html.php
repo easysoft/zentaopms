@@ -18,7 +18,7 @@
 .select-1 {width:80%}
 .text-2{margin-bottom:2px; width:123px}
 .select-2{margin-bottom:2px}
-.date{width:104px}
+#searchform input.date{width:110px}
 </style>
 <script language='Javascript'>
 
@@ -187,7 +187,7 @@ function deleteQuery()
 foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
-    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', 'class=select-2 searchSelect');
+    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', "class='select-2 searchSelect'");
     if($param['control'] == 'input')  echo html::input($fieldName, '', "class='text-2 searchInput'");
     echo '</span>';
 }
@@ -207,7 +207,7 @@ foreach($fieldParams as $fieldName => $param)
       for($i = 1; $i <= $groupItems; $i ++)
       {
           $spanClass = $i == 1 ? 'inline' : 'hidden';
-          echo "<span id='searchbox$fieldNO' class='$spanClass'>";
+          echo "<div><span id='searchbox$fieldNO' class='$spanClass'>";
 
           /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
@@ -215,7 +215,7 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Print and or. */
           if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
-          if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
+          if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* Print field. */
           echo html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)'");
@@ -235,7 +235,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</span>';
 
           $fieldNO ++;
-          echo '</span>';
+          echo '</span></div>';
       }
       ?>
       </nobr>
@@ -247,7 +247,7 @@ foreach($fieldParams as $fieldName => $param)
       for($i = 1; $i <= $groupItems; $i ++)
       {
           $spanClass = $i == 1 ? 'inline' : 'hidden';
-          echo "<span id='searchbox$fieldNO' class='$spanClass'>";
+          echo "<div><span id='searchbox$fieldNO' class='$spanClass'>";
 
           /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
@@ -255,7 +255,7 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Print and or. */
           if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
-          if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
+          if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* Print field. */
           echo html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)'");
@@ -276,12 +276,12 @@ foreach($fieldParams as $fieldName => $param)
           echo '</span>';
 
           $fieldNO ++;
-          echo '</span>';
+          echo '</span></div>';
       }
       ?>
       </nobr>
     </td>
-    <td width='100'> 
+    <td width='180' class='a-center'> 
       <nobr>
       <?php
       echo html::hidden('module',     $module);
@@ -293,7 +293,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </nobr>
     </td>
-    <td width='250' class='a-center'>
+    <td width='150' class='a-center'>
       <?php
       echo html::select('queryID', $queries, $queryID, 'class=select-1 onchange=executeQuery(this.value)');
       if(common::hasPriv('search', 'deleteQuery')) echo html::a('javascript:deleteQuery()', '<i class="link-icon icon-remove"></i>', '', '');

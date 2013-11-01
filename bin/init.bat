@@ -42,7 +42,7 @@ echo backup.bat ok
 if %requestType% == 'PATH_INFO' (
   SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/report-remind"
 )else (
-  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=report&f=remind"
+  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=report&f=remind"
 )
 echo %computeburn% > %baseDir%dailyreminder.bat
 echo dailyreminder.bat ok
@@ -51,7 +51,7 @@ echo dailyreminder.bat ok
 if %requestType% == 'PATH_INFO' (
   SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/project-computeburn"
 )else (
-  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=project&f=computeburn"
+  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=project&f=computeburn"
 )
 echo %computeburn% > %baseDir%computeburn.bat
 echo computeburn.bat ok
@@ -60,7 +60,7 @@ echo computeburn.bat ok
 if %requestType% == 'PATH_INFO' (
   SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/admin-checkdb"
 )else (
-  SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=admin&f=checkdb"
+  SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=admin&f=checkdb"
 )
 echo %checkdb% > %baseDir%checkdb.bat
 echo checkdb.bat ok
@@ -69,7 +69,7 @@ echo checkdb.bat ok
 if %requestType% == 'PATH_INFO' (
   SET syncsvn= %phpcli% %baseDir%ztcli "%pmsRoot%/svn-run"
 )else (
-  SET syncsvn= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=svn&f=run"
+  SET syncsvn= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=svn&f=run"
 )
 echo %syncsvn% > %baseDir%syncsvn.bat
 echo syncsvn.bat ok
@@ -78,7 +78,7 @@ echo syncsvn.bat ok
 if %requestType% == 'PATH_INFO' (
   SET syncgit= %phpcli% %baseDir%ztcli "%pmsRoot%/git-run"
 )else (
-  SET syncgit= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=git&f=run"
+  SET syncgit= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=git&f=run"
 )
 echo %syncgit% > %baseDir%syncgit.bat
 echo syncgit.bat ok

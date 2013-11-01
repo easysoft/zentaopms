@@ -516,8 +516,14 @@ class product extends control
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        foreach($products as $key => $product)
+        {
+            if(!$this->product->checkPriv($product)) unset($products[$key]);
+        }
+
         $this->view->link     = $this->product->getProductLink($module, $method, $extra);
-        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $this->view->products = $products;
         $this->view->keywords = $keywords;
         $this->display();
     }

@@ -1592,6 +1592,12 @@ class router
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
         $errorLog .= "when visiting <strong>" . $this->getURI() . "</strong>\n";
 
+        /* If the ip is pulic, hidden the full path of scripts. */
+        if(!defined('IN_SHELL') and !validater::checkIP($this->server->server_addr, 'private'))
+        {
+            $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
+        }
+
         /* Save to log file. */
         $errorFile = $this->getLogRoot() . 'php.' . date('Ymd') . '.log';
         $fh = @fopen($errorFile, 'a');

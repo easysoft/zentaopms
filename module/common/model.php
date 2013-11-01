@@ -157,6 +157,7 @@ class commonModel extends model
 
         if(stripos($method, 'ajaxgetdropmenu') !== false and $this->app->user->account == 'guest') return true;
         if(stripos($method, 'ajaxgetmatcheditems') !== false and $this->app->user->account == 'guest') return true;
+        if($method == 'ajaxgetdetail' and $this->app->viewType == 'mhtml') return true;
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
@@ -540,18 +541,6 @@ class commonModel extends model
     {
         global $lang;
         echo html::a(helper::createLink('misc', 'qrCode'), "<i class='icon-mobile-phone icon-large'></i>" . $lang->user->mobileLogin, '', "class='qrCode $color'");
-    }
-
-    /**
-     * Print QR code Link. 
-     * 
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function getQRCodeLink()
-    {
-        echo helper::createLink('misc', 'qrCode');
     }
 
     /**

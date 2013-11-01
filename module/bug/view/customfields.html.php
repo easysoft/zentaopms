@@ -28,19 +28,15 @@
         echo html::select('defaultFields[]', $defaultFields, '', 'class=hidden');
         ?>
       </td>
-      <td>
-        <?php
-        echo html::commonButton('>', "onclick=\"addItem('allFields', 'customFields')\"") . '<br />';
-        echo html::commonButton('<', "onclick=delItem('customFields')")  . '<br />';
-        ?>
+      <td class='v-middle btn-group'>
+        <a class='btn' onclick="addItem('allFields', 'customFields')"><i class="icon-chevron-right"></i></a>
+        <a class='btn' onclick="delItem('customFields')"><i class="icon-chevron-left"></i></a>
       </td>
       <td><?php echo html::select('customFields[]', $customFields, '', 'class=select-2 size=10 multiple');?></td>
-      <td>
-        <?php
-        echo html::commonButton('+', "onclick=upItem('customFields')")  . '<br />';
-        echo html::commonButton('-', "onclick=downItem('customFields')")  . '<br />';
-        echo html::commonButton($lang->bug->restoreDefault, "onclick=restoreDefault()")  . '<br />';
-        ?>
+      <td class='v-middle btn-group'>
+        <a class='btn' onclick="upItem('customFields')"><i class="icon-plus"></i></a>
+        <a class='btn' onclick="downItem('customFields')"><i class="icon-minus"></i></a>
+        <a class='btn' onclick='restoreDefault()'><?php echo $lang->bug->restoreDefault;?></a>
       </td>
     </tr>  
     <tr><td colspan='4' class='a-center'><?php echo html::submitButton('', 'onclick=selectItem("customFields")');?></td></tr>

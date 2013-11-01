@@ -371,7 +371,12 @@ class productModel extends model
         }
 
         ksort($roadmap);
-        return $roadmap;
+
+        /* Get last 5 roadmap. */
+        $lastKeys = array_slice(array_keys($roadmap), -5);
+        foreach($lastKeys as $key) $lastRoadmap[$key] = $roadmap[$key];
+
+        return $lastRoadmap;
     }
 
     /**

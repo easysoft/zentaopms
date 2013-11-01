@@ -26,7 +26,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->verify;?></legend>
-        <div><?php echo htmlspecialchars($story->verify);?></div>
+        <div><?php echo $story->verify;?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->comment;?></legend>

@@ -153,7 +153,7 @@ $(function(){
           <form method='post' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>
             <table align='center' class='table-1'>
               <tr><td><?php echo html::textarea('lastComment', $action->comment,"rows='5' class='w-p100'");?></td></tr>
-              <tr><td><?php echo html::submitButton() . html::commonButton($lang->goback, "onclick='toggleComment($action->id)' class='button-s'");?></td></tr>
+              <tr><td><?php echo html::submitButton() . html::commonButton($lang->goback, "onclick='toggleComment($action->id)' class='button-b'");?></td></tr>
             </table>
           </form>
         </div>

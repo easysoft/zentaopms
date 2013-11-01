@@ -44,9 +44,9 @@
       <th class='rowhead'><?php echo $lang->build->linkStoriesAndBugs;?></th>
       <td>
 
-        <table class='w-p90 bd-none' style='margin-bottom:0px'>
+        <table class='bd-none' style='margin-bottom:0px;width:91%'>
           <tr>
-            <td class='w-p50'>
+            <td class='w-p50' style='padding-left:0px;padding-right:8px;'>
               <table class='mainTable'>
                 <caption style='padding-left:3px'><?php echo html::selectAll('story', 'checkbox') . ' ' . $lang->build->linkStories;?></caption>
                 <tr style='border-bottom:none'>
@@ -71,7 +71,7 @@
               </table>
             </td>
 
-            <td class='w-p50'>
+            <td class='w-p50' style='padding-left:0px;padding-right:0px;'>
               <table class='mainTable'>
                 <caption style='padding-left:3px'><?php echo html::selectAll('bug', 'checkbox') . ' ' . $lang->build->linkBugs;?></caption>
                 <tr style='border-bottom:none'>

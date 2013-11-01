@@ -1,2 +1,4 @@
 body{background:white; overflow:hidden;}
-.button-c {width:100px}
+.btn-group .btn{display: block;width: 80px;text-align: center;margin-top: -1px;}
+.btn-group .btn:hover{z-index: 9999;}
+.btn-group .btn i{line-height: 21px;}

@@ -64,9 +64,9 @@ js::set('refresh', $lang->refresh);
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->bug->steps;?></th>
-      <td>
+      <td style='position:relative'>
         <div class='w-p85 bd-none padding-zero f-left'><?php echo html::textarea('steps', $steps, "rows='10'");?></div>
-        <div class='bd-none pl-10px f-left' id='tplBox'><?php echo $this->fetch('bug', 'buildTemplates');?></div>
+        <div class='bd-none' id='tplBox' style='position:absolute;top:0px;left:86%'><?php echo $this->fetch('bug', 'buildTemplates');?></div>
       </td>
     </tr>  
     <tr>

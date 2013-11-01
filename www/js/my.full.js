@@ -515,19 +515,29 @@ function setFormAction(actionLink, hiddenwin)
  * @access public
  * @return void
  */
-function setImageSize(image, maxWidth)
+function setImageSize(image, maxWidth, type)
 {
     /* If not set maxWidth, set it auto. */
     if(!maxWidth)
     {
         bodyWidth = $('body').width();
-        maxWidth  = bodyWidth - 450; // The side bar's width is 336, and add some margins.
+        maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
     }
-    $('.content img').each(function()
+    if(type == 'comment')
     {
-        if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
-    });
-    $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>')
+        $('#actionbox img').each(function()
+        {
+            if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
+        });
+    }
+    else
+    {
+        $('.content img').each(function()
+        {
+            if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
+        });
+    }
+    $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>');
 }
 
 /**
@@ -820,12 +830,14 @@ function selectItem(SelectID)
  * @access public
  * @return void
  */
-function setModal4List(colorboxClass, replaceID, callback)
+function setModal4List(colorboxClass, replaceID, callback, width, height)
 {
+    if(typeof(width) == 'undefined') width = 900
+    if(typeof(height) == 'undefined') height = 500
     $('.' + colorboxClass).colorbox(
     {
-        width: 900,
-        height: 500,
+        width: width,
+        height: height,
         iframe: true,
         transition: 'none',
 
@@ -840,7 +852,7 @@ function setModal4List(colorboxClass, replaceID, callback)
             $('#tmpDiv').load(link + ' #' + replaceID, function()
             {
                 $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                setModal4List(colorboxClass, replaceID, callback);
+                setModal4List(colorboxClass, replaceID, callback, width, height);
 
                 try{$('.colored').colorize();}catch(err){}
                 $('tfoot td').css('background', 'white').unbind('click').unbind('hover');

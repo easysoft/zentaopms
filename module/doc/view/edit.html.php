@@ -43,7 +43,7 @@ $(document).ready(function()
     </tr>  
     <tr id='contentBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->doc->content;?></th>
-      <td><?php echo html::textarea('content', htmlspecialchars($doc->content), "class='text-1' rows='8' style='width:90%; height:200px'");?></td>
+      <td><?php echo html::textarea('content', $doc->content, "class='text-1' rows='8' style='width:90%; height:200px'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->doc->digest;?></th>
