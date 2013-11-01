@@ -71,7 +71,7 @@
               </table>
             </td>
 
-            <td class='w-p50' style='padding-left:0px;padding-right:0px;'>
+            <td class='w-p50' style='padding-left:0px;padding-right:5px;'>
               <table class='mainTable'>
                 <caption style='padding-left:3px'><?php echo html::selectAll('bug', 'checkbox') . ' ' . $lang->build->linkBugs;?></caption>
                 <tr style='border-bottom:none'>
@@ -86,7 +86,7 @@
                           </td>
                           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                           <td class='w-80px'><?php echo $lang->bug->statusList[$bug->status];?></td>
-                          <td class='w-80px'><?php echo $bug->status == 'resolved' ? substr($users[$bug->resolvedBy], 2) : html::select('resolvedBy[]', $users, $this->app->user->account, "class='w-70px'");?></td>
+                          <td class='w-80px' style='padding:0px'><?php echo $bug->status == 'resolved' ? substr($users[$bug->resolvedBy], 2) : html::select('resolvedBy[]', $users, $this->app->user->account, "class='w-70px'");?></td>
                         </tr>
                         <?php endforeach;?>
                       </table>
