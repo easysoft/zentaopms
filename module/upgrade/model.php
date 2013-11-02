@@ -96,6 +96,7 @@ class upgradeModel extends model
             case '5_0_beta1':
             case '5_0_beta2':
             case '5_0':
+            case '5_1':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -150,6 +151,8 @@ class upgradeModel extends model
         case '4_3_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('4.3'));
         case '5_0_beta1':
         case '5_0_beta2':
+        case '5_0':
+        case '5_1':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
