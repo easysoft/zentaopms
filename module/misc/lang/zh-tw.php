@@ -46,5 +46,6 @@ $lang->misc->zentao->service['install']    = '禪道安裝服務';
 $lang->misc->zentao->service['fixissue']   = '禪道問題解決';
 $lang->misc->zentao->service['servicemore']= '更多服務...';
 
-$lang->misc->noGDLib   = "請用手機瀏覽器直接訪問：%s";
+$lang->misc->mobile    = "手機訪問";
+$lang->misc->noGDLib   = "請用手機瀏覽器訪問：<strong>%s</strong>";
 $lang->misc->copyright = "版權所有 &copy;2009-2013 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";
