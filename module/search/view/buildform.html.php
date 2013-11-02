@@ -281,7 +281,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </nobr>
     </td>
-    <td width='180' class='a-center'> 
+    <td width='150'> 
       <nobr>
       <?php
       echo html::hidden('module',     $module);
@@ -293,7 +293,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </nobr>
     </td>
-    <td width='150' class='a-center'>
+    <td width='180'>
       <?php
       echo html::select('queryID', $queries, $queryID, 'class=select-1 onchange=executeQuery(this.value)');
       if(common::hasPriv('search', 'deleteQuery')) echo html::a('javascript:deleteQuery()', '<i class="link-icon icon-remove"></i>', '', '');

@@ -14,7 +14,8 @@
 #webapps li table .webapp-name{font-size:14px; color:#039; padding-top:2px;}
 #webapps li table .webapp-icon{padding:5px;vertical-align:middle;text-align:center}
 #webapps li table .webapp-info{color:#888; padding-top:2px; height:32px; white-space:pre-wrap;}
-#webapps li table .webapp-actions{padding-top:5px}
+#webapps li table .webapp-actions{padding-top:5px; padding-bottom:5px;}
+#webapps li table .webapp-actions .button-c{font-size:12px;}
 
 small{font-weight:normal}
 #webapps .button-c{min-width: 0;}

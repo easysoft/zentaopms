@@ -25,7 +25,7 @@
       </div>
       <div class='box-title'><?php echo $lang->extension->bySearch;?></div>
       <div class='box-content a-center'>
-        <form method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
+        <form class='side-search' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
         <?php echo html::input('key', $this->post->key, "class='text-1'") . html::submitButton($lang->extension->bySearch);?>
         </form>
       </div>
