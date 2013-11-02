@@ -169,3 +169,14 @@
 .diff-sort{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf036;');}
 .icon-green-user-unlock{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf09C;');}
 .icon-gray-user-unlock{*zoom:expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf09C;');}
+.icon-insert-template:before {*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe768;');}
+.icon-stack:before{*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe769;');}
+.icon-green-task-batchCreate:before {*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe769;');}
+.icon-share2:before {*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe76a;');}
+.icon-green-testcase-batchCreate:before{*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe600;');}
+.icon-gray-testcase-createCase:before{*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe600;');}
+.icon-usecases:before{*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe600;');}
+.icon-green-testcase-createCase{*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe600;');}
+.icon-green-story-createCase {*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe600;');}
+.icon-tasks:before{*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe601;');}
+.icon-green-task-create:before {*zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe601;');}
