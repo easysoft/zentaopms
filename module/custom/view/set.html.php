@@ -63,7 +63,7 @@ EOT;
     <td>
       <form method='post'>
         <table class='table-1'>
-          <caption><?echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></caption>
+          <caption><?php echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></caption>
           <tr>
             <th class='w-100px'><?php echo $lang->custom->key;?></th>
             <th><?php echo $lang->custom->value;?></th>
