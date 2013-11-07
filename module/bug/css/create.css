@@ -1,5 +1,8 @@
-#steps {width:100%}
-#task, #story, .text-1 {width: 85%}
+#steps {width:99.6%}
+.text-1 {width: 85%}
+#task, #story{width: 85.4%;}
+#mailto{width: 85.5%}
+#keywords{width: 85.1%;}
 .w-p100 {margin:0}
 /* The build template setting. */
 .button-c {padding:2px}

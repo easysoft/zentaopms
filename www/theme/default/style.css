@@ -22,7 +22,7 @@ a {text-decoration:none;}
 
 /*-----------------------ICONS-----------------------------------*/
 /* icons use fontawesome */
-.link-icon{color: #2E6DAD;display: inline-block;}
+.link-icon{color: #498cd0;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
@@ -117,9 +117,6 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before{color: #ccc;}
 
-.icon-green-testcase-createCase,.icon-green-story-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -582px;}
-.icon-gray-testcase-createCase,.icon-gray-story-createCase{width: 22px; height: 18px; background:url(images/main/zt-icons.png) -22px -604px;}
-
 .change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-sort{display: inline-block; font-family: FontAwesome;border: 1px solid #555;color: #555; font-size: 13px;font-weight: lighter; width: 14px;height: 13px;line-height: 13px;text-align: center;}
 .change-show:hover,.change-hide:hover,.log-desc:hover,.log-asc:hover,.diff-all:hover,.diff-sort:hover{background-color: #333;color: #fff}
 .change-show:before{content: "\f067";}
@@ -128,6 +125,21 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .log-asc:before{content: "\f062";}
 .diff-all:before{content: "\f0b2";}
 .diff-sort:before{content: "\f036";}
+
+/* zenicon */
+@font-face {font-family: 'zenicon';src:url('../fontawesome/font/zenicon.eot');src:url('../fontawesome/font/zenicon.eot?#iefix') format('embedded-opentype'),url('../fontawesome/font/zenicon.ttf') format('truetype'),url('../fontawesome/font/zenicon.woff') format('woff'),url('../fontawesome/font/zenicon.svg#zenicon') format('svg');font-weight: normal;font-style: normal;}
+.icon-green-testcase-createCase:before,.icon-green-story-createCase:before,.icon-green-task-create:before,
+.icon-green-task-batchCreate:before,.icon-green-testcase-batchCreate:before,.icon-gray-testcase-createCase:before,
+.icon-insert-template:before,.icon-stack:before,.icon-share2:before,.icon-usecases:before,.icon-tasks:before{font-family: 'zenicon';speak: none;font-style: normal;font-weight: normal;font-variant: normal;text-transform: none;line-height: 1;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+.icon-insert-template:before {content: "\e768";}
+.icon-stack:before,
+.icon-green-task-batchCreate:before {content: "\e769";}
+.icon-share2:before {content: "\e76a";}
+.icon-green-testcase-batchCreate:before,
+.icon-gray-testcase-createCase:before,
+.icon-usecases:before,.icon-green-testcase-createCase,.icon-green-story-createCase {content: "\e600";}
+.icon-tasks:before,.icon-green-task-create:before {content: "\e601";}
+
 
 /*-----------------------BUTTONS -----------------------------------*/
 .btn,a.btn,.button-s,.button-c,.button-b,#reversechecker,#allchecker,#goto{padding: 4px 15px;background-color: #f8f8f8;-webkit-transition: border-color .3s;-moz-transition: border-color .3s;-o-transition: border-color .3s;transition: border-color .3s;-webkit-border-radius: 2px;-moz-border-radius: 2px;border-radius: 2px;border: 1px solid #dcdcdc;margin: 0 10px 0 0;position: relative;display: inline-block;*display: inline;*zoom: 1;cursor: pointer;text-shadow: 0 1px 0 #fff;text-decoration: none;line-height: 1.5;font-size: 14px;color: #444;transition-delay: 0,0;transition-duration: .5s,.5s;transition-property: all;}
@@ -144,6 +156,8 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .groupButton #moreAction{border: 1px solid #DCDCDC;}
 .groupButton #moreAction:hover{border-color: #999;}
 .button-d{filter: alpha(opacity=50);-moz-opacity:0.5;opacity: 0.5;cursor: not-allowed;}
+.button-s{background-color: #d0dee3;border-color: #a3bbc4}
+.button-s:hover{background-color: #b1dff0}
 
 /*---------------------------Form Controls---------------------------*/
 select,textarea,input[type="text"],input[type="password"],input[type="datetime"],input[type="datetime-local"],input[type="date"],
@@ -237,7 +251,7 @@ select{padding: 4px 1px;}
 
 /*-----------------------FORM SETTING----------------------------*/
 .text-1 {width: 90%}
-td>.text-1{padding-left:2px;padding-right: 2px}
+td>.text-1,td>.area-1{padding-left:2px;padding-right: 2px}
 .text-2 {width: 120px}
 .text-3 {width: 240px}
 select.text-3 {width: 250px}

@@ -609,7 +609,14 @@ class productModel extends model
         foreach($stories as $key => $story)
         {
             $totalEstimate += $story->estimate;
-            $storyIdList[] = $story->id;
+            /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
+            if(
+                $story->status != 'closed' or
+                ($story->status == 'closed' and ($story->closedReason == 'done' or $story->closedReason == 'postponed'))
+            )
+            {
+                $storyIdList[] = $story->id;
+            }
         }
 
         $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->fetchAll();

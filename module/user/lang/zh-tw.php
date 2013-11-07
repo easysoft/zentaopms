@@ -69,7 +69,7 @@ $lang->user->asGuest         = "遊客訪問";
 $lang->user->goback          = "返回前一頁";
 $lang->user->allUsers        = '全部用戶';
 $lang->user->deleted         = '(已刪除)';
-$lang->user->select          = '--請選擇用戶--';
+$lang->user->select          = '請選擇用戶';
 
 $lang->user->profile      = '檔案';
 $lang->user->project      = '項目';

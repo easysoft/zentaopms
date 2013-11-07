@@ -455,6 +455,7 @@ class taskModel extends model
 
         $consumed = 0;
         $left     = $task->left;
+        $now      = helper::now();
         $this->loadModel('action');
         foreach($estimates as $estimate)
         {
@@ -468,25 +469,28 @@ class taskModel extends model
             $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
         }
 
-        if($left == 0)
-        {
-            $task->status = 'done'; 
-        }
-        else if($task->status == 'wait')
-        {
-            $task->status = 'doing'; 
-        }
-
         $data = new stdClass();
         $data->consumed       = $task->consumed + $consumed;
         $data->left           = $left;
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
-        $data->lastEditedDate = helper::now();
-        if(!$left)
+        $data->lastEditedDate = $now;
+        if($left == 0)
         {
+            $task->status       = 'done'; 
+            $data->status       = $task->status;
+            $data->assignedTo   = $task->openedBy;
+            $data->assignedDate = $now;
             $data->finishedBy   = $this->app->user->account;
-            $data->finishedDate = helper::now();
+            $data->finishedDate = $now;
+        }
+        else if($task->status == 'wait')
+        {
+            $task->status       = 'doing'; 
+            $data->status       = $task->status;
+            $data->assignedTo   = $this->app->user->account;
+            $data->assignedDate = $now;
+            $data->realStarted  = date('Y-m-d');
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
@@ -926,16 +930,17 @@ class taskModel extends model
         }
         if($left == 0) $task->status = 'done';
 
+        $now  = helper::now();
         $data = new stdClass();
         $data->consumed       = $consumed;
         $data->left           = $left;
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
-        $data->lastEditedDate = helper::now();
+        $data->lastEditedDate = $now;
         if(!$left) 
         {
             $data->finishedBy   = $this->app->user->account;
-            $data->finishedDate = helper::now();
+            $data->finishedDate = $now;
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
