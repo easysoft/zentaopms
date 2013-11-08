@@ -137,7 +137,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .icon-share2:before {content: "\e76a";}
 .icon-green-testcase-batchCreate:before,
 .icon-gray-testcase-createCase:before,
-.icon-usecases:before,.icon-green-testcase-createCase,.icon-green-story-createCase {content: "\e600";}
+.icon-usecases:before,.icon-green-testcase-createCase:before,.icon-green-story-createCase:before {content: "\e600";}
 .icon-tasks:before,.icon-green-task-create:before {content: "\e601";}
 
 
