@@ -966,6 +966,7 @@ class projectModel extends model
                 $task->assignedTo   = $BugToTasks->assignedTo[$key];
                 $task->assignedDate = $now;
             }
+            if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
             $this->dao->insert(TABLE_TASK)->data($task)->checkIF($BugToTasks->estimate[$key] != '', 'estimate', 'float')->exec();
 
             if(dao::isError()) 
