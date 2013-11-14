@@ -79,7 +79,7 @@ EOT;
             <?php if($canAdd):?>
             <td class='a-left'>
               <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
-              <?php if(!$system):?><a href='javascript:onclick=delItem(this)' class='link-icon'><i class='icon-delete'></i></a><?php endif;?>
+              <?php if(!$system):?><a href='javascript:void()' onclick='delItem(this)' class='link-icon'><i class='icon-delete'></i></a><?php endif;?>
             </td>
             <?php endif;?>
           </tr>
