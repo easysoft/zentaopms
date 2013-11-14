@@ -54,6 +54,21 @@ class releaseModel extends model
     }
 
     /**
+     * Get last release.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return bool | object 
+     */
+    public function getLast($productID)
+    {
+        return $this->dao->select('id, name')->from(TABLE_RELEASE)
+            ->where('product')->eq((int)$productID)
+            ->orderBy('date DESC')
+            ->fetch();
+    }
+
+    /**
      * Get release builds from product.
      * 
      * @param  int    $productID 
