@@ -20,7 +20,7 @@
       <th class='rowhead'><?php echo $lang->release->name;?></th>
       <td>
         <?php echo html::input('name', '', "class='text-3'");?>
-        <?php if($lastRelease) echo '<span class="gray">' . $lang->release->last . ': ' . $lastRelease->name . '</span>';?>
+        <?php if($lastRelease) echo '<span class="gray">(' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>
       </td>
     </tr>
     <tr>
