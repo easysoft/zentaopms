@@ -64,6 +64,7 @@ class build extends control
         $this->view->position[] = $this->lang->build->create;
         $this->view->products   = $this->project->getProducts($projectID);
         $this->view->projectID  = $projectID;
+        $this->view->lastBuild  = $this->build->getLast($projectID);
         $this->view->users      = $this->user->getPairs('nodeleted');
         $this->view->stories    = $stories;
         $this->view->bugs       = $bugs;
