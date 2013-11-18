@@ -12,7 +12,7 @@ caption,#featurebar,.outer>table.table-1>caption{background-color: #ebf2f9}
 select:focus,textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,
 input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus {border-color: #145bcc;outline: 0;}
 
-.button-s,.btn-primary{background-color:#3280fc;border-color: #145bcc; }
+.button-s,.btn-primary{background-color:#3280fc;border-color: #145bcc; color: #fff;text-shadow:none; }
 .button-s:hover,.btn-primary:hover{background-color:#145bcc;border-color: #004ec9;}
 
 table,#wrap .outer,#modulemenu li>a,#featurebar a, .outer>table.table-1>caption a{-moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px;}
