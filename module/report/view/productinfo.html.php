@@ -15,7 +15,7 @@
         <tr class='colhead'>
           <th width='200'><?php echo $lang->product->name;?></th>
           <th width='120'><?php echo $lang->product->PO;?></th>
-          <th><?php echo $lang->productplan->common;?></th>
+          <th width="200"><?php echo $lang->productplan->common;?></th>
           <th width="150"><?php echo $lang->productplan->begin;?></th>
           <th width="150"><?php echo $lang->productplan->end;?></th>
           <th class="w-50px"><?php echo $lang->story->statusList['draft'];?></th>
