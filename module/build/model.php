@@ -122,6 +122,21 @@ class buildModel extends model
     }
 
     /**
+     * Get last build.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return bool | object
+     */
+    public function getLast($projectID)
+    {
+        return $this->dao->select('id, name')->from(TABLE_BUILD) 
+            ->where('project')->eq((int)$projectID)
+            ->orderBy('date DESC')
+            ->fetch();
+    }
+
+    /**
      * Create a build
      * 
      * @param  int    $projectID 

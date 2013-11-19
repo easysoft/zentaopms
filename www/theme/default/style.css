@@ -458,6 +458,8 @@ table.data-table td:last-child{padding-right: 20px;}
 /* Header. */
 #header{padding:2px 20px 0 20px; background:#003366; border-bottom:1px solid #e4e4e4;}
 #header td{vertical-align: middle;}
+#header select{padding-top: 0;}
+
 
 /* Top bar. */
 #topbar, #topbar a {color:#ACCADF}

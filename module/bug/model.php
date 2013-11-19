@@ -260,6 +260,13 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
+
+        /* format mailto. */
+        $bug->mailto = ltrim(trim($bug->mailto), ',');
+        $bug->mailto = str_replace(' ','', $bug->mailto);
+        $bug->mailto = rtrim($bug->mailto, ',') . ',';
+        $bug->mailto = str_replace(',', ', ', $bug->mailto);
+
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }
 

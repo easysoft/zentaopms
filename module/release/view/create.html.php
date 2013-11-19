@@ -18,8 +18,11 @@
     <caption><?php echo $lang->release->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->release->name;?></th>
-      <td><?php echo html::input('name', '', "class='text-3'");?></td>
-    </tr>  
+      <td>
+        <?php echo html::input('name', '', "class='text-3'");?>
+        <?php if($lastRelease) echo '<span class="gray">(' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>
+      </td>
+    </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->release->build;?></th>
       <td>

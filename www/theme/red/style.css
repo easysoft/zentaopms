@@ -12,5 +12,5 @@ caption,#featurebar,.outer>table.table-1>caption{background-color: #fff3f3}
 select:focus,textarea:focus,input[type="text"]:focus,input[type="password"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="time"]:focus,input[type="week"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,
 input[type="search"]:focus,input[type="tel"]:focus,input[type="color"]:focus {border-color: #990000;outline: 0;}
 
-.button-s,.btn-primary{background-color:#b20101;border-color: #990000; }
+.button-s,.btn-primary{background-color:#b20101;border-color: #990000; color: #fff;text-shadow:none; }
 .button-s:hover,.btn-primary:hover{background-color:#990000;border-color: #880101 };

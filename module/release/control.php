@@ -67,10 +67,11 @@ class release extends control
         unset($builds['trunk']);
 
         $this->commonAction($productID);
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
-        $this->view->position[] = $this->lang->release->create;
-        $this->view->builds     = $builds;
-        $this->view->productID  = $productID;
+        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
+        $this->view->position[]  = $this->lang->release->create;
+        $this->view->builds      = $builds;
+        $this->view->productID   = $productID;
+        $this->view->lastRelease = $this->release->getLast($productID);
         $this->display();
     }
 
