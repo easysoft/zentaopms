@@ -731,7 +731,7 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('company')->ne($this->app->company->id)->exec();
         $this->dbh->exec("ALTER TABLE " . TABLE_GROUPPRIV . " DROP `company`;");
 
-        /* Delete version and sn that don's conform to the rules. Prevent conflict when delete company's field.*/
+        /* Delete config that don't conform to the rules. Prevent conflict when delete company's field.*/
         $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');
         $items   = array();
         $delList = array();
