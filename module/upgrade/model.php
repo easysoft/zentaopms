@@ -732,20 +732,20 @@ class upgradeModel extends model
         $this->dbh->exec("ALTER TABLE " . TABLE_GROUPPRIV . " DROP `company`;");
 
         /* Delete version and sn that don's conform to the rules. Prevent conflict when delete company's field.*/
-        $configs = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');
+        $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');
         $items   = array();
-        $delID   = array();
-        foreach($configs as $config)
+        $delList = array();
+        foreach($rows as $config)
         {
             if(isset($items[$config->owner][$config->module][$config->section][$config->key]))
             {
-                $delID[] = $config->id;
+                $delList[] = $config->id;
                 continue;
             }
 
             $items[$config->owner][$config->module][$config->section][$config->key] = $config->id;
         }
-        if($delID) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->in($delID)->exec();
+        if($delList) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->in($delList)->exec();
 
         $this->dbh->exec("ALTER TABLE " . TABLE_CONFIG . " DROP `company`;");
 
