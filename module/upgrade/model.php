@@ -732,23 +732,20 @@ class upgradeModel extends model
         $this->dbh->exec("ALTER TABLE " . TABLE_GROUPPRIV . " DROP `company`;");
 
         /* Delete version and sn that don's conform to the rules. Prevent conflict when delete company's field.*/
-        $version = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('`key`')->eq('version')
-            ->andWhere('company')->eq(0)
-            ->andWhere('owner')->eq('system')
-            ->andWhere('module')->eq('common')
-            ->andWhere('section')->eq('global')
-            ->fetch();
-        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('id')->ne($version->id)->exec();
+        $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');
+        $items   = array();
+        $delList = array();
+        foreach($rows as $config)
+        {
+            if(isset($items[$config->owner][$config->module][$config->section][$config->key]))
+            {
+                $delList[] = $config->id;
+                continue;
+            }
 
-        $sn = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('`key`')->eq('sn')
-            ->andWhere('company')->eq($this->app->company->id)
-            ->andWhere('owner')->eq('system')
-            ->andWhere('module')->eq('common')
-            ->andWhere('section')->eq('global')
-            ->fetch();
-        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('sn')->andWhere('id')->ne($sn->id)->exec();
+            $items[$config->owner][$config->module][$config->section][$config->key] = $config->id;
+        }
+        if($delList) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->in($delList)->exec();
 
         $this->dbh->exec("ALTER TABLE " . TABLE_CONFIG . " DROP `company`;");
 
