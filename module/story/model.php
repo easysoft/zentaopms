@@ -392,6 +392,7 @@ class storyModel extends model
                 $story->closedReason   = isset($this->post->closedReasons[$storyID])      ? $this->post->closedReasons[$storyID]      : $oldStory->closedReason;
                 $story->duplicateStory = isset($this->post->duplicateStories[$storyID])   ? $this->post->duplicateStories[$storyID]   : $oldStory->duplicateStory;
                 $story->childStories   = isset($this->post->childStoriesIDList[$storyID]) ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
+                $story->version        = $story->title == $oldStory->title ? $oldStory->version : $oldStory->version + 1;
 
                 if($story->title        != $oldStory->title)                         $story->status     = 'changed';
                 if($story->plan         !== false and $story->plan == '')            $story->plan       = 0;
@@ -417,6 +418,16 @@ class storyModel extends model
                     ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
                     ->where('id')->eq((int)$storyID)
                     ->exec();
+                if($story->title != $oldStory->title)
+                {
+                    $data          = new stdclass();
+                    $data->story   = $storyID;
+                    $data->version = $story->version;
+                    $data->title   = $story->title;
+                    $data->spec    = $oldStory->spec;
+                    $data->verify  = $oldStory->verify;
+                    $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+                }
 
                 if(!dao::isError()) 
                 {
