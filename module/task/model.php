@@ -93,6 +93,15 @@ class taskModel extends model
         $now   = helper::now();
         $tasks = fixer::input('post')->get();
         $mails = array();
+
+        /* check estimate. */
+        for($i = 0; $i < $this->config->task->batchCreate; $i++)
+        {
+            if(!empty($tasks->name[$i]) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $tasks->estimate[$i]))
+            {
+                die(js::alert($this->lang->task->error->estimateNumber));
+            }
+        }
         for($i = 0; $i < $this->config->task->batchCreate; $i++)
         {
             if(empty($tasks->name[$i])) continue;

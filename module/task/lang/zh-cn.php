@@ -146,6 +146,7 @@ $lang->task->confirmRecord         = '"剩余"为0，任务将标记为"已完�
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"已经消耗"必须为数字';
+$lang->task->error->estimateNumber   = '"预计剩余"必须为数字';
 $lang->task->error->consumedSmall    = '"已经消耗"必须大于之前消耗';
 $lang->task->error->consumedThisTime = '请填写"工时"';
 $lang->task->error->left             = '请填写"剩余"';
