@@ -65,6 +65,7 @@ class releaseModel extends model
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
             ->where('product')->eq((int)$productID)
             ->orderBy('date DESC')
+            ->limit(1)
             ->fetch();
     }
 

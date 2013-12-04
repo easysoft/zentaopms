@@ -133,6 +133,7 @@ class buildModel extends model
         return $this->dao->select('id, name')->from(TABLE_BUILD) 
             ->where('project')->eq((int)$projectID)
             ->orderBy('date DESC')
+            ->limit(1)
             ->fetch();
     }
 

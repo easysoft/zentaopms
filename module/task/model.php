@@ -93,6 +93,15 @@ class taskModel extends model
         $now   = helper::now();
         $tasks = fixer::input('post')->get();
         $mails = array();
+
+        /* check estimate. */
+        for($i = 0; $i < $this->config->task->batchCreate; $i++)
+        {
+            if(!empty($tasks->name[$i]) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $tasks->estimate[$i]))
+            {
+                die(js::alert($this->lang->task->error->estimateNumber));
+            }
+        }
         for($i = 0; $i < $this->config->task->batchCreate; $i++)
         {
             if(empty($tasks->name[$i])) continue;
@@ -663,13 +672,6 @@ class taskModel extends model
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
-        if($task->mailto)
-        {
-            $task->mailto = ltrim(trim($task->mailto), ',');  // remove the first ,
-            $task->mailto = str_replace(' ', '', $task->mailto);
-            $task->mailto = rtrim($task->mailto, ',') . ',';
-            $task->mailto = str_replace(',', ', ', $task->mailto);
-        }
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
         return $this->processTask($task);
     }

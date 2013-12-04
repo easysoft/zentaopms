@@ -157,8 +157,8 @@ $lang->bug->setTemplateTitle     = '请输入bug模板标题（保存之前请�
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 
 /* 模板。*/
-$lang->bug->tplStep   = "<p>[步骤]</p>";
-$lang->bug->tplResult = "<p>[结果]</p>";
+$lang->bug->tplStep   = "<p>[步骤]</p>\n";
+$lang->bug->tplResult = "<p>[结果]</p>\n";
 $lang->bug->tplExpect = "<p>[期望]</p>";
 
 /* 各个字段取值列表。*/

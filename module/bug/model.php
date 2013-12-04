@@ -168,14 +168,6 @@ class bugModel extends model
         if($setImgSize) $bug->steps = $this->loadModel('file')->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
 
-        if($bug->mailto)
-        {
-            $bug->mailto = ltrim(trim($bug->mailto), ',');  // Remove the first ,
-            $bug->mailto = str_replace(' ', '', $bug->mailto);
-            $bug->mailto = rtrim($bug->mailto, ',') . ',';
-            $bug->mailto = str_replace(',', ', ', $bug->mailto);
-        }
-
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
         if($bug->case)         $bug->caseTitle         = $this->dao->findById($bug->case)->from(TABLE_CASE)->fields('title')->fetch('title');
         if($bug->linkBug)      $bug->linkBugTitles     = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($bug->linkBug)->fetchPairs();
@@ -260,12 +252,6 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
-
-        /* format mailto. */
-        $bug->mailto = ltrim(trim($bug->mailto), ',');
-        $bug->mailto = str_replace(' ','', $bug->mailto);
-        $bug->mailto = rtrim($bug->mailto, ',') . ',';
-        $bug->mailto = str_replace(',', ', ', $bug->mailto);
 
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }

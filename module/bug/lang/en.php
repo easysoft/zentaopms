@@ -157,8 +157,8 @@ $lang->bug->setTemplateTitle     = 'Please input the template title:';
 $lang->bug->remindTask           = 'This bug has been to be a task, update the task:%s or not?';
 
 /* Templates. */
-$lang->bug->tplStep   = "<p>[Steps]</p>";
-$lang->bug->tplResult = "<p>[Result]</p>";
+$lang->bug->tplStep   = "<p>[Steps]</p>\n";
+$lang->bug->tplResult = "<p>[Result]</p>\n";
 $lang->bug->tplExpect = "<p>[Expect]</p>";
 
 /* Field options lists. */

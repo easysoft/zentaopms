@@ -146,6 +146,7 @@ $lang->task->confirmRecord         = '"Left" is zero, this task will be done. Ar
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Consumed" must be number';
+$lang->task->error->estimateNumber   = '"Estimate" must be number';
 $lang->task->error->consumedSmall    = '"Consumed" must be more than consumed before';
 $lang->task->error->consumedThisTime = 'Please input "hours"';
 $lang->task->error->left             = 'Please input "left"';
