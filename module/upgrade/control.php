@@ -95,11 +95,12 @@ class upgrade extends control
             $incompatibleExts = $this->extension->checkIncompatible($versions);
             $extensionsName   = array();
 
+            $removeCommands = array();
             foreach($incompatibleExts as $extension)
             {
                 $this->extension->updateExtension($extension, array('status' => 'deactivated'));
-                $this->extension->removePackage($extension);
-                $extensionsName[] = $extensions[$extension]->name;
+                $removeCommands[$extension] = $this->extension->removePackage($extension);
+                $extensionsName[$extension] = $extensions[$extension]->name;
             }
 
             $data = '';
@@ -107,7 +108,12 @@ class upgrade extends control
             {
                 $data .= "<h3>{$this->lang->upgrade->forbiddenExt}</h3>";
                 $data .= '<ul>';
-                foreach($extensionsName as $extensionName) $data .= "<li>$extensionName</li>";
+                foreach($extensionsName as $extension => $extensionName)
+                {
+                    $data .= "<li>$extensionName";
+                    if($removeCommands[$extension])) $data .= '<p>'. $this->lang->extension->unremovedFiles . '</p> <p>' . join('<br />', $removeCommands[$extension]) . '</p>';
+                    $data .= '</li>';
+                }
                 $data .= '</ul>';
             }
 
