@@ -111,7 +111,7 @@ class upgrade extends control
                 foreach($extensionsName as $extension => $extensionName)
                 {
                     $data .= "<li>$extensionName";
-                    if($removeCommands[$extension])) $data .= '<p>'. $this->lang->extension->unremovedFiles . '</p> <p>' . join('<br />', $removeCommands[$extension]) . '</p>';
+                    if($removeCommands[$extension]) $data .= '<p>'. $this->lang->extension->unremovedFiles . '</p> <p>' . join('<br />', $removeCommands[$extension]) . '</p>';
                     $data .= '</li>';
                 }
                 $data .= '</ul>';
