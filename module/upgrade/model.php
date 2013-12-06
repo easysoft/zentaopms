@@ -97,6 +97,7 @@ class upgradeModel extends model
             case '5_0_beta2':
             case '5_0':
             case '5_1':
+            case '5_2':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -153,6 +154,7 @@ class upgradeModel extends model
         case '5_0_beta2':
         case '5_0':
         case '5_1':
+        case '5_2':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
