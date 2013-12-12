@@ -695,7 +695,7 @@ class taskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF(!empty($moduleIds))->andWhere('t1.module')->in($moduleIds)->fi() 
+            ->andWhere('t1.module')->in($moduleIds)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
