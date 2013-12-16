@@ -1,4 +1,8 @@
 <?php // -*- c++ -*-
+include '../config/config.php';
+session_name($config->sessionVar);
+session_start();
+if(!isset($_SESSION['user'])) header('location:index.php');
 
 /** 
  * ionCube Loader install Wizard
