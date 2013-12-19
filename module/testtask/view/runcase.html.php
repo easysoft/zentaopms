@@ -49,7 +49,7 @@
             echo html::submitButton($lang->testtask->pass, "onclick=$('#passall').val(1)");
         }
         echo html::hidden('case',    $run->case->id);
-        echo html::hidden('version', $run->version);
+        echo html::hidden('version', $run->case->currentVersion);
         if($run->case->steps)  echo html::hidden('passall', 0);
         if($nextCase)  echo html::linkButton($lang->testtask->next, inlink('runCase', "runID={$nextCase['runID']}&caseID={$nextCase['caseID']}&version={$nextCase['version']}"));
         if(!$run->case->steps) echo html::hidden('result', '');
