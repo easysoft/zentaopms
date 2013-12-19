@@ -97,7 +97,7 @@ class taskModel extends model
         /* check estimate. */
         for($i = 0; $i < $this->config->task->batchCreate; $i++)
         {
-            if(!empty($tasks->name[$i]) and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $tasks->estimate[$i]))
+            if(!empty($tasks->name[$i]) and $tasks->estimate[$i] and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $tasks->estimate[$i]))
             {
                 die(js::alert($this->lang->task->error->estimateNumber));
             }
