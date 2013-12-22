@@ -85,4 +85,89 @@ class backupModel extends model
 
         return $return;
     }
+
+    /**
+     * Add file header.
+     * 
+     * @param  string    $fileName 
+     * @access public
+     * @return bool
+     */
+    public function addFileHeader($fileName)
+    {
+        $firstline = false;
+        $die       = "<?php die();?>\n";
+        $fileSize  = filesize($fileName);
+
+        $fh    = fopen($fileName, 'c+');
+        $delta = strlen($die);
+        while(true)
+        {
+            $offset = ftell($fh);
+            $line   = fread($fh, 1024 * 1024);
+            if(!$firstline)
+            {
+                $line = $die . $line;
+                $firstline = true;
+            }
+            else
+            {
+                $line = $compensate . $line;
+            }
+            
+            $compensate = fread($fh, $delta);
+            fseek($fh, $offset);
+            fwrite($fh, $line);
+
+            if(ftell($fh) >= $fileSize)
+            {
+                fwrite($fh, $compensate);
+                break;
+            }
+        }
+        fclose($fh);
+        return true;
+    }
+
+    /**
+     * Remove file header.
+     * 
+     * @param  string    $fileName 
+     * @access public
+     * @return bool
+     */
+    public function removeFileHeader($fileName)
+    {
+        $firstline = false;
+        $die       = "<?php die();?>\n";
+        $fileSize  = filesize($fileName);
+
+        $fh = fopen($fileName, 'c+');
+        while(true)
+        {
+            $offset = ftell($fh);
+            if($firstline and $delta) fseek($fh, $offset + $delta);
+            $line = fread($fh, 1024 * 1024);
+            if(!$firstline)
+            {
+                $firstline    = true;
+                $beforeLength = strlen($line);
+                $line         = str_replace($die, '', $line);
+                $afterLength  = strlen($line);
+                $delta        = $beforeLength - $afterLength;
+                if($delta == 0)
+                {
+                    fclose($fh);
+                    return true;
+                }
+            }
+            fseek($fh, $offset);
+            fwrite($fh, $line);
+
+            if(ftell($fh) >= $fileSize - $delta) break;
+        }
+        ftruncate($fh, ($fileSize - $delta));
+        fclose($fh);
+        return true;
+    }
 }

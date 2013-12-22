@@ -81,14 +81,7 @@ class backup extends control
             echo js::alert(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
             die(js::reload('parent'));
         }
-
-        $fp  = fopen($this->backupPath . $fileName . '.sql.php', 'r');
-        $tmp = fopen($this->backupPath . $fileName . '.sql.php.tmp', 'w');
-        fwrite($tmp, "#<?php die()?>;\n");
-        while(($buffer = fgets($fp)) !== false) fwrite($tmp, $buffer);
-        fclose($fp);
-        fclose($tmp);
-        rename($this->backupPath . $fileName . '.sql.php.tmp', $this->backupPath . $fileName . '.sql.php');
+        $this->backup->addFileHeader($this->backupPath . $fileName . '.sql.php');
 
        if(extension_loaded('zlib'))
        {
@@ -98,6 +91,7 @@ class backup extends control
                echo js::alert(sprintf($this->lang->backup->error->backupFile, $result->error));
                die(js::reload('parent'));
            }
+           $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
        }
 
         echo js::alert($this->lang->backup->success->backup);
@@ -122,7 +116,9 @@ class backup extends control
         set_time_limit(0);
 
         /* Restore database. */
+        $this->backup->removeFileHeader($this->backupPath . $fileName . '.sql.php');
         $result = $this->backup->restoreSQL($this->backupPath . $fileName . '.sql.php');
+        $this->backup->addFileHeader($this->backupPath . $fileName . '.sql.php');
         if(!$result->result)
         {
             echo js::alert(sprintf($this->lang->backup->error->restoreSQL, $result->error));
@@ -132,7 +128,9 @@ class backup extends control
         /* Restore attatchments. */
         if(file_exists($this->backupPath . $fileName . '.file.zip.php'))
         {
+            $this->backup->removeFileHeader($this->backupPath . $fileName . '.file.zip.php');
             $result = $this->backup->restoreFile($this->backupPath . $fileName . '.file.zip.php');
+            $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
             if(!$result->result)
             {
                 echo js::alert(sprintf($this->lang->backup->error->restoreFile, $result->error));
