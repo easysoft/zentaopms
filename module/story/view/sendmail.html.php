@@ -28,7 +28,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
       <?php 
       if(strpos($story->spec, 'src="data/upload'))
       {
-        $story->spec = preg_replace('/<img (.*) src="/', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
+        $story->spec = preg_replace('/<img (.*)src="/', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
       }
       echo $story->spec;
       ?>
