@@ -17,12 +17,7 @@
     <tr>
       <th class='w-30px'><?php echo $lang->idAB;?></th> 
       <th class='red'>   <?php echo $lang->task->name?></th>
-      <?php 
-      if(!isset($project) or (isset($project) and $project->type != 'sprint')) 
-      {
-          echo "<th class='w-80px'>" . $lang->task->module . "</th>";
-      }
-      ?>
+      <th class='w-80px'><?php echo $lang->task->module?></th>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-60px red'><?php echo $lang->typeAB;?></th>
       <th class='w-70px'><?php echo $lang->task->status;?></th>
@@ -46,12 +41,7 @@
     <tr class='a-center'>
       <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
       <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=text-1');?></td>
-      <?php 
-      if(!isset($project) or (isset($project) and $project->type != 'sprint')) 
-      {
-          echo "<td>" . html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, 'class=select-1') . "</td>";
-      }
-      ?>
+      <td><?php echo html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, 'class=select-1')?></td>
       <td><?php echo html::select("assignedTos[$taskID]",   $members, $tasks[$taskID]->assignedTo, 'class=select-1');?></td>
       <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=select-1');?></td>
       <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=select-1');?></td>
