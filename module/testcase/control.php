@@ -759,6 +759,10 @@ class testcase extends control
                 {
                     $fc = @iconv($this->post->encode, 'utf-8', $fc);
                 }
+                else
+                {
+                    die(js::alert($this->lang->testcase->noFunction));
+                }
             }
             file_put_contents($this->file->savePath . $file['pathname'], $fc);
 

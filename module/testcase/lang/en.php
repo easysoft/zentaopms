@@ -148,3 +148,4 @@ $lang->testcase->buttonEdit   = 'Edit';
 $lang->testcase->buttonToList = 'Back';
 
 $lang->testcase->errorEncode = 'No data, please select right encode and upload again!';
+$lang->testcase->noFunction  = 'Iconv and mb_convert_encoding does not exist, you can not turn the data into the desired coding!';
