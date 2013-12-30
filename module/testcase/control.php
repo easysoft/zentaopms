@@ -835,7 +835,7 @@ class testcase extends control
                 {
                     if($cellValue == 0)
                     {
-                        $cese->$field = 0;
+                        $case->$field = 0;
                     }
                     elseif(preg_match('/^#\d+$/', $cellValue))
                     {

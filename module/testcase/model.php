@@ -336,6 +336,7 @@ class testcaseModel extends model
     public function joinStep($steps)
     {
         $return = '';
+        if(empty($steps)) return $return;
         foreach($steps as $step) $return .= $step->desc . ' EXPECT:' . $step->expect . "\n";
         return $return;
     }
@@ -452,23 +453,27 @@ class testcaseModel extends model
                 $caseID      = $this->post->id[$key];
                 $stepChanged = false;
                 $steps       = array();
-                if(!isset($oldSteps[$caseID])) continue;
-                $oldStep     = $oldSteps[$caseID];
+                $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
+                $oldCase     = $oldCases[$caseID];
 
                 /* Remove the empty setps in post. */
-                foreach($this->post->desc[$key] as $id => $desc)
+                $steps = array();
+                if(isset($_POST['desc'][$key]))
                 {
-                    $desc = trim($desc);
-                    if(empty($desc))continue;
-                    $step = new stdclass();
-                    $step->desc = $desc;
-                    $step->expect = trim($this->post->expect[$key][$id]);
-                    $steps[] = $step;
-                    unset($step);
+                    foreach($this->post->desc[$key] as $id => $desc)
+                    {
+                        $desc = trim($desc);
+                        if(empty($desc))continue;
+                        $step = new stdclass();
+                        $step->desc   = $desc;
+                        $step->expect = trim($this->post->expect[$key][$id]);
+
+                        $steps[] = $step;
+                    }
                 }
 
                 /* If step count changed, case changed. */
-                if(count($oldStep) != count($steps))
+                if((!$oldStep != !$steps) or (count($oldStep) != count($steps)))
                 {
                     $stepChanged = true;
                 }
@@ -485,9 +490,9 @@ class testcaseModel extends model
                     }
                 }
 
-                $version = $stepChanged ? $oldStep->version + 1 : $oldStep->version;
-                $caseData->version        = $version;
-                $changes = common::createChanges($oldCases[$caseID], $caseData); 
+                $version           = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
+                $caseData->version = $version;
+                $changes           = common::createChanges($oldCase, $caseData); 
                 if(!$changes and !$stepChanged) continue;
 
                 if($changes or $stepChanged)
@@ -501,7 +506,7 @@ class testcaseModel extends model
                         {
                             $step = (array)$step;
                             if(empty($step['desc'])) continue;
-                            $stepData = '';
+                            $stepData = new stdclass();
                             $stepData->case    = $caseID;
                             $stepData->version = $version;
                             $stepData->desc    = htmlspecialchars($step['desc']);
@@ -509,9 +514,9 @@ class testcaseModel extends model
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         }
                     }
-                    $oldCases[$caseID]->steps = $this->joinStep($oldSteps[$caseID]);
+                    $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
-                    $changes = common::createChanges($oldCases[$caseID], $caseData);
+                    $changes = common::createChanges($oldCase, $caseData);
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
@@ -530,7 +535,8 @@ class testcaseModel extends model
                     {
                         $desc = trim($desc);
                         if(empty($desc)) continue;
-                        $stepData->case = $caseID;
+                        $stepData = new stdclass();
+                        $stepData->case    = $caseID;
                         $stepData->version = 1;
                         $stepData->desc    = htmlspecialchars($desc);
                         $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
