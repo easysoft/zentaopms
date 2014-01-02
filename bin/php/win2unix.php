@@ -8,6 +8,8 @@ $renameTables = array('zt_casestep' => 'zt_caseStep', 'zt_doclib' => 'zt_docLib'
 'zt_testrun' => 'zt_testRun', 'zt_testtask' => 'zt_testTask', 'zt_usercontact' => 'zt_userContact', 'zt_usergroup' => 'zt_userGroup',
 'zt_userquery' => 'zt_userQuery', 'zt_usertpl' => 'zt_userTPL');
 
+$renameTables += array('zt_relationoftasks' => 'zt_relationOfTasks', 'zt_repohistory' => 'zt_repoHistory');
+
 try
 {
     $params = $config->db;
