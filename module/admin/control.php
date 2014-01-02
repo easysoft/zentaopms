@@ -122,39 +122,6 @@ class admin extends control
     }
 
     /**
-     * Rename table for from windows to linux.
-     * 
-     * @access public
-     * @return void
-     */
-    public function win2Unix()
-    {
-        $renameTables = $this->config->win2Unix->renameTables;
-
-        $existTables = $this->dbh->query('SHOW TABLES')->fetchAll();
-        foreach($existTables as $key => $table) $existTables[$key] = current((array)$table);
-        $existTables = array_flip($existTables);
-
-        foreach($renameTables as $oldTable => $newTable)
-        {
-            if(isset($existTables[$newTable]))
-            {
-                echo "Has existed table '$newTable'\n";
-            }
-            elseif(!isset($existTables[$oldTable]))
-            {
-                echo "No found table '$oldTable'\n";
-            }
-            else
-            {
-                $this->dbh->query("RENAME TABLE `$oldTable` TO `$newTable`");
-                echo "RENAME TABLE `$oldTable` TO `$newTable`\n";
-            }
-        }
-        echo "Finish!\n";
-    }
-
-    /**
      * Confirm clear data.
      * 
      * @param  string $confirm ''|no|yes
