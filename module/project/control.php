@@ -113,6 +113,7 @@ class project extends control
     public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->loadModel('tree');
+        $this->loadModel('search');
 
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
@@ -161,7 +162,7 @@ class project extends control
         {   
             if($queryID)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
+                $query = $this->search->getQuery($queryID);
                 if($query)
                 {
                     $this->session->set('taskQuery', $query->sql);
@@ -183,7 +184,7 @@ class project extends control
 
             $projectQuery = "`project`" . helper::dbIN(array_keys($this->projects));  
             $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
-            $taskQuery    = $this->loadModel('search')->replaceDynamic($taskQuery);
+            $taskQuery    = $this->search->replaceDynamic($taskQuery);
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $orderBy);
@@ -196,7 +197,7 @@ class project extends control
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
         $this->config->project->search['params']['module']['values']  = $this->tree->getTaskOptionMenu($projectID, $startModuleID = 0);
-        $this->loadModel('search')->setSearchParams($this->config->project->search);
+        $this->search->setSearchParams($this->config->project->search);
 
         /* Assign. */
         $this->view->tasks       = $tasks;

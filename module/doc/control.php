@@ -55,6 +55,8 @@ class doc extends control
      */
     public function browse($libID = 'product', $moduleID = 0, $productID = 0, $projectID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {  
+        $this->loadModel('search');
+
         /* Set browseType.*/ 
         $browseType = strtolower($browseType);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -83,7 +85,7 @@ class doc extends control
         {
             if($queryID)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
+                $query = $this->search->getQuery($queryID);
                 if($query)
                 {
                     $this->session->set('docQuery', $query->sql);
@@ -100,7 +102,7 @@ class doc extends control
             }
             $docQuery = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
             $docQuery = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
-            $docQuery = $this->loadModel('search')->replaceDynamic($docQuery);
+            $docQuery = $this->search->replaceDynamic($docQuery);
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -127,7 +129,6 @@ class doc extends control
         $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->project->getPairs() + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'') + $this->libs;
         $this->config->doc->search['params']['type']['values']    = array(''=>'') + $this->config->doc->search['params']['type']['values'];
-        $this->loadModel('search')->setSearchParams($this->config->doc->search);
 
         /* Get the modules. */
         if($libID == 'product' or $libID == 'project')
@@ -138,7 +139,8 @@ class doc extends control
         {
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
-        $this->config->doc->search['params']['module']['values']        = array(''=>'') + $moduleOptionMenu;
+        $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
+        $this->search->setSearchParams($this->config->doc->search);
 
         $this->view->libID         = $libID;
         $this->view->libName       = $this->libs[$libID];
