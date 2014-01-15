@@ -105,10 +105,10 @@ class release extends control
         $build = $this->build->getById($release->build);
         if($release->build !=0)
         {
-        /* Get stories and bugs. */
-        $orderBy = 'status_asc, stage_asc, id_desc';
-        $stories = $this->story->getProjectStories($build->project, $orderBy);
-        $bugs    = $this->bug->getProjectBugs($build->project); 
+            /* Get stories and bugs. */
+            $orderBy = 'status_asc, stage_asc, id_desc';
+            $stories = $this->story->getProjectStories($build->project, $orderBy);
+            $bugs    = $this->bug->getProjectBugs($build->project); 
         }
         else
         {
