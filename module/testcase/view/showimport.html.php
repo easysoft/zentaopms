@@ -28,7 +28,7 @@
   <tr valign='top' align='center'>
     <td>
     <?php
-      if(isset($case->id))
+      if(!empty($case->id))
       {
           echo $case->id . html::hidden("id[$key]", $case->id);
       }
@@ -40,9 +40,9 @@
       ?>
     </td>
     <td><?php echo html::input("title[$key]", $case->title, "class='text-1' style='margin-top:2px'")?></td>
-    <td><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (isset($case->id) ? $cases[$case->id]->module : ''), "class='select-2'")?></td>
-    <td><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (isset($case->id) ? $cases[$case->id]->story : ''), "class='select-2'")?></td>
-    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (isset($case->id) ? $cases[$case->id]->pri : ''))?></td>
+    <td><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='select-2'")?></td>
+    <td><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='select-2'")?></td>
+    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''))?></td>
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type)?></td>
     <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : '')?></td>
     <td><?php echo html::input("frequency[$key]", isset($case->frequency) ? $case->frequency : 1, "size='2'")?></td>
