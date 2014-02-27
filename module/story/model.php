@@ -226,7 +226,7 @@ class storyModel extends model
                 $specData[$i]->story   = $storyID;
                 $specData[$i]->version = 1;
                 $specData[$i]->title   = htmlspecialchars($stories->title[$i]);
-                if($stories->spec[$i] != '') $specData[$i]->spec = htmlspecialchars($stories->spec[$i]);
+                if($stories->spec[$i] != '') $specData[$i]->spec = str_replace(array("\r\n", "\n"), '<br />', htmlspecialchars($stories->spec[$i]));
                 $this->dao->insert(TABLE_STORYSPEC)->data($specData[$i])->exec();
 
                 $this->loadModel('action');

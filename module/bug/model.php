@@ -88,7 +88,7 @@ class bugModel extends model
             $bug->project     = $data->projects[$i] ? $data->projects[$i] : 0;
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->title       = $data->titles[$i];
-            $bug->steps       = $data->stepses[$i];
+            $bug->steps       = str_replace(array("\r\n", "\n"), '<br />', htmlspecialchars($data->stepses[$i]));
             $bug->type        = $data->types[$i];
             $bug->severity    = $data->severities[$i];
             $bug->os          = $data->oses[$i];
