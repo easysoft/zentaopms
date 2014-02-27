@@ -148,3 +148,4 @@ $lang->testcase->buttonEdit   = '編輯';
 $lang->testcase->buttonToList = '返回';
 
 $lang->testcase->errorEncode = '無數據，請選擇正確的編碼重新上傳！';
+$lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding轉碼方法，不能將數據轉成想要的編碼！';
