@@ -21,6 +21,7 @@
       <th><?php echo $lang->task->story;?></th>
       <th class='red'><?php echo $lang->task->name;?></th>
       <th class='w-60px red'><?php echo $lang->typeAB;?></th>
+      <th class='w-80px'><?php echo $lang->task->module?></th>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
       <th class='w-200px'><?php echo $lang->task->desc;?></th>
@@ -31,6 +32,7 @@
     $stories['ditto'] = $this->lang->task->ditto; 
     $lang->task->typeList['ditto'] = $lang->task->ditto; 
     $members['ditto'] = $lang->task->ditto;
+    $modules['ditto'] = $lang->task->ditto;
     ?>
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
     <?php 
@@ -39,10 +41,11 @@
         $story  = $storyID;
         $type   = '';
         $member = '';
+        $module = '';
     }
     else
     {
-        $story = $type = $member = 'ditto';
+        $story = $type = $member = $module = 'ditto';
     }
     ?>
     <?php $pri = 3;?>
@@ -56,6 +59,7 @@
       </td>
       <td><?php echo html::input("name[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1');?></td>
+      <td><?php echo html::select("modules[$i]", $modules, $module, 'class=select-1')?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::textarea("desc[$i]", '', "rows='1' class=text-1");?></td>

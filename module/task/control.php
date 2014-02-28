@@ -163,6 +163,7 @@ class task extends control
 
         $stories = $this->story->getProjectStoryPairs($projectID);
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
         $title      = $project->name . $this->lang->colon . $this->lang->task->batchCreate;
         $position[] = html::a($taskLink, $project->name);
         $position[] = $this->lang->task->common;
@@ -172,6 +173,7 @@ class task extends control
         $this->view->position = $position;
         $this->view->project  = $project;
         $this->view->stories  = $stories;
+        $this->view->modules  = $modules;
         $this->view->storyID  = $storyID;
         $this->view->members  = $members;
         $this->display();

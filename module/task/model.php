@@ -107,8 +107,9 @@ class taskModel extends model
             if(empty($tasks->name[$i])) continue;
 
             $data[$i] = new stdclass();
-            $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->story : 0)      : ($tasks->story[$i] ? $tasks->story[$i] : 0);
-            $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->type  : 0)      : $tasks->type[$i];
+            $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->story      : 0) : ($tasks->story[$i] ? $tasks->story[$i] : 0);
+            $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->type       : 0) : $tasks->type[$i];
+            $data[$i]->module       = $tasks->module[$i]     == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->module     : 0) : $tasks->module[$i];
             $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
             $data[$i]->name         = htmlspecialchars($tasks->name[$i]);
             $data[$i]->desc         = str_replace(array("\r\n", "\n"), '<br />', htmlspecialchars($tasks->desc[$i]));
