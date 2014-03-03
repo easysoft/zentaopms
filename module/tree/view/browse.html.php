@@ -36,7 +36,7 @@
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
           <caption><?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?></caption>
           <tr>
-            <td width='10%'>
+            <td class='parentModule'>
               <nobr>
               <?php
               echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType"), $root->name);
