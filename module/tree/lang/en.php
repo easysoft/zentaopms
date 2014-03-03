@@ -32,8 +32,7 @@ $lang->tree->manageBugChild    = 'Manage bug child';
 $lang->tree->manageCaseChild   = 'Manage case child';
 $lang->tree->manageTaskChild   = 'Manage project child';
 $lang->tree->manageWebappChild = 'Manage webapp child';
-$lang->tree->syncFromProduct   = 'Copy from product module';
-$lang->tree->syncFromProject   = 'Copy from project module';
+$lang->tree->syncFromProduct   = 'Copy';
 $lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
 $lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
