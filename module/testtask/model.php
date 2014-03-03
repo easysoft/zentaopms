@@ -49,7 +49,7 @@ class testtaskModel extends model
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
             ->checkIF($task->begin != '', 'begin', 'date')
             ->checkIF($task->end   != '', 'end', 'date')
-            ->checkIF($task->end != '', 'end', 'gt', $task->begin)
+            ->checkIF($task->end != '', 'end', 'ge', $task->begin)
             ->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
