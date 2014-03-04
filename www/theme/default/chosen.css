@@ -200,6 +200,19 @@
     padding: 5px;
 }
 
+.chzn-container-single .search-choice-close {
+    background: url("./images/chosen/chosen-sprite.png") no-repeat scroll -47px 1px transparent;
+    border-bottom:none;
+    cursor:pointer;
+    display: block;
+    font-size: 1px;
+    height: 12px;
+    position: absolute;
+    right: 20px;
+    top: 4px;
+    width: 12px;
+}
+
 .chzn-container-multi .chzn-choices li.search-choice .search-choice-close {
     background: url("./images/chosen/chosen-sprite.png") no-repeat scroll -47px 1px transparent;
     display: block;

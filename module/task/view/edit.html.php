@@ -64,7 +64,7 @@
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-            <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, 'class=select-1');?></span></td> 
+            <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='select-1 chosen'");?></span></td> 
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->type;?></th>

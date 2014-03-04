@@ -22,7 +22,7 @@ js::set('page', 'assignedto');
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
       <td class='rowhead'><?php echo $lang->bug->mailto;?></td>

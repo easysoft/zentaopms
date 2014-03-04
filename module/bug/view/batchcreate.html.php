@@ -33,7 +33,7 @@
       <td><?php echo $i+1;?></td>
       <td class='a-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='select-1'");?></td>
       <td><?php echo html::select("projects[$i]", $projects, $projectID, "class='select-1' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
-      <td class='a-left chosenBox' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1' multiple data-placeholder=' '");?></td>
+      <td class='a-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1 chosen' multiple data-placeholder=' '");?></td>
       <td><?php echo html::input("titles[$i]", '', 'class=select-1');?></td>
       <td><?php echo html::textarea("stepses[$i]", '', "rows='1' class=text-1");?></td>
       <td><?php echo html::select("types[$i]", $lang->bug->typeList, '');?></td>

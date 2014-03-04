@@ -56,7 +56,7 @@ js::set('refresh', $lang->refresh);
     </tr>
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-      <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, 'class=select-3');?></span></td>
+      <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, "class='select-3 chosen'");?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->title;?></th>

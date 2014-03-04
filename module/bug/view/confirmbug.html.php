@@ -22,7 +22,7 @@ js::set('page', 'confirmbug');
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->bug->pri;?></th>

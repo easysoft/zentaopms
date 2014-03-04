@@ -17,7 +17,7 @@
     <caption><?php echo $task->name;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, '', "class='text-3'");?></td>
+      <td><?php echo html::select('assignedTo', $users, '', "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->left;?></th>
