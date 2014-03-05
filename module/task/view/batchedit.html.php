@@ -17,13 +17,12 @@
     <tr>
       <th class='w-30px'><?php echo $lang->idAB;?></th> 
       <th class='red'>   <?php echo $lang->task->name?></th>
-      <th class='w-80px'><?php echo $lang->task->module?></th>
+      <th class='w-150px'><?php echo $lang->task->module?></th>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-60px red'><?php echo $lang->typeAB;?></th>
       <th class='w-70px'><?php echo $lang->task->status;?></th>
       <th class='w-50px'><?php echo $lang->task->pri;?></th>
       <th class='w-30px red'><?php echo $lang->task->estimateAB;?></th>
-      <th class='w-70px'><?php echo $lang->task->consumed;?></th>
       <th class='w-60px red'><?php echo $lang->task->consumedThisTime?></th>
       <th class='w-30px red'><?php echo $lang->task->leftAB?></th>
       <th class='w-80px'><?php echo $lang->task->finishedBy;?></th>
@@ -41,13 +40,12 @@
     <tr class='a-center'>
       <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
       <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=text-1');?></td>
-      <td><?php echo html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, 'class=select-1')?></td>
+      <td><?php echo html::select("modules[$taskID]",       $modules, $tasks[$taskID]->module, 'class=select-1')?></td>
       <td><?php echo html::select("assignedTos[$taskID]",   $members, $tasks[$taskID]->assignedTo, 'class=select-1');?></td>
       <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=select-1');?></td>
       <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=select-1');?></td>
       <td><?php echo html::select("pris[$taskID]",          (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=select-1');?></td>
       <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("", $tasks[$taskID]->consumed, "class='text-1 a-center' disabled");?></td>
       <td><?php echo html::input("consumeds[$taskID]",      '', "class='text-1 a-center'");?></td>
       <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='text-1 a-center'");?></td>
       <td><?php echo html::select("finishedBys[$taskID]",   $members, $tasks[$taskID]->finishedBy, 'class=select-1');?></td>

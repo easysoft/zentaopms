@@ -315,7 +315,7 @@ class task extends control
             $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
             $this->view->position[] = html::a($this->createLink('project', 'browse', "project=$project->id"), $project->name);
             $this->view->project    = $project;
-            $this->view->modules    = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+            $this->view->modules    = $this->tree->getTaskOptionMenu($projectID);
             $this->view->members    = $members;
         }
         /* The tasks of my. */
