@@ -23,7 +23,7 @@ class project extends control
         parent::__construct();
         if($this->methodName != 'computeburn')
         {
-            $this->projects = $this->project->getPairs();
+            $this->projects = $this->project->getPairs('nocode');
             if(!$this->projects and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
     }
