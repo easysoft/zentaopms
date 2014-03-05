@@ -299,6 +299,7 @@ class product extends control
         $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
         $this->view->position[] = $this->lang->close;
         $this->view->actions    = $actions;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

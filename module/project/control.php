@@ -1003,6 +1003,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->start;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->start;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1034,6 +1035,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->putoff;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->putoff;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1065,6 +1067,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->suspend;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1096,6 +1099,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->activate;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1127,6 +1131,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->close;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->close;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
