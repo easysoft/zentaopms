@@ -128,6 +128,22 @@ function showDropMenu(objectType, objectID, module, method, extra)
 }
 
 /**
+ * Show drop result. 
+ * 
+ * @param  objectType $objectType 
+ * @param  objectID $objectID 
+ * @param  module $module 
+ * @param  method $method 
+ * @param  extra $extra 
+ * @access public
+ * @return void
+ */
+function showDropResult(objectType, objectID, module, method, extra)
+{
+    $('#resultList').load(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra) + ' #searchResult');
+}
+
+/**
  * Search items. 
  * 
  * @param  string $keywords 
@@ -144,12 +160,13 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     if(keywords == '')
     {
         showMenu = 0;
-        showDropMenu(objectType, objectID, module, method, extra);
+        showDropResult(objectType, objectID, module, method, extra);
         setTimeout(function(){$("#dropMenu #search").focus();}, 300);
     }
     else
     {
-        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#searchResult').html(data);});
+        keywords = encodeURI(keywords);
+        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){$('#searchResult').html(data);});
     }
 }
 

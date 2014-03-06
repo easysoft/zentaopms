@@ -178,7 +178,7 @@ $lang->project->whyNoStories    = "There no active stories to added to this proj
 $lang->project->doneProjects    = 'Done';
 $lang->project->unDoneProjects  = 'Undone';
 $lang->project->copyTeam        = 'Copy a team';
-$lang->product->noMatched       = 'No matched project including "%s"';
+$lang->project->noMatched       = 'No matched project including "%s"';
 
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';
