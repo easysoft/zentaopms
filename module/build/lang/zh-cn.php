@@ -30,12 +30,17 @@ $lang->build->builder   = '构建者';
 $lang->build->scmPath   = '源代码地址';
 $lang->build->filePath  = '存储地址';
 $lang->build->desc      = '描述';
+$lang->build->files     = '上传发行包';
 $lang->build->last      = '上个版本';
 $lang->build->linkStoriesAndBugs = '关联需求和Bug';
 $lang->build->linkStories        = '相关需求';
 $lang->build->linkBugs           = '相关Bug';
 $lang->build->stories            = '已关联需求';
 $lang->build->bugs               = '已关联Bug';
+$lang->build->packageType        = '发行包方式';
 
 $lang->build->finishStories = '本次共完成需求%s个';
 $lang->build->resolvedBugs  = '本次共解决Bug%s个';
+
+$lang->build->packageTypeList['path'] = '文件共享';
+$lang->build->packageTypeList['file'] = '上传附件';

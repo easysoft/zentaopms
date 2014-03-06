@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin' id='dataform'>
+<form method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
   <table class='table-1'> 
     <caption><?php echo $lang->release->create;?></caption>
     <tr>
@@ -41,6 +41,10 @@
     <tr>
       <th class='rowhead'><?php echo $lang->release->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows='10' class='area-1'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->files;?></th>
+      <td class='a-left'><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1));?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>

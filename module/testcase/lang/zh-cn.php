@@ -71,7 +71,7 @@ $lang->testcase->confirmStoryChange = '确认需求变动';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num = '导入用例个数：';
+$lang->testcase->num = '用例记录数：';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';

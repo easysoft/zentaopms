@@ -30,7 +30,10 @@ class releaseModel extends model
             ->where('t1.id')->eq((int)$releaseID)
             ->orderBy('t1.id DESC')
             ->fetch();
-        if($setImgSize) $release->desc = $this->loadModel('file')->setImgSize($release->desc);
+        if(!$release) return false;
+
+        $release->files = $this->loadModel('file')->getByObject('release', $releaseID);
+        if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
     }
 
@@ -91,31 +94,38 @@ class releaseModel extends model
      */
     public function create($productID)
     {
-       if($this->post->build == false)
+        if($this->post->build == false)
         {
             $build = fixer::input('post')
                 ->stripTags('name')
                 ->add('product', (int)$productID)
                 ->add('builder', $this->app->user->account)
-                ->remove('build')
+                ->remove('build,files,labels')
                 ->get();
             $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->check('name','unique')->exec();
             $buildID = $this->dao->lastInsertID();
         }
 
-       $release = fixer::input('post')
-           ->stripTags('name')
-           ->add('product', (int)$productID)
-           ->join('stories', ',')
-           ->join('bugs', ',')
-           ->setIF($this->post->build == false, 'build', $buildID)
-           ->remove('allchecker')
-           ->get();
+        $release = fixer::input('post')
+            ->stripTags('name')
+            ->add('product', (int)$productID)
+            ->join('stories', ',')
+            ->join('bugs', ',')
+            ->setIF($this->post->build == false, 'build', $buildID)
+            ->remove('allchecker,files,labels')
+            ->get();
 
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
-        $releaseID = $this->dao->lastInsertID();
-        if($release->stories) $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
-        if(!dao::isError()) return $releaseID;
+
+        if(!dao::isError())
+        {
+            $releaseID = $this->dao->lastInsertID();
+            $this->loadModel('file')->saveUpload('release', $releaseID);
+            if($release->stories) $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
+            if(!dao::isError()) return $releaseID;
+        }
+
+        return false;
     }
 
     /**
@@ -134,6 +144,7 @@ class releaseModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->remove('files,labels')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
