@@ -30,6 +30,7 @@ $lang->build->builder   = '构建者';
 $lang->build->scmPath   = '源代码地址';
 $lang->build->filePath  = '存储地址';
 $lang->build->desc      = '描述';
+$lang->build->files     = '上传发行包';
 $lang->build->last      = '上个版本';
 $lang->build->linkStoriesAndBugs = '关联需求和Bug';
 $lang->build->linkStories        = '相关需求';

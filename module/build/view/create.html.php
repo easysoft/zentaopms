@@ -44,6 +44,10 @@
       <td><?php echo html::input('filePath', '', "class='text-1'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->build->files;?></th>
+      <td><?php echo $this->fetch('file', 'buildForm', array('fileCount' => 1));?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->build->linkStoriesAndBugs;?></th>
       <td>
 
@@ -106,10 +110,6 @@
     <tr>
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows='10' class='area-1'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->files;?></th>
-      <td><?php echo $this->fetch('file', 'buildForm');?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>

@@ -30,6 +30,7 @@ $lang->build->builder    = 'Builder';
 $lang->build->scmPath    = 'Source code path';
 $lang->build->filePath   = 'Package file path';
 $lang->build->desc       = 'Desc';
+$lang->build->files      = 'Upload package';
 $lang->build->last       = 'Last build';
 $lang->build->linkStoriesAndBugs = 'stories and bugs';
 $lang->build->linkStories        = 'Stories';
