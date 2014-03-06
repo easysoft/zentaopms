@@ -372,7 +372,7 @@ class installModel extends model
             }
 
             /* Skip sql that is note. */
-            if(preg_match('/^--|^#|^\/\*/', $table)) continue;
+            if(strpos($table, '--') === 0) continue;
 
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
