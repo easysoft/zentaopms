@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <form method='post' target='hiddenwin' action="<?php echo inLink('batchClose', "from=storyBatchClose")?>">
-  <table class='table-1 fixed colored'> 
+  <table class='table-1 fixed'> 
     <caption><?php echo $lang->story->common . $lang->colon . $lang->story->batchClose;?></caption>
     <tr>
       <th class='w-30px'> <?php echo $lang->idAB;?></th> 
