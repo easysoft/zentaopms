@@ -94,7 +94,7 @@ class release extends control
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
-                if($changes) $this->action->logHistory($actionID, $changes);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }

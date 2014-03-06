@@ -30,7 +30,9 @@ class buildModel extends model
             ->where('t1.id')->eq((int)$buildID)
             ->fetch();
         if(!$build) return false;
-        if($setImgSize) $build->desc = $this->loadModel('file')->setImgSize($build->desc);
+
+        $build->files = $this->loadModel('file')->getByObject('build', $buildID);
+        if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
         return $build;
     }
 
@@ -154,11 +156,12 @@ class buildModel extends model
             ->setDefault('product', 0)
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->add('project', (int)$projectID)->remove('resolvedBy,allchecker')->get();
+            ->add('project', (int)$projectID)->remove('resolvedBy,allchecker,files,labels')->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
+            $this->loadModel('file')->saveUpload('build', $buildID);
             $this->updateLinkedBug($build);
             return $buildID;
         }
@@ -180,7 +183,7 @@ class buildModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->remove('allchecker,resolvedBy')
+            ->remove('allchecker,resolvedBy,files,labels')
             ->get();
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()

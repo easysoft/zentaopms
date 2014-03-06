@@ -30,8 +30,10 @@ class releaseModel extends model
             ->where('t1.id')->eq((int)$releaseID)
             ->orderBy('t1.id DESC')
             ->fetch();
-        if($setImgSize) $release->desc = $this->loadModel('file')->setImgSize($release->desc);
+        if(!$release) return false;
+
         $release->files = $this->loadModel('file')->getByObject('release', $releaseID);
+        if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
     }
 
