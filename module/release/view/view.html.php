@@ -19,6 +19,7 @@
         <legend><?php echo $lang->release->desc;?></legend>
         <div class='content'><?php echo $release->desc;?></div>
       </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px pb-10px'>
       <?php
