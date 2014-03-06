@@ -156,7 +156,12 @@ class buildModel extends model
             ->setDefault('product', 0)
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->add('project', (int)$projectID)->remove('resolvedBy,allchecker,files,labels')->get();
+            ->add('project', (int)$projectID)
+            ->remove('resolvedBy,allchecker,files,labels')
+            ->get();
+
+        if($build->packageType == 'path') unset($_FILES);
+
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
         if(!dao::isError())
         {
@@ -185,6 +190,9 @@ class buildModel extends model
             ->join('bugs', ',')
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
+
+        if($build->packageType == 'path') unset($_FILES);
+
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')

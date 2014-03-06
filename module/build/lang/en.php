@@ -37,6 +37,10 @@ $lang->build->linkStories        = 'Stories';
 $lang->build->linkBugs           = 'Bugs';
 $lang->build->stories            = 'Linked stories';
 $lang->build->bugs               = 'Linked bugs';
+$lang->build->packageType        = 'Package type';
 
 $lang->build->finishStories = 'The total demand for a complete %s';
 $lang->build->resolvedBugs  = 'The total solution of bug%s';
+
+$lang->build->packageTypeList['path'] = 'Shared file';
+$lang->build->packageTypeList['file'] = 'Upload file';
