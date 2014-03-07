@@ -459,12 +459,11 @@ class treeModel extends model
                     }
                     $menu .= '</ul></li>';
                 }
-
                 $menu .= '</ul>';
             }
+            $menu .='</li>';
         }
-
-        $menu .= '</li>';
+        $menu .= '</ul>';
         return $menu;
     }
 

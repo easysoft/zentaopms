@@ -31,7 +31,7 @@
   <div class='f-right'>
     <?php 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick='toggleSubMenu(this.id,\"bottom\",0)' title='{$lang->export}'");
     echo '</span>';
 
     common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
@@ -154,7 +154,7 @@
 
           $canBatchClose = common::hasPriv('story', 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
           $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");
-          $misc = $canBatchClose ? "onclick=setFormAction('$actionLink')" : $class;
+          $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : $class;
           echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
           $misc = common::hasPriv('story', 'batchReview') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='reviewItem'" : $class;
