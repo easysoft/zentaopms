@@ -467,7 +467,8 @@ class testcase extends control
             $this->lang->set('menugroup.testcase', 'my');
             $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->testcase->batchEdit;
+            $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
+            $this->view->title      = $this->lang->testcase->batchEdit;
         }
         
         /* Judge whether the editedTasks is too large and set session. */

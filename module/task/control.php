@@ -325,8 +325,9 @@ class task extends control
             $this->lang->set('menugroup.task', 'my');
             $this->lang->task->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->task->batchEdit;
-            $this->view->users = $this->loadModel('user')->getPairs('noletter');
+            $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
+            $this->view->title      = $this->lang->task->batchEdit;
+            $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         }
 
         /* Get edited tasks. */

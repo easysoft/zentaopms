@@ -190,6 +190,7 @@ class todo extends control
 
             /* Assign. */
             $title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
+            $position[] = html::a($this->createLink('my', 'todo'), $this->lang->my->todo);
             $position[] = $this->lang->todo->common;
             $position[] = $this->lang->todo->batchEdit;
 

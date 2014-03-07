@@ -55,13 +55,12 @@
     <?php endforeach;?>
 
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns + 1;?>'>
+    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns;?>'>
       <div class='f-left blue'><?php echo $suhosinInfo;?></div>
     </td></tr>
     <?php endif;?>
 
-    <?php $colspan = (!isset($project) or (isset($project) and $project->type != 'sprint')) ? $this->config->task->batchEdit->columns + 1 : $this->config->task->batchEdit->columns;?>
-    <tr><td colspan='<?php echo $colspan;?>' class='a-center'>
+    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns;?>' class='a-center'>
       <?php echo html::submitButton();?>
     </td></tr>
   </table>

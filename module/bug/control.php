@@ -582,7 +582,8 @@ class bug extends control
             $this->lang->set('menugroup.bug', 'my');
             $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = "BUG" . $this->lang->bug->batchEdit;
+            $this->view->position[] = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
+            $this->view->title      = "BUG" . $this->lang->bug->batchEdit;
         }
         /* Initialize vars.*/
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
