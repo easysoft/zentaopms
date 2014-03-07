@@ -1026,9 +1026,9 @@ class story extends control
                     $story->verify = str_replace('"', '""', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))              $story->product        = $products[$story->product];
-                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module];
-                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan];
+                if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan] . "(#$story->plan)";
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];

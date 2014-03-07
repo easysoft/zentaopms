@@ -662,9 +662,9 @@ class testcase extends control
                 }
 
                 /* fill some field with useful value. */
-                if(isset($products[$case->product]))      $case->product = $products[$case->product];
-                if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module];
-                if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story];
+                if(isset($products[$case->product]))      $case->product = $products[$case->product] . "(#$case->product)";
+                if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module] . "(#$case->module)";
+                if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story] . "(#$case->story)";
 
                 if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
                 if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];
@@ -687,7 +687,7 @@ class testcase extends control
                     foreach($linkCaseIdList as $linkCaseID)
                     {
                         $linkCaseID = trim($linkCaseID);
-                        $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] : $linkCaseID;
+                        $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
                     }
                     $case->linkCase = join("; \n", $tmpLinkCases);
                 }
