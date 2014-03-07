@@ -7,7 +7,7 @@ function copyStoryTitle(num)
 {
     var storyTitle = $('#story' + num).find('option:selected').text();
     startPosition  = storyTitle.indexOf(':') + 1;
-    endPosition    = storyTitle.lastIndexOf('(');
+    endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
     $('#story' + num).parent().next().find('input:first').val(storyTitle);
 }
