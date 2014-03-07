@@ -190,6 +190,7 @@ class todo extends control
 
             /* Assign. */
             $title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
+            $position[] = html::a($this->createLink('my', 'todo'), $this->lang->my->todo);
             $position[] = $this->lang->todo->common;
             $position[] = $this->lang->todo->batchEdit;
 
@@ -393,8 +394,8 @@ class todo extends control
                 if(isset($users[$todo->account]))               $todo->account = $users[$todo->account];
                 if(isset($times[$todo->begin]))                 $todo->begin   = $times[$todo->begin];
                 if(isset($times[$todo->end]))                   $todo->end     = $times[$todo->end];
-                if($todo->type == 'bug')                        $todo->name    = isset($bugs[$todo->idvalue])  ? $bugs[$todo->idvalue]  : '';
-                if($todo->type == 'task')                       $todo->name    = isset($tasks[$todo->idvalue]) ? $tasks[$todo->idvalue] : '';
+                if($todo->type == 'bug')                        $todo->name    = isset($bugs[$todo->idvalue])  ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
+                if($todo->type == 'task')                       $todo->name    = isset($tasks[$todo->idvalue]) ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if(isset($todoLang->typeList[$todo->type]))     $todo->type    = $todoLang->typeList[$todo->type];
                 if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
                 if(isset($todoLang->statusList[$todo->status])) $todo->status  = $todoLang->statusList[$todo->status];

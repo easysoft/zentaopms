@@ -467,7 +467,8 @@ class testcase extends control
             $this->lang->set('menugroup.testcase', 'my');
             $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->testcase->batchEdit;
+            $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
+            $this->view->title      = $this->lang->testcase->batchEdit;
         }
         
         /* Judge whether the editedTasks is too large and set session. */
@@ -662,9 +663,9 @@ class testcase extends control
                 }
 
                 /* fill some field with useful value. */
-                if(isset($products[$case->product]))      $case->product = $products[$case->product];
-                if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module];
-                if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story];
+                if(isset($products[$case->product]))      $case->product = $products[$case->product] . "(#$case->product)";
+                if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module] . "(#$case->module)";
+                if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story] . "(#$case->story)";
 
                 if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
                 if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];
@@ -687,7 +688,7 @@ class testcase extends control
                     foreach($linkCaseIdList as $linkCaseID)
                     {
                         $linkCaseID = trim($linkCaseID);
-                        $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] : $linkCaseID;
+                        $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
                     }
                     $case->linkCase = join("; \n", $tmpLinkCases);
                 }

@@ -326,7 +326,8 @@ class story extends control
         {
             $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
             $product = $this->product->getByID($productID);
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
 
         }
         /* The stories of a project. */
@@ -337,7 +338,8 @@ class story extends control
             $this->lang->set('menugroup.story', 'project');
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
             $project = $this->project->getByID($projectID);
-            $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
         /* The stories of my. */
         else
@@ -346,7 +348,8 @@ class story extends control
             $this->lang->set('menugroup.story', 'my');
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
+            $this->view->title      = $this->lang->story->batchEdit;
         }
 
         /* Get the module and productplan of edited stories. */
@@ -365,7 +368,6 @@ class story extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
-        $this->view->position[]        = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
@@ -681,7 +683,8 @@ class story extends control
             $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $project = $this->project->getByID($projectID);
-            $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         /* The stories of my. */
         else
@@ -690,7 +693,8 @@ class story extends control
             $this->lang->set('menugroup.story', 'my');
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
+            $this->view->title      = $this->lang->story->batchEdit;
         }
 
         /* Judge whether the editedStories is too large and set session. */
@@ -1026,9 +1030,9 @@ class story extends control
                     $story->verify = str_replace('"', '""', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))              $story->product        = $products[$story->product];
-                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module];
-                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan];
+                if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan] . "(#$story->plan)";
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];

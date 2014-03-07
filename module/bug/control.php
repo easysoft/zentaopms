@@ -582,7 +582,8 @@ class bug extends control
             $this->lang->set('menugroup.bug', 'my');
             $this->lang->bug->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = "BUG" . $this->lang->bug->batchEdit;
+            $this->view->position[] = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
+            $this->view->title      = "BUG" . $this->lang->bug->batchEdit;
         }
         /* Initialize vars.*/
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
@@ -1112,7 +1113,7 @@ class bug extends control
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
             $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedBuilds  = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
+            $relatedBuilds  = array('trunk' => 'Trunk') + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->fetchGroup('objectID');
 
             foreach($bugs as $bug)
@@ -1127,13 +1128,14 @@ class bug extends control
                 }
 
                 /* fill some field with useful value. */
-                if(isset($products[$bug->product]))         $bug->product      = $products[$bug->product];
-                if(isset($projects[$bug->project]))         $bug->project      = $projects[$bug->project];
-                if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
-                if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
-                if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
-                if(isset($relatedBugs[$bug->duplicateBug])) $bug->duplicateBug = $relatedBugs[$bug->duplicateBug];
-                if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
+                if(isset($products[$bug->product]))            $bug->product       = $products[$bug->product] . "(#$bug->product)";
+                if(isset($projects[$bug->project]))            $bug->project       = $projects[$bug->project] . "(#$bug->project)";
+                if(isset($relatedModules[$bug->module]))       $bug->module        = $relatedModules[$bug->module] . "(#$bug->module)";
+                if(isset($relatedStories[$bug->story]))        $bug->story         = $relatedStories[$bug->story] . "(#$bug->story)";
+                if(isset($relatedTasks[$bug->task]))           $bug->task          = $relatedTasks[$bug->task] . "($bug->task)";
+                if(isset($relatedBugs[$bug->duplicateBug]))    $bug->duplicateBug  = $relatedBugs[$bug->duplicateBug] . "($bug->duplicateBug)";
+                if(isset($relatedCases[$bug->case]))           $bug->case          = $relatedCases[$bug->case] . "($bug->case)";
+                if(isset($relatedBuilds[$bug->resolvedBuild])) $bug->resolvedBuild = $relatedBuilds[$bug->resolvedBuild] . "(#$bug->resolvedBuild)";
 
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
@@ -1173,20 +1175,10 @@ class bug extends control
                     foreach($buildIdList as $buildID)
                     {
                         $buildID = trim($buildID);
-                        $tmpOpenedBuilds[] = isset($relatedBuilds[$buildID]) ? $relatedBuilds[$buildID] : $buildID;
+                        $tmpOpenedBuilds[] = isset($relatedBuilds[$buildID]) ? $relatedBuilds[$buildID] . "(#$buildID)" : $buildID;
                     }
-                    $bug->openedBuild = join("; \n", $tmpOpenedBuilds);
-                }
-
-                if($bug->resolvedBuild)
-                {
-                    $buildIdList = explode(',', $bug->resolvedBuild);
-                    foreach($buildIdList as $buildID)
-                    {
-                        $buildID = trim($buildID);
-                        $tmpResolvedBuilds[] = isset($relatedBuilds[$buildID]) ? $relatedBuilds[$buildID] : $buildID;
-                    }
-                    $bug->resolvedBuild = join("; \n", $tmpResolvedBuilds);
+                    $bug->openedBuild = join("\n", $tmpOpenedBuilds);
+                    if($this->post->fileType == 'html') $bug->openedBuild = nl2br($bug->openedBuild);
                 }
 
                 /* Set related files. */
