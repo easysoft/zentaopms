@@ -34,7 +34,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
     common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement');
 
     echo '<span class="link-button dropButton">'; 
-    echo html::a("#", "<i class='icon-green-common-export'></i>" . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-green-common-export'></i>" . $lang->export, '', "id='exportAction' onclick=\"toggleSubMenu(this.id,'bottom',0)\" title='{$lang->export}'");
     echo '</span>';
 
     common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");
@@ -142,7 +142,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
              echo "<div class='groupButton'>" . html::selectAll() . html::selectReverse() . "</div>"; 
 
              $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
-             $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
+             $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
              echo "<div class='groupButton dropButton'>";
              echo html::commonButton($lang->edit, $misc);
              echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
@@ -164,7 +164,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
   <ul>
   <?php 
   $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-  $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=setFormAction('$actionLink')" : "class='disabled'";
+  $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
   echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
   ?>
   </ul>
