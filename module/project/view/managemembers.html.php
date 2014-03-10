@@ -25,7 +25,7 @@
       <th><?php echo $lang->team->days;?></th>
       <th><?php echo $lang->team->hours;?></th>
     </tr>
-    <?php $i = 1;?>
+    <?php $i = 1; $memberCount = 0;?>
     <?php foreach($currentMembers as $member):?>
     <?php if(!isset($users[$member->account])) continue; $realname = substr($users[$member->account], 2);?>
     <?php unset($users[$member->account]);?>
@@ -39,12 +39,12 @@
         <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
       </td>
     </tr>
-    <?php $i ++;?>
+    <?php $i ++; $memberCount ++;?>
     <?php endforeach;?>
 
     <?php foreach($members2Import as $member2Import):?>
     <tr>
-      <td><?php echo html::select('accounts[]', $users, $member2Import->account, "class='select-2' onchange='setRole(this.value, $i)'");?></td>
+      <td><?php echo html::select("accounts[$memberCount]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
       <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='text-2' value='<?php echo $member2Import->role;?>' /></td>
       <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='text-2' value='<?php echo $project->days?>'/></td>
       <td>
@@ -52,7 +52,7 @@
         <input type='hidden' name='modes[]' value='create' />
       </td>
     </tr>
-    <?php $i ++;?>
+    <?php $i ++; $memberCount ++;?>
     <?php endforeach;?>
 
     <?php
@@ -62,7 +62,7 @@
 
     <?php for($j = 0; $j < $count; $j ++):?>
     <tr>
-      <td><?php echo html::select('accounts[]', $users, '', "class='select-2' onchange='setRole(this.value, $i)'");?></td>
+      <td><?php echo html::select("accounts[$memberCount]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
       <td><input type='text' name='roles[]' id='role<?php echo ($i);?>' class='text-2' /></td>
       <td><input type='text' name='days[]'  id='days<?php echo  ($i);?>' class='text-2' value='<?php echo $project->days?>'/></td>
       <td>
@@ -70,7 +70,7 @@
         <input type='hidden' name='modes[]' value='create' />
       </td>
     </tr>
-    <?php $i ++;?>
+    <?php $i ++; $memberCount ++;?>
     <?php endfor;?>
     <tr>
       <td colspan='4'>
