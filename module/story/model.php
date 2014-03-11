@@ -148,6 +148,7 @@ class storyModel extends model
             
             if($bugID > 0)
             {
+                $bug = new stdclass();
                 $bug->toStory      = $storyID;
                 $bug->status       = 'closed';
                 $bug->resolution   = 'tostory';
@@ -595,6 +596,7 @@ class storyModel extends model
             $oldStory = $this->getById($storyID);
             if($oldStory->status == 'closed') continue;
 
+            $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->closedBy       = $this->app->user->account;

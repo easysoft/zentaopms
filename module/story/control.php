@@ -434,7 +434,6 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
             $this->sendmail($storyID, $actionID);
 
             if(isonlybody()) die(js::closeColorbox('parent.parent'));
@@ -655,7 +654,7 @@ class story extends control
                 foreach($allChanges as $storyID => $changes)
                 {
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]));
-                    $this->action->logHistory($actionID);
+                    $this->action->logHistory($actionID, $changes);
                     $this->sendmail($storyID, $actionID);
                 }
             }
