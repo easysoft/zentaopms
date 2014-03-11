@@ -1034,6 +1034,7 @@ class bug extends control
         $this->view->bug    = $bug;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');
+        $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */

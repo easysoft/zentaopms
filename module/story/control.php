@@ -57,7 +57,7 @@ class story extends control
             {
                 $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
             }
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -184,7 +184,7 @@ class story extends control
 
             foreach($mails as $mail)
             {
-                $this->sendMail($mail->storyID, $mail->actionID);
+                $this->sendmail($mail->storyID, $mail->actionID);
             }
             die(js::locate($this->createLink('product', 'browse', "productID=$productID"), 'parent'));
         }
@@ -273,7 +273,7 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendMail($storyID, $actionID);
+                $this->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -309,7 +309,7 @@ class story extends control
                 {
                     $actionID = $this->action->create('story', $storyID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->sendMail($storyID, $actionID);
+                    $this->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -401,7 +401,7 @@ class story extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendMail($storyID, $actionID);
+                $this->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -434,8 +434,7 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
 
             if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -537,7 +536,7 @@ class story extends control
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->action->logHistory($actionID, array());
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
@@ -590,7 +589,7 @@ class story extends control
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);
 
         if(dao::isError()) die(js::error(dao::getError()));
-        foreach($actions as $storyID => $actionID) $this->sendMail($storyID, $actionID);
+        foreach($actions as $storyID => $actionID) $this->sendmail($storyID, $actionID);
         die(js::locate($this->session->storyList, 'parent'));
     }
 
@@ -609,7 +608,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
             $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
             if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -655,8 +654,8 @@ class story extends control
                 foreach($allChanges as $storyID => $changes)
                 {
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]));
-                    $this->action->logHistory($actionID);
-                    $this->sendMail($storyID, $actionID);
+                    $this->action->logHistory($actionID, $changes);
+                    $this->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -730,7 +729,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
         }
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -751,7 +750,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
         }
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -889,6 +888,7 @@ class story extends control
         $this->view->story  = $story;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');
+        $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
