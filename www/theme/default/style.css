@@ -117,14 +117,14 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before{color: #ccc;}
 
-.change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-sort{display: inline-block; font-family: FontAwesome;border: 1px solid #555;color: #555; font-size: 13px;font-weight: lighter; width: 14px;height: 13px;line-height: 13px;text-align: center;}
-.change-show:hover,.change-hide:hover,.log-desc:hover,.log-asc:hover,.diff-all:hover,.diff-sort:hover{background-color: #333;color: #fff}
+.change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-short{display: inline-block; font-family: FontAwesome;border: 1px solid #555;color: #555; font-size: 13px;font-weight: lighter; width: 14px;height: 13px;line-height: 13px;text-align: center;}
+.change-show:hover,.change-hide:hover,.log-desc:hover,.log-asc:hover,.diff-all:hover,.diff-short:hover{background-color: #333;color: #fff}
 .change-show:before{content: "\f067";}
 .change-hide:before{content: "\f068";}
 .log-desc:before{content: "\f063";}
 .log-asc:before{content: "\f062";}
 .diff-all:before{content: "\f0b2";}
-.diff-sort:before{content: "\f036";}
+.diff-short:before{content: "\f036";}
 
 /* zenicon */
 @font-face {font-family: 'zenicon';src:url('../fontawesome/font/zenicon.eot');src:url('../fontawesome/font/zenicon.eot?#iefix') format('embedded-opentype'),url('../fontawesome/font/zenicon.ttf') format('truetype'),url('../fontawesome/font/zenicon.woff') format('woff'),url('../fontawesome/font/zenicon.svg#zenicon') format('svg');font-weight: normal;font-style: normal;}
