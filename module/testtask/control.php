@@ -773,6 +773,7 @@ class testtask extends control
         $this->view->testtask = $testtask;
         $this->view->action   = $action;
         $this->view->users    = $users;
+        $this->clear();
 
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
