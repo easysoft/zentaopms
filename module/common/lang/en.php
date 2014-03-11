@@ -57,6 +57,7 @@ $lang->switchDisplay= 'Toggle Show';
 $lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
+$lang->timeout      = 'Timed out, please check the network, or retry!';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
