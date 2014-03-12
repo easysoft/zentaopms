@@ -89,9 +89,10 @@ function setStories(moduleID, projectID)
     $.get(link, function(stories)
     {
         var storyID = $('#story').val();
-        if(!stories) stories = '<select id="story" name="story"></select>';
+        if(!stories) stories = '<select id="story" name="story" class="select-1"></select>';
         $('#story').replaceWith(stories);
         $('#story').val(storyID);
+        setPreview();
         $('#story_chzn').remove();
         $("#story").chosen({no_results_text: ''});
     });

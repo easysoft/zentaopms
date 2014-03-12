@@ -66,31 +66,5 @@ function loadProjectMembers(projectID)
     $('#assignedToIdBox').load(link);
 }
 
-/**
- * load stories of module.
- * 
- * @access public
- * @return void
- */
-function loadModuleRelated()
-{
-    moduleID  = $('#module').val();
-    projectID = $('#project').val();
-    setStories(moduleID, projectID);
-}
-
-/* Get select of stories.*/
-function setStories(moduleID, projectID)
-{
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&moduleID=' + moduleID);
-    $.get(link, function(stories)
-    {
-        if(!stories) stories = '<select id="story" name="story"></select>';
-        $('#story').replaceWith(stories);
-        $('#story_chzn').remove();
-        $("#story").chosen({no_results_text: ''});
-    });
-}
-
 /* empty function. */
 function setPreview(){}

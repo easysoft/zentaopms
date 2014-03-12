@@ -56,7 +56,7 @@
           </tr>  
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->module;?></th>
-            <td><span id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="select-1" onchange="loadModuleRelated()"');?></span></td>
+            <td><span id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="select-1"');?></span></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->story;?></th>
