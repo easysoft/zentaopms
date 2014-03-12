@@ -16,18 +16,13 @@ $clientTheme  = $this->app->getClientTheme();
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
-  css::import($themeRoot . 'fontawesome/min.css',   $config->version);
-  if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 7.0"))
-  {
-      css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
-      css::import($defaultTheme . 'style.ie7.css', $config->version);
-  }
   if($config->debug)
   {
       js::import($jsRoot . 'jquery/lib.js', $config->version);
+      js::import($jsRoot . 'zui/min.js', $config->version);
       js::import($jsRoot . 'my.min.js',     $config->version);
 
-      css::import($defaultTheme . 'yui.css',   $config->version);
+      css::import($themeRoot . 'zui/css/min.css',   $config->version);
       css::import($defaultTheme . 'style.css', $config->version);
 
       css::import($langTheme, $config->version);

@@ -234,7 +234,10 @@ KindEditor.plugin('multiimage', function(K) {
 				}
 			},
 			beforeRemove : function() {
-				swfupload.remove();
+				// IE9 bugfix: https://github.com/kindsoft/kindeditor/issues/72
+				if (!K.IE || K.V <= 8) {
+					swfupload.remove();
+				}
 			}
 		}),
 		div = dialog.div;
@@ -311,10 +314,6 @@ KindEditor.plugin('multiimage', function(K) {
 
 (function() {
 
-if (window.SWFUpload) {
-	return;
-}
-
 window.SWFUpload = function (settings) {
 	this.initSWFUpload(settings);
 };
@@ -324,7 +323,7 @@ SWFUpload.prototype.initSWFUpload = function (settings) {
 		this.customSettings = {};	// A container where developers can place their own settings associated with this instance.
 		this.settings = settings;
 		this.eventQueue = [];
-		this.movieName = "SWFUpload_" + SWFUpload.movieCount++;
+		this.movieName = "KindEditor_SWFUpload_" + SWFUpload.movieCount++;
 		this.movieElement = null;
 
 
@@ -1281,6 +1280,9 @@ SWFUpload.Console.writeLine = function (message) {
 	}
 };
 
+})();
+
+(function() {
 /*
 	Queue Plug-in
 

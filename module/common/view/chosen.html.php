@@ -2,8 +2,8 @@
 <?php
 if($config->debug)
 {
-    css::import($defaultTheme . 'chosen.css');
-    js::import($jsRoot . 'jquery/chosen/chosen.min.js');
+    css::import($jsRoot . 'jquery/chosen/min.css');
+    js::import($jsRoot . 'jquery/chosen/min.js');
 }
 ?>
 <style>

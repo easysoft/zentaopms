@@ -2,9 +2,8 @@
 <?php
 if($config->debug)
 {
-    css::import($defaultTheme . 'datepicker.css');
-    js::import($jsRoot . 'jquery/datepicker/min.js'); 
-    js::import($jsRoot . 'jquery/datepicker/date.js');
+    css::import($jsRoot . 'jquery/datetimepicker/min.css');
+    js::import($jsRoot . 'jquery/datetimepicker/min.js'); 
 }
 ?>
 <script language='javascript'>
