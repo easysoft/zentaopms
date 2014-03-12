@@ -49,6 +49,7 @@ class project extends control
         $this->view->position[]    = $this->lang->project->allProject;
         $this->view->projectStats  = $this->project->getProjectStats($status);
         $this->view->projectID     = $projectID;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

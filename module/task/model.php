@@ -944,6 +944,7 @@ class taskModel extends model
         {
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;
+            $data->assignedTo   = $task->openedBy;
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
