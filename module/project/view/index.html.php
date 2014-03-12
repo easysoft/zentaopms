@@ -25,6 +25,7 @@
     <th class='w-id'>   <?php echo $lang->idAB;?></th>
     <th class='w-150px'><?php echo $lang->project->name;?></th>
     <th><?php echo $lang->project->code;?></th>
+    <th><?php echo $lang->project->PM;?></th>
     <th><?php echo $lang->project->end;?></th>
     <th><?php echo $lang->project->status;?></th>
     <th><?php echo $lang->project->totalEstimate;?></th>
@@ -43,7 +44,8 @@
       <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), sprintf('%03d', $project->id));?>
     </td>
     <td class='a-left'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
-    <td><?php echo $project->code;?></td>
+    <td class='a-left'><?php echo $project->code;?></td>
+    <td><?php echo $users[$project->PM];?></td>
     <td><?php echo $project->end;?></td>
     <td><?php echo $lang->project->statusList[$project->status];?></td>
     <td><?php echo $project->hours->totalEstimate;?></td>
