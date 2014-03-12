@@ -19,7 +19,16 @@
         <legend><?php echo $lang->release->desc;?></legend>
         <div class='content'><?php echo $release->desc;?></div>
       </fieldset>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'true'));?>
+      <fieldset>
+        <legend><?php echo $lang->files?></legend>
+        <?php if($release->files):?>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));?>
+        <?php elseif($release->filePath):?>
+        <?php echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank')?>
+        <?php elseif($release->scmPath):?>
+        <?php echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank')?>
+        <?php endif;?>
+      </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px pb-10px'>
       <?php

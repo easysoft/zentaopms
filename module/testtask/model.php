@@ -213,6 +213,7 @@ class testtaskModel extends model
         if($this->post->cases == false) return;
         foreach($this->post->cases as $caseID)
         {
+            $row = new stdclass();
             $row->task       = $taskID;
             $row->case       = $caseID;
             $row->version    = $this->post->versions[$caseID];

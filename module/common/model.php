@@ -406,6 +406,9 @@ class commonModel extends model
 
         if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
 
+        /* Unset clearData menu when the data of pms is demo. */
+        if(!isset($app->config->global->showDemoUsers) or !$app->config->global->showDemoUsers) unset($lang->admin->menu->clearData);
+
         /* Get the sub menus of the module, and get current module and method. */
         $submenus      = $lang->$moduleName->menu;  
         $currentModule = $app->getModuleName();

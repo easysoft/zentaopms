@@ -27,6 +27,7 @@ $lang->project->status        = 'Status';
 $lang->project->statge        = 'Stage';
 $lang->project->pri           = 'Priority';
 $lang->project->desc          = 'Desc';
+$lang->project->goal          = 'Goal';
 $lang->project->openedBy      = 'Opened by';
 $lang->project->openedDate    = 'Opened date';
 $lang->project->closedBy      = 'Closed by';
