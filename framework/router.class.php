@@ -408,7 +408,7 @@ class router
         {
             $this->appRoot = realpath($appRoot) . $this->pathFix;
         }
-        if(!is_dir($this->appRoot)) $this->triggerError("The app you call not noud in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
+        if(!is_dir($this->appRoot)) $this->triggerError("The app you call not found in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
     }
 
     /**
@@ -1588,6 +1588,9 @@ class router
      */
     public function saveError($level, $message, $file, $line)
     {
+        /* Skip the error: Redefining already defined constructor. */
+        if(strpos($message, 'Redefining') !== false) return true;
+
         /* Set the error info. */
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
         $errorLog .= "when visiting <strong>" . $this->getURI() . "</strong>\n";
@@ -1602,6 +1605,18 @@ class router
         $errorFile = $this->getLogRoot() . 'php.' . date('Ymd') . '.log';
         $fh = @fopen($errorFile, 'a');
         if($fh) fwrite($fh, strip_tags($errorLog)) && fclose($fh);
+
+        /* If the debug > 1, show warning, notice error. */
+        if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192) // 8192: E_DEPRECATED
+        {
+            if(!empty($this->config->debug) and $this->config->debug > 1)
+            {
+                $cmd  = "vim +$line $file";
+                $size = strlen($cmd);
+                echo "<pre class='alert alert-danger'>$message: ";
+                echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
+            }
+        }
 
         /* If error level is serious, die.  */
         if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)

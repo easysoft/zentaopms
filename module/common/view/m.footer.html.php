@@ -10,6 +10,10 @@ $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 <?php if($this->server->HTTP_X_PJAX == false):?>
+<script>
+/* May be fix bug #576. */
+$(function(){$("#main").css('padding-top', $("div[data-role='header']").height() + 'px')})
+</script>
 </div>
 </body>
 </html>
