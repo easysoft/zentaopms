@@ -16,7 +16,7 @@ function setOwners(result)
         $('#assignedTo').attr('size', 4);
         $('#assignedTo').attr('multiple', 'multiple');
     }
-    else
+    else if($('#assignedTo').attr('multiple') == 'multiple')
     {
         $('#assignedTo').removeAttr('size');
         $('#assignedTo').removeAttr('multiple');
