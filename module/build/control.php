@@ -85,10 +85,14 @@ class build extends control
         {
             $changes = $this->build->update($buildID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($changes)
+            $files = $this->loadModel('file')->saveUpload('build', $buildID);
+
+            if($changes or $files)
             {
-                $actionID = $this->loadModel('action')->create('build', $buildID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                $actionID = $this->loadModel('action')->create('build', $buildID, 'Edited', $fileAction);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
             die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }

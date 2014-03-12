@@ -386,7 +386,7 @@ class commonModel extends model
 
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
-        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
+        echo html::input('searchQuery', $lang->searchTips, "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
 		echo "<a href='javascript:shortcut();return false;' id='objectSwitcher' class='icon-circle-arrow-right'></a>";
         echo "</li>";
         echo "</ul>\n";
@@ -405,6 +405,9 @@ class commonModel extends model
         global $lang, $app;
 
         if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
+
+        /* Unset clearData menu when the data of pms is demo. */
+        if(!isset($app->config->global->showDemoUsers) or !$app->config->global->showDemoUsers) unset($lang->admin->menu->clearData);
 
         /* Get the sub menus of the module, and get current module and method. */
         $submenus      = $lang->$moduleName->menu;  

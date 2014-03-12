@@ -51,28 +51,24 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->PO;?></th>
-      <td><?php echo html::select('PO', $poUsers, $project->PO, 'class=text-3');?></td>
+      <td><?php echo html::select('PO', $poUsers, $project->PO, "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->PM;?></th>
-      <td><?php echo html::select('PM', $pmUsers, $project->PM, 'class=text-3');?></td>
+      <td><?php echo html::select('PM', $pmUsers, $project->PM, "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->QD;?></th>
-      <td><?php echo html::select('QD', $qdUsers, $project->QD, 'class=text-3');?></td>
+      <td><?php echo html::select('QD', $qdUsers, $project->QD, "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->RD;?></th>
-      <td><?php echo html::select('RD', $rdUsers, $project->RD, 'class=text-3');?></td>
+      <td><?php echo html::select('RD', $rdUsers, $project->RD, "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
-      <td class='a-left chosenBox' id='productsBox'><?php echo html::select("products[]", $allProducts, $linkedProducts, "class='select-1' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
+      <td class='a-left' id='productsBox'><?php echo html::select("products[]", $allProducts, $linkedProducts, "class='select-1 chosen' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
     </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->project->goal;?></th>
-      <td><?php echo html::textarea('goal', $project->goal, "rows='6' class='area-1'");?></td>
-    </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->desc;?></th>
       <td><?php echo html::textarea('desc', $project->desc, "rows='6' class='area-1'");?></td>

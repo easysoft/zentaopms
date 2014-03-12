@@ -40,7 +40,7 @@ js::set('customed', $customed);
     <?php
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=\"toggleSubMenu(this.id,'bottom',0)\" title='{$lang->export}'");
     echo '</span>';
 
     common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
@@ -189,7 +189,7 @@ if($customed)
                   echo "</div>";
 
                   $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID");
-                  $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
+                  $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
                   echo "<div class='groupButton dropButton'>";
                   echo html::commonButton($lang->edit, $misc);
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
@@ -213,7 +213,7 @@ if($customed)
   $class = "class='disabled'";
 
   $actionLink = $this->createLink('bug', 'batchConfirm');
-  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=setFormAction('$actionLink','hiddenwin')" : "class='disabled'";
+  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
   echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
 
   $misc = common::hasPriv('bug', 'batchResolve') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='resolveItem'" : $class;
@@ -233,7 +233,7 @@ if($customed)
       echo "<li>";
       if($key == 'fixed')
       {
-          echo html::a('#', $resolution, '', "onmouseover=toggleSubMenu(this.id,'right',2) id='fixedItem'");
+          echo html::a('#', $resolution, '', "onmouseover=\"toggleSubMenu(this.id,'right',2)\" id='fixedItem'");
       }
       else
       {

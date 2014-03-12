@@ -98,6 +98,9 @@ class upgradeModel extends model
             case '5_0':
             case '5_1':
             case '5_2':
+            case '5_2_1':
+                $this->mergeProjectGoalAndDesc();
+                $this->execSQL($this->getUpgradeFile('5.2.1'));
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -155,6 +158,7 @@ class upgradeModel extends model
         case '5_0':
         case '5_1':
         case '5_2':
+        case '5_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('5.2.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -609,13 +613,14 @@ class upgradeModel extends model
         {
             $line       = trim($line);
             $sqls[$key] = $line;
-            if(strpos($line, '--') !== false or empty($line)) unset($sqls[$key]);
+
+            /* Skip sql that is note. */
+            if(preg_match('/^--|^#|^\/\*/', $line) or empty($line)) unset($sqls[$key]);
         }
         $sqls = explode(';', join("\n", $sqls));
 
         foreach($sqls as $sql)
         {
-            $sql = trim($sql);
             if(empty($sql)) continue;
 
             if($mysqlVersion <= 4.1)
@@ -751,6 +756,25 @@ class upgradeModel extends model
 
         $this->dbh->exec("ALTER TABLE " . TABLE_CONFIG . " DROP `company`;");
 
+        return true;
+    }
+
+    /**
+     * Merge the goal and desc of project.
+     * 
+     * @access public
+     * @return void
+     */
+    public function mergeProjectGoalAndDesc()
+    {
+        $projects = $this->dao->select('id, goal, `desc`')->from(TABLE_PROJECT)->fetchAll('id');
+        foreach($projects as $id => $project)
+        {
+            $this->dao->update(TABLE_PROJECT)
+                ->set('`desc`')->eq($project->goal . '<br />' . $project->desc)
+                ->where('id')->eq($id)
+                ->exec();
+        }
         return true;
     }
 

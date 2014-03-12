@@ -52,9 +52,9 @@ class custom extends control
             die(js::reload('parent'));
         }
 
-        $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->custom->story;
+        $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
         $this->view->position[]  = $this->lang->custom->common;
-        $this->view->position[]  = $this->lang->custom->$module;
+        $this->view->position[]  = $this->lang->$module->common;
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $this->custom->getItems("lang=$currentLang,all&module=$module&section=$field");
         $this->view->field       = $field;

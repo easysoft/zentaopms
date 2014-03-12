@@ -161,8 +161,9 @@ class task extends control
             die(js::locate($storyLink, 'parent'));
         }
 
-        $stories = $this->story->getProjectStoryPairs($projectID);
+        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, 'short');
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
         $title      = $project->name . $this->lang->colon . $this->lang->task->batchCreate;
         $position[] = html::a($taskLink, $project->name);
         $position[] = $this->lang->task->common;
@@ -172,6 +173,7 @@ class task extends control
         $this->view->position = $position;
         $this->view->project  = $project;
         $this->view->stories  = $stories;
+        $this->view->modules  = $modules;
         $this->view->storyID  = $storyID;
         $this->view->members  = $members;
         $this->display();
@@ -226,7 +228,7 @@ class task extends control
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
 
@@ -313,7 +315,7 @@ class task extends control
             $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
             $this->view->position[] = html::a($this->createLink('project', 'browse', "project=$project->id"), $project->name);
             $this->view->project    = $project;
-            $this->view->modules    = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+            $this->view->modules    = $this->tree->getTaskOptionMenu($projectID);
             $this->view->members    = $members;
         }
         /* The tasks of my. */
@@ -323,8 +325,9 @@ class task extends control
             $this->lang->set('menugroup.task', 'my');
             $this->lang->task->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->task->batchEdit;
-            $this->view->users = $this->loadModel('user')->getPairs('noletter');
+            $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
+            $this->view->title      = $this->lang->task->batchEdit;
+            $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         }
 
         /* Get edited tasks. */
@@ -586,7 +589,6 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noletter', $this->view->task->openedBy); 
         $this->view->date       = strftime("%Y-%m-%d %X", strtotime('now'));
        
         $this->display();
@@ -947,14 +949,14 @@ class task extends control
                 }
 
                 /* fill some field with useful value. */
-                $task->story = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] : '';
+                $task->story = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
 
-                if(isset($projects[$task->project]))                  $task->project      = $projects[$task->project];
+                if(isset($projects[$task->project]))                  $task->project      = $projects[$task->project] . "(#$task->project)";
                 if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
                 if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
                 if(isset($taskLang->statusList[$task->status]))       $task->status       = $taskLang->statusList[$task->status];
                 if(isset($taskLang->reasonList[$task->closedReason])) $task->closedReason = $taskLang->reasonList[$task->closedReason];
-                if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module];
+                if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
 
                 if(isset($users[$task->openedBy]))     $task->openedBy     = $users[$task->openedBy];
                 if(isset($users[$task->assignedTo]))   $task->assignedTo   = $users[$task->assignedTo];

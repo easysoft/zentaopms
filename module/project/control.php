@@ -23,7 +23,7 @@ class project extends control
         parent::__construct();
         if($this->methodName != 'computeburn')
         {
-            $this->projects = $this->project->getPairs();
+            $this->projects = $this->project->getPairs('nocode');
             if(!$this->projects and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
     }
@@ -49,6 +49,7 @@ class project extends control
         $this->view->position[]    = $this->lang->project->allProject;
         $this->view->projectStats  = $this->project->getProjectStats($status);
         $this->view->projectID     = $projectID;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -452,6 +453,7 @@ class project extends control
             $this->config->bug->search['params']['product']['values'] = array(''=>'');
         }
         $this->config->bug->search['params']['project']['values'] = array(''=>'') + $projects + array('all'=>$this->lang->project->aboveAllProject);
+        $this->config->bug->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
         $this->config->bug->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($projectID, $viewType = 'bug', $startModuleID = 0);
@@ -1003,6 +1005,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->start;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->start;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1034,6 +1037,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->putoff;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->putoff;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1065,6 +1069,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->suspend;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1096,6 +1101,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->activate;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1127,6 +1133,7 @@ class project extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->close;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->close;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

@@ -82,23 +82,23 @@ var browseType  = '<?php echo $browseType;?>';
             if($task->fromBug) echo html::a($this->createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
             ?>
           </td>
-          <td class=<?php echo $task->status;?> >
+          <td class="<?php echo $task->status;?>">
             <?php
             $storyChanged = ($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
             $storyChanged ? print("<span class='warning'>{$lang->story->changed}</span> ") : print($lang->task->statusList[$task->status]);
             ?>
           </td>
-          <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
+          <td class="<?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-          <td><?php echo substr($task->openedDate, 5, 6);?></th>
+          <td><?php echo substr($task->openedDate, 5, 6);?></td>
           <?php endif;?>
 
           <td <?php echo $class;?>><?php echo $task->assignedTo == 'closed' ? 'Closed' : $task->assignedToRealName;?></td>
           <td><?php echo $users[$task->finishedBy];?></td>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-          <td><?php echo substr($task->finishedDate, 5, 6);?></th>
+          <td><?php echo substr($task->finishedDate, 5, 6);?></td>
           <?php endif;?>
 
           <td><?php echo $task->estimate;?></td>
@@ -107,7 +107,7 @@ var browseType  = '<?php echo $browseType;?>';
           <?php
           if($project->type == 'sprint')
           {
-              echo '<td class="a-left" title="' . $task->storyTitle . '"';
+              echo '<td class="a-left" title="' . $task->storyTitle . '">';
               if($task->storyID)
               {
                 if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
@@ -149,7 +149,7 @@ var browseType  = '<?php echo $browseType;?>';
                   echo "</div>";
 
                   $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
-                  $misc       = $canBatchEdit ? "onclick=setFormAction('$actionLink')" : "disabled='disabled'";
+                  $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
                   echo "<div class='groupButton dropButton'>";
                   echo html::commonButton($lang->edit, $misc);
                   echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
@@ -172,7 +172,7 @@ var browseType  = '<?php echo $browseType;?>';
   <ul>
   <?php 
   $actionLink = $this->createLink('task', 'batchClose');
-  $misc = $canBatchClose ? "onclick=setFormAction('$actionLink','hiddenwin')" : "class='disabled'";
+  $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
   echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
   ?>
   </ul>

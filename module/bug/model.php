@@ -77,6 +77,11 @@ class bugModel extends model
         $now     = helper::now();
         $data    = fixer::input('post')->get();
         $actions = array();
+
+        $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0));
+        $moduleOwners = array();
+        while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
+
         for($i = 0; $i < $this->config->bug->batchCreate; $i++)
         {
             if(empty($data->titles[$i])) continue;
@@ -88,11 +93,17 @@ class bugModel extends model
             $bug->project     = $data->projects[$i] ? $data->projects[$i] : 0;
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->title       = $data->titles[$i];
-            $bug->steps       = $data->stepses[$i];
+            $bug->steps       = str_replace(array("\r\n", "\n"), '<br />', htmlspecialchars($data->stepses[$i]));
             $bug->type        = $data->types[$i];
             $bug->severity    = $data->severities[$i];
             $bug->os          = $data->oses[$i];
             $bug->browser     = $data->browsers[$i];
+
+            if(!empty($moduleOwners[$bug->module]))
+            {
+                $bug->assignedTo   = $moduleOwners[$bug->module];
+                $bug->assignedDate = $now;
+            }
 
             $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();

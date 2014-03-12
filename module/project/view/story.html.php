@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id='featurebar'>
-  <div class='f-left'><?php echo $lang->project->story;?></div>
+  <div class='f-left strong'><?php echo $lang->project->story;?></div>
   <div class='f-right'>
     <?php 
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc");

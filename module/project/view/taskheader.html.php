@@ -24,11 +24,11 @@
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=\"toggleSubMenu(this.id,'bottom',0)\" title='{$lang->export}'");
     echo '</span>';
 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-download-alt'></i> " . $lang->import, '', "id='importAction' onclick=toggleSubMenu(this.id,'bottom',0) title='{$lang->import}'");
+    echo html::a("#", "<i class='icon-download-alt'></i> " . $lang->import, '', "id='importAction' onclick=\"toggleSubMenu(this.id,'bottom',0)\" title='{$lang->import}'");
     echo '</span>';
 
     common::printIcon('task', 'batchCreate', "projectID=$projectID");

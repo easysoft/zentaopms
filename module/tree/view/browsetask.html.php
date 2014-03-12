@@ -36,7 +36,7 @@
           <?php $manageChild = 'manageTaskChild';?>
           <caption><?php echo $lang->tree->$manageChild;?></caption>
           <tr>
-            <td width='10%'>
+            <td class='parentModule'>
               <nobr>
               <?php
               echo html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&viewType=task"), $root->name);

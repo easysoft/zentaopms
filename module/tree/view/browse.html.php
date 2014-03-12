@@ -36,7 +36,7 @@
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
           <caption><?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?></caption>
           <tr>
-            <td width='10%'>
+            <td class='parentModule'>
               <nobr>
               <?php
               echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType"), $root->name);
@@ -55,21 +55,23 @@
               {
                   if($allProject)
                   {
-                      echo html::select('allProject', $allProject, '', 'onchange=syncProductOrProject(this,"project")');
+                      echo "<span class='copy'>";
+                      echo html::select('allProject', $allProject, '', "onchange=\"syncProductOrProject(this,'project')\"");
                       echo html::select('projectModule', $projectModules, '');
                       echo html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'");
+                      echo '</span>';
                   }
-                  echo '<br />';
               }
               else if($viewType == 'story')
               {
                   if($allProduct)
                   {
-                      echo html::select('allProduct', $allProduct, '', 'onchange=syncProductOrProject(this,"product")');
+                      echo "<span class='copy'>";
+                      echo html::select('allProduct', $allProduct, '', "onchange=\"syncProductOrProject(this,'product')\"");
                       echo html::select('productModule', $productModules, '');
                       echo html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'");
+                      echo '</span>';
                   }
-                  echo '<br />';
               }
               $maxOrder = 0;
               echo '<div id="sonModule">';

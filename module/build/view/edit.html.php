@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin' id='dataform'>
+<form method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
   <table class='table-1'> 
     <caption><?php echo $lang->build->edit;?></caption>
     <tr>
@@ -37,8 +37,16 @@
       <td><?php echo html::input('scmPath', $build->scmPath, "class='text-1'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->build->packageType;?></th>
+      <td><?php echo html::radio('packageType', $lang->build->packageTypeList, $build->packageType);?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->build->filePath;?></th>
       <td><?php echo html::input('filePath', $build->filePath, "class='text-1'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->build->files;?></th>
+      <td><?php echo $this->fetch('file', 'buildForm', array('fileCount' => 1));?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->linkStoriesAndBugs;?></th>
@@ -121,9 +129,10 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
-      <td><?php echo html::textarea('desc', $build->desc, "rows='15' class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', $build->desc, "rows='10' class='area-1'");?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton() .html::hidden('project', $build->project);?></td></tr>
   </table>
 </form>
+<?php js::set('packageType', $build->packageType == 'file' ? 'fileform' : 'filePath')?>
 <?php include '../../common/view/footer.html.php';?>

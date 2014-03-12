@@ -171,7 +171,7 @@ class treeModel extends model
         }
         $treeMenu   = array();
         $lastMenu[] = '/';
-        $projectModules = $this->getTaskTreeModules($rootID);
+        $projectModules = $this->getTaskTreeModules($rootID, false, false);
         foreach($products as $id => $product)
         {
             $modules  = $this->dao->select('*')->from(TABLE_MODULE)
@@ -376,21 +376,33 @@ class treeModel extends model
      * 
      * @param  int    $projectID 
      * @param  bool   $parent
+     * @param  bool   $linkStory
      * @access public
      * @return array
      */
-    public function getTaskTreeModules($projectID, $parent = false)
+    public function getTaskTreeModules($projectID, $parent = false, $linkStory = true)
     {
         $projectModules = array();
         $field = $parent ? 'path' : 'id';
 
-        /* Get story paths of this project. */
-        $paths = $this->dao->select('t3.' . $field)
-            ->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-            ->where('t1.project')->eq($projectID)
-            ->fetchPairs();
+        if($linkStory)
+        {
+            /* Get story paths of this project. */
+            $paths = $this->dao->select('t3.' . $field)
+                ->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
+                ->where('t1.project')->eq($projectID)
+                ->fetchPairs();
+        }
+        else
+        {
+            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+            $paths    = $this->dao->select('id')->from(TABLE_MODULE)
+                ->where('root')->in($products)
+                ->andWhere('type')->eq('story')
+                ->fetchPairs();
+        }
 
         /* Add task paths of this project.*/
         $paths += $this->dao->select($field)->from(TABLE_MODULE)
@@ -447,12 +459,11 @@ class treeModel extends model
                     }
                     $menu .= '</ul></li>';
                 }
-
                 $menu .= '</ul>';
             }
+            $menu .='</li>';
         }
-
-        $menu .= '</li>';
+        $menu .= '</ul>';
         return $menu;
     }
 

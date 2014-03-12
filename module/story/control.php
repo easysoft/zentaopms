@@ -57,7 +57,7 @@ class story extends control
             {
                 $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
             }
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -184,7 +184,7 @@ class story extends control
 
             foreach($mails as $mail)
             {
-                $this->sendMail($mail->storyID, $mail->actionID);
+                $this->sendmail($mail->storyID, $mail->actionID);
             }
             die(js::locate($this->createLink('product', 'browse', "productID=$productID"), 'parent'));
         }
@@ -273,7 +273,7 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendMail($storyID, $actionID);
+                $this->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -309,7 +309,7 @@ class story extends control
                 {
                     $actionID = $this->action->create('story', $storyID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->sendMail($storyID, $actionID);
+                    $this->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -326,7 +326,8 @@ class story extends control
         {
             $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
             $product = $this->product->getByID($productID);
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
 
         }
         /* The stories of a project. */
@@ -337,7 +338,8 @@ class story extends control
             $this->lang->set('menugroup.story', 'project');
             $this->lang->story->menuOrder = $this->lang->project->menuOrder;
             $project = $this->project->getByID($projectID);
-            $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
         /* The stories of my. */
         else
@@ -346,7 +348,8 @@ class story extends control
             $this->lang->set('menugroup.story', 'my');
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
+            $this->view->title      = $this->lang->story->batchEdit;
         }
 
         /* Get the module and productplan of edited stories. */
@@ -365,7 +368,6 @@ class story extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
-        $this->view->position[]        = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
@@ -399,7 +401,7 @@ class story extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendMail($storyID, $actionID);
+                $this->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -432,8 +434,7 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
 
             if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -535,7 +536,7 @@ class story extends control
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->action->logHistory($actionID, array());
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
@@ -588,7 +589,7 @@ class story extends control
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);
 
         if(dao::isError()) die(js::error(dao::getError()));
-        foreach($actions as $storyID => $actionID) $this->sendMail($storyID, $actionID);
+        foreach($actions as $storyID => $actionID) $this->sendmail($storyID, $actionID);
         die(js::locate($this->session->storyList, 'parent'));
     }
 
@@ -607,7 +608,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
             $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
             if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -653,8 +654,8 @@ class story extends control
                 foreach($allChanges as $storyID => $changes)
                 {
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]));
-                    $this->action->logHistory($actionID);
-                    $this->sendMail($storyID, $actionID);
+                    $this->action->logHistory($actionID, $changes);
+                    $this->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -681,7 +682,8 @@ class story extends control
             $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
             $this->lang->set('menugroup.story', 'project');
             $project = $this->project->getByID($projectID);
-            $this->view->title = $project->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->position[] = html::a($this->createLink('project', 'story', "project=$project->id"), $project->name);
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         /* The stories of my. */
         else
@@ -690,7 +692,8 @@ class story extends control
             $this->lang->set('menugroup.story', 'my');
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
             $this->loadModel('my')->setMenu();
-            $this->view->title = $this->lang->story->batchEdit;
+            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
+            $this->view->title      = $this->lang->story->batchEdit;
         }
 
         /* Judge whether the editedStories is too large and set session. */
@@ -726,7 +729,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
         }
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -747,7 +750,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendMail($storyID, $actionID);
+            $this->sendmail($storyID, $actionID);
         }
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -885,6 +888,7 @@ class story extends control
         $this->view->story  = $story;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');
+        $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
@@ -1026,9 +1030,9 @@ class story extends control
                     $story->verify = str_replace('"', '""', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))              $story->product        = $products[$story->product];
-                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module];
-                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan];
+                if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan] . "(#$story->plan)";
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];

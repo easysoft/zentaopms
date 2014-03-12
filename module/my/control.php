@@ -45,7 +45,7 @@ class my extends control
 
         $this->view->projectStats  = $projectStats;
         $this->view->productStats  = $productStats;
-        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'latest3days', 'date_desc', $pager);
+        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
         $this->view->todos         = $this->loadModel('todo')->getList('all', $account, 'wait, doing', $this->config->my->todoCounts);
         $this->view->tasks         = $this->loadModel('task')->getUserTasks($account, 'assignedTo', $this->config->my->taskCounts);
         $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($account, false, $this->config->my->bugCounts);

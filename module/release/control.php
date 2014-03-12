@@ -88,10 +88,13 @@ class release extends control
         {
             $changes = $this->release->update($releaseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($changes)
+            $files = $this->loadModel('file')->saveUpload('release', $releaseID);
+            if($changes or $files)
             {
-                $actionID = $this->loadModel('action')->create('release', $releaseID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }

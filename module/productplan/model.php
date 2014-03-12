@@ -65,8 +65,8 @@ class productplanModel extends model
     /**
      * Get plan pairs.
      * 
-     * @param  int    $product 
-     * @param  string $expired 
+     * @param  array|int    $product 
+     * @param  string       $expired 
      * @access public
      * @return array
      */
@@ -74,7 +74,7 @@ class productplanModel extends model
     {
         $date = date('Y-m-d');
         return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->eq((int)$product)
+            ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF($expired == 'unexpired')
             ->andWhere('end')->gt($date)

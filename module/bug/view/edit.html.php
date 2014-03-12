@@ -108,7 +108,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
-            <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, 'class=select-3');?></td>
+            <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-3 chosen'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->os;?></td>

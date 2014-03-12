@@ -1,1 +1,3 @@
 textarea {height:16px}
+.icon-green-same:before {content: "\f105";}
+.sameAsStory{float:right;}

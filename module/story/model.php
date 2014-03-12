@@ -148,6 +148,7 @@ class storyModel extends model
             
             if($bugID > 0)
             {
+                $bug = new stdclass();
                 $bug->toStory      = $storyID;
                 $bug->status       = 'closed';
                 $bug->resolution   = 'tostory';
@@ -226,7 +227,7 @@ class storyModel extends model
                 $specData[$i]->story   = $storyID;
                 $specData[$i]->version = 1;
                 $specData[$i]->title   = htmlspecialchars($stories->title[$i]);
-                if($stories->spec[$i] != '') $specData[$i]->spec = htmlspecialchars($stories->spec[$i]);
+                if($stories->spec[$i] != '') $specData[$i]->spec = str_replace(array("\r\n", "\n"), '<br />', htmlspecialchars($stories->spec[$i]));
                 $this->dao->insert(TABLE_STORYSPEC)->data($specData[$i])->exec();
 
                 $this->loadModel('action');
@@ -595,6 +596,7 @@ class storyModel extends model
             $oldStory = $this->getById($storyID);
             if($oldStory->status == 'closed') continue;
 
+            $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->closedBy       = $this->app->user->account;
@@ -1071,10 +1073,11 @@ class storyModel extends model
      * @param  int           $projectID 
      * @param  int           $productID 
      * @param  array|string  $moduleIds 
+     * @param  string        $type
      * @access public
      * @return array
      */
-    public function getProjectStoryPairs($projectID = 0, $productID = 0, $moduleIds = 0)
+    public function getProjectStoryPairs($projectID = 0, $productID = 0, $moduleIds = 0, $type = 'full')
     {
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -1088,7 +1091,7 @@ class storyModel extends model
             ->beginIF($moduleIds)->andWhere('t2.module')->in($moduleIds)->fi()
             ->fetchAll();
         if(!$stories) return array();
-        return $this->formatStories($stories);
+        return $this->formatStories($stories, $type);
     }
 
     /**
@@ -1228,10 +1231,11 @@ class storyModel extends model
      * Format stories 
      * 
      * @param  array    $stories 
+     * @param  string   $type
      * @access public
      * @return void
      */
-    public function formatStories($stories)
+    public function formatStories($stories, $type = 'full')
     {
         /* Get module names of stories. */
         /*$modules = array();
@@ -1240,7 +1244,18 @@ class storyModel extends model
 
         /* Format these stories. */
         $storyPairs = array('' => '&nbsp;');
-        foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->title . "({$this->lang->story->pri}:$story->pri, {$this->lang->story->estimate}: $story->estimate)";
+        foreach($stories as $story)
+        {
+            if($type == 'short')
+            {
+                $property = '[p' . $story->pri . ', ' . $story->estimate . 'h]';
+            }
+            else
+            {
+                $property = '(' . $this->lang->story->pri . ':' . $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
+            }
+            $storyPairs[$story->id] = $story->id . ':' . $story->title . $property;
+        }
         return $storyPairs;
     }
 

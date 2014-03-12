@@ -19,6 +19,7 @@
         <legend><?php echo $lang->build->desc;?></legend>
         <div class='content'><?php echo $build->desc;?></div>
       </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px strong mb-10px'>
       <?php

@@ -57,6 +57,7 @@ $lang->switchDisplay= '切换显示';
 $lang->switchHelp   = '切换帮助';
 $lang->addFiles     = '上传了附件 ';
 $lang->files        = '附件 ';
+$lang->timeout      = '连接超时，请检查网络环境，或重试！';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 

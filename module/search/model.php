@@ -179,7 +179,7 @@ class searchModel extends model
             if($params[$fieldName]['values'] == 'projects') $hasProject = true;
         }
 
-        if($hasUser)    
+        if($hasUser)
         {
             $users        = $this->loadModel('user')->getPairs();
             $users['$@me'] = $this->lang->search->me;

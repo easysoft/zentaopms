@@ -38,6 +38,5 @@
       <?php endif;?>
     </tr>
   </table>
-  <?php include '../../common/view/footer.html.php';?>  
 </div>
-
+<?php include '../../common/view/footer.html.php';?>  

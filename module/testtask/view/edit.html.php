@@ -26,7 +26,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
-      <td><?php echo html::select('owner', $users, $task->owner, 'class=select-3');?></td>
+      <td><?php echo html::select('owner', $users, $task->owner, "class='select-3 chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->pri;?></th>

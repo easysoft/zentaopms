@@ -61,7 +61,7 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></table>
+  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <?php js::set('replaceID', 'bugList')?>
 <?php include '../../common/view/footer.html.php';?>

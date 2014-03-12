@@ -119,7 +119,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->assignedTo;?></td>
-            <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-3"');?></td>
+            <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-3 chosen"');?></td>
           </tr>
           <?php if($story->reviewedBy):?>
           <tr>

@@ -17,5 +17,6 @@ $(document).ready(function()
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
     $("#productID").chosen({no_results_text: noResultsMatch});
     $("#projectID").chosen({no_results_text: noResultsMatch});
+    $(".chosen").chosen({no_results_text: noResultsMatch, allow_single_deselect: true});
 });
 </script>

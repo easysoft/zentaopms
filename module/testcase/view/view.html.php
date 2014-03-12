@@ -69,7 +69,7 @@
     <td>
       <fieldset>
         <legend><?php echo $lang->testcase->precondition;?></legend>
-        <?php echo $case->precondition;?>
+        <?php echo nl2br($case->precondition);?>
       </fieldset>
       <table class='table-1 colored'>
         <tr class='colhead'>

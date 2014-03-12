@@ -370,6 +370,10 @@ class installModel extends model
             {
                 $table = str_replace('--', '', $table);
             }
+
+            /* Skip sql that is note. */
+            if(strpos($table, '--') === 0) continue;
+
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
