@@ -155,6 +155,7 @@ $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需�
 $lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
 $lang->bug->setTemplateTitle     = '请输入bug模板标题（保存之前请先填写bug重现步骤）：';
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
+$lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p>\n";

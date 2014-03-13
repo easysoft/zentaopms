@@ -639,15 +639,20 @@ class task extends control
     {
         if($this->post->taskIDList)
         {
-            $tasks = $this->post->taskIDList;
+            $taskIDList = $this->post->taskIDList;
             unset($_POST['taskIDList']);
             $this->loadModel('action');
 
-            foreach($tasks as $taskID)
+            $tasks = $this->task->getList($taskIDList);
+            foreach($tasks as $taskID => $task)
             {
-                $this->commonAction($taskID);
-                $task = $this->task->getById($taskID);
-                if($task->status == 'wait' or $task->status == 'doing') continue;
+                if($task->status == 'wait' or $task->status == 'doing')
+                {
+                    $skipTasks[$taskID] = $taskID;
+                    continue;
+                }
+
+                if($task->status == 'closed') continue;
 
                 $changes = $this->task->close($taskID);
 
@@ -658,6 +663,7 @@ class task extends control
                     $this->sendmail($taskID, $actionID);
                 }
             }
+            if(isset($skipTasks)) echo js::alert(sprintf($this->lang->task->error->skipClose, join(',', $skipTasks)));
         }
         die(js::reload('parent'));
     }

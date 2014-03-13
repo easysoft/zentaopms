@@ -155,6 +155,7 @@ $lang->bug->confirmChangeProduct = 'Change product will change project, task and
 $lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please input the template title:';
 $lang->bug->remindTask           = 'This bug has been to be a task, update the task:%s or not?';
+$lang->bug->skipClose            = 'The status of bug:%s are not resolved, so can not close!';
 
 /* Templates. */
 $lang->bug->tplStep   = "<p>[Steps]</p>\n";

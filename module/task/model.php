@@ -678,6 +678,21 @@ class taskModel extends model
     }
 
     /**
+     * Get task list.
+     * 
+     * @param  int|array|string    $taskIDList 
+     * @access public
+     * @return array
+     */
+    public function getList($taskIDList = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF($taskIDList)->andWhere('id')->in($taskIDList)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Get tasks list of a project.
      * 
      * @param  int           $projectID 

@@ -195,6 +195,21 @@ class bugModel extends model
     }
 
     /**
+     * Get bug list.
+     * 
+     * @param  int|array|string    $bugIDList 
+     * @access public
+     * @return array
+     */
+    public function getList($bugIDList = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->beginIF($bugIDList)->andWhere('id')->in($bugIDList)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * getActiveBugs 
      * 
      * @param  object   $pager 
@@ -353,7 +368,7 @@ class bugModel extends model
      * 
      * @param  int    $bugID 
      * @access public
-     * @return void
+     * @return string
      */
     public function assign($bugID)
     {
@@ -406,11 +421,11 @@ class bugModel extends model
      */
     public function batchConfirm($bugIDList)
     {
-        $now = helper::now();
+        $now  = helper::now();
+        $bugs = $this->getList($bugIDList);
         foreach($bugIDList as $bugID)
         {
-            $oldBug = $this->getById($bugID);
-            if($oldBug->confirmed) continue;
+            if($bugs[$bugID]->confirmed) continue;
 
             $bug = new stdclass();
             $bug->assignedTo     = $this->app->user->account;
@@ -466,10 +481,11 @@ class bugModel extends model
      */
     public function batchResolve($bugIDList, $resolution, $resolvedBuild)
     {
-        $now = helper::now();
+        $now  = helper::now();
+        $bugs = $this->getList($bugIDList);
         foreach($bugIDList as $bugID)
         {
-            $oldBug = $this->getById($bugID);
+            $oldBug = $bugs[$bugID];
             if($oldBug->status != 'active') continue;
             $bug = new stdClass();
             $bug->resolution     = $resolution;
@@ -528,7 +544,6 @@ class bugModel extends model
      */
     public function close($bugID)
     {
-        $oldBug = $this->getById($bugID);
         $now = helper::now();
         $bug = fixer::input('post')
             ->add('assignedTo',     'closed')
