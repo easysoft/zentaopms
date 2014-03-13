@@ -387,7 +387,7 @@ class commonModel extends model
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
         echo html::input('searchQuery', $lang->searchTips, "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
-		echo "<a href='javascript:shortcut();return false;' id='objectSwitcher' class='icon-circle-arrow-right'></a>";
+		echo "<a href='javascript:shortcut()' id='objectSwitcher' class='icon-circle-arrow-right'></a>";
         echo "</li>";
         echo "</ul>\n";
     }
