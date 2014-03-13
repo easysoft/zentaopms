@@ -224,10 +224,10 @@ class html
         foreach($options as $key => $value)
         {
             $key     = str_replace('item', '', $key);
-            $string .= "<span><input type='checkbox' name='{$name}[]' value='$key' ";
+            $string .= "<div class='checkbox'><label><input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /> <label for='$name$key'>$value</label></span>\n";
+            $string .= " id='$name$key' /> $value</label></div>\n";
         }
         return $string;
     }
@@ -418,7 +418,7 @@ EOT;
             global $lang;
             $label = $lang->save;
         }
-        return " <input type='submit' id='submit' value='$label' $misc class='button-s' /> ";
+        return " <input type='submit' id='submit' value='$label' $misc class='btn btn-submit btn-primary' /> ";
     }
 
     /**
@@ -431,7 +431,7 @@ EOT;
     public static function resetButton()
     {
         global $lang;
-        return " <input type='reset' id='reset' value='{$lang->reset}' class='button-r' /> ";
+        return " <input type='reset' id='reset' value='{$lang->reset}' class='btn btn-reset' /> ";
     }
 
     /**
@@ -445,7 +445,7 @@ EOT;
     {
         global $lang;
         if(isonlybody()) return false;
-        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='button-b' $misc/>";
+        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='btn btn-back' $misc/>";
     }
 
     /**
@@ -459,7 +459,7 @@ EOT;
      */
     public static function commonButton($label = '', $misc = '', $class = '')
     {
-        return " <input type='button' value='$label' $misc class='button-c $class' /> ";
+        return " <input type='button' value='$label' $misc class='btn $class' /> ";
     }
 
     /**
