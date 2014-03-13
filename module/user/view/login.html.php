@@ -20,7 +20,7 @@ include '../../common/view/header.lite.html.php';
           <button class='btn' data-toggle='dropdown' title='Change Language/更换语言/更換語言'><?php echo $config->langs[$this->app->getClientLang()]; ?> <span class="caret"></span></button>
           <ul class='dropdown-menu'>
             <?php foreach($config->langs as $key => $value):?>
-            <li><a href="###" data-value="<?php echo $key; ?>" class="<?php echo $key==$this->app->getClientLang()?'active':''; ?>"><?php echo $value; ?></a></li>
+            <li class="<?php echo $key==$this->app->getClientLang()?'active':''; ?>"><a href="###" data-value="<?php echo $key; ?>"><?php echo $value; ?></a></li>
             <?php endforeach;?>
           </ul>
         </div>

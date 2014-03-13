@@ -16,3 +16,4 @@ html,body{background-color: #036}
 #keeplogin label {font-weight: normal}
 .popover {max-width: 500px}
 .popover-content {padding: 0}
+.btn-submit {min-width: 70px}
