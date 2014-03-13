@@ -930,6 +930,7 @@ class treeModel extends model
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
         $module->grade = $parent ? $parent->grade + 1 : 1;
+        $module->path  = $parent ? $parent->path . $moduleID . ',' : ',' . $moduleID . ',';
         $this->dao->update(TABLE_MODULE)->data($module)->autoCheck()->check('name', 'notempty')->where('id')->eq($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
