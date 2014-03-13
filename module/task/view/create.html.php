@@ -37,7 +37,7 @@
     <tr>
       <th class='rowhead'><?php echo $lang->task->story;?></th>
       <td>
-        <?php echo html::select('story', $stories, $task->story, 'class=select-1 onchange=setPreview();');?>
+        <?php echo html::select('story', $stories, $task->story, 'class=select-1 onchange=setStoryRelated();');?>
         <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
       </td>
     </tr>  
