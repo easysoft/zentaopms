@@ -10,8 +10,9 @@ $clientTheme  = $this->app->getClientTheme();
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+  <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
@@ -38,5 +39,14 @@ $clientTheme  = $this->app->getClientTheme();
 
   echo html::icon($webRoot . 'favicon.ico');
   ?>
+<!--[if lt IE 9]>
+<?php
+js::import($jsRoot . 'html5shiv/min.js');
+js::import($jsRoot . 'respond/min.js');
+?>
+<![endif]-->
+<!--[if lt IE 10]>
+<?php js::import($jsRoot . 'jquery/placeholder/min.js'); ?>
+<![endif]-->
 </head>
 <body>
