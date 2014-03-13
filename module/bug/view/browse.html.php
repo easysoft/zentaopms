@@ -216,6 +216,10 @@ if($customed)
   $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
   echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
 
+  $actionLink = $this->createLink('bug', 'batchClose');
+  $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->bug->close, '', $misc) . "</li>";
+
   $misc = common::hasPriv('bug', 'batchResolve') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='resolveItem'" : $class;
   echo "<li>" . html::a('#', $lang->bug->resolve,  '', $misc) . "</li>";
   ?>

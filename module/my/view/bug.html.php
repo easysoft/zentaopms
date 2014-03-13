@@ -70,7 +70,21 @@
       <tr><td colspan='9'>
       <?php if($bugs and $canBatchEdit):?>
       <div class='f-left'>
-      <?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->edit);?>
+        <?php
+        echo html::selectAll() . html::selectReverse();
+
+        if(common::hasPriv('bug', 'batchEdit'))
+        {
+            $actionLink = $this->createLink('bug', 'batchEdit', "productID=0");
+            echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+        }
+
+        if(common::hasPriv('bug', 'batchClose') and $type != 'closedBy')
+        {
+            $actionLink = $this->createLink('bug', 'batchClose');
+            echo html::commonButton($lang->bug->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+        }
+        ?>
       </div>
       <?php endif;?>
       <?php $pager->show();?>

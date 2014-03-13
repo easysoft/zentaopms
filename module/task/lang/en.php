@@ -151,6 +151,7 @@ $lang->task->error->consumedSmall    = '"Consumed" must be more than consumed be
 $lang->task->error->consumedThisTime = 'Please input "hours"';
 $lang->task->error->left             = 'Please input "left"';
 $lang->task->error->work             = '"Comment" must be less than 255 characters';
+$lang->task->error->skipClose        = 'The status of Tasks : %s are not finished or canceled, can not close.';
 
 /* Report. */
 $lang->task->report = new stdclass();

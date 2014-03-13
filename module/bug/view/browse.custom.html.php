@@ -1,6 +1,6 @@
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>' id='treebox'>
+    <td class='side' id='treebox'>
       <nobr>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
@@ -74,7 +74,13 @@
               <div class='f-left'>
                 <?php 
                 echo html::selectAll() . html::selectReverse(); 
-                if(common::hasPriv('bug', 'batchEdit') and $bugs) echo html::submitButton($lang->edit);
+
+                $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID");
+                $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                echo "<div class='groupButton dropButton'>";
+                echo html::commonButton($lang->edit, $misc);
+                echo "<button id='moreAction' type='button' onclick=\"toggleSubMenu(this.id, 'top', 0)\"><span class='caret'></span></button>";
+                echo "</div>";
                ?>
               </div>
               <?php endif?>
@@ -87,3 +93,60 @@
     </td>
   </tr>
 </table>
+
+<div id='moreActionMenu' class='listMenu hidden'>
+  <ul>
+  <?php 
+  $class = "class='disabled'";
+
+  $actionLink = $this->createLink('bug', 'batchConfirm');
+  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
+
+  $actionLink = $this->createLink('bug', 'batchClose');
+  $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+  echo "<li>" . html::a('#', $lang->bug->close, '', $misc) . "</li>";
+
+  $misc = common::hasPriv('bug', 'batchResolve') ? "onmouseover='toggleSubMenu(this.id)' onmouseout='toggleSubMenu(this.id)' id='resolveItem'" : $class;
+  echo "<li>" . html::a('#', $lang->bug->resolve,  '', $misc) . "</li>";
+  ?>
+  </ul>
+</div>
+
+<div id='resolveItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($lang->bug->resolutionList['']);
+  unset($lang->bug->resolutionList['duplicate']);
+  foreach($lang->bug->resolutionList as $key => $resolution)
+  {
+      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
+      echo "<li>";
+      if($key == 'fixed')
+      {
+          echo html::a('#', $resolution, '', "onmouseover=\"toggleSubMenu(this.id,'right',2)\" id='fixedItem'");
+      }
+      else
+      {
+          echo html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      }
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>
+
+<div id='fixedItemMenu' class='hidden listMenu'>
+  <ul>
+  <?php
+  unset($builds['']);
+  foreach($builds as $key => $build)
+  {
+      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
+      echo "<li>";
+      echo html::a('#', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      echo "</li>";
+  }
+  ?>
+  </ul>
+</div>

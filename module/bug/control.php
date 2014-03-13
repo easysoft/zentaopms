@@ -826,6 +826,39 @@ class bug extends control
     }
 
     /**
+     * Batch close bugs. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchClose()
+    {
+        if($this->post->bugIDList)
+        {
+            $bugIDList = $this->post->bugIDList;
+            foreach($_POST as $postKey => $postValue) unset($_POST[$postKey]);
+
+            $bugs = $this->bug->getList($bugIDList);
+            foreach($bugs as $bugID => $bug)
+            {
+                if($bug->status != 'resolved')
+                {
+                    if($bug->status != 'closed') $skipBugs[$bugID] = $bugID;
+                    continue;
+                }
+
+                $this->bug->close($bugID);
+
+                $actionID = $this->action->create('bug', $bugID, 'Closed');
+                $this->sendmail($bugID, $actionID);
+            }
+
+            if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
      * Confirm story change.
      * 
      * @param  int    $bugID 
