@@ -180,6 +180,79 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 /* Background */
 body  {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
+/* Header */
+#header {padding: 12px 20px 0; background:#003366;}
+
+#topbar {color: #ACCADF}
+#topnav .dropdown {display: inline-block;}
+#topnav .dropdown-menu {min-width: inherit;}
+#topnav > .dropdown .caret {border-top-color: #fff}
+#topnav > .dropdown, #topnav > a {display: inline-block; margin-left: 4px;}
+#topnav > .dropdown:before, #topnav > a:before {content: '|'; display: inline-block; margin-right: 6px; color: #999}
+#topnav > a:first-child:before {display: none}
+#topnav > a, #topnav > .dropdown > a, #companyname a {color:#d1e4f2;text-decoration:none;}
+#topnav > a:hover, #topnav > .dropdown > a:hover, #companyname a:hover {color: #fff;}
+#companyname {color:#ffcc00; font-weight: normal; margin: 0}
+
+#mainmenu {margin-top: 12px; width: 100%; position: relative;}
+#mainmenu li {float: left;}
+#mainmenu li > a {display: block; margin-right: 3px; white-space:nowrap; padding:7px 15px; color:#E5E5E5; font-size: 14px; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
+#mainmenu li > a:hover{background-color: #2e6dad;color: #fff;-webkit-box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
+#mainmenu li.active > a { background-color:#e5e5e5;color:#21841d; font-weight:bold;}
+
+#searchbox {position: absolute; right: 0; top: 1px; width: 220px; border-radius: 12px; overflow: hidden;}
+#searchbox.input-group .form-control, #searchbox.input-group .btn {width: 50%; padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0}
+#searchbox.input-group .btn {height: 24px; width: 30px; color: #666}
+#searchbox.input-group select.form-control {color: #666}
+#searchbox .btn, #searchbox .form-control {border-radius: 0}
+
+/* Module menu. */
+#modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative;}
+#modulemenu li {padding:4px 0px;display: block; float: left;}
+#modulemenu li a {line-height: 30px; display: block; padding: 2px 7px; color:#003366}
+#modulemenu li > a:hover {background: #d1d1d1; color: #000;}
+#modulemenu li.active > a,#modulemenu li.active > a:hover {color:#21841d; font-weight:bold; }
+#modulemenu li.right {float:right; font-weight:bold;}
+#modulemenu li.right > a {font-weight:bold}
+#modulemenu #myname {display: inline-block; color: #808080; line-height: 34px;}
+
+/* Drop menu. */
+#dropMenu {background: #fff; position:absolute; display:none; font-size:12px; z-index:9999; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);border: 1px solid #CBCBCB; border: 1px solid rgba(0, 0, 0, 0.15); top: 39px; border-top: none; min-width: 250px; padding: 10px 15px 0}
+#currentItem {border: 1px solid transparent; padding: 1px 6px;}
+.show > #dropMenu {display: block;}
+.show > #currentItem, .show > #currentItem:hover {background: #fff; border: 1px solid #CBCBCB; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);}
+#search {padding: 2px 8px; height: 28px}
+#searchResult {display: table; line-height: 20px; color: #808080}
+#defaultMenu, #moreMenu {display: table-cell; vertical-align: top; min-width: 218px}
+#moreMenu {display: none;}
+#searchResult.show-more #moreMenu {display: table-cell;}
+#defaultMenu > ul, #moreMenu > ul {display: block; position: relative; padding: 0;}
+#moreMenu > ul {margin-left: 30px;}
+#defaultMenu > ul > li:first-child, #moreMenu > ul > li:first-child, #searchResult > ul > li:first-child {margin-top: 10px; border-top: 1px dashed #ddd}
+#defaultMenu > ul > li, #moreMenu > ul > li,#searchResult > ul > li {display: block; float: none; margin: 0 -15px; padding: 2px 10px; border-bottom: 1px dashed #ddd;}
+#defaultMenu > ul > li:hover, #defaultMenu > .actions > a:hover, #moreMenu > ul > li:hover, #searchResult > ul > li:hover {background: #f1f1f1}
+#defaultMenu > ul > li > a, #moreMenu > ul > li > a, #searchResult > ul > li > a {line-height: 20px}
+#defaultMenu > ul > li > a:hover, #moreMenu > ul > li > a:hover, #searchResult > ul > li > a:hover {background: none}
+#defaultMenu > .actions > a {display: block; text-align: right; margin: 0 -15px; padding-right: 15px;}
+#searchResult.show-more #defaultMenu > ul > li, #defaultMenu > .actions > a {border-right: 1px solid #ddd}
+#defaultMenu > .actions > a > i, #defaultMenu > ul > li > a > i, #moreMenu > ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
+#searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}
+#searchResult > ul > li {}
+
+/*#dropMenu #defaultMenu, #dropMenu ul, #dropMenu li {padding:0px}
+#dropMenu #defaultMenu {margin-bottom:20px}
+
+#dropMenu #searchResult {margin:5px 20px 10px;}
+#dropMenu ul {line-height:24px; max-height:320px; overflow-y:auto}
+#dropMenu li {float:none; padding-left:12px}
+#dropMenu, #dropMenu li {text-align: left}
+#dropMenu li a:hover {font-weight: bold}
+#dropMenu li a.mine {color:#1a59b6}
+#dropMenu li a.other, #dropMenu li a.closed, #dropMenu li a.done, #dropMenu #more{color:gray; font-size:12px}
+
+#projectID {background:#e5e5e5; border:1px solid #e5e5e5}*/
+
+
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 19px 20px 19px; background:#e5e5e5;}
@@ -284,65 +357,11 @@ td>select{padding-left: 0;padding-right: 0}
 .navbar li>a:hover {color:#ff3600;}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
-/* Header. */
-#header{padding:2px 20px 0 20px; background:#003366; border-bottom:1px solid #e4e4e4;}
-#header td{vertical-align: middle;}
-#header select{padding-top: 0;}
 
 
-/* Top bar. */
-#topbar, #topbar a {color:#ACCADF}
-#topbar {margin:5px 5px 6px 5px}
-#topbar select {border:none; color:#ACCADF; background:#003366}
-#topbar a {color:#d1e4f2;text-decoration:none;}
-#topbar a:hover {color: #fff;}
-#companyname{color:#ffcc00; font-size:14px}
 
-/* Main menu. */
-#mainmenu ul { height:32px; line-height:30px}
-#mainmenu li {margin-right: 3px;font-size:14px;}
-#mainmenu li>a {display: inline-block;white-space:nowrap;padding:2px 15px; color:#E5E5E5; font-weight:normal; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
-#mainmenu li>a:hover{background-color: #2e6dad;color: #fff;-webkit-box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
-#mainmenu li.active>a{background-color:#e5e5e5;color:#21841d; font-weight:bold;}
 
-#mainmenu #searchbox{height: 32px; float:right; background-color: #e5e5e5;padding: 1px 5px;margin: 0;-moz-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); -webkit-box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1); box-shadow:inset 0px -2px 3px rgba(0,0,0,0.1);}
-#mainmenu .button-s{border:none; padding:2px}
 
-#searchType {border:1px solid #ccc; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
-#searchQuery {height:16px; border:1px solid #ccc; background: #E5E5E5; color:gray; font-size:12px;margin-bottom: 2px;}
-#searchQuery:focus,#searchType:focus{color: #333;background: #fff;}
-#mainmenu li>a#objectSwitcher{background: #e5e5e5;color: gray;padding: 0 3px;-webkit-box-shadow: none;box-shadow:none;}
-
-/* Module menu. */
-#modulemenu {padding: 0 20px;height: 42px;font-size:14px;background-color: #e5e5e5;}
-#modulemenu li {color:#003366;padding:4px 0px;line-height: 30px;}
-#modulemenu li a{display: inline-block; padding: 2px 7px; font-weight:normal; font-size:14px; color:#003366}
-#modulemenu li>a:hover{background: #d1d1d1;color: #000;}
-#modulemenu li.active>a,#modulemenu li.active>a:hover {color:#21841d; font-weight:bold; }
-#modulemenu li.right {float:right; font-weight:bold;}
-#modulemenu li.right>a {font-weight:bold}
-#modulemenu #myname {display: inline-block; color: #888888;line-height: 34px;}
-
-/* Drop menu. */
-#currentItem a, #dropMenu a {cursor:pointer}
-#dropIcon {padding:3px 8px; background: url("./images/chosen/chosen-sprite.png") no-repeat scroll 0 -2px transparent;}
-#dropMenu { border:solid 1px #ccc; position:absolute; display:none; font-size:12px; z-index:9999}
-
-#dropMenu #defaultMenu, #dropMenu ul, #dropMenu li {padding:0px}
-#dropMenu #defaultMenu {margin-bottom:20px}
-#dropMenu #search {border:1px solid #ccc; height:25px; margin:10px 20px 5px; padding-left:5px}
-#dropMenu #search, #dropMenu #defaultMenu {min-width:250px;}
-#dropMenu #searchResult {margin:5px 20px 10px;}
-
-#dropMenu, #dropMenu ul {background:#f1f1f1; height:auto}
-#dropMenu ul {line-height:24px; max-height:320px; overflow-y:auto}
-#dropMenu li {float:none; padding-left:12px}
-#dropMenu, #dropMenu li {text-align: left}
-#dropMenu li a:hover {font-weight: bold}
-#dropMenu li a.mine {color:#1a59b6}
-#dropMenu li a.other, #dropMenu li a.closed, #dropMenu li a.done, #dropMenu #more{color:gray; font-size:12px}
-
-#projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
 /* Feature bar. */
 #featurebar,#wrap .outer>table.table-1>caption,#wrap .outer>form>table.table-1>caption{height:30px; line-height:30px;background-color: #f8fafe; padding:8px 10px;}

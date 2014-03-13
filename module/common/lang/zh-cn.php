@@ -356,8 +356,8 @@ $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a>&nbsp; ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'><i class='icon-heart'></i> 捐赠</a>&nbsp; ";
+$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
+$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠 </a>";
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>购买专业版(特惠)！</a>&nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 

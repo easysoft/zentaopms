@@ -1,43 +1,4 @@
 /**
- * Load css file of special browser.
- * 
- * @access public
- * @return void
- */
-function loadFixedCSS()
-{
-    cssFile = '';
-    if($.browser.msie )
-    {
-        cssFile = $.browser.version == '6.0' ? config.themeRoot + '/browser/ie.6.css' : config.themeRoot + 'browser/ie.css';
-    }
-    else if($.browser.mozilla) 
-    {
-        cssFile = config.themeRoot + '/browser/firefox.css';
-    }
-    else if($.browser.opera) 
-    {
-        cssFile = config.themeRoot + '/browser/opera.css';
-    }
-    else if($.browser.safari) 
-    {
-        cssFile = config.themeRoot + '/browser/safari.css';
-    }
-    else if($.browser.chrome) 
-    {
-        cssFile = config.themeRoot + '/browser/chrome.css';
-    }
-
-    if(cssFile != '')
-    {
-        /* Thanks ekerner, please visit ekerner.com. The code is from: 
-         * http://stackoverflow.com/questions/1184950/dynamically-loading-css-stylesheet-doesnt-work-on-ie. 
-         */
-        $("<link>").appendTo($('head')).attr({type: 'text/css', rel: 'stylesheet'}).attr('href', cssFile);
-    }
-}
-
-/**
  * Create link. 
  * 
  * @param  string $moduleName 
@@ -114,17 +75,21 @@ function shortcut()
  * @access public
  * @return void
  */
-var showMenu = 0; //Showing or hiding drop menu.
 function showDropMenu(objectType, objectID, module, method, extra)
 {
-    if(showMenu == 1) { showMenu = 0; return $("#dropMenu").hide();};
-    $('#wrap').click(function(){showMenu = 0; return $("#dropMenu").hide();});
+    console.log(arguments);
+    var li = $('#currentItem').closest('li');
+    if(li.hasClass('show')) {li.removeClass('show'); return;}
 
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
-    var offset = $('#currentItem').offset();
-    $("#dropMenu").css({ top:offset.top + $('#currentItem').height() + "px", left:offset.left });
-    $("#dropMenu").show('fast', function(){$("#dropMenu #search").focus();});
-    showMenu = 1;
+    if(!li.data('showagain'))
+    {
+        li.data('showagain', true);
+        $(document).click(function() {li.removeClass('show');});
+        $('#dropMenu, #currentItem').click(function(e){e.stopPropagation();});
+    }
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data).find('#search').focus();});
+
+    li.addClass('show');
 }
 
 /**
@@ -178,9 +143,9 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
  */
 function switchMore()
 {
-    $('#moreMenu').css('width', $('#defaultMenu').width());
-    $('#moreMenu').toggle();
-    $('#search').focus();
+    $('#search').width($('#search').width()).focus();
+    $('#moreMenu').width($('#defaultMenu').outerWidth());
+    $('#searchResult').toggleClass('show-more');
 }
 
 /**
@@ -922,7 +887,6 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    loadFixedCSS();
     setForm();
     saveWindowSize();
     setDebugWin('white');

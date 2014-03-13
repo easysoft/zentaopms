@@ -486,7 +486,7 @@ EOT;
             $link .= $onlybody;
         }
 
-        return " <input type='button' value='$label' $misc onclick='{$target}.location=\"$link\"' class='button-c' /> ";
+        return " <input type='button' value='$label' $misc onclick='{$target}.location=\"$link\"' class='btn' /> ";
     }
 
     /**

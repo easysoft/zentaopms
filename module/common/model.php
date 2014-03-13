@@ -229,15 +229,21 @@ class commonModel extends model
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
-
-        echo '&nbsp;|&nbsp; ';
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
         echo $lang->agileTraining;
         echo $lang->donate;
-
-        echo '&nbsp;|&nbsp;';
-        echo html::select('', $app->config->langs, $app->cookie->lang,  'onchange="selectLang(this.value)"');
-        echo html::select('', $app->lang->themes,  $app->cookie->theme, 'onchange="selectTheme(this.value)"');
+        echo "<div class='dropdown' id='langSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->config->langs[$app->cookie->lang] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
+        foreach ($app->config->langs as $key => $value)
+        {
+            echo "<li" . ($app->cookie->lang == $key ? " class='active'" : '') . "><a href='javascript:;' data-value='" . $key . "'>" . $value . "</a></li>";
+        }
+        echo '</ul></div>';
+        echo "<div class='dropdown' id='themeSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->lang->themes[$app->cookie->theme] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
+        foreach ($app->lang->themes as $key => $value)
+        {
+            echo "<li" . ($app->cookie->theme == $key ? " class='active'" : '') . "><a href='javascript:;' data-value='" . $key . "'>" . $value . "</a></li>";
+        }
+        echo '</ul></div>';
     }
 
     /**
@@ -306,7 +312,7 @@ class commonModel extends model
     public static function printMainmenu($moduleName, $methodName = '')
     {
         global $app, $lang;
-        echo "<ul>\n";
+        echo "<ul class='nav'>\n";
  
         /* Set the main main menu. */
         $mainMenu = $moduleName;
@@ -354,7 +360,7 @@ class commonModel extends model
                 echo "<li $active><a href='$link' $active id='menu$menuKey'>$menuLabel</a></li>\n";
             }
         }
-
+        echo "</ul>\n";
     }
 
     /**
@@ -384,12 +390,11 @@ class commonModel extends model
             $searchObject = $methodName;
         }
 
-        echo "<li id='searchbox'>"; 
-        echo html::select('searchType', $lang->searchObjects, $searchObject);
-        echo html::input('searchQuery', $lang->searchTips, "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
-		echo "<a href='javascript:shortcut();return false;' id='objectSwitcher' class='icon-circle-arrow-right'></a>";
-        echo "</li>";
-        echo "</ul>\n";
+        echo "<div class='input-group input-group-sm' id='searchbox'>"; 
+        echo html::select('searchType', $lang->searchObjects, $searchObject, "class='form-control'");
+        echo html::input('searchQuery', '', "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'");
+        echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();return false;' class='btn'><i class='icon-circle-arrow-right'></i></a></div>";
+        echo "</div>\n";
     }
 
     /**
@@ -442,7 +447,7 @@ class commonModel extends model
         }
 
         /* The beginning of the menu. */
-        echo "<ul>\n";
+        echo "<ul class='nav'>\n";
 
         /* Cycling to print every sub menus. */
         foreach($submenus as $subMenuKey => $submenu)
