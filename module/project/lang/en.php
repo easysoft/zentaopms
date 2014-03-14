@@ -53,7 +53,7 @@ $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";
 $lang->project->all           = 'All';
-$lang->project->typeDesc      = 'No burndown for waterfall, no story in OPS';
+$lang->project->typeDesc      = 'No burndown and story in OPS';
 $lang->project->mine          = 'I charge : ';
 $lang->project->other         = 'Other : ';
 
@@ -174,7 +174,7 @@ $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait
 $lang->project->wbs             = "WBS";
 $lang->project->batchWBS        = "Batch WBS";
 $lang->project->largeBurnChart  = 'View large';
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>How?</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' title='How to update burndown?' target='_blank'><i class='icon-question-sign'></i></a>";
 $lang->project->whyNoStories    = "There no active stories to added to this project. Please check the linked product.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->unDoneProjects  = 'Undone';
@@ -194,8 +194,8 @@ $lang->project->linkStory             = 'Link story';
 $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back';
 $lang->project->linkProduct           = 'Select product to link...';
-$lang->project->withWeekend           = 'Show weekend';
-$lang->project->noWeekend             = 'Remove weekend';
+$lang->project->weekend               = 'Weekend';
+$lang->project->interval              = 'Interval';
 
 /* Report. */
 $lang->project->charts = new stdclass();

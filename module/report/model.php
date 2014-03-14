@@ -92,7 +92,6 @@ EOT;
 return <<<EOT
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/excanvas.min.js"></script><![endif]-->
 <script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.min.js"></script>
-<h1>$projectName  {$this->lang->project->burn}</h1>
 <div id="placeholder" style="width:$width;height:$height;margin:0 auto"></div>
 <script type="text/javascript">
 $(function () 
@@ -102,6 +101,8 @@ $(function ()
     var baseline = $baselineJSON;
     var dateList = $dateListJSON;
     var ticks    = $ticksJSON;
+    var firstMon = 0;
+    var months   = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -121,7 +122,37 @@ $(function ()
             series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
             legend: {noColumns: 1},
             grid: { hoverable: true, clickable: true },
-            xaxis: { ticks:ticks, tickFormatter: function(val) {tick = new Date(dateList[val]);if(dateList[val] != undefined){return tick.getDate() + '/' + (tick.getMonth() + 1)}else{return ''}}},
+            xaxis:
+            {
+                 ticks:ticks,
+                 tickFormatter: function(val)
+                 {
+                     tick = new Date(dateList[val]);
+                     if(dateList[val] != undefined)
+                     {
+                         var month    = tick.getMonth() + 1;
+                         var dateTail = '';
+                         if(firstMon != month)
+                         {
+                             dateTail = '<br />/' + month;
+                             firstMon = month;
+                         }
+
+                         if(config.clientLang == 'en')
+                         {
+                             title = months[month-1] + ' ' + tick.getDate();
+                         }
+                         else
+                         {
+                             title = month + '{$this->lang->date->month}' + tick.getDate();
+                         }
+
+                         if(ticks.length <= 30) dateTail = '/' + month;
+                         return '<span title="' + title + '">' + tick.getDate() + dateTail + '</span>';
+                     }
+                     return '';
+                 }
+            },
             yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
 
     var placeholder = $("#placeholder");
@@ -171,6 +202,7 @@ $(function ()
     });
 });
 </script>
+<h1>$projectName  {$this->lang->project->burn}</h1>
 EOT;
     }
 

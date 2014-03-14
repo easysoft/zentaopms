@@ -2,7 +2,7 @@
 $config->project = new stdclass();
 $config->project->defaultWorkhours = 7;
 $config->project->orderBy          = 'isDone, status';
-$config->project->maxBurnDay       = '30';
+$config->project->maxBurnDay       = '31';
 
 global $lang, $app;
 $app->loadLang('task');

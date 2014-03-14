@@ -366,6 +366,10 @@ $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <
 $lang->noResultsMatch    = "No results match";
 $lang->chooseUsersToMail = "Choose users to mail...";
 
+$lang->date = new stdclass();
+$lang->date->day   = 'Day';
+$lang->date->month = 'Month';
+
 /* Date times. */
 define('DT_DATETIME1',  'Y-m-d H:i:s');
 define('DT_DATETIME2',  'y-m-d H:i');

@@ -53,7 +53,7 @@ $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
-$lang->project->typeDesc      = '长期项目禁用燃尽图，运维项目禁用燃尽图和需求。';
+$lang->project->typeDesc      = '运维项目禁用燃尽图和需求。';
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 
@@ -106,7 +106,7 @@ $lang->project->dynamic         = '动态';
 $lang->project->build           = '版本列表';
 $lang->project->testtask        = '测试任务';
 $lang->project->burn            = '燃尽图';
-$lang->project->computeBurn     = '更新燃尽图';
+$lang->project->computeBurn     = '更新';
 $lang->project->burnData        = '燃尽图数据';
 $lang->project->team            = '团队成员';
 $lang->project->doc             = '文档列表';
@@ -174,7 +174,7 @@ $lang->project->groupSummary    = "本组共 <strong>%s</strong> 个任务，未
 $lang->project->wbs             = "分解任务";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '点击查看大图';
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>如何更新?</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？'><i class='icon-question-sign'></i></a>";
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";
 $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';
@@ -194,8 +194,8 @@ $lang->project->linkStory             = '关联需求';
 $lang->project->createTask            = '添加任务';
 $lang->project->goback                = '返回项目首页';
 $lang->project->linkProduct           = '选择产品关联...';
-$lang->project->withWeekend           = '显示周末';
-$lang->project->noWeekend             = '去除周末';
+$lang->project->weekend               = '周末';
+$lang->project->interval              = '间隔';
 
 /* 统计。*/
 $lang->project->charts = new stdclass();

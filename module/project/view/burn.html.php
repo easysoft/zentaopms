@@ -13,12 +13,33 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?>
 <script>$('#burnTab').addClass('active');</script>
-<div class='a-center'>
-  <?php
-  echo $charts; 
-  common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
-  echo html::a(inlink('burn', "projectID=$projectID&type=" . ($type == 'noweekend' ? 'withweekend' : 'noweekend')), ($type == 'noweekend' ? $lang->project->withWeekend : $lang->project->noWeekend));
+<table width='950' align='center' class='bd-none' id='burn'>
+<tr>
+  <td class='a-right pr-25px' style='vertical-align:middle'>
+<?php
+  $checked = ($type == 'noweekend') ? '' : "weekend";
+  echo html::checkbox('', array('weekend' => $lang->project->weekend), $checked);
+
+  if($interval)
+  {
+      echo $lang->project->interval;
+      echo html::select('interval', $dayList, $interval);
+  }
+
+  common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn' id='computeBurn'");
   echo $lang->project->howToUpdateBurn;
-  ?>
-</div>
+?>
+  </td>
+</tr>
+<tr>
+  <td class='a-center'>
+  <?php echo $charts; ?>
+  </td>
+</tr>
+</table>
+<?php
+js::set('projectID', $projectID);
+js::set('type', $type);
+js::set('interval', $interval);
+?>
 <?php include '../../common/view/footer.html.php';?>

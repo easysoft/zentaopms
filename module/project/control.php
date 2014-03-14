@@ -673,12 +673,11 @@ class project extends control
      * @access public
      * @return void
      */
-    public function burn($projectID = 0, $type = 'noweekend')
+    public function burn($projectID = 0, $type = 'noweekend', $interval = 0)
     {
         $this->loadModel('report');
         $project     = $this->commonAction($projectID);
         $projectInfo = $this->project->getByID($project->id);
-        $maxDays     = $this->config->project->maxBurnDay;
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->burn;
@@ -686,51 +685,19 @@ class project extends control
         $position[] = $this->lang->project->burn;
 
         /* Get date list. */
-        if($projectInfo->days <= $maxDays)
-        {
-            $dateList = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type);
-        }
-        else
-        {
-            $today = date('Y-m-d');
-            if($today > $projectInfo->end)
-            {
-                $begin = $projectInfo->begin;
-                $end   = date('Y-m-d', strtotime($projectInfo->begin) + 30 * 24 * 3600);
-            }
-            else
-            {
-                $endDays   = helper::diffDate($projectInfo->end, $today);
-                $endDays   = $endDays > 15 ? 15 : $endDays;
-                $beginDays = $endDays > 15 ? 15 : (30 - $endDays);
+        list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval);
 
-                $begin = date('Y-m-d', strtotime("-$beginDays days"));
-                $begin = $begin > $projectInfo->begin ? $begin : $projectInfo->begin;
-                $end   = date('Y-m-d', strtotime("+$endDays days"));
-                $end   = $end > $projectInfo->end ? $projectInfo->end : $end;
-            }
-            $dateList = $this->project->getDateList($begin, $end, $type);
-        }
-
-        $sets          = $this->project->getBurnDataFlot($project->id, $maxDays);
+        $sets          = $this->project->getBurnDataFlot($project->id);
         $limitJSON     = '[]';
         $baselineJSON  = '[]';
-        if($projectInfo->days <= $maxDays)
-        {
-            $firstBurn    = empty($sets) ? 0 : reset($sets);
-            $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
-            $days         = count($dateList) - 1;
-            $rate         = $firstTime / $days;
-            $baselineJSON = '[';
-            foreach($dateList as $i => $date) $baselineJSON .='[' . $i . ',' . ($days - $i) * $rate . '],';
-            $baselineJSON = rtrim($baselineJSON, ',') . ']';
-        }
-        else
-        {
-            $limitJSON = '[';
-            foreach($dateList as $i => $date) $limitJSON .= "[$i, 0],";
-            $limitJSON = rtrim($limitJSON, ',') . ']';
-        }
+
+        $firstBurn    = empty($sets) ? 0 : reset($sets);
+        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
+        $days         = count($dateList) - 1;
+        $rate         = $firstTime / $days;
+        $baselineJSON = '[';
+        foreach($dateList as $i => $date) $baselineJSON .='[' . $i . ',' . ($days - $i) * $rate . '],';
+        $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $flotJSON['data']     = $this->report->createSingleJSON($sets, $dateList);
         $flotJSON['limit']    = $limitJSON;
@@ -740,6 +707,9 @@ class project extends control
 
         $charts = $this->report->createJSChartFlot($project->name, $flotJSON, 900, 400);
 
+        $dayList = array_fill(1, floor(count($dateList) / $this->config->project->maxBurnDay) + 5, '');
+        foreach($dayList as $key => $val) $dayList[$key] = ($key + 1) . $this->lang->date->day;
+
         /* Assign. */
         $this->view->title     = $title;
         $this->view->position  = $position;
@@ -747,6 +717,8 @@ class project extends control
         $this->view->charts    = $charts;
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
+        $this->view->interval  = $interval;
+        $this->view->dayList   = array('full' => 1 . $this->lang->date->day) + $dayList;
 
         $this->display();
     }

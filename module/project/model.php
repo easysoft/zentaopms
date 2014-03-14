@@ -1288,11 +1288,10 @@ class projectModel extends model
      * Get burn data for flot 
      * 
      * @param  int    $projectID 
-     * @param  int    $itemCounts 
      * @access public
      * @return void
      */
-    public function getBurnDataFlot($projectID = 0, $itemCounts = 30)
+    public function getBurnDataFlot($projectID = 0)
     {
         /* Get project and burn counts. */
         $project    = $this->getById($projectID);
@@ -1304,7 +1303,6 @@ class projectModel extends model
         $burnData = array();
         foreach($sets as $date => $set) 
         {
-            if($count > $itemCounts)  break;
             if($date > $project->end) continue;
 
             $burnData[$date] = $set;
@@ -1495,12 +1493,25 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getDateList($begin, $end, $type)
+    public function getDateList($begin, $end, $type, $interval = '')
     {
         $begin    = strtotime($begin);
         $end      = strtotime($end);
+
+        $days = ($end - $begin) / 3600 / 24;
+        if($type == 'noweekend')
+        {
+            $mod   = $days % 7;
+            $days  = $days - floor($days / 7) * 2;
+            $days  = $mod == 6 ? $days - 1 : $days;
+        }
+
+        if(!$interval) $interval = floor($days / $this->config->project->maxBurnDay);
+
         $dateList = array();
         $date     = $begin;
+        $spaces   = (int)$interval;
+        $counter  = 0;
         while($date <= $end)
         {
             /* Remove weekend when type is noweekend.*/
@@ -1514,10 +1525,18 @@ class projectModel extends model
                 }
             }
 
+            $counter ++;
+            if($counter <= $spaces)
+            {
+                $date += 24 * 3600;
+                continue;
+            }
+
+            $counter    = 0;
             $dateList[] = date('m/d/Y', $date);
             $date += 24 * 3600;
         }
 
-        return $dateList;
+        return array($dateList, $interval);
     }
 }
