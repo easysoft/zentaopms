@@ -1511,7 +1511,7 @@ class projectModel extends model
         $dateList = array();
         $date     = $begin;
         $spaces   = (int)$interval;
-        $counter  = 0;
+        $counter  = $spaces;
         while($date <= $end)
         {
             /* Remove weekend when type is noweekend.*/
