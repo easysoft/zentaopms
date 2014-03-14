@@ -19,21 +19,27 @@
 /* Height definitions */
 .h-5px {height:5px} .h-10px {height:10px} .h-20px {height:20px} .h-30px {height:30px} .h-35px {height:35px} .h-40px {height:40px} .h-45px {height:45px} .h-50px {height:50px} .h-60px {height:60px} .h-70px {height:70px} .h-80px {height:80px} .h-100px {height:100px} .h-120px {height:120px} .h-130px {height:130px} .h-140px {height:140px} .h-150px {height:150px} .h-200px {height:200px}
 
+/* Style of text */
+.text-latin {font-family: Arial;}
+.text-lg {font-size: 24px;}
+.text-middle,.text-middle td {vertical-align: middle !important;}
+tr.text-center > td, tr.text-center > th {text-align: center;}
+tr.text-center > td.text-left, tr.text-center > th.text-left {text-align: left;}
+
 /* === Components === */
 /* Tables sorters */
-table.tablesorter thead tr div{padding:0; margin:0}
-table.tablesorter thead tr .header{cursor:pointer;}
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red;}
-table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:red}
-table.tablesorter thead tr .header a,table.tablesorter thead tr .headerSortUp a,table.tablesorter thead tr .headerSortDown a{display: inline-block;}
+table.tablesorter thead tr div {padding:0; margin:0}
+table.tablesorter thead tr .header {cursor:pointer;}
+table.tablesorter thead tr .header a,table.tablesorter thead tr .headerSortUp a,table.tablesorter thead tr .headerSortDown a{display: inline-block; text-decoration:none}
+table.tablesorter thead tr .header a{color:#707070;}
 table.tablesorter thead tr .header:after {font-family: ZenIcon; font-weight: normal;content: " \f0dc";font-size: 14px;}
-table.tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \f0d8";font-size: 14px;color:red;}
-table.tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \f0d7";font-size: 14px;color:red;}
+table.tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \f0d8";font-size: 14px;color:#2973EA;}
+table.tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \f0d7";font-size: 14px;color:#2973EA;}
 
 /* Icons */
 .link-icon{color: #498cd0;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
-i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px;}
+i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{display: inline-block;min-width: 13px;min-height: 13px; font-size: 14px}
 .outer td i[class^="icon-"],.outer td i[class*=" icon-"]{font-size: 18px;margin-right: 4px;}
 .outer td i[class^="icon-"].icon-sm,.outer td i[class*=" icon-"].icon-sm{font-size: 0.9em;}
 
@@ -146,7 +152,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .icon-green-testcase-batchCreate:before,
 .icon-gray-testcase-createCase:before,
 .icon-usecases:before,.icon-green-testcase-createCase:before,.icon-green-story-createCase:before {content: "\e600";}
-.icon-tasks:before,.icon-green-task-create:before {content: "\e601";}
+.icon-green-task-create:before {content: "\e601";}
 
 /* === Views === */
 /* Table form */
@@ -161,6 +167,25 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .table-form td > .row {margin-right: 0;}
 .table-form td > .row > [class*="col-"] {padding-right: 0;line-height: 34px}
 .table-form td .checkbox {margin: 0}
+
+/* Panel */
+.panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
+.panel > .panel-heading,.nav-stacked.nav-primary>li.nav-heading,.list > header, #navbar {background-color: #f1f1f1;}
+.panel-pure {box-shadow: none; border: 0; border-radius: 0;}
+.panel-pure .panel-heading {background: transparent;}
+.panel-actions {display: inline-block; margin-left: 8px;}
+.panel-actions .btn-mini {margin-top: -3px;}
+.panel-actions.pull-right{display: block; margin-top: -10px;margin-right: -10px;}
+.panel-actions.pull-right .btn{margin-top: 3px;}
+.panel-heading > h1,.panel-heading > h2,.panel-heading > h3,.panel-heading > h4,.panel-heading > h5,.panel-heading > h6 {margin: 0}
+.panel-actions > .btn.btn-link:hover{background: none; box-shadow: none;}
+.panel-actions a {display: inline-block;}
+.panel .table {margin-bottom: 0;}
+
+.panel .table-bordered {border:none; margin-bottom: 0;}
+.panel .table-bordered > thead > tr:first-child th,.panel .table-bordered > tbody > tr:first-child th,.panel .table-bordered > tr:first-child th {border-top: 0;}
+.panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
+.panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
 
 /* Condensed form */
 .form-condensed .table-form {margin-bottom: 0;}
@@ -178,7 +203,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 
 /* === Layout === */
 /* Background */
-body  {font-size: 12px; color:#141414;padding-bottom: 40px;}
+body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* Header */
 #header {padding: 12px 20px 0; background:#003366;}
@@ -208,8 +233,8 @@ body  {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* Module menu. */
 #modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative;}
-#modulemenu li {padding:4px 0px;display: block; float: left;}
-#modulemenu li a {line-height: 30px; display: block; padding: 2px 7px; color:#003366}
+#modulemenu li {line-height: 30px; padding:5px 0px 1px;display: block; float: left;}
+#modulemenu li a {display: block; padding: 0 7px; color:#003366}
 #modulemenu li > a:hover {background: #d1d1d1; color: #000;}
 #modulemenu li.active > a,#modulemenu li.active > a:hover {color:#21841d; font-weight:bold; }
 #modulemenu li.right {float:right; font-weight:bold;}
@@ -217,7 +242,7 @@ body  {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #modulemenu #myname {display: inline-block; color: #808080; line-height: 34px;}
 
 /* Drop menu. */
-#dropMenu {background: #fff; position:absolute; display:none; font-size:12px; z-index:9999; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);border: 1px solid #CBCBCB; border: 1px solid rgba(0, 0, 0, 0.15); top: 39px; border-top: none; min-width: 250px; padding: 10px 15px 0}
+#dropMenu {background: #fff; position:absolute; display:none; font-size:12px; z-index:9999; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);border: 1px solid #CBCBCB; border: 1px solid rgba(0, 0, 0, 0.15); top: 36px; border-top: none; min-width: 250px; padding: 10px 15px 0;}
 #currentItem {border: 1px solid transparent; padding: 1px 6px;}
 .show > #dropMenu {display: block;}
 .show > #currentItem, .show > #currentItem:hover {background: #fff; border: 1px solid #CBCBCB; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);}
@@ -231,32 +256,20 @@ body  {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #defaultMenu > ul > li:first-child, #moreMenu > ul > li:first-child, #searchResult > ul > li:first-child {margin-top: 10px; border-top: 1px dashed #ddd}
 #defaultMenu > ul > li, #moreMenu > ul > li,#searchResult > ul > li {display: block; float: none; margin: 0 -15px; padding: 2px 10px; border-bottom: 1px dashed #ddd;}
 #defaultMenu > ul > li:hover, #defaultMenu > .actions > a:hover, #moreMenu > ul > li:hover, #searchResult > ul > li:hover {background: #f1f1f1}
-#defaultMenu > ul > li > a, #moreMenu > ul > li > a, #searchResult > ul > li > a {line-height: 20px}
+#defaultMenu > ul > li > a, #moreMenu > ul > li > a, #searchResult > ul > li > a {line-height: 24px}
 #defaultMenu > ul > li > a:hover, #moreMenu > ul > li > a:hover, #searchResult > ul > li > a:hover {background: none}
-#defaultMenu > .actions > a {display: block; text-align: right; margin: 0 -15px; padding-right: 15px;}
+#defaultMenu > .actions > a {display: block; text-align: right; margin: 0 -15px; padding-right: 15px; line-height: 30px}
 #searchResult.show-more #defaultMenu > ul > li, #defaultMenu > .actions > a {border-right: 1px solid #ddd}
 #defaultMenu > .actions > a > i, #defaultMenu > ul > li > a > i, #moreMenu > ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
 #searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}
-#searchResult > ul > li {}
 
-/*#dropMenu #defaultMenu, #dropMenu ul, #dropMenu li {padding:0px}
-#dropMenu #defaultMenu {margin-bottom:20px}
+#projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
-#dropMenu #searchResult {margin:5px 20px 10px;}
-#dropMenu ul {line-height:24px; max-height:320px; overflow-y:auto}
-#dropMenu li {float:none; padding-left:12px}
-#dropMenu, #dropMenu li {text-align: left}
-#dropMenu li a:hover {font-weight: bold}
-#dropMenu li a.mine {color:#1a59b6}
-#dropMenu li a.other, #dropMenu li a.closed, #dropMenu li a.done, #dropMenu #more{color:gray; font-size:12px}
-
-#projectID {background:#e5e5e5; border:1px solid #e5e5e5}*/
-
-
+/* Wrapper */
+#wrap {padding:0 19px 20px 19px; background:#e5e5e5;}
+#wrap .outer {text-align:left; padding:20px; background:#fff;border:1px solid #cfcfcf; -webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
-#wrap{ padding:0 19px 20px 19px; background:#e5e5e5;}
-#wrap .outer {text-align:left; padding:20px;background:#fff;border:1px solid #cfcfcf;-webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
 
 .cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
 .cont tr, .cont td {border:none; padding:0}
@@ -357,12 +370,6 @@ td>select{padding-left: 0;padding-right: 0}
 .navbar li>a:hover {color:#ff3600;}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
-
-
-
-
-
-
 /* Feature bar. */
 #featurebar,#wrap .outer>table.table-1>caption,#wrap .outer>form>table.table-1>caption{height:30px; line-height:30px;background-color: #f8fafe; padding:8px 10px;}
 #featurebar,#wrap .outer>table.table-1>caption {border-bottom: 1px solid #e7edf7;margin: -20px -20px 20px -20px;}

@@ -387,22 +387,13 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-    var winWidth  = window.screen.width;
-    var winHeight = $(window).height();
-    var headerH   = $('#header').height();
-    var navbarH   = $('#modulemenu').height();
-    var footerH   = $('#footer').height() + 15;
-
-    var outerH = winHeight - headerH - footerH - navbarH - 50;
-    if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
-    if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
-    $('.outer').css('min-height', outerH);
-
-    if($.browser.msie && ($.browser.version == "6.0") && !$.support.style)
+    var resetOuterHeight = function()
     {
-        winWidth -= 49;
-        $('#wrap').width(winWidth);
+        $('#wrap .outer').css('min-height', $(window).height() - $('#header').height() - $('#header').height() - 33);        
     }
+
+    $(window).resize(resetOuterHeight);
+    resetOuterHeight();
 }
 
 /**
@@ -906,7 +897,8 @@ $(document).ready(function()
 
     hideClearDataLink();
 
-    $(window).resize(function(){saveWindowSize()});   // When window resized, call it again.
+    $(window).resize(saveWindowSize);   // When window resized, call it again.
+
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
 
     $('.export').bind('click', function()

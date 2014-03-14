@@ -1,22 +1,16 @@
-<div class='block linkbox1' id='projectbox'>
+<div class='panel panel-block' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
-<table class='table-1 a-center' height='138px'>
-  <caption><i class="icon icon-th-large"></i>&nbsp;<?php echo $lang->my->home->projects;?></caption>
-  <tr>
-    <td valign='middle'>
-      <table class='a-left bd-none' align='center'>
-        <tr>
-          <td><?php echo html::a($this->createLink('project', 'create'), $lang->my->home->createProject);?></td>
-          <td><?php echo $lang->my->home->help; ?></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+<div class='panel-heading'>
+  <i class='icon-folder-close-alt icon'></i> <strong><?php echo $lang->my->home->projects;?></strong>
+</div>
+<div class='panel-body text-center'><br><br>
+  <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject,'', "class='btn btn-success'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
+</div>
 <?php else:?>
-  <table class='table-1 fixed colored'>
-    <tr class='colhead'>
-      <th class='w-150px'><div class='f-left'><i class="icon icon-th-large"></i>&nbsp; <?php echo $lang->project->name;?></div></th>
+<table class='table table-condensed table-hover table-striped table-borderless'>
+  <thead>
+    <tr class='text-center'>
+      <th class='w-150px'><div class='text-left'><i class="icon-folder-close-alt icon"></i> <?php echo $lang->project->name;?></div></th>
       <th><?php echo $lang->project->end;?></th>
       <th><?php echo $lang->statusAB;?></th>
       <th><?php echo $lang->project->totalEstimate;?></th>
@@ -25,21 +19,24 @@
       <th class='w-120px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
+  </thead>
+  <tbody>
     <?php foreach($projectStats as $project):?>
-    <tr class='a-center'>
-      <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title=$project->name");?></td>
+    <tr class='text-center'>
+      <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title=$project->name");?></td>
       <td><?php echo $project->end;?></td>
       <td><?php echo $lang->project->statusList[$project->status];?></td>
       <td><?php echo $project->hours->totalEstimate;?></td>
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>
-      <td class='a-left w-150px'>
-        <?php if($project->hours->progress):?><img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: /><?php endif;?>
+      <td class='text-left w-150px'>
+        <div class="progressbar" style='width:<?php echo $project->hours->progress;?>px'>&nbsp;</div>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
-      <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
+      <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
    </tr>
    <?php endforeach;?>
-  </table>
+  </tbody>
+</table>
 <?php endif;?>
 </div>
