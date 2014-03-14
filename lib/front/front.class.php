@@ -297,7 +297,7 @@ EOT;
         }
         elseif($type == 'button')
         {
-            $string .= "<input type='button' name='allchecker' id='allchecker' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            $string .= "<input type='button' name='allchecker' id='allchecker' class='btn btn-select-all' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
         }
 
         return  $string;
@@ -333,7 +333,7 @@ function selectReverse(scope)
 </script>
 EOT;
         global $lang;
-        $string .= "<input type='button' name='reversechecker' id='reversechecker' value='{$lang->selectReverse}' onclick='selectReverse(\"$scope\")'/>";
+        $string .= "<input type='button' name='reversechecker' id='reversechecker' class='btn btn-select-reverse' value='{$lang->selectReverse}' onclick='selectReverse(\"$scope\")'/>";
 
         return  $string;
     }
@@ -457,9 +457,11 @@ EOT;
      * @access public
      * @return string the common button tag.
      */
-    public static function commonButton($label = '', $misc = '', $class = '')
+    public static function commonButton($label = '', $misc = '', $class = '', $icon)
     {
-        return " <input type='button' value='$label' $misc class='btn $class' /> ";
+        if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
+        if($class) $class = 'btn ' . $class; else $class = 'btn';
+        return " <button $misc class='$class'>$label</button>";
     }
 
     /**

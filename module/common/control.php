@@ -297,10 +297,12 @@ class common extends control
 
         /* set the class. */
         if(!$icon) $icon = $method;
-        if(strpos(',edit,copy,report,export,delete,', ",$icon,") !== false) $module = 'common';
-        $color      = $type == 'button' ? 'green' : ($clickable ? 'green' : 'gray');
+        if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $extraClass = strpos(',export,customFields,', ",$method,") !== false ? $method : $extraClass;
-        $class      = $extraClass ? "icon-$color-$module-$icon $extraClass" : "icon-$color-$module-$icon";
+        $class = "icon-$module-$method";
+        if(!$clickable) $class .= ' disabled';
+        if($icon) $class       .= ' icon-' . $icon;
+  
  
         /* Create the icon link. */
         if($clickable)
@@ -319,14 +321,12 @@ class common extends control
                 }
                 else
                 {
-                    $class = "icon-$color-$module-$icon";
                     echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
                 }
                 echo "</span>";
             }
             else
             {
-                $class = "icon-$color-$module-$icon";
                 echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
             }
         }
@@ -334,7 +334,6 @@ class common extends control
         {
             if($type == 'list')
             {
-                $class = "icon-$color-$module-$icon";
                 echo "<i class='disabled $class' title='$title'></i>";
             }
         }

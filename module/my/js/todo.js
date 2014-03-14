@@ -4,5 +4,3 @@ function changeDate(date)
     link = createLink('my', 'todo', 'type=' + date);
     location.href=link;
 }
-
-$(".colorbox").colorbox({width:960, height:550, iframe:true, transition:'none'});
