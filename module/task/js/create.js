@@ -23,6 +23,27 @@ function setOwners(result)
     }
 }
 
+/* Set preview and module of story. */
+function setStoryRelated()
+{
+    setPreview();
+    if($('#module').val() == 0) setStoryModule();
+}
+
+/* Set the story module. */
+function setStoryModule()
+{
+    var storyID = $('#story').val();
+    if(storyID)
+    {
+        var link = createLink('story', 'ajaxGetModule', 'storyID=' + storyID);
+        $.get(link, function(moduleID)
+        {
+            $('#module').val(moduleID);
+        });
+    }
+}
+
 /* Set the story priview link. */
 function setPreview()
 {

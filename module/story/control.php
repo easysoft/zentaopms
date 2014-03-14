@@ -776,10 +776,11 @@ class story extends control
      * @param  int    $projectID 
      * @param  int    $productID 
      * @param  int    $storyID 
+     * @param  string $number
      * @access public
      * @return void
      */
-    public function ajaxGetProjectStories($projectID, $productID = 0, $moduleID = 0, $storyID = 0)
+    public function ajaxGetProjectStories($projectID, $productID = 0, $moduleID = 0, $storyID = 0, $number = '')
     {
         if($moduleID) 
         {
@@ -787,7 +788,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID);
-        die(html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();'));
+        die(html::select('story' . $num, $stories, $storyID, 'class=select-1 onchange=setStoryRelated(' . $num . ');'));
     }
 
     /**
@@ -827,6 +828,19 @@ class story extends control
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->story   = $this->story->getByID($storyID);
         $this->display();
+    }
+
+    /**
+     * AJAX: get module of a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return string 
+     */
+    public function ajaxGetModule($storyID)
+    {
+        $story = $this->story->getByID($storyID); 
+        echo $story->module;
     }
 
     /**

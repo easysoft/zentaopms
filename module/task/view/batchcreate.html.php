@@ -53,13 +53,13 @@
       <td><?php echo $i+1;?></td>
       <td class='a-left' style='overflow:visible'>
         <?php 
-        echo html::select("story[$i]", $stories, $story, "class='select-1'");
+        echo html::select("story[$i]", $stories, $story, "class='select-1' onchange='setStoryRelated($i)'");
         echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
         ?>
       </td>
       <td><?php echo html::input("name[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1');?></td>
-      <td><?php echo html::select("module[$i]", $modules, $module, 'class=select-1')?></td>
+      <td><?php echo html::select("module[$i]", $modules, $module, "class='select-1' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::textarea("desc[$i]", '', "rows='1' class=text-1");?></td>
