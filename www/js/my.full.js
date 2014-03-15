@@ -397,28 +397,6 @@ function setOuterBox()
 }
 
 /**
- * Set the about link. 
- * 
- * @access public
- * @return void
- */
-function setAbout()
-{
-    if($('a.about').size()) $("a.about").colorbox({width:900, height:330, iframe:true, transition:'none', scrolling:false});
-}
-
-/**
- * Set QR Code. 
- * 
- * @access public
- * @return void
- */
-function setQRCode()
-{
-    if($('a.qrCode').size()) $("a.qrCode").colorbox({width:400, height:400, iframe:true, transition:'none', scrolling:false});
-}
-
-/**
  * Set the css of the iframe.
  * 
  * @param  string $color 
@@ -872,12 +850,101 @@ function ajaxDelete(url, replaceID, notice)
     }
 }
 
+/**
+ * Set modal load content with ajax or iframe
+ * 
+ * @access public
+ * @return void
+ */
+function setModal()
+{
+    if($('[data-toggle="modal"]').size() == 0) return false;
+
+    /* Addpend modal div. */
+    $('<div id="ajaxModal" class="modal fade"></div>').appendTo('body');
+
+    $('[data-toggle=modal]').click(function(event)
+    {
+        var $e   = $(this);
+        var url  = $e.attr('href') || $e.data('url');
+        var type = $e.data('type') || 'ajax';
+        if(type == 'iframe')
+        {
+            var options = 
+            {
+                url: url,
+                width: $e.data('width') || 800,
+                height: $e.data('height') || 'auto',
+                icon: $e.data('icon') || 'file-text',
+                title: $e.data('title') || $e.text(),
+                name: $e.data('name') || 'modalIframe'
+            }
+            if(options.height != 'auto') options.height += 'px';
+            var modal = $('#ajaxModal').addClass('modal-loading');
+            modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: {height}'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+
+            var frame = document.getElementById(options.name);
+            frame.onload = frame.onreadystatechange = function()
+            {
+                if (this.readyState && this.readyState != 'complete') return;
+                modal.removeClass('modal-loading');
+                if(options.height == 'auto')
+                {
+                    setTimeout(function()
+                    {
+                        try
+                        {
+                            var $frame = $(window.frames[options.name].document);
+                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').height()}, 200);
+                        }
+                        catch(e){}
+                    }, 100);
+                }
+            }
+            modal.modal('show');
+        }
+        else
+        {
+            $('#ajaxModal').load(url, function()
+            {
+                /* Set the width of modal dialog. */
+                if($e.data('width'))
+                {
+                    var modalWidth = parseInt($e.data('width'));
+                    $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
+                }
+
+                /* show the modal dialog. */
+                $('#ajaxModal').modal('show');
+            });
+        }
+
+        /* Save the href to rel attribute thus we can save it. */
+        $('#ajaxModal').attr('rel', url);
+
+        return false;
+    });
+}
+
+/**
+ * Set table behavior
+ * 
+ * @access public
+ * @return void
+ */
+function setTableBehavior()
+{
+    $('#wrap .table td').click(function(){$(this).closest('tr').toggleClass('active');});
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
+    setModal();
+    setTableBehavior();
     setForm();
     saveWindowSize();
     setDebugWin('white');
@@ -886,8 +953,6 @@ $(document).ready(function()
     setRequiredFields();
     setPlaceholder();
 
-    setAbout();
-    setQRCode();
     setExport();
     setRepoLink();
 

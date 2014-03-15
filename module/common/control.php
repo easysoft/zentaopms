@@ -327,14 +327,14 @@ class common extends control
             }
             else
             {
-                echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
+                echo html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title'", false);
             }
         }
         else
         {
             if($type == 'list')
             {
-                echo "<i class='disabled $class' title='$title'></i>";
+                echo "<button class='disabled btn-icon'><i class='$class' title='$title'></i></button>";
             }
         }
     }
