@@ -64,6 +64,7 @@ $lang->extension->byCategory    = 'By Category';
 
 $lang->extension->installFailed            = '%s failed, the reason is:';
 $lang->extension->uninstallFailed          = 'Uninstall failed, the reason is:';
+$lang->extension->confirmUninstall         = 'Uninstall will delete or modify database, whether to uninstall?';
 $lang->extension->installFinished          = 'Good, the extension has been %s successfully.';
 $lang->extension->refreshPage              = 'Refresh';
 $lang->extension->uninstallFinished        = 'Extension has been successfully uninstalled.';
@@ -78,6 +79,7 @@ $lang->extension->successInstallDB         = 'Successfully installed database.';
 $lang->extension->viewInstalled            = 'View installed extensions.';
 $lang->extension->viewAvailable            = 'View available extensions';
 $lang->extension->viewDeactivated          = 'View deactivated extensions';
+$lang->extension->backDBFile               = 'Plug-related data has been backed up to %s file!';
 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Install';

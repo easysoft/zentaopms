@@ -339,8 +339,15 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function uninstall($extension)
+    public function uninstall($extension, $confirm = 'no')
     {
+        $dbFile = $this->extension->getDBFile($extension, 'uninstall');
+        if($confirm == 'no' and file_exists($dbFile))
+        {
+            $this->view->confirm = 'no';
+            $this->view->code    = $extension;
+            die($this->display());
+        }
 
         $dependsExts = $this->extension->checkDepends($extension);
         if($dependsExts)
@@ -350,6 +357,8 @@ class extension extends control
         }
 
         if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
+
+        if(file_exists($dbFile)) $this->view->backDBName = $this->extension->backupDB($extension);
 
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));

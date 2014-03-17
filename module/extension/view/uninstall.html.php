@@ -15,14 +15,21 @@
   <caption><?php echo $title;?></caption>
   <tr>
     <td valign='middle'>
-    <?php if(!empty($error)):?>
-      <?php 
-      echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>"; 
-      echo "<p>$error</p>";
-      ?>
+    <?php if(isset($confirm) and $confirm == 'no'):?>
+    <?php
+    echo "<p class='waring'>{$lang->extension->confirmUninstall}";
+    echo html::a(inlink('uninstall', "extension=$code&confirm=yes"), $lang->extension->uninstall);
+    echo "</p>";
+    ?>
+    <?php elseif(!empty($error)):?>
+    <?php 
+    echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>"; 
+    echo "<p>$error</p>";
+    ?>
     <?php else:?>
     <?php
     echo "<h3 class='a-center success'>{$title}</h3>";
+    if(!empty($backDBName)) echo '<p>' . sprintf($lang->extension->backDBFile, $backDBName) . '</p>';
     if($removeCommands)
     {
         echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";

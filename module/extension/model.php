@@ -410,6 +410,7 @@ class extensionModel extends model
     public function checkDownloadPath()
     {
         /* Init the return. */
+        $return = new stdclass();
         $return->result = 'ok';
         $return->error  = '';
 
@@ -730,6 +731,40 @@ class extensionModel extends model
         }
         if($return->error) $return->result = 'fail';
         return $return;
+    }
+
+    /**
+     * Backup db when uninstall extension. 
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return bool|string
+     */
+    public function backupDB($extension)
+    {
+        $zdb = $this->app->loadClass('zdb');
+
+        $sqls = file_get_contents($this->getDBFile($extension, 'uninstall'));
+        $sqls = explode(';', $sqls);
+
+        $backupTables = array();
+        foreach($sqls as $sql)
+        {
+            $sql = trim($sql);
+            if(preg_match('/^DROP TABLE `?([^` ]*)`?|^ALTER TABLE `?([^` ]*)`? .*DROP .+/i', $sql, $out))
+            {
+                if(!empty($out[1])) $backupTables[] = $out[1];
+                if(!empty($out[2])) $backupTables[] = $out[2];
+            }
+        }
+
+        if($backupTables)
+        {
+            $backDBName = $this->app->getTmpRoot() . $extension . date('Ymd') . '.sql';
+            if($zdb->backupDB($backDBName, $backupTables) == 0) return $backDBName;
+            return false; 
+        }
+        return false; 
     }
 
     /**
