@@ -319,6 +319,12 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group {float: left; margin-right: 10px}
 .outer .table tfoot .pager {margin: 0;}
 
+/* Pager. */
+.pager {margin-bottom:0;line-height: 30px; color: #999}
+#_recPerPage, #_pageID, .pager .btn{display: inline-block; min-width: 30px; font-size: 10px; padding: 1px 4px; line-height: 20px; height: 24px}
+#_recPerPage {width: 60px}
+#goto {padding: 1px 6px;}
+
 /* modal with iframe */
 .modal-iframe .modal-body {transition: all 0.5s; padding: 0}
 .body-modal {padding-bottom: 0; overflow: hidden;}
@@ -494,12 +500,6 @@ td>select{padding-left: 0;padding-right: 0}
 
 /* Debug. */
 .debugwin {display:none; width:50px; height:20px; bottom:50px; position:fixed;}
-
-/* Pager. */
-.pager {margin-bottom:0;line-height: 26px;}
-#_recPerPage{height: 22px;}
-#_pageID,#_recPerPage{padding: 1px}
-#goto{padding-left: 2px;padding-right: 2px;}
 
 /* Search. */
 #searchform .searchSelect, #searchform .searchInput, #searchform #queryID{background:#f9f9f9;}

@@ -1,7 +1,7 @@
 .panel-block {height: 207px;overflow: auto; padding: 0}
 .panel-block.dynamic {height: 435px;}
 .panel-block .panel-heading {padding: 6px 10px; margin: 0;}
-.panel-block .panel-actions {line-height: 36px}
+.panel-block .panel-actions {line-height: 36px; margin-right: -5px;}
 .panel > .table > thead > tr > th, .panel > form > .table > thead > tr > th {background: #f1f1f1}
 .panel-block td, .panel-block th {padding: 6px;}
 .panel-block.dynamic td {padding: 6px 6px 5px}
