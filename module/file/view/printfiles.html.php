@@ -5,7 +5,7 @@ $sessionString .= session_name() . '=' . session_id();
 <style>.button-c {padding:1px}</style>
 <script language='Javascript'>
 $(function(){
-     $(".edit").colorbox({width:400, height:200, iframe:true, transition:'none', scrolling:true});
+     $(".edit").colorbox({width:400, height:230, iframe:true, transition:'none', scrolling:true});
 })
 
 /* Delete a file. */
@@ -32,9 +32,14 @@ function downloadFile(fileID)
   <?php
   foreach($files as $file)
   {
-      if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
-      common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "class='edit'");
-      if(common::hasPriv('file', 'delete'))   echo "<a class='link-icon' href='###' onclick='deleteFile($file->id)'><i class='icon-remove'></i></a>";
+      if(common::hasPriv('file', 'download'))
+      {
+          echo '<div>';
+          echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
+          common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit link-icon' title='{$lang->file->edit}'");
+          if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='link-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
+          echo '</div>';
+      }
   }
   ?>
   </div>
