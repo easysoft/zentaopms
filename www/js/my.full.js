@@ -389,7 +389,7 @@ function setOuterBox()
 {
     var resetOuterHeight = function()
     {
-        $('#wrap .outer').css('min-height', $(window).height() - $('#header').height() - $('#header').height() - 33);        
+        $('#wrap .outer').css('min-height', $(window).height() - $('#header').height() - $('#footer').height() - 33);
     }
 
     $(window).resize(resetOuterHeight);
@@ -934,7 +934,7 @@ function setModal()
  */
 function setTableBehavior()
 {
-    $('#wrap .table td').click(function(){$(this).closest('tr').toggleClass('active');});
+    $('#wrap .table tbody td').click(function(){$(this).closest('tr').toggleClass('active');});
 }
 
 /* Ping the server every some minutes to keep the session. */
