@@ -1,6 +1,6 @@
 VERSION=$(shell head -n 1 VERSION)
 
-all: prepare pms zstory ztask ztest
+all: prepare pms
 clean:
 	rm -fr {zentaopms,zentaostory,zentaotask,zentaotest,storyext,taskext,testext}
 	rm -fr *.tar.gz

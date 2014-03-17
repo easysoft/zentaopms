@@ -788,7 +788,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID);
-        die(html::select('story' . $num, $stories, $storyID, 'class=select-1 onchange=setStoryRelated(' . $num . ');'));
+        die(html::select('story' . $number, $stories, $storyID, 'class=select-1 onchange=setStoryRelated(' . $number . ');'));
     }
 
     /**
