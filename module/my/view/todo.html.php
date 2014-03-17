@@ -65,7 +65,7 @@
     <tr class='text-center'>
       <td class='text-left'>
         <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
-        <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />         
+        <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
         <?php endif;?>
         <?php echo $todo->id; ?>
       </td>
