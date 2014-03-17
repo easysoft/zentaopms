@@ -12,9 +12,9 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-100px {width:100px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px}
+.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px}
 
-.w-id {width:55px;} .w-pri {width:30px;} .w-severity {width:40px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:50px} .w-type {width:80px} .w-resolution {width:60px}
+.w-id {width:55px;} .w-pri {width:30px;} .w-severity {width:40px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
 /* Height definitions */
 .h-5px {height:5px} .h-10px {height:10px} .h-20px {height:20px} .h-30px {height:30px} .h-35px {height:35px} .h-40px {height:40px} .h-45px {height:45px} .h-50px {height:50px} .h-60px {height:60px} .h-70px {height:70px} .h-80px {height:80px} .h-100px {height:100px} .h-120px {height:120px} .h-130px {height:130px} .h-140px {height:140px} .h-150px {height:150px} .h-200px {height:200px}
@@ -293,8 +293,11 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #poweredby {float: right;margin-right: 20px;}
 
 /* Feature bar. */
-#featurebar {padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px}
-#featurebar .nav {height: 30px}
+#featurebar {padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px;}
+#featurebar .heading {float: left; padding: 0 6px}
+#featurebar .heading > i {color: #666}
+#featurebar .heading + .nav, #featurebar .heading + .btn-group + .nav {border-left: 1px solid #ddd; padding-left: 5px;}
+#featurebar .nav {height: 30px; float: left;}
 #featurebar .nav > li {float: left; margin-right: 2px;}
 #featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px}
 #featurebar .nav > li > .form-control.form-date {width: 110px}
@@ -309,7 +312,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table th {vertical-align: middle;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
-.outer .table tfoot td {border-top: 1px solid #e5e5e5; padding-top: 8px}
+.outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 8px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
 .outer .table tfoot .btn {padding: 4px 12px;}
 .outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; color: #666}
