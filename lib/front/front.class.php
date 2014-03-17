@@ -243,7 +243,7 @@ class html
     static public function selectAll($scope = "", $type = "button", $checked = false)
     {
         $string = <<<EOT
-<script type="text/javascript">
+<script>
 function selectAll(checker, scope, type)
 { 
     if(scope)
@@ -312,7 +312,7 @@ EOT;
     static public function selectReverse($scope = "")
     {
         $string = <<<EOT
-<script type="text/javascript">
+<script>
 function selectReverse(scope)
 { 
     if(scope)
@@ -533,7 +533,7 @@ class js
     public static function import($url, $version = '')
     {
         if(!$version) $version = filemtime(__FILE__);
-        echo "<script src='$url?v=$version' type='text/javascript'></script>\n";
+        echo "<script src='$url?v=$version'></script>\n";
     }
 
     /**
@@ -545,8 +545,8 @@ class js
      */
     static private function start($full = true)
     {
-        if($full) return "<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><style>body{background:white}</style><script language='Javascript'>";
-        return "<script language='Javascript'>";
+        if($full) return "<html><meta charset=utf-8'/><style>body{background:white}</style><script>";
+        return "<script>";
     }
 
     /**
