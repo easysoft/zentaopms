@@ -858,16 +858,16 @@ function ajaxDelete(url, replaceID, notice)
  */
 function setModal()
 {
-    if($('[data-toggle="modal"]').size() == 0) return false;
+    if($('[data-toggle="modal"], a.iframe').size() == 0) return false;
 
     /* Addpend modal div. */
     $('<div id="ajaxModal" class="modal fade"></div>').appendTo('body');
 
-    $('[data-toggle=modal]').click(function(event)
+    $('[data-toggle=modal], a.iframe').click(function(event)
     {
         var $e   = $(this);
         var url  = $e.attr('href') || $e.data('url');
-        var type = $e.data('type') || 'ajax';
+        var type = $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
         if(type == 'iframe')
         {
             var options = 
@@ -875,11 +875,16 @@ function setModal()
                 url: url,
                 width: $e.data('width') || 800,
                 height: $e.data('height') || 'auto',
-                icon: $e.data('icon') || 'file-text',
-                title: $e.data('title') || $e.text(),
+                icon: $e.data('icon') || '?',
+                title: $e.data('title') || $e.attr('title') || $e.text(),
                 name: $e.data('name') || 'modalIframe'
             }
             if(options.height != 'auto') options.height += 'px';
+            if(options.icon == '?')
+            {
+                var i = $e.find("[class^='icon-']");
+                options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
+            }
             var modal = $('#ajaxModal').addClass('modal-loading');
             modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: {height}'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
