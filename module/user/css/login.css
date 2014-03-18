@@ -6,6 +6,7 @@ html,body{background-color: #036}
 #login-panel .panel-actions{float: right;position: absolute;right: 15px;top: 18px;padding: 0}
 #login-panel .panel-actions .dropdown {display: inline-block; margin-right: 2px}
 #mobile {font-size: 28px; padding: 1px 12px; line-height: 28px}
+#mobile i {font-size: 28px;}
 #login-panel .panel-content{padding-left: 150px;background:url('theme/default/images/main/zt-logo.png') 50px top no-repeat; min-height: 161px}
 #login-panel .panel-content table{border: none;width: 300px;margin: 20px auto}
 #login-panel .panel-content .button-s{width: 80px}

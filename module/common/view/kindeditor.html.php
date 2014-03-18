@@ -2,6 +2,7 @@
 <?php
 $module = $this->moduleName;
 $method = $this->methodName;
+js::set('themeRoot', $themeRoot);
 if(!isset($config->$module->editor->$method)) return;
 $editor = $config->$module->editor->$method;
 $editor['id'] = explode(',', $editor['id']);
@@ -46,8 +47,11 @@ function initKindeditor(afterInit)
         var K = KindEditor, $editor = $('#' + editorID);
         keEditor = K.create('#' + editorID,
         {
+            cssPath:[v.themeRoot + 'zui/css/min.css'],
+            width:'100%',
             items:editorTool,
             filterMode: true, 
+            bodyClass:'article-content',
             cssPath:['<?php echo $jsRoot?>kindeditor/plugins/code/prettify.css'],
             urlType:'relative', 
             uploadJson: createLink('file', 'ajaxUpload'),

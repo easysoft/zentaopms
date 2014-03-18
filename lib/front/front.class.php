@@ -197,10 +197,13 @@ class html
         $string  = '';
         foreach($options as $key => $value)
         {
+            $string .= "<label class='radio-inline'>\n";
             $string .= "<input type='radio' name='$name' value='$key' ";
             $string .= ($key == $checked) ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /><label for='$name$key'>$value</label>\n";
+            $string .= " id='$name$key' />\n ";
+            $string .= $value;
+            $string .= '</label>';
         }
         return $string;
     }
@@ -224,10 +227,10 @@ class html
         foreach($options as $key => $value)
         {
             $key     = str_replace('item', '', $key);
-            $string .= "<div class='checkbox'><label><input type='checkbox' name='{$name}[]' value='$key' ";
+            $string .= "<label class='checkbox-inline'><input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /> $value</label></div>\n";
+            $string .= " id='$name$key' /> $value</label>\n";
         }
         return $string;
     }

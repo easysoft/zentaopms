@@ -201,7 +201,9 @@ function setRequiredFields()
     requiredFields = config.requiredFields.split(',');
     for(i = 0; i < requiredFields.length; i++)
     {
-        $('#' + requiredFields[i]).after('<span class="star"> * </span>');
+        $('#' + requiredFields[i]).closest('td,th').prepend("<div class='required required-wrapper'></div>");
+        var colEle = $('#' + requiredFields[i]).closest('[class*="col-"]');
+        if(colEle.parent().hasClass('form-group')) colEle.addClass('required');
     }
 }
 
@@ -890,8 +892,23 @@ function setModal()
  */
 function setTableBehavior()
 {
-    $('#wrap .table tbody td').click(function(){$(this).closest('tr').toggleClass('active');});
+    $('#wrap .table:not(.table-data, .table-form) tbody td').click(function(){$(this).closest('tr').toggleClass('active');});
 }
+
+/**
+ * Make form condensed
+ * 
+ * @access public
+ * @return void
+ */
+function condensedForm()
+{
+    $('.form-condensed legend').click(function()
+    {
+        $(this).closest('fieldset').toggleClass('collapsed');
+    });
+}
+
 
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
@@ -899,6 +916,7 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
+    condensedForm();
     setModal();
     setTableBehavior();
     setForm();

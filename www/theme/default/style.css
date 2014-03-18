@@ -12,7 +12,7 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px}
+.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px}
 
 .w-id {width:60px;} .w-pri {width:30px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
@@ -192,6 +192,30 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .table-data th, .table-data td {padding: 5px;}
 .table-data th {text-align: right;}
 
+/* Condensed form */
+.form-condensed .table-form {margin-bottom: 0;}
+.form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
+.form-condensed .table-form td + td, .form-condensed .table-form th + th {padding-left: 5%;}
+.form-condensed fieldset {background-color: #eee; padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 6px; position: relative;}
+.form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
+.form-condensed fieldset .table-form {margin-bottom: 0;}
+.form-condensed fieldset.collapsed {padding: 1px;}
+.form-condensed fieldset.collapsed .table-form {display: none}
+.form-condensed legend {font-size: 12px; font-weight: bold; border:0px solid red; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666}
+.form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}
+.form-condensed legend:hover {color: #333;}
+.form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
+
+/* Required field */
+form .star {display: none;}/* hide star */
+.required:after{font-family: arial;font-size: 24px}
+[class*="col-"].required {position: relative;}
+[class*="col-"].required:after {position: absolute; top: 6px; right: 2px}
+.control-label.required:after{right: -10px}
+
+.required-wrapper{position: relative;width: 100%; height: 0;overflow: visible;}
+.required-wrapper.required:after{right: -13px;top: 4px}
+
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
 .panel > .panel-heading,.nav-stacked.nav-primary>li.nav-heading,.list > header, #navbar {background-color: #f1f1f1;}
@@ -210,20 +234,6 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .panel .table-bordered > thead > tr:first-child th,.panel .table-bordered > tbody > tr:first-child th,.panel .table-bordered > tr:first-child th {border-top: 0;}
 .panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
 .panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
-
-/* Condensed form */
-.form-condensed .table-form {margin-bottom: 0;}
-.form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
-.form-condensed .table-form td + td, .form-condensed .table-form th + th {padding-left: 5%;}
-.form-condensed fieldset {background-color: #eee; padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 6px; position: relative;}
-.form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
-.form-condensed fieldset .table-form {margin-bottom: 0;}
-.form-condensed fieldset.collapsed {padding: 1px;}
-.form-condensed fieldset.collapsed .table-form {display: none}
-.form-condensed legend {font-size: 12px; font-weight: bold; border:0px solid red; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666}
-.form-condensed legend:before {font-family: ZenIcon; content: '\f0d7'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; margin-bottom: -3px; -webkit-font-smoothing: antialiased;}
-.form-condensed legend:hover {color: #333;}
-.form-condensed fieldset.collapsed legend:before {content: '\f0da'}
 
 /* === Layout === */
 /* Background */
@@ -335,9 +345,13 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .table-actions {float: left;}
 .table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group {float: left; margin-right: 10px}
 .outer .table tfoot .pager {margin: 0;}
+
+/* Container in outer */
 .outer .container {padding: 20px;}
 .outer .container .table-form, .outer .container .table-data {margin-top: 10px;}
 
+/* Form in outer */
+form > .btn {margin-right: 10px;}
 
 /* Pager. */
 .pager {margin-bottom:0;line-height: 30px; color: #999}

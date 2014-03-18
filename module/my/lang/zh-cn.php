@@ -39,3 +39,6 @@ $lang->my->home->productHome   = '访问产品主页';
 $lang->my->home->createProject = "创建一个项目？";
 $lang->my->home->createProduct = "创建一个产品？";
 $lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>帮助文档</a>";
+
+$lang->my->form->lblBasic   = '基本信息';
+$lang->my->form->lblContact = '联系信息';
