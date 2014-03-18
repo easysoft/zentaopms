@@ -751,7 +751,10 @@ class treeModel extends model
     public function getAllChildId($moduleID)
     {
         if($moduleID == 0) return array();
+
         $module = $this->getById((int)$moduleID);
+        if(empty($module)) return array();
+
         return $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like($module->path . '%')->fetchPairs();
     }
 
@@ -949,6 +952,8 @@ class treeModel extends model
     public function delete($moduleID, $null = null)
     {
         $module  = $this->getById($moduleID);
+        if(empty($module)) return false;
+
         $childs  = $this->getAllChildId($moduleID);
         $childs[$moduleID] = $moduleID;
 
@@ -959,6 +964,8 @@ class treeModel extends model
         if($module->type == 'story') $this->dao->update(TABLE_STORY)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
         if($module->type == 'bug')   $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
         if($module->type == 'case')  $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
+
+        return true;
     }
 
     /**

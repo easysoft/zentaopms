@@ -280,12 +280,13 @@ class tree extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->tree->confirmDelete, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->tree->confirmDelete, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
         {
-            $this->tree->delete($moduleID);
+            $result = $this->tree->delete($moduleID);
+            if(!$result) die();
+
             die(js::reload('parent'));
         }
     }
