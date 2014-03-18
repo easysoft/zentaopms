@@ -240,8 +240,8 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </nobr>
     </td>
-    <td class='a-center' width='60'><nobr><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'])?></nobr></td>
-    <td class='a-right'>
+    <td class='a-center'><nobr><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'])?></nobr></td>
+    <td class='a-right' width='380'>
       <nobr>
       <?php
       for($i = 1; $i <= $groupItems; $i ++)
