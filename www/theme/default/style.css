@@ -12,9 +12,9 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px}
+.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px}
 
-.w-id {width:55px;} .w-pri {width:30px;} .w-severity {width:40px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
+.w-id {width:60px;} .w-pri {width:30px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
 /* Height definitions */
 .h-5px {height:5px} .h-10px {height:10px} .h-20px {height:20px} .h-30px {height:30px} .h-35px {height:35px} .h-40px {height:40px} .h-45px {height:45px} .h-50px {height:50px} .h-60px {height:60px} .h-70px {height:70px} .h-80px {height:80px} .h-100px {height:100px} .h-120px {height:120px} .h-130px {height:130px} .h-140px {height:140px} .h-150px {height:150px} .h-200px {height:200px}
@@ -25,6 +25,7 @@
 .text-middle,.text-middle td {vertical-align: middle !important;}
 tr.text-center > td, tr.text-center > th {text-align: center;}
 tr.text-center > td.text-left, tr.text-center > th.text-left {text-align: left;}
+tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: right;}
 
 /* === Components === */
 /* Table */
@@ -166,9 +167,11 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .icon-green-task-create:before {content: "\e601";}
 
 /* Button icon */
-.btn-icon {border-radius: 4px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0}
+.btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0; color: #498CD0; text-align: center;}
 .btn-icon:hover {text-decoration: none; background: #145CCD; color: #fff;}
-.btn-icon.disabled:hover {background: none; color: #ccc; cursor: default}
+.btn-icon.disabled:hover, .btn-icon.disabled:hover > i {background: none!important; color: #ccc!important; cursor: default}
+.btn-icon.text-danger {color: #D2322D}
+.btn-icon.text-danger:hover {background: #D2322D; color: #fff}
 
 /* === Views === */
 /* Table form */
@@ -183,6 +186,11 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .table-form td > .row {margin-right: 0;}
 .table-form td > .row > [class*="col-"] {padding-right: 0;line-height: 34px}
 .table-form td .checkbox {margin: 0}
+.table-form td .btn + .btn {margin-left: 8px;}
+
+/* Table data */
+.table-data th, .table-data td {padding: 5px;}
+.table-data th {text-align: right;}
 
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
@@ -234,6 +242,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #topnav > a, #topnav > .dropdown > a, #companyname a {color:#d1e4f2;text-decoration:none;}
 #topnav > a:hover, #topnav > .dropdown > a:hover, #companyname a:hover {color: #fff;}
 #companyname {color:#ffcc00; font-weight: normal; margin: 0}
+#companyname a {display: inline-block; margin-left: 4px;}
 
 #mainmenu {margin-top: 12px; width: 100%; position: relative;}
 #mainmenu li {float: left;}
@@ -294,9 +303,10 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* Feature bar. */
 #featurebar {padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px;}
-#featurebar .heading {float: left; padding: 0 6px}
-#featurebar .heading > i {color: #666}
-#featurebar .heading + .nav, #featurebar .heading + .btn-group + .nav {border-left: 1px solid #ddd; padding-left: 5px;}
+#featurebar .heading {float: left; padding: 0 5px; color: #666}
+#featurebar .heading:after {content: "\e6e1"; font-family: ZenIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
+#featurebar .heading > i {color: #808080}
+
 #featurebar .nav {height: 30px; float: left;}
 #featurebar .nav > li {float: left; margin-right: 2px;}
 #featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px}
@@ -306,9 +316,12 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}
 #featurebar .btn-group {margin-right: 5px;}
 #featurebar .btn {padding: 4px 12px}
-#featurebar .btn > i {display: inline-block; margin-right: 2px; color: #666}
+#featurebar .btn > i {display: inline-block; margin-right: 2px; opacity: 0.8}
 
 /* table in outer */
+.outer .table .btn-icon {margin-left: -2px}
+.outer .table thead tr th {text-align: center;}
+.outer .table tbody td {vertical-align: middle;}
 .outer .table th {vertical-align: middle;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
@@ -319,8 +332,12 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table tfoot .datepicker-wrapper:before {top: 5px}
 .outer .table tfoot .form-control.form-date {width: 110px}
 .outer .table tfoot .input-wrapper {display:  inline-block;}
+.table-actions {float: left;}
 .table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group {float: left; margin-right: 10px}
 .outer .table tfoot .pager {margin: 0;}
+.outer .container {padding: 20px;}
+.outer .container .table-form, .outer .container .table-data {margin-top: 10px;}
+
 
 /* Pager. */
 .pager {margin-bottom:0;line-height: 30px; color: #999}

@@ -11,22 +11,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
-  <div class='f-left'>
+  <div class='heading'><i class='icon-bug'></i> <?php echo $lang->my->bug;?></div>
+  <nav class='nav'>
     <?php
-    echo "<span id='assignedToTab'>"  . html::a(inlink('bug', "type=assignedTo"),  $lang->bug->assignToMe)    . "</span>";
-    echo "<span id='openedByTab'>"    . html::a(inlink('bug', "type=openedBy"),    $lang->bug->openedByMe)    . "</span>";
-    echo "<span id='resolvedByTab'>"  . html::a(inlink('bug', "type=resolvedBy"),  $lang->bug->resolvedByMe)  . "</span>";
-    echo "<span id='closedByTab'>"    . html::a(inlink('bug', "type=closedBy"),    $lang->bug->closedByMe)    . "</span>";
+    echo "<li id='assignedToTab'>"  . html::a(inlink('bug', "type=assignedTo"),  $lang->bug->assignToMe)    . "</li>";
+    echo "<li id='openedByTab'>"    . html::a(inlink('bug', "type=openedBy"),    $lang->bug->openedByMe)    . "</li>";
+    echo "<li id='resolvedByTab'>"  . html::a(inlink('bug', "type=resolvedBy"),  $lang->bug->resolvedByMe)  . "</li>";
+    echo "<li id='closedByTab'>"    . html::a(inlink('bug', "type=closedBy"),    $lang->bug->closedByMe)    . "</li>";
     ?>
-  </div>
+  </nav>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-  <table class='table-1 fixed tablesorter colored' id='bugList'>
+  <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='bugList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
-    <tr class='colhead'>
+    <tr class='text-center'>
       <th class='w-id'>        <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-severity'>  <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
       <th class='w-pri'>       <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
@@ -41,26 +41,26 @@
     <tbody>
     <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
     <?php foreach($bugs as $bug):?>
-    <tr class='a-center'>
-      <td class='a-left'>
+    <tr class='text-center'>
+      <td class='text-left'>
         <?php if($canBatchEdit):?><input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '_blank');?>
       </td>
       <td><span class='<?php echo 'severity' . $lang->bug->severityList[$bug->severity]?>'><?php echo isset($lang->bug->severityList[$bug->severity]) ? $lang->bug->severityList[$bug->severity] : $bug->severity;?></span></td>
       <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri]?>'><?php echo isset($lang->bug->priList[$bug->pri]) ? $lang->bug->priList[$bug->pri] : $bug->pri?></span></td>
       <td><?php echo $lang->bug->typeList[$bug->type]?></td>
-      <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+      <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
       <td><?php echo $users[$bug->openedBy];?></td>
       <td><?php echo $users[$bug->resolvedBy];?></td>
       <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
-      <td class='a-right'>
+      <td class='text-right'>
         <?php
         $params = "bugID=$bug->id";
-        common::printIcon('bug', 'confirmBug', $params, $bug, 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'assignTo',   $params, '', 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-        common::printIcon('bug', 'edit',       $params, '', 'list');
+        common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   $params, '', 'list', 'hand-right', '', 'iframe', true);
+        common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'ok-sign', '', 'iframe', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'list', 'off', '', 'iframe text-danger', true);
+        common::printIcon('bug', 'edit',       $params, '', 'list', 'pencil');
         ?>
       </td>
     </tr>
@@ -69,8 +69,8 @@
     <tfoot>
       <tr><td colspan='9'>
       <?php if($bugs and $canBatchEdit):?>
-      <div class='f-left'>
-      <?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->edit);?>
+      <div class='table-actions clearfix'>
+      <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton("<i class='icon-edit'></i> " . $lang->edit);?>
       </div>
       <?php endif;?>
       <?php $pager->show();?>

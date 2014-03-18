@@ -11,24 +11,30 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table align='center' class='table-4 a-left'> 
-    <caption><?php echo $lang->my->changePassword;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->user->account;?></th>
-      <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->user->password;?></th>
-      <td><?php echo html::password('password1');?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->user->password2;?></th>
-      <td><?php echo html::password('password2');?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
-    </tr>
-  </table>
-</form>
+<div class='container w-500px'>
+  <div id='featurebar'>
+    <div class='heading'><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></div>
+  </div>
+  <form method='post' target='hiddenwin'>
+    <table align='center' class='table table-form w-400px'> 
+      <tr>
+        <th class='rowhead w-100px'><?php echo $lang->user->account;?></th>
+        <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->user->password;?></th>
+        <td><?php echo html::password('password1', '', "class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->user->password2;?></th>
+        <td><?php echo html::password('password2', '', "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><?php echo html::submitButton('', '', 'btn-primary') . html::backButton();?></td>
+      </tr>
+    </table>
+  </form>  
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

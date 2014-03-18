@@ -760,55 +760,6 @@ function selectItem(SelectID)
 }
 
 /**
- * Set modal for list page.
- *
- * Open operation pages in modal for list pages, after the modal window close, reload the list content and repace the replaceID.
- * 
- * @param string   colorboxClass   the class for colorbox binding.
- * @param string   replaceID       the html object to be replaced.
- * @access public
- * @return void
- */
-function setModal4List(colorboxClass, replaceID, callback, width, height)
-{
-    if(typeof(width) == 'undefined') width = 900
-    if(typeof(height) == 'undefined') height = 500
-    $('.' + colorboxClass).colorbox(
-    {
-        width: width,
-        height: height,
-        iframe: true,
-        transition: 'none',
-
-        onCleanup:function()
-        {
-            var selfClose = $.cookie('selfClose');
-            if(selfClose != 1) return;
-            saveWindowSize();
-
-            var link = self.location.href;
-            $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
-            $('#tmpDiv').load(link + ' #' + replaceID, function()
-            {
-                $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                setModal4List(colorboxClass, replaceID, callback, width, height);
-
-                try{$('.colored').colorize();}catch(err){}
-                $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                try
-                {
-                    $(".date").datePicker({createButton:true, startDate:startDate})
-                    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
-                }
-                catch(err){}
-                if(typeof(callback) == 'function') callback();
-                $.cookie('selfClose', 0);
-            });
-        }
-    });
-}
-
-/**
  * Delete item use ajax.
  * 
  * @param  string url 
@@ -900,7 +851,7 @@ function setModal()
                         try
                         {
                             var $frame = $(window.frames[options.name].document);
-                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').height()}, 200);
+                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').height()}, 100);
                         }
                         catch(e){}
                     }, 100);

@@ -11,21 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
-  <?php 
-  echo '<span id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</span>';
-  echo '<span id="yesterday">'  . html::a(inlink('dynamic', "type=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
-  echo '<span id="twodaysago">' . html::a(inlink('dynamic', "type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
-  echo '<span id="thisweek">'   . html::a(inlink('dynamic', "type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
-  echo '<span id="lastweek">'   . html::a(inlink('dynamic', "type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
-  echo '<span id="thismonth">'  . html::a(inlink('dynamic', "type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
-  echo '<span id="lastmonth">'  . html::a(inlink('dynamic', "type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
-  echo '<span id="all">'        . html::a(inlink('dynamic', "type=all"),        $lang->action->dynamic->all)        . '</span>';
-  ?>
+  <div class='heading'><i class='icon-volume-up'></i> <?php echo $lang->my->dynamic;?></div>
+  <nav class='nav'>
+    <?php 
+    echo '<li id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</li>';
+    echo '<li id="yesterday">'  . html::a(inlink('dynamic', "type=yesterday"),  $lang->action->dynamic->yesterday)  . '</li>';
+    echo '<li id="twodaysago">' . html::a(inlink('dynamic', "type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</li>';
+    echo '<li id="thisweek">'   . html::a(inlink('dynamic', "type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</li>';
+    echo '<li id="lastweek">'   . html::a(inlink('dynamic', "type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</li>';
+    echo '<li id="thismonth">'  . html::a(inlink('dynamic', "type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</li>';
+    echo '<li id="lastmonth">'  . html::a(inlink('dynamic', "type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</li>';
+    echo '<li id="all">'        . html::a(inlink('dynamic', "type=all"),        $lang->action->dynamic->all)        . '</li>';
+    ?>
+  </nav>
 </div>
 
-<table class='table-1 colored tablesorter fixed'>
+<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>
@@ -40,13 +42,13 @@
   <tbody>
   <?php foreach($actions as $action):?>
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo $action->date;?></td>
     <td><?php echo $app->user->realname;?></td>
     <td><?php echo $action->actionLabel;?></td>
     <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
     <td><?php echo $action->objectID;?></td>
-    <td class='a-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
+    <td class='text-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
   </tr>
   <?php endforeach;?>
   </tbody>

@@ -11,24 +11,24 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <script language="Javascript">var type='<?php echo $type;?>';</script>
 <div id='featurebar'>
-  <div class='f-left'>
+  <div class='heading'><i class='icon-tasks'></i> <?php echo $lang->my->task;?></div>
+  <ul class='nav'>
     <?php
-    echo "<span id='assignedToTab'>" . html::a(inlink('task', "type=assignedTo"),  $lang->my->taskMenu->assignedToMe) . "</span>";
-    echo "<span id='openedByTab'>"   . html::a(inlink('task', "type=openedBy"),    $lang->my->taskMenu->openedByMe)   . "</span>";
-    echo "<span id='finishedByTab'>" . html::a(inlink('task', "type=finishedBy"),  $lang->my->taskMenu->finishedByMe) . "</span>";
-    echo "<span id='closedByTab'>"   . html::a(inlink('task', "type=closedBy"),    $lang->my->taskMenu->closedByMe)   . "</span>";
-    echo "<span id='canceledByTab'>" . html::a(inlink('task', "type=canceledBy"),  $lang->my->taskMenu->canceledByMe) . "</span>";
+    echo "<li id='assignedToTab'>" . html::a(inlink('task', "type=assignedTo"),  $lang->my->taskMenu->assignedToMe) . "</li>";
+    echo "<li id='openedByTab'>"   . html::a(inlink('task', "type=openedBy"),    $lang->my->taskMenu->openedByMe)   . "</li>";
+    echo "<li id='finishedByTab'>" . html::a(inlink('task', "type=finishedBy"),  $lang->my->taskMenu->finishedByMe) . "</li>";
+    echo "<li id='closedByTab'>"   . html::a(inlink('task', "type=closedBy"),    $lang->my->taskMenu->closedByMe)   . "</li>";
+    echo "<li id='canceledByTab'>" . html::a(inlink('task', "type=canceledBy"),  $lang->my->taskMenu->canceledByMe) . "</li>";
     ?>
-  </div>
+  </ul>
 </div>
 <form method='post' id='myTaskForm'>
-  <table class='table-1 tablesorter fixed colored' id='tasktable'>
+  <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
-    <tr class='colhead'>
+    <tr class='text-center'>
       <th class='w-id'>    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
       <th class='w-150px'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
@@ -46,28 +46,28 @@
     <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <?php foreach($tasks as $task):?>
-    <tr class='a-center'>
-      <td class='a-left'>
+    <tr class='text-center'>
+      <td class='text-left'>
         <?php if($canBatchEdit or $canBatchClose):?><input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>
       <td><span class='<?php echo 'pri' . $lang->task->priList[$task->pri];?>'><?php echo isset($lang->task->priList[$task->pri]) ? $lang->task->priList[$task->pri] : $task->pri;?></span></td>
-      <td class='nobr a-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
-      <td class='a-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
+      <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
+      <td class='text-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
       <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class='<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
       <td><?php echo $users[$task->openedBy];?></td>
-      <td class='a-right'>
+      <td class='text-right'>
         <?php 
-        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'edit', "taskID=$task->id", '', 'list');
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', 'hand-right', '', 'iframe', true);
+        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', 'play', '', 'iframe', true);
+        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'off', '', 'iframe text-danger', true);
+        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list', 'ok-sign', '', 'iframe', true);
+        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', 'remove', '', 'iframe', true);
+        common::printIcon('task', 'edit', "taskID=$task->id", '', 'list', 'pencil');
         ?>
       </td>
     </tr>
@@ -77,18 +77,18 @@
       <tr>
         <td colspan='11'>
         <?php if(count($tasks)):?>
-        <div class='f-left'>
+        <div class='table-actions clearfix'>
         <?php 
-        if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
+        if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
         if($canBatchEdit)
         {
             $actionLink = $this->createLink('task', 'batchEdit', "projectID=0&orderBy=$orderBy");
-            echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+            echo html::commonButton("<i class='icon-edit'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\"");
         }
         if($canBatchClose)
         {
             $actionLink = $this->createLink('task', 'batchClose');
-            echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+            echo html::commonButton("<i class='icon-remove'></i> " . $lang->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
         }
          ?>
         </div> 

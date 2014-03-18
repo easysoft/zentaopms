@@ -15,11 +15,7 @@
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
-    <div class='btn-group pull-right'>
-      <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn'") ?>
-      <?php echo html::a(helper::createLink('todo', 'batchCreate'), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
-      <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
-    </div>
+    <div class='heading'><i class='icon-folder-open-alt'></i> <?php echo $lang->my->todo;?>  </div>
     <ul class='nav'>
       <?php 
       foreach($lang->todo->periods as $period => $label)
@@ -43,7 +39,12 @@
       }
       ?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
-    </ul>
+    </ul>  
+    <div class='btn-group pull-right'>
+      <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn'") ?>
+      <?php echo html::a(helper::createLink('todo', 'batchCreate'), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
+      <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
+    </div>
   </div>
   <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>

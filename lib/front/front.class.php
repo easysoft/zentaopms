@@ -411,14 +411,14 @@ EOT;
      * @access public
      * @return string the submit button tag.
      */
-    public static function submitButton($label = '', $misc = '')
+    public static function submitButton($label = '', $misc = '', $class = '')
     {
         if(empty($label))
         {
             global $lang;
             $label = $lang->save;
         }
-        return " <input type='submit' id='submit' value='$label' $misc class='btn btn-submit btn-primary' /> ";
+        return " <button type='submit' id='submit' $misc class='btn btn-submit $class'>$label</button>";
     }
 
     /**
@@ -428,10 +428,14 @@ EOT;
      * @access public
      * @return string the reset button tag.
      */
-    public static function resetButton()
+    public static function resetButton($label = '', $misc = '', $class = '')
     {
-        global $lang;
-        return " <input type='reset' id='reset' value='{$lang->reset}' class='btn btn-reset' /> ";
+        if(empty($label))
+        {
+            global $lang;
+            $label = $lang->reset;
+        }
+        return " <button type='reset' id='reset' class='btn btn-reset $class'>$label</button>";
     }
 
     /**
