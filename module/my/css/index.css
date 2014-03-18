@@ -1,4 +1,4 @@
-.panel-block {height: 207px;overflow: auto; padding: 0}
+.panel-block {height: 208px;overflow: auto; padding: 0}
 .panel-block.dynamic {height: 435px;}
 .panel-block .panel-heading {padding: 6px 10px; margin: 0;}
 .panel-block .panel-actions {line-height: 36px; margin-right: -5px;}
@@ -9,3 +9,4 @@
 .panel-block td .progressbar {display: inline-block; height: 16px; background: #229F24;}
 .panel-block .icon {color: #666; display: inline-block; margin-right: 2px;}
 #wrap .outer {padding: 20px 20px 0}
+.outer .panel-block .table tbody > tr:last-child td {border-bottom: none}

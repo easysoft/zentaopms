@@ -13,14 +13,20 @@
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <style>
-.helplink {display:none}
-.button-s, .button-r, .button-c {padding:3px} 
-.select-1 {width:80%}
-.text-2{margin-bottom:2px; width:123px}
-.select-2{margin-bottom:2px}
-#searchform input.date{width:110px}
 </style>
 <script language='Javascript'>
+var dtOptions = 
+{
+    language: '<?php echo $this->app->getClientLang();?>',
+    weekStart: 1,
+    todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    minView: 2,
+    forceParse: 0,
+    format: 'yyyy-mm-dd'
+};
 
 $(function() {
     $('.date').each(function(){
@@ -33,10 +39,7 @@ $(function() {
             $('.date').val(time);
         }
     });
-
-    startDate = new Date(1970, 1, 1);
-    $(".date").datePicker({createButton:true, startDate:startDate, displayDynamic:true})
-        .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+    $(".date").datetimepicker(dtOptions);
 });
 
 var params        = <?php echo json_encode($fieldParams);?>;
@@ -61,7 +64,7 @@ function setField(fieldName, fieldNO)
 
     if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
-        $("#value" + fieldNO).datePicker({createButton:true, startDate:startDate, displayDynamic:true})
+        $("#value" + fieldNO).datetimepicker(dtOptions);
         $("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
         var groupItems = <?php echo $config->search->groupItems?>;
         var maxNO      = 2 * groupItems;
@@ -73,7 +76,7 @@ function setField(fieldName, fieldNO)
             $('#operator' + nextNO).val('<=');
             $('#valueBox' + nextNO).html($('#box' + fieldName).children().clone());
             $('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
-            $("#value" + nextNO).datePicker({createButton:true, startDate:startDate, displayDynamic:true});
+            $("#value" + nextNO).datetimepicker(dtOptions);
             $("#value" + nextNO).addClass('date');
         }
     }
@@ -187,18 +190,17 @@ function deleteQuery()
 foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
-    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', "class='select-2 searchSelect'");
-    if($param['control'] == 'input')  echo html::input($fieldName, '', "class='text-2 searchInput'");
+    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', "class='form-control searchSelect'");
+    if($param['control'] == 'input')  echo html::input($fieldName, '', "class='form-control searchInput'");
     echo '</span>';
 }
 ?>
 </div>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform'>
-<table class='table-1'>
-  <tr valign='middle'>
-    <th width='50'><i class="icon icon-search icon-large"></i></th>
-    <td class='a-right'>
-      <nobr>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform' class='form-condensed'>
+<table class='table table-condensed table-form'>
+  <tr>
+    <td>
+      <table class='table'>
       <?php
       $formSessionName = $module . 'Form';
       $formSession     = $this->session->$formSessionName;
@@ -206,102 +208,108 @@ foreach($fieldParams as $fieldName => $param)
       $fieldNO = 1;
       for($i = 1; $i <= $groupItems; $i ++)
       {
-          $spanClass = $i == 1 ? 'inline' : 'hidden';
-          echo "<div><span id='searchbox$fieldNO' class='$spanClass'>";
+          $spanClass = $i == 1 ? '' : 'hidden';
+          echo "<tr id='searchbox$fieldNO' class='$spanClass'>";
 
           /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
           $param        = $fieldParams[$currentField];
 
           /* Print and or. */
+          echo "<td class='text-right w-60px'>";
           if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
-          if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
+          if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
+          echo '</td>';
 
           /* Print field. */
-          echo html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)'");
+          echo "<td class='w-100px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
 
           /* Print operator. */
-          echo html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"]);
+          echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
           /* Print value. */
-          echo "<span id='valueBox$fieldNO'>";
-          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='select-2 searchSelect'");
+          echo "<td id='valueBox$fieldNO'>";
+          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect'");
           if($param['control'] == 'input') 
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass searchInput'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput'");
           }
-          echo '</span>';
+          echo '</td>';
 
           $fieldNO ++;
-          echo '</span></div>';
+          echo '</tr>';
       }
       ?>
-      </nobr>
+      </table>
     </td>
-    <td class='a-center' width='60'><nobr><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'])?></nobr></td>
-    <td class='a-right'>
-      <nobr>
+    <td class='text-center nobr'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control w-60px'")?></td>
+    <td>
+      <table class='table'>
       <?php
       for($i = 1; $i <= $groupItems; $i ++)
       {
-          $spanClass = $i == 1 ? 'inline' : 'hidden';
-          echo "<div><span id='searchbox$fieldNO' class='$spanClass'>";
+          $spanClass = $i == 1 ? '' : 'hidden';
+          echo "<tr id='searchbox$fieldNO' class='$spanClass'>";
 
           /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
           $param        = $fieldParams[$currentField];
 
           /* Print and or. */
+          echo "<td class='text-right w-60px'>";
           if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
-          if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
+          if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
+          echo '</td>';
 
           /* Print field. */
-          echo html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)'");
+          echo "<td class='w-100px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
 
           /* Print operator. */
-          echo html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"]);
+          echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
           /* Print value. */
-          echo "<span id='valueBox$fieldNO'>";
-          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='select-2 searchSelect'");
+          echo "<td id='valueBox$fieldNO'>";
+          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect'");
 
           if($param['control'] == 'input')
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass searchInput'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput'");
           }
-          echo '</span>';
+          echo '</td>';
 
           $fieldNO ++;
-          echo '</span></div>';
+          echo '</tr>';
       }
       ?>
-      </nobr>
+      </table>
     </td>
-    <td width='150'> 
-      <nobr>
+    <td class='w-180px'> 
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
-      echo html::submitButton($lang->search->common);
-      echo html::commonButton($lang->search->reset, 'onclick=resetForm();');
-      echo html::commonButton($lang->save, 'onclick=saveQuery()');
+      echo "<div class='btn-group'>";
+      echo html::submitButton("<i class='icon-search'></i> " . $lang->search->common, '', 'btn-primary');
+      echo html::commonButton($lang->search->reset, 'onclick=resetForm(); class=btn');
+      echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
+      echo '</div>';
       ?>
-      </nobr>
     </td>
-    <td width='180'>
+    <td class='w-120px'>
+      <div class='input-group'>
       <?php
-      echo html::select('queryID', $queries, $queryID, 'class=select-1 onchange=executeQuery(this.value)');
-      if(common::hasPriv('search', 'deleteQuery')) echo html::a('javascript:deleteQuery()', '<i class="link-icon icon-remove"></i>', '', '');
+      echo html::select('queryID', $queries, $queryID, 'onchange=executeQuery(this.value) class=form-control');
+      if(common::hasPriv('search', 'deleteQuery')) echo "<span class='input-group-btn'>" . html::a('javascript:deleteQuery()', '<i class="icon-remove"></i>', '', 'class=btn') . '</span>';
       ?>
+      </div>
     </td>
     <th width='50' class='a-center' style='cursor:pointer; padding:0'>
-      <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x link-icon"></i></a>
-      <a id="searchlite" href="javascript:showlite()" class="hidden"><i class="icon-double-angle-up icon-2x link-icon"></i></a>
+      <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
+      <a id="searchlite" href="javascript:showlite()" class="hidden"><i class="icon-double-angle-up icon-2x"></i></a>
       <?php echo html::hidden('formType', 'lite');?>
     </th>
   </tr>

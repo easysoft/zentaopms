@@ -495,7 +495,7 @@ function setRepoLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:650, height:240, iframe:true, transition:'none', scrolling:true});
+   // if($('.export').size()) $(".export").colorbox({width:650, height:240, iframe:true, transition:'none', scrolling:true});
 }
 
 /**
@@ -578,7 +578,6 @@ function toggleSearch()
             if(browseType == 'bymodule')
             {
                 $('#treebox').addClass('hidden');
-                $('.divider').addClass('hidden');
                 $('#bymoduleTab').removeClass('active');
             }
             else
@@ -587,14 +586,13 @@ function toggleSearch()
             }
             $('#bysearchTab').addClass('active');
             ajaxGetSearchForm();
-            $('#querybox').removeClass('hidden');
+            $('#querybox').addClass('show');
         },
         function()
         {
             if(browseType == 'bymodule')
             {
                 $('#treebox').removeClass('hidden');
-                $('.divider').removeClass('hidden');
                 $('#bymoduleTab').addClass('active');
             }
             else
@@ -602,7 +600,7 @@ function toggleSearch()
                 $('#' + browseType +'Tab').addClass('active');
             }
             $('#bysearchTab').removeClass('active');
-            $('#querybox').addClass('hidden');
+            $('#querybox').removeClass('show');
         } 
     );
 }
@@ -617,7 +615,8 @@ function ajaxGetSearchForm()
 {
     if($('#querybox').html() == '')
     {
-        $.get(createLink('search', 'buildForm'), function(data){
+        $.get(createLink('search', 'buildForm'), function(data)
+        {
             $('#querybox').html(data);
         });
     }

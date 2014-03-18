@@ -314,16 +314,14 @@ class common extends control
             }
             if($type == 'button')
             {
-                echo "<span class='link-button'>";
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='$extraClass'", true);
+                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass'", true);
                 }
                 else
                 {
-                    echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
+                    echo html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title'", false);
                 }
-                echo "</span>";
             }
             else
             {

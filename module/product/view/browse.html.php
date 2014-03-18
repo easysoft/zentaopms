@@ -12,45 +12,46 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<?php include '../../common/view/dropmenu.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
-  <div class='f-left'>
-    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
-    <span id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></span>
-    <span id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></span>
-    <span id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></span>
-    <span id='closedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedByMe"),   $lang->product->closedByMe);?></span>
-    <span id='draftstoryTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=draftStory"),   $lang->product->draftStory);?></span>
-    <span id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></span>
-    <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
-    <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
-    <span id='bysearchTab' ><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->product->searchStory;?></a></span>
-  </div>
-  <div class='f-right'>
+  <nav class='nav'>
+    <li id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></li>
+    <li id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></li>
+    <li id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></li>
+    <li id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></li>
+    <li id='closedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedByMe"),   $lang->product->closedByMe);?></li>
+    <li id='draftstoryTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=draftStory"),   $lang->product->draftStory);?></li>
+    <li id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></li>
+    <li id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></li>
+    <li id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></li>
+    <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
+  </nav>
+  <div class='actions'>
+    <div class='btn-group'>
+      <div class="btn-group">
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+          <i class='icon-download-alt'></i> <?php echo $lang->export ?>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='exportActionMenu'>
+        <?php 
+        $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
+        $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+        echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
+        <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
+    </div>
+    <div class='btn-group'>
     <?php 
-    echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick='toggleSubMenu(this.id,\"bottom\",0)' title='{$lang->export}'");
-    echo '</span>';
-
-    common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");
-    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); 
+    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'button', 'plus-sign');
+    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID", '', 'button', 'plus'); 
     ?>
+    </div>
   </div>
+  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
-<div id='exportActionMenu' class='listMenu hidden'>
-  <ul>
-  <?php 
-  $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
-  $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy") : '#';
-  echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
-  ?>
-  </ul>
-</div>
-
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <div class='treeSlider' id='storyTree'><span>&nbsp;</span></div>
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>

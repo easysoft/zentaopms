@@ -12,7 +12,7 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px}
+.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px}
 
 .w-id {width:60px;} .w-pri {width:30px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
@@ -54,6 +54,8 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 .link-icon{color: #498cd0;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{font-size: 14px}
+
+i.icon-2x[class^="icon-"], i.icon-2x[class*=" icon-"], .link-icon i.icon-2x[class^="icon-"], .link-icon i.icon-2x[class*=" icon-"] {font-size: 2em}
 
 .icon-green-testcase-import:before,.icon-gray-testcase-import:before,
 .icon-green-common-import:before,.icon-gray-common-import:before{content: "\f019";}
@@ -187,6 +189,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .table-form td > .row > [class*="col-"] {padding-right: 0;line-height: 34px}
 .table-form td .checkbox {margin: 0}
 .table-form td .btn + .btn {margin-left: 8px;}
+.table-form td .btn-group .btn + .btn {margin-left: -1px;}
 
 /* Table data */
 .table-data th, .table-data td {padding: 5px;}
@@ -196,7 +199,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed .table-form {margin-bottom: 0;}
 .form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
 .form-condensed .table-form td + td, .form-condensed .table-form th + th {padding-left: 5%;}
-.form-condensed fieldset {background-color: #eee; padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 6px; position: relative;}
+.form-condensed fieldset {background-color: #eee; padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 2px; position: relative;}
 .form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
 .form-condensed fieldset .table-form {margin-bottom: 0;}
 .form-condensed fieldset.collapsed {padding: 1px;}
@@ -325,8 +328,10 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .nav > li.active > a, #featurebar .nav > li.active > a:hover, #featurebar .nav > li.active > a:active, #featurebar .nav > li.active > a:focus {font-weight: bold; color: #333}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}
 #featurebar .btn-group {margin-right: 5px;}
+#featurebar .btn-group > .btn-group {margin-right: 0;}
 #featurebar .btn {padding: 4px 12px}
 #featurebar .btn > i {display: inline-block; margin-right: 2px; opacity: 0.8}
+#featurebar .actions {float: right; margin-top: -2px;}
 
 /* table in outer */
 .outer .table .btn-icon {margin-left: -2px}
@@ -345,6 +350,24 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .table-actions {float: left;}
 .table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group {float: left; margin-right: 10px}
 .outer .table tfoot .pager {margin: 0;}
+
+/* Querybox */
+#querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none; padding: 10px}
+#querybox.show {display: block; height: auto}
+#bysearchTab {transition: all 0.3s;}
+#bysearchTab.active {background: #fff; padding: 2px 10px 3px; border: 1px solid #ddd; border-bottom: none}
+#bysearchTab.active:hover {background: #f1f1f1}
+#bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
+#featurebar .nav {z-index: 999; position: relative;}
+#querybox .form-control {padding: 2px;}
+#querybox .table-form td {border: none}
+#querybox .btn {padding: 5px 8px;}
+#querybox .table-form td td {padding: 2px;}
+#querybox .table .table {margin: 0;}
+.outer #querybox .table tr > th:first-child, .outer #querybox .table tr > td:first-child,
+.outer #querybox .table tr > th:last-child, .outer #querybox .table tr > td:last-child,
+.outer #querybox .table tbody > tr:last-child td {padding: 2px}
+#querybox a:hover {text-decoration: none;}
 
 /* Container in outer */
 .outer .container {padding: 20px;}
@@ -464,23 +487,6 @@ td>select{padding-left: 0;padding-right: 0}
 .navbar li>a:hover {color:#ff3600;}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
-/* Querybox */
-#querybox{margin: -20px -20px 20px -20px;background-color: #ffc;}
-#querybox table{border: none;border-bottom: 1px solid #e5e5e5;}
-#querybox td{vertical-align: middle;}
-#querybox select,#querybox input[type="text"]{min-width: 95px;max-width: 140px;}
-#querybox input[type="text"]{min-width: 80px;width: 130px;}
-#querybox select[name='value1'],#querybox select[name='value2'],#querybox select[name='value3'],#querybox select[name='value4'],#querybox select[name='value5'],#querybox select[name='value6']{min-width: 80px;width: 140px}
-#querybox .button-c,#querybox .button-s{width: auto;min-width: 42px; margin-right:5px;}
-#querybox select[name='operator6'],#querybox select[name='operator5'],  #querybox select[name='operator4'],#querybox select[name='operator3'],  #querybox select[name='operator2'],#querybox select[name='operator1'],  #querybox select[name='groupAndOr'],#querybox select[name='andOr1'],#querybox select[name='andOr2'],#querybox select[name='andOr3'],#querybox select[name='andOr4'],#querybox select[name='andOr5'],#querybox select[name='andOr6']{width: 65px;min-width: 65px;}
-#querybox select[name='field4'],#querybox select[name='field3'],#querybox select[name='field5'],#querybox select[name='field6'],
-#querybox select[name='field2'],#querybox select[name='field1']{width: 95px;}
-#querybox select[name='queryID']{width:90%;} 
-@media(max-width:1220px)
-{
-  #querybox input[type="text"],#querybox select[name='value3'],#querybox select[name='value5']{min-width: 70px;width: 70px;}
-}
-
 /* Tree slider. */
 .treeSlider{position:absolute;background-color: #bbb;background-repeat: repeat-x;border: 1px solid #bbb;border-left:none;cursor: pointer;width: 8px;height: 50px;left: 20px;border-radius:0px 10px 10px 0px}
 .treeSlider span {position:absolute;top:40%;left:2px;border-bottom: 4px solid transparent;border-top: 4px solid transparent;border-right: 4px solid #000000;border-left: 0 none;height: 0;width: 0;}
