@@ -13,6 +13,20 @@
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <style>
+#bysearchTab {transition: all 0.3s;}
+#bysearchTab.active {background: #fff; padding: 2px 10px 3px; border: 1px solid #ddd; border-bottom: none}
+#bysearchTab.active:hover {background: #f1f1f1}
+#bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
+#featurebar .nav {z-index: 999; position: relative;}
+#querybox .form-control {padding: 2px;}
+#querybox .table-form td {border: none}
+#querybox .btn {padding: 5px 8px;}
+#querybox .table-form td td {padding: 2px;}
+#querybox .table .table {margin: 0;}
+.outer #querybox .table tr > th:first-child, .outer #querybox .table tr > td:first-child,
+.outer #querybox .table tr > th:last-child, .outer #querybox .table tr > td:last-child,
+.outer #querybox .table tbody > tr:last-child td {padding: 2px}
+#querybox a:hover {text-decoration: none;}
 </style>
 <script language='Javascript'>
 var dtOptions = 

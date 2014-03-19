@@ -279,11 +279,8 @@ function toggleHelpLink()
 function hideTreeBox(treeType)
 {
     $.cookie(treeType, 'hide', {expires:config.cookieLife, path:config.webRoot});
-    $('.side').hide();
-    $('.divider').hide();
-    $('.treeSlider span').css("border-right", "0 none");
-    $('.treeSlider span').css("border-left", "4px solid #000000");
-
+    $('.outer').addClass('hide-side');
+    $('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
 }
 
 /**
@@ -296,10 +293,8 @@ function hideTreeBox(treeType)
 function showTreeBox(treeType)
 {
     $.cookie(treeType, 'show', {expires:config.cookieLife, path:config.webRoot});
-    $('.side').show();
-    $('.divider').show();
-    $('.treeSlider span').css("border-right", "4px solid #000000");
-    $('.treeSlider span').css("border-left", "0 none");
+    $('.outer').removeClass('hide-side');
+    $('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
 }
 
 /**
@@ -310,11 +305,11 @@ function showTreeBox(treeType)
  */
 function toggleTreeBox()
 {
-    var treeType = $('.treeSlider').attr('id');
+    var treeType = $('.side-handle').data('id');
     if(typeof treeType == 'undefined') return;
     if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
 
-    $('.treeSlider').toggle
+    $('.side-handle').toggle
     (
         function()
         {
@@ -389,9 +384,14 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
+    if($('#treebox').length) $('.outer').addClass('with-side');
+
     var resetOuterHeight = function()
     {
-        $('#wrap .outer').css('min-height', $(window).height() - $('#header').height() - $('#footer').height() - 33);
+        var height = $(window).height() - $('#header').height() - $('#footer').height() - 33;
+        $('#wrap .outer').css('min-height', height);
+        /* uncomment to ajust treebox height */
+        // $('#treebox').css('min-height', height - $('#featurebar').height() - 18);
     }
 
     $(window).resize(resetOuterHeight);

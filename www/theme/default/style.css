@@ -305,7 +305,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* Wrapper */
 #wrap {padding:0 19px 20px 19px; background:#e5e5e5;}
-#wrap .outer {text-align:left; background:#fff;border:1px solid #cfcfcf; -webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
+#wrap .outer {position: relative; text-align:left; background:#fff;border:1px solid #cfcfcf; -webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);}
 
 /* Footer. */
 #footer {position: relative; width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #e1e1e1; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);}
@@ -334,6 +334,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .actions {float: right; margin-top: -2px;}
 
 /* table in outer */
+.outer .table {margin-bottom: 0;}
 .outer .table .btn-icon {margin-left: -2px}
 .outer .table thead tr th {text-align: center;}
 .outer .table tbody td {vertical-align: middle;}
@@ -341,6 +342,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
 .outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 8px}
+.outer .table tfoot .dropdown-menu {min-width: 100px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
 .outer .table tfoot .btn {padding: 4px 12px;}
 .outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; color: #666}
@@ -348,30 +350,35 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table tfoot .form-control.form-date {width: 110px}
 .outer .table tfoot .input-wrapper {display:  inline-block;}
 .table-actions {float: left;}
-.table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group {float: left; margin-right: 10px}
+.table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group, .table-actions > .text {float: left; margin-right: 10px;}
+.table-actions > .text {line-height: 30px; color: #808080}
+.table-actions > .text strong {color: #333}
 .outer .table tfoot .pager {margin: 0;}
 
 /* Querybox */
 #querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none; padding: 10px}
 #querybox.show {display: block; height: auto}
-#bysearchTab {transition: all 0.3s;}
-#bysearchTab.active {background: #fff; padding: 2px 10px 3px; border: 1px solid #ddd; border-bottom: none}
-#bysearchTab.active:hover {background: #f1f1f1}
-#bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
-#featurebar .nav {z-index: 999; position: relative;}
-#querybox .form-control {padding: 2px;}
-#querybox .table-form td {border: none}
-#querybox .btn {padding: 5px 8px;}
-#querybox .table-form td td {padding: 2px;}
-#querybox .table .table {margin: 0;}
-.outer #querybox .table tr > th:first-child, .outer #querybox .table tr > td:first-child,
-.outer #querybox .table tr > th:last-child, .outer #querybox .table tr > td:last-child,
-.outer #querybox .table tbody > tr:last-child td {padding: 2px}
-#querybox a:hover {text-decoration: none;}
 
 /* Container in outer */
 .outer .container {padding: 20px;}
 .outer .container .table-form, .outer .container .table-data {margin-top: 10px;}
+
+/* side */
+.outer.with-side #featurebar {margin-bottom: 20px;}
+.outer.with-side .main, .outer.with-side .side + form, .outer.with-side .main, .outer.with-side .side + table {margin-left: 220px; margin-right: 20px; transition: all 0.3s;}
+.outer.with-side .main, .outer > form > .table {border: 1px solid #ddd}
+.outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}
+.outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 8px}
+.outer .side {width: 180px; position: absolute; left: 20px; background: #fafafa; border: 1px solid #ddd; transition: all 0.3s;}
+.outer .side > header {padding: 5px 15px; line-height: 20px; border-bottom: 1px solid #ddd; background: #f1f1f1}
+.outer .side-body {padding: 10px;}
+.outer .side .side-handle {position: absolute; right: 5px; top: 4px; width: 22px; line-height: 18px; border: 1px solid #ddd; background: #e5e5e5; border-radius: 2px; color: #666; transition: all 0.3s;}
+.outer .side .side-handle:hover {background: #fff; color: #333}
+
+.outer.hide-side .side{width: 0; border: none;}
+.outer.hide-side .side > header, .outer.hide-side .side-body {display: none;}
+.outer.hide-side .side .side-handle {right: -1px; top: -1px; border-radius: 0 4px 4px 0}
+.outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 30px}
 
 /* Form in outer */
 form > .btn {margin-right: 10px;}
@@ -387,25 +394,6 @@ form > .btn {margin-right: 10px;}
 .body-modal {padding-bottom: 0; overflow: hidden;}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
-
-.cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
-.cont tr, .cont td {border:none; padding:0}
-.cont-lt1 tr, .cont-lt2 tr, .cont-lt3 tr, .cont-lt4 tr, .cont-lt5 tr {border:none; padding:0}
-.cont-lt1 td, .cont-lt2 td, .cont-lt3 td, .cont-lt4 td, .cont-lt5 td {border:none; padding:0}
-.cont-rt1 tr, .cont-rt2 tr, .cont-rt3 tr, .cont-rt4 tr, .cont-rt5 tr {border:none; padding:0}
-.cont-rt1 td, .cont-rt2 td, .cont-rt3 td, .cont-rt4 td, .cont-rt5 td {border:none; padding:0}
-
-.cont-lt1 .side, .cont-rt1 .side {width:160px}
-.cont-lt2 .side, .cont-rt2 .side {width:180px}
-.cont-lt3 .side, .cont-rt3 .side {width:240px}
-.cont-lt4 .side, .cont-rt4 .side {width:300px}
-.cont-lt5 .side, .cont-rt5 .side {width:336px}
-
-.side-search .text-1{width: 54%;margin: 0;}
-.side-search .button-s{padding:2px 0;width: 30%;margin: 0;}
-
-.cont-lt1 .divider,.cont-lt2 .divider,.cont-lt3 .divider,.cont-lt4 .divider,.cont-lt5 .divider {width:10px}
-.cont-rt1 .divider,.cont-rt2 .divider,.cont-rt3 .divider,.cont-rt4 .divider,.cont-rt5 .divider {width:10px}
 
 .f-left {float:left; padding-left: 5px}
 .f-right {float:right; padding-right:5px}
