@@ -735,7 +735,6 @@ class projectModel extends model
         $project->totalLeft     = round($total->totalLeft, 1);
 
         if($setImgSize) $project->desc = $this->loadModel('file')->setImgSize($project->desc);
-        if($setImgSize) $project->goal = $this->loadModel('file')->setImgSize($project->goal);
 
         return $project;
     }

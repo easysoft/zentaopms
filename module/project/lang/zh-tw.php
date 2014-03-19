@@ -27,7 +27,6 @@ $lang->project->status        = '項目狀態';
 $lang->project->statge        = '所處階段';
 $lang->project->pri           = '優先順序';
 $lang->project->desc          = '項目描述';
-$lang->project->goal          = '項目目標';
 $lang->project->openedBy      = '由誰創建';
 $lang->project->openedDate    = '創建日期';
 $lang->project->closedBy      = '由誰關閉';

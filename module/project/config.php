@@ -12,10 +12,10 @@ $config->project->create->requiredFields = 'name,code,begin,end';
 $config->project->edit->requiredFields   = 'name,code,begin,end';
 
 $config->project->editor = new stdclass();
-$config->project->editor->create = array('id' => 'desc,goal', 'tools' => 'simpleTools');
-$config->project->editor->edit   = array('id' => 'desc,goal', 'tools' => 'simpleTools');
-$config->project->editor->putoff = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->create  = array('id' => 'desc',    'tools' => 'simpleTools');
+$config->project->editor->edit    = array('id' => 'desc',    'tools' => 'simpleTools');
+$config->project->editor->putoff  = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->close   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->project->editor->suspend = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->project->search['module']                   = 'task';

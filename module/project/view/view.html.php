@@ -47,10 +47,6 @@
   <tr valign='top'>
     <td>
       <fieldset>
-        <legend><?php echo $lang->project->goal;?></legend>
-        <div class='content'><?php echo $project->goal;?></div>
-      </fieldset>
-      <fieldset>
         <legend><?php echo $lang->project->desc;?></legend>
         <div class='content'><?php echo $project->desc;?></div>
       </fieldset>
