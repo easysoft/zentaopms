@@ -23,7 +23,7 @@ class testtask extends control
     {
         parent::__construct();
         $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getPairs();
+        $this->view->products = $this->products = $this->product->getPairs('nocode');
     }
 
     /**

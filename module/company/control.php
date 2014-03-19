@@ -194,12 +194,12 @@ class company extends control
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Get products' list.*/
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('nocode');
         $products = array($this->lang->product->select) + $products;
         $this->view->products = $products;
 
         /* Get projects' list.*/
-        $projects = $this->loadModel('project')->getPairs();
+        $projects = $this->loadModel('project')->getPairs('nocode');
         $projects = array($this->lang->project->select) + $projects;
         $this->view->projects = $projects; 
 

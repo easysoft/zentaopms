@@ -378,7 +378,7 @@ class project extends control
         $this->app->session->set('projectList', $uri);
 
         $this->loadModel('bug');
-        $projects = $this->project->getPairs();
+        $projects = $this->project->getPairs('nocode');
         $this->project->setMenu($projects, $projectID);
 
         /* Load pager. */

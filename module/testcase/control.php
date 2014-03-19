@@ -25,7 +25,7 @@ class testcase extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
-        $this->view->products = $this->products = $this->product->getPairs();
+        $this->view->products = $this->products = $this->product->getPairs('nocode');
     }
 
     /**

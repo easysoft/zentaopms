@@ -325,7 +325,7 @@ class productplan extends control
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
-        $products  = $this->product->getPairs();
+        $products  = $this->product->getPairs('nocode');
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 

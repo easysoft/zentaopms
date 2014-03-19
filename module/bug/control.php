@@ -28,7 +28,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->products = $this->product->getPairs();
+        $this->products = $this->product->getPairs('nocode');
         if(empty($this->products))
         {
             echo js::alert($this->lang->product->errorNoProduct);

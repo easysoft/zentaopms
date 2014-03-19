@@ -970,10 +970,11 @@ class storyModel extends model
      * @param  int    $queryID 
      * @param  string $orderBy 
      * @param  object $pager 
+     * @param  string $projectID 
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager, $projectID = '')
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '')
     {
         if($projectID != '') 
         {
