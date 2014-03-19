@@ -151,10 +151,7 @@ class task extends control
             $mails = $this->task->batchCreate($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail)
-            {
-                $this->sendmail($mail->taskID, $mail->actionID);
-            }
+            foreach($mails as $mail) $this->sendmail($mail->taskID, $mail->actionID);
 
             /* Locate the browser. */
             if($iframe) die(js::reload('parent.parent'));
@@ -175,6 +172,7 @@ class task extends control
         $this->view->stories  = $stories;
         $this->view->modules  = $modules;
         $this->view->storyID  = $storyID;
+        $this->view->story    = $this->loadModel('story')->getByID($storyID);
         $this->view->members  = $members;
         $this->display();
     }

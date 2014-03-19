@@ -827,7 +827,9 @@ class treeModel extends model
      */
     public function getStoryModule($moduleID)
     {
-        $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch();
+        if(empty($module)) return 0;
+
         if($module->id and $module->type != 'story')
         {
             $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($module->parent)->fetch();

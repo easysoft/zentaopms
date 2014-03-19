@@ -777,17 +777,18 @@ class story extends control
      * @param  int    $productID 
      * @param  int    $storyID 
      * @param  string $number
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxGetProjectStories($projectID, $productID = 0, $moduleID = 0, $storyID = 0, $number = '')
+    public function ajaxGetProjectStories($projectID, $productID = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
     {
         if($moduleID) 
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID);
+        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID, $type);
         die(html::select('story' . $number, $stories, $storyID, 'class=select-1 onchange=setStoryRelated(' . $number . ');'));
     }
 

@@ -38,22 +38,22 @@
     <?php 
     if($i == 0)
     {
-        $story  = $storyID;
-        $type   = '';
-        $member = '';
-        $module = '';
+        $currentStory = $storyID;
+        $type         = '';
+        $member       = '';
+        $module       = $story ? $story->module : '';
     }
     else
     {
-        $story = $type = $member = $module = 'ditto';
+        $currentStory = $type = $member = $module = 'ditto';
     }
     ?>
     <?php $pri = 3;?>
     <tr class='a-center'>
-      <td><?php echo $i+1;?></td>
+      <td><?php echo $i + 1;?></td>
       <td class='a-left' style='overflow:visible'>
         <?php 
-        echo html::select("story[$i]", $stories, $story, "class='select-1' onchange='setStoryRelated($i)'");
+        echo html::select("story[$i]", $stories, $currentStory, "class='select-1' onchange='setStoryRelated($i)'");
         echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
         ?>
       </td>
