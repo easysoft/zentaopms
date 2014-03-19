@@ -76,6 +76,7 @@ $lang->bug->confirmBug         = 'Confirm Bug';
 $lang->bug->batchConfirm       = 'Batch confirm';
 $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch edit';
+$lang->bug->batchClose         = 'Batch close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->browse             = 'Browse Bug';
 $lang->bug->view               = 'Bug Info';
