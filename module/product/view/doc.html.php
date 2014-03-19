@@ -12,46 +12,48 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
-<div class='yui-d0'>
-  <table class='table-1 fixed colored tablesorter' align='center' id='docList'>
-    <caption class='caption-tr'><?php common::printIcon('doc', 'create', "libID=product&moduleID=0&productID={$product->id}&projectID=0&from=product");?></caption>
-    <thead>
-      <tr class='colhead'>
-        <th class='w-id'><?php echo $lang->idAB;?></th>
-        <th><?php echo $lang->doc->module;?></th>
-        <th><?php echo $lang->doc->title;?></th>
-        <th><?php echo $lang->doc->addedBy;?></th>
-        <th><?php echo $lang->doc->addedDate;?></th>
-        <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($docs as $key => $doc):?>
-      <?php
-      $viewLink = $this->createLink('doc', 'view', "docID=$doc->id");
-      $canView  = common::hasPriv('doc', 'view');
-      ?>
-      <tr class='a-center'>
-        <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
-        <td><?php echo $doc->module;?></td>
-        <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
-        <td><?php echo $users[$doc->addedBy];?></td>
-        <td><?php echo $doc->addedDate;?></td>
-        <td>
-          <?php 
-          common::printIcon('doc', 'edit',   "doc={$doc->id}");
-          if(common::hasPriv('doc', 'delete'))
-          {
-              $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
-          }
-          ?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-    </tbody>
-  </table>
-</div>  
+<div id='featurebar'>
+  <div class='heading'><i class='icon-file-text'></i> <?php echo $lang->product->doc;?>  </div>
+  <div class='btn-group pull-right'>
+    <?php common::printIcon('doc', 'create', "libID=product&moduleID=0&productID={$product->id}&projectID=0&from=product");?>
+  </div>
+</div>
+<table class='table' id='docList'>
+  <thead>
+    <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th><?php echo $lang->doc->module;?></th>
+      <th><?php echo $lang->doc->title;?></th>
+      <th><?php echo $lang->doc->addedBy;?></th>
+      <th><?php echo $lang->doc->addedDate;?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach($docs as $key => $doc):?>
+    <?php
+    $viewLink = $this->createLink('doc', 'view', "docID=$doc->id");
+    $canView  = common::hasPriv('doc', 'view');
+    ?>
+    <tr class='text-center'>
+      <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
+      <td><?php echo $doc->module;?></td>
+      <td class='text-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
+      <td><?php echo $users[$doc->addedBy];?></td>
+      <td><?php echo $doc->addedDate;?></td>
+      <td>
+        <?php 
+        common::printIcon('doc', 'edit',   "doc={$doc->id}", '', 'list');
+        if(common::hasPriv('doc', 'delete'))
+        {
+            $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
+            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->doc->delete}'");
+        }
+        ?>
+      </td>
+    </tr>
+    <?php endforeach;?>
+  </tbody>
+</table>
 <?php include '../../common/view/footer.html.php';?>

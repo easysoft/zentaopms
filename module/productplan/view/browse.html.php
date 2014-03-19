@@ -12,11 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
-<table class='table-1 tablesorter fixed' id="productplan">
-  <caption class='caption-tr'>
-    <div class='f-left'><?php echo $lang->productplan->browse;?></div>
-    <div class='f-right'><?php common::printIcon('productplan', 'create', "productID=$product->id");?></div>
-  </caption>
+<div id='featurebar'>
+  <div class='heading'><i class='icon-flag'></i> <?php echo $lang->productplan->browse;?>  </div>
+  <div class='btn-group pull-right'>
+    <?php common::printIcon('productplan', 'create', "productID=$product->id", '', 'button', 'plus');?>
+  </div>
+</div>
+<table class='table' id="productplan">
   <thead>
   <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
@@ -30,22 +32,22 @@
   </thead>
   <tbody>
   <?php foreach($plans as $plan):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo $plan->id;?></td>
-    <td class='a-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
-    <td class='a-left content' title='<?php echo $plan->desc;?>'><?php echo $plan->desc;?></td>
+    <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
+    <td class='text-left content' title='<?php echo $plan->desc;?>'><?php echo $plan->desc;?></td>
     <td><?php echo $plan->begin;?></td>
     <td><?php echo $plan->end;?></td>
-    <td class='a-center'>
+    <td class='text-center'>
       <?php
-      common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list');
-      common::printIcon('productplan', 'linkBug', "planID=$plan->id", '', 'list');
+      common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list', 'link');
+      common::printIcon('productplan', 'linkBug', "planID=$plan->id", '', 'list', 'bug');
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
 
       if(common::hasPriv('productplan', 'delete'))
       {
           $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->productplan->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->productplan->delete}'");
       }
       ?>
     </td>

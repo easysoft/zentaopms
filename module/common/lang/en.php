@@ -400,4 +400,17 @@ $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesda
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 $lang->datepicker->monthNames   = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 
+/* Common action icons */
+$lang->icons['create'] = 'plus';
+$lang->icons['edit']   = 'pencil';
+$lang->icons['delete'] = 'remove';
+$lang->icons['copy']   = 'copy';
+$lang->icons['report'] = 'bar-chart';
+$lang->icons['export'] = 'download-alt';
+$lang->icons['finish'] = 'ok-sign';
+$lang->icons['start']  = 'play';
+$lang->icons['assign'] = 'hand-right';
+$lang->icons['change'] = 'random';
+$lang->icons['link']   = 'link';
+
 include (dirname(__FILE__) . '/menuOrder.php');

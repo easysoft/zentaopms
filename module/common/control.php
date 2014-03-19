@@ -296,7 +296,10 @@ class common extends control
         if($icon == 'createBug') $title  = $lang->testtask->createBug;
 
         /* set the class. */
-        if(!$icon) $icon = $method;
+        if(!$icon)
+        {
+            $icon = $lang->icons[$method] ? $lang->icons[$method] : $method;
+        }
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $extraClass = strpos(',export,customFields,', ",$method,") !== false ? $method : $extraClass;
         $class = "icon-$module-$method";
@@ -350,9 +353,7 @@ class common extends control
         global $lang, $app;
         if(isonlybody()) return false;
 
-        echo "<span class='link-button'>";
-        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "class='link-icon' title={$lang->goback}");
-        echo "</span>";
+        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "class='btn' title={$lang->goback}");
 
         if(isset($preAndNext->pre) and $preAndNext->pre) 
         {

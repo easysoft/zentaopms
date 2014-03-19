@@ -306,7 +306,7 @@ function showTreeBox(treeType)
 function toggleTreeBox()
 {
     var treeType = $('.side-handle').data('id');
-    if(typeof treeType == 'undefined') return;
+    if(typeof treeType == 'undefined' || treeType == null) return;
     if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
 
     $('.side-handle').toggle
@@ -892,6 +892,7 @@ function setModal()
 function setTableBehavior()
 {
     $('#wrap .table:not(.table-data, .table-form) tbody td').click(function(){$(this).closest('tr').toggleClass('active');});
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').addClass('table table-condensed table-hover table-striped table-borderless tablesorter');
 }
 
 /**

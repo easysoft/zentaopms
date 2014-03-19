@@ -41,8 +41,6 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 
 .table tr.active td, .table-hover>tbody>tr.active:hover>td, .table-hover>tbody>tr.active:hover>th, .table-striped>tbody>tr.active:nth-child(odd).active>td, .table-striped>tbody>tr.active:nth-child(odd)>th {background-color: #FCE6A2}
 
-
-
 /* Datepicker */
 .datepicker-wrapper {position: relative;}
 .datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 6px; color: #808080; font-size: 14px;}
@@ -168,6 +166,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .icon-usecases:before,.icon-green-testcase-createCase:before,.icon-green-story-createCase:before {content: "\e600";}
 .icon-green-task-create:before {content: "\e601";}
 
+/* Icon rotate */
+.icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
+
 /* Button icon */
 .btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0; color: #498CD0; text-align: center;}
 .btn-icon:hover {text-decoration: none; background: #145CCD; color: #fff;}
@@ -194,6 +195,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 /* Table data */
 .table-data th, .table-data td {padding: 5px;}
 .table-data th {text-align: right;}
+
+/* Table condensed */
+.table-condensed th, .table-condensed td {padding: 6px 5px;}
 
 /* Condensed form */
 .form-condensed .table-form {margin-bottom: 0;}
@@ -270,7 +274,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #searchbox .btn, #searchbox .form-control {border-radius: 0}
 
 /* Module menu. */
-#modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative;}
+#modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative; height: 40px;}
 #modulemenu li {line-height: 30px; padding:5px 0px 1px;display: block; float: left;}
 #modulemenu li a {display: block; padding: 0 7px; color:#003366}
 #modulemenu li > a:hover {background: #d1d1d1; color: #000;}
@@ -333,6 +337,15 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .btn > i {display: inline-block; margin-right: 2px; opacity: 0.8}
 #featurebar .actions {float: right; margin-top: -2px;}
 
+/* Title bar. */
+#titlebar {background: #F8FAFE; border-bottom: 1px solid #e5e5e5; min-height: 46px; padding: 15px 20px 10px; vertical-align: bottom; position: relative;}
+#titlebar > .heading {font-size: 14px; line-height: 20px; }
+#titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666; border-radius: 4px; margin-bottom: 5px;}
+#titlebar > .heading > .prefix > i {font-size: 28px; vertical-align: middle; color: #808080}
+#titlebar > .heading > strong {display: inline-block; vertical-align: middle; margin-right: 5px;}
+#titlebar .actions {position: absolute; right: 20px; top: 13px;}
+#titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
+
 /* table in outer */
 .outer .table {margin-bottom: 0;}
 .outer .table .btn-icon {margin-left: -2px}
@@ -342,6 +355,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
 .outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 8px}
+.outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
 .outer .table tfoot .dropdown-menu {min-width: 100px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
 .outer .table tfoot .btn {padding: 4px 12px;}
@@ -363,10 +377,23 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .container {padding: 20px;}
 .outer .container .table-form, .outer .container .table-data {margin-top: 10px;}
 
+/* Main content in outer */
+.outer .row {padding: 15px 20px;}
+.outer .main > fieldset {margin-bottom: 15px; border: 1px solid #e5e5e5; padding: 15px;}
+.outer .main > fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
+.outer .main > fieldset > .article-content {font-size: 14px; padding: 0}
+.outer .main > .actions {text-align: center;}
+.outer .main > .actions > .btn, .outer .main > .actions > .btn-group {margin: 0 4px}
+
+/* Table data in outer */
+.outer .table-data.table-condensed td, .outer .table-data.table-condensed th {padding: 3px 8px}
+.outer .table-data th {font-weight: normal; color: #444}
+.outer .table-data th.strong, .outer .table-data td.strong, .outer .table-data th > strong {font-weight: bold;}
+
 /* side */
 .outer.with-side #featurebar {margin-bottom: 20px;}
 .outer.with-side .main, .outer.with-side .side + form, .outer.with-side .main, .outer.with-side .side + table {margin-left: 220px; margin-right: 20px; transition: all 0.3s;}
-.outer.with-side .main, .outer > form > .table {border: 1px solid #ddd}
+.outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: 1px solid #ddd}
 .outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}
 .outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 8px}
 .outer .side {width: 180px; position: absolute; left: 20px; background: #fafafa; border: 1px solid #ddd; transition: all 0.3s;}
@@ -377,7 +404,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 .outer.hide-side .side{width: 0; border: none;}
 .outer.hide-side .side > header, .outer.hide-side .side-body {display: none;}
-.outer.hide-side .side .side-handle {right: -1px; top: -1px; border-radius: 0 4px 4px 0}
+.outer.hide-side .side .side-handle {right: -1px; top: 0; border-radius: 0 4px 4px 0}
 .outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 30px}
 
 /* Form in outer */
@@ -484,13 +511,6 @@ td>select{padding-left: 0;padding-right: 0}
 .tree .active {color:blue; font-weight:bold}
 .tree a  {color:#003366}
 
-/* Title bar. */
-#titlebar {font-size:14px; font-weight:bold; padding:5px; margin:0px 0px 8px 0px; height:30px; line-height:30px;}
-#titlebar #main {float:left; width:45%; clear:none; text-align:left}
-#titlebar div {float:right; width:55%; clear:none; text-align:right}
-#titlebar #main input {font-size:14px; margin-top:5px}
-#titlebar .text-1 {width:80%}
-#titlebar span{padding:5px 3px}
 
 /* Form settings */
 #dataform{margin-top:20px; padding:0 30px}
@@ -512,12 +532,7 @@ td>select{padding-left: 0;padding-right: 0}
 .history, .changes {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
 .history .changes {border:none; margin:0; padding:0}
 .content {font-size:14px; padding:10px}
-.roadmap {width:180px; margin:10px auto 10px auto; padding:15px 10px; font-weight:bold}
-.roadmap a{color:#ccc;}
-.roadmap p{margin:2px}
-.release {background:darkgreen; color:#ccc}
-.plan {background:#ffcc00;}
-.plan a{color:green}
+
 .helplink {font-size:9px}
 #fileform .text-3 {margin-bottom:5px}
 
@@ -528,9 +543,6 @@ td>select{padding-left: 0;padding-right: 0}
 
 /* Debug. */
 .debugwin {display:none; width:50px; height:20px; bottom:50px; position:fixed;}
-
-/* Search. */
-#searchform .searchSelect, #searchform .searchInput, #searchform #queryID{background:#f9f9f9;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
 .box-title {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:8px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
@@ -552,7 +564,6 @@ td>select{padding-left: 0;padding-right: 0}
 
 /*-----------------------ICONS --------------------*/
 /* Common icons. */
-#featurebar .f-right .icon-goback {padding:0px 9px}
 .pri1,.pri0,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 18px;height: 18px;font-size: 12px;line-height: 16px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68; font-family: arial, helvetica, clean, sans-serif;}
 .pri,.pri0{border-color: #ccc;color: #ccc;}
 .pri:before{content: '?'}

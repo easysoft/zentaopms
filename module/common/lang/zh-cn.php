@@ -400,4 +400,18 @@ $lang->datepicker->dayNames     = array('日', '一', '二', '三', '四', '五'
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
 
+/* Common action icons 通用动作图标 */
+$lang->icons['create'] = 'plus';
+$lang->icons['edit']   = 'pencil';
+$lang->icons['delete'] = 'remove';
+$lang->icons['copy']   = 'copy';
+$lang->icons['report'] = 'bar-chart';
+$lang->icons['export'] = 'download-alt';
+$lang->icons['finish'] = 'ok-sign';
+$lang->icons['start']  = 'play';
+$lang->icons['assign'] = 'hand-right';
+$lang->icons['change'] = 'random';
+$lang->icons['link']   = 'link';
+$lang->icons['close']  = 'off';
+
 include (dirname(__FILE__) . '/menuOrder.php');

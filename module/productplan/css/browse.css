@@ -1,1 +1,1 @@
-#productplan td, tr, th{ border:1px solid #E4E4E4;}
+#productplan tbody > tr > td{border-right:1px solid #E4E4E4;}

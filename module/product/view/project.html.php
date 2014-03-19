@@ -11,33 +11,37 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<table class='table-1 fixed colored'>
-  <tr class='colhead'>
-    <th class='w-150px'><?php echo $lang->project->name;?></th>
-    <th><?php echo $lang->project->code;?></th>
-    <th><?php echo $lang->project->end;?></th>
-    <th><?php echo $lang->project->status;?></th>
-    <th><?php echo $lang->project->totalEstimate;?></th>
-    <th><?php echo $lang->project->totalConsumed;?></th>
-    <th><?php echo $lang->project->totalLeft;?></th>
-    <th class='w-150px'><?php echo $lang->project->progess;?></th>
-    <th class='w-100px'><?php echo $lang->project->burn;?></th>
-  </tr>
+<div id='featurebar'>
+  <div class='heading'><i class='icon-folder-close'></i> <?php echo $lang->product->project;?>  </div>
+</div>
+<table class='table'>
+  <thead>
+    <tr class='colhead'>
+      <th class='w-150px'><?php echo $lang->project->name;?></th>
+      <th><?php echo $lang->project->code;?></th>
+      <th><?php echo $lang->project->end;?></th>
+      <th><?php echo $lang->project->status;?></th>
+      <th><?php echo $lang->project->totalEstimate;?></th>
+      <th><?php echo $lang->project->totalConsumed;?></th>
+      <th><?php echo $lang->project->totalLeft;?></th>
+      <th class='w-150px'><?php echo $lang->project->progess;?></th>
+      <th class='w-100px'><?php echo $lang->project->burn;?></th>
+    </tr>
+  </thead>
   <?php foreach($projectStats as $project):?>
-  <tr class='a-center'>
-    <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
+  <tr class='text-center'>
+    <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
     <td><?php echo $project->code;?></td>
     <td><?php echo $project->end;?></td>
     <td><?php echo $lang->project->statusList[$project->status];?></td>
     <td><?php echo $project->hours->totalEstimate;?></td>
     <td><?php echo $project->hours->totalConsumed;?></td>
     <td><?php echo $project->hours->totalLeft;?></td>
-    <td class='a-left w-150px'>
+    <td class='text-left w-150px'>
       <img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: />
       <small><?php echo $project->hours->progress;?>%</small>
     </td>
-    <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
+    <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
  </tr>
  <?php endforeach;?>
 </table>
