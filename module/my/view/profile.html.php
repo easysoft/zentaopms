@@ -18,7 +18,7 @@
       <?php echo html::a($this->createLink('my', 'editprofile'), "<i class='icon-pencil'></i> " . $lang->user->editProfile, '', "class='btn btn-primary'");?>
     </div>
   </div>
-  <table class='table table-borderless table-condensed table-data'>
+  <table class='table table-borderless table-data'>
     <tr>
       <th class='rowhead w-100px'><?php echo $lang->user->dept;?></th>
       <td>

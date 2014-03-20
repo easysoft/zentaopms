@@ -239,9 +239,7 @@ class common extends control
         global $lang;
 
         if(!common::hasPriv($module, 'edit')) return false;
-        echo "<span class='link-button'>";
-        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()'");
-        echo "</span>";
+        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
     }
 
     /**
@@ -360,18 +358,14 @@ class common extends control
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title;
-            echo "<span class='link-button'>";
-            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '<i class="icon-pre icon-chevron-sign-left"></i>', '', "id='pre' class='link-icon' title='{$title}'");
-            echo "</span>";
+            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '<i class="icon-pre icon-chevron-left"></i>', '', "id='pre' class='btn' title='{$title}'");
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title;
-            echo "<span class='link-button'>";
-            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '<i class="icon-pre icon-chevron-sign-right"></i>', '', "id='next' class='link-icon' title='$title'");
-            echo "</span>";
+            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '<i class="icon-pre icon-chevron-right"></i>', '', "id='next' class='btn' title='$title'");
         }
     }
 

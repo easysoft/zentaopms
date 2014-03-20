@@ -10,3 +10,4 @@
 .panel-block .icon {color: #666; display: inline-block; margin-right: 2px;}
 #wrap .outer {padding: 20px 20px 0}
 .outer .panel-block .table tbody > tr:last-child td {border-bottom: none}
+.outer .row {padding: 0}

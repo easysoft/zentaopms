@@ -11,41 +11,67 @@
  */
 ?>
 <?php include './header.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $lang->story->change;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-3 chosen"') . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->title;?></th>
-      <td><?php echo html::input('title', $story->title, 'class="text-1"');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->spec;?></th>
-      <td><?php echo html::textarea('spec', $story->spec, 'rows=8 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->verify;?></th>
-      <td><?php echo html::textarea('verify', $story->verify, 'rows=6 class="area-1"');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->comment;?></th>
-      <td><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->attatch;?></th>
-      <td><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></td>
-    </tr>
-  </table>
-  <?php include './affected.html.php';?>
-  <div class='a-center'>
-    <?php 
-    echo html::submitButton();
-    echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
-    ?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $product->id;?></span>
+    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+    <small><i class='icon-random'></i> <?php echo $lang->story->change;?></small>
   </div>
-  <?php include '../../common/view/action.html.php';?>
-</form>
+</div>
+<div class='row'>
+  <div class='col-md-8'>
+    <div class='main'>
+      <form method='post' enctype='multipart/form-data' target='hiddenwin' class='form-condensed'>
+        <table class='table table-form'>
+          <tr>
+            <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
+            <td>
+              <div class="input-group">
+                <?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?>
+                <span class="input-group-addon">
+                <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->title;?></th>
+            <td><?php echo html::input('title', $story->title, 'class="form-control"');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->spec;?></th>
+            <td><?php echo html::textarea('spec', $story->spec, 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->verify;?></th>
+            <td><?php echo html::textarea('verify', $story->verify, 'rows=6 class="form-control"');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->comment;?></th>
+            <td><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->attatch;?></th>
+            <td><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->checkAffection;?></th>
+            <td><?php include './affected.html.php';?></td>
+          </tr>
+        </table>
+        <div class='actions'>
+          <?php 
+          echo html::submitButton('', '', 'btn-primary');
+          echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
+          ?>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <div class='main mian-side'>
+      <?php include '../../common/view/action.html.php';?></div>
+    </div>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

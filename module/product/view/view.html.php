@@ -26,7 +26,7 @@
     if(!$product->deleted)
     {
         ob_start();
-        common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'btn-danger');
+        common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'text-danger');
 
         echo "<div class='btn-group'>";
         common::printIcon('product', 'edit', $params);
@@ -51,7 +51,8 @@
       <fieldset>
         <legend><?php echo $lang->product->desc;?></legend>
         <div class='article-content'><?php echo $product->desc;?></div>
-      </fieldset><?php include '../../common/view/action.html.php';?>
+      </fieldset>
+      <?php include '../../common/view/action.html.php';?>
       <div class='actions'><?php if(!$product->deleted) echo $actionLinks;?></div>
     </div>
   </div>
@@ -61,7 +62,7 @@
         <legend><?php echo $lang->product->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th width='25%' class='strong'><?php echo $lang->product->name;?></th>
+            <th class='strong w-80px'><?php echo $lang->product->name;?></th>
             <td <?php if($product->deleted) echo "class='deleted text-danger'";?>><strong><?php echo $product->name;?></strong></td>
           </tr>  
           <tr>
@@ -111,7 +112,7 @@
         <legend><?php echo $lang->product->otherInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th width='25%' class='strong'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
+            <th class='strong w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
             <td class='strong'><?php echo $product->stories['active']?></td>
           </tr>
           <tr>
