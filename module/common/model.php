@@ -231,7 +231,6 @@ class commonModel extends model
         }
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
         echo $lang->agileTraining;
-        echo $lang->donate;
         echo "<div class='dropdown' id='langSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->config->langs[$app->cookie->lang] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
         foreach ($app->config->langs as $key => $value)
         {
