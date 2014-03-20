@@ -2,7 +2,10 @@ VERSION=$(shell head -n 1 VERSION)
 
 all: prepare pms
 clean:
-	rm -fr {zentaopms,zentaostory,zentaotask,zentaotest,storyext,taskext,testext}
+	rm -fr zentaopms
+	rm -fr zentaostory
+	rm -fr zentaotask
+	rm -fr zentaotest
 	rm -fr *.tar.gz
 	rm -fr *.zip
 	rm -fr api*
