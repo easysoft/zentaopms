@@ -43,17 +43,31 @@ class html
     }
 
     /**
-     * Create icon tag
+     * Create fav icon tag
      * 
      * @param mixed $url  the url of the icon.
      * @access public
      * @return string          
      */
-    public static function icon($url)
+    public static function favicon($url)
     {
         return "<link rel='icon' href='$url' type='image/x-icon' />\n" . 
                "<link rel='shortcut icon' href='$url' type='image/x-icon' />\n";
 
+    }
+
+    /**
+     * Create icon tag
+     * 
+     * @param name $name  the name of the icon.
+     * @param cssClass $class  the extra css class of the icon.
+     * @access public
+     * @return string          
+     */
+    public static function icon($name, $class = '')
+    {
+        $class = empty($class) ? ('icon-' . $name) : ('icon-' . $name . ' ' . $class);
+        return "<i class='$class'></i>";
     }
 
     /**
