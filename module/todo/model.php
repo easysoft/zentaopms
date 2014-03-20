@@ -28,7 +28,6 @@ class todoModel extends model
             ->add('idvalue', 0)
             ->specialChars('type,name')
             ->cleanInt('date, pri, begin, end, private')
-            ->setIF($this->post->type != 'custom', 'name', '')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
