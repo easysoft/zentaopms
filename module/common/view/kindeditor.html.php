@@ -47,7 +47,7 @@ function initKindeditor(afterInit)
         var K = KindEditor, $editor = $('#' + editorID);
         keEditor = K.create('#' + editorID,
         {
-            cssPath:[v.themeRoot + 'zui/css/min.css'],
+            cssPath:[themeRoot + 'zui/css/min.css'],
             width:'100%',
             items:editorTool,
             filterMode: true, 
