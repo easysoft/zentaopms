@@ -2,17 +2,36 @@
   <?php 
   /* Define the html code of a file row. */
   $fileRow = <<<EOT
-  <div class='fileBox' id='fileBox\$i'>
-    <input type='file' name='files[]' class='fileControl'  tabindex='-1' />
-    <label tabindex='-1' class='fileLabel'>{$lang->file->label}</label>
-    <input type='text' name='labels[]' class='text-3' tabindex='-1' /> 
-    <a href='javascript:void();' onclick='addFile(this)' class='link-icon'><i class='icon-add'></i></a>
-    <a href='javascript:void();' onclick='delFile(this)' class='link-icon'><i class='icon-delete'></i></a>
+  <div class='fileBox input-group' id='fileBox\$i'>
+    <span class='input-control w-p45'><input type='file' name='files[]' class='fileControl'  tabindex='-1' /></span>
+    <span class="input-group-addon">{$lang->file->label}</span>
+    <input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' />
+    <span class='input-group-btn'>
+      <a href='javascript:void();' onclick='addFile(this)' class='btn'><i class='icon-plus'></i></a>
+    </span>
+    <span class='input-group-btn'>
+      <a href='javascript:void();' onclick='delFile(this)' class='btn'><i class='icon-remove'></i></a>
+    </span>
   </div>
 EOT;
   for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
 ?>
 </div>
+
+<?php if(!$writeable):?>
+<h5 class='text-danger a-left'> <?php echo $this->lang->file->errorUnwritable;?> </h5>
+<?php else:?>
+<div class="file-form">
+  <?php for($i = 0; $i < $fileCount; $i ++):?>
+  <div class='form-group clearfix'>
+    <div class='col-sm-5' style='padding-left:0px'><input type='file' class='form-control' name='files[]' id="file<?php echo $i;?>"  tabindex='-1' /></div>
+    <div class='col-sm-7' style='padding-right:0px'><input type='text' id='label<?php echo $i;?>' name='labels[]' class='form-control' tabindex='-1' placeholder='<?php echo $lang->file->label;?>'/></div>
+  </div>
+  <?php endfor;?>
+</div>
+<?php endif;?>
+
+
 <script language='javascript'>
 $(function()
 {
@@ -54,7 +73,7 @@ function addFile(clickedButton)
 {
     fileRow = <?php echo json_encode($fileRow);?>;
     fileRow = fileRow.replace('$i', $('.fileID').size() + 1);
-    $(clickedButton).parent().after(fileRow);
+    $(clickedButton).closest('.fileBox').after(fileRow);
 
     setFileFormWidth(<?php echo $percent;?>);
     updateID();
@@ -70,7 +89,7 @@ function addFile(clickedButton)
 function delFile(clickedButton)
 {
     if($('.fileBox').size() == 1) return;
-    $(clickedButton).parent().remove();
+    $(clickedButton).closest('.fileBox').remove();
     updateID();
 }
 
