@@ -52,7 +52,7 @@ $lang->project->noProduct     = '無產品項目';
 $lang->project->select        = '--請選擇項目--';
 $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
-$lang->project->typeDesc      = '長期項目禁用燃盡圖，運維項目禁用燃盡圖和需求。';
+$lang->project->typeDesc      = '運維項目禁用燃盡圖和需求。';
 $lang->project->mine          = '我負責：';
 $lang->project->other         = '其他：';
 
@@ -105,7 +105,7 @@ $lang->project->dynamic         = '動態';
 $lang->project->build           = '版本列表';
 $lang->project->testtask        = '測試任務';
 $lang->project->burn            = '燃盡圖';
-$lang->project->computeBurn     = '更新燃盡圖';
+$lang->project->computeBurn     = '更新';
 $lang->project->burnData        = '燃盡圖數據';
 $lang->project->team            = '團隊成員';
 $lang->project->doc             = '文檔列表';
@@ -173,12 +173,12 @@ $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未
 $lang->project->wbs             = "分解任務";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '點擊查看大圖';
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank'>如何更新?</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank' title='如何更新燃盡圖？'><i class='icon-question-sign'></i></a>";
 $lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下項目關聯的產品中有沒有需求，而且要確保它們已經審核通過。";
 $lang->project->doneProjects    = '已結束';
 $lang->project->unDoneProjects  = '未結束';
 $lang->project->copyTeam        = '複製團隊';
-$lang->product->noMatched       = '找不到包含"%s"的項目';
+$lang->project->noMatched       = '找不到包含"%s"的項目';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您確定刪除項目[%s]嗎？';
@@ -193,8 +193,8 @@ $lang->project->linkStory             = '關聯需求';
 $lang->project->createTask            = '添加任務';
 $lang->project->goback                = '返回項目首頁';
 $lang->project->linkProduct           = '選擇產品關聯...';
-$lang->project->withWeekend           = '顯示周末';
-$lang->project->noWeekend             = '去除周末';
+$lang->project->weekend               = '周末';
+$lang->project->interval              = '間隔';
 
 /* 統計。*/
 $lang->project->charts = new stdclass();

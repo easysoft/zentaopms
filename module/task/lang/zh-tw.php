@@ -151,6 +151,7 @@ $lang->task->error->consumedSmall    = '"已經消耗"必須大於之前消耗';
 $lang->task->error->consumedThisTime = '請填寫"工時"';
 $lang->task->error->left             = '請填寫"剩餘"';
 $lang->task->error->work             = '"備註"必須小於255個字元';
+$lang->task->error->skipClose        = '任務：%s 不是“已完成”或“已取消”狀態，不能關閉！';
 
 /* 統計報表。*/
 $lang->task->report = new stdclass();

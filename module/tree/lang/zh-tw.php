@@ -32,8 +32,7 @@ $lang->tree->manageBugChild    = '維護Bug子模組';
 $lang->tree->manageCaseChild   = '維護用例子模組';
 $lang->tree->manageTaskChild   = '維護項目子模組';
 $lang->tree->manageWebappChild = '維護WEB應用子模組';
-$lang->tree->syncFromProduct   = '複製產品視圖模組';
-$lang->tree->syncFromProject   = '複製項目視圖模組';
+$lang->tree->syncFromProduct   = '複製';
 $lang->tree->ajaxGetOptionMenu = '介面:獲取下拉列表';
 $lang->tree->ajaxGetSonModules = '介面:獲得子菜單列表';
 

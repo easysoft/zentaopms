@@ -36,3 +36,6 @@ $lang->release->ajaxGetStoriesAndBugs = '介面：獲得需求和Bug';
 $lang->release->finishStories         = '本次共完成需求%s個';
 $lang->release->resolvedBugs          = '本次共解決Bug%s個';
 $lang->release->export                = '導出HTML';
+
+$lang->release->filePath = '下載地址：';
+$lang->release->scmPath  = '版本庫地址：';

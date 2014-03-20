@@ -57,6 +57,7 @@ $lang->switchDisplay= '切換顯示';
 $lang->switchHelp   = '切換幫助';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
+$lang->timeout      = '連接超時，請檢查網絡環境，或重試！';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
@@ -364,6 +365,10 @@ $lang->suhosinInfo = "警告：數據太多，請在php.ini中修改<font color=
 
 $lang->noResultsMatch    = "沒有匹配結果";
 $lang->chooseUsersToMail = "選擇要發信通知的用戶...";
+
+$lang->date = new stdclass();
+$lang->date->day   = '天';
+$lang->date->month = '月';
 
 /* 時間格式設置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');

@@ -64,6 +64,7 @@ $lang->extension->byCategory    = '分類瀏覽';
 
 $lang->extension->installFailed            = '%s失敗，錯誤原因如下:';
 $lang->extension->uninstallFailed          = '卸載失敗，錯誤原因如下:';
+$lang->extension->confirmUninstall         = '卸載插件會刪除或修改相關的資料庫，是否繼續卸載？';
 $lang->extension->installFinished          = '恭喜您，插件順利的%s成功！';
 $lang->extension->refreshPage              = '刷新頁面';
 $lang->extension->uninstallFinished        = '插件已經成功卸載';
@@ -78,6 +79,7 @@ $lang->extension->successInstallDB         = '成功安裝資料庫';
 $lang->extension->viewInstalled            = '查看已安裝插件';
 $lang->extension->viewAvailable            = '查看可安裝插件';
 $lang->extension->viewDeactivated          = '查看已禁用插件';
+$lang->extension->backDBFile               = '插件相關數據已經備份到 %s 檔案中！';
 
 $lang->extension->upgradeExt     = '升級';
 $lang->extension->installExt     = '安裝';
