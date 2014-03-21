@@ -747,21 +747,23 @@ class extensionModel extends model
         $sqls = file_get_contents($this->getDBFile($extension, 'uninstall'));
         $sqls = explode(';', $sqls);
 
+        /* Get tables for backup. */
         $backupTables = array();
         foreach($sqls as $sql)
         {
             $sql = trim($sql);
-            if(preg_match('/^DROP TABLE `?([^` ]*)`?|^ALTER TABLE `?([^` ]*)`? .*DROP .+/i', $sql, $out))
+            if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
             {
-                if(!empty($out[1])) $backupTables[] = $out[1];
-                if(!empty($out[2])) $backupTables[] = $out[2];
+                if(!empty($out[1])) $backupTables[$out[1]] = $out[1];
             }
         }
 
+        /* Back up database. */
         if($backupTables)
         {
-            $backDBName = $this->app->getTmpRoot() . $extension . date('Ymd') . '.sql';
-            if($zdb->backupDB($backDBName, $backupTables) == 0) return $backDBName;
+            $backupFile = $this->app->getTmpRoot() . $extension . '.' . date('Ymd') . '.sql';
+            $result     = $zdb->dump($backupFile, $backupTables);
+            if($result->result) return $backupFile;
             return false; 
         }
         return false; 

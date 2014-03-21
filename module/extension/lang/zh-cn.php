@@ -65,6 +65,7 @@ $lang->extension->byCategory    = '分类浏览';
 $lang->extension->installFailed            = '%s失败，错误原因如下:';
 $lang->extension->uninstallFailed          = '卸载失败，错误原因如下:';
 $lang->extension->confirmUninstall         = '卸载插件会删除或修改相关的数据库，是否继续卸载？';
+$lang->extension->noticeBackupDB           = '卸载前，建议备份数据库。';
 $lang->extension->installFinished          = '恭喜您，插件顺利的%s成功！';
 $lang->extension->refreshPage              = '刷新页面';
 $lang->extension->uninstallFinished        = '插件已经成功卸载';
@@ -84,6 +85,8 @@ $lang->extension->backDBFile               = '插件相关数据已经备份到 
 $lang->extension->upgradeExt     = '升级';
 $lang->extension->installExt     = '安装';
 $lang->extension->upgradeVersion = '（从%s升级到%s）';
+
+$lang->extension->waring = '警告';
 
 $lang->extension->errorOccurs                  = '错误：';
 $lang->extension->errorGetModules              = '从www.zentao.net获得插件分类失败。可能是因为网络方面的原因，请检查后重新刷新页面。';

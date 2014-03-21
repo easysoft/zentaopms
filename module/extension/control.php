@@ -116,6 +116,8 @@ class extension extends control
      */
     public function install($extension, $downLink = '', $md5 = '', $type = '', $overridePackage = 'no', $ignoreCompatible = 'no', $overrideFile = 'no', $agreeLicense = 'no', $upgrade = 'no')
     {
+        set_time_limit(0);
+
         $this->view->error = '';
         $installTitle      = $upgrade == 'no' ? $this->lang->extension->install : $this->lang->extension->upgrade;
         $installType       = $upgrade == 'no' ? $this->lang->extension->installExt : $this->lang->extension->upgradeExt; 
@@ -341,9 +343,11 @@ class extension extends control
      */
     public function uninstall($extension, $confirm = 'no')
     {
+        /* Determine whether need to back up. */
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
         if($confirm == 'no' and file_exists($dbFile))
         {
+            $this->view->title   = $this->lang->extension->waring;
             $this->view->confirm = 'no';
             $this->view->code    = $extension;
             die($this->display());
@@ -358,7 +362,7 @@ class extension extends control
 
         if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
 
-        if(file_exists($dbFile)) $this->view->backDBName = $this->extension->backupDB($extension);
+        if(file_exists($dbFile)) $this->view->backupFile = $this->extension->backupDB($extension);
 
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));

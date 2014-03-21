@@ -18,8 +18,9 @@
     <?php if(isset($confirm) and $confirm == 'no'):?>
     <?php
     echo "<p class='waring'>{$lang->extension->confirmUninstall}";
-    echo html::a(inlink('uninstall', "extension=$code&confirm=yes"), $lang->extension->uninstall);
+    echo html::a(inlink('uninstall', "extension=$code&confirm=yes"), $lang->extension->uninstall, '', "class='btn'");
     echo "</p>";
+    echo "<p>{$lang->extension->noticeBackupDB}</p>"
     ?>
     <?php elseif(!empty($error)):?>
     <?php 
@@ -29,7 +30,7 @@
     <?php else:?>
     <?php
     echo "<h3 class='a-center success'>{$title}</h3>";
-    if(!empty($backDBName)) echo '<p>' . sprintf($lang->extension->backDBFile, $backDBName) . '</p>';
+    if(!empty($backupFile)) echo '<p>' . sprintf($lang->extension->backDBFile, $backupFile) . '</p>';
     if($removeCommands)
     {
         echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";

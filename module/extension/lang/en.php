@@ -65,6 +65,7 @@ $lang->extension->byCategory    = 'By Category';
 $lang->extension->installFailed            = '%s failed, the reason is:';
 $lang->extension->uninstallFailed          = 'Uninstall failed, the reason is:';
 $lang->extension->confirmUninstall         = 'Uninstall will delete or modify database, whether to uninstall?';
+$lang->extension->noticeBackupDB           = 'Before uninstalling, we recommend backing up the database.';
 $lang->extension->installFinished          = 'Good, the extension has been %s successfully.';
 $lang->extension->refreshPage              = 'Refresh';
 $lang->extension->uninstallFinished        = 'Extension has been successfully uninstalled.';
@@ -84,6 +85,8 @@ $lang->extension->backDBFile               = 'Plug-related data has been backed 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Install';
 $lang->extension->upgradeVersion = '(Upgrade from %s to %s)';
+
+$lang->extension->waring = 'Waring';
 
 $lang->extension->errorOccurs                  = 'Error:';
 $lang->extension->errorGetModules              = "Get extensions' categories data from the www.zentao.net failed. ";
