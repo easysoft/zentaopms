@@ -953,10 +953,10 @@ class treeModel extends model
      */
     public function delete($moduleID, $null = null)
     {
-        $module  = $this->getById($moduleID);
+        $module = $this->getById($moduleID);
         if(empty($module)) return false;
 
-        $childs  = $this->getAllChildId($moduleID);
+        $childs = $this->getAllChildId($moduleID);
         $childs[$moduleID] = $moduleID;
 
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in($childs)->exec();
