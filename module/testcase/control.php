@@ -673,10 +673,10 @@ class testcase extends control
                 if(isset($users[$case->openedBy]))                     $case->openedBy      = $users[$case->openedBy];
                 if(isset($users[$case->lastEditedBy]))                 $case->lastEditedBy  = $users[$case->lastEditedBy];
                 if(isset($caseLang->resultList[$case->lastRunResult])) $case->lastRunResult = $caseLang->resultList[$case->lastRunResult];
-                foreach($caseLang->stageList as $stage => $stageName) 
-                {
-                    if(strpos($case->stage, $stage) !== false) $case->stage = str_replace($stage, $stageName, $case->stage);
-                }
+
+                $case->stage = explode(',', $case->stage);
+                foreach($case->stage as $key => $stage) $case->stage[$key] = isset($caseLang->stageList[$stage]) ? $caseLang->stageList[$stage] : $stage;
+                $case->stage = join("\n", $case->stage);
 
                 $case->openedDate     = substr($case->openedDate, 0, 10);
                 $case->lastEditedDate = substr($case->lastEditedDate, 0, 10);
@@ -861,8 +861,17 @@ class testcase extends control
                     $case->$field = array_search($cellValue, $modules);
                 }
                 elseif(in_array($field, $caseConfig->export->listFields))
-                {   
-                    $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
+                {
+                    if($field == 'stage')
+                    {
+                        $stages = explode("\n", $cellValue);
+                        foreach($stages as $stage) $case->stage[] = array_search($stage, $caseLang->{$field . 'List'});
+                        $case->stage = join(',', $case->stage);
+                    }
+                    else
+                    {
+                        $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
+                    }
                 }
                 elseif($field != 'stepDesc' and $field != 'stepExpect')
                 {
