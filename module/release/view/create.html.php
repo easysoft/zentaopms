@@ -13,40 +13,51 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->release->create;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->name;?></th>
-      <td>
-        <?php echo html::input('name', '', "class='text-3'");?>
-        <?php if($lastRelease) echo '<span class="gray">(' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>
-      </td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->build;?></th>
-      <td>
-      <?php  
-          echo html::select('build', $builds, '', "class='select-3' onchange=loadStoriesAndBugs(this.value,$productID)");
-          if(empty($builds)) echo $lang->build->notice;
-      ?>
-      </td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->date;?></th>
-      <td><?php echo html::input('date', helper::today(), "class='text-3 date'");?></td>
-    </tr>  
-    <tr id='linkStoriesAndBugs'>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->desc;?></th>
-      <td><?php echo html::textarea('desc', '', "rows='10' class='area-1'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->files;?></th>
-      <td class='a-left'><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1));?></td>
-    </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
-  </table>
-</form>
+<div class='container w-900px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['release']);?></span>
+      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->release->create;?></strong>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
+    <table class='table table-form'> 
+      <tr>
+        <th class='w-80px'><?php echo $lang->release->name;?></th>
+        <td class='w-p45'>
+          <div class='input-group'>
+            <?php echo html::input('name', '', "class='form-control'");?>
+            <?php if($lastRelease) echo '<span class="input-group-addon">(' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->release->build;?></th>
+        <td>
+        <?php  
+            echo html::select('build', $builds, '', "class='form-control' onchange=loadStoriesAndBugs(this.value,$productID)");
+        ?>
+        </td>
+        <td><?php if(empty($builds)) echo $lang->build->notice; ?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->release->date;?></th>
+        <td><?php echo html::input('date', helper::today(), "class='form-control form-date'");?></td><td></td>
+      </tr>  
+      <tr id='linkStoriesAndBugs'>
+      </tr>
+      <tr>
+        <th><?php echo $lang->release->desc;?></th>
+        <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->files;?></th>
+        <td colspan='2'><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1));?></td>
+      </tr>  
+      <tr><td></td><td colspan='2'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    </table>
+  </form>  
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

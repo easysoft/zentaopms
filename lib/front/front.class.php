@@ -428,7 +428,7 @@ EOT;
      * @access public
      * @return string the submit button tag.
      */
-    public static function submitButton($label = '', $misc = '', $class = '')
+    public static function submitButton($label = '', $misc = '', $class = 'btn-primary')
     {
         if(empty($label))
         {

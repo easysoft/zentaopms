@@ -12,7 +12,7 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px}
+.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
 
 .w-id {width:60px;} .w-pri {width:30px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
@@ -187,19 +187,19 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 
 /* === Views === */
 /* Table form */
-.table-form th {text-align:right;vertical-align:middle; border-bottom:none}
-.table-form th.text-left, .table-form tr.text-left th {text-align:left;vertical-align:middle; border-bottom:none}
-.table-form td {vertical-align:middle; border-bottom:none}
-.table-form th,.table-form td {border-bottom:none}
+.table-form > tbody > tr > th {text-align:right;vertical-align:middle; border-bottom:none}
+.table-form > tbody > tr > th.text-left, .table-form > tbody > tr > tr.text-left th {text-align:left;vertical-align:middle; border-bottom:none}
+.table-form > tbody > tr > td {vertical-align:middle; border-bottom:none}
+.table-form > tbody > tr > th,.table-form > tbody > tr > td {border-bottom:none}
 .table th.text-middle, .table td.text-middle, .text-middle {vertical-align: middle;}
-.table-form td.text-bottom {vertical-align:bottom;}
-.table-form td .form-control {vertical-align:middle;margin:0;}
-.table-form .checkbox,.table-form input[type="radio"] + label {margin-right: 10px;}
-.table-form td > .row {margin-right: 0;}
-.table-form td > .row > [class*="col-"] {padding-right: 0;line-height: 34px}
-.table-form td .checkbox {margin: 0}
-.table-form td .btn + .btn {margin-left: 8px;}
-.table-form td .btn-group .btn + .btn {margin-left: -1px;}
+.table-form > tbody > tr > td.text-bottom {vertical-align:bottom;}
+.table-form > tbody > tr > td .form-control {vertical-align:middle;margin:0;}
+.table-form > tbody > tr > td .checkbox,.table-form > tbody > tr > td input[type="radio"] + label {margin-right: 10px;}
+.table-form > tbody > tr > td > .row {margin-right: 0;}
+.table-form > tbody > tr > td > .row > [class*="col-"] {padding-right: 0;line-height: 34px}
+.table-form > tbody > tr > td .checkbox {margin: 0}
+.table-form > tbody > tr > td .btn + .btn {margin-left: 8px;}
+.table-form > tbody > tr > td .btn-group .btn + .btn {margin-left: -1px;}
 
 /* Table data */
 .table-data th, .table-data td {padding: 5px;}
@@ -254,10 +254,12 @@ form .star {display: none;}/* hide star */
 .panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
 .panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
 
+.panel-sm .panel-heading {padding: 6px 10px}
+
 /* File form */
-.fileBox {margin-bottom: 10px;}
+.fileBox {margin-bottom: 10px; width: 100%}
 #fileform > .fileBox:last-child {margin-bottom: 0;}
-.fileBox .input-group-addon{text-indent: -99em; padding: 0 !important; border-left: 0; border-right: 0}
+.fileBox .input-group-addon{text-indent: -9999em; padding: 0 !important; border-left: 0; border-right: 0}
 .fileBox .form-control[type='text'] + .input-group-btn > .btn {border-left: 0}
 .fileBox .form-control[type='text'] {height: 30px;}
 .fileBox .input-control {display: table-cell; border: 1px solid #ccc; padding: 0 10px; border-radius: 2px 0 0 2px}
@@ -372,11 +374,15 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table {margin-bottom: 0;}
 .outer .table .btn-icon {margin-left: -2px}
 .outer .table thead tr th {text-align: center;}
+.outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
 .outer .table th {vertical-align: middle;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
 .outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 8px}
+.outer .table-form .table tr > th:first-child, .outer .table-form .table tr > td:first-child {padding-left: 5px}
+.outer .table-form .table tr > th:last-child, .outer .table-form .table tr > td:last-child {padding-right: 5px}
+.outer .table-form .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 5px}
 .outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
 .outer .table tfoot .dropdown-menu {min-width: 100px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
@@ -442,7 +448,8 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 30px}
 
 /* Form in outer */
-form > .btn {margin-right: 10px;}
+.outer form > .btn {margin-right: 10px;}
+.outer form .panel {margin-bottom: 0;}
 
 /* Pager. */
 .pager {margin-bottom:0;line-height: 30px; color: #999}
@@ -546,11 +553,6 @@ td>select{padding-left: 0;padding-right: 0}
 
 
 /* Form settings */
-#dataform{margin-top:20px; padding:0 30px}
-#dataform caption{font-size:14px; padding:5px 5px 5px 10px}
-#dataform .rowhead{font-size:11.5px; font-weight:1.2; border:none}
-#dataform tr, #createform td, #createform th{border:none;}
-
 .actionlink{font-size:14px; font-weight:bold; padding-top:8px}
 .actionlink span{padding:5px 3px}
 
