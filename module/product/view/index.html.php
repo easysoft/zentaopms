@@ -12,45 +12,52 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<div id='featurebar'>
+  <div class='heading'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->product->index;?>  </div>
+  <div class='btn-group pull-right'>
+    <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
+  </div>
+</div>
+
 <div class='block' id='productbox'>
 <?php if(empty($productStats)):?>
-<table class='table-1 a-center' height='100%'>
-  <caption><?php echo $lang->my->home->products;?></caption>
-  <tr>
-    <td valign='middle'>
-    <?php 
-    $productLink = $this->createLink('product', 'create');
-    printf($lang->my->home->noProductsTip, $productLink);
-    ?>
-    </td>
-  </tr>
-</table>
+<div class='container w-500px'>
+  <div class='alert'>
+    <i class='icon icon-info-sign'></i>
+    <div class='content'>
+      <h5><?php echo $lang->my->home->noProductsTip ?></h5>
+      <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProduct,'', "class='btn btn-success'") ?>
+    </div>
+  </div>
+</div>
 <?php else:?>
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
-  <table class='table-1 colored fixed'>
-    <tr class='colhead'>
-      <th class='w-id'>   <?php echo $lang->idAB;?></th>
-      <th class='w-150px'><?php echo $lang->product->name;?></th>
-      <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
-      <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
-      <th><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
-      <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
-      <th><?php echo $lang->product->plans;?></th>
-      <th><?php echo $lang->product->releases;?></th>
-      <th><?php echo $lang->product->bugs;?></th>
-      <th><?php echo $lang->bug->unResolved;?></th>
-      <th><?php echo $lang->bug->assignToNull;?></th>
-    </tr>
+  <table class='table table-condensed table-hover table-striped table-borderless'>
+    <thead>
+      <tr>
+        <th class='w-id'>   <?php echo $lang->idAB;?></th>
+        <th class='w-150px'><?php echo $lang->product->name;?></th>
+        <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
+        <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
+        <th><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
+        <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+        <th><?php echo $lang->product->plans;?></th>
+        <th><?php echo $lang->product->releases;?></th>
+        <th><?php echo $lang->product->bugs;?></th>
+        <th><?php echo $lang->bug->unResolved;?></th>
+        <th><?php echo $lang->bug->assignToNull;?></th>
+      </tr>
+    </thead>
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
     <?php foreach($productStats as $product):?>
-    <tr class='a-center' style='height:30px'>
+    <tr class='text-center'>
       <td>
         <?php if($canBatchEdit):?>
         <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
         <?php endif;?>
         <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
       </td>
-      <td><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+      <td class='text-left'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
       <td><?php echo $product->stories['active']?></td>
       <td><?php echo $product->stories['changed']?></td>
       <td><?php echo $product->stories['draft']?></td>
@@ -65,10 +72,10 @@
     <?php if($canBatchEdit):?>
     <tfoot>
       <tr>
-        <td colspan='11' class='a-right'>
-          <div class='f-left'>
-          <?php echo html::selectAll() . html::selectReverse();?>
-          <?php echo html::submitButton($lang->product->batchEdit);?>
+        <td colspan='11'>
+          <div class='table-actions clearfix'>
+            <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';?>
+            <?php echo html::submitButton("<i class='icon-pencil'></i> " . $lang->product->batchEdit, '', '');?>
           </div>
         </td>
       </tr>
@@ -76,7 +83,6 @@
     <?php endif;?>
   </table>
 </form>
-</div>
 <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

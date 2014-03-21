@@ -201,23 +201,27 @@ class html
      * @param  array  $options    the array to create radio tag from.
      * @param  string $checked    the value to checked by default.
      * @param  string $attrib     other attribs.
+     * @param  string $type       inline or block
      * @return string
      */
-    static public function radio($name = '', $options = array(), $checked = '', $attrib = '')
+    static public function radio($name = '', $options = array(), $checked = '', $attrib = '', $type = 'inline')
     {
         $options = (array)($options);
         if(!is_array($options) or empty($options)) return false;
+        $isBlock = $type == 'block';
 
         $string  = '';
         foreach($options as $key => $value)
         {
-            $string .= "<label class='radio-inline'>\n";
+            if($isBlock) $string .= "<div class='radio'><label>";
+            else $string .= "<label class='radio-inline'>";
             $string .= "<input type='radio' name='$name' value='$key' ";
             $string .= ($key == $checked) ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' />\n ";
+            $string .= " id='$name$key' /> ";
             $string .= $value;
-            $string .= '</label>';
+            if($isBlock) $string .= '</label></div>';
+            else $string .= '</label>';
         }
         return $string;
     }
