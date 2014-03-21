@@ -10,10 +10,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <form method='post' action='<?php echo inLink('batchEdit');?>'>
-<table class='table-1 fixed colored'>
+<table class='table-1 fixed'>
   <tr class='colhead'>
     <th class='w-30px'>     <?php echo $lang->idAB;?></th>
     <th class='red'>        <?php echo $lang->project->name;?></th>
