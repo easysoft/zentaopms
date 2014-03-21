@@ -948,7 +948,8 @@ $(document).ready(function()
     $('.export').bind('click', function()
     {
         var checkeds = '';
-        $(':checkbox').each(function(){
+        $(':checkbox').each(function()
+        {
             if($(this).attr('checked'))
             {
                 var checkedVal = parseInt($(this).val());
