@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container w-900px'>
+<div class='container mw-900px'>
   <div id='featurebar'><div class='heading'><i class='icon-code-fork'></i> <?php echo $lang->product->roadmap;?></div></div>
   <table class='table-grid w-p100'>
     <?php 

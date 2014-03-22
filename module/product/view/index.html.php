@@ -21,7 +21,7 @@
 
 <div class='block' id='productbox'>
 <?php if(empty($productStats)):?>
-<div class='container w-500px'>
+<div class='container mw-500px'>
   <div class='alert'>
     <i class='icon icon-info-sign'></i>
     <div class='content'>

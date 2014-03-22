@@ -19,12 +19,12 @@ $(document).ready(function()
     setType(type);
 });
 </script>
-<div class='container w-900px'>
+<div class='container mw-900px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['doc']) . ' #' . $doc->id;?></span>
       <strong><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title);?></strong>
-      <small class='text-muted'> <?php echo $lang->doc->edit;?> <i class='icon icon-pencil'></i></small>
+      <small class='text-muted'> <?php echo html::icon($lang->icons['edit']) . ' ' . $lang->doc->edit;?></small>
     </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>

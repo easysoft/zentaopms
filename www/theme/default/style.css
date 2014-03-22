@@ -13,8 +13,9 @@
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
 .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
+.mw-200px {max-width:200px} .mw-400px {max-width:400px} .mw-500px {max-width:500px} .mw-600px {max-width:600px} .mw-700px {max-width:700px} .mw-800px {max-width:800px} .mw-900px {max-width:900px}
 
-.w-id {width:60px;} .w-pri {width:30px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:60px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
+.w-id {width:60px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
 /* Height definitions */
 .h-5px {height:5px} .h-10px {height:10px} .h-20px {height:20px} .h-30px {height:30px} .h-35px {height:35px} .h-40px {height:40px} .h-45px {height:45px} .h-50px {height:50px} .h-60px {height:60px} .h-70px {height:70px} .h-80px {height:80px} .h-100px {height:100px} .h-120px {height:120px} .h-130px {height:130px} .h-140px {height:140px} .h-150px {height:150px} .h-200px {height:200px}
@@ -215,9 +216,10 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed fieldset {background-color: #eee; padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 2px; position: relative;}
 .form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
 .form-condensed fieldset .table-form {margin-bottom: 0;}
-.form-condensed fieldset.collapsed {padding: 1px;}
-.form-condensed fieldset.collapsed .table-form {display: none}
+.form-condensed fieldset.collapsed, .form-condensed fieldset.fieldset-pure.collapsed {padding: 1px!important; background: #eee!important}
+.form-condensed fieldset.collapsed .table-form, .form-condensed fieldset.collapsed .article-content, .form-condensed fieldset.collapsed .form-group {display: none}
 .form-condensed legend {font-size: 12px; font-weight: bold; border:0px solid red; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666}
+.form-condensed .fieldset-pure legend{top: -20px}
 .form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}
 .form-condensed legend:hover {color: #333;}
 .form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
@@ -387,7 +389,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table tfoot .dropdown-menu {min-width: 100px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
 .outer .table tfoot .btn {padding: 4px 12px;}
-.outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; color: #666}
+.outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; opacity: 0.8}
 .outer .table tfoot .datepicker-wrapper:before {top: 5px}
 .outer .table tfoot .form-control.form-date {width: 110px}
 .outer .table tfoot .input-wrapper {display:  inline-block;}
@@ -407,7 +409,10 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* Main content in outer */
 .outer .row {padding: 15px 20px;}
+.outer .main {margin-bottom: 20px;}
 .outer .main fieldset {margin-bottom: 15px; border: 1px solid #e5e5e5; padding: 10px 15px 15px;}
+.outer .main fieldset.fieldset-pure {background: none; padding: 0; border: none}
+.outer .main fieldset.collapsed {border: none}
 .outer .main fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
 .outer .main .article-content {font-size: 14px; padding: 0}
 .outer .main .actions {text-align: center;}
@@ -420,7 +425,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .main-side > fieldset {padding: 5px 15px 10px;}
 
 .outer .main .tabs {margin-bottom: 15px;}
+.outer .main .table-form td > .tabs {margin-bottom: 0;}
 .outer .main .nav-tabs > li > a {padding: 5px 10px; color: #333}
+.outer .main .nav-tabs > li {margin-bottom: -2px;}
 .outer .main .nav-tabs > li.active > a, .outer .main .nav-tabs > li.active > a:hover, .outer .main .nav-tabs > li.active > a:focus {color: #333; font-weight: bold;}
 .outer .main .tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 15px}
 /*.outer .main .tab-pane > .table {margin: -10px -15px}*/

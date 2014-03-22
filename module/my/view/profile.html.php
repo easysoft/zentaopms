@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container w-600px'>
+<div class='container mw-600px'>
   <div id='featurebar'>
     <div class='heading'><i class='icon-user'></i> <?php echo $lang->my->profile;?></div>
     <div class='btn-group pull-right'>

@@ -10,7 +10,7 @@
 <table class='table table-condensed table-hover table-striped table-borderless'>
   <thead>
     <tr class='text-center'>
-      <th class='w-150px text-left'><div class='f-left'><i class="icon icon-cube"></i> <?php echo $lang->product->name;?></div></th>
+      <th class='w-150px text-left'><i class="icon icon-cube"></i> <?php echo $lang->product->name;?></th>
       <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
       <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
       <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>

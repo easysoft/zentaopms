@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container w-500px'>
+<div class='container mw-500px'>
   <div id='featurebar'>
     <div class='heading'><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></div>
   </div>

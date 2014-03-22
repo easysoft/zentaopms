@@ -11,32 +11,52 @@
  */
 ?>
 <?php include './header.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $story->title;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->closedReason;?></th>
-      <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=select-3 onchange="setStory(this.value)"');?></td>
-    </tr>
-    <tr id='duplicateStoryBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->duplicateStory;?></th>
-      <td><?php echo html::input('duplicateStory', '', 'class=text-3');?></td>
-    </tr>
-    <tr id='childStoriesBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->childStories;?></th>
-      <td><?php echo html::input('childStories', '', 'class=text-3');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='8' class='w-p98'");?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='a-center'>
-      <?php echo html::submitButton();?>
-      <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));?>
-      </td>
-    </tr>
-  </table>
-  <?php include '../../common/view/action.html.php';?>
-</form>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+    <small><?php echo html::icon($lang->icons['close']) . ' ' . $lang->story->close;?></small>
+  </div>
+</div>
+  <div class='row'>
+    <div class='col-md-8'>
+      <div class='main'>
+        <form method='post' target='hiddenwin' class='form-condensed'>
+          <table class='table table-form'>
+            <tr>
+              <th class='w-80px'><?php echo $lang->story->closedReason;?></th>
+              <td class='w-p45'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
+            </tr>
+            <tr id='duplicateStoryBox' class='hidden1'>
+              <th><?php echo $lang->story->duplicateStory;?></th>
+              <td><?php echo html::input('duplicateStory', '', 'class=form-control');?></td><td></td>
+            </tr>
+            <tr id='childStoriesBox' class='hidden1'>
+              <th><?php echo $lang->story->childStories;?></th>
+              <td><?php echo html::input('childStories', '', 'class=form-control');?></td><td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->story->comment;?></th>
+              <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan='2'>
+              <?php echo html::submitButton();?>
+              <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+    <div class='col-md-4'>
+      <div class='main main-side'>
+        <?php include '../../common/view/action.html.php';?>
+      </div>
+    </div>
+  </div>
+
+
+
 <?php include '../../common/view/footer.html.php';?>

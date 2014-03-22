@@ -13,9 +13,9 @@
 <?php include './header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $product->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
     <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
-    <small><i class='icon-random'></i> <?php echo $lang->story->change;?></small>
+    <small><?php echo html::icon($lang->icons['change']) . ' ' . $lang->story->change;?></small>
   </div>
 </div>
 <div class='row'>

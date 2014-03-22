@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<div class='container w-800px'>
+<div class='container mw-800px'>
   <div id='featurebar'>
     <div class='heading'><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></div>
   </div>
