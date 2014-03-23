@@ -416,6 +416,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .main fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
 .outer .main .article-content {font-size: 14px; padding: 0}
 .outer .main .actions {text-align: center;}
+.outer .main .actions + .tabs {margin-top: 20px;}
 .outer .main .actions > .btn, .outer .main .actions > .btn-group {margin: 0 4px}
 
 .outer .main ul.list-unstyled:last-child {margin-bottom: 0;}

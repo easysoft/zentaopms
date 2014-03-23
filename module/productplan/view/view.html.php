@@ -55,8 +55,8 @@
       <div class='actions'><?php if(!$product->deleted) echo $actionLinks;?></div>
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <li class='active'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?></a></li>
-          <li><a href='#batchUnlinkBug' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?></a></li>
+          <li class='active'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?> <?php $count = count($planStories); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
+          <li><a href='#batchUnlinkBug' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?> <?php $count = count($planBugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
         </ul>
         <div class='tab-content'>
           <div id='batchUnlinkStory' class='tab-pane active'>

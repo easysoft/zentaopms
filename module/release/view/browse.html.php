@@ -33,11 +33,11 @@
     <tbody>
     <?php foreach($releases as $release):?>
     <tr>
-      <td class='a-center'><?php echo $release->id;?></td>
+      <td class='text-center'><?php echo $release->id;?></td>
       <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
       <td><?php echo $release->buildName;?></td>
-      <td class='a-center'><?php echo $release->date;?></td>
-      <td class='a-center'>
+      <td class='text-center'><?php echo $release->date;?></td>
+      <td class='text-center'>
         <?php
         common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
         if(common::hasPriv('release', 'delete'))
@@ -50,7 +50,7 @@
     </tr>
     <?php endforeach;?>
     </tbody>
-  </table>  
+  </table>
 </div>
 
 <?php include '../../common/view/footer.html.php';?>

@@ -11,108 +11,169 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table class='cont-rt5'> 
-  <caption class='<?php if($release->deleted) echo 'deleted';?>'>RELEASE #<?php echo $release->id . ' ' . $release->name;?></caption>
-  <tr valign='top'>
-    <td>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['release']) . ' #' . $release->id;?></span>
+    <strong><?php echo $release->name;?></strong>
+    <?php if($release->deleted):?>
+    <small class='label label-danger'><?php echo $lang->release->deleted;?></small>
+    <?php endif; ?>
+  </div>
+  <div class='actions'>
+    <?php
+    $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
+    if(!$release->deleted)
+    {
+        ob_start();
+
+        echo "<div class='btn-group'>";
+        common::printIcon('release', 'edit',   "releaseID=$release->id");
+        common::printIcon('release', 'delete', "releaseID=$release->id", '', 'button', '', 'hiddenwin');
+        echo '</div>';
+
+        echo "<div class='btn-group'>";
+        echo common::printRPN($browseLink, $lang->goback);
+        echo '</div>';
+
+        $actionLinks = ob_get_contents();
+        ob_clean();
+        echo $actionLinks;
+    }
+    else
+    {
+        common::printRPN($browseLink);
+    }
+    ?>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-8'>
+    <div class='main'>
       <fieldset>
         <legend><?php echo $lang->release->desc;?></legend>
-        <div class='content'><?php echo $release->desc;?></div>
+        <div class='article-content'><?php echo $release->desc;?></div>
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center f-16px pb-10px'>
+      <div class='actions'>
       <?php
       $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
-      if(!$release->deleted)
-      { 
-          common::printIcon('release', 'edit',   "releaseID=$release->id");
-          common::printIcon('release', 'delete', "releaseID=$release->id", '', 'button', '', 'hiddenwin');
-      } 
-      echo common::printRPN($browseLink, $lang->goback);
+      if(!$release->deleted) echo $actionLinks; else echo common::printRPN($browseLink, $lang->goback);
       ?>
       </div>
-      <table class='table-1 fixed'>
-        <caption class='caption-t1'>
-          <?php echo $lang->release->stories;?>
-          <div class='f-right'><?php if(count($stories)) common::printIcon('release', 'export', 'type=story', '', 'button', '', '', "export");?></div>
-        </caption>
-        <tr>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th><?php echo $lang->story->title;?></th>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
-          <th class='w-hour'><?php echo $lang->statusAB;?></th>
-          <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
-        </tr>
-        <?php foreach($stories as $storyID => $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
-        <tr class='a-center'>
-          <td><?php echo sprintf('%03d', $story->id);?></td>
-          <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
-          <td class='a-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
-          <td><?php echo $users[$story->openedBy];?></td>
-          <td><?php echo $story->estimate;?></td>
-          <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
-          <td><?php echo $lang->story->stageList[$story->stage];?></td>
-        </tr>
-        <?php endforeach;?>
-        <tr><td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->finishStories, count($stories));?></td></tr>
-      </table>
-      <table class='table-1 fixed'>
-        <caption class='caption-t1'>
-          <?php echo $lang->release->bugs;?>
-          <div class='f-right'><?php if(count($bugs)) common::printIcon('release', 'export', 'type=bug', '', 'button', '', '', 'export');?></div>
-        </caption>
-        <tr>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th><?php echo $lang->bug->title;?></th>
-          <th class='w-100px'><?php echo $lang->bug->status;?></th>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
-          <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
-          <th class='w-date'><?php echo $lang->bug->resolvedDateAB;?></th>
-        </tr>
-        <?php foreach($bugs as $bug):?>
-        <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-        <tr class='a-center'>
-          <td><?php echo sprintf('%03d', $bug->id);?></td>
-          <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-          <td><?php echo $lang->bug->statusList[$bug->status];?></td>
-          <td><?php echo $users[$bug->openedBy];?></td>
-          <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-          <td><?php echo $users[$bug->resolvedBy];?></td>
-          <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
-        </tr>
-        <?php endforeach;?>
-        <tr><td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->resolvedBugs, count($bugs));?></td></tr>
-      </table>
-    </td>
-    <td class="divider"></td>
-    <td class="side">
+      <div class='tabs'>
+        <?php $countStories = count($stories); $countBugs = count($bugs); ?>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story']) . ' ' . $lang->release->stories; if($countStories > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countStories . "</span>";?></a></li>
+          <li><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->release->bugs; if($countBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countBugs . "</span>";?></a></li>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active' id='stories'>
+            <table class='table table-hover table-condensed table-borderless'>
+              <thead>
+                <tr>
+                  <th class='w-id'><?php echo $lang->idAB;?></th>
+                  <th class='w-pri'><?php echo $lang->priAB;?></th>
+                  <th><?php echo $lang->story->title;?></th>
+                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
+                  <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
+                  <th class='w-hour'><?php echo $lang->statusAB;?></th>
+                  <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
+                </tr>
+              </thead>
+              <?php foreach($stories as $storyID => $story):?>
+              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+              <tr class='text-center'>
+                <td><?php echo sprintf('%03d', $story->id);?></td>
+                <td><span class='story-<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
+                <td class='text-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
+                <td><?php echo $users[$story->openedBy];?></td>
+                <td><?php echo $story->estimate;?></td>
+                <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+                <td><?php echo $lang->story->stageList[$story->stage];?></td>
+              </tr>
+              <?php endforeach;?>
+              <tfoot>
+                <tr>
+                  <td colspan='7'>
+                    <div class='table-actions clearfix'>
+                      <?php if($countStories) common::printIcon('release', 'export', 'type=story', '', 'button', '', '', "export");?>
+                      <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class='tab-pane' id='bugs'>
+            <table class='table table-hover table-condensed table-borderless'>
+              <caption class='caption-t1'>
+                <?php echo $lang->release->bugs;?>
+                <div class='f-right'></div>
+              </caption>
+              <thead>
+                <tr>
+                  <th class='w-id'><?php echo $lang->idAB;?></th>
+                  <th><?php echo $lang->bug->title;?></th>
+                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
+                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
+                  <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
+                  <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
+                  <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
+                </tr>
+              </thead>
+              <?php foreach($bugs as $bug):?>
+              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <tr class='a-center'>
+                <td><?php echo sprintf('%03d', $bug->id);?></td>
+                <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+                <td><?php echo $users[$bug->openedBy];?></td>
+                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo $users[$bug->resolvedBy];?></td>
+                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+              </tr>
+              <?php endforeach;?>
+              <tfoot>
+                <tr>
+                  <td colspan='7'>
+                    <div class='table-actions clearfix'>
+                      <?php if(count($bugs)) common::printIcon('release', 'export', 'type=bug', '', 'button', '', '', 'export');?>
+                      <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <div class='main-side main'>
       <fieldset>
-      <legend><?php echo $lang->release->basicInfo?></legend>
-      <table class='table-1 a-left'>
-        <tr>
-          <th width='25%' class='a-right'><?php echo $lang->release->product;?></th>
-          <td><?php echo $release->productName;?></td>
-        </tr>  
-        <tr>
-          <th class='rowhead'><?php echo $lang->release->name;?></th>
-          <td><?php echo $release->name;?></td>
-        </tr>  
-        <tr>
-          <th class='rowhead'><?php echo $lang->release->build;?></th>
-          <td><?php echo $release->buildName;?></td>
-        </tr>  
-        <tr>
-          <th class='rowhead'><?php echo $lang->release->date;?></th>
-          <td><?php echo $release->date;?></td>
-        </tr>
-      </table>
+        <legend><?php echo $lang->release->basicInfo?></legend>
+        <table class='table-data'>
+          <tr>
+            <th class='w-80px'><?php echo $lang->release->product;?></th>
+            <td><?php echo $release->productName;?></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->release->name;?></th>
+            <td><?php echo $release->name;?></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->release->build;?></th>
+            <td><?php echo $release->buildName;?></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->release->date;?></th>
+            <td><?php echo $release->date;?></td>
+          </tr>
+        </table>
       </fieldset>
-    </td>
-  </tr>
-</table> 
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
