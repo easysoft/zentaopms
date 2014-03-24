@@ -202,7 +202,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getList($bugIDList = 0)
+    public function getByList($bugIDList = 0)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -423,7 +423,7 @@ class bugModel extends model
     public function batchConfirm($bugIDList)
     {
         $now  = helper::now();
-        $bugs = $this->getList($bugIDList);
+        $bugs = $this->getByList($bugIDList);
         foreach($bugIDList as $bugID)
         {
             if($bugs[$bugID]->confirmed) continue;
@@ -483,7 +483,7 @@ class bugModel extends model
     public function batchResolve($bugIDList, $resolution, $resolvedBuild)
     {
         $now  = helper::now();
-        $bugs = $this->getList($bugIDList);
+        $bugs = $this->getByList($bugIDList);
         foreach($bugIDList as $bugID)
         {
             $oldBug = $bugs[$bugID];

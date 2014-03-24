@@ -641,7 +641,7 @@ class task extends control
             unset($_POST['taskIDList']);
             $this->loadModel('action');
 
-            $tasks = $this->task->getList($taskIDList);
+            $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
                 if($task->status == 'wait' or $task->status == 'doing')

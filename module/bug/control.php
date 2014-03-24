@@ -840,7 +840,7 @@ class bug extends control
             /* Reset $_POST. Do not unset that because the function of close need that in model. */
             $_POST = array();
 
-            $bugs = $this->bug->getList($bugIDList);
+            $bugs = $this->bug->getByList($bugIDList);
             foreach($bugs as $bugID => $bug)
             {
                 if($bug->status != 'resolved')

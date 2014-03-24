@@ -58,6 +58,21 @@ class storyModel extends model
     }
 
     /**
+     * Get stories by idList.
+     * 
+     * @param  int|array|string    $storyIDList 
+     * @access public
+     * @return array
+     */
+    public function getByList($storyIDList = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->beginIF($storyIDList)->andWhere('id')->in($storyIDList)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Get affected things. 
      * 
      * @param  object  $story 
@@ -374,9 +389,10 @@ class storyModel extends model
         /* Init $stories. */
         if(!empty($storyIDList))
         {
+            $oldStories = $this->getByList($storyIDList);
             foreach($storyIDList as $storyID)
             {
-                $oldStory = $this->getById($storyID);
+                $oldStory = $oldStories[$storyID];
 
                 $story                 = new stdclass();
                 $story->lastEditedBy   = $this->app->user->account;
@@ -408,7 +424,7 @@ class storyModel extends model
 
             foreach($stories as $storyID => $story)
             {
-                $oldStory = $this->getById($storyID);
+                $oldStory = $oldStories[$storyID];
 
                 $this->dao->update(TABLE_STORY)->data($story)
                     ->autoCheck()
@@ -510,9 +526,11 @@ class storyModel extends model
         $date    = helper::today();
         $actions = array();
         $this->loadModel('action');
+
+        $oldStories = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {
-            $oldStory = $this->getById($storyID);
+            $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
 
             $story = new stdClass();
@@ -591,9 +609,10 @@ class storyModel extends model
 
         /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
         if($this->session->showSuhosinInfo) array_pop($storyIDList);
+        $oldStories = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {
-            $oldStory = $this->getById($storyID);
+            $oldStory = $oldStories[$storyID];
             if($oldStory->status == 'closed') continue;
 
             $story = new stdclass();
@@ -620,7 +639,7 @@ class storyModel extends model
         {
             if(!$story->closedReason) continue;
 
-            $oldStory = $this->getById($storyID);
+            $oldStory = $oldStories[$storyID];
 
             $this->dao->update(TABLE_STORY)->data($story)
                 ->autoCheck()
@@ -653,9 +672,10 @@ class storyModel extends model
     {
         $now         = helper::now();
         $allChanges  = array();
+        $oldStories  = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {
-            $oldStory = $this->getById($storyID);
+            $oldStory = $oldStories[$storyID];
 
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
@@ -681,9 +701,10 @@ class storyModel extends model
     {
         $now         = helper::now();
         $allChanges  = array();
+        $oldStories  = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {
-            $oldStory = $this->getById($storyID);
+            $oldStory = $oldStories[$storyID];
             if($oldStory->status == 'draft') continue;
 
             $story = new stdclass();
