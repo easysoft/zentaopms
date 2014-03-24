@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/colorbox.html.php';?>
+<style>
+body{padding-bottom:0px}
+</style>
 
 <script>
 function setFileName()
@@ -27,11 +30,11 @@ function closeWindow()
 }
 </script>
 
-<form method='post' target='hiddenwin' onsubmit='setFileName();' id='dataform'>
+<form method='post' target='hiddenwin' onsubmit='setFileName();'>
   <table class='table-1'>
     <caption><?php echo $lang->file->inputFileName;?></caption>
     <tr>
-      <td class='a-center' style='padding-top:30px;'>
+      <td class='a-center v-middle' height='50'>
         <?php echo html::input('fileName', $file->title) . "<strong>.{$file->extension}</strong>";?>
         <?php echo html::submitButton();?>
       </td>
