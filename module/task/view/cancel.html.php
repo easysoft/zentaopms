@@ -16,7 +16,7 @@
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>

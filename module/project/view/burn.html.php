@@ -12,16 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?>
-<script>$('#burnTab').addClass('active');</script>
 <table width='950' align='center' class='bd-none' id='burn'>
   <tr>
-    <td class='a-right pr-25px v-middle'>
+    <td class='a-right pr-25px'>
       <?php
-      $checked = ($type == 'noweekend') ? '' : "weekend";
-      echo html::checkbox('', array('weekend' => $lang->project->weekend), $checked);
-
       if($interval) echo html::select('interval', $dayList, $interval);
-
+      $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
+      echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn'");
       common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn' id='computeBurn'");
       echo $lang->project->howToUpdateBurn;
       ?>
@@ -30,8 +27,9 @@
   <tr><td class='a-center'><?php echo $charts; ?></td></tr>
 </table>
 <?php
+/* Interval is keyword in javascript so use intervals. */
+js::set('intervals', $interval);
 js::set('projectID', $projectID);
 js::set('type', $type);
-js::set('interval', $interval);
 ?>
 <?php include '../../common/view/footer.html.php';?>

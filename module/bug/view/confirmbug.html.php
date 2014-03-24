@@ -29,11 +29,11 @@ js::set('page', 'confirmbug');
       <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=select-2');?></td>
     </tr>  
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
+      <th class='rowhead'><?php echo $lang->bug->mailto;?></th>
       <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="w-p98" multiple');?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>
     </tr>
     <tr>

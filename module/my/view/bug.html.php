@@ -33,6 +33,7 @@
       <th class='w-type'>      <?php common::printOrderLink('type',       $orderBy, $vars, $lang->typeAB);?></th>
       <th>                     <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
       <th class='w-user'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+      <th class='w-user'>      <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
       <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
       <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
       <th class='w-140px'><?php echo $lang->actions;?></th>
@@ -51,6 +52,7 @@
       <td><?php echo $lang->bug->typeList[$bug->type]?></td>
       <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
       <td><?php echo $users[$bug->openedBy];?></td>
+      <td><?php echo $users[$bug->assignedTo];?></td>
       <td><?php echo $users[$bug->resolvedBy];?></td>
       <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
       <td class='a-right'>
@@ -67,28 +69,30 @@
     <?php endforeach;?>
     </tbody>
     <tfoot>
-      <tr><td colspan='9'>
-      <?php if($bugs and $canBatchEdit):?>
-      <div class='f-left'>
-        <?php
-        echo html::selectAll() . html::selectReverse();
+      <tr>
+        <td colspan='10'>
+          <?php if($bugs and $canBatchEdit):?>
+          <div class='f-left'>
+            <?php
+            echo html::selectAll() . html::selectReverse();
 
-        if(common::hasPriv('bug', 'batchEdit'))
-        {
-            $actionLink = $this->createLink('bug', 'batchEdit', "productID=0");
-            echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-        }
+            if(common::hasPriv('bug', 'batchEdit'))
+            {
+                $actionLink = $this->createLink('bug', 'batchEdit', "productID=0");
+                echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+            }
 
-        if(common::hasPriv('bug', 'batchClose') and $type != 'closedBy')
-        {
-            $actionLink = $this->createLink('bug', 'batchClose');
-            echo html::commonButton($lang->bug->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
-        }
-        ?>
-      </div>
-      <?php endif;?>
-      <?php $pager->show();?>
-      </td></tr>
+            if(common::hasPriv('bug', 'batchClose') and $type != 'closedBy')
+            {
+                $actionLink = $this->createLink('bug', 'batchClose');
+                echo html::commonButton($lang->bug->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+            }
+            ?>
+          </div>
+          <?php endif;?>
+          <?php $pager->show();?>
+        </td>
+      </tr>
     </tfoot>
   </table>
 </form>

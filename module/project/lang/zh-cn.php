@@ -193,7 +193,8 @@ $lang->project->linkStory             = '关联需求';
 $lang->project->createTask            = '添加任务';
 $lang->project->goback                = '返回项目首页';
 $lang->project->linkProduct           = '选择产品关联...';
-$lang->project->weekend               = '周末';
+$lang->project->noweekend             = '去除周末';
+$lang->project->withweekend           = '显示周末';
 $lang->project->interval              = '间隔';
 
 /* 统计。*/

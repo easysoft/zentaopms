@@ -1486,9 +1486,10 @@ class projectModel extends model
     /**
      * Get no weekend date 
      * 
-     * @param  string    $begin 
-     * @param  string    $end 
-     * @param  string    $type 
+     * @param  string     $begin 
+     * @param  string     $end 
+     * @param  string     $type 
+     * @param  string|int $interval 
      * @access public
      * @return array
      */

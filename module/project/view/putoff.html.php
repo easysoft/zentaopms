@@ -18,11 +18,11 @@
   <table class='table-1'>
     <caption><?php echo $project->name;?></caption>
     <tr>
-      <td class='rowhead'><?php echo $lang->project->begin;?></td>
+      <th class='rowhead'><?php echo $lang->project->begin;?></th>
       <td><?php echo html::input('begin', $project->begin, "class='text-3 date' onchange='computeWorkDays()'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->project->end;?></td>
+      <th class='rowhead'><?php echo $lang->project->end;?></th>
       <td><?php echo html::input('end', $project->end, "class='text-3 date' onchange='computeWorkDays()'");?></td>
     </tr>
     <tr>
@@ -30,7 +30,7 @@
       <td><?php echo html::input('days', $project->days, "class='text-3'") . $lang->project->day;?></td>
     </tr>  
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
     </tr>
     <tr>
