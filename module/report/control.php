@@ -153,6 +153,9 @@ class report extends control
 
         foreach($reminder as $user => $mail)
         {
+            /* Reset $this->output. */
+            $this->clear();
+
             /* Get email content and title.*/
             $this->view->mail = $mail;
             $mailContent = $this->parse('report', 'dailyreminder');
@@ -161,7 +164,6 @@ class report extends control
             $mailTitle  .= isset($mail->tasks) ? sprintf($this->lang->report->mailtitle->task, count($mail->tasks)) : '';
             $mailTitle  .= isset($mail->todos) ? sprintf($this->lang->report->mailtitle->todo, count($mail->todos)) : '';
             $mailTitle   = rtrim($mailTitle, ',');
-            $this->clear();
             
             /* Send email.*/
             echo date('Y-m-d H:i:s') . " sending to $user, ";

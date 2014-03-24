@@ -769,6 +769,9 @@ class task extends control
      */
     public function sendmail($taskID, $actionID)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         /* Set toList and ccList. */
         $task        = $this->task->getById($taskID);
         $projectName = $this->project->getById($task->project)->name;
@@ -805,7 +808,7 @@ class task extends control
         $this->view->task   = $task;
         $this->view->action = $action;
         $this->view->users  = $users;
-        $this->clear();
+
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send emails. */

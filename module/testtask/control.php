@@ -766,6 +766,9 @@ class testtask extends control
      */
     public function sendmail($testtaskID, $actionID, $actionType)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         $testtask = $this->testtask->getByID($testtaskID);
         $action   = $this->action->getById($actionID);
         $users    = $this->loadModel('user')->getPairs('noletter');
@@ -773,7 +776,6 @@ class testtask extends control
         $this->view->testtask = $testtask;
         $this->view->action   = $action;
         $this->view->users    = $users;
-        $this->clear();
 
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 

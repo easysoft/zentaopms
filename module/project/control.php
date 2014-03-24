@@ -1170,6 +1170,9 @@ class project extends control
      */
     public function sendmail($taskID, $actionID)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         /* Set toList and ccList. */
         $task        = $this->loadModel('task')->getById($taskID);
         $projectName = $this->project->getById($task->project)->name;
@@ -1204,7 +1207,7 @@ class project extends control
         /* Create the email content. */
         $this->view->task   = $task;
         $this->view->action = $action;
-        $this->clear();
+
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send emails. */

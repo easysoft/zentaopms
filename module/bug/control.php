@@ -1031,6 +1031,9 @@ class bug extends control
      */
     public function sendmail($bugID, $actionID)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         /* Set toList and ccList. */
         $bug         = $this->bug->getByID($bugID);
         $productName = $this->products[$bug->product];
@@ -1067,7 +1070,7 @@ class bug extends control
         $this->view->bug    = $bug;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');
-        $this->clear();
+
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
