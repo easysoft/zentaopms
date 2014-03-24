@@ -21,13 +21,20 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->files?></legend>
-        <?php if($release->files):?>
-        <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));?>
-        <?php elseif($release->filePath):?>
-        <?php echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank')?>
-        <?php elseif($release->scmPath):?>
-        <?php echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank')?>
-        <?php endif;?>
+        <?php
+        if($release->files)
+        {
+            echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+        }
+        elseif($release->filePath)
+        {
+            echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+        }
+        elseif($release->scmPath)
+        {
+            echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+        }
+        ?>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px pb-10px'>
