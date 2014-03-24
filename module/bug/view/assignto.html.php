@@ -25,11 +25,11 @@ js::set('page', 'assignedto');
       <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3 chosen'");?></td>
     </tr>  
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
+      <th class='rowhead'><?php echo $lang->bug->mailto;?></th>
       <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="w-p98" multiple');?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>

@@ -20,16 +20,16 @@
       <td><?php echo html::input('consumed', $task->consumed, "class='text-3'") . $lang->task->hour;?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->task->assignedTo;?></td>
+      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $members, $task->openedBy, "class='select-3 chosen'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->task->finishedDate;?></td>
+      <th class='rowhead'><?php echo $lang->task->finishedDate;?></th>
       <td><?php echo html::input('finishedDate',$date, "class='text-3'");?></td>
     </tr>
 
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>

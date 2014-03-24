@@ -16,27 +16,27 @@
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
+      <th class='rowhead'><?php echo $lang->bug->resolution;?></th>
       <td><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=select-3 onchange=setDuplicate(this.value)');?></td>
     </tr>
     <tr id='duplicateBugBox' style='display:none'>
-      <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
+      <th class='rowhead'><?php echo $lang->bug->duplicateBug;?></th>
       <td><?php echo html::input('duplicateBug', '', 'class=text-3');?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
+      <th class='rowhead'><?php echo $lang->bug->resolvedBuild;?></th>
       <td><?php echo html::select('resolvedBuild', $builds, '', 'class=select-3');?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
+      <th class='rowhead'><?php echo $lang->bug->resolvedDate;?></th>
       <td><?php echo html::input('resolvedDate', helper::now(), "class='select-3'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
+      <th class='rowhead'><?php echo $lang->bug->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='select-3 chosen'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
