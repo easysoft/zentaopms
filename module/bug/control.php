@@ -836,7 +836,9 @@ class bug extends control
         if($this->post->bugIDList)
         {
             $bugIDList = $this->post->bugIDList;
-            foreach($_POST as $postKey => $postValue) unset($_POST[$postKey]);
+
+            /* Reset $_POST. Do not unset that because the function of close need that in model. */
+            $_POST = array();
 
             $bugs = $this->bug->getList($bugIDList);
             foreach($bugs as $bugID => $bug)

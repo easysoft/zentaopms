@@ -78,6 +78,7 @@ class bugModel extends model
         $data    = fixer::input('post')->get();
         $actions = array();
 
+        /* Get pairs(moduleID => moduleOwner) for bug. */
         $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0));
         $moduleOwners = array();
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
