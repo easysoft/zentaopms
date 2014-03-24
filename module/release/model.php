@@ -23,7 +23,7 @@ class releaseModel extends model
      */
     public function getByID($releaseID, $setImgSize = false)
     {
-        $release = $this->dao->select('t1.*, t2.id as buildID, t2.packageType, t2.filePath, t2.scmPath, t2.name as buildName, t3.name as productName')
+        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t3.name as productName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -32,8 +32,9 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->files = $this->loadModel('file')->getByObject('release', $releaseID);
-        if($release->packageType == 'file' and empty($release->files)) $release->files = $this->loadModel('file')->getByObject('build', $release->buildID);
+        $this->loadModel('file');
+        $release->files = $this->file->getByObject('release', $releaseID);
+        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->buildID);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
     }
@@ -95,6 +96,7 @@ class releaseModel extends model
      */
     public function create($productID)
     {
+        $buildID = 0;
         if($this->post->build == false)
         {
             $build = fixer::input('post')

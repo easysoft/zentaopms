@@ -85,7 +85,7 @@ $.extend(
             error:function(jqXHR, textStatus, errorThrown)
             {
                 $.enableForm(formID);
-                if(textStatus == 'timeout' || textStatus == 'error') return alert(timeout);
+                if(textStatus == 'timeout' || textStatus == 'error') return alert(config.timeout);
                 alert(jqXHR.responseText + textStatus + errorThrown);
             }
         };

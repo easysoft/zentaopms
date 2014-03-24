@@ -101,8 +101,7 @@ $(function ()
     var baseline = $baselineJSON;
     var dateList = $dateListJSON;
     var ticks    = $ticksJSON;
-    var firstMon = 0;
-    var months   = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    var firstDay = 0;
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -132,20 +131,13 @@ $(function ()
                      {
                          var month    = tick.getMonth() + 1;
                          var dateTail = '';
-                         if(firstMon != month)
+                         if(firstDay != month)
                          {
-                             dateTail = '<br />/' + month;
-                             firstMon = month;
+                             dateTail = '/' + month;
+                             firstDay = month;
                          }
 
-                         if(config.clientLang == 'en')
-                         {
-                             title = months[month-1] + ' ' + tick.getDate();
-                         }
-                         else
-                         {
-                             title = month + '{$this->lang->date->month}' + tick.getDate();
-                         }
+                         title = tick.getFullYear() + '/' + month + '/' + tick.getDate();
 
                          if(ticks.length <= 30) dateTail = '/' + month;
                          return '<span title="' + title + '">' + tick.getDate() + dateTail + '</span>';

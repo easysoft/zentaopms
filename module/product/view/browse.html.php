@@ -31,7 +31,7 @@
   <div class='f-right'>
     <?php 
     echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick='toggleSubMenu(this.id,\"bottom\",0)' title='{$lang->export}'");
+    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick='toggleSubMenu(this.id,\"bottom\",0)'");
     echo '</span>';
 
     common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");

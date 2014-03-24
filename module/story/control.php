@@ -854,6 +854,9 @@ class story extends control
      */
     public function sendmail($storyID, $actionID)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         $story       = $this->story->getById($storyID);
         $productName = $this->product->getById($story->product)->name;
 
@@ -903,7 +906,7 @@ class story extends control
         $this->view->story  = $story;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');
-        $this->clear();
+
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */

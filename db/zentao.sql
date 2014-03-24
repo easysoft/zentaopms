@@ -67,7 +67,6 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `project` mediumint(8) unsigned NOT NULL default '0',
   `name` char(150) NOT NULL,
   `scmPath` char(255) NOT NULL,
-  `packageType` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'path',
   `filePath` char(255) NOT NULL,
   `date` date NOT NULL,
   `stories` text NOT NULL,

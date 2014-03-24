@@ -47,6 +47,7 @@ $lang->goback       = 'Back';
 $lang->goPC         = 'PC';
 $lang->go           = 'GO';
 $lang->more         = 'More';
+$lang->day          = 'Day';
 
 $lang->actions      = 'Actions';
 $lang->comment      = 'Comment';
@@ -365,10 +366,6 @@ $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <
 
 $lang->noResultsMatch    = "No results match";
 $lang->chooseUsersToMail = "Choose users to mail...";
-
-$lang->date = new stdclass();
-$lang->date->day   = 'Day';
-$lang->date->month = 'Month';
 
 /* Date times. */
 define('DT_DATETIME1',  'Y-m-d H:i:s');

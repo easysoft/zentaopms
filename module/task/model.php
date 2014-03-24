@@ -684,7 +684,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getList($taskIDList = 0)
+    public function getByList($taskIDList = 0)
     {
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)

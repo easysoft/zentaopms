@@ -40,10 +40,6 @@
       <td><?php echo html::input('scmPath', '', "class='text-1'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->build->packageType;?></th>
-      <td><?php echo html::radio('packageType', $lang->build->packageTypeList, 'path');?></td>
-    </tr>  
-    <tr>
       <th class='rowhead'><?php echo $lang->build->filePath;?></th>
       <td><?php echo html::input('filePath', '', "class='text-1'");?></td>
     </tr>  
@@ -118,5 +114,4 @@
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
-<?php js::set('packageType', 'filePath')?>
 <?php include '../../common/view/footer.html.php';?>

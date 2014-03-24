@@ -24,15 +24,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
     <td>
     <fieldset>
       <legend><?php echo $lang->bug->legendSteps;?></legend>
-      <div class='content'>
-      <?php 
-      if(strpos($bug->steps, 'src="data/upload'))
-      {
-        $bug->steps = preg_replace('/<img (.*)src="/', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot, $bug->steps);
-      }
-      echo $bug->steps;
-      ?>
-      </div>
+      <div class='content'><?php echo $bug->steps;?></div>
     </fieldset>
     </td>
   </tr>

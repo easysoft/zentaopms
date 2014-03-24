@@ -708,7 +708,7 @@ class project extends control
         $charts = $this->report->createJSChartFlot($project->name, $flotJSON, 900, 400);
 
         $dayList = array_fill(1, floor(count($dateList) / $this->config->project->maxBurnDay) + 5, '');
-        foreach($dayList as $key => $val) $dayList[$key] = ($key + 1) . $this->lang->date->day;
+        foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
         $this->view->title     = $title;
@@ -718,7 +718,7 @@ class project extends control
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
         $this->view->interval  = $interval;
-        $this->view->dayList   = array('full' => 1 . $this->lang->date->day) + $dayList;
+        $this->view->dayList   = array('full' => $this->lang->project->interval . 1 . $this->lang->day) + $dayList;
 
         $this->display();
     }
@@ -1170,6 +1170,9 @@ class project extends control
      */
     public function sendmail($taskID, $actionID)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         /* Set toList and ccList. */
         $task        = $this->loadModel('task')->getById($taskID);
         $projectName = $this->project->getById($task->project)->name;
@@ -1204,7 +1207,7 @@ class project extends control
         /* Create the email content. */
         $this->view->task   = $task;
         $this->view->action = $action;
-        $this->clear();
+
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send emails. */

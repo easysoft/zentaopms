@@ -641,7 +641,7 @@ class task extends control
             unset($_POST['taskIDList']);
             $this->loadModel('action');
 
-            $tasks = $this->task->getList($taskIDList);
+            $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
                 if($task->status == 'wait' or $task->status == 'doing')
@@ -769,6 +769,9 @@ class task extends control
      */
     public function sendmail($taskID, $actionID)
     {
+        /* Reset $this->output. */
+        $this->clear();
+
         /* Set toList and ccList. */
         $task        = $this->task->getById($taskID);
         $projectName = $this->project->getById($task->project)->name;
@@ -805,7 +808,7 @@ class task extends control
         $this->view->task   = $task;
         $this->view->action = $action;
         $this->view->users  = $users;
-        $this->clear();
+
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send emails. */
