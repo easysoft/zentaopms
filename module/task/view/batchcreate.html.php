@@ -18,10 +18,10 @@
     <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate;?></caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
+      <th class='w-200px'><?php echo $lang->task->module?></th>
       <th><?php echo $lang->task->story;?></th>
       <th class='red'><?php echo $lang->task->name;?></th>
       <th class='w-60px red'><?php echo $lang->typeAB;?></th>
-      <th class='w-80px'><?php echo $lang->task->module?></th>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
       <th class='w-200px'><?php echo $lang->task->desc;?></th>
@@ -51,15 +51,15 @@
     <?php $pri = 3;?>
     <tr class='a-center'>
       <td><?php echo $i + 1;?></td>
+      <td><?php echo html::select("module[$i]", $modules, $module, "class='select-1' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td class='a-left' style='overflow:visible'>
         <?php 
         echo html::select("story[$i]", $stories, $currentStory, "class='select-1' onchange='setStoryRelated($i)'");
-        echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
+        echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same' id='icon-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
         ?>
       </td>
       <td><?php echo html::input("name[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1');?></td>
-      <td><?php echo html::select("module[$i]", $modules, $module, "class='select-1' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::textarea("desc[$i]", '', "rows='1' class=text-1");?></td>

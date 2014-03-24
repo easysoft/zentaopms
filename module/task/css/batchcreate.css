@@ -1,3 +1,4 @@
 textarea {height:16px}
-.icon-green-same:before {content: "\f105";}
+#icon-same {margin:4px 0;}
+.icon-green-same:before {content: "\f0c5"; font-size:small; color:grey;}
 .sameAsStory{float:right;}
