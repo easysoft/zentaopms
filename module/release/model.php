@@ -33,8 +33,8 @@ class releaseModel extends model
         if(!$release) return false;
 
         $this->loadModel('file');
-        $buildFiles     = $this->file->getByObject('build', $release->buildID);
-        $release->files = $buildFiles ? $buildFiles : $this->file->getByObject('release', $releaseID);
+        $release->files = $this->file->getByObject('release', $releaseID);
+        if(empty($release->files))$release->files = $this->file->getByObject('build', $release->buildID);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
         return $release;
     }
@@ -96,6 +96,7 @@ class releaseModel extends model
      */
     public function create($productID)
     {
+        $buildID = 0;
         if($this->post->build == false)
         {
             $build = fixer::input('post')

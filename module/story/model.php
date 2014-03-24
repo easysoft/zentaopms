@@ -66,9 +66,11 @@ class storyModel extends model
      */
     public function getByList($storyIDList = 0)
     {
-        return $this->dao->select('*')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->beginIF($storyIDList)->andWhere('id')->in($storyIDList)->fi()
+        return $this->dao->select('t1.*, t2.spec, t2.verify')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.version=t2.version')
+            ->beginIF($storyIDList)->andWhere('t1.id')->in($storyIDList)->fi()
             ->fetchAll('id');
     }
 
@@ -551,7 +553,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
             $this->setStage($storyID);
 
-            if(strpos('done,postponed', $reason) !== false) $result = 'pass';
+            if($reason and strpos('done,postponed', $reason) !== false) $result = 'pass';
             $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result));
             $this->action->logHistory($actions[$storyID], array());
         }

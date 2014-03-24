@@ -708,7 +708,7 @@ class project extends control
         $charts = $this->report->createJSChartFlot($project->name, $flotJSON, 900, 400);
 
         $dayList = array_fill(1, floor(count($dateList) / $this->config->project->maxBurnDay) + 5, '');
-        foreach($dayList as $key => $val) $dayList[$key] = ($key + 1) . $this->lang->date->day;
+        foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
         $this->view->title     = $title;
@@ -718,7 +718,7 @@ class project extends control
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
         $this->view->interval  = $interval;
-        $this->view->dayList   = array('full' => 1 . $this->lang->date->day) + $dayList;
+        $this->view->dayList   = array('full' => $this->lang->project->interval . 1 . $this->lang->day) + $dayList;
 
         $this->display();
     }

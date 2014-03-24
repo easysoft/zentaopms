@@ -47,6 +47,7 @@ $lang->goback       = '返回';
 $lang->goPC         = 'PC版';
 $lang->go           = 'GO';
 $lang->more         = '更多';
+$lang->day          = '天';
 
 $lang->actions      = '操作';
 $lang->comment      = '备注';
@@ -365,10 +366,6 @@ $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=
 
 $lang->noResultsMatch    = "没有匹配结果";
 $lang->chooseUsersToMail = "选择要发信通知的用户...";
-
-$lang->date = new stdclass();
-$lang->date->day   = '天';
-$lang->date->month = '月';
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');

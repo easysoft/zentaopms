@@ -15,16 +15,12 @@
 <script>$('#burnTab').addClass('active');</script>
 <table width='950' align='center' class='bd-none' id='burn'>
   <tr>
-    <td class='a-right pr-25px' style='vertical-align:middle'>
+    <td class='a-right pr-25px v-middle'>
       <?php
       $checked = ($type == 'noweekend') ? '' : "weekend";
       echo html::checkbox('', array('weekend' => $lang->project->weekend), $checked);
 
-      if($interval)
-      {
-          echo $lang->project->interval;
-          echo html::select('interval', $dayList, $interval);
-      }
+      if($interval) echo html::select('interval', $dayList, $interval);
 
       common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn' id='computeBurn'");
       echo $lang->project->howToUpdateBurn;
