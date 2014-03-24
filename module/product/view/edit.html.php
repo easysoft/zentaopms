@@ -41,7 +41,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->desc;?></th>
-      <td><?php echo html::textarea('desc', $product->desc, "rows='8' class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', htmlspecialchars($product->desc), "rows='8' class='area-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->acl;?></th>

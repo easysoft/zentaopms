@@ -125,7 +125,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
-      <td><?php echo html::textarea('desc', $build->desc, "rows='10' class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='10' class='area-1'");?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton() .html::hidden('project', $build->project);?></td></tr>
   </table>

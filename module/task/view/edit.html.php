@@ -30,7 +30,7 @@
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->task->desc;?></legend>
-            <?php echo html::textarea('desc', $task->desc, "rows='8' class='area-1'");?>
+            <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='area-1'");?>
           </fieldset>
           <fieldset>
             <legend><?php echo $lang->comment;?></legend>
@@ -49,11 +49,11 @@
     <td class='side'>
       <fieldset>
         <legend><?php echo $lang->task->legendBasic;?></legend>
-        <table class='table-1'> 
+        <table class='table-1'>
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
             <td><?php echo html::select('project', $projects, $task->project, 'class="select-1" onchange="loadAll(this.value)"');?></td>
-          </tr>  
+          </tr>
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->module;?></th>
             <td><span id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="select-1"');?></span></td>

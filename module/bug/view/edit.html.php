@@ -44,7 +44,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->bug->legendSteps;?></legend>
-           <?php echo html::textarea('steps', $bug->steps, "rows='12' class='area-1'");?>
+            <?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12' class='area-1'");?>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>

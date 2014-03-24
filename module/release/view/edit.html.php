@@ -32,7 +32,6 @@
       <th class='rowhead'><?php echo $lang->release->linkStoriesAndBugs;?></th>
       <td>
         <div class="w-p90">
-
           <div class='half-left'>
             <table class='mainTable'>
               <tr style='border-bottom:none'>
@@ -106,7 +105,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->release->desc;?></th>
-      <td><?php echo html::textarea('desc', $release->desc, "rows=10 class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='area-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
