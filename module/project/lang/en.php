@@ -193,7 +193,8 @@ $lang->project->linkStory             = 'Link story';
 $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back';
 $lang->project->linkProduct           = 'Select product to link...';
-$lang->project->weekend               = 'Weekend';
+$lang->project->noweekend             = 'No weekend';
+$lang->project->widthweekend          = 'Width weekend';
 $lang->project->interval              = 'Interval';
 
 /* Report. */
