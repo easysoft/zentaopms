@@ -12,7 +12,7 @@
 if(isset($error))
 {
     include '../../common/view/header.lite.html.php';
-    die("<br />" . str_replace('\n', "<br />", join('', $error)));
+    die("<br />" . nl2br(join('', $error)));
 }
 ?>
 
