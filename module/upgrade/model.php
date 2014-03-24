@@ -771,7 +771,7 @@ class upgradeModel extends model
         foreach($projects as $id => $project)
         {
             $this->dao->update(TABLE_PROJECT)
-                ->set('`desc`')->eq($project->goal . '<br />' . $project->desc)
+                ->set('`desc`')->eq($project->desc . '<br />' . $project->goal)
                 ->where('id')->eq($id)
                 ->exec();
         }
