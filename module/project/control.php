@@ -670,6 +670,7 @@ class project extends control
      * 
      * @param  int       $projectID 
      * @param  string    $type 
+     * @param  int       $interval 
      * @access public
      * @return void
      */
