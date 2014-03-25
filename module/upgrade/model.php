@@ -767,9 +767,11 @@ class upgradeModel extends model
      */
     public function mergeProjectGoalAndDesc()
     {
-        $projects = $this->dao->select('id, goal, `desc`')->from(TABLE_PROJECT)->fetchAll('id');
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id');
         foreach($projects as $id => $project)
         {
+            if(!isset($project->goal)) continue;
+
             $this->dao->update(TABLE_PROJECT)
                 ->set('`desc`')->eq($project->desc . '<br />' . $project->goal)
                 ->where('id')->eq($id)

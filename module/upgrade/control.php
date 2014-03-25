@@ -90,6 +90,7 @@ class upgrade extends control
             $this->loadModel('extension');
             $extensions = $this->extension->getLocalExtensions('installed');
 
+            $versions = array();
             foreach($extensions as $code => $extension) $versions[$code] = $extension->version;
 
             $incompatibleExts = $this->extension->checkIncompatible($versions);
