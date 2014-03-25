@@ -384,7 +384,7 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-    if($('#treebox').length) $('.outer').addClass('with-side');
+    if($('.outer > .side').length) $('.outer').addClass('with-side');
 
     var resetOuterHeight = function()
     {

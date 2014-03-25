@@ -414,6 +414,7 @@ $lang->icons['plan']    = 'flag';
 $lang->icons['dynamic'] = 'volume-up';
 $lang->icons['build']   = 'tag';
 $lang->icons['test']    = 'check';
+$lang->icons['team']    = 'group';
 
 $lang->icons['create']      = 'plus';
 $lang->icons['batchCreate'] = 'plus-sign';
@@ -432,5 +433,7 @@ $lang->icons['link']        = 'link';
 $lang->icons['close']       = 'off';
 $lang->icons['activate']    = 'off';
 $lang->icons['review']      = 'search';
+$lang->icons['putoff']      = 'calendar';
+$lang->icons['suspend']     = 'pause';
 
 include (dirname(__FILE__) . '/menuOrder.php');

@@ -37,7 +37,7 @@
     <tbody>
     <?php foreach($tasks2Imported as $task):?>
     <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-    <tr class='a-center'>
+    <tr class='text-center'>
 
       <td>
       <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />

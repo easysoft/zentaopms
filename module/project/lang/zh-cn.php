@@ -56,6 +56,7 @@ $lang->project->all           = '所有';
 $lang->project->typeDesc      = '长期项目禁用燃尽图，运维项目禁用燃尽图和需求。';
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
+$lang->project->deleted       = '已删除';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
@@ -219,3 +220,5 @@ $lang->project->selectGroup->suspended = '(已挂起)';
 $lang->project->selectGroup->done      = '(已结束)';
 
 $lang->project->projectTasks = '项目';
+
+$lang->project->byUser = '按用户';

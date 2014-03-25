@@ -32,7 +32,7 @@
     <?php if(isset($prjStories[$story->id])) continue;?>
     <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
     <tr>
-      <td class='a-left'>
+      <td class='text-left'>
         <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
         <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
         <?php echo html::a($storyLink, $story->id);?>
@@ -49,7 +49,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='7' class='a-left'>
+        <td colspan='7' class='text-left'>
           <?php 
           if($storyCount)  echo html::selectAll() . html::selectReverse() . html::submitButton();
           if(!$storyCount) echo $lang->project->whyNoStories;

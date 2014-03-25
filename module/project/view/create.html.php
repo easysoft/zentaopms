@@ -77,7 +77,7 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
-      <td class='a-left' id='productsBox'><?php echo html::select("products[]", $allProducts, $products, "class='select-1 chosen' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
+      <td class='text-left' id='productsBox'><?php echo html::select("products[]", $allProducts, $products, "class='select-1 chosen' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->desc;?></th>
@@ -92,7 +92,7 @@ $(document).ready(function()
       <td><?php echo html::checkbox('whitelist', $groups, $whitelist);?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
 </form>

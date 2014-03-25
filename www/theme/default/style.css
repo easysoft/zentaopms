@@ -40,6 +40,10 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 
 /* Table */
 .table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 2px}
+.table-fixed {table-layout: fixed;}
+.table-fixed th, .table-fixed td  {overflow:hidden; white-space:nowrap;}
+.table-fixed tfoot > tr > th, .table-fixed tfoot > tr > td {overflow: visible;}
+
 /* Tables sorters */
 .tablesorter thead tr div {padding:0; margin:0}
 .tablesorter thead tr .header {cursor:pointer;}
@@ -350,8 +354,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 #featurebar .nav {height: 30px; float: left;}
 #featurebar .nav > li {float: left; margin-right: 2px;}
-#featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px}
+#featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px; margin-right: 10px;}
 #featurebar .nav > li > .form-control.form-date {width: 110px}
+#featurebar .nav > li.datepicker-wrapper:before {right: 15px}
 #featurebar .nav > li > a {padding: 0px 6px;}
 #featurebar .nav > li.active > a, #featurebar .nav > li.active > a:hover, #featurebar .nav > li.active > a:active, #featurebar .nav > li.active > a:focus {font-weight: bold; color: #333}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}

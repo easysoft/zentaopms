@@ -37,7 +37,7 @@ var browseType = '<?php echo $browseType;?>';
     </thead>
     <tbody>
     <?php foreach($bugs as $bug):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td>
         <?php echo html::checkbox("import[$bug->id]", '');?> 
         <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>

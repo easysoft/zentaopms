@@ -36,15 +36,15 @@
   </tr>
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <?php foreach($projectStats as $project):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td>
       <?php if($canBatchEdit):?>
       <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
       <?php endif;?>
       <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), sprintf('%03d', $project->id));?>
     </td>
-    <td class='a-left'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
-    <td class='a-left'><?php echo $project->code;?></td>
+    <td class='text-left'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
+    <td class='text-left'><?php echo $project->code;?></td>
     <td><?php echo $users[$project->PM];?></td>
     <td><?php echo $project->end;?></td>
     <td><?php echo $lang->project->statusList[$project->status];?></td>
@@ -61,7 +61,7 @@
   <?php if($canBatchEdit):?>
   <tfoot>
     <tr>
-      <td colspan='10' class='a-right'>
+      <td colspan='10' class='text-right'>
         <div class='f-left'>
         <?php echo html::selectAll() . html::selectReverse();?>
         <?php echo html::submitButton($lang->project->batchEdit);?>

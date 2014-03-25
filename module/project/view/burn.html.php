@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?>
 <script>$('#burnTab').addClass('active');</script>
-<div class='a-center'>
+<div class='text-center'>
   <?php
   echo $charts; 
   common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');

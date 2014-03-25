@@ -25,7 +25,7 @@
     <th class='w-150px'>    <?php echo $lang->project->days;?></th>
   </tr>
   <?php foreach($projectIDList as $projectID):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIDList[$projectID]", $projectID);?></td>
     <td><?php echo html::input("names[$projectID]",     $projects[$projectID]->name, "class='text-1'");?></td>
     <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='text-1'");?></td>
@@ -36,7 +36,7 @@
     <td><?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='w-100px'") . $lang->project->day;?></td>
   </tr>
   <?php endforeach;?>
-  <tfoot><tr><td colspan='8' class='a-center'><?php echo html::submitButton();?></td></tr></tfoot>
+  <tfoot><tr><td colspan='8' class='text-center'><?php echo html::submitButton();?></td></tr></tfoot>
 </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
