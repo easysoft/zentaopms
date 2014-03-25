@@ -16,7 +16,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['release']) . ' #' . $release->id;?></span>
     <strong><?php echo $release->name;?></strong>
     <?php if($release->deleted):?>
-    <small class='label label-danger'><?php echo $lang->release->deleted;?></small>
+    <span class='label label-danger'><?php echo $lang->release->deleted;?></span>
     <?php endif; ?>
   </div>
   <div class='actions'>

@@ -19,7 +19,7 @@
   <span class='prefix'><?php echo html::icon($lang->icons['plan']) . ' #' . $plan->id;?></span>
     <strong><?php echo $plan->title;?></strong>
     <?php if($plan->deleted):?>
-    <small class='label label-danger'><?php echo $lang->plan->deleted;?></small>
+    <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>
     <?php endif; ?>
   </div>
   <div class='actions'>

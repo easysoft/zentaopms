@@ -41,8 +41,6 @@ function setPreview()
         $('#copyButton').removeClass('hidden');
     }
 
-    $("#preview").colorbox({width:960, height:550, iframe:true, transition:'none', scrolling:true});
-
     setAfter();
 }
 
@@ -99,7 +97,8 @@ function setStories(moduleID, projectID)
 
 $(document).ready(function()
 {
+    var options = {no_results_text: noResultsMatch, allow_single_deselect: true, disable_search_threshold: 10, width: '100%', placeholder_text_single: selectAnOption, placeholder_text_multiple: selectSoomeOptions};
     setPreview();
-    $("#story").chosen({no_results_text: noResultsMatch});
-    $("#mailto").chosen({no_results_text: noResultsMatch});
+    $("#story").chosen(options);
+    $("#mailto").chosen(options);
 });

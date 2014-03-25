@@ -12,7 +12,7 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
+.w-auto {width: auto} .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
 .mw-200px {max-width:200px} .mw-400px {max-width:400px} .mw-500px {max-width:500px} .mw-600px {max-width:600px} .mw-700px {max-width:700px} .mw-800px {max-width:800px} .mw-900px {max-width:900px}
 
 .w-id {width:60px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
@@ -57,7 +57,7 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 
 /* Datepicker */
 .datepicker-wrapper {position: relative;}
-.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 6px; color: #808080; font-size: 14px;}
+.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 6px; color: #808080; font-size: 14px; top: 4px}
 .datepicker-wrapper > .form-control {padding-right: 30px;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
@@ -227,6 +227,8 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}
 .form-condensed legend:hover {color: #333;}
 .form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
+.form-condensed .chosen-container-single .chosen-single {padding: 4px 10px; height: 30px}
+.form-condensed .chosen-container-single .chosen-single div {padding: 4px 10px}
 
 /* help in form */
 .help-block {margin-bottom: 5px;}
@@ -327,6 +329,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #defaultMenu > ul > li, #moreMenu > ul > li,#searchResult > ul > li {display: block; float: none; margin: 0 -15px; padding: 2px 10px; border-bottom: 1px dashed #ddd;}
 #defaultMenu > ul > li:hover, #defaultMenu > .actions > a:hover, #moreMenu > ul > li:hover, #searchResult > ul > li:hover {background: #f1f1f1}
 #defaultMenu > ul > li > a, #moreMenu > ul > li > a, #searchResult > ul > li > a {line-height: 24px}
+#moreMenu > ul > li > a {color: #808080}
 #defaultMenu > ul > li > a:hover, #moreMenu > ul > li > a:hover, #searchResult > ul > li > a:hover {background: none}
 #defaultMenu > .actions > a {display: block; text-align: right; margin: 0 -15px; padding-right: 15px; line-height: 30px}
 #searchResult.show-more #defaultMenu > ul > li, #defaultMenu > .actions > a {border-right: 1px solid #ddd}
@@ -372,7 +375,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666; border-radius: 4px; margin-bottom: 5px;}
 #titlebar > .heading > .prefix > i {font-size: 28px; vertical-align: middle; color: #808080}
 #titlebar > .heading > strong {display: inline-block; vertical-align: middle; margin-right: 5px;}
-#titlebar > .heading > small {color: #808080;}
 #titlebar > .heading > small > i {position: relative; top: 1px;}
 #titlebar .actions {position: absolute; right: 20px; top: 13px;}
 #titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
@@ -472,7 +474,14 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* modal with iframe */
 .modal-iframe .modal-body {transition: all 0.5s; padding: 0}
+.modal.with-titlebar .modal-header {position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
+.modal.with-titlebar .modal-header .modal-body {z-index: 990}
+.modal.with-titlebar .modal-header .modal-title {display: none}
+.modal.with-titlebar .modal-header .close {position: absolute; right: 15px; top: 20px}
 .body-modal {padding-bottom: 0; overflow: hidden;}
+.body-modal .outer > form {margin: 10px 5px 20px}
+.body-modal .outer > .main {padding: 10px 20px; margin: 0}
+.body-modal > form {padding-bottom: 15px;}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 

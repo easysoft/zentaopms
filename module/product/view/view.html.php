@@ -16,7 +16,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['product']) . ' #' . $product->id;?></span>
     <strong><?php echo $product->name;?></strong>
     <?php if($product->deleted):?>
-    <small class='label label-danger'><?php echo $lang->product->deleted;?></small>
+    <span class='label label-danger'><?php echo $lang->product->deleted;?></span>
     <?php endif; ?>
   </div>
   <div class='actions'>

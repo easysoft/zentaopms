@@ -16,7 +16,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['project']) . ' #' . $project->id;?></span>
     <strong><?php echo $project->name;?></strong>
     <?php if($project->deleted):?>
-    <small class='label label-danger'><?php echo $lang->project->deleted;?></small>
+    <span class='label label-danger'><?php echo $lang->project->deleted;?></span>
     <?php endif; ?>
   </div>
   <div class='actions'>

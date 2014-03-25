@@ -847,15 +847,17 @@ function setModal()
                 modal.removeClass('modal-loading');
                 if(options.height == 'auto')
                 {
-                    setTimeout(function()
+                    try
                     {
-                        try
+                        var $frame = $(window.frames[options.name].document);
+                        if($frame.find('#titlebar').length) modal.addClass('with-titlebar');
+
+                        setTimeout(function()
                         {
-                            var $frame = $(window.frames[options.name].document);
                             modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').height()}, 100);
-                        }
-                        catch(e){}
-                    }, 100);
+                        }, 100);
+                    }
+                    catch(e){}
                 }
             }
             modal.modal('show');
