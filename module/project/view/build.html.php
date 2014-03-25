@@ -27,7 +27,7 @@
     <th><?php echo $lang->build->filePath;?></th>
     <th class='w-date'><?php echo $lang->build->date;?></th>
     <th class='w-user'><?php echo $lang->build->builder;?></th>
-    <th class='w-150px'><?php echo $lang->actions;?></th>
+    <th class='w-100px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>

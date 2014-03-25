@@ -41,7 +41,7 @@
         echo html::select("begins[$i]", $times, $time, "onchange=setBeginsAndEnds($i,'begin')");
         echo html::select("ends[$i]",   $times, '', "onchange=setBeginsAndEnds($i,'end')");
         ?>
-      <td>
+      </td>
     </tr>  
     <?php endfor;?>
     <tr><td colspan='6' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
