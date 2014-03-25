@@ -35,7 +35,7 @@
     if($bugs[$bugID]->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
     if($bugs[$bugID]->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
     ?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
       <td><?php echo html::select("types[$bugID]",         $lang->bug->typeList, $bugs[$bugID]->type, 'class=select-1');?></td>
       <td><?php echo html::select("severities[$bugID]",   (array)$lang->bug->severityList, $bugs[$bugID]->severity, 'class=select-1');?></td>
@@ -53,7 +53,7 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

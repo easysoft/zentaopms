@@ -21,7 +21,7 @@
       <th class='rowhead'><?php echo $lang->sso->ip;?></th>
       <td><?php echo html::input('ip', $auth->ip, "class='text-5'");?></td>
     </tr>
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

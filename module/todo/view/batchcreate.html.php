@@ -27,7 +27,7 @@
 
     <?php $pri = 3;?>
     <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange=loadList(this.value,$i+1) class='select-1'");?></td>
       <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=select-1');?></td>
@@ -44,7 +44,7 @@
       <td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='6' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='6' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include './footer.html.php';?>

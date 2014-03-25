@@ -22,7 +22,7 @@
         echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
         echo join($removeCommands, '<br />');
     }
-    echo "<p class='a-center'>" . html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"') . '</p>';
+    echo "<p class='text-center'>" . html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"') . '</p>';
     ?>
     </td>
   </tr>

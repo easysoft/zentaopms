@@ -60,7 +60,7 @@ include '../../common/view/header.html.php';
   </tr>
 
   <tr>
-     <td colspan='2' class='a-center'>
+     <td colspan='2' class='text-center'>
        <?php 
        echo html::submitButton();
        if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));

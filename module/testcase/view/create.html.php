@@ -81,7 +81,7 @@
           foreach($steps as $stepID => $step)
           {
               $stepID += 1;
-              echo "<tr id='row$stepID' class='a-center'>";
+              echo "<tr id='row$stepID' class='text-center'>";
               echo "<th class='stepID'>$stepID</th>";
               echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='w-p100'") . '</td>';
               echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='w-p100'") . '</td>';
@@ -105,7 +105,7 @@
       <td><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?> </td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
     </tr>
   </table>
 </form>

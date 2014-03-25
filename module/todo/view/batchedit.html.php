@@ -26,7 +26,7 @@
     </tr>
 
     <?php foreach($editedTodos as $todo):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-2 date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='select-1'");?></td>
@@ -57,7 +57,7 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='6'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='6' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include './footer.html.php';?>

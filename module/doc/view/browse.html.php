@@ -35,7 +35,7 @@ var browseType = '<?php echo $browseType;?>';
       <div class='box-title'><?php echo $libName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
-        <div class='a-right'>
+        <div class='text-right'>
           <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
           <?php if(is_numeric($libID)) common::printLink('tree', 'fix', "root=$libID&type=customdoc", $lang->tree->fix, 'hiddenwin');?>
         </div>
@@ -61,9 +61,9 @@ var browseType = '<?php echo $browseType;?>';
           $viewLink = $this->createLink('doc', 'view', "docID=$doc->id");
           $canView  = common::hasPriv('doc', 'view');
           ?>
-          <tr class='a-center'>
+          <tr class='text-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
-            <td class='a-left' title="<?php echo $doc->title?>"><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
+            <td class='text-left' title="<?php echo $doc->title?>"><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
             <td><?php echo $lang->doc->types[$doc->type];?></td>
             <td><?php isset($users[$doc->addedBy]) ? print($users[$doc->addedBy]) : print($doc->addedBy);?></td>
             <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
@@ -73,7 +73,7 @@ var browseType = '<?php echo $browseType;?>';
               if(common::hasPriv('doc', 'delete'))
               {
                   $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
               }
               ?>
             </td>

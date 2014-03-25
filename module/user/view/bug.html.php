@@ -38,7 +38,7 @@
   </thead>
   <tbody>
   <?php foreach($bugs as $bug):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
     <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
     <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri]?>'><?php echo $lang->bug->priList[$bug->pri]?></span></td>

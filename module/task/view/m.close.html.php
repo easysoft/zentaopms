@@ -8,7 +8,7 @@
       <td class='w-70px'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td colspan="2">
       <?php 
       echo html::submitButton('', 'data-inline="true" data-theme="b"');

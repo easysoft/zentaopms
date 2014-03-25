@@ -19,7 +19,7 @@
       <td><?php echo html::input('name', '', "class='text-1'");?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

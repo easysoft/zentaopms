@@ -1,4 +1,4 @@
-<tr class='a-center'>
+<tr class='text-center'>
   <th><?php echo $lang->convert->item?></th>
   <th><?php echo $lang->convert->count?></th>
   <th><?php echo $lang->convert->info?></th>

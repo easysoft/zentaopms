@@ -33,7 +33,7 @@
       <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple'");?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='3'>
+      <td class='text-center' colspan='3'>
         <?php 
         echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));

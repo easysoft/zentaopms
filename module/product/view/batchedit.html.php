@@ -23,7 +23,7 @@
       <th class='w-100px'><?php echo $lang->product->status;?></th>
     </tr>
     <?php foreach($productIDList as $productID):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
       <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='text-1'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='text-1'");?></td>
@@ -33,7 +33,7 @@
       <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status);?></td>
     </tr>
     <?php endforeach;?>
-    <tfoot><tr><td colspan='7' class='a-center'><?php echo html::submitButton();?></td></tr></tfoot>
+    <tfoot><tr><td colspan='7' class='text-center'><?php echo html::submitButton();?></td></tr></tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

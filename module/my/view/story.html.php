@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
-  <div class='heading'><i class='icon-file-text'></i> <?php echo $lang->my->story;?></div>
+  <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->my->story;?></div>
   <nav class='nav'>
     <?php
     echo "<li id='assignedToTab'>" . html::a(inlink('story', "type=assignedTo"),  $lang->my->storyMenu->assignedToMe) . "</li>";

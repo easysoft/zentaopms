@@ -66,7 +66,7 @@
                       <table class='table-1 fixed bd-none' id='story'>
                         <?php foreach($stories as $key => $story):?>
                         <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true); ?>
-                        <tr class='a-center'>
+                        <tr class='text-center'>
                           <td class='w-id a-left'>
                             <input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?>
                           </td>
@@ -91,7 +91,7 @@
                       <table class='table-1 fixed bd-none' id='bug'>
                         <?php foreach($bugs as $bug):?>
                         <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-                        <tr class='a-center'>
+                        <tr class='text-center'>
                           <td class='w-id a-left'>
                             <input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if($bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?>> <?php echo sprintf('%03d', $bug->id);?>
                           </td>
@@ -115,7 +115,7 @@
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows='10' class='area-1'");?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php js::set('packageType', 'filePath')?>

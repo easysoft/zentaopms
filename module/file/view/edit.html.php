@@ -31,7 +31,7 @@ function closeWindow()
   <table class='table-1'>
     <caption><?php echo $lang->file->inputFileName;?></caption>
     <tr>
-      <td class='a-center' style='padding-top:30px;'>
+      <td class='text-center' style='padding-top:30px;'>
         <?php echo html::input('fileName', $file->title) . "<strong>.{$file->extension}</strong>";?>
         <?php echo html::submitButton();?>
       </td>

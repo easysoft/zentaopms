@@ -36,7 +36,7 @@
   </thead>
   <tbody>
   <?php foreach($tasks as $task):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='a-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
     <td class='nobr'><?php echo $task->projectName?></td>

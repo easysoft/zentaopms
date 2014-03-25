@@ -321,7 +321,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </div>
     </td>
-    <th width='50' class='a-center' style='cursor:pointer; padding:0'>
+    <th width='50' class='text-center' style='cursor:pointer; padding:0'>
       <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
       <a id="searchlite" href="javascript:showlite()" class="hidden"><i class="icon-double-angle-up icon-2x"></i></a>
       <?php echo html::hidden('formType', 'lite');?>

@@ -36,7 +36,7 @@
       if($bug->plan and helper::diffDate($plans[$bug->plan], helper::today()) > 0) continue;
       ?>
       <tr>
-        <td class='a-left'>
+        <td class='text-left'>
           <input class='ml-10px' type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
@@ -51,7 +51,7 @@
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='7' class='a-left'>
+        <td colspan='7' class='text-left'>
           <?php if(count($allBugs)) echo html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') .  html::submitButton($lang->productplan->linkBug);?>
         </td>
       </tr>
@@ -77,7 +77,7 @@
       <?php $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkBug');?>
       <?php foreach($planBugs as $bug):?>
       <tr>
-        <td class='a-center'>
+        <td class='text-center'>
           <?php if($canBatchUnlink):?>
           <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
           <?php endif;?>
@@ -102,7 +102,7 @@
       <?php if(count($planBugs) and $canBatchUnlink):?>
       <tfoot>
       <tr>
-        <td colspan='7' class='a-left'>
+        <td colspan='7' class='text-left'>
         <?php 
         echo html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm');
         echo html::submitButton($lang->productplan->batchUnlink);

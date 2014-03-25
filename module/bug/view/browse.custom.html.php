@@ -5,7 +5,7 @@
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
-        <div class='a-right'><?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?></div>
+        <div class='text-right'><?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?></div>
       </div>
       </nobr>
     </td>
@@ -55,7 +55,7 @@
               ?>
             </nobr></td>
             <?php endforeach;?>
-            <td class='a-center'><nobr>
+            <td class='text-center'><nobr>
               <?php
               $params = "bugID=$bug->id";
               common::printIcon('bug', 'resolve', $params, $bug, 'list', '', '', 'iframe', true);

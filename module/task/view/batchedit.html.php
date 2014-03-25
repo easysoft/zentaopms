@@ -37,7 +37,7 @@
         $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
     }
     ?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
       <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=text-1');?></td>
       <td><?php echo html::select("modules[$taskID]",       $modules, $tasks[$taskID]->module, 'class=select-1')?></td>
@@ -60,7 +60,7 @@
     </td></tr>
     <?php endif;?>
 
-    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns;?>' class='a-center'>
+    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns;?>' class='text-center'>
       <?php echo html::submitButton();?>
     </td></tr>
   </table>

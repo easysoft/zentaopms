@@ -15,7 +15,7 @@
     <caption><?php echo $lang->convert->setting . $lang->colon . strtoupper($source);?></caption>
     <?php echo $setting;?>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
   <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>

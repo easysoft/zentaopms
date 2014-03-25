@@ -28,7 +28,7 @@
     <h1 onClick="showDetail('todo', <?php echo $todo->id;?>)"><?php echo $todo->name;?></h1>
     <div><?php echo $todo->desc;?></div>
     <div id='item<?php echo $todo->id;?>'><?php echo $todo->desc;?></div>
-    <div data-role='content' class='a-center'>
+    <div data-role='content' class='text-center'>
       <?php
       common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'button', '', 'hiddenwin');
       if($todo->account == $app->user->account)

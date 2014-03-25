@@ -46,7 +46,7 @@
                   <th><?php echo $lang->report->percent;?></th>
                 </tr>
                 <?php foreach($datas[$chartType] as $key => $data):?>
-                <tr class='a-center'>
+                <tr class='text-center'>
                   <td><?php echo $data->name;?></td>
                   <td><?php echo $data->value;?></td>
                   <td><?php echo ($data->percent * 100) . '%';?></td>

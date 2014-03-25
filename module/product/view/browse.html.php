@@ -14,7 +14,7 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
-  <nav class='nav'>
+  <ul class='nav'>
     <li id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></li>
     <li id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></li>
     <li id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></li>
@@ -25,10 +25,10 @@
     <li id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></li>
     <li id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></li>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
-  </nav>
+  </ul>
   <div class='actions'>
     <div class='btn-group'>
-      <div class="btn-group">
+      <div class='btn-group'>
         <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
           <i class='icon-download-alt'></i> <?php echo $lang->export ?>
           <span class='caret'></span>
@@ -54,7 +54,7 @@
 </div>
 <div class='side' id='treebox'>
   <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
-  <header class='nobr'><i class='icon-cube'></i> <strong><?php echo $productName;?></strong></header>
+  <header class='nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></header>
   <div class='side-body'>
     <?php echo $moduleTree;?>
     <div class='text-right'>

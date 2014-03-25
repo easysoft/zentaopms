@@ -14,7 +14,7 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php 
 $itemRow = <<<EOT
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td>
       <input type='text' class="text-1"  value="" name="keys[]">
       <input type='hidden' value="0" name="systems[]">
@@ -22,7 +22,7 @@ $itemRow = <<<EOT
     <td>
       <input type='text' class="w-p98" value="" name="values[]">
     </td>
-    <td class='a-left'>
+    <td class='text-left'>
       <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
       <a href='javascript:void()' class='link-icon' onclick='delItem(this)'><i class='icon-delete'></i></a>
     </td>
@@ -70,14 +70,14 @@ EOT;
             <?php if($canAdd):?><th class='w-40px'></th><?php endif;?>
           </tr>
           <?php foreach($fieldList as $key => $value):?>
-          <tr class='a-center'>
+          <tr class='text-center'>
             <?php $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;?>
             <td><?php echo $key === '' ? 'NULL' : $key; echo html::hidden('keys[]', $key) . html::hidden('systems[]', $system);?></td>
             <td>
               <?php echo html::input("values[]", $value, "class='w-p98'");?>
             </td>
             <?php if($canAdd):?>
-            <td class='a-left'>
+            <td class='text-left'>
               <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
               <?php if(!$system):?><a href='javascript:void()' onclick='delItem(this)' class='link-icon'><i class='icon-delete'></i></a><?php endif;?>
             </td>
@@ -86,7 +86,7 @@ EOT;
           <?php endforeach;?>
           <tfoot>
             <tr>
-              <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='a-center'>
+              <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
               <?php 
               $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
               echo html::radio('lang', $appliedTo, 'all');

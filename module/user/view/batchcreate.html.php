@@ -31,7 +31,7 @@
     <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
     <?php $groupList = $groupList + array('ditto' => $lang->user->ditto)?>
     <?php for($i = 0; $i < $config->user->batchCreate; $i++):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='select-1'");?>
       <td><?php echo html::input("account[$i]", '', "class='text-1 account_$i' autocomplete='off' onchange='changeEmail($i)'");?></td>
@@ -48,7 +48,7 @@
       </td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='9' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='9' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

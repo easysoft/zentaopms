@@ -28,7 +28,7 @@
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'>
+      <td colspan='2' class='text-center'>
        <?php 
        echo html::submitButton();
        echo html::linkButton($lang->goback, $this->session->taskList);

@@ -23,9 +23,9 @@
       <th class='w-p30 '> <?php echo $lang->story->comment;?></th>
     </tr>
     <?php foreach($storyIDList as $storyID):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
-      <td class='a-left'><?php echo $stories[$storyID]->title;?></td>
+      <td class='text-left'><?php echo $stories[$storyID]->title;?></td>
       <td><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>
 
       <?php if($stories[$storyID]->status != 'closed'):?>
@@ -59,7 +59,7 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='5'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='5' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='5' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

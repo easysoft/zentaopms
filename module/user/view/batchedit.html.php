@@ -29,7 +29,7 @@
     <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
     <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
     <?php foreach($users as $user):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $user->id;?></td>
       <td><?php echo html::select("dept[$user->id]", $depts, empty($user->dept) ? 'ditto' : $user->dept, "class='select-1'");?>
       <td><?php echo html::input("account[$user->id]", $user->account, "class='text-1' autocomplete='off'");?></td>
@@ -40,7 +40,7 @@
       <td><?php echo html::input("join[$user->id]", $user->join, "class='w-p70 date'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr><td colspan='7' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='7' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

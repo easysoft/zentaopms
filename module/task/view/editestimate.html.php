@@ -33,7 +33,7 @@
       <td><?php echo html::textarea('work', $estimate->work, "class=text-5");?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'>
+      <td colspan='2' class='text-center'>
         <?php echo html::submitButton() . html::backButton();?>
       </td>
     </tr>

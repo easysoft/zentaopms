@@ -7,7 +7,7 @@
     </td>
     <td> 
 	  <?php include './links.html.php';?>
-      <div class='a-right'><?php echo $lang->misc->copyright;?></div>
+      <div class='text-right'><?php echo $lang->misc->copyright;?></div>
     </td>
   </tr>
 </table>

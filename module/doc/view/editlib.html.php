@@ -21,7 +21,7 @@
       <th class='rowhead'><?php echo $lang->doc->libName;?></th>
       <td><?php echo html::input('name', $libName, "class='text-1'");?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php endif;?>

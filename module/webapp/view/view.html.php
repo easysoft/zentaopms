@@ -18,24 +18,24 @@
   </caption>
   <?php if($type == 'local'):?>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->module?></th>
+    <th class='text-right'><?php echo $lang->webapp->module?></th>
     <td><?php echo $modules[$webapp->module]?></td>
   </tr>
   <?php endif;?>
   <tr>
-    <th class='a-right' width='60'><?php echo $lang->webapp->name?></th>
+    <th class='text-right' width='60'><?php echo $lang->webapp->name?></th>
     <td><?php echo $webapp->name?></td>
   </tr>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->url?></th>
+    <th class='text-right'><?php echo $lang->webapp->url?></th>
     <td><?php echo $webapp->url?></td>
   </tr>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->author?></th>
+    <th class='text-right'><?php echo $lang->webapp->author?></th>
     <td><?php echo $webapp->author?></td>
   </tr>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->target?></th>
+    <th class='text-right'><?php echo $lang->webapp->target?></th>
     <td><?php echo $lang->webapp->targetList[$webapp->target]?></td>
   </tr>
   <?php if($webapp->target == 'popup'):?>
@@ -47,7 +47,7 @@
   }
   ?>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->size?></th>
+    <th class='text-right'><?php echo $lang->webapp->size?></th>
     <td>
       <?php
       echo $lang->webapp->sizeList[$webapp->size];
@@ -57,30 +57,30 @@
   </tr>
   <?php endif;?>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->abstract?></th>
+    <th class='text-right'><?php echo $lang->webapp->abstract?></th>
     <td><?php echo $webapp->abstract?></td>
   </tr>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->desc?></th>
+    <th class='text-right'><?php echo $lang->webapp->desc?></th>
     <td><?php echo $webapp->desc?></td>
   </tr>
   <?php if($type == 'local'):?>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->addType?></th>
+    <th class='text-right'><?php echo $lang->webapp->addType?></th>
     <td><?php echo $lang->webapp->addTypeList[$webapp->addType]?></td>
   </tr>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->addedBy?></th>
+    <th class='text-right'><?php echo $lang->webapp->addedBy?></th>
     <td><?php echo $users[$webapp->addedBy]?></td>
   </tr>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->addedDate?></th>
+    <th class='text-right'><?php echo $lang->webapp->addedDate?></th>
     <td><?php echo $webapp->addedDate?></td>
   </tr>
   <?php endif;?>
   <?php if($type == 'api'):?>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->downloads?></th>
+    <th class='text-right'><?php echo $lang->webapp->downloads?></th>
     <td><?php echo $webapp->downloads?></td>
   </tr>
   <?php endif;?>

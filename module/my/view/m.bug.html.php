@@ -21,7 +21,7 @@
       <h1 onClick="showDetail('bug', <?php echo $bug->id;?>)"><?php echo $bug->title;?></h1>
       <div><?php echo $bug->steps;?></div>
       <div id='item<?php echo $bug->id;?>'></div>
-      <div data-role='content' class='a-center'>
+      <div data-role='content' class='text-center'>
         <?php
         common::printIcon('bug', 'confirmBug', "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
         common::printIcon('bug', 'assignTo',   "bugID=$bug->id", '',   'button', '', '', 'iframe');

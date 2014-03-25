@@ -26,7 +26,7 @@
       <th class='rowhead'><?php echo $lang->group->option;?></th>
       <td><?php echo html::checkbox('options', $lang->group->copyOptions);?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

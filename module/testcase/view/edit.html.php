@@ -43,7 +43,7 @@
         foreach($case->steps as $stepID => $step)
         {
             $stepID += 1;
-            echo "<tr id='row$stepID' class='a-center'>";
+            echo "<tr id='row$stepID' class='text-center'>";
             echo "<th class='stepID'>$stepID</th>";
             echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='w-p100'") . '</td>';
             echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='w-p100'") . '</td>';
@@ -66,7 +66,7 @@
         <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
       </fieldset>
 
-      <div class='a-center'>
+      <div class='text-center'>
        <?php echo html::submitButton();?>
        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' 
             onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
@@ -89,7 +89,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-            <td class='a-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
+            <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
             </td>       
           </tr>
           <tr>

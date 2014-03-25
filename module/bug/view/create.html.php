@@ -113,7 +113,7 @@ js::set('refresh', $lang->refresh);
       <td><?php echo $this->fetch('file', 'buildform', 'fileCount=2&percent=0.85');?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'>
+      <td colspan='2' class='text-center'>
         <?php echo html::submitButton() . html::backButton() . html::hidden('case', $caseID);?>
       </td>
     </tr>

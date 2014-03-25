@@ -49,9 +49,9 @@
     }
     ?>
     <?php $pri = 3;?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td class='a-left' style='overflow:visible'>
+      <td class='text-left' style='overflow:visible'>
         <?php 
         echo html::select("story[$i]", $stories, $story, "class='select-1'");
         echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
@@ -66,7 +66,7 @@
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=select-1');?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

@@ -124,7 +124,7 @@
               </thead>
               <?php foreach($bugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-              <tr class='a-center'>
+              <tr class='text-center'>
                 <td><?php echo sprintf('%03d', $bug->id);?></td>
                 <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td><?php echo $lang->bug->statusList[$bug->status];?></td>

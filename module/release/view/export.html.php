@@ -38,7 +38,7 @@ function closeWindow()
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
     <tr>
-      <td class='a-center'>
+      <td class='text-center'>
         <?php echo $lang->setFileName;?>
         <?php echo html::input('fileName', '', 'size=15') . ".html";?>
         <?php echo html::submitButton();?>

@@ -46,7 +46,7 @@ var browseType = '<?php echo $browseType;?>';
   <tbody>
   <?php foreach($actions as $action):?>
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo $action->date;?></td>
     <td>
       <?php 
@@ -57,7 +57,7 @@ var browseType = '<?php echo $browseType;?>';
     <td><?php echo $action->actionLabel;?></td>
     <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
     <td><?php echo $action->objectID;?></td>
-    <td class='a-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
+    <td class='text-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
   </tr>
   <?php endforeach;?>
   </tbody>

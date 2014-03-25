@@ -59,7 +59,7 @@
       <td><input type='checkbox' name='private' id='private' value='1' <?php if($todo->private) echo 'checked';?>></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'>
+      <td colspan='2' class='text-center'>
         <?php echo html::submitButton() . html::backButton();?>
       </td>
     </tr>

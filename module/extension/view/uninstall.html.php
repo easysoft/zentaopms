@@ -28,7 +28,7 @@
         echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
         echo join($removeCommands, '<br />');
     }
-    echo "<p class='a-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
+    echo "<p class='text-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
     ?>
     <?php endif;?>
     </td>

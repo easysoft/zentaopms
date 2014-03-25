@@ -30,7 +30,7 @@
     </tr>  
     <?php endif;?>
     <tr>
-      <td colspan='2' class='a-center'>
+      <td colspan='2' class='text-center'>
       <?php echo html::submitButton();?>
       </td>
     </tr>

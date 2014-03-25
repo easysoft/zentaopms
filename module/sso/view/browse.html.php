@@ -17,12 +17,12 @@
   </thead>
   <tbody>
     <?php foreach($auths as $code => $auth):?>
-    <tr class='a-left'>
+    <tr class='text-left'>
       <td><?php echo $auth->title?></td>
       <td><?php echo $code?></td>
       <td><?php echo $auth->key?></td>
       <td><?php echo $auth->ip?></td>
-      <td class='a-center'>
+      <td class='text-center'>
         <?php
         common::printIcon('sso', 'edit',   "code=$code");
         common::printIcon('sso', 'delete', "code=$code", '', 'list', '', 'hiddenwin');

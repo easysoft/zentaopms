@@ -14,7 +14,7 @@ include '../../common/view/header.html.php';
 <form method='post' target='hiddenwin'>
 <table class='table-4' align='center'>
   <caption><?php echo $lang->mail->inputFromEmail; ?></caption>
-  <tr><td class='a-center'><?php echo html::input('fromAddress', $fromAddress, 'class=text-3') . html::submitButton($lang->mail->nextStep);?></td></tr>
+  <tr><td class='text-center'><?php echo html::input('fromAddress', $fromAddress, 'class=text-3') . html::submitButton($lang->mail->nextStep);?></td></tr>
 </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

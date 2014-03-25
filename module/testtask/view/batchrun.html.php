@@ -31,7 +31,7 @@ table .table-1 td{border:0px;}
     </tr>
     <?php foreach($caseIDList as $caseID):?>
     <?php if(!$productID) $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>
       <td><?php echo $lang->testcase->priList[$cases[$caseID]->pri]?></td>
       <td align='left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
@@ -55,7 +55,7 @@ table .table-1 td{border:0px;}
       </td>
     </tr>  
     <?php endforeach;?>
-    <tr><td colspan='6' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <script type='text/javascript'>

@@ -29,10 +29,10 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->files;?></th>
-      <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
+      <td class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>

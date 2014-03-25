@@ -14,7 +14,7 @@
     </tr>
     <?php endforeach;?>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

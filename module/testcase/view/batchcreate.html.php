@@ -28,15 +28,15 @@
     <?php $moduleOptionMenu['same'] = $lang->testcase->same; if($i != 0) $currentModuleID = 'same';?>
     <?php $lang->testcase->typeList['same'] = $lang->testcase->same; $type = ($i == 0 ? 'feature' : 'same');?>
     <?php $pri = 3;?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class=select-1");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=select-1");?></td>
-      <?php if(!$story):?><td class='a-left'style='overflow:visible'><?php echo html::select("story[$i]", '', '', 'class="select-1 storySelect"');?></td><?php endif;?>
+      <?php if(!$story):?><td class='text-left'style='overflow:visible'><?php echo html::select("story[$i]", '', '', 'class="select-1 storySelect"');?></td><?php endif;?>
       <td><?php echo html::input("title[$i]", '', "class='text-1'");?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='<?php $story ? print '4' : print '5'?>' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='<?php $story ? print '4' : print '5'?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

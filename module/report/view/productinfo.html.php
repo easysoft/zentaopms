@@ -35,7 +35,7 @@
             <?php $id = 1;?>
             <?php foreach($product->plans as $plan):?>
               <?php $class = $color ? 'rowcolor' : '';?>
-              <?php if($id != 1) echo "<tr class='a-center'>"?>
+              <?php if($id != 1) echo "<tr class='text-center'>"?>
                 <td align='left' class="<?php echo $class;?>"><?php echo $plan->title;?></td>
                 <td class="<?php echo $class;?>"><?php echo $plan->begin;?></td>
                 <td class="<?php echo $class;?>"><?php echo $plan->end;?></td>

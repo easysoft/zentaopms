@@ -33,7 +33,7 @@ js::set('page', 'assignedto');
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>

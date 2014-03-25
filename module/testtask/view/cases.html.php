@@ -70,8 +70,8 @@ var moduleID   = '<?php echo $moduleID;?>';
           $canBatchRun    = common::hasPriv('testtask', 'batchRun');
           ?>
           <?php foreach($runs as $run):?>
-          <tr class='a-center'>
-            <td class='a-left'>
+          <tr class='text-center'>
+            <td class='text-left'>
               <?php if($canBatchEdit or $canBatchAssign or $canBatchRun):?>
               <input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> 
               <?php endif;?>
@@ -86,7 +86,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
             <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
-            <td class='a-center'>
+            <td class='text-center'>
               <?php
               common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase');
               common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');

@@ -38,7 +38,7 @@
       if($story->plan and helper::diffDate($plans[$story->plan], helper::today()) > 0) continue;
       ?>
       <tr>
-        <td class='a-left'>
+        <td class='text-left'>
           <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
           <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?>
         </td>
@@ -55,7 +55,7 @@
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='9' class='a-left'>
+        <td colspan='9' class='text-left'>
           <?php if(count($allStories)) echo html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') .  html::submitButton($lang->story->linkStory);?>
         </td>
       </tr>
@@ -83,7 +83,7 @@
       <?php $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkStory');?>
       <?php foreach($planStories as $story):?>
       <tr>
-        <td class='a-center'>
+        <td class='text-center'>
           <?php if($canBatchUnlink):?>
           <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
           <?php endif;?>
@@ -110,7 +110,7 @@
       <?php if(count($planStories) and $canBatchUnlink):?>
       <tfoot>
       <tr>
-        <td colspan='9' class='a-left'>
+        <td colspan='9' class='text-left'>
         <?php 
         echo html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm');
         echo html::submitButton($lang->productplan->batchUnlink);

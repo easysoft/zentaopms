@@ -22,7 +22,7 @@
       <th class='rowhead'><?php echo $lang->group->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows=5 class=area-1");?></textarea></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

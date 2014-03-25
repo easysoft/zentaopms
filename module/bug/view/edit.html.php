@@ -54,7 +54,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           <legend><?php echo $lang->bug->legendAttatch;?></legend>
           <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
           </fieldset>
-          <div class='a-center'>
+          <div class='text-center'>
             <?php 
             echo html::submitButton();
             $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");

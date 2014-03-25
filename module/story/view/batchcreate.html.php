@@ -27,7 +27,7 @@
     <?php for($i = 0; $i < $config->story->batchCreate; $i++):?>
     <?php $moduleID = $i == 0 ? $moduleID : 'same';?>
     <?php $planID   = $i == 0 ? '' : 'same';?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, 'class=select-1');?></td>
       <td><?php echo html::select("plan[$i]", $plans, $planID, 'class=select-1');?></td>
@@ -38,7 +38,7 @@
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='text-1'");?></td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

@@ -36,7 +36,7 @@
     </tr>
     <tr>
       <th class='rowhead'></th>
-      <td class='a-center'>
+      <td class='text-center'>
         <?php 
         echo html::submitButton();
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));

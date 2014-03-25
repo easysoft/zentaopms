@@ -24,7 +24,7 @@ if(isset($error))
     <div class='f-right'><?php echo $lang->mail->sendmailTips;?></div>
   </caption>
   <tr>
-    <td class='a-center'>
+    <td class='text-center'>
       <?php 
       echo html::select('to', $users, $app->user->account);
       echo html::submitButton($lang->mail->test);

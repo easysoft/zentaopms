@@ -21,7 +21,7 @@
       <th class='rowhead'><?php echo $lang->sso->ip;?></th>
       <td><?php echo html::input('ip', '', "class='text-5' placeholder='{$lang->sso->note->ip}'");?></td>
     </tr>
-    <tr><td></td><td colspan='2' class='a-left'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td></td><td colspan='2' class='text-left'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <div class="instruction"><?php echo $lang->sso->instruction;?></div>

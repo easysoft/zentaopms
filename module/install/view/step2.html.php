@@ -16,7 +16,7 @@
     <caption><?php echo $lang->install->setConfig;?></caption>
     <tr>
       <th class='w-p20'><?php echo $lang->install->key;?></th>
-      <th class='a-left'><?php echo $lang->install->value?></th>
+      <th class='text-left'><?php echo $lang->install->value?></th>
     </tr>
     <tr>
       <th><?php echo $lang->install->defaultLang;?></th>
@@ -52,7 +52,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::hidden('requestType', 'GET');?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::hidden('requestType', 'GET');?></td>
     </tr>
   </table>
 </form>

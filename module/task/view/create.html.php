@@ -80,14 +80,14 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
-      <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
+      <td class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->afterSubmit;?></th>
       <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
   <span id='responser'></span>

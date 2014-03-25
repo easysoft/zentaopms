@@ -75,7 +75,7 @@
                       <table class='f-left table-1 fixed bd-none'>
                         <?php foreach($stories as $key => $story):?>
                         <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
-                        <tr class='a-center'>
+                        <tr class='text-center'>
                           <td class='w-id a-left' id='story'><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if(strpos(',' . $build->stories . ',', ',' . $story->id . ',') !== false) echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
                           <td class='a-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='preview'");?></td>
                           <td class='<?php echo $story->status;?> w-50px'><?php echo $lang->story->statusList[$story->status];?></td>
@@ -109,7 +109,7 @@
                       <table class='f-left table-1 fixed bd-none'>
                         <?php foreach($bugs as $bug):?>
                         <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-                        <tr class='a-center'>
+                        <tr class='text-center'>
                           <td class='w-id a-left' id='bug'><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if(strpos(',' . $build->bugs . ',', ',' . $bug->id . ',') !== false) echo 'checked';?>> <?php echo sprintf('%03d', $bug->id);?></td>
                           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                           <td class='w-80px'><?php echo $lang->bug->statusList[$bug->status];?></td>
@@ -131,7 +131,7 @@
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
       <td><?php echo html::textarea('desc', $build->desc, "rows='10' class='area-1'");?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton() .html::hidden('project', $build->project);?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton() .html::hidden('project', $build->project);?></td></tr>
   </table>
 </form>
 <?php js::set('packageType', $build->packageType == 'file' ? 'fileform' : 'filePath')?>

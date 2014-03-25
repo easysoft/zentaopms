@@ -93,7 +93,7 @@
       <th class='rowhead'><?php echo $lang->story->legendAttatch;?></th>
       <td><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
   <span id='responser'></span>
 </form>

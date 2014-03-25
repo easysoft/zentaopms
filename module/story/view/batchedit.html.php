@@ -28,7 +28,7 @@
       <th class='w-120px a-left'><?php echo $lang->story->closedReason;?></th>
     </tr>
     <?php foreach($storyIDList as $storyID):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
       <td><?php echo html::select("modules[$storyID]",       $moduleOptionMenus[$stories[$storyID]->product], $stories[$storyID]->module, 'class=select-1');?></td>
       <td><?php echo html::select("plans[$storyID]",         $productPlans[$stories[$storyID]->product], $stories[$storyID]->plan, 'class=select-1');?></td>
@@ -70,7 +70,7 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

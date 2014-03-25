@@ -40,7 +40,7 @@ EOT;
 <table class='table-6' align='center'>
   <caption><?php echo $lang->install->saveConfig;?></caption>
   <tr>
-    <td class='a-center'><?php echo html::textArea('config', $configContent, "rows='15' class='area-1 f-12px'");?></td>
+    <td class='text-center'><?php echo html::textArea('config', $configContent, "rows='15' class='area-1 f-12px'");?></td>
   </tr>
   <tr>
     <td>
@@ -63,7 +63,7 @@ EOT;
         printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
     }
     echo "<br />";
-    echo "<div class='a-center'>" . html::a($this->createLink('install', 'step4'), $lang->install->next) . '</div>';
+    echo "<div class='text-center'>" . html::a($this->createLink('install', 'step4'), $lang->install->next) . '</div>';
     ?>
     </td>
   </tr>

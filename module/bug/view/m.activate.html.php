@@ -16,7 +16,7 @@
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='2'>
+      <td class='text-center' colspan='2'>
       <?php echo html::submitButton($lang->bug->buttonConfirm, 'data-inline="true" data-theme="b"');?>
       <?php echo html::linkButton($lang->goback, $this->createLink('bug', 'view', "bugID=$bug->id"), 'self', "data-inline='true'");?>
       </td>
