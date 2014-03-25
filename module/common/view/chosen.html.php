@@ -10,13 +10,15 @@ if($config->debug)
 #colorbox, #cboxOverlay, #cboxWrapper{z-index:9999;}
 </style>
 <script> 
-noResultsMatch    = '<?php echo $lang->noResultsMatch;?>';
-chooseUsersToMail = '<?php echo $lang->chooseUsersToMail;?>';
+noResultsMatch     = '<?php echo $lang->noResultsMatch;?>';
+chooseUsersToMail  = '<?php echo $lang->chooseUsersToMail;?>';
+selectAnOption     = '<?php echo $lang->selectAnOption;?>';
+selectSoomeOptions = '<?php echo $lang->selectSoomeOptions;?>';
 $(document).ready(function()
 {
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
     $("#productID").chosen({no_results_text: noResultsMatch, width: '100%'});
     $("#projectID").chosen({no_results_text: noResultsMatch, width: '100%'});
-    $(".chosen").chosen({no_results_text: noResultsMatch, allow_single_deselect: true, disable_search_threshold: 10, width: '100%'});
+    $(".chosen").chosen({no_results_text: noResultsMatch, allow_single_deselect: true, disable_search_threshold: 10, width: '100%', placeholder_text_single: selectAnOption, placeholder_text_multiple: selectSoomeOptions});
 });
 </script>
