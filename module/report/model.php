@@ -137,7 +137,14 @@ $(function ()
                              firstDay = month;
                          }
 
-                         title = tick.getFullYear() + '/' + month + '/' + tick.getDate();
+                         if(config.clientLang == 'en')
+                         {
+                             title = month + '/' + tick.getDate() + '/' + tick.getFullYear();
+                         }
+                         else
+                         {
+                             title = tick.getFullYear() + '/' + month + '/' + tick.getDate();
+                         }
 
                          if(ticks.length <= 30) dateTail = '/' + month;
                          return '<span title="' + title + '">' + tick.getDate() + dateTail + '</span>';
