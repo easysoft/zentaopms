@@ -29,8 +29,8 @@
     <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIDList[$projectID]", $projectID);?></td>
     <td><?php echo html::input("names[$projectID]",     $projects[$projectID]->name, "class='form-control'");?></td>
     <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='form-control'");?></td>
-    <td><?php echo html::select("PMs[$projectID]",      $pmUsers, $projects[$projectID]->PM, 'class=text-1');?></td>
-    <td><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=text-1');?></td>
+    <td><?php echo html::select("PMs[$projectID]",      $pmUsers, $projects[$projectID]->PM, 'class=form-control');?></td>
+    <td><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
     <td><?php echo html::input("begins[$projectID]",    $projects[$projectID]->begin, "class='text-1 w-date date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='text-1 w-date date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='w-100px'") . $lang->project->day;?></td>
