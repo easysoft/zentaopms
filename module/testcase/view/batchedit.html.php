@@ -27,11 +27,11 @@
     <?php if(!$productID) $moduleOptionMenu = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0); ?>
     <tr class='text-center'>
       <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
-      <td><?php echo html::select("pris[$caseID]",      $lang->testcase->priList, $cases[$caseID]->pri, 'class=select-1');?></td>
-      <td><?php echo html::select("statuses[$caseID]",  (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=select-1');?></td>
+      <td><?php echo html::select("pris[$caseID]",      $lang->testcase->priList, $cases[$caseID]->pri, 'class=form-control');?></td>
+      <td><?php echo html::select("statuses[$caseID]",  (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
       <td><?php echo html::select("modules[$caseID]",   $moduleOptionMenu, $cases[$caseID]->module, "class='select-1'");?></span></td>
-      <td><?php echo html::input("titles[$caseID]",     $cases[$caseID]->title, 'class=text-1'); echo "<span class='star'>*</span>";?></td>
-      <td><?php echo html::select("types[$caseID]",     $lang->testcase->typeList, $cases[$caseID]->type, 'class=select-1');?></td>
+      <td><?php echo html::input("titles[$caseID]",     $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?></td>
+      <td><?php echo html::select("types[$caseID]",     $lang->testcase->typeList, $cases[$caseID]->type, 'class=form-control');?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("stages[$caseID][]",  $lang->testcase->stageList, $cases[$caseID]->stage, "class='select-1 chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
     </tr>  
     <?php endforeach;?>

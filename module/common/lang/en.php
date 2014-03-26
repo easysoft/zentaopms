@@ -364,6 +364,8 @@ $lang->downNotify     = "Down notify";
 $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
 
 $lang->noResultsMatch    = "No results match";
+$lang->selectAnOption    = "Select an option";
+$lang->selectSomeOptions = "Select some options";
 $lang->chooseUsersToMail = "Choose users to mail...";
 
 /* Date times. */

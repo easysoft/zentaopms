@@ -824,7 +824,7 @@ class task extends control
         $tasks = $this->task->getUserTaskPairs($account, $status);
 
         if($id) die(html::select("tasks[$id]", $tasks, '', 'class="select-1 f-left"'));
-        die(html::select('task', $tasks, '', 'class=select-1'));
+        die(html::select('task', $tasks, '', 'class=form-control'));
     }
 
     /**

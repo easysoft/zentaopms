@@ -17,40 +17,48 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
-      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->story->create;?></strong>
+      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->story->create;?></strong>
     </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
     <table class='table table-form'> 
       <tr>
-        <th><?php echo $lang->story->product;?></th>
-        <td>
-          <?php echo html::select('product', $products, $productID, "onchange=loadProduct(this.value); class='form-control'");?>
-          <span id='moduleIdBox'>
+        <th class='w-80px'><?php echo $lang->story->product;?></th>
+        <td class='w-p35'>
+          <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control'");?>
+        </td>
+        <td class='w-p25'>
+          <div class='input-group' id='moduleIdBox'>
           <?php 
           echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control'");
           if(count($moduleOptionMenu) == 1)
           {
+              echo "<span class='input-group-addon'>";
               echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story"), $lang->tree->manage, '_blank');
+              echo '&nbsp; ';
               echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+              echo '</span>';
           }
           ?>
-          </span>
-        </td>
-      </tr>  
+          </div>
+        </td><td></td>
+      </tr>
       <tr>
         <th><?php echo $lang->story->plan;?></th>
         <td>
-          <span id='planIdBox'>
+          <div class='input-group' id='planIdBox'>
           <?php 
           echo html::select('plan', $plans, $planID, "class='form-control'");
           if(count($plans) == 1) 
           {
+              echo "<span class='input-group-addon'>";
               echo html::a($this->createLink('productplan', 'create', "productID=$productID"), $lang->productplan->create, '_blank');
+              echo '&nbsp; ';
               echo html::a("javascript:loadProductPlans($productID)", $lang->refresh);
+              echo '</span>';
           }
           ?>
-          </span>
+          </div>
         </td>
       </tr>
       <tr>
@@ -59,15 +67,15 @@
       </tr>
       <tr>
         <th><?php echo $lang->story->title;?></th>
-        <td><?php echo html::input('title', $storyTitle, "class='form-control'");?></td>
+        <td colspan='3'><?php echo html::input('title', $storyTitle, "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->story->spec;?></th>
-        <td><?php echo html::textarea('spec', $spec, "rows='9' class='form-control'");?><br /><?php echo $lang->story->specTemplate;?></td>
+        <td colspan='3'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control'");?><div class='help-block'><?php echo $lang->story->specTemplate;?></div></td>
       </tr>  
          <tr>
         <th><?php echo $lang->story->verify;?></th>
-        <td><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
+        <td colspan='3'><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
       </tr> 
        <tr>
         <th><?php echo $lang->story->pri;?></th>
@@ -75,15 +83,21 @@
       </tr>
       <tr>
         <th><?php echo $lang->story->estimate;?></th>
-        <td><?php echo html::input('estimate', $estimate, "class='form-control'") . $lang->story->hour;?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('estimate', $estimate, "class='form-control'");?>
+            <span class='input-group-addon'><?php echo $lang->story->hour;?></span>
+          </div>
+        </td>
       </tr> 
       <tr>
         <th><?php echo $lang->story->reviewedBy;?></th>
-        <td><?php echo html::select('assignedTo', $users, '', "class='form-control chosen'") . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
+        <td><?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?></td>
+        <td><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
       </tr>  
        <tr>
         <th><nobr><?php echo $lang->story->mailto;?></nobr></th>
-        <td>
+        <td colspan='3'>
           <?php 
           echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "multiple"); 
           if($contactLists) echo html::select('', $contactLists, '', "class='text-right' onchange=\"setMailto('mailto', this.value)\"");
@@ -93,13 +107,13 @@
 
       <tr>
         <th><nobr><?php echo $lang->story->keywords;?></nobr></th>
-        <td><?php echo html::input('keywords', $keywords, 'class="form-control"');?></td>
+        <td colspan='3'><?php echo html::input('keywords', $keywords, 'class="form-control"');?></td>
       </tr>
      <tr>
         <th><?php echo $lang->story->legendAttatch;?></th>
-        <td><?php echo $this->fetch('file', 'buildform');?></td>
+        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
-      <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><td></td><td colspan='3'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>
     <span id='responser'></span>
   </form>

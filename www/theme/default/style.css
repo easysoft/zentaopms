@@ -20,6 +20,9 @@
 /* Height definitions */
 .h-5px {height:5px} .h-10px {height:10px} .h-20px {height:20px} .h-30px {height:30px} .h-35px {height:35px} .h-40px {height:40px} .h-45px {height:45px} .h-50px {height:50px} .h-60px {height:60px} .h-70px {height:70px} .h-80px {height:80px} .h-100px {height:100px} .h-120px {height:120px} .h-130px {height:130px} .h-140px {height:140px} .h-150px {height:150px} .h-200px {height:200px}
 
+/* paddings */
+.pd-0 {padding: 0 !important}
+
 /* Style of text */
 .text-latin {font-family: Arial;}
 .text-lg {font-size: 24px;}
@@ -205,6 +208,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .table-form > tbody > tr > td .checkbox {margin: 0}
 .table-form > tbody > tr > td .btn + .btn {margin-left: 8px;}
 .table-form > tbody > tr > td .btn-group .btn + .btn {margin-left: -1px;}
+.table-form  tr > td > .input-group {width: 100%}
 
 /* Table data */
 .table-data th, .table-data td {padding: 5px;}
@@ -229,6 +233,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
 .form-condensed .chosen-container-single .chosen-single {padding: 4px 10px; height: 30px}
 .form-condensed .chosen-container-single .chosen-single div {padding: 4px 10px}
+.form-condensed .table-fixed select.form-control {padding: 5px}
 
 /* help in form */
 .help-block {margin-bottom: 5px;}
@@ -242,6 +247,10 @@ form .star {display: none;}/* hide star */
 
 .required-wrapper{position: relative;width: 100%; height: 0;overflow: visible;}
 .required-wrapper.required:after{right: -13px;top: 4px}
+.table-form > thead > tr > th.required:after {top: 2px; padding-left: 4px;}
+
+/* Auto Height textarea */
+div.form-control[contenteditable='true'] {height: auto; text-align: left; outline: 0; overflow-x: hidden; overflow-y: auto;}
 
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
@@ -388,6 +397,8 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table th {vertical-align: middle;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
+.outer .table.table-form tr > th:last-child, .outer .table.table-form tr > td:last-child {padding-right: 5px}
+.outer .table.table-form.table-fixed tr > th:last-child, .outer .table.table-form.table-fixed tr > td:last-child {padding-right: 15px}
 .outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 8px}
 .outer .table-form .table tr > th:first-child, .outer .table-form .table tr > td:first-child {padding-left: 5px}
 .outer .table-form .table tr > th:last-child, .outer .table-form .table tr > td:last-child {padding-right: 5px}

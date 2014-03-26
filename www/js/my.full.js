@@ -894,7 +894,7 @@ function setModal()
 function setTableBehavior()
 {
     $('#wrap .table:not(.table-data, .table-form) tbody td').click(function(){$(this).closest('tr').toggleClass('active');});
-    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data').addClass('table table-condensed table-hover table-striped table-borderless tablesorter');
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped table-borderless tablesorter');
 }
 
 /**
@@ -908,6 +908,25 @@ function condensedForm()
     $('.form-condensed legend').click(function()
     {
         $(this).closest('fieldset').toggleClass('collapsed');
+    });
+}
+
+/**
+ * Update data to the target element synchronous.
+ * 
+ * @access public
+ * @return void
+ */
+function setSyncTrigger()
+{
+    $("[data-sync-target]").on('input propertychange', function()
+    {
+        var $this = $(this);
+        var val = $this.prop('tagName') == 'INPUT' ? $this.val() : $this.html();
+        var target = $($this.attr('data-sync-target'));
+        console.log(target);
+        if(target.prop('tagName') == 'INPUT') target.val(val);
+        else target.html(val);
     });
 }
 
@@ -935,6 +954,8 @@ $(document).ready(function()
     autoCheck();
     toggleSearch();
     toggleTreeBox();
+
+    setSyncTrigger();
 
     hideClearDataLink();
 

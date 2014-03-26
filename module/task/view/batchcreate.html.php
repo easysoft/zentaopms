@@ -57,13 +57,13 @@
         echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
         ?>
       </td>
-      <td><?php echo html::input("name[$i]", '', 'class=text-1');?></td>
-      <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1');?></td>
-      <td><?php echo html::select("module[$i]", $modules, $module, 'class=select-1')?></td>
-      <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=select-1');?></td>
-      <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
+      <td><?php echo html::input("name[$i]", '', 'class=form-control');?></td>
+      <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
+      <td><?php echo html::select("module[$i]", $modules, $module, 'class=form-control')?></td>
+      <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=form-control');?></td>
+      <td><?php echo html::input("estimate[$i]", '', 'class=form-control');?></td>
       <td><?php echo html::textarea("desc[$i]", '', "rows='1' class=text-1");?></td>
-      <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=select-1');?></td>
+      <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>
     <?php endfor;?>
     <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>

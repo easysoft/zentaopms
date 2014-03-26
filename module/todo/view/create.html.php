@@ -32,8 +32,8 @@
     <tr>
       <th class='rowhead'><?php echo $lang->todo->name;?></th>
       <td>
-        <div id='nameBox' class='hidden'><?php echo html::input('name', '', 'class=text-1');?></div>
-        <div class='nameBox'><?php echo html::input('name', '', 'class=text-1');?></div>
+        <div id='nameBox' class='hidden'><?php echo html::input('name', '', 'class=form-control');?></div>
+        <div class='nameBox'><?php echo html::input('name', '', 'class=form-control');?></div>
         </td>
     </tr>  
     <tr>

@@ -20,7 +20,7 @@
 <div id='titlebar'>
   <div id='main'>
   CASE #<?php echo $case->id . $lang->colon;?>
-  <?php echo html::input('title', $case->title, 'class=text-1');?>
+  <?php echo html::input('title', $case->title, 'class=form-control');?>
   </div>
   <div><?php echo html::submitButton();?></div>
 </div>
@@ -89,12 +89,12 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-            <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
+            <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control');?></div>
             </td>       
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->type;?></td>
-            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-1');?>
+            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?>
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
@@ -102,19 +102,19 @@
           </tr>  
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
-            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-1');?>
+            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=form-control');?>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->status;?></td>
-            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-1');?></td>
+            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=form-control');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
-            <td><?php echo html::input('keywords', $case->keywords, 'class=text-1');?></td>
+            <td><?php echo html::input('keywords', $case->keywords, 'class=form-control');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
-            <td><?php echo html::input('linkCase', $case->linkCase, 'class=text-1');?></td>
+            <td><?php echo html::input('linkCase', $case->linkCase, 'class=form-control');?></td>
           </tr>
         </table>
       </fieldset>

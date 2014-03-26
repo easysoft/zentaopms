@@ -313,11 +313,14 @@ class tree extends control
         }
         if($returnType == 'html')
         {
-            $output = html::select("module", $optionMenu, '', "onchange=loadModuleRelated()");
+            $output = html::select("module", $optionMenu, '', "onchange='loadModuleRelated()' class='form-control'");
             if(count($optionMenu) == 1 and $needManage)
             {
+                $output .=  "<span class='input-group-addon'>";
                 $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType"), $this->lang->tree->manage, '_blank');
+                $output .= '&nbsp; ';
                 $output .= html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
+                $output .= '</span>';
             }
             die($output);
         }

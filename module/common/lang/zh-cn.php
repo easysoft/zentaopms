@@ -365,7 +365,7 @@ $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=
 
 $lang->noResultsMatch     = "没有匹配结果";
 $lang->selectAnOption     = "选择一个选项";
-$lang->selectSoomeOptions = "选择一些选项";
+$lang->selectSomeOptions  = "选择一些选项";
 $lang->chooseUsersToMail  = "选择要发信通知的用户...";
 
 /* 时间格式设置。*/
@@ -421,6 +421,7 @@ $lang->icons['team']    = 'group';
 
 $lang->icons['create']         = 'plus';
 $lang->icons['batchCreate']    = 'plus-sign';
+$lang->icons['batchEdit']      = 'edit-sign';
 $lang->icons['edit']           = 'pencil';
 $lang->icons['delete']         = 'remove';
 $lang->icons['copy']           = 'copy';

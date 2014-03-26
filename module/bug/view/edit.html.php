@@ -32,7 +32,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 <div id='titlebar'>
   <div id='main'>
   BUG #<?php echo $bug->id . $lang->colon;?>
-  <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class=text-1');?>
+  <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class=form-control');?>
  </div>
   <div><?php echo html::submitButton()?></div>
 </div>
@@ -165,7 +165,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
-            <td><?php echo html::input('resolvedDate', $bug->resolvedDate, 'class=text-1');?></td>
+            <td><?php echo html::input('resolvedDate', $bug->resolvedDate, 'class=form-control');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
@@ -177,7 +177,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
             <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
-            <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=text-1');?></td>
+            <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=form-control');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->closedBy;?></td>
@@ -185,7 +185,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->closedDate;?></td>
-            <td><?php echo html::input('closedDate', $bug->closedDate, 'class=text-1');?></td>
+            <td><?php echo html::input('closedDate', $bug->closedDate, 'class=form-control');?></td>
           </tr>
         </table>
       </fieldset>

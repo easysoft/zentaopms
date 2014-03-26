@@ -39,18 +39,18 @@
     ?>
     <tr class='text-center'>
       <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
-      <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=text-1');?></td>
-      <td><?php echo html::select("modules[$taskID]",       $modules, $tasks[$taskID]->module, 'class=select-1')?></td>
-      <td><?php echo html::select("assignedTos[$taskID]",   $members, $tasks[$taskID]->assignedTo, 'class=select-1');?></td>
-      <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=select-1');?></td>
-      <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=select-1');?></td>
-      <td><?php echo html::select("pris[$taskID]",          (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=select-1');?></td>
+      <td><?php echo html::input("names[$taskID]",          $tasks[$taskID]->name, 'class=form-control');?></td>
+      <td><?php echo html::select("modules[$taskID]",       $modules, $tasks[$taskID]->module, 'class=form-control')?></td>
+      <td><?php echo html::select("assignedTos[$taskID]",   $members, $tasks[$taskID]->assignedTo, 'class=form-control');?></td>
+      <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=form-control');?></td>
+      <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=form-control');?></td>
+      <td><?php echo html::select("pris[$taskID]",          (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=form-control');?></td>
       <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='text-1 a-center'");?></td>
       <td><?php echo html::input("consumeds[$taskID]",      '', "class='text-1 a-center'");?></td>
       <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='text-1 a-center'");?></td>
-      <td><?php echo html::select("finishedBys[$taskID]",   $members, $tasks[$taskID]->finishedBy, 'class=select-1');?></td>
-      <td><?php echo html::select("closedBys[$taskID]",     $members, $tasks[$taskID]->closedBy, 'class=select-1');?></td>
-      <td><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=select-1');?></td>
+      <td><?php echo html::select("finishedBys[$taskID]",   $members, $tasks[$taskID]->finishedBy, 'class=form-control');?></td>
+      <td><?php echo html::select("closedBys[$taskID]",     $members, $tasks[$taskID]->closedBy, 'class=form-control');?></td>
+      <td><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=form-control');?></td>
     </tr>  
     <?php endforeach;?>
 

@@ -45,7 +45,7 @@
       <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
       <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
     </td>
-    <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=select-1');?> </td>
+    <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=form-control');?> </td>
     <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
     <td class='text-left'>
       <?php
