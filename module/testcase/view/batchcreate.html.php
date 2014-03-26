@@ -33,7 +33,7 @@
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class=select-1");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=select-1");?></td>
       <?php if(!$story):?><td class='text-left'style='overflow:visible'><?php echo html::select("story[$i]", '', '', 'class="select-1 storySelect"');?></td><?php endif;?>
-      <td><?php echo html::input("title[$i]", '', "class='text-1'");?></td>
+      <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
     </tr>
     <?php endfor;?>
     <tr><td colspan='<?php $story ? print '4' : print '5'?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>

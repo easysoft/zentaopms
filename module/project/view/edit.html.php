@@ -19,11 +19,11 @@
     <caption><?php echo $lang->project->edit;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->project->name;?></th>
-      <td><?php echo html::input('name', $project->name, "class='text-3'");?></td>
+      <td><?php echo html::input('name', $project->name, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->code;?></th>
-      <td><?php echo html::input('code', $project->code, "class='text-3'");?></td>
+      <td><?php echo html::input('code', $project->code, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->begin;?></th>
@@ -35,15 +35,15 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->days;?></th>
-      <td><?php echo html::input('days', $project->days, "class='text-3'") . $lang->project->day;?></td>
+      <td><?php echo html::input('days', $project->days, "class='form-control'") . $lang->project->day;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->type;?></th>
-      <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='text-3'");?></td>
+      <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
-      <td><?php echo html::input('team', $project->team, "class='text-3'");?></td>
+      <td><?php echo html::input('team', $project->team, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->status;?></th>

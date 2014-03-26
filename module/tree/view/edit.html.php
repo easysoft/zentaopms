@@ -21,7 +21,7 @@
     </tr>
     <tr <?php if($hidden) echo "style='display:none'";?>>
       <th class='rowhead'><?php echo $lang->tree->name;?></th>
-      <td><?php echo html::input('name', $module->name, "class='text-1'");?></td>
+      <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
     </tr>
     <?php if($type == 'bug'):?>
     <tr>

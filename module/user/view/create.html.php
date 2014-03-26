@@ -19,39 +19,39 @@
     <caption><?php echo $lang->user->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->user->dept;?></th>
-      <td><?php echo html::select('dept', $depts, $deptID, "class='select-3'");?>
+      <td><?php echo html::select('dept', $depts, $deptID, "class='form-control'");?>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->account;?></th>
-      <td><?php echo html::input('account', '', "class='text-3' autocomplete='off'");?></td>
+      <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->realname;?></th>
-      <td><?php echo html::input('realname', '', "class='text-3'");?></td>
+      <td><?php echo html::input('realname', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->password;?></th>
-      <td><?php echo html::password('password1', '', "class='text-3' autocomplete='off'");?></td>
+      <td><?php echo html::password('password1', '', "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->password2;?></th>
-      <td><?php echo html::password('password2', '', "class='text-3' autocomplete='off'");?></td>
+      <td><?php echo html::password('password2', '', "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->role;?></th>
-      <td><?php echo html::select('role', $lang->user->roleList, '', "class='select-3' onchange='changeGroup(this.value)'");?></td>
+      <td><?php echo html::select('role', $lang->user->roleList, '', "class='form-control' onchange='changeGroup(this.value)'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->group;?></th>
-      <td><?php echo html::select('group', $groupList, '', "class='select-3'");?></td>
+      <td><?php echo html::select('group', $groupList, '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->email;?></th>
-      <td><?php echo html::input('email', '', "class='text-3'");?></td>
+      <td><?php echo html::input('email', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->commiter;?></th>
-      <td><?php echo html::input('commiter', '', "class='text-3'");?></td>
+      <td><?php echo html::input('commiter', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->join;?></th>

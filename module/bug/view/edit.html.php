@@ -72,35 +72,35 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->product;?></td>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?></td>
+            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->module;?></td>
             <td>
-              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='select-3'");?></span>
+              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control'");?></span>
             </td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->productplan;?></td>
             <td>
-              <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, 'class=select-3');?></span>
+              <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control'");?></span>
             </td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->type;?></td>
-            <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, 'class=select-3');?>
+            <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, "class='form-control'");?>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->severity;?></td>
-            <td><?php echo html::select('severity', $lang->bug->severityList, $bug->severity, 'class=select-3');?>
+            <td><?php echo html::select('severity', $lang->bug->severityList, $bug->severity, "class='form-control'");?>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->pri;?></td>
-            <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=select-3');?>
+            <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, "class='form-control'");?>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->status;?></td>
-            <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, 'class=select-3');?></td>
+            <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, "class='form-control'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->confirmed;?></td>
@@ -108,23 +108,23 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
-            <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-3 chosen'");?></td>
+            <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->os;?></td>
-            <td><?php echo html::select('os', $lang->bug->osList, $bug->os, 'class=select-3');?></td>
+            <td><?php echo html::select('os', $lang->bug->osList, $bug->os, "class='form-control'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->browser;?></td>
-            <td><?php echo html::select('browser', $lang->bug->browserList, $bug->browser, 'class=select-3');?></td>
+            <td><?php echo html::select('browser', $lang->bug->browserList, $bug->browser, "class='form-control'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
-            <td><?php echo html::input('keywords', $bug->keywords, 'class="text-1"');?></td>
+            <td><?php echo html::input('keywords', $bug->keywords, 'class="form-control"');?></td>
           </tr>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
-            <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="text-1" multiple');?></td>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control" multiple');?></td>
           </tr>
         </table>
       </fieldset>
@@ -143,7 +143,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->task;?></td>
-            <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></div></td>
+            <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control'");?></div></td>
           </tr>
         </table>
       </fieldset>
@@ -161,7 +161,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedBy;?></td>
-            <td><?php echo html::select('resolvedBy', $users, $bug->resolvedBy, 'class=select-3');?></td>
+            <td><?php echo html::select('resolvedBy', $users, $bug->resolvedBy, "class='form-control'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
@@ -169,7 +169,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
-            <td><span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, 'class=select-3');?></span></td>
+            <td><span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control'");?></span></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
@@ -181,7 +181,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->closedBy;?></td>
-            <td><?php echo html::select('closedBy', $users, $bug->closedBy, 'class=select-3');?></td>
+            <td><?php echo html::select('closedBy', $users, $bug->closedBy, "class='form-control'");?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->closedDate;?></td>
@@ -194,11 +194,11 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table-1 a-left'>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
-            <td><?php echo html::input('linkBug', $bug->linkBug, 'class="text-1"');?></td>
+            <td><?php echo html::input('linkBug', $bug->linkBug, 'class="form-control"');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->case;?></td>
-            <td><?php echo html::input('case', $bug->case, 'class="text-1"');?></td>
+            <td><?php echo html::input('case', $bug->case, 'class="form-control"');?></td>
           </tr>
         </table>
       </fieldset>

@@ -23,7 +23,7 @@ var browseType = '<?php echo $browseType;?>';
     <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
     <span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon icon-large'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></span>
   </div>
-  <div class='f-right'>
+  <div class='text-right'>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc");?>
   </div>
 </div>

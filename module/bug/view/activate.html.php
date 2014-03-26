@@ -17,7 +17,7 @@
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
-      <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, 'class=select-3');?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->openedBuild;?></td>

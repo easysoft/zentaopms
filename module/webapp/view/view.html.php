@@ -14,7 +14,7 @@
 <table class='table-1'>
   <caption>
     <?php echo $lang->webapp->view?>
-    <span class='f-right'><?php if($type =='local') common::printLink('webapp', 'edit', "webappID=$webapp->id", $lang->edit);?></span>
+    <span class='text-right'><?php if($type =='local') common::printLink('webapp', 'edit', "webappID=$webapp->id", $lang->edit);?></span>
   </caption>
   <?php if($type == 'local'):?>
   <tr>

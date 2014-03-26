@@ -19,12 +19,12 @@
     <?php if(isset($projectID)):?>
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->product;?></th>
-      <td><?php echo html::select('product', $products, '', 'class=select-3');?></td>
+      <td><?php echo html::select('product', $products, '', "class='form-control'");?></td>
     </tr>  
     <?php else:?>
     <tr class='hidden'>
       <th><?php echo $lang->testtask->product;?></th>
-      <td><?php echo html::input('product', $productID, 'class=select-3');?></td>
+      <td><?php echo html::input('product', $productID, "class='form-control'");?></td>
     </tr>  
     <?php endif;?>
     <tr>
@@ -33,15 +33,15 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->build;?></th>
-      <td><span id='buildBox'><?php echo html::select('build', $builds, '', 'class=select-3');?></span></td>
+      <td><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control'");?></span></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
-      <td><?php echo html::select('owner', $users, '', "class='select-3 chosen'");?></td>
+      <td><?php echo html::select('owner', $users, '', "class='form-control chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->pri;?></th>
-      <td><?php echo html::select('pri', $lang->testtask->priList, 0, 'class=select-3');?></td>
+      <td><?php echo html::select('pri', $lang->testtask->priList, 0, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
@@ -53,11 +53,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->status;?></th>
-      <td><?php echo html::select('status', $lang->testtask->statusList, '',  "class='select-3'");?></td>
+      <td><?php echo html::select('status', $lang->testtask->statusList, '',  "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->name;?></th>
-      <td><?php echo html::input('name', '', "class='text-1'");?></td>
+      <td><?php echo html::input('name', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->desc;?></th>

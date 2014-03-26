@@ -27,7 +27,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->days;?></th>
-      <td><?php echo html::input('days', $project->days, "class='text-3'") . $lang->project->day;?></td>
+      <td><?php echo html::input('days', $project->days, "class='form-control'") . $lang->project->day;?></td>
     </tr>  
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

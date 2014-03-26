@@ -39,7 +39,7 @@
       echo html::hidden("product[$key]", $productID);
       ?>
     </td>
-    <td><?php echo html::input("title[$key]", $case->title, "class='text-1' style='margin-top:2px'")?></td>
+    <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
     <td><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='select-2'")?></td>
     <td><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='select-2'")?></td>
     <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''))?></td>

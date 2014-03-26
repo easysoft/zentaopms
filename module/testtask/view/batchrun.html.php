@@ -46,7 +46,7 @@ table .table-1 td{border:0px;}
             <td align='left' width='30%'><?php echo "<span title='$step->desc'>" . $i . "、" . $step->desc . '</span>'?></td>
             <td align='left' width='30%'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
             <td width='50' class='hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass')?></td>
-            <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='text-1'");?></td>
+            <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='form-control'");?></td>
           </tr>
           <?php $i++?>
           <?php endforeach?>

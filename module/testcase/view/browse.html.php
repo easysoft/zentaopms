@@ -29,7 +29,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
-  <div class='f-right'>
+  <div class='text-right'>
     <?php 
     common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement');
 

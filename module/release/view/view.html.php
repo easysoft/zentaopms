@@ -109,7 +109,7 @@
             <table class='table table-hover table-condensed table-borderless'>
               <caption class='caption-t1'>
                 <?php echo $lang->release->bugs;?>
-                <div class='f-right'></div>
+                <div class='text-right'></div>
               </caption>
               <thead>
                 <tr>

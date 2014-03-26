@@ -16,11 +16,11 @@
 <caption><?php echo $lang->admin->bind->caption;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->account;?></th>
-	<td><?php echo html::input('account', '', "class='text-3'");?></td>
+	<td><?php echo html::input('account', '', "class='form-control'");?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->password;?></th>
-    <td><?php echo html::password('password', '', "class='text-3'");?></td>
+    <td><?php echo html::password('password', '', "class='form-control'");?></td>
   </tr>  
   <tr>
     <th><td colspan="2" class="a-center"><?php echo html::submitButton() . html::hidden('sn', $sn);?></td></th>

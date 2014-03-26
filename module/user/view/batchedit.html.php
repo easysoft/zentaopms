@@ -32,11 +32,11 @@
     <tr class='text-center'>
       <td><?php echo $user->id;?></td>
       <td><?php echo html::select("dept[$user->id]", $depts, empty($user->dept) ? 'ditto' : $user->dept, "class='select-1'");?>
-      <td><?php echo html::input("account[$user->id]", $user->account, "class='text-1' autocomplete='off'");?></td>
-      <td><?php echo html::input("realname[$user->id]", $user->realname, "class='text-1'");?></td>
+      <td><?php echo html::input("account[$user->id]", $user->account, "class='form-control' autocomplete='off'");?></td>
+      <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
       <td><?php echo html::select("role[$user->id]", $lang->user->roleList, empty($user->role) ? 'ditto' : $user->role, "class='select-1'");?>
-      <td><?php echo html::input("commiter[$user->id]", $user->commiter, "class='text-1'");?></td>
-      <td><?php echo html::input("email[$user->id]", $user->email, "class='text-1'");?></td>
+      <td><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>
+      <td><?php echo html::input("email[$user->id]", $user->email, "class='form-control'");?></td>
       <td><?php echo html::input("join[$user->id]", $user->join, "class='w-p70 date'");?></td>
     </tr>
     <?php endforeach;?>

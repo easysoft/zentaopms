@@ -26,7 +26,7 @@
       <div class='box-title'><?php echo $lang->extension->bySearch;?></div>
       <div class='box-content a-center'>
         <form class='side-search' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
-        <?php echo html::input('key', $this->post->key, "class='text-1'") . html::submitButton($lang->extension->bySearch);?>
+        <?php echo html::input('key', $this->post->key, "class='form-control'") . html::submitButton($lang->extension->bySearch);?>
         </form>
       </div>
       <div class='box-title'><?php echo $lang->extension->byCategory;?></div>
@@ -45,7 +45,7 @@
         <table class='table-1 exttable'>
           <caption>
             <div class='f-left'><?php echo $extension->name . "($currentRelease->releaseVersion)";?></div>
-            <div class='f-right'>
+            <div class='text-right'>
               <?php 
               if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion) 
               {

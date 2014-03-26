@@ -21,7 +21,7 @@ if(isset($error))
 <table class='table-4' align='center'>
   <caption>
     <div class='f-left'> <?php echo $lang->mail->test;?></div>
-    <div class='f-right'><?php echo $lang->mail->sendmailTips;?></div>
+    <div class='text-right'><?php echo $lang->mail->sendmailTips;?></div>
   </caption>
   <tr>
     <td class='text-center'>

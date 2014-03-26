@@ -44,7 +44,7 @@ include '../../common/view/header.html.php';
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->mail->password; ?></th>
-    <td><?php echo html::password('password', $mailConfig->password, 'class="text-3" autocomplete="off"') ?></td>
+    <td><?php echo html::password('password', $mailConfig->password, 'class="form-control" autocomplete="off"') ?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->mail->secure; ?></th>

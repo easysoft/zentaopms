@@ -16,7 +16,7 @@
 <table align='center' class='table-1 tablesorter fixed' id='groupList'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->group->browse;?></div>
-    <div class='f-right'><?php common::printIcon('group', 'create');?></div>
+    <div class='text-right'><?php common::printIcon('group', 'create');?></div>
   </caption>
   <thead>
   <tr class='colhead'>

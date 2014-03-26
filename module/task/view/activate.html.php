@@ -17,11 +17,11 @@
     <caption><?php echo $task->name;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='select-3'");?></td>
+      <td><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control'");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', '', "class='text-3'") . $lang->task->hour;?></td>
+      <td><?php echo html::input('left', '', "class='form-control'") . $lang->task->hour;?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

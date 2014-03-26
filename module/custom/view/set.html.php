@@ -16,7 +16,7 @@
 $itemRow = <<<EOT
   <tr class='text-center'>
     <td>
-      <input type='text' class="text-1"  value="" name="keys[]">
+      <input type='text' class="form-control"  value="" name="keys[]">
       <input type='hidden' value="0" name="systems[]">
     </td>
     <td>

@@ -193,7 +193,7 @@ class productplan extends control
     public function ajaxGetProductplans($productID)
     {
         $plans = $this->productplan->getPairs($productID);
-        die(html::select('plan', $plans, '', 'class=select-3'));
+        die(html::select('plan', $plans, '', "class='form-control'"));
     }
 
     /**

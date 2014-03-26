@@ -36,21 +36,21 @@ $(document).ready(function()
   <table align='center' class='table-1 a-left'> 
     <caption>
       <div class='f-left'><?php echo $lang->project->create;?></div>
-      <div class='f-right'><?php echo html::checkbox('', $lang->project->copy . '?', '', 'onclick=switchCopyProject(this);');?></div>
+      <div class='text-right'><?php echo html::checkbox('', $lang->project->copy . '?', '', 'onclick=switchCopyProject(this);');?></div>
     </caption>
     <?php if($projects):?>
     <tr id='copyProjectBox' <?php if($copyProjectID == 0) echo "class='hidden'";?>>
       <th class='rowhead'><?php echo $lang->project->copy;?></th>
-      <td><?php echo html::select('', $projects, $copyProjectID, "class='select-3' onchange=setCopyProject(this.value)");?></td>
+      <td><?php echo html::select('', $projects, $copyProjectID, "class='form-control' onchange=setCopyProject(this.value)");?></td>
     </tr>  
     <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->project->name;?></th>
-      <td><?php echo html::input('name', $name, "class='text-3'");?></td>
+      <td><?php echo html::input('name', $name, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->code;?></th>
-      <td><?php echo html::input('code', $code, "class='text-3'");?></td>
+      <td><?php echo html::input('code', $code, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->begin;?></th>
@@ -65,15 +65,15 @@ $(document).ready(function()
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->days;?></th>
-      <td><?php echo html::input('days', '', "class='text-3'") . $lang->project->day;?></td>
+      <td><?php echo html::input('days', '', "class='form-control'") . $lang->project->day;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
-      <td><?php echo html::input('team', $team, "class='text-3'");?></td>
+      <td><?php echo html::input('team', $team, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->type;?></th>
-      <td><?php echo html::select('type', $lang->project->typeList, '', "class='text-3'") . $lang->project->typeDesc;?></td>
+      <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control'") . $lang->project->typeDesc;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>

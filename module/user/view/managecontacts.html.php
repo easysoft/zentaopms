@@ -26,7 +26,7 @@
       <form method='post' target='hiddenwin' id='dataform' style='margin:0 0 0 10px; padding:0'>
       <div class='box-title' style='height:15px'>
         <div class='f-left'><?php echo $lang->user->contacts->manage;?></div>
-        <div class='f-right'><?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin');?></div>
+        <div class='text-right'><?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin');?></div>
       </div>
       <table class='table-1 fixed'> 
         <tr>

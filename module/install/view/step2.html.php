@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->defaultLang;?></th>
-      <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), 'class=select-3');?></td>
+      <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbHost;?></th>

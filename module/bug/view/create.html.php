@@ -29,7 +29,7 @@ js::set('refresh', $lang->refresh);
     <tr>
       <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
       <td>
-        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='select-3' autocomplete='off'");?>
+        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control' autocomplete='off'");?>
         <span id='moduleIdBox'>
         <?php
         echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()'");
@@ -56,11 +56,11 @@ js::set('refresh', $lang->refresh);
     </tr>
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-      <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, "class='select-3 chosen'");?></span></td>
+      <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->title;?></th>
-      <td><?php echo html::input('title', $bugTitle, "class='text-1'");?></td>
+      <td><?php echo html::input('title', $bugTitle, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->bug->steps;?></th>
@@ -100,13 +100,13 @@ js::set('refresh', $lang->refresh);
       <td>
         <?php 
         echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), 'class=text-1 multiple');
-        if($contactLists) echo html::select('', $contactLists, '', "class='f-right' onchange=\"setMailto('mailto', this.value)\"");
+        if($contactLists) echo html::select('', $contactLists, '', "class='text-right' onchange=\"setMailto('mailto', this.value)\"");
         ?>
       </td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->keywords;?></th>
-      <td><?php echo html::input('keywords', $keywords, "class='text-1'");?></td>
+      <td><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->files;?></th>

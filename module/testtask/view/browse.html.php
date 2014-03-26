@@ -16,7 +16,7 @@
 <table class='table-1 colored tablesorter fixed' id='taskList'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
-    <div class='f-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
+    <div class='text-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
   </caption>
   <thead>
   <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

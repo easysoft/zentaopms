@@ -18,19 +18,19 @@
     <caption><?php echo $lang->testtask->edit;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->project;?></th>
-      <td><?php echo html::select('project', $projects, $task->project, 'class=select-3');?></td>
+      <td><?php echo html::select('project', $projects, $task->project, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->build;?></th>
-      <td><?php echo html::select('build', $builds, $task->build, 'class=select-3');?></td>
+      <td><?php echo html::select('build', $builds, $task->build, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
-      <td><?php echo html::select('owner', $users, $task->owner, "class='select-3 chosen'");?></td>
+      <td><?php echo html::select('owner', $users, $task->owner, "class='form-control chosen'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->pri;?></th>
-      <td><?php echo html::select('pri', $lang->testtask->priList, $task->pri, 'class=select-3');?></td>
+      <td><?php echo html::select('pri', $lang->testtask->priList, $task->pri, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
@@ -42,11 +42,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->status;?></th>
-      <td><?php echo html::select('status', $lang->testtask->statusList, $task->status,  "class='select-3'");?></td>
+      <td><?php echo html::select('status', $lang->testtask->statusList, $task->status,  "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->name;?></th>
-      <td><?php echo html::input('name', $task->name, "class='text-1'");?></td>
+      <td><?php echo html::input('name', $task->name, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->desc;?></th>

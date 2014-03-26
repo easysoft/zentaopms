@@ -16,23 +16,23 @@
   <caption><?php echo $lang->webapp->create?></caption>
   <tr>
     <th align='left'><?php echo $lang->webapp->module?></th>
-    <td><?php echo html::select('module', $modules, '', "class='select-3'")?></td>
+    <td><?php echo html::select('module', $modules, '', "class='form-control'")?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->name?></th>
-    <td><?php echo html::input('name', '', "class='text-3'")?></td>
+    <td><?php echo html::input('name', '', "class='form-control'")?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->url?></th>
-    <td><?php echo html::input('url', '', "class='text-3'")?></td>
+    <td><?php echo html::input('url', '', "class='form-control'")?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->target?></th>
-    <td><?php echo html::select('target', $lang->webapp->targetList, '', "class='select-3'")?></td>
+    <td><?php echo html::select('target', $lang->webapp->targetList, '', "class='form-control'")?></td>
   </tr>
   <tr class="size hidden">
     <th align='left'><?php echo $lang->webapp->size?></th>
-    <td><?php echo html::select('size', $lang->webapp->sizeList, '', "class='select-3'")?></td>
+    <td><?php echo html::select('size', $lang->webapp->sizeList, '', "class='form-control'")?></td>
   </tr>
   <tr class="customSize hidden">
     <th align='left'><?php echo $lang->webapp->custom?></th>
@@ -40,7 +40,7 @@
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->abstract?></th>
-    <td><?php echo html::input('abstract', '', "class='text-3' maxlength='30'")?> <span><?php echo $lang->webapp->noticeAbstract?></span></td>
+    <td><?php echo html::input('abstract', '', "class='form-control' maxlength='30'")?> <span><?php echo $lang->webapp->noticeAbstract?></span></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->desc?></th>
@@ -48,7 +48,7 @@
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->icon?></th>
-    <td><?php echo html::file('files', "class='text-1' size='57'")?><br /><span><?php echo $lang->webapp->noticeIcon?></span></td>
+    <td><?php echo html::file('files', "class='form-control' size='57'")?><br /><span><?php echo $lang->webapp->noticeIcon?></span></td>
   </tr>
   <tr><td colspan='2' align='center'><?php echo html::submitButton()?></td></tr>
 </table>

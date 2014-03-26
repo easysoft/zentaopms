@@ -52,7 +52,7 @@ var browseType = '<?php echo $browseType;?>';
     </tr>
     <?php endforeach;?>
     </tbody>
-    <tr><td colspan='9'><div class='f-right'><?php $pager->show();?></div></td></tr>
+    <tr><td colspan='9'><div class='text-right'><?php $pager->show();?></div></td></tr>
   </table>
   <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->import) . html::backButton();?></div>
 </form>

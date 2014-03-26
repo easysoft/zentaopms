@@ -25,8 +25,8 @@
     <?php foreach($productIDList as $productID):?>
     <tr class='text-center'>
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
-      <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='text-1'");?></td>
-      <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='text-1'");?></td>
+      <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
+      <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
       <td><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO);?></td>
       <td><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD);?></td>
       <td><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD);?></td>

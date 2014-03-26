@@ -25,15 +25,15 @@
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
-      <td><?php echo html::select('resolvedBuild', $builds, '', 'class=select-3');?></td>
+      <td><?php echo html::select('resolvedBuild', $builds, '', "class='form-control'");?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
-      <td><?php echo html::input('resolvedDate', helper::now(), "class='select-3'");?></td>
+      <td><?php echo html::input('resolvedDate', helper::now(), "class='form-control'");?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
-      <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='select-3 chosen'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='form-control chosen'");?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

@@ -16,7 +16,7 @@
     <caption><?php echo $lang->doc->createLib;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->doc->libName;?></th>
-      <td><?php echo html::input('name', '', "class='text-1'");?></td>
+      <td><?php echo html::input('name', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>

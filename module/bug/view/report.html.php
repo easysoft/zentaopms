@@ -30,7 +30,7 @@
       <table class='table-1'>
         <caption>
           <div class='f-left'><?php echo $lang->bug->report->common;?></div>
-          <div class='f-right'><?php echo html::a($this->createLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID"), $lang->goback);?></div>
+          <div class='text-right'><?php echo html::a($this->createLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID"), $lang->goback);?></div>
         </caption>
         <?php foreach($charts as $chartType => $chartContent):?>
         <tr valign='top'>

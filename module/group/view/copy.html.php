@@ -16,7 +16,7 @@
     <caption><?php echo $lang->group->copy;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->group->name;?></th>
-      <td><?php echo html::input('name', $group->name, "class='text-1'");?></td>
+      <td><?php echo html::input('name', $group->name, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->group->desc;?></th>

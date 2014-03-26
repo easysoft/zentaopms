@@ -5,7 +5,7 @@
   <table class='table-1'>
     <tr>
       <td class='w-60px'><?php echo $lang->bug->assignedTo;?></td>
-      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control'");?></td>
     </tr>
     <tr>
       <td class='w-60px'><?php echo $lang->comment;?></td>

@@ -28,7 +28,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
-  <div class='f-right'>
+  <div class='text-right'>
     <?php
     common::printIcon('testtask', 'linkCase', "taskID=$task->id");
     common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id");

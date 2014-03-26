@@ -2,7 +2,7 @@
 <table class='table-1 fixed colored tablesorter datatable'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->sso->browse;?></div>
-    <div class='f-right'>
+    <div class='text-right'>
       <?php common::printIcon('sso', 'create');?>
     </div>
   </caption>

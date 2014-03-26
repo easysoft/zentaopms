@@ -18,12 +18,12 @@
     <caption><?php echo $lang->build->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->build->product;?></th>
-      <td><?php echo html::select('product', $products, '', "class='select-3'");?></td>
+      <td><?php echo html::select('product', $products, '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->name;?></th>
       <td>
-        <?php echo html::input('name', '', "class='text-3'");?>
+        <?php echo html::input('name', '', "class='form-control'");?>
         <?php if($lastBuild) echo '<span class="gray">(' . $lang->build->last . ': ' . $lastBuild->name . ')</span>';?>
       </td>
     </tr>  
@@ -37,7 +37,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
-      <td><?php echo html::input('scmPath', '', "class='text-1'");?></td>
+      <td><?php echo html::input('scmPath', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->packageType;?></th>
@@ -45,7 +45,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->filePath;?></th>
-      <td><?php echo html::input('filePath', '', "class='text-1'");?></td>
+      <td><?php echo html::input('filePath', '', "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->files;?></th>

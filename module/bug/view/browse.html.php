@@ -36,7 +36,7 @@ js::set('customed', $customed);
     echo "<span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
-  <div class='f-right'>
+  <div class='text-right'>
     <?php
 
     echo '<span class="link-button dropButton">';
@@ -197,7 +197,7 @@ if($customed)
                  ?>
                 </div>
                 <?php endif?>
-                <div class='f-right'><?php $pager->show();?></div>
+                <div class='text-right'><?php $pager->show();?></div>
               </td>
             </tr>
           </tfoot>

@@ -78,7 +78,7 @@
                ?>
               </div>
               <?php endif?>
-              <div class='f-right'><?php $pager->show();?></div>
+              <div class='text-right'><?php $pager->show();?></div>
             </td>
           </tr>
           </tfoot>

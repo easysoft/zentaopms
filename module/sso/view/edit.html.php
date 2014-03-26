@@ -4,7 +4,7 @@
     <caption><?php echo $lang->sso->edit;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->sso->title;?></th>
-      <td><?php echo html::input('title', $auth->title, "class='text-3'");?></td>
+      <td><?php echo html::input('title', $auth->title, "class='form-control'");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->sso->code;?></th>
@@ -13,7 +13,7 @@
     <tr>
       <th class='rowhead'><?php echo $lang->sso->key;?></th>
       <td>
-        <?php echo html::input('key', $auth->key, "class='text-3' readonly='readonly'");?>
+        <?php echo html::input('key', $auth->key, "class='form-control' readonly='readonly'");?>
         <?php echo html::a('javascript:void(0)', $lang->sso->createKey, '', 'onclick="createKey()"')?>
       </td>
     </tr>

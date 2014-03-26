@@ -17,7 +17,7 @@
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->unlinkedCases;?></div>
-    <div class='f-right'>
+    <div class='text-right'>
       <?php
       $lang->testtask->linkCase = $lang->testtask->linkByStory;
       common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bystory");
@@ -69,7 +69,7 @@
       <?php if($cases):?>
       <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></div>
       <?php endif;?>
-      <div class='f-right'><?php $pager->show();?></div>
+      <div class='text-right'><?php $pager->show();?></div>
     </td>
   </tr>
   </tfoot>

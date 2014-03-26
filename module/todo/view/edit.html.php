@@ -27,7 +27,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->pri;?></th>
-      <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, 'class=select-3');?></td>
+      <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->name;?></th>
@@ -45,7 +45,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->todo->status;?></th>
-      <td><?php echo html::select('status', $lang->todo->statusList, $todo->status, 'class=select-3');?></td>
+      <td><?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
