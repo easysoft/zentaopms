@@ -50,6 +50,7 @@ class project extends control
         $this->view->projectStats  = $this->project->getProjectStats($status);
         $this->view->projectID     = $projectID;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status        = $status;
 
         $this->display();
     }

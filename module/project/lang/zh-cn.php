@@ -21,6 +21,8 @@ $lang->project->name          = '项目名称';
 $lang->project->code          = '项目代号';
 $lang->project->begin         = '开始日期';
 $lang->project->end           = '结束日期';
+$lang->project->dateRange     = '起始日期';
+$lang->project->to            = '至';
 $lang->project->days          = '可用工作日';
 $lang->project->day           = '天';
 $lang->project->status        = '项目状态';
@@ -181,6 +183,12 @@ $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';
 $lang->project->copyTeam        = '复制团队';
 $lang->project->noMatched       = '找不到包含"%s"的项目';
+$lang->project->copyTitle       = '请选择一个项目来复制';
+$lang->project->copyNoProject   = '没有可用的项目来复制';
+$lang->project->copyFromProject = '复制自项目： <strong>%s</strong>';
+$lang->project->reCopyProject   = '重新复制';
+$lang->project->cancelCopy      = '取消复制';
+$lang->project->byPeriod        = '按时间段';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';

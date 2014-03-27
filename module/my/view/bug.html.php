@@ -13,14 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <div class='heading'><i class='icon-bug'></i> <?php echo $lang->my->bug;?></div>
-  <nav class='nav'>
+  <ul class='nav'>
     <?php
     echo "<li id='assignedToTab'>"  . html::a(inlink('bug', "type=assignedTo"),  $lang->bug->assignToMe)    . "</li>";
     echo "<li id='openedByTab'>"    . html::a(inlink('bug', "type=openedBy"),    $lang->bug->openedByMe)    . "</li>";
     echo "<li id='resolvedByTab'>"  . html::a(inlink('bug', "type=resolvedBy"),  $lang->bug->resolvedByMe)  . "</li>";
     echo "<li id='closedByTab'>"    . html::a(inlink('bug', "type=closedBy"),    $lang->bug->closedByMe)    . "</li>";
     ?>
-  </nav>
+  </ul>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
   <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='bugList'>

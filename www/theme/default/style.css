@@ -387,6 +387,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #titlebar > .heading > small > i {position: relative; top: 1px;}
 #titlebar .actions {position: absolute; right: 20px; top: 13px;}
 #titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
+#titlebar .actions > .text {display: inline-block; margin-left: 8px;}
 
 /* table in outer */
 .outer .table {margin-bottom: 0;}
@@ -654,6 +655,3 @@ td>select{padding-left: 0;padding-right: 0}
 .link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;}
 .link-button a i{font-size: 18px;}
 .link-button a:hover {color:#000;}
-
-.alert{padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 3px; background-color: #f1f1f1; border-color: #e4e4e4; color: #333;}
-.alert-danger{background-color: #ffe6e5; border-color: #ffccd3; color: #d2322d;}

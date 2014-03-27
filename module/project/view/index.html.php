@@ -11,29 +11,36 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<h3>
-  <?php echo html::a(inlink("index", "locate=no&status=all&projectID=$project->id"), $lang->project->all);?>
-  <?php echo html::a(inlink("index", "locate=no&status=wait&projectID=$project->id"), $lang->project->statusList['wait']);?>
-  <?php echo html::a(inlink("index", "locate=no&status=doing&projectID=$project->id"), $lang->project->statusList['doing']);?>
-  <?php echo html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']);?>
-  <?php echo html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->statusList['done']);?>
-</h3>
-<form method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
-<table class='table-1 fixed colored'>
-  <tr class='colhead'>
-    <th class='w-id'>   <?php echo $lang->idAB;?></th>
-    <th class='w-150px'><?php echo $lang->project->name;?></th>
-    <th><?php echo $lang->project->code;?></th>
-    <th><?php echo $lang->project->PM;?></th>
-    <th><?php echo $lang->project->end;?></th>
-    <th><?php echo $lang->project->status;?></th>
-    <th><?php echo $lang->project->totalEstimate;?></th>
-    <th><?php echo $lang->project->totalConsumed;?></th>
-    <th><?php echo $lang->project->totalLeft;?></th>
-    <th class='w-150px'><?php echo $lang->project->progess;?></th>
-    <th class='w-100px'><?php echo $lang->project->burn;?></th>
-  </tr>
+<div id='featurebar'>
+  <div class='heading'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->project->allProject;?>  </div>
+  <div class='btn-group pull-right'>
+    <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
+  </div>
+  <ul class='nav'>
+  <?php echo "<li id='allTab'>" . html::a(inlink("index", "locate=no&status=all&projectID=$project->id"), $lang->project->all) . '</li>';?>
+    <?php echo "<li id='waitTab'>" . html::a(inlink("index", "locate=no&status=wait&projectID=$project->id"), $lang->project->statusList['wait']) . '</li>';?>
+    <?php echo "<li id='doingTab'>" . html::a(inlink("index", "locate=no&status=doing&projectID=$project->id"), $lang->project->statusList['doing']) . '</li>';?>
+    <?php echo "<li id='suspendedTab'>" . html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']) . '</li>';?>
+    <?php echo "<li id='doneTab'>" . html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->statusList['done']) . '</li>';?>
+  </ul>
+</div>
+<form class='form-condensed' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
+<table class='table table-fixed'>
+  <thead>
+    <tr>
+      <th class='w-id'>   <?php echo $lang->idAB;?></th>
+      <th class='w-150px'><?php echo $lang->project->name;?></th>
+      <th><?php echo $lang->project->code;?></th>
+      <th><?php echo $lang->project->PM;?></th>
+      <th><?php echo $lang->project->end;?></th>
+      <th><?php echo $lang->project->status;?></th>
+      <th><?php echo $lang->project->totalEstimate;?></th>
+      <th><?php echo $lang->project->totalConsumed;?></th>
+      <th><?php echo $lang->project->totalLeft;?></th>
+      <th class='w-150px'><?php echo $lang->project->progess;?></th>
+      <th class='w-100px'><?php echo $lang->project->burn;?></th>
+    </tr>
+  </thead>
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <?php foreach($projectStats as $project):?>
   <tr class='text-center'>
@@ -51,20 +58,20 @@
     <td><?php echo $project->hours->totalEstimate;?></td>
     <td><?php echo $project->hours->totalConsumed;?></td>
     <td><?php echo $project->hours->totalLeft;?></td>
-    <td class='a-left w-150px'>
+    <td class='text-left w-150px'>
       <img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: />
       <small><?php echo $project->hours->progress;?>%</small>
     </td>
-    <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
+    <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
   </tr>
   <?php endforeach;?>
   <?php if($canBatchEdit):?>
   <tfoot>
     <tr>
-      <td colspan='10' class='text-right'>
-        <div class='f-left'>
-        <?php echo html::selectAll() . html::selectReverse();?>
-        <?php echo html::submitButton($lang->project->batchEdit);?>
+      <td colspan='10'>
+        <div class='table-actions clearfix'>
+        <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';?>
+        <?php echo html::submitButton(html::icon($lang->icons['edit']) . ' ' . $lang->project->batchEdit);?>
         </div>
       </td>
     </tr>
@@ -72,4 +79,5 @@
   <?php endif;?>
 </table>
 </form>
+<script>$("#<?php echo $status;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

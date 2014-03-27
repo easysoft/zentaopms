@@ -10,20 +10,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post' action='<?php echo inLink('batchEdit');?>'>
-<table class='table-1 fixed colored'>
-  <tr class='colhead'>
-    <th class='w-30px'>     <?php echo $lang->idAB;?></th>
-    <th class='red'>        <?php echo $lang->project->name;?></th>
-    <th class='w-150px red'><?php echo $lang->project->code;?></th>
-    <th class='w-100px'>    <?php echo $lang->project->PM;?></th>
-    <th class='w-100px'>    <?php echo $lang->project->status;?></th>
-    <th class='w-150px red'><?php echo $lang->project->begin;?></th>
-    <th class='w-150px red'><?php echo $lang->project->end;?></th>
-    <th class='w-150px'>    <?php echo $lang->project->days;?></th>
-  </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['project']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->project->common . $lang->colon . $lang->project->batchEdit;?></strong>
+  </div>
+</div>
+<form class='form-condensed' method='post' action='<?php echo inLink('batchEdit');?>'>
+<table class='table table-fixed table-form'>
+  <thead>
+    <tr class='text-center'>
+      <th class='w-30px'>     <?php echo $lang->idAB;?></th>
+      <th class='required'>        <?php echo $lang->project->name;?></th>
+      <th class='w-150px required'><?php echo $lang->project->code;?></th>
+      <th class='w-110px'>    <?php echo $lang->project->PM;?></th>
+      <th class='w-100px'>    <?php echo $lang->project->status;?></th>
+      <th class='w-110px required'><?php echo $lang->project->begin;?></th>
+      <th class='w-110px required'><?php echo $lang->project->end;?></th>
+      <th class='w-150px'>    <?php echo $lang->project->days;?></th>
+    </tr>
+  </thead>
   <?php foreach($projectIDList as $projectID):?>
   <tr class='text-center'>
     <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIDList[$projectID]", $projectID);?></td>
@@ -31,12 +38,17 @@
     <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='form-control'");?></td>
     <td><?php echo html::select("PMs[$projectID]",      $pmUsers, $projects[$projectID]->PM, 'class=form-control');?></td>
     <td><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
-    <td><?php echo html::input("begins[$projectID]",    $projects[$projectID]->begin, "class='text-1 w-date date' onchange='computeWorkDays(this.id)'");?></td>
-    <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='text-1 w-date date' onchange='computeWorkDays(this.id)'");?></td>
-    <td><?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='w-100px'") . $lang->project->day;?></td>
+    <td><?php echo html::input("begins[$projectID]",    $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+    <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+    <td>
+      <div class='input-group'>
+        <?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='form-control'");?>
+        <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+      </div>
+    </td>
   </tr>
   <?php endforeach;?>
-  <tfoot><tr><td colspan='8' class='text-center'><?php echo html::submitButton();?></td></tr></tfoot>
+  <tr><td colspan='8' class='text-center'><?php echo html::submitButton();?></td></tr>
 </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
