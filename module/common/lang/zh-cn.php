@@ -422,6 +422,7 @@ $lang->icons['team']    = 'group';
 $lang->icons['create']         = 'plus';
 $lang->icons['batchCreate']    = 'plus-sign';
 $lang->icons['batchEdit']      = 'edit-sign';
+$lang->icons['batchClose']     = 'off';
 $lang->icons['edit']           = 'pencil';
 $lang->icons['delete']         = 'remove';
 $lang->icons['copy']           = 'copy';

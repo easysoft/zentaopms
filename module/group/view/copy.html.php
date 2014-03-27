@@ -11,19 +11,19 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table align='center' class='table-4'> 
     <caption><?php echo $lang->group->copy;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->group->name;?></th>
+      <th><?php echo $lang->group->name;?></th>
       <td><?php echo html::input('name', $group->name, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->group->desc;?></th>
-      <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='area-1'");?></td>
+      <th><?php echo $lang->group->desc;?></th>
+      <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->group->option;?></th>
+      <th><?php echo $lang->group->option;?></th>
       <td><?php echo html::checkbox('options', $lang->group->copyOptions);?></td>
     </tr>  
     <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>

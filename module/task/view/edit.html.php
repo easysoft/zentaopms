@@ -36,11 +36,11 @@
       </div>
       <fieldset>
         <legend><?php echo $lang->task->desc;?></legend>
-        <?php echo html::textarea('desc', $task->desc, "rows='8' class='area-1'");?>
+        <?php echo html::textarea('desc', $task->desc, "rows='8' class='form-control'");?>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->comment;?></legend>
-        <?php echo html::textarea('comment', '',  "rows='5' class='area-1'");?>
+        <?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->files;?></legend>

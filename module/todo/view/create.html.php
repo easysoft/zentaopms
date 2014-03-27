@@ -13,46 +13,46 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin' id='dataform'>
-  <table class='table-1'> 
+<form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
+  <table class='table table-form'> 
     <caption><?php echo $lang->todo->create;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->date;?></th>
+      <th><?php echo $lang->todo->date;?></th>
       <td><?php echo html::input('date', $date, "class='select-3 date'");?>
       <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->type;?></th>
+      <th><?php echo $lang->todo->type;?></th>
       <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange=loadList(this.value); class=select-3');?> 
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->pri;?></th>
+      <th><?php echo $lang->todo->pri;?></th>
       <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->name;?></th>
+      <th><?php echo $lang->todo->name;?></th>
       <td>
         <div id='nameBox' class='hidden'><?php echo html::input('name', '', 'class=form-control');?></div>
         <div class='nameBox'><?php echo html::input('name', '', 'class=form-control');?></div>
         </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-      <td><?php echo html::textarea('desc', '', "rows='8' class='area-1'");?></textarea>
+      <th><?php echo $lang->todo->desc;?></th>
+      <td><?php echo html::textarea('desc', '', "rows='8' class='form-control'");?></textarea>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->status;?></th>
+      <th><?php echo $lang->todo->status;?></th>
       <td><?php echo html::select('status', $lang->todo->statusList, '', "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
+      <th><?php echo $lang->todo->beginAndEnd;?></th>
       <td>
         <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?>
         <input type='checkbox' id='switchDate' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?>
       </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->todo->private;?></th>
+      <th><?php echo $lang->todo->private;?></th>
       <td><input type='checkbox' name='private' id='private' value='1'></td>
     </tr>  
     <tr>

@@ -12,31 +12,31 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
+      <td><?php echo $lang->bug->resolution;?></td>
       <td><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=select-3 onchange=setDuplicate(this.value)');?></td>
     </tr>
     <tr id='duplicateBugBox' style='display:none'>
-      <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
-      <td><?php echo html::input('duplicateBug', '', 'class=text-3');?></td>
+      <td><?php echo $lang->bug->duplicateBug;?></td>
+      <td><?php echo html::input('duplicateBug', '', "class='form-control'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
+      <td><?php echo $lang->bug->resolvedBuild;?></td>
       <td><?php echo html::select('resolvedBuild', $builds, '', "class='form-control'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
+      <td><?php echo $lang->bug->resolvedDate;?></td>
       <td><?php echo html::input('resolvedDate', helper::now(), "class='form-control'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
+      <td><?php echo $lang->bug->assignedTo;?></td>
       <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='form-control chosen'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <td><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>

@@ -12,17 +12,27 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $project->name;?></caption>
-    <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
-    </tr>
-  </table>
-  <?php include '../../common/view/action.html.php';?>
-</form>
+<div class='container mw-800px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['project']) . ' #' . $project->id;;?></span>
+      <strong><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?></strong>
+      <small class='text-danger'> <?php echo $lang->project->close;?> <?php echo html::icon($lang->icons['close']);?></small>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' target='hiddenwin'>
+    <table class='table table-form'>
+      <tr>
+        <th class='text-left'><?php echo $lang->comment;?></th>
+      </tr>
+      <tr>
+        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+      </tr>
+      <tr>
+        <td class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+      </tr>
+    </table>
+  </form>
+  <div class='main'><?php include '../../common/view/action.html.php';?></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

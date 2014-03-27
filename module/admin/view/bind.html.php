@@ -15,7 +15,7 @@
 <table align='center' class='table-6'>
 <caption><?php echo $lang->admin->bind->caption;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->user->account;?></th>
+    <th><?php echo $lang->user->account;?></th>
 	<td><?php echo html::input('account', '', "class='form-control'");?></td>
   </tr>
   <tr>

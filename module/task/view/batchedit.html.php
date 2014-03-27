@@ -11,24 +11,33 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
-  <table class='table-1 fixed'> 
-    <caption><?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></caption>
-    <tr>
-      <th class='w-30px'><?php echo $lang->idAB;?></th> 
-      <th class='red'>   <?php echo $lang->task->name?></th>
-      <th class='w-150px'><?php echo $lang->task->module?></th>
-      <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
-      <th class='w-60px red'><?php echo $lang->typeAB;?></th>
-      <th class='w-70px'><?php echo $lang->task->status;?></th>
-      <th class='w-50px'><?php echo $lang->task->pri;?></th>
-      <th class='w-30px red'><?php echo $lang->task->estimateAB;?></th>
-      <th class='w-60px red'><?php echo $lang->task->consumedThisTime?></th>
-      <th class='w-30px red'><?php echo $lang->task->leftAB?></th>
-      <th class='w-80px'><?php echo $lang->task->finishedBy;?></th>
-      <th class='w-80px'><?php echo $lang->task->closedBy;?></th>
-      <th class='w-80px'><?php echo $lang->task->closedReason;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></strong>
+    <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->project . $lang->colon . ' ' . $projectName;?></small>
+  </div>
+</div>
+
+<form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
+  <table class='table table-fixed table-form'>
+    <thead>
+      <tr>
+        <th class='w-30px'><?php echo $lang->idAB;?></th> 
+        <th class='required'>   <?php echo $lang->task->name?></th>
+        <th class='w-150px'><?php echo $lang->task->module?></th>
+        <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
+        <th class='w-70px required'><?php echo $lang->typeAB;?></th>
+        <th class='w-80px'><?php echo $lang->task->status;?></th>
+        <th class='w-60px'><?php echo $lang->task->pri;?></th>
+        <th class='w-40px required'><?php echo $lang->task->estimateAB;?></th>
+        <th class='w-60px required'><?php echo $lang->task->consumedThisTime?></th>
+        <th class='w-40px required'><?php echo $lang->task->leftAB?></th>
+        <th class='w-90px'><?php echo $lang->task->finishedBy;?></th>
+        <th class='w-90px'><?php echo $lang->task->closedBy;?></th>
+        <th class='w-90px'><?php echo $lang->task->closedReason;?></th>
+      </tr>
+    </thead>
     <?php foreach($taskIDList as $taskID):?>
     <?php 
     if(!isset($project))
@@ -45,9 +54,9 @@
       <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=form-control');?></td>
       <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=form-control');?></td>
       <td><?php echo html::select("pris[$taskID]",          (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=form-control');?></td>
-      <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("consumeds[$taskID]",      '', "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='text-1 a-center'");?></td>
+      <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='form-control text-center'");?></td>
+      <td><?php echo html::input("consumeds[$taskID]",      '', "class='form-control text-center'");?></td>
+      <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='form-control text-center'");?></td>
       <td><?php echo html::select("finishedBys[$taskID]",   $members, $tasks[$taskID]->finishedBy, 'class=form-control');?></td>
       <td><?php echo html::select("closedBys[$taskID]",     $members, $tasks[$taskID]->closedBy, 'class=form-control');?></td>
       <td><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=form-control');?></td>

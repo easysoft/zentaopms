@@ -30,7 +30,7 @@
       </div>
       <table class='table-1 fixed'> 
         <tr>
-          <th class='rowhead'><?php echo $lang->user->contacts->selectedUsers;?></th>
+          <th><?php echo $lang->user->contacts->selectedUsers;?></th>
           <td>
             <?php
             foreach($this->view->users as $account => $realname)
@@ -41,7 +41,7 @@
           </td>
         </tr>
         <tr>
-          <th class='rowhead'><?php $mode == 'new' ? print($lang->user->contacts->selectList) : print($lang->user->contacts->listName);?></th>
+          <th><?php $mode == 'new' ? print($lang->user->contacts->selectList) : print($lang->user->contacts->listName);?></th>
           <td>
             <?php 
             if($mode == 'new')

@@ -18,7 +18,7 @@
   <table class='table-1'> 
     <caption><?php echo $lang->doc->editLib;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->doc->libName;?></th>
+      <th><?php echo $lang->doc->libName;?></th>
       <td><?php echo html::input('name', $libName, "class='form-control'");?></td>
     </tr>  
     <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>

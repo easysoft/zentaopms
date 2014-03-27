@@ -17,19 +17,19 @@ include '../../common/view/chosen.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'assignedto');
 ?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3 chosen'");?></td>
+      <th><?php echo $lang->bug->assignedTo;?></th>
+      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td>
     </tr>  
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
+      <td><?php echo $lang->bug->mailto;?></td>
       <td><?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="w-p98" multiple');?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <td><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>

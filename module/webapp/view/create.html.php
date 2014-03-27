@@ -44,7 +44,7 @@
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->desc?></th>
-    <td><?php echo html::textarea('desc', '', "class='area-1' rows='5'")?></td>
+    <td><?php echo html::textarea('desc', '', "class='form-control' rows='5'")?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->icon?></th>

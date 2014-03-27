@@ -12,19 +12,19 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <caption><?php echo $task->name;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
+      <th><?php echo $lang->task->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->left;?></th>
+      <th><?php echo $lang->task->left;?></th>
       <td><?php echo html::input('left', '', "class='form-control'") . $lang->task->hour;?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <td><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>

@@ -15,7 +15,7 @@
 <table align='center' class='table-6'>
 <caption><?php echo $lang->admin->register->caption;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->user->account;?></th>
+    <th><?php echo $lang->user->account;?></th>
 	<td><?php echo html::input('account', '', "class='form-control'") . '<span class="star">*</span>' . $lang->admin->register->lblAccount;?></td>
   </tr>
   <tr>
@@ -39,7 +39,7 @@
     <td><?php echo html::password('password1', '', "class='form-control'") . '<span class="star">*</span>' . $lang->admin->register->lblPasswd;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->user->password2;?></td>
+    <th><?php echo $lang->user->password2;?></td>
     <td><?php echo html::password('password2', '', "class='form-control'") . '<span class="star">*</span>';?></td>
   </tr> 
   <tr>

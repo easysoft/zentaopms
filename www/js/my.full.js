@@ -893,7 +893,7 @@ function setModal()
  */
 function setTableBehavior()
 {
-    $('#wrap .table:not(.table-data, .table-form) tbody td').click(function(){$(this).closest('tr').toggleClass('active');});
+    $('#wrap .table:not(.table-data, .table-form) tbody tr:not(.actie-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
     $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped table-borderless tablesorter');
 }
 

@@ -51,7 +51,7 @@
         </div>
       </td>
       <td><?php echo html::select("begins[$todo->id]", $times, $todo->begin) . html::select("ends[$todo->id]", $times, $todo->end);?></td>
-      <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='select-1'");?></td>
+      <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>

@@ -66,31 +66,31 @@
             <td <?php if($product->deleted) echo "class='deleted text-danger'";?>><strong><?php echo $product->name;?></strong></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->code;?></th>
+            <th><?php echo $lang->product->code;?></th>
             <td><?php echo $product->code;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->PO;?></th>
+            <th><?php echo $lang->product->PO;?></th>
             <td><?php echo $users[$product->PO];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->QD;?></th>
+            <th><?php echo $lang->product->QD;?></th>
             <td><?php echo $users[$product->QD];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->RD;?></th>
+            <th><?php echo $lang->product->RD;?></th>
             <td><?php echo $users[$product->RD];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->status;?></th>
+            <th><?php echo $lang->product->status;?></th>
             <td><?php echo $lang->product->statusList[$product->status];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->acl;?></th>
+            <th><?php echo $lang->product->acl;?></th>
             <td><?php echo $lang->product->aclList[$product->acl];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->whitelist;?></th>
+            <th><?php echo $lang->product->whitelist;?></th>
             <td>
               <?php
               $whitelist = explode(',', $product->whitelist);
@@ -99,11 +99,11 @@
             </td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->story->openedBy?></th>
+            <th><?php echo $lang->story->openedBy?></th>
             <td><?php echo $users[$product->createdBy];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->story->openedDate?></th>
+            <th><?php echo $lang->story->openedDate?></th>
             <td><?php echo $product->createdDate;?></td>
           </tr>  
         </table>
@@ -116,43 +116,43 @@
             <td class='strong'><?php echo $product->stories['active']?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->story->statusList['changed']  . $lang->story->common;?></th>
+            <th><?php echo $lang->story->statusList['changed']  . $lang->story->common;?></th>
             <td><?php echo $product->stories['changed']?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->story->statusList['draft']  . $lang->story->common;?></th>
+            <th><?php echo $lang->story->statusList['draft']  . $lang->story->common;?></th>
             <td><?php echo $product->stories['draft']?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+            <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
             <td><?php echo $product->stories['closed']?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->plans?></th>
+            <th><?php echo $lang->product->plans?></th>
             <td><?php echo $product->plans?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->projects?></th>
+            <th><?php echo $lang->product->projects?></th>
             <td><?php echo $product->projects?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->bugs?></th>
+            <th><?php echo $lang->product->bugs?></th>
             <td><?php echo $product->bugs?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->docs?></th>
+            <th><?php echo $lang->product->docs?></th>
             <td><?php echo $product->docs?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->cases?></th>
+            <th><?php echo $lang->product->cases?></th>
             <td><?php echo $product->cases?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->bulids?></th>
+            <th><?php echo $lang->product->bulids?></th>
             <td><?php echo $product->bulids?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->product->releases?></th>
+            <th><?php echo $lang->product->releases?></th>
             <td><?php echo $product->releases?></td>
           </tr>
         </table>

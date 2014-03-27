@@ -24,29 +24,29 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->dbHost;?></th>
-      <td><?php echo html::input('dbHost', '127.0.0.1', 'class=text-3');?><?php echo $lang->install->dbHostNote;?></td>
+      <td><?php echo html::input('dbHost', '127.0.0.1', "class='form-control'");?><?php echo $lang->install->dbHostNote;?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPort;?></th>
-      <td><?php echo html::input('dbPort', '3306', 'class=text-3');?></td>
+      <td><?php echo html::input('dbPort', '3306', "class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbUser;?></th>
-      <td><?php echo html::input('dbUser', 'root', 'class=text-3');?></td>
+      <td><?php echo html::input('dbUser', 'root', "class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPassword;?></th>
-      <td><?php echo html::input('dbPassword', '', 'class=text-3');?></td>
+      <td><?php echo html::input('dbPassword', '', "class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbName;?></th>
-      <td><?php echo html::input('dbName', 'zentao', 'class=text-3');?></td>
+      <td><?php echo html::input('dbName', 'zentao', "class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPrefix;?></th>
       <td>
       <?php 
-      echo html::input('dbPrefix', 'zt_', 'class=text-3');
+      echo html::input('dbPrefix', 'zt_', "class='form-control'");
       echo html::checkBox('clearDB', $lang->install->clearDB);
       ?>
       </td>

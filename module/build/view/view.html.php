@@ -93,23 +93,23 @@
             <td><?php echo $build->productName;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->name;?></th>
+            <th><?php echo $lang->build->name;?></th>
             <td><?php echo $build->name;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->builder;?></th>
+            <th><?php echo $lang->build->builder;?></th>
             <td><?php echo $users[$build->builder];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->date;?></th>
+            <th><?php echo $lang->build->date;?></th>
             <td><?php echo $build->date;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
+            <th><?php echo $lang->build->scmPath;?></th>
             <td><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->filePath;?></th>
+            <th><?php echo $lang->build->filePath;?></th>
             <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
           </tr>
         </table>

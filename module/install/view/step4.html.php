@@ -24,19 +24,19 @@
   <tr><td><?php echo html::commonButton($lang->install->pre, "onclick='javascript:history.back(-1)'");?></td></tr>
 </table>
 <?php else:?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
 <table class='table-6' align='center'>
   <caption><?php echo $lang->install->getPriv;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->install->company;?></th>
+    <th><?php echo $lang->install->company;?></th>
     <td><?php echo html::input('company');?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->install->account;?></th>
+    <th><?php echo $lang->install->account;?></th>
     <td><?php echo html::input('account');?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->install->password;?></th>
+    <th><?php echo $lang->install->password;?></th>
     <td><?php echo html::input('password') .  html::checkBox('importDemoData', $lang->install->importDemoData);?></td>
   </tr>
   <tr class='text-center'>

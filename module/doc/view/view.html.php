@@ -79,27 +79,27 @@
           <td><?php echo $lib;?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->doc->module;?></th>
+          <th><?php echo $lang->doc->module;?></th>
           <td><?php echo $doc->moduleName ? $doc->moduleName : '/';?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->doc->type;?></th>
+          <th><?php echo $lang->doc->type;?></th>
           <td><?php echo $lang->doc->types[$doc->type];?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->doc->addedBy;?></th>
+          <th><?php echo $lang->doc->addedBy;?></th>
           <td><?php echo $users[$doc->addedBy];?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->doc->addedDate;?></th>
+          <th><?php echo $lang->doc->addedDate;?></th>
           <td><?php echo $doc->addedDate;?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->doc->editedBy;?></th>
+          <th><?php echo $lang->doc->editedBy;?></th>
           <td><?php echo $users[$doc->editedBy];?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->doc->editedDate;?></th>
+          <th><?php echo $lang->doc->editedDate;?></th>
           <td><?php echo $doc->editedDate;?></td>
         </tr>
       </table>

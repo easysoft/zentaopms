@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <?php 
   echo html::hidden("date", date('Y-m-d'));
   for($i = 1; $i <= 5; $i++)

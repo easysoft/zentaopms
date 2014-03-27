@@ -18,8 +18,8 @@ table .table-1{border:0px; margin:0px;}
 table .table-1 td{border:0px;}
 </style>
 <?php $this->app->loadLang('testcase'); unset($this->lang->testcase->resultList['n/a']); ?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1 fixed'> 
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-fixed table-form'> 
     <caption><?php echo $lang->testtask->common . $lang->colon . $lang->testtask->batchRun;?></caption>
     <tr>
       <th class='w-id'>   <?php  echo $lang->idAB;?></th> 

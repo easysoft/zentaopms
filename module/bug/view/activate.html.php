@@ -16,19 +16,19 @@
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
+      <td><?php echo $lang->bug->assignedTo;?></td>
       <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->bug->openedBuild;?></td>
+      <td><?php echo $lang->bug->openedBuild;?></td>
       <td><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class=select-3');?></td>
     </tr>
     <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <td><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->files;?></th>
+      <th><?php echo $lang->bug->files;?></th>
       <td class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>

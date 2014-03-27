@@ -114,7 +114,7 @@ $(document).ready(function() {$('#tipsModal').modal('show');});
       </tr>
       <tr>
         <th><?php echo $lang->project->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', '', "rows='6' class='area-1'");?></td>
+        <td colspan='2'><?php echo html::textarea('desc', '', "rows='6' class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->project->acl;?></th>
@@ -125,7 +125,8 @@ $(document).ready(function() {$('#tipsModal').modal('show');});
         <td colspan='2'><?php echo html::checkbox('whitelist', $groups, $whitelist);?></td>
       </tr>  
       <tr>
-        <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
+        <td></td>
+        <td colspan='2'><?php echo html::submitButton() . html::backButton();?></td>
       </tr>
     </table>
   </form>
@@ -147,13 +148,13 @@ $(document).ready(function() {$('#tipsModal').modal('show');});
       <?php else:?>
       <div id='copyProjects' class='row'>
       <?php foreach ($projects as $id => $name):?>
-        <div class='col-md-4 col-sm-6'>
-        <?php if(empty($id)):?>
-          <a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a>
-        <?php else: ?>
-          <a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProjectID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
-        <?php endif; ?>
-        </div>
+      <?php if(empty($id)):?>
+        <?php if($copyProjectID != 0):?>
+        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
+        <?php endif;?>
+      <?php else: ?>
+        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProjectID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
+      <?php endif; ?>
       <?php endforeach;?>
       </div>
       <?php endif;?>

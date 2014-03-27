@@ -20,7 +20,7 @@
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->lblProductAndModule;?></th>
+      <th><?php echo $lang->testcase->lblProductAndModule;?></th>
       <td>
         <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?>
         <span id='moduleIdBox'>
@@ -36,19 +36,19 @@
       </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->type;?></th>
+      <th><?php echo $lang->testcase->type;?></th>
       <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
+      <th><?php echo $lang->testcase->stage;?></th>
       <td><?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control' multiple='multiple'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->pri;?></th>
+      <th><?php echo $lang->testcase->pri;?></th>
       <td><?php echo html::select('pri', $lang->testcase->priList, $pri, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
+      <th><?php echo $lang->testcase->lblStory;?></th>
       <td>
         <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="form-control" onchange=setPreview();');?>
         <?php if($storyID == 0): ?>
@@ -60,15 +60,15 @@
       </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->title;?></th>
+      <th><?php echo $lang->testcase->title;?></th>
       <td><?php echo html::input('title', $caseTitle, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->precondition;?></th>
+      <th><?php echo $lang->testcase->precondition;?></th>
       <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
+      <th><?php echo $lang->testcase->steps;?></th>
       <td>
         <table class='w-p90'>
           <tr class='colhead'>
@@ -97,11 +97,11 @@
       </td> 
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->keywords;?></th>
+      <th><?php echo $lang->testcase->keywords;?></th>
       <td><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
     </tr>  
      <tr>
-      <th class='rowhead'><?php echo $lang->testcase->files;?></th>
+      <th><?php echo $lang->testcase->files;?></th>
       <td><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>

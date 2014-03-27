@@ -1,4 +1,4 @@
-<th class='rowhead'><?php echo $lang->release->linkStoriesAndBugs;?></th>
+<th><?php echo $lang->release->linkStoriesAndBugs;?></th>
 <td>
   <div class="w-p90">
 

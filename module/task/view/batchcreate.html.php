@@ -13,20 +13,28 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('batchCreateNum', $config->task->batchCreate);?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1 fixed'> 
-    <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate;?></caption>
-    <tr>
-      <th class='w-20px'><?php echo $lang->idAB;?></th> 
-      <th><?php echo $lang->task->story;?></th>
-      <th class='red'><?php echo $lang->task->name;?></th>
-      <th class='w-60px red'><?php echo $lang->typeAB;?></th>
-      <th class='w-80px'><?php echo $lang->task->module?></th>
-      <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
-      <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
-      <th class='w-200px'><?php echo $lang->task->desc;?></th>
-      <th class='w-50px'><?php echo $lang->task->pri;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->common . $lang->colon . $lang->task->batchCreate;?></strong>
+    <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->project . $lang->colon . ' ' . $projectName;?></small>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-fixed table-form'>
+    <thead>
+      <tr class='text-center'>
+        <th class='w-30px'><?php echo $lang->idAB;?></th> 
+        <th><?php echo $lang->task->story;?></th>
+        <th class='required'><?php echo $lang->task->name;?></th>
+        <th class='w-70px required'><?php echo $lang->typeAB;?></th>
+        <th class='w-80px'><?php echo $lang->task->module?></th>
+        <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
+        <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
+        <th class='w-p20'><?php echo $lang->task->desc;?></th>
+        <th class='w-70px'><?php echo $lang->task->pri;?></th>
+      </tr>
+    </thead>
 
     <?php
     $stories['ditto'] = $this->lang->task->ditto; 
@@ -49,20 +57,27 @@
     }
     ?>
     <?php $pri = 3;?>
-    <tr class='text-center'>
-      <td><?php echo $i+1;?></td>
-      <td class='text-left' style='overflow:visible'>
-        <?php 
-        echo html::select("story[$i]", $stories, $story, "class='select-1'");
-        echo html::a("javascript:copyStoryTitle($i)", "<i class='icon-green-same'></i>", '', "class='sameAsStory' title='{$lang->task->copyStoryTitle}'");
-        ?>
+    <tr>
+      <td class='text-center'><?php echo $i+1;?></td>
+      <td style='overflow: visible'>
+        <?php echo html::select("story[$i]", $stories, $story, "class='form-control'");?>
       </td>
-      <td><?php echo html::input("name[$i]", '', 'class=form-control');?></td>
+      <td>
+        <div class='input-group'>
+          <span class='input-group-btn'>
+          <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-double-angle-right'></i></a>
+          </span>
+          <?php echo html::input("name[$i]", '', 'class=form-control');?>
+        </div>
+      </td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td><?php echo html::select("module[$i]", $modules, $module, 'class=form-control')?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=form-control');?></td>
-      <td><?php echo html::input("estimate[$i]", '', 'class=form-control');?></td>
-      <td><?php echo html::textarea("desc[$i]", '', "rows='1' class=text-1");?></td>
+      <td><?php echo html::input("estimate[$i]", '', 'class=form-control text-center');?></td>
+      <td>
+        <div class='form-control' contenteditable='true' data-sync-target='#desc\[<?php echo $i;?>\]'></div>
+        <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control hidden'");?>
+      </td>
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>
     <?php endfor;?>

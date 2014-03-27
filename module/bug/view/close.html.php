@@ -12,8 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <td class='rowhead v-middle'><?php echo $lang->comment;?></td>

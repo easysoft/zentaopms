@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table-1 fixed tablesorter'>
     <caption>
     <?php

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table-6 a-center' align='center'> 
     <caption class='caption-tl'><?php echo $lang->group->managePriv . $lang->group->byModuleTips;?></caption>
     <tr class='colhead'>

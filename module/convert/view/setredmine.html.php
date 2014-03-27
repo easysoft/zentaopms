@@ -3,26 +3,26 @@
   <td><?php echo html::input('dbHost', $config->db->host, "class='form-control'");?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php echo $lang->convert->dbPort;?></th>
+  <th><?php echo $lang->convert->dbPort;?></th>
   <td><?php echo html::input('dbPort', $config->db->port, "class='form-control'");?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php echo $lang->convert->dbUser;?></th>
+  <th><?php echo $lang->convert->dbUser;?></th>
   <td><?php echo html::input('dbUser', $config->db->user, "class='form-control'");?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php echo $lang->convert->dbPassword;?></th>
+  <th><?php echo $lang->convert->dbPassword;?></th>
   <td><?php echo html::input('dbPassword', $config->db->password, "class='form-control'");?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php printf($lang->convert->dbName, $source);?></th>
+  <th><?php printf($lang->convert->dbName, $source);?></th>
   <td><?php echo html::input('dbName', $dbName, "class='form-control'");?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php printf($lang->convert->dbCharset, $source);?></th>
+  <th><?php printf($lang->convert->dbCharset, $source);?></th>
   <td><?php echo html::input('dbCharset', $dbCharset, "class='form-control'");?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php printf($lang->convert->installPath, $source);?></th>
+  <th><?php printf($lang->convert->installPath, $source);?></th>
   <td><?php echo html::input('installPath', '', "class='form-control'");?></td>
 </tr>

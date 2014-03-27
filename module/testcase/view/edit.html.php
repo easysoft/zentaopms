@@ -59,7 +59,7 @@
 
       <fieldset>
         <legend><?php echo $lang->testcase->legendComment;?></legend>
-        <?php echo html::textarea('comment', '',  "rows='5' class='area-1'");?>
+        <?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->testcase->legendAttatch;?></legend>
@@ -84,36 +84,36 @@
             <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-1'");?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->module;?></td>
+            <td><?php echo $lang->testcase->module;?></td>
             <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='select-1'");?></span></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->story;?></td>
+            <td><?php echo $lang->testcase->story;?></td>
             <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control');?></div>
             </td>       
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->type;?></td>
+            <td><?php echo $lang->testcase->type;?></td>
             <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
+            <th><?php echo $lang->testcase->stage;?></th>
             <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='select-1' multiple='multiple'");?></td>
           </tr>  
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
+            <td><?php echo $lang->testcase->pri;?></td>
             <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=form-control');?>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->status;?></td>
+            <td><?php echo $lang->testcase->status;?></td>
             <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
+            <td><?php echo $lang->testcase->keywords;?></td>
             <td><?php echo html::input('keywords', $case->keywords, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
+            <td><?php echo $lang->testcase->linkCase;?></td>
             <td><?php echo html::input('linkCase', $case->linkCase, 'class=form-control');?></td>
           </tr>
         </table>
@@ -125,7 +125,7 @@
             <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
             <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->lblLastEdited;?></td>
+            <td><?php echo $lang->testcase->lblLastEdited;?></td>
             <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>
           </tr>
         </table>

@@ -14,29 +14,52 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $project->name;?></caption>
-    <tr>
-      <td class='rowhead'><?php echo $lang->project->begin;?></td>
-      <td><?php echo html::input('begin', $project->begin, "class='text-3 date' onchange='computeWorkDays()'");?></td>
-    </tr>
-    <tr>
-      <td class='rowhead'><?php echo $lang->project->end;?></td>
-      <td><?php echo html::input('end', $project->end, "class='text-3 date' onchange='computeWorkDays()'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->project->days;?></th>
-      <td><?php echo html::input('days', $project->days, "class='form-control'") . $lang->project->day;?></td>
-    </tr>  
-    <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
-    </tr>
-  </table>
-  <?php include '../../common/view/action.html.php';?>
-</form>
+<div class='container mw-800px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['project']) . ' #' . $project->id;;?></span>
+      <strong><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?></strong>
+      <small class='text-muted'> <?php echo $lang->project->putoff;?> <?php echo html::icon($lang->icons['putoff']);?></small>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' target='hiddenwin'>
+    <table class='table table-form'>
+      <tr>
+        <th class='w-90px'><?php echo $lang->project->dateRange;?></th>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
+            <span class='input-group-addon'><?php echo $lang->project->to;?></span>
+            <?php echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "'");?>
+            <div class='input-group-btn'>
+              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><?php echo $lang->project->byPeriod;?> <span class='caret'></span></button>
+              <ul class='dropdown-menu'>
+              <?php foreach ($lang->project->endList as $key => $name):?>
+                <li><a href='javascript:computeEndDate("<?php echo $key;?>")'><?php echo $name;?></a></li>
+              <?php endforeach;?>
+              </ul>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->project->days;?></th>
+        <td>
+          <div class='input-group'>
+          <?php echo html::input('days', $project->days, "class='form-control'");?>
+            <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+          </div>
+        </td>
+      </tr> 
+      <tr>
+        <th><?php echo $lang->comment;?></th>
+        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+      </tr>
+      <tr>
+        <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+      </tr>
+    </table>
+  </form>
+  <div class='main'><?php include '../../common/view/action.html.php';?></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -56,7 +56,7 @@
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->desc?></th>
-    <td><?php echo html::textarea('desc', $webapp->desc, "class='area-1' rows='5'")?></td>
+    <td><?php echo html::textarea('desc', $webapp->desc, "class='form-control' rows='5'")?></td>
   </tr>
   <?php if($webapp->addType == 'custom'):?>
   <tr>

@@ -1,6 +1,6 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <h3><?php echo $lang->task->assignTo . $this->lang->colon . $task->name;?></h3>
   <table class='table-1'>
     <tr>

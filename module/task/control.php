@@ -169,13 +169,14 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->batchCreate;
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->project  = $project;
-        $this->view->stories  = $stories;
-        $this->view->modules  = $modules;
-        $this->view->storyID  = $storyID;
-        $this->view->members  = $members;
+        $this->view->title       = $title;
+        $this->view->position    = $position;
+        $this->view->project     = $project;
+        $this->view->projectName = $project->name;
+        $this->view->stories     = $stories;
+        $this->view->modules     = $modules;
+        $this->view->storyID     = $storyID;
+        $this->view->members     = $members;
         $this->display();
     }
 
@@ -340,11 +341,12 @@ class task extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Assign. */
-        $this->view->position[] = $this->lang->task->common;
-        $this->view->position[] = $this->lang->task->batchEdit;
-        $this->view->projectID  = $projectID;
-        $this->view->taskIDList = $taskIDList;
-        $this->view->tasks      = $tasks;
+        $this->view->position[]  = $this->lang->task->common;
+        $this->view->position[]  = $this->lang->task->batchEdit;
+        $this->view->projectID   = $projectID;
+        $this->view->taskIDList  = $taskIDList;
+        $this->view->tasks       = $tasks;
+        $this->view->projectName = $project->name;
 
         $this->display();
     }

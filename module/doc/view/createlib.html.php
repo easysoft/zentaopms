@@ -15,7 +15,7 @@
   <table class='table-1'> 
     <caption><?php echo $lang->doc->createLib;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->doc->libName;?></th>
+      <th><?php echo $lang->doc->libName;?></th>
       <td><?php echo html::input('name', '', "class='form-control'");?></td>
     </tr>  
     <tr>

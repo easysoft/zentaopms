@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <div id='featurebar'>
     <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
     <span <?php echo empty($menu) ? "class='active'" : ""?>>
@@ -69,7 +69,7 @@
     </tr>
     <?php endforeach;?>
     <tr>
-      <th class='rowhead'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
+      <th><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
       <td>
         <?php 
         echo html::submitButton($lang->save, "onclick='setNoChecked()'");

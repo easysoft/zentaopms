@@ -9,7 +9,7 @@
     </tr>
     <?php foreach($trackers as $tracker):?>
     <tr>
-      <th class='rowhead'><?php echo $tracker->name;?></th>
+      <th><?php echo $tracker->name;?></th>
       <td><?php html::select("$tracker->name", $lang->convert->directionList, '', "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>

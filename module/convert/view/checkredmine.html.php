@@ -1,9 +1,9 @@
 <tr>
-  <th class='rowhead'><?php echo $lang->convert->checkDB;?></th>
+  <th><?php echo $lang->convert->checkDB;?></th>
   <td><?php is_object($checkInfo['db']) ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
 </tr>
 <tr>
-  <th class='rowhead'><?php echo $lang->convert->checkPath;?></th>
+  <th><?php echo $lang->convert->checkPath;?></th>
   <td><?php $checkInfo['path'] === true ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
 </tr>
 <tr>

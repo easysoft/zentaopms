@@ -36,6 +36,7 @@ $lang->project->closedBy      = '由谁关闭';
 $lang->project->closedDate    = '关闭日期';
 $lang->project->canceledBy    = '由谁取消';
 $lang->project->canceledDate  = '取消日期';
+$lang->project->Person        = '负责人';
 $lang->project->PO            = '产品负责人';
 $lang->project->PM            = '项目负责人';
 $lang->project->QD            = '测试负责人';

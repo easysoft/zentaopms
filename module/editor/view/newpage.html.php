@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
 <table class='table-1'>
   <caption><?php echo $lang->editor->newPage?></caption>
   <tr>

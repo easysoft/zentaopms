@@ -233,7 +233,10 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
 .form-condensed .chosen-container-single .chosen-single {padding: 4px 10px; height: 30px}
 .form-condensed .chosen-container-single .chosen-single div {padding: 4px 10px}
+.form-condensed .table-fixed .form-control {padding: 5px 6px}
 .form-condensed .table-fixed select.form-control {padding: 5px}
+.form-condensed .chosen-container {font-size: 12px}
+.form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 
 /* help in form */
 .help-block {margin-bottom: 5px;}
@@ -491,9 +494,10 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .modal.with-titlebar .modal-header .modal-title {display: none}
 .modal.with-titlebar .modal-header .close {position: absolute; right: 15px; top: 20px}
 .body-modal {padding-bottom: 0; overflow: hidden;}
-.body-modal .outer > form {margin: 10px 5px 20px}
-.body-modal .outer > .main {padding: 10px 20px; margin: 0}
+.body-modal .outer > form, .body-modal .outer > .container > form {margin: 10px 15px 20px}
+.body-modal .outer > .main, .body-modal .outer > .container > .main{padding: 10px 20px; margin: 0}
 .body-modal > form {padding-bottom: 15px;}
+.body-modal .outer > .container {padding: 0}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 

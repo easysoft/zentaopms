@@ -15,18 +15,18 @@
   <div id='featurebar'>
     <div class='heading'><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></div>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form class='form-condensed' method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-400px'> 
       <tr>
         <th class='rowhead w-100px'><?php echo $lang->user->account;?></th>
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->user->password;?></th>
+        <th><?php echo $lang->user->password;?></th>
         <td><?php echo html::password('password1', '', "class='form-control'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->user->password2;?></th>
+        <th><?php echo $lang->user->password2;?></th>
         <td><?php echo html::password('password2', '', "class='form-control'");?></td>
       </tr>
       <tr>

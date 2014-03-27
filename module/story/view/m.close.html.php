@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <h3><?php echo $lang->story->close . $lang->colon . $story->title;?></h3>
   <table class='table-1'>
     <tr>
