@@ -23,7 +23,7 @@ function closeWindow()
 <table class='table-1 mt-10px'>
   <caption><?php echo $lang->testcase->exportTemplet?></caption>
   <tr>
-    <td align='center'>
+    <td align='center' style="padding:30px">
     <?php
     echo $lang->testcase->num;
     echo html::input('num', '10');
@@ -31,7 +31,7 @@ function closeWindow()
     echo html::submitButton();
     ?>
     </td>
-  <tr>
+  </tr>
 </table>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

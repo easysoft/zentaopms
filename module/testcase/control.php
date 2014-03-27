@@ -838,27 +838,27 @@ class testcase extends control
 
                 if($field == 'story')
                 {
-                    if($cellValue == 0)
+                    if(strrpos($cellValue, '(#') !== false)
                     {
-                        $case->$field = 0;
-                    }
-                    elseif(preg_match('/^#\d+$/', $cellValue))
-                    {
-                        $case->$field = substr($cellValue, 1);
-                    }
+                        $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                        $case->$field = $id;
+                    }   
                     else
                     {
-                        $selectedID = 0;
-                        foreach($stories as $id => $story)
-                        {
-                            if(strpos($story, $cellValue) !== false) $selectedID = $id;
-                        }
-                        $case->$field = $selectedID;
+                        $case->$field = 0;
                     }
                 }
                 elseif($field == 'module')
                 {
-                    $case->$field = array_search($cellValue, $modules);
+                    if(strrpos($cellValue, '(#') !== false)
+                    {
+                        $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                        $case->$field = $id;
+                    }   
+                    else
+                    {
+                        $case->$field = 0;
+                    }
                 }
                 elseif(in_array($field, $caseConfig->export->listFields))
                 {
