@@ -17,11 +17,11 @@
   <table class='table table-form'>
     <caption><?php echo $testtask->name;?></caption>
     <tr>
-      <td><?php echo $lang->testtask->report;?></td>
+      <th class='rowhead'><?php echo $lang->testtask->report;?></td>
       <td><?php echo html::textarea('report', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
-      <td><?php echo $lang->comment;?></td>
+      <th class='rowhead'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
