@@ -13,53 +13,62 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkMember', $lang->project->confirmUnlinkMember)?>
-<table align='center' class='table-5 tablesorter' id='memberList'>
-  <thead>
-  <tr class='colhead'>
-    <th><?php echo $lang->team->account;?></th>
-    <th><?php echo $lang->team->role;?></th>
-    <th><?php echo $lang->team->join;?></th>
-    <th><?php echo $lang->team->days;?></th>
-    <th><?php echo $lang->team->hours;?></th>
-    <th><?php echo $lang->team->totalHours;?></th>
-    <th><?php echo $lang->actions;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php $totalHours = 0;?>
-  <?php foreach($teamMembers as $member):?>
-  <tr class='a-center'>
-    <td>
-    <?php 
-    if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
-    $memberHours = $member->days * $member->hours;
-    $totalHours  += $memberHours;
-    ?>
-    </td>
-    <td><?php echo $member->role;?></td>
-    <td><?php echo substr($member->join, 2);?></td>
-    <td><?php echo $member->days;?></td>
-    <td><?php echo $member->hours;?></td>
-    <td><?php echo $memberHours;?></td>
-    <td>
+<div class='container mw-700px'>
+  <div id='featurebar'>
+    <div class='heading'>
+      <?php echo html::icon($lang->icons['team']);?> <?php echo $lang->project->team;?>
+    </div>
+    <div class='actions'>
+      <?php common::printLink('project', 'managemembers', "projectID=$project->id", "<i class='icon-cogs'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary'");?>
+    </div>
+  </div>
+  <table class='table tablesorter' id='memberList'>
+    <thead>
+      <tr>
+        <th><?php echo $lang->team->account;?></th>
+        <th><?php echo $lang->team->role;?></th>
+        <th><?php echo $lang->team->join;?></th>
+        <th><?php echo $lang->team->days;?></th>
+        <th><?php echo $lang->team->hours;?></th>
+        <th><?php echo $lang->team->totalHours;?></th>
+        <th><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php $totalHours = 0;?>
+    <?php foreach($teamMembers as $member):?>
+    <tr class='text-center'>
+      <td>
       <?php 
-      if (common::hasPriv('project', 'unlinkMember'))
-      {
-          $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-remove"></i>', '', "class='link-icon' title='{$lang->project->unlinkMember}'");
-      }
+      if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
+      $memberHours = $member->days * $member->hours;
+      $totalHours  += $memberHours;
       ?>
-    </td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>     
-  <tfoot>
-  <tr>
-    <td colspan='7'>
-      <div class='f-left'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours</strong>";?></div>
-      <div class='f-right'><?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers);?></div>
-    </td>
-  </tr>
-  </tfoot>
-</table>
+      </td>
+      <td><?php echo $member->role;?></td>
+      <td><?php echo substr($member->join, 2);?></td>
+      <td><?php echo $member->days;?></td>
+      <td><?php echo $member->hours;?></td>
+      <td><?php echo $memberHours;?></td>
+      <td>
+        <?php 
+        if (common::hasPriv('project', 'unlinkMember'))
+        {
+            $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
+            echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-remove"></i>', '', "class='btn-icon' title='{$lang->project->unlinkMember}'");
+        }
+        ?>
+      </td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>     
+    <tfoot>
+    <tr>
+      <td colspan='7'>
+      <div class='table-actions clearfix'><div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours</strong>";?></div></div>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>

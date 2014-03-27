@@ -1,2 +1,4 @@
 .parentModule {width:10%; vertical-align:middle;}
 .copy {display:block; margin-bottom:5px;}
+
+.outer .row .col-md-8 .table-form {max-width: 600px}

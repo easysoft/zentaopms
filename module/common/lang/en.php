@@ -365,6 +365,8 @@ $lang->downNotify     = "Down notify";
 $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
 
 $lang->noResultsMatch    = "No results match";
+$lang->selectAnOption    = "Select an option";
+$lang->selectSomeOptions = "Select some options";
 $lang->chooseUsersToMail = "Choose users to mail...";
 
 /* Date times. */
@@ -400,5 +402,18 @@ $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose date';
 $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 $lang->datepicker->monthNames   = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+
+/* Common action icons */
+$lang->icons['create'] = 'plus';
+$lang->icons['edit']   = 'pencil';
+$lang->icons['delete'] = 'remove';
+$lang->icons['copy']   = 'copy';
+$lang->icons['report'] = 'bar-chart';
+$lang->icons['export'] = 'download-alt';
+$lang->icons['finish'] = 'ok-sign';
+$lang->icons['start']  = 'play';
+$lang->icons['assign'] = 'hand-right';
+$lang->icons['change'] = 'random';
+$lang->icons['link']   = 'link';
 
 include (dirname(__FILE__) . '/menuOrder.php');

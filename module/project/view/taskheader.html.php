@@ -1,64 +1,89 @@
 <?php include $this->app->getModuleRoot() . 'common/view/dropmenu.html.php';?>
 <div id='featurebar'>
-  <div class='f-left'>
+  <ul class='nav'>
   <?php
-    echo "<span id='allTab'>"; common::printLink('project', 'task', "project=$projectID&type=all", $lang->project->allTasks); echo '</span>' ;
-    if($project->type == 'sprint' or $project->type == 'waterfall') print "<span id='burnTab'>" and common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); print '</span>' ;
-    echo "<span id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</span>' ;
+    echo "<li id='allTab'>"; common::printLink('project', 'task', "project=$projectID&type=all", $lang->project->allTasks); echo '</li>' ;
+    if($project->type == 'sprint' or $project->type == 'waterfall') print "<li id='burnTab'>" and common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); print '</li>' ;
+    echo "<li id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</li>' ;
 
-    echo "<span id='statusTab'>";
-    echo html::select('status', $lang->project->statusSelects, isset($status) ? $status : '', "onchange='switchStatus({$projectID}, this.value)'");
-    echo "</span>";
+    echo "<li id='statusTab' class='dropdown'>";
+    $current = $lang->project->statusSelects[isset($status) ? $status : ''];
+    if(empty($current)) $current = $lang->project->statusSelects[''];
+    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+    echo "<ul class='dropdown-menu'>";
+    foreach ($lang->project->statusSelects as $key => $value)
+    {
+        if($key == '') continue;
+        echo '<li' . ($key == $status ? " class='active'" : '') . '>';
+        echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
+    }
+    echo '</ul></li>';
 
-    echo "<span id='groupTab'>";
-    echo html::select('groupBy', $lang->project->groups, isset($groupBy) ? $groupBy : '', "onchange='switchGroup($projectID, this.value)'");
-    echo "</span>";
+    echo "<li id='groupTab' class='dropdown'>";
+    $current = $lang->project->groups[isset($groupBy) ? $groupBy : ''];
+    if(empty($current)) $current = $lang->project->groups[''];
+    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+    echo "<ul class='dropdown-menu'>";
+    foreach ($lang->project->groups as $key => $value)
+    {
+        if($key == '') continue;
+        echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
+        echo html::a($this->createLink('project', 'groupTask', "project=$projectID&groupBy=$key"), $value);
+    }
+    echo '</ul></li>';
 
-    if($this->methodName == 'task') echo "<span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon icon-large'></i>&nbsp;{$lang->project->byQuery}</a></span> ";
+
+    if($this->methodName == 'task') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->project->byQuery}</a></li> ";
     ?>
-  </div>
-  <div class='f-right'>
-    <?php 
-    if(!isset($browseType)) $browseType = '';
-    if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
+  </ul>
+  <div class='actions'>
+    <div class='btn-group'>
+      <?php 
+      if(!isset($browseType)) $browseType = '';
+      if(!isset($orderBy))    $orderBy = '';
+      common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
+      ?>
 
-    echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-upload-alt'></i> " . $lang->export, '', "id='exportAction' onclick=\"toggleSubMenu(this.id,'bottom',0)\"");
-    echo '</span>';
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='exportAction'>
+            <i class='icon-download-alt'></i> <?php echo $lang->export ?>
+            <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='exportActionMenu'>
+        <?php 
+        $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $link = common::hasPriv('task', 'export') ?  $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy") : '#';
+        echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
 
-    echo '<span class="link-button dropButton">';
-    echo html::a("#", "<i class='icon-download-alt'></i> " . $lang->import, '', "id='importAction' onclick=\"toggleSubMenu(this.id,'bottom',0)\"");
-    echo '</span>';
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='importAction'>
+            <i class='icon-upload-alt'></i> <?php echo $lang->export ?>
+            <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='importActionMenu'>
+        <?php 
+        $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
+        $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
+        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
+        $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
+        $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
+        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
+    </div>
+    <div class='btn-group'>
+    <?php
     common::printIcon('task', 'batchCreate', "projectID=$projectID");
-    common::printIcon('task', 'create', "project=$projectID");
+    common::printIcon('task', 'create', "project=$projectID", '', 'button', 'branch');
     ?>
+    </div>
   </div>
-</div>
-
-<div id='exportActionMenu' class='listMenu hidden'>
-  <ul>
-  <?php 
-  $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-  $link = common::hasPriv('task', 'export') ?  $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy") : '#';
-  echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
-  ?>
-  </ul>
-</div>
-
-<div id='importActionMenu' class='listMenu hidden'>
-  <ul>
-  <?php 
-  $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
-  $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-  echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
-
-  $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
-  $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-  echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
-  ?>
-  </ul>
+  <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
 
 <?php foreach(glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php") as $fileName) include_once $fileName; ?>

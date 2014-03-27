@@ -26,11 +26,11 @@
     </tr>
 
     <?php foreach($editedTodos as $todo):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-2 date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='select-1'");?></td>
-      <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=select-1');?></td>
+      <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=form-control');?></td>
       <td>
         <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='f-left text-1 hiddenwin'"); ?></div>
         <div class='<?php echo "nameBox" . $todo->id;?>'>
@@ -51,13 +51,13 @@
         </div>
       </td>
       <td><?php echo html::select("begins[$todo->id]", $times, $todo->begin) . html::select("ends[$todo->id]", $times, $todo->end);?></td>
-      <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='select-1'");?></td>
+      <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='6'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='6' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include './footer.html.php';?>

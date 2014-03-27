@@ -43,17 +43,31 @@ class html
     }
 
     /**
-     * Create icon tag
+     * Create fav icon tag
      * 
      * @param mixed $url  the url of the icon.
      * @access public
      * @return string          
      */
-    public static function icon($url)
+    public static function favicon($url)
     {
         return "<link rel='icon' href='$url' type='image/x-icon' />\n" . 
                "<link rel='shortcut icon' href='$url' type='image/x-icon' />\n";
 
+    }
+
+    /**
+     * Create icon tag
+     * 
+     * @param name $name  the name of the icon.
+     * @param cssClass $class  the extra css class of the icon.
+     * @access public
+     * @return string          
+     */
+    public static function icon($name, $class = '')
+    {
+        $class = empty($class) ? ('icon-' . $name) : ('icon-' . $name . ' ' . $class);
+        return "<i class='$class'></i>";
     }
 
     /**
@@ -187,20 +201,27 @@ class html
      * @param  array  $options    the array to create radio tag from.
      * @param  string $checked    the value to checked by default.
      * @param  string $attrib     other attribs.
+     * @param  string $type       inline or block
      * @return string
      */
-    static public function radio($name = '', $options = array(), $checked = '', $attrib = '')
+    static public function radio($name = '', $options = array(), $checked = '', $attrib = '', $type = 'inline')
     {
         $options = (array)($options);
         if(!is_array($options) or empty($options)) return false;
+        $isBlock = $type == 'block';
 
         $string  = '';
         foreach($options as $key => $value)
         {
+            if($isBlock) $string .= "<div class='radio'><label>";
+            else $string .= "<label class='radio-inline'>";
             $string .= "<input type='radio' name='$name' value='$key' ";
             $string .= ($key == $checked) ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /><label for='$name$key'>$value</label>\n";
+            $string .= " id='$name$key' /> ";
+            $string .= $value;
+            if($isBlock) $string .= '</label></div>';
+            else $string .= '</label>';
         }
         return $string;
     }
@@ -224,10 +245,10 @@ class html
         foreach($options as $key => $value)
         {
             $key     = str_replace('item', '', $key);
-            $string .= "<span><input type='checkbox' name='{$name}[]' value='$key' ";
+            $string .= "<label class='checkbox-inline'><input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /> <label for='$name$key'>$value</label></span>\n";
+            $string .= " id='$name$key' /> $value</label>\n";
         }
         return $string;
     }
@@ -243,7 +264,7 @@ class html
     static public function selectAll($scope = "", $type = "button", $checked = false)
     {
         $string = <<<EOT
-<script type="text/javascript">
+<script>
 function selectAll(checker, scope, type)
 { 
     if(scope)
@@ -297,7 +318,7 @@ EOT;
         }
         elseif($type == 'button')
         {
-            $string .= "<input type='button' name='allchecker' id='allchecker' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            $string .= "<input type='button' name='allchecker' id='allchecker' class='btn btn-select-all' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
         }
 
         return  $string;
@@ -312,7 +333,7 @@ EOT;
     static public function selectReverse($scope = "")
     {
         $string = <<<EOT
-<script type="text/javascript">
+<script>
 function selectReverse(scope)
 { 
     if(scope)
@@ -333,7 +354,7 @@ function selectReverse(scope)
 </script>
 EOT;
         global $lang;
-        $string .= "<input type='button' name='reversechecker' id='reversechecker' value='{$lang->selectReverse}' onclick='selectReverse(\"$scope\")'/>";
+        $string .= "<input type='button' name='reversechecker' id='reversechecker' class='btn btn-select-reverse' value='{$lang->selectReverse}' onclick='selectReverse(\"$scope\")'/>";
 
         return  $string;
     }
@@ -411,14 +432,14 @@ EOT;
      * @access public
      * @return string the submit button tag.
      */
-    public static function submitButton($label = '', $misc = '')
+    public static function submitButton($label = '', $misc = '', $class = 'btn-primary')
     {
         if(empty($label))
         {
             global $lang;
             $label = $lang->save;
         }
-        return " <input type='submit' id='submit' value='$label' $misc class='button-s' /> ";
+        return " <button type='submit' id='submit' $misc class='btn btn-submit $class'>$label</button>";
     }
 
     /**
@@ -428,10 +449,14 @@ EOT;
      * @access public
      * @return string the reset button tag.
      */
-    public static function resetButton()
+    public static function resetButton($label = '', $misc = '', $class = '')
     {
-        global $lang;
-        return " <input type='reset' id='reset' value='{$lang->reset}' class='button-r' /> ";
+        if(empty($label))
+        {
+            global $lang;
+            $label = $lang->reset;
+        }
+        return " <button type='reset' id='reset' class='btn btn-reset $class'>$label</button>";
     }
 
     /**
@@ -445,7 +470,7 @@ EOT;
     {
         global $lang;
         if(isonlybody()) return false;
-        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='button-b' $misc/>";
+        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='btn btn-back' $misc/>";
     }
 
     /**
@@ -457,9 +482,11 @@ EOT;
      * @access public
      * @return string the common button tag.
      */
-    public static function commonButton($label = '', $misc = '', $class = '')
+    public static function commonButton($label = '', $misc = '', $class = '', $icon)
     {
-        return " <input type='button' value='$label' $misc class='button-c $class' /> ";
+        if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
+        if($class) $class = 'btn ' . $class; else $class = 'btn';
+        return " <button $misc class='$class'>$label</button>";
     }
 
     /**
@@ -486,7 +513,7 @@ EOT;
             $link .= $onlybody;
         }
 
-        return " <input type='button' value='$label' $misc onclick='{$target}.location=\"$link\"' class='button-c' /> ";
+        return " <input type='button' value='$label' $misc onclick='{$target}.location=\"$link\"' class='btn' /> ";
     }
 
     /**
@@ -531,7 +558,7 @@ class js
     public static function import($url, $version = '')
     {
         if(!$version) $version = filemtime(__FILE__);
-        echo "<script src='$url?v=$version' type='text/javascript'></script>\n";
+        echo "<script src='$url?v=$version'></script>\n";
     }
 
     /**
@@ -543,8 +570,8 @@ class js
      */
     static private function start($full = true)
     {
-        if($full) return "<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><style>body{background:white}</style><script language='Javascript'>";
-        return "<script language='Javascript'>";
+        if($full) return "<html><meta charset=utf-8'/><style>body{background:white}</style><script>";
+        return "<script>";
     }
 
     /**

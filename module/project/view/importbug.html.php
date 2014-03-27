@@ -37,7 +37,7 @@ var browseType = '<?php echo $browseType;?>';
     </thead>
     <tbody>
     <?php foreach($bugs as $bug):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td>
         <?php echo html::checkbox("import[$bug->id]", '');?> 
         <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>
@@ -52,7 +52,7 @@ var browseType = '<?php echo $browseType;?>';
     </tr>
     <?php endforeach;?>
     </tbody>
-    <tr><td colspan='9'><div class='f-right'><?php $pager->show();?></div></td></tr>
+    <tr><td colspan='9'><div class='text-right'><?php $pager->show();?></div></td></tr>
   </table>
   <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->import) . html::backButton();?></div>
 </form>

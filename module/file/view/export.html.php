@@ -47,7 +47,7 @@ function switchEncode(fileType)
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
     <tr>
-      <td class='a-center' style='padding:30px'>
+      <td class='text-center' style='padding:30px'>
         <?php
         echo $lang->setFileName . ' ';
         echo html::input('fileName', '', 'class=text-2');

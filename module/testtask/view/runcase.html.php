@@ -30,11 +30,11 @@
       <th><?php echo $key + 1;?></th>
       <td><?php echo nl2br($step->desc);?></td>
       <td><?php echo nl2br($step->expect);?></td>
-      <td class='a-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, $defaultResult);?></td>
-      <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='area-1'");?></td>
+      <td class='text-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, $defaultResult);?></td>
+      <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='form-control'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td colspan='5'>
         <?php
         if($preCase)  echo html::linkButton($lang->testtask->pre, inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"));

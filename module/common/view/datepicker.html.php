@@ -1,35 +1,50 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php
+$clientLang = $this->app->getClientLang();
 if($config->debug)
 {
-    css::import($defaultTheme . 'datepicker.css');
-    js::import($jsRoot . 'jquery/datepicker/min.js'); 
-    js::import($jsRoot . 'jquery/datepicker/date.js');
+    css::import($jsRoot . 'jquery/datetimepicker/min.css');
+    js::import($jsRoot . 'jquery/datetimepicker/min.js'); 
 }
 ?>
 <script language='javascript'>
-Date.firstDayOfWeek = 1;
-Date.format = 'yyyy-mm-dd';
-$.dpText = <?php echo json_encode($lang->datepicker->dpText)?>
-
-Date.dayNames     = <?php echo json_encode($lang->datepicker->dayNames)?>;
-Date.abbrDayNames = <?php echo json_encode($lang->datepicker->abbrDayNames)?>;
-Date.monthNames   = <?php echo json_encode($lang->datepicker->monthNames)?>; 
-
-$(function() {
-    $('.date').each(function(){
-        time = $(this).val();
-        if(!isNaN(time) && time != ''){
-            var Y = time.substring(0, 4);
-            var m = time.substring(4, 6);
-            var d = time.substring(6, 8);
-            time = Y + '-' + m + '-' + d;
-            $('.date').val(time);
-        }
+$(function()
+{
+    $('.form-datetime').datetimepicker(
+    {
+        language: '<?php echo $clientLang; ?>',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1,
+        format: 'yyyy-mm-dd hh:ii'
     });
-
-    startDate = new Date(1970, 1, 1);
-    $(".date").datePicker({createButton:true, startDate:startDate})
-        .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+    $('.form-date').datetimepicker(
+    {
+        language: '<?php echo $clientLang; ?>',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        format: 'yyyy-mm-dd'
+    });
+    $('.form-time').datetimepicker({
+        language: '<?php echo $clientLang; ?>',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0,
+        format: 'hh:ii'
+    });
 });
 </script>

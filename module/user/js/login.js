@@ -3,28 +3,11 @@ $(document).ready(function()
 {
     $('#account').focus();
 
-    $("#lang").click(function(event) 
+    $("#langs li > a").click(function() 
     {
-        $("#langs").toggle();
-        event.stopPropagation();
+        selectLang($(this).data('value'));
+        console.log($(this).data('value'));
     });
 
-    $(document).click(function(event)
-    {
-        $("#langs").hide();
-        $("#qrcode").hide();
-    });
-
-    $("#langs a").click(function() 
-    {
-        $("#langs a").removeClass('active');
-        $(this).addClass("active");
-        selectLang($(this).attr("data-value"));
-    });
-
-    $("#mobile").click(function(event) {
-        $("#qrcode").toggle();
-        event.stopPropagation();
-        return false;
-    });
+    $('#mobile').popover({html: true, container: 'body'});
 })

@@ -912,8 +912,8 @@ class user extends control
     public function ajaxGetContactUsers($contactListID)
     {
         $users = $this->user->getPairs('nodeleted,devfirst');
-        if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='text-1' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
         $list = $this->user->getContactListByID($contactListID);
-        return print(html::select('mailto[]', $users, $list->userList, "class='text-1' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        return print(html::select('mailto[]', $users, $list->userList, "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
     }
 }

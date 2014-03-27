@@ -11,18 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' id='dataform'>
+<form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-4 a-left'> 
     <caption><?php echo $lang->group->create;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->group->name;?></th>
+      <th><?php echo $lang->group->name;?></th>
       <td><?php echo html::input('name', '', "class=text-1");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->group->desc;?></th>
+      <th><?php echo $lang->group->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows=5 class=area-1");?></textarea></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

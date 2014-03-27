@@ -39,7 +39,7 @@
         <a class='btn' onclick='restoreDefault()'><?php echo $lang->bug->restoreDefault;?></a>
       </td>
     </tr>  
-    <tr><td colspan='4' class='a-center'><?php echo html::submitButton('', 'onclick=selectItem("customFields")');?></td></tr>
+    <tr><td colspan='4' class='text-center'><?php echo html::submitButton('', 'onclick=selectItem("customFields")');?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

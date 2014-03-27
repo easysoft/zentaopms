@@ -15,32 +15,32 @@
 <table align='center' class='table-6'>
 <caption><?php echo $lang->admin->register->caption;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->user->account;?></th>
-	<td><?php echo html::input('account', '', "class='text-3'") . '<span class="star">*</span>' . $lang->admin->register->lblAccount;?></td>
+    <th><?php echo $lang->user->account;?></th>
+	<td><?php echo html::input('account', '', "class='form-control'") . '<span class="star">*</span>' . $lang->admin->register->lblAccount;?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->realname;?></th>
-    <td><?php echo html::input('realname', '', "class='text-3'") . '<span class="star">*</span>';?></td>
+    <td><?php echo html::input('realname', '', "class='form-control'") . '<span class="star">*</span>';?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->company;?></th>
-    <td><?php echo html::input('company', $register->company, "class='text-3'");?></td>
+    <td><?php echo html::input('company', $register->company, "class='form-control'");?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->phone;?></th>
-    <td><?php echo html::input('phone', '', "class='text-3'");?></td>
+    <td><?php echo html::input('phone', '', "class='form-control'");?></td>
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->email;?></td>
-    <td><?php echo html::input('email', $register->email, "class='text-3'") . '<span class="star">*</span>';?></td>
+    <td><?php echo html::input('email', $register->email, "class='form-control'") . '<span class="star">*</span>';?></td>
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->password;?></th>
-    <td><?php echo html::password('password1', '', "class='text-3'") . '<span class="star">*</span>' . $lang->admin->register->lblPasswd;?></td>
+    <td><?php echo html::password('password1', '', "class='form-control'") . '<span class="star">*</span>' . $lang->admin->register->lblPasswd;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->user->password2;?></td>
-    <td><?php echo html::password('password2', '', "class='text-3'") . '<span class="star">*</span>';?></td>
+    <th><?php echo $lang->user->password2;?></td>
+    <td><?php echo html::password('password2', '', "class='form-control'") . '<span class="star">*</span>';?></td>
   </tr> 
   <tr>
     <th>

@@ -16,21 +16,21 @@
   <caption><?php echo $lang->webapp->edit?></caption>
   <tr>
     <th align='left'><?php echo $lang->webapp->module?></th>
-    <td><?php echo html::select('module', $modules, $webapp->module, "class='select-3'")?></td>
+    <td><?php echo html::select('module', $modules, $webapp->module, "class='form-control'")?></td>
   </tr>
   <?php if($webapp->addType != 'system'):?>
   <tr>
     <th align='left'><?php echo $lang->webapp->name?></th>
-    <td><?php echo html::input('name', $webapp->name, "class='text-3'")?></td>
+    <td><?php echo html::input('name', $webapp->name, "class='form-control'")?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->url?></th>
-    <td><?php echo html::input('url', $webapp->url, "class='text-3'")?></td>
+    <td><?php echo html::input('url', $webapp->url, "class='form-control'")?></td>
   </tr>
   <?php endif;?>
   <tr>
     <th align='left'><?php echo $lang->webapp->target?></th>
-    <td><?php echo html::select('target', $lang->webapp->targetList, $webapp->target, "class='select-3'")?></td>
+    <td><?php echo html::select('target', $lang->webapp->targetList, $webapp->target, "class='form-control'")?></td>
   </tr>
   <?php 
   $customWidth  = '';
@@ -44,7 +44,7 @@
   ?>
   <tr class="size">
     <th align='left'><?php echo $lang->webapp->size?></th>
-    <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='select-3'")?></td>
+    <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='form-control'")?></td>
   </tr>
   <tr class="customSize <?php if($webapp->size != 'custom') echo 'hidden'?>">
     <th align='left'><?php echo $lang->webapp->custom?></th>
@@ -52,11 +52,11 @@
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->abstract?></th>
-    <td><?php echo html::input('abstract', $webapp->abstract, "class='text-3' maxlength='30'")?> <span><?php echo $lang->webapp->noticeAbstract?></span></td>
+    <td><?php echo html::input('abstract', $webapp->abstract, "class='form-control' maxlength='30'")?> <span><?php echo $lang->webapp->noticeAbstract?></span></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->desc?></th>
-    <td><?php echo html::textarea('desc', $webapp->desc, "class='area-1' rows='5'")?></td>
+    <td><?php echo html::textarea('desc', $webapp->desc, "class='form-control' rows='5'")?></td>
   </tr>
   <?php if($webapp->addType == 'custom'):?>
   <tr>
@@ -64,7 +64,7 @@
     <td>
       <?php
       if($webapp->icon) echo "<p><img src='{$webapp->icon->webPath}' /></p>";
-      echo html::file('files', "class='text-1' size='57'");
+      echo html::file('files', "class='form-control' size='57'");
       ?>
       <br /><span><?php echo $lang->webapp->noticeIcon?></span>
     </td>
@@ -77,11 +77,11 @@
 <table class='table-1'>
   <tr class="hideSize">
     <th><?php echo $lang->webapp->size?></th>
-    <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='select-3'")?></td>
+    <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='form-control'")?></td>
   </tr>
   <tr class="hideHeight">
     <th><?php echo $lang->webapp->height?></th>
-    <td><?php echo html::input('size', $webapp->size, "class='text-3'")?></td>
+    <td><?php echo html::input('size', $webapp->size, "class='form-control'")?></td>
   </tr>
 </table>
 </div>

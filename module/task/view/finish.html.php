@@ -12,30 +12,39 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $task->name;?></caption>
+<?php include '../../common/view/datepicker.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;;?></span>
+    <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
+    <small class='text-success'> <?php echo $lang->task->finish;?> <?php echo html::icon($lang->icons['finish']);?></small>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-      <td><?php echo html::input('consumed', $task->consumed, "class='text-3'") . $lang->task->hour;?></td>
+      <th class='w-80px'><?php echo $lang->task->consumed;?></th>
+      <td class='w-p45'><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $members, $task->openedBy, "class='select-3 chosen'");?></td>
+      <td><?php echo $lang->task->assignedTo;?></td>
+      <td><?php echo html::select('assignedTo', $members, $task->openedBy, "class='form-control chosen'");?></td><td></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->finishedDate;?></th>
-      <td><?php echo html::input('finishedDate',$date, "class='text-3'");?></td>
+      <td><?php echo $lang->task->finishedDate;?></td>
+      <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-datetime'");?></div></td><td></td>
     </tr>
 
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+      <td><?php echo $lang->comment;?></td>
+      <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='3' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

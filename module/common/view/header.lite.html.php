@@ -10,24 +10,20 @@ $clientTheme  = $this->app->getClientTheme();
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
-  css::import($themeRoot . 'fontawesome/min.css',   $config->version);
-  if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 7.0"))
-  {
-      css::import($themeRoot . 'fontawesome/ie7.min.css',   $config->version);
-      css::import($defaultTheme . 'style.ie7.css', $config->version);
-  }
   if($config->debug)
   {
       js::import($jsRoot . 'jquery/lib.js', $config->version);
+      js::import($jsRoot . 'zui/min.js', $config->version);
       js::import($jsRoot . 'my.min.js',     $config->version);
 
-      css::import($defaultTheme . 'yui.css',   $config->version);
+      css::import($themeRoot . 'zui/css/min.css',   $config->version);
       css::import($defaultTheme . 'style.css', $config->version);
 
       css::import($langTheme, $config->version);
@@ -41,7 +37,16 @@ $clientTheme  = $this->app->getClientTheme();
 
   if(isset($pageCss)) css::internal($pageCss);
 
-  echo html::icon($webRoot . 'favicon.ico');
+  echo html::favicon($webRoot . 'favicon.ico');
   ?>
+<!--[if lt IE 9]>
+<?php
+js::import($jsRoot . 'html5shiv/min.js');
+js::import($jsRoot . 'respond/min.js');
+?>
+<![endif]-->
+<!--[if lt IE 10]>
+<?php js::import($jsRoot . 'jquery/placeholder/min.js'); ?>
+<![endif]-->
 </head>
 <body>

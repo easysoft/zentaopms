@@ -338,11 +338,12 @@ class task extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Assign. */
-        $this->view->position[] = $this->lang->task->common;
-        $this->view->position[] = $this->lang->task->batchEdit;
-        $this->view->projectID  = $projectID;
-        $this->view->taskIDList = $taskIDList;
-        $this->view->tasks      = $tasks;
+        $this->view->position[]  = $this->lang->task->common;
+        $this->view->position[]  = $this->lang->task->batchEdit;
+        $this->view->projectID   = $projectID;
+        $this->view->taskIDList  = $taskIDList;
+        $this->view->tasks       = $tasks;
+        $this->view->projectName = $project->name;
 
         $this->display();
     }
@@ -831,7 +832,7 @@ class task extends control
         $tasks = $this->task->getUserTaskPairs($account, $status);
 
         if($id) die(html::select("tasks[$id]", $tasks, '', 'class="select-1 f-left"'));
-        die(html::select('task', $tasks, '', 'class=select-1'));
+        die(html::select('task', $tasks, '', 'class=form-control'));
     }
 
     /**

@@ -36,7 +36,7 @@ js::set('customed', $customed);
     echo "<span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
-  <div class='f-right'>
+  <div class='text-right'>
     <?php
 
     echo '<span class="link-button dropButton">';
@@ -79,7 +79,7 @@ if($customed)
         <div class='box-title'><?php echo $productName;?></div>
         <div class='box-content'>
           <?php echo $moduleTree;?>
-          <div class='a-right'>
+          <div class='text-right'>
             <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?>
             <?php common::printLink('tree', 'fix',    "root=$productID&type=bug", $lang->tree->fix, 'hiddenwin');?>
           </div>
@@ -126,7 +126,7 @@ if($customed)
           <tbody>
           <?php foreach($bugs as $bug):?>
           <?php $bugLink = inlink('view', "bugID=$bug->id");?>
-          <tr class='a-center'>
+          <tr class='text-center'>
             <td class='<?php echo $bug->status;?>' style="font-weight:bold">
               <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
               <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
@@ -135,14 +135,14 @@ if($customed)
             <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri];?>'><?php echo $lang->bug->priList[$bug->pri];?></span></td>
 
             <?php $class = 'confirm' . $bug->confirmed;?>
-            <td class='a-left' title="<?php echo $bug->title?>"><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
+            <td class='text-left' title="<?php echo $bug->title?>"><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
             <td><?php echo $lang->bug->statusList[$bug->status];?></td>
             <?php endif;?>
 
             <?php if($browseType == 'needconfirm'):?>
-            <td class='a-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
+            <td class='text-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
             <td><?php $lang->bug->confirmStoryChange = $lang->confirm; common::printIcon('bug', 'confirmStoryChange', "bugID=$bug->id", '', 'list', '', 'hiddenwin')?></td>
             <?php else:?>
             <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
@@ -159,7 +159,7 @@ if($customed)
             <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
             <?php endif;?>
 
-            <td class='a-right'>
+            <td class='text-right'>
               <?php
               $params = "bugID=$bug->id";
               common::printIcon('bug', 'confirmBug', $params, $bug, 'list', '', '', 'iframe', true);
@@ -197,7 +197,7 @@ if($customed)
                  ?>
                 </div>
                 <?php endif?>
-                <div class='f-right'><?php $pager->show();?></div>
+                <div class='text-right'><?php $pager->show();?></div>
               </td>
             </tr>
           </tfoot>

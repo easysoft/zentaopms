@@ -15,15 +15,15 @@
 <table class='table-1'>
   <caption><?php echo $lang->story->activate;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->story->assignedTo;?></th>
+    <th><?php echo $lang->story->assignedTo;?></th>
     <td><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="select-3"');?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->story->comment;?></th>
+    <th><?php echo $lang->story->comment;?></th>
     <td><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
   </tr>
   <tr>
-    <td colspan='2' class='a-center'>
+    <td colspan='2' class='text-center'>
       <?php 
       echo html::submitButton();
       echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));

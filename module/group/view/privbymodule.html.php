@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table-6 a-center' align='center'> 
     <caption class='caption-tl'><?php echo $lang->group->managePriv . $lang->group->byModuleTips;?></caption>
     <tr class='colhead'>
@@ -33,7 +33,7 @@
       <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple'");?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='3'>
+      <td class='text-center' colspan='3'>
         <?php 
         echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));

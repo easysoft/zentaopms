@@ -1,0 +1,6 @@
+.roadmap {width:180px; margin:10px auto 10px auto; padding:15px 10px; font-weight:bold}
+.roadmap a{color:#ccc;}
+.roadmap p{margin:2px}
+.release {background:#006400; color:#ccc}
+.plan {background:#ffcc00;}
+.plan a{color:#006400}

@@ -17,7 +17,7 @@
   <table align='center' class='table-4 a-center'> 
     <caption>
       <div class='f-left'><?php echo $lang->project->manageMembers;?></div>
-      <div class='f-right'><?php echo html::select('teams2Import', $teams2Import, $team2Import, 'onchange=importTeam()');?></div>
+      <div class='text-right'><?php echo html::select('teams2Import', $teams2Import, $team2Import, 'onchange=importTeam()');?></div>
     </caption>
     <tr>
       <th><?php echo $lang->team->account;?></th>

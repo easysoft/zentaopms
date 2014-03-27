@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <?php 
   echo html::hidden("date", date('Y-m-d'));
   for($i = 1; $i <= 5; $i++)
@@ -25,7 +25,7 @@
       echo html::hidden("ends[$i]",   '2400');
   }
   ?>
-<p class='a-center'>
+<p class='text-center'>
   <?php
   echo html::submitButton('', "data-inline='true' data-theme='b'");
   echo html::linkButton($lang->goback, $this->createLink('my', 'todo', "type={$this->session->todoType}"), 'self', "data-inline='true'");

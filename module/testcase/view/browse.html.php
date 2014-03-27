@@ -29,7 +29,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
-  <div class='f-right'>
+  <div class='text-right'>
     <?php 
     common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement');
 
@@ -65,7 +65,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
-        <div class='a-right'>
+        <div class='text-right'>
           <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage);?>
           <?php common::printLink('tree', 'fix',    "root=$productID&type=case", $lang->tree->fix, 'hiddenwin');?>
         </div>
@@ -94,16 +94,16 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
             <?php endif;?>
           </tr>
           <?php foreach($cases as $case):?>
-          <tr class='a-center'>
+          <tr class='text-center'>
             <?php $viewLink = inlink('view', "caseID=$case->id");?>
             <td>
               <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
               <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
             </td>
             <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
-            <td class='a-left' title="<?php echo $case->title?>"><?php echo html::a($viewLink, $case->title);?></td>
+            <td class='text-left' title="<?php echo $case->title?>"><?php echo html::a($viewLink, $case->title);?></td>
             <?php if($browseType == 'needconfirm'):?>
-            <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
+            <td class='text-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
             <td><?php $lang->testcase->confirmStoryChange = $lang->confirm; common::printIcon('testcase', 'confirmStoryChange', "caseID=$case->id", '', 'list', '', 'hiddenwin');?></td>
             <?php else:?>
             <td><?php echo $lang->testcase->typeList[$case->type];?></td>
@@ -112,7 +112,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
             <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
             <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
             <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
-            <td class='a-right'>
+            <td class='text-right'>
               <?php
               common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', '', '', 'runCase');
               common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results');
@@ -122,7 +122,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
               if(common::hasPriv('testcase', 'delete'))
               {
                   $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->testcase->delete}'");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->testcase->delete}'");
               }
 
               common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'createBug');

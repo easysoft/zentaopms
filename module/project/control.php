@@ -50,6 +50,7 @@ class project extends control
         $this->view->projectStats  = $this->project->getProjectStats($status);
         $this->view->projectID     = $projectID;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status        = $status;
 
         $this->display();
     }
@@ -1580,7 +1581,7 @@ class project extends control
     public function ajaxGetMembers($projectID)
     {
         $users = $this->project->getTeamMemberPairs($projectID);
-        die(html::select('assignedTo', $users, '', "class='select-1'"));
+        die(html::select('assignedTo', $users, '', "class='form-control'"));
     }
 
     /**

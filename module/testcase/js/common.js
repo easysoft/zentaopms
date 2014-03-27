@@ -106,7 +106,7 @@ function createRow()
 {
     if(newRowID == 0) newRowID = $('.stepID').size();
     newRowID ++;
-    var newRow = "<tr class='a-center' id='row" + newRowID + "'>";
+    var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
     newRow += "<th class='stepID'></th>";
     newRow += "<td class='w-p50'><textarea name='steps[]' rows=3 class='w-p100'></textarea></td>";
     newRow += "<td><textarea name='expects[]' rows=3 class='w-p100'></textarea></td>";

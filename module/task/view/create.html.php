@@ -15,81 +15,92 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('holders', $lang->task->placeholder);?>
-<form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
-  <table align='center' class='table-1 a-left'> 
-    <caption><?php echo $lang->task->create;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->project;?></th>
-      <td><?php echo $project->name;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->module;?></th>
-      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3' onchange='setStories(this.value,$project->id)'");?></span></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='select-3 chosen'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->type;?></th>
-      <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-3 onchange="setOwners(this.value)"');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->story;?></th>
-      <td>
-        <?php echo html::select('story', $stories, $task->story, 'class=select-1 onchange=setStoryRelated();');?>
-        <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
-      </td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->name;?></th>
-      <td>
-      <?php
-      echo html::input('name', $task->name, "class='text-1'");
-      echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle() id="copyButton"');?>
-      </td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->desc;?></th>
-      <td><?php echo html::textarea('desc', $task->desc, "rows='7' class='area-1'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->pri;?></th>
-      <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-3');?> 
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-      <td><?php echo html::input('estimate', $task->estimate, "class='text-3'") . $lang->task->hour;?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->estStarted;?></th>
-      <td><?php echo html::input('estStarted', $task->estStarted, "class='text-3 date'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-      <td><?php echo html::input('deadline', $task->deadline, "class='text-3 date'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->mailto;?></th>
-      <td>
-        <?php
-        echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), 'multiple');
-        if($contactLists) echo html::select('', $contactLists, '', "class='f-right' onchange=\"setMailto('mailto', this.value)\"");
-        ?>
-      </td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->files;?></th>
-      <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->afterSubmit;?></th>
-      <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
-    </tr>
-    <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
-    </tr>
-  </table>
-  <span id='responser'></span>
-</form>
+<div class='container'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
+      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->task->create;?></strong>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
+    <table class='table table-form'> 
+      <tr>
+        <th class='w-100px'><?php echo $lang->task->project;?></th>
+        <td colspan='3'><?php echo $project->name;?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->task->module;?></th>
+        <td id='moduleIdBox' class='w-p35'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control' onchange='setStories(this.value,$project->id)'");?></td><td class='w-p40'></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->assignedTo;?></th>
+        <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->type;?></th>
+        <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control onchange="setOwners(this.value)"');?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->story;?></th>
+        <td colspan='2'>
+          <?php echo html::select('story', $stories, $task->story, 'class=form-control onchange=setStoryRelated();');?>
+        </td><td><a href='#' id='preview' class='iframe'><i class='icon-eye-open'></i> <?php echo $lang->preview;?></a></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->task->name;?></th>
+        <td colspan='2'>
+          <?php echo html::input('name', $task->name, "class='form-control'");?>
+        </td>
+        <td><a href='#' id='copyButton' onclick='copyStoryTitle()'><i class='icon-copy'></i> <?php echo $lang->task->copyStoryTitle;?></a></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->task->desc;?></th>
+        <td colspan='2'><?php echo html::textarea('desc', $task->desc, "rows='7' class='form-control'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->task->pri;?></th>
+        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->estimate;?></th>
+        <td>
+          <div class="input-group">
+            <?php echo html::input('estimate', $task->estimate, "class='form-control'")?>
+            <span class="input-group-addon"><?php echo $lang->task->hour;?></span>
+          </div>
+        </td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->estStarted;?></th>
+        <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->deadline;?></th>
+        <td><?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->mailto;?></th>
+        <td colspan='3'>
+          <?php
+          echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");
+          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->files;?></th>
+        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->task->afterSubmit;?></th>
+        <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan='3'><?php echo html::submitButton() . html::backButton();?></td>
+      </tr>
+    </table>
+    <span id='responser'></span>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,6 +1,6 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <h3><?php echo "BUG#$bug->id $bug->title";?></h3>
   <table class='table-1'>
     <tr>
@@ -12,7 +12,7 @@
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='2'>
+      <td class='text-center' colspan='2'>
       <?php echo html::submitButton($lang->bug->buttonConfirm, 'data-inline="true" data-theme="b"');?>
       <?php echo html::linkButton($lang->goback, $this->createLink('bug', 'view', "bugID=$bug->id"), 'self', "data-inline='true'");?>
      </td>

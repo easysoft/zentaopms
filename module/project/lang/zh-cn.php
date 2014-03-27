@@ -21,6 +21,8 @@ $lang->project->name          = '项目名称';
 $lang->project->code          = '项目代号';
 $lang->project->begin         = '开始日期';
 $lang->project->end           = '结束日期';
+$lang->project->dateRange     = '起始日期';
+$lang->project->to            = '至';
 $lang->project->days          = '可用工作日';
 $lang->project->day           = '天';
 $lang->project->status        = '项目状态';
@@ -33,6 +35,7 @@ $lang->project->closedBy      = '由谁关闭';
 $lang->project->closedDate    = '关闭日期';
 $lang->project->canceledBy    = '由谁取消';
 $lang->project->canceledDate  = '取消日期';
+$lang->project->Person        = '负责人';
 $lang->project->PO            = '产品负责人';
 $lang->project->PM            = '项目负责人';
 $lang->project->QD            = '测试负责人';
@@ -55,6 +58,7 @@ $lang->project->all           = '所有';
 $lang->project->typeDesc      = '运维项目禁用燃尽图和需求。';
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
+$lang->project->deleted       = '已删除';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
@@ -179,6 +183,12 @@ $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';
 $lang->project->copyTeam        = '复制团队';
 $lang->project->noMatched       = '找不到包含"%s"的项目';
+$lang->project->copyTitle       = '请选择一个项目来复制';
+$lang->project->copyNoProject   = '没有可用的项目来复制';
+$lang->project->copyFromProject = '复制自项目： <strong>%s</strong>';
+$lang->project->reCopyProject   = '重新复制';
+$lang->project->cancelCopy      = '取消复制';
+$lang->project->byPeriod        = '按时间段';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';
@@ -219,3 +229,5 @@ $lang->project->selectGroup->suspended = '(已挂起)';
 $lang->project->selectGroup->done      = '(已结束)';
 
 $lang->project->projectTasks = '项目';
+
+$lang->project->byUser = '按用户';

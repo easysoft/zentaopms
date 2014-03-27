@@ -12,42 +12,49 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin' id='dataform'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->product->create;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->name;?></th>
-      <td><?php echo html::input('name', '', "class='text-3'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->code;?></th>
-      <td><?php echo html::input('code', '', "class='text-3'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->PO;?></th>
-      <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='select-3 chosen'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->QD;?></th>
-      <td><?php echo html::select('QD', $qdUsers, '', "class='select-3 chosen'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->RD;?></th>
-      <td><?php echo html::select('RD', $rdUsers, '', "class='select-3 chosen'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->desc;?></th>
-      <td><?php echo html::textarea('desc', '', "rows='8' class='area-1'");?></textarea></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->acl;?></th>
-      <td><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'open', "onclick='setWhite(this.value);'"));?></td>
-    </tr>  
-    <tr id='whitelistBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->product->whitelist;?></th>
-      <td><?php echo html::checkbox('whitelist', $groups);?></td>
-    </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
-  </table>
-</form>
+<div class='container'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['product']);?></span>
+      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->product->create;?></strong>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
+    <table class='table table-form'> 
+      <tr>
+        <th class='w-90px'><?php echo $lang->product->name;?></th>
+        <td class='w-p45'><?php echo html::input('name', '', "class='form-control'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->product->code;?></th>
+        <td><?php echo html::input('code', '', "class='form-control'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->product->PO;?></th>
+        <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->product->QD;?></th>
+        <td><?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->product->RD;?></th>
+        <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->product->desc;?></th>
+        <td colspan='2'><?php echo html::textarea('desc', '', "rows='8' class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->product->acl;?></th>
+        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+      </tr>  
+      <tr id='whitelistBox' class='hidden'>
+        <th><?php echo $lang->product->whitelist;?></th>
+        <td colspan='2'><?php echo html::checkbox('whitelist', $groups);?></td>
+      </tr>  
+      <tr><td></td><td colspan='2'><?php echo html::submitButton();?></td></tr>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

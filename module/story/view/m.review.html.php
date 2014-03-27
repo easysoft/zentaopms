@@ -13,8 +13,8 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <h3><?php echo $lang->story->review . $lang->colon . $story->title?></h3>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <tr>
       <td class='w-70px'><?php echo $lang->story->reviewedDate;?></td>
       <td><?php echo html::input('reviewedDate', helper::today());?></td>
@@ -54,7 +54,7 @@
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='2'>
+      <td class='text-center' colspan='2'>
         <?php
         echo html::submitButton('', "data-inline='true' data-theme='b'");
         echo html::linkButton($lang->goback, $this->createLink('story', 'view', "storyID=$story->id"), 'self', "data-inline='true'");

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table-1 fixed tablesorter'>
     <caption>
     <?php
@@ -37,7 +37,7 @@
     <tbody>
     <?php foreach($tasks2Imported as $task):?>
     <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-    <tr class='a-center'>
+    <tr class='text-center'>
 
       <td>
       <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />

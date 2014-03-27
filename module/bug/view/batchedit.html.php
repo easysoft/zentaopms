@@ -35,15 +35,15 @@
     if($bugs[$bugID]->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
     if($bugs[$bugID]->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
     ?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
-      <td><?php echo html::select("types[$bugID]",         $lang->bug->typeList, $bugs[$bugID]->type, 'class=select-1');?></td>
-      <td><?php echo html::select("severities[$bugID]",   (array)$lang->bug->severityList, $bugs[$bugID]->severity, 'class=select-1');?></td>
-      <td><?php echo html::select("pris[$bugID]",         (array)$lang->bug->priList, $bugs[$bugID]->pri, 'class=select-1');?></td>
-      <td><?php echo html::input("titles[$bugID]",         $bugs[$bugID]->title, 'class=text-1');?></td>
-      <td><?php echo html::select("assignedTos[$bugID]",   $users, $bugs[$bugID]->assignedTo, 'class=select-1');?></td>
-      <td><?php echo html::select("statuses[$bugID]",     (array)$lang->bug->statusList, $bugs[$bugID]->status, 'class=select-1');?></td>
-      <td><?php echo html::select("resolvedBys[$bugID]",   $users, $bugs[$bugID]->resolvedBy, 'class=select-1');?></td>
+      <td><?php echo html::select("types[$bugID]",         $lang->bug->typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
+      <td><?php echo html::select("severities[$bugID]",   (array)$lang->bug->severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
+      <td><?php echo html::select("pris[$bugID]",         (array)$lang->bug->priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
+      <td><?php echo html::input("titles[$bugID]",         $bugs[$bugID]->title, 'class=form-control');?></td>
+      <td><?php echo html::select("assignedTos[$bugID]",   $users, $bugs[$bugID]->assignedTo, 'class=form-control');?></td>
+      <td><?php echo html::select("statuses[$bugID]",     (array)$lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
+      <td><?php echo html::select("resolvedBys[$bugID]",   $users, $bugs[$bugID]->resolvedBy, 'class=form-control');?></td>
       <td>
         <div class='f-left'><?php echo html::select("resolutions[$bugID]",   $this->lang->bug->resolutionList, $bugs[$bugID]->resolution, "class=w-80px onchange=setDuplicate(this.value,$bugID)");?></div>
         <div class='f-left' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bugs[$bugID]->resolution != 'duplicate') echo "style='display:none'";?>><?php echo html::input("duplicateBugs[$bugID]", '', "class=w-40px placeholder='{$lang->bug->duplicateBug}'");?></div>
@@ -53,7 +53,7 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

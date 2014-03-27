@@ -15,23 +15,23 @@
 <table class='table-1 a-left'> 
   <caption><?php echo $lang->todo->common . ' #' . $todo->id . ' ' . $todo->name;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->account;?></th>
+    <th><?php echo $lang->todo->account;?></th>
     <td><?php echo $todo->account;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->date;?></th>
+    <th><?php echo $lang->todo->date;?></th>
     <td><?php echo $todo->date == '20300101' ? $lang->todo->periods['future'] : date(DT_DATE1, strtotime($todo->date));?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->type;?></th>
+    <th><?php echo $lang->todo->type;?></th>
     <td><?php echo $lang->todo->typeList[$todo->type];?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->pri;?></th>
+    <th><?php echo $lang->todo->pri;?></th>
     <td><?php echo $lang->todo->priList[$todo->pri];?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->name;?></th>
+    <th><?php echo $lang->todo->name;?></th>
     <td>
       <?php 
       if($todo->type == 'bug')    echo html::a($this->createLink('bug',  'view', "id={$todo->idvalue}"), $todo->name);
@@ -41,15 +41,15 @@
     </td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->desc;?></th>
+    <th><?php echo $lang->todo->desc;?></th>
     <td class='content'><?php echo $todo->desc;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->status;?></th>
+    <th><?php echo $lang->todo->status;?></th>
     <td><?php echo $lang->todo->statusList[$todo->status];?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
+    <th><?php echo $lang->todo->beginAndEnd;?></th>
     <td>
       <?php
       if(isset($times[$todo->begin])) echo $times[$todo->begin];

@@ -22,7 +22,7 @@
         ?>
         </td>
       </tr>
-      <tr><td class='a-center'><input type='submit' name='submit' /></td></tr>
+      <tr><td class='text-center'><input type='submit' name='submit' /></td></tr>
     </table>
   </form>
 </div>

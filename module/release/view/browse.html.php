@@ -13,39 +13,44 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
-<table align='center' class='table-6 tablesorter' id='releaseList'>
-  <caption class='caption-tl'>
-    <div class='f-left'><?php echo $lang->release->browse;?></div>
-    <div class='f-right'><?php common::printIcon('release', 'create', "product=$product->id");?></div>
-  </caption>
-  <thead>
-  <tr class='colhead'>
-    <th class='w-id'><?php echo $lang->release->id;?></th>
-    <th><?php echo $lang->release->name;?></th>
-    <th><?php echo $lang->release->build;?></th>
-    <th class='w-100px'><?php echo $lang->release->date;?></th>
-    <th class='w-60px'><?php echo $lang->actions;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($releases as $release):?>
-  <tr>
-    <td class='a-center'><?php echo $release->id;?></td>
-    <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
-    <td><?php echo $release->buildName;?></td>
-    <td class='a-center'><?php echo $release->date;?></td>
-    <td class='a-center'>
-      <?php
-      common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
-      if(common::hasPriv('release', 'delete'))
-      {
-          $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->release->delete}'");
-      }
-      ?>
-    </td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-</table>
+<div class='container mw-900px'>
+  <div id='featurebar'>
+    <div class='heading'><i class='icon-tags'></i> <?php echo $lang->release->browse;?>  </div>
+    <div class='btn-group pull-right'>
+      <?php common::printIcon('release', 'create', "product=$product->id");?>
+    </div>
+  </div>
+  <table class='table tablesorter' id='releaseList'>
+    <thead>
+    <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->release->id;?></th>
+      <th><?php echo $lang->release->name;?></th>
+      <th><?php echo $lang->release->build;?></th>
+      <th class='w-100px'><?php echo $lang->release->date;?></th>
+      <th class='w-70px'><?php echo $lang->actions;?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($releases as $release):?>
+    <tr>
+      <td class='text-center'><?php echo $release->id;?></td>
+      <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
+      <td><?php echo $release->buildName;?></td>
+      <td class='text-center'><?php echo $release->date;?></td>
+      <td class='text-center'>
+        <?php
+        common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
+        if(common::hasPriv('release', 'delete'))
+        {
+            $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->release->delete}'");
+        }
+        ?>
+      </td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

@@ -26,7 +26,7 @@
     <?php if($this->session->storyID == $story->id) echo "<script>showDetail('story', $story->id);</script>";?>
     <h1 onClick="showDetail('story', <?php echo $story->id;?>)"><?php echo $story->title;?></h1>
     <div id='item<?php echo $story->id;?>'></div>
-    <div data-role='content' class='a-center'>
+    <div data-role='content' class='text-center'>
       <?php
       if(!$story->deleted)
       {

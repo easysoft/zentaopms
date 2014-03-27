@@ -22,7 +22,7 @@
       <td><?php echo $config->version;?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton($lang->upgrade->common);?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton($lang->upgrade->common);?></td>
     </tr>
   </table>
 </form>

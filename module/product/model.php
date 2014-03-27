@@ -63,9 +63,7 @@ class productModel extends model
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
-        $output  = "<div id='currentItem'>";
-        $output .= "<a onclick=\"showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name}<span id='dropIcon'></span></a>";
-        $output .= "</div><div id='dropMenu'></div>";
+        $output .= "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'></div>";
         return $output;
     }
 

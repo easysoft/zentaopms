@@ -16,21 +16,21 @@
     <caption><?php echo $lang->tree->edit;?></caption>
     <?php $hidden = ($type != 'story' and $module->type == 'story');?>
     <tr <?php if($hidden) echo "style='display:none'";?>>
-      <th class='rowhead'><?php echo $lang->tree->parent;?></th>
-      <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='select-1'");?></td>
+      <th><?php echo $lang->tree->parent;?></th>
+      <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control'");?></td>
     </tr>
     <tr <?php if($hidden) echo "style='display:none'";?>>
-      <th class='rowhead'><?php echo $lang->tree->name;?></th>
-      <td><?php echo html::input('name', $module->name, "class='text-1'");?></td>
+      <th><?php echo $lang->tree->name;?></th>
+      <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
     </tr>
     <?php if($type == 'bug'):?>
     <tr>
-      <th class='rowhead'><?php echo $lang->tree->owner;?></th>
-      <td><?php echo html::select('owner', $users, $module->owner, "class='select-1'", true);?></td>
+      <th><?php echo $lang->tree->owner;?></th>
+      <td><?php echo html::select('owner', $users, $module->owner, "class='form-control'", true);?></td>
     </tr>  
     <?php endif;?>
     <tr>
-      <td colspan='2' class='a-center'>
+      <td colspan='2' class='text-center'>
       <?php echo html::submitButton();?>
       </td>
     </tr>

@@ -14,29 +14,35 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
-<form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
-  <table class='table-1'>
-    <caption><?php echo $task->name;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;;?></span>
+    <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->task->start;?> <?php echo html::icon($lang->icons['start']);?></small>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='return checkLeft();'>
+  <table class='table table-form'>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->realStarted;?></th>
-      <td><?php echo html::input('realStarted', helper::today(), "class='text-2 date'");?></td>
+      <th class='w-80px'><?php echo $lang->task->realStarted;?></th>
+      <td class='w-p45'><div class='datepicker-wrapper'><?php echo html::input('realStarted', helper::today(), "class='form-control form-datetime'");?></div></td><td></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-      <td><?php echo html::input('consumed', $task->consumed, "class='text-2'") . $lang->task->hour;?></td>
+      <th><?php echo $lang->task->consumed;?></th>
+      <td><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', $task->left, "class='text-2'") . $lang->task->hour;?></td>
+      <th><?php echo $lang->task->left;?></th>
+      <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+      <th><?php echo $lang->comment;?></th>
+      <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton(); ?></td>
+      <td colspan='3' class='text-center'><?php echo html::submitButton(); ?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'><?php include '../../common/view/action.html.php';?></div>
 <?php include '../../common/view/footer.html.php';?>

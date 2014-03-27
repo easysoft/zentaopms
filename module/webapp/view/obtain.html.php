@@ -26,7 +26,7 @@
       <div class='box-title'><?php echo $lang->webapp->bySearch;?></div>
       <div class='box-content a-center'>
         <form method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
-        <?php echo html::input('key', $this->post->key, "class='text-1'") . html::submitButton($lang->webapp->bySearch);?>
+        <?php echo html::input('key', $this->post->key, "class='form-control'") . html::submitButton($lang->webapp->bySearch);?>
         </form>
       </div>
       <div class='box-title'><?php echo $lang->webapp->byCategory;?></div>

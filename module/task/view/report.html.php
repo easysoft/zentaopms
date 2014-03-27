@@ -31,7 +31,7 @@
       <table class='table-1'>
         <caption>
           <div class='f-left'><?php echo $lang->task->report->common;?></div>
-          <div class='f-right'><?php echo html::a($this->createLink('project', 'task', "projectID=$projectID&browseType=$browseType"), $lang->goback);?></div>
+          <div class='text-right'><?php echo html::a($this->createLink('project', 'task', "projectID=$projectID&browseType=$browseType"), $lang->goback);?></div>
         </caption>
         <?php foreach($charts as $chartType => $chartContent):?>
         <tr valign='top'>
@@ -47,7 +47,7 @@
                   <th><?php echo $lang->report->percent;?></th>
                 </tr>
                 <?php foreach($datas[$chartType] as $key => $data):?>
-                <tr class='a-center'>
+                <tr class='text-center'>
                   <td><?php echo $data->name;?></td>
                   <td><?php echo $data->value;?></td>
                   <td><?php echo ($data->percent * 100) . '%';?></td>

@@ -16,7 +16,7 @@
 <table align='center' class='table-1 tablesorter fixed' id='groupList'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->group->browse;?></div>
-    <div class='f-right'><?php common::printIcon('group', 'create');?></div>
+    <div class='text-right'><?php common::printIcon('group', 'create');?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -30,12 +30,12 @@
   <tbody>
   <?php foreach($groups as $group):?>
   <?php $users = implode(' ', $groupUsers[$group->id]);?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td class='strong'><?php echo $group->id;?></td>
-    <td class='a-left'><?php echo $group->name;?></td>
-    <td class='a-left'><?php echo $group->desc;?></td>
-    <td class='a-left' title='<?php echo $users;?>'><?php echo $users;?></td>
-    <td class='a-center'>
+    <td class='text-left'><?php echo $group->name;?></td>
+    <td class='text-left'><?php echo $group->desc;?></td>
+    <td class='text-left' title='<?php echo $users;?>'><?php echo $users;?></td>
+    <td class='text-center'>
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
       <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list');?>
       <?php $lang->group->managemember = $lang->group->manageMember;?>
@@ -46,7 +46,7 @@
       if(common::hasPriv('group', 'delete'))
       {
           $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->group->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->group->delete}'");
       }
       ?>
     </td>
@@ -55,7 +55,7 @@
   </tbody>
   <?php if(common::hasPriv('group', 'managePriv')):?>
   <tfoot>
-    <tr><td colspan='5' class='a-center'><?php echo html::linkButton($lang->group->managePrivByModule, inlink('managePriv', 'type=byModule'));?></td></tr>
+    <tr><td colspan='5' class='text-center'><?php echo html::linkButton($lang->group->managePrivByModule, inlink('managePriv', 'type=byModule'));?></td></tr>
   </tfoot>
   <?php endif;?>
 </table>

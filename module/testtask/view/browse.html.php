@@ -16,7 +16,7 @@
 <table class='table-1 colored tablesorter fixed' id='taskList'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
-    <div class='f-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
+    <div class='text-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
   </caption>
   <thead>
   <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -34,16 +34,16 @@
   </thead>
   <tbody>
   <?php foreach($tasks as $task):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-    <td class='a-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
-    <td class='a-left' title="<?php echo $task->projectName?>"><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
-    <td class='a-left' title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+    <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
+    <td class='text-left' title="<?php echo $task->projectName?>"><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
+    <td class='text-left' title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
-    <td class='a-center'>
+    <td class='text-center'>
       <?php
       common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
@@ -52,7 +52,7 @@
       if(common::hasPriv('testtask', 'delete'))
       {
           $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->testtask->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->testtask->delete}'");
       }
       ?>
     </td>

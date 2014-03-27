@@ -11,22 +11,21 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id='featurebar'>
-  <div class='f-left'>
+  <div class='heading'><i class='icon-list-alt'></i> <?php echo $lang->my->testTask;?></div>
+  <nav class='nav'>
     <?php
-    echo "<span id='testtaskTab'>"   . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</span>";
-    echo "<span id='assigntomeTab'>" . html::a($this->createLink('my', 'testcase', "type=assigntome"),  $lang->testcase->assignToMe) . "</span>";
-    //echo "<span id='donebymeTab'>"   . html::a($this->createLink('my', 'testcase', "type=donebyme"),    $lang->testcase->doneByMe)   . "</span>";
-    echo "<span id='closedbymeTab'>" . html::a($this->createLink('my', 'testcase', "type=openedbyme"),  $lang->testcase->openedByMe) . "</span>";
+    echo "<li id='testtaskTab'>"   . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</li>";
+    echo "<li id='assigntomeTab'>" . html::a($this->createLink('my', 'testcase', "type=assigntome"),  $lang->testcase->assignToMe) . "</li>";
+    echo "<li id='closedbymeTab'>" . html::a($this->createLink('my', 'testcase', "type=openedbyme"),  $lang->testcase->openedByMe) . "</li>";
     ?>
-  </div>
+  </nav>
 </div>
-<table class='table-1 tablesorter fixed colored' id='taskList'>
+<table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='taskList'>
   <?php $vars = "orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
-  <tr class='colhead'>
+  <tr class='text-center'>
     <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
     <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
     <th>               <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
@@ -39,24 +38,24 @@
   </thead>
   <tbody>
   <?php foreach($tasks as $task):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-    <td class='a-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
+    <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
     <td class='nobr'><?php echo $task->projectName?></td>
     <td class='nobr'><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
-    <td class='a-right'>
+    <td class='text-right'>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
 
       if(common::hasPriv('testtask', 'delete'))
       {
           $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->testtask->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->testtask->delete}'");
       }
       ?>
     </td>

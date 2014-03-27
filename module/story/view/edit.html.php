@@ -11,130 +11,138 @@
  */
 ?>
 <?php include './header.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
-  <div id='main'>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>
-  <div><?php echo html::submitButton()?></div>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+    <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->story->edit;?></small>
+  </div>
+  <div class='actions'>
+    <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save)?>
+  </div>
 </div>
-
-<table class='cont-rt5'>
-  <tr valign='top'>
-    <td>
+<div class='row'>
+  <div class='col-md-8'>
+    <div class='main'>
       <fieldset>
         <legend><?php echo $lang->story->legendSpec;?></legend>
-        <div class='content'><?php echo $story->spec;?></div>
+        <div class='article-content'><?php echo $story->spec;?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->verify;?></legend>
-        <div><?php echo $story->verify;?></div>
+        <div class='article-content'><?php echo $story->verify;?></div>
       </fieldset>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->story->comment;?></legend>
-        <?php echo html::textarea('comment', '', "rows='5' class='area-1'");?>
+        <div class='form-group'>
+          <?php echo html::textarea('comment', '', "rows='5' class='form-control'");?>
+        </div>
       </fieldset>
-      <div class='a-center'>
+      <div class='actions'>
         <?php 
-        echo html::submitButton();
+        echo html::submitButton(html::icon('save') . ' ' . $lang->save);
         echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
         ?>
       </div>
       <?php include '../../common/view/action.html.php';?>
-    </td>
-    <td class='divider'></td>
-    <td class='side'>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->story->legendBasicInfo;?></legend>
-        <table class='table-1'>
+        <table class='table table-form'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->story->product;?></td>
-            <td><?php echo html::select('product', $products, $story->product, 'class="select-3" onchange="loadProduct(this.value)";');?></td>
+            <th class='w-70px'><?php echo $lang->story->product;?></th>
+            <td><?php echo html::select('product', $products, $story->product, 'class="form-control" onchange="loadProduct(this.value)";');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->module;?></td>
-            <td>
-              <span id='moduleIdBox'>
-              <?php
-              echo html::select('module', $moduleOptionMenu, $story->module, 'class="select-3"');
-              if(count($moduleOptionMenu) == 1)
-              {
-                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
-                  echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
-              }
-              ?>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->story->plan;?></td>
-            <td>
-            <span id='planIdBox'>
-            <?php echo html::select('plan', $plans, $story->plan, 'class=select-3');
-            if(count($plans) == 1) 
+            <th><?php echo $lang->story->module;?></th>
+            <td id='moduleIdBox'>
+            <?php
+            echo html::select('module', $moduleOptionMenu, $story->module, 'class="form-control"');
+            if(count($moduleOptionMenu) == 1)
             {
-                echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
-                echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
+                echo "<span class='help-block'>";
+                echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
+                echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
+                echo '</span>';
             }
             ?>
-            </span>
             </td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->story->source;?></th>
-            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=select-3');?></td>
+            <th><?php echo $lang->story->plan;?></th>
+            <td id='planIdBox'>
+            <?php echo html::select('plan', $plans, $story->plan, 'class=form-control');
+            if(count($plans) == 1) 
+            {
+                echo "<span class='help-block'>";
+                echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
+                echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
+                echo '</span>';
+            }
+            ?>
+            </td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->status;?></td>
-            <td><?php echo $lang->story->statusList[$story->status];?></td>
+            <th><?php echo $lang->story->source;?></th>
+            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=form-control');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->status;?></th>
+            <td><span class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span></td>
           </tr>
           <?php if($story->status != 'draft'):?>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->stage;?></td>
-            <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, 'class=select-3');?></td>
+            <th><?php echo $lang->story->stage;?></th>
+            <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, 'class=form-control');?></td>
           </tr>
           <?php endif;?>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->pri;?></td>
-            <td><?php echo html::select('pri', $lang->story->priList, $story->pri, 'class=select-3');?></td>
+            <th><?php echo $lang->story->pri;?></th>
+            <td><?php echo html::select('pri', $lang->story->priList, $story->pri, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->estimate;?></td>
-            <td><?php echo html::input('estimate', $story->estimate, "class='text-1'");?></td>
+            <th><?php echo $lang->story->estimate;?></th>
+            <td><?php echo html::input('estimate', $story->estimate, "class='form-control'");?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->keywords;?></td>
-            <td><?php echo html::input('keywords', $story->keywords, 'class=text-1');?></td>
+            <th><?php echo $lang->story->keywords;?></th>
+            <td><?php echo html::input('keywords', $story->keywords, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->mailto;?></td>
-            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='select-3' multiple");?></td>
+            <th><?php echo $lang->story->mailto;?></th>
+            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?></td>
           </tr>
         </table>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->legendLifeTime;?></legend>
-        <table class='table-1'>
+        <table class='table table-form'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->story->openedBy;?></td>
+            <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
             <td><?php echo $users[$story->openedBy];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->assignedTo;?></td>
-            <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-3 chosen"');?></td>
+            <th><?php echo $lang->story->assignedTo;?></th>
+            <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
           </tr>
           <?php if($story->reviewedBy):?>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->reviewedBy;?></td>
+            <th><?php echo $lang->story->reviewedBy;?></th>
             <td><?php echo html::select('reviewedBy[]', $users, str_replace(' ', '', $story->reviewedBy), 'class="area-1" multiple');?></td>
           </tr>
           <?php endif;?>
           <?php if($story->status == 'closed'):?>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->closedBy;?></td>
-            <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="select-3"');?></td>
+            <th><?php echo $lang->story->closedBy;?></th>
+            <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="form-control"');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->closedReason;?></td>
-            <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, 'class="select-3"');?></td>
+            <th><?php echo $lang->story->closedReason;?></th>
+            <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, 'class="form-control"');?></td>
           </tr>
           <?php endif;?>
         </table>
@@ -142,23 +150,23 @@
 
       <fieldset>
         <legend><?php echo $lang->story->legendMisc;?></legend>
-        <table class='table-1'>
+        <table class='table table-form'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->story->duplicateStory;?></td>
-            <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='text-1'");?></td>
+            <th class='w-70px'><?php echo $lang->story->duplicateStory;?></th>
+            <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
           </tr>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->story->linkStories;?></td>
-            <td><?php echo html::input('linkStories', $story->linkStories, "class='text-1'");?></td>
+            <th><?php echo $lang->story->linkStories;?></th>
+            <td><?php echo html::input('linkStories', $story->linkStories, "class='form-control'");?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->story->childStories;?></td>
-            <td><?php echo html::input('childStories', $story->childStories, "class='text-1'");?></td>
+            <th><?php echo $lang->story->childStories;?></th>
+            <td><?php echo html::input('childStories', $story->childStories, "class='form-control'");?></td>
           </tr>
        </table>
       </fieldset>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
 </form>
 <?php include '../../common/view/footer.html.php';?>

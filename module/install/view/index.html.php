@@ -17,7 +17,7 @@
     <td>
     <?php if(isset($latestRelease) and (version_compare($latestRelease->version, $config->version) > 0)):?>
     <?php vprintf($lang->install->newReleased, $latestRelease);?>
-    <h3 class='a-center'>
+    <h3 class='text-center'>
       <?php 
       echo $lang->install->choice;
       echo html::a($latestRelease->url, $lang->install->seeLatestRelease, '_blank');
@@ -25,7 +25,7 @@
       ?>
     </h3>
 	<?php else:?>
-      <h3 class='a-center'>
+      <h3 class='text-center'>
         <?php echo html::select('', $app->config->langs, $app->cookie->lang,  'onchange="selectLang(this.value)"');?>
         <?php echo html::a($this->createLink('install', 'step1'), $lang->install->start);?>
       </h3>

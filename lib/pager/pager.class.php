@@ -435,7 +435,7 @@ class pager
         $vars = rtrim($vars, '&');
 
         $js  = <<<EOT
-        <script language='Javascript'>
+        <script>
         vars = '$vars';
         pageCookie = '$this->pageCookie';
         function submitPage(mode)
@@ -466,7 +466,7 @@ EOT;
     }
 
     /**
-    /* Create the select list of RecPerPage. 
+     * Create the select list of RecPerPage. 
      * 
      * @access private
      * @return string
@@ -478,7 +478,7 @@ EOT;
         $range[200]  = 200;
         $range[500]  = 500;
         $range[1000] = 1000;
-        return html::select('_recPerPage', $range, $this->recPerPage, "onchange='submitPage(\"changeRecPerPage\");'");
+        return html::select('_recPerPage', $range, $this->recPerPage, "onchange='submitPage(\"changeRecPerPage\");' class='form-control'");
     }
 
     /**
@@ -491,8 +491,8 @@ EOT;
     {
         $goToHtml  = "<input type='hidden' id='_recTotal'  value='$this->recTotal' />\n";
         $goToHtml .= "<input type='hidden' id='_pageTotal' value='$this->pageTotal' />\n";
-        $goToHtml .= "<input type='text'   id='_pageID'    value='$this->pageID' style='text-align:center;width:30px;' /> \n";
-        $goToHtml .= "<input type='button' id='goto'       value='{$this->lang->pager->locate}' onclick='submitPage(\"changePageID\");' />";
+        $goToHtml .= "<input type='text'   id='_pageID' value='$this->pageID' style='text-align:center;width:30px;' class='form-control' /> \n";
+        $goToHtml .= "<input type='button' id='goto' value='{$this->lang->pager->locate}' onclick='submitPage(\"changePageID\");' class='btn'/>";
         return $goToHtml;
     }    
 }

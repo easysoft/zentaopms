@@ -1,31 +1,31 @@
 <?php
 if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}
 include 'header.lite.html.php';
-include 'colorbox.html.php';
 include 'chosen.html.php';
 //include 'validation.html.php';
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
-<div id='header'>
-  <table class='cont navbar' id='topbar'>
-    <tr>
-      <td class='w-p50'>
+<header id='header'>
+  <div id='topbar'>
+    <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
+    <h5 id='companyname'>
+      <?php echo $app->company->name;?>
+      <small class='actions'>
         <?php
-        echo "<span id='companyname'>{$app->company->name}</span> ";
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
-        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
+        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');      
         ?>
-      </td>
-      <td class='a-right'><?php commonModel::printTopBar();?></td>
-    </tr>
-  </table>
-  <table class='cont navbar' id='navbar'>
-    <tr><td id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></td></tr>
-  </table>
-</div>
-<div class="navbar" id="modulemenu">
-  <?php commonModel::printModuleMenu($this->moduleName);?>
-</div>
+      </small>
+    </h5>
+  </div>
+  <nav id='mainmenu'>
+    <?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?>
+  </nav>
+  <nav id="modulemenu">
+    <?php commonModel::printModuleMenu($this->moduleName);?>
+  </nav>
+</header>
+
 <div id='wrap'>
 <?php endif;?>
   <div class='outer'>

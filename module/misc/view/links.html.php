@@ -4,7 +4,7 @@
   unset($lang->misc->zentao->version);
   unset($lang->misc->zentao->labels);
   ?>
-  <tr class='a-left' valign='top'>
+  <tr class='text-left' valign='top'>
     <?php foreach($lang->misc->zentao as $groupItems):?>
     <td>
       <ul>

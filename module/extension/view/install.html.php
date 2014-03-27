@@ -28,15 +28,15 @@ if(isset($license) and $upgrade == 'yes') printf($lang->extension->upgradeVersio
       ?>
     <?php elseif(isset($license)):?>
       <?php
-      echo "<h3 class='a-center'>{$lang->extension->license}</h3>"; 
+      echo "<h3 class='text-center'>{$lang->extension->license}</h3>"; 
       echo html::textarea('license', $license) . '<br />';
       echo '<h3>' . html::a($agreeLink, $lang->extension->agreeLicense) . '</h3>';
       ?>
     <?php else:?>
       <?php
       if($downloadedPackage) echo  "<h3 class='success'>{$lang->extension->successDownloadedPackage}</h3>";
-      echo "<h1 class='a-center'>" . sprintf($lang->extension->installFinished, $installType) . "</h1>";
-      echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '"') . '</p>';
+      echo "<h1 class='text-center'>" . sprintf($lang->extension->installFinished, $installType) . "</h1>";
+      echo "<p class='text-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '"') . '</p>';
       echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
       echo '<ul>';
       foreach($files as $fileName => $md5)

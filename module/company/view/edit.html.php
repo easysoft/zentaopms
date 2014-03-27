@@ -11,42 +11,42 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table align='center' class='table-5'> 
     <caption><?php echo $lang->company->edit;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->company->name;?></th>
-      <td><?php echo html::input('name', $company->name, "class='text-1'");?></td>
+      <th><?php echo $lang->company->name;?></th>
+      <td><?php echo html::input('name', $company->name, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->phone;?></th>
-      <td><?php echo html::input('phone', $company->phone, "class='text-1'");?></td>
+      <th><?php echo $lang->company->phone;?></th>
+      <td><?php echo html::input('phone', $company->phone, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->fax;?></th>
-      <td><?php echo html::input('fax', $company->fax, "class='text-1'");?></td>
+      <th><?php echo $lang->company->fax;?></th>
+      <td><?php echo html::input('fax', $company->fax, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->address;?></th>
-      <td><?php echo html::input('address', $company->address, "class='text-1'");?></td>
+      <th><?php echo $lang->company->address;?></th>
+      <td><?php echo html::input('address', $company->address, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->zipcode;?></th>
-      <td><?php echo html::input('zipcode', $company->zipcode, "class='text-1'");?></td>
+      <th><?php echo $lang->company->zipcode;?></th>
+      <td><?php echo html::input('zipcode', $company->zipcode, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->website;?></th>
-      <td><?php echo html::input('website', $company->website ? $company->website : 'http://', "class='text-1'");?></td>
+      <th><?php echo $lang->company->website;?></th>
+      <td><?php echo html::input('website', $company->website ? $company->website : 'http://', "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->backyard;?></th>
-      <td><?php echo html::input('backyard', $company->backyard ? $company->backyard : 'http://', "class='text-1'");?></td>
+      <th><?php echo $lang->company->backyard;?></th>
+      <td><?php echo html::input('backyard', $company->backyard ? $company->backyard : 'http://', "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->company->guest;?></th>
+      <th><?php echo $lang->company->guest;?></th>
       <td><?php echo html::radio('guest', $lang->company->guestList, $company->guest);?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

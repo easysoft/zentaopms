@@ -475,11 +475,14 @@ class product extends control
     public function ajaxGetPlans($productID, $planID = 0, $needCreate = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);
-        $output = html::select('plan', $plans, $planID, "class='select-3'");
+        $output = html::select('plan', $plans, $planID, "class='form-control'");
         if(count($plans) == 1 and $needCreate) 
         {
+            $output .= "<span class='input-group-addon'>";
             $output .= html::a($this->createLink('productplan', 'create', "productID=$productID"), $this->lang->productplan->create, '_blank');
+            $output .= '&nbsp; ';
             $output .= html::a("javascript:loadProductPlans($productID)", $this->lang->refresh);
+            $output .= '</span>';
         }
         die($output);
     }

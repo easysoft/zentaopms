@@ -12,24 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?>
-<table width='950' align='center' class='bd-none' id='burn'>
-  <tr>
-    <td class='a-right pr-25px'>
-      <?php
-      if($interval) echo html::select('interval', $dayList, $interval);
-      $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
-      echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn'");
-      common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn' id='computeBurn'");
-      echo $lang->project->howToUpdateBurn;
-      ?>
-    </td>
-  </tr>
-  <tr><td class='a-center'><?php echo $charts; ?></td></tr>
-</table>
-<?php
-/* Interval is keyword in javascript so use intervals. */
-js::set('intervals', $interval);
-js::set('projectID', $projectID);
-js::set('type', $type);
-?>
+<script>$('#burnTab').addClass('active');</script>
+<div class='text-center'>
+  <?php
+  echo $charts; 
+  common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
+  echo html::a(inlink('burn', "projectID=$projectID&type=" . ($type == 'noweekend' ? 'withweekend' : 'noweekend')), ($type == 'noweekend' ? $lang->project->withWeekend : $lang->project->noWeekend));
+  echo $lang->project->howToUpdateBurn;
+  ?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

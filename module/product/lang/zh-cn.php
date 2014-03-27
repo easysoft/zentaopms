@@ -19,11 +19,13 @@ $lang->product->batchEdit = "批量编辑";
 $lang->product->create    = "新增产品";
 $lang->product->read      = "产品详情";
 $lang->product->delete    = "删除产品";
+$lang->product->deleted   = "已删除";
 $lang->product->close     = "关闭";
 $lang->product->select    = '--请选择产品--';
 $lang->product->mine      = '我负责：';
 $lang->product->other     = '其他：';
 $lang->product->closed    = '已关闭&raquo;';
+$lang->product->deleted   = '已删除';
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

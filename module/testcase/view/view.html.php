@@ -132,7 +132,7 @@
             </td>
           </tr>
           <tr class='nofixed'>
-            <td class='rowhead'><?php echo $lang->testcase->story;?></td>
+            <td><?php echo $lang->testcase->story;?></td>
             <td>
                 <?php
                 if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
@@ -166,11 +166,11 @@
             </td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
+            <td><?php echo $lang->testcase->pri;?></td>
             <td><?php echo $case->pri;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->status;?></td>
+            <td><?php echo $lang->testcase->status;?></td>
             <td>
               <?php 
               echo $lang->testcase->statusList[$case->status];
@@ -184,19 +184,19 @@
             </td>
           </tr>
            <tr>
-            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></td>
+            <td><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></td>
             <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo $case->lastRunDate;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></td>
+            <td><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></td>
             <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
+            <td><?php echo $lang->testcase->keywords;?></td>
             <td><?php echo $case->keywords;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
+            <td><?php echo $lang->testcase->linkCase;?></td>
             <td>
               <?php
               if(isset($case->linkCaseTitles))

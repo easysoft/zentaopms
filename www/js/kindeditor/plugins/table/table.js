@@ -117,6 +117,7 @@ KindEditor.plugin('table', function(K) {
 				'</div>',
 				'</div>'
 			].join('');
+			var bookmark = self.cmd.range.createBookmark();
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
@@ -228,6 +229,9 @@ KindEditor.plugin('table', function(K) {
 								table.removeAttr('borderColor');
 							}
 							self.hideDialog().focus();
+							self.cmd.range.moveToBookmark(bookmark);
+							self.cmd.select();
+							self.addBookmark();
 							return;
 						}
 						//insert new table
@@ -241,8 +245,7 @@ KindEditor.plugin('table', function(K) {
 						if (bgColor !== '') {
 							style += 'background-color:' + bgColor + ';';
 						}
-            tableID = String(parseInt(100 * Math.random())) + String(new Date().getTime()).substr(10);
-						var html = '<table class="ke-table' + tableID + '"';
+						var html = '<table';
 						if (style !== '') {
 							html += ' style="' + style + '"';
 						}
@@ -383,6 +386,7 @@ KindEditor.plugin('table', function(K) {
 				'</div>',
 				'</div>'
 			].join('');
+			var bookmark = self.cmd.range.createBookmark();
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
@@ -431,6 +435,8 @@ KindEditor.plugin('table', function(K) {
 							'border-color' : borderColor
 						});
 						self.hideDialog().focus();
+						self.cmd.range.moveToBookmark(bookmark);
+						self.cmd.select();
 						self.addBookmark();
 					}
 				}
@@ -570,7 +576,7 @@ KindEditor.plugin('table', function(K) {
 			if (table.rows.length <= nextRowIndex) {
 				return;
 			}
-			var cellIndex = _getCellIndex(table, row, cell); // 下一行单元格的index
+			var cellIndex = cell.cellIndex; // 下一行单元格的index
 			if (nextRow.cells.length <= cellIndex) {
 				return;
 			}

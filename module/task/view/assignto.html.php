@@ -12,25 +12,33 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $task->name;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;;?></span>
+    <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->task->assign;?> <?php echo html::icon($lang->icons['assign']);?></small>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, '', "class='text-3 chosen'");?></td>
+      <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
+      <td class='w-p45'><?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?></td><td></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', $task->left, "class='text-3'") . $lang->task->hour;?></td>
+      <th><?php echo $lang->task->left;?></th>
+      <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+      <th><?php echo $lang->comment;?></th>
+      <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control w-p98'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='3' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

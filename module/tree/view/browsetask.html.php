@@ -21,7 +21,7 @@
           <tr>
             <td>
               <div id='main'><?php echo $modules;?></div>
-              <div class='a-center'>
+              <div class='text-center'>
                 <?php if(common::hasPriv('tree', 'updateorder')) echo html::submitButton($lang->tree->updateOrder);?>
               </div>
             </td>

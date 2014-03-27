@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
 <div class='box-title'><?php echo $lang->webapp->install?></div>
 <div class='box-content'>
   <p align='center' style='margin:30px 0;'><span><?php echo $lang->webapp->selectModule?></span>

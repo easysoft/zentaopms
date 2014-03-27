@@ -14,20 +14,22 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id='featurebar'>
-  <div class='f-left strong'><?php echo $lang->project->story;?></div>
-  <div class='f-right'>
+  <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
+  <div class='actions'>
+    <div class='btn-group'>
     <?php 
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc");
 
     $this->lang->story->create = $this->lang->project->createStory;
     if($productID) common::printIcon('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id");
 
-    common::printIcon('project', 'linkStory', "project=$project->id");
+    common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link');
     ?>
+    </div>
   </div>
 </div>
 <form method='post' id='projectStoryForm'>
-  <table class='table-1 fixed colored tablesorter datatable' id='storyList'>
+  <table class='table tablesorter' id='storyList'>
     <thead>
       <tr class='colhead'>
       <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
@@ -35,11 +37,11 @@
         <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
         <th class='{sorter:false}'>          <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
         <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-        <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+        <th class='w-80px {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-        <th class='w-50px'>                  <?php echo $lang->story->taskCount;?></th>
+        <th class='w-70px'>                  <?php echo $lang->story->taskCount;?></th>
         <th class='w-100px {sorter:false}'>  <?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -54,7 +56,7 @@
       $storyLink      = $this->createLink('story', 'view', "storyID=$story->id");
       $totalEstimate += $story->estimate;
       ?>
-      <tr class='a-center' id="story<?php echo $story->id?>">
+      <tr class='text-center' id="story<?php echo $story->id?>">
         <td>
           <?php if($canBatchEdit or $canBatchClose):?>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
@@ -62,11 +64,11 @@
           <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
         </td>
         <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
-        <td class='a-left' title="<?php echo $story->title?>"><?php echo html::a($storyLink,$story->title);?></td>
+        <td class='text-left' title="<?php echo $story->title?>"><?php echo html::a($storyLink,$story->title);?></td>
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $story->estimate;?></td>
-        <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+        <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
         <td><?php echo $lang->story->stageList[$story->stage];?></td>
         <td class='linkbox'>
           <?php
@@ -74,23 +76,23 @@
           $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
           ?> 
         </td>
-        <td class='a-center'>
+        <td>
           <?php 
           $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
           $lang->task->create = $lang->project->wbs;
-          common::printIcon('task', 'create', $param, '', 'list');
+          common::printIcon('task', 'create', $param, '', 'list', 'branch');
 
           $lang->task->batchCreate = $lang->project->batchWBS;
-          common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list');
+          common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');
 
           $lang->testcase->batchCreate = $lang->testcase->create;
-          if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list');
+          if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list', 'usecase');
 
           if(common::hasPriv('project', 'unlinkStory'))
           {
               $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->project->unlinkStory}'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->project->unlinkStory}'");
           }
           ?>
         </td>
@@ -100,24 +102,26 @@
     <tfoot>
       <tr>
         <td colspan='10'>
-          <div class='f-left'>
+          <div class='table-actions clearfix'>
           <?php
           if(count($stories))
           {
-              if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
+            if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
 
+              echo "<div class='btn-group'>";
               if($canBatchEdit)
               {
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
-                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+                  echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\"");
               }
               if($canBatchClose)
               {
                   $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
-                  echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
+                  echo html::commonButton("<i class='icon-off'></i> " . $lang->close, "onclick=\"setFormAction('$actionLink')\"");
               }
+              echo '</div>';
           }
-          echo $summary;
+          echo "<div class='text'>" . $summary . '</div>';
           ?>
           </div>
         </td>

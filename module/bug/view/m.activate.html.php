@@ -5,7 +5,7 @@
   <table class='table-1'>
     <tr>
       <td class='w-80px'><?php echo $lang->bug->assignedTo?></td>
-      <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, 'class=select-3');?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td>
     </tr>
     <tr>
       <td><?php echo $lang->bug->openedBuild;?></td>
@@ -16,7 +16,7 @@
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='2'>
+      <td class='text-center' colspan='2'>
       <?php echo html::submitButton($lang->bug->buttonConfirm, 'data-inline="true" data-theme="b"');?>
       <?php echo html::linkButton($lang->goback, $this->createLink('bug', 'view', "bugID=$bug->id"), 'self', "data-inline='true'");?>
       </td>

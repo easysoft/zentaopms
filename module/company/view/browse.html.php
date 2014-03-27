@@ -24,7 +24,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <div class='box-title'><?php echo $lang->dept->common;?></div>
       <div class='box-content'>
         <?php echo $deptTree;?>
-        <div class='a-right'><?php common::printLink('dept', 'browse', '', $lang->dept->manage);?></div>
+        <div class='text-right'><?php common::printLink('dept', 'browse', '', $lang->dept->manage);?></div>
       </div>
     </td>
     <td class='divider'></td>
@@ -54,7 +54,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         $canManageContacts = common::hasPriv('user', 'manageContacts');
         ?>
         <?php foreach($users as $user):?>
-        <tr class='a-center'>
+        <tr class='text-center'>
           <td>
             <?php 
             if($canBatchEdit or $canManageContacts) echo "<input type='checkbox' name='users[]' value='$user->account'> ";
@@ -77,7 +77,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
                 $deleteURL = $this->createLink('user', 'delete', "userID=$user->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"userList\",confirmDelete)", '<i class="icon-green-common-delete"></i>', '', "class='link-icon' title='{$lang->user->delete}'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"userList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->user->delete}'");
             }
             if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
             {

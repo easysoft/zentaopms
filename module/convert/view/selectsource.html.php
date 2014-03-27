@@ -19,12 +19,12 @@
     </tr>
     <?php foreach($lang->convert->sourceList as $name => $versions):?>
     <tr>
-      <th class='rowhead'><?php echo $name;?></th>
+      <th><?php echo $name;?></th>
       <td><?php echo html::radio('source', $versions);?></td>
     </tr>
     <?php endforeach;?>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

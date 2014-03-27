@@ -21,7 +21,7 @@ function loadProductPlans(productID)
 
 $(function() 
 {
-    $("#reviewedBy").chosen({no_results_text:noResultsMatch});                                                   
-    $("#mailto").chosen({no_results_text:noResultsMatch});                                                   
+    $("#reviewedBy").chosen(defaultChosenOptions);
+    $("#mailto").chosen(defaultChosenOptions);
 })
 </script>

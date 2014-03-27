@@ -40,7 +40,7 @@
   </thead>   
   <tbody>
   <?php foreach($tasks as $task):?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td><span class='<?php echo 'pri' . $lang->task->priList[$task->pri];?>'><?php echo $lang->task->priList[$task->pri]?></span></td>
     <td class='nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>

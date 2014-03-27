@@ -8,7 +8,7 @@
     <h1 onClick="showDetail('task', <?php echo $task->id;?>)"><?php echo $task->name;?></h1>
     <div><?php echo $task->desc?></div>
     <div id='item<?php echo $task->id;?>'></div>
-    <div data-role='content' class='a-center'>
+    <div data-role='content' class='text-center'>
       <?php 
       common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task);
       common::printIcon('task', 'start',          "taskID=$task->id", $task);

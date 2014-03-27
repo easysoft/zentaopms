@@ -11,13 +11,20 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div class='container mw-700px'>
+  <div id='featurebar'>
+    <div class='heading'>
+      <?php echo html::icon($lang->icons['product']);?> <?php echo $lang->project->manageProducts;?>
+    </div>
+  </div>
+  <form class='form-condensed' method='post'>
+    <div id='productsBox'><?php echo html::checkbox("products", $allProducts, $linkedProducts);?><?php echo html::hidden("post", 'post');?></div>
+    <div class="text-center">
+      <?php echo html::submitButton();?>
+    </div>
+  </form>
+</div>
 <form method='post'>
-  <table align='center' class='table-6'> 
-    <caption><?php echo $lang->project->manageProducts;?></caption>
-    <tr>
-      <td id='productsBox'><?php echo html::checkbox("products", $allProducts, $linkedProducts);?><?php echo html::hidden("post", 'post');?></td>
-    </tr>
-    <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
-  </table>
+
 </form>
 <?php include '../../common/view/footer.html.php';?>

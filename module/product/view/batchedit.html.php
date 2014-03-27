@@ -10,30 +10,37 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
-  <table class='table-1 colored fixed'>
-    <tr class='colhead'>
-      <th class='w-id'>   <?php echo $lang->idAB;?></th>
-      <th class='red'>    <?php echo $lang->product->name;?></th>
-      <th class='w-150px red'><?php echo $lang->product->code;?></th>
-      <th class='w-100px'><?php echo $lang->product->PO;?></th>
-      <th class='w-100px'><?php echo $lang->product->QD;?></th>
-      <th class='w-100px'><?php echo $lang->product->RD;?></th>
-      <th class='w-100px'><?php echo $lang->product->status;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['product']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->product->batchEdit;?></strong>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
+  <table class='table table-fixed table-form'>
+    <thead>
+      <tr>
+        <th class='w-id'>   <?php echo $lang->idAB;?></th>
+        <th class='required'>    <?php echo $lang->product->name;?></th>
+        <th class='w-150px required'><?php echo $lang->product->code;?></th>
+        <th class='w-110px'><?php echo $lang->product->PO;?></th>
+        <th class='w-110px'><?php echo $lang->product->QD;?></th>
+        <th class='w-110px'><?php echo $lang->product->RD;?></th>
+        <th class='w-100px'><?php echo $lang->product->status;?></th>
+      </tr>
+    </thead>
     <?php foreach($productIDList as $productID):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
-      <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='text-1'");?></td>
-      <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='text-1'");?></td>
-      <td><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO);?></td>
-      <td><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD);?></td>
-      <td><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD);?></td>
-      <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status);?></td>
+      <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
+      <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
+      <td><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control'");?></td>
+      <td><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control'");?></td>
+      <td><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control'");?></td>
+      <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>
-    <tfoot><tr><td colspan='7' class='a-center'><?php echo html::submitButton();?></td></tr></tfoot>
+    <tr><td colspan='7' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

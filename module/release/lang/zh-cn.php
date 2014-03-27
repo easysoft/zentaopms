@@ -13,6 +13,7 @@ $lang->release->common    = '发布';
 $lang->release->create    = "创建发布";
 $lang->release->edit      = "编辑发布";
 $lang->release->delete    = "删除发布";
+$lang->release->deleted   = '已删除';
 $lang->release->view      = "发布详情";
 $lang->release->browse    = "浏览发布";
 

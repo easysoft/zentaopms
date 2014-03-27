@@ -9,12 +9,12 @@
     </tr>
     <?php foreach($trackers as $tracker):?>
     <tr>
-      <th class='rowhead'><?php echo $tracker->name;?></th>
-      <td><?php html::select("$tracker->name", $lang->convert->directionList, '', "class='select-3'");?></td>
+      <th><?php echo $tracker->name;?></th>
+      <td><?php html::select("$tracker->name", $lang->convert->directionList, '', "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

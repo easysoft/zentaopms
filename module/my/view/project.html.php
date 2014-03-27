@@ -12,9 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table class='table-1 tablesorter a-center'>
+<div id='featurebar'>
+  <div class='heading'><i class='icon-folder-open-alt'></i> <?php echo $lang->my->myProject;?></div>
+  <div class='btn-group pull-right'>
+    <?php echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn'") ?>
+  </div>
+</div>
+<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
   <thead>
-  <tr class='colhead'>
+  <tr class='text-center'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
     <th class='w-160px'><?php echo $lang->project->code;?></th>
     <th><?php echo $lang->project->name;?></th>
@@ -23,16 +29,16 @@
     <th class='w-status'><?php echo $lang->statusAB;?></th>
     <th class='w-user'><?php echo $lang->team->role;?></th>
     <th class='w-date'><?php echo $lang->team->join;?></th>
-    <th class='w-date'><?php echo $lang->team->hours;?></th>
+    <th class='w-110px'><?php echo $lang->team->hours;?></th>
   </tr>
   </thead>
   <tbody>
   <?php foreach($projects as $project):?>
   <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
-  <tr>
+  <tr class='text-center'>
     <td><?php echo html::a($projectLink, $project->id);?></td>
-    <td class='a-left'><?php echo $project->code;?></td>
-    <td class='a-left'><?php echo html::a($projectLink, $project->name);?></td>
+    <td class='text-left'><?php echo $project->code;?></td>
+    <td class='text-left'><?php echo html::a($projectLink, $project->name);?></td>
     <td><?php echo $project->begin;?></td>
     <td><?php echo $project->end;?></td>
     <td><?php echo $lang->project->statusList[$project->status];?></td>

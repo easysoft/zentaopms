@@ -1,43 +1,4 @@
 /**
- * Load css file of special browser.
- * 
- * @access public
- * @return void
- */
-function loadFixedCSS()
-{
-    cssFile = '';
-    if($.browser.msie )
-    {
-        cssFile = $.browser.version == '6.0' ? config.themeRoot + '/browser/ie.6.css' : config.themeRoot + 'browser/ie.css';
-    }
-    else if($.browser.mozilla) 
-    {
-        cssFile = config.themeRoot + '/browser/firefox.css';
-    }
-    else if($.browser.opera) 
-    {
-        cssFile = config.themeRoot + '/browser/opera.css';
-    }
-    else if($.browser.safari) 
-    {
-        cssFile = config.themeRoot + '/browser/safari.css';
-    }
-    else if($.browser.chrome) 
-    {
-        cssFile = config.themeRoot + '/browser/chrome.css';
-    }
-
-    if(cssFile != '')
-    {
-        /* Thanks ekerner, please visit ekerner.com. The code is from: 
-         * http://stackoverflow.com/questions/1184950/dynamically-loading-css-stylesheet-doesnt-work-on-ie. 
-         */
-        $("<link>").appendTo($('head')).attr({type: 'text/css', rel: 'stylesheet'}).attr('href', cssFile);
-    }
-}
-
-/**
  * Create link. 
  * 
  * @param  string $moduleName 
@@ -114,17 +75,21 @@ function shortcut()
  * @access public
  * @return void
  */
-var showMenu = 0; //Showing or hiding drop menu.
 function showDropMenu(objectType, objectID, module, method, extra)
 {
-    if(showMenu == 1) { showMenu = 0; return $("#dropMenu").hide();};
-    $('#wrap').click(function(){showMenu = 0; return $("#dropMenu").hide();});
+    console.log(arguments);
+    var li = $('#currentItem').closest('li');
+    if(li.hasClass('show')) {li.removeClass('show'); return;}
 
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
-    var offset = $('#currentItem').offset();
-    $("#dropMenu").css({ top:offset.top + $('#currentItem').height() + "px", left:offset.left });
-    $("#dropMenu").show('fast', function(){$("#dropMenu #search").focus();});
-    showMenu = 1;
+    if(!li.data('showagain'))
+    {
+        li.data('showagain', true);
+        $(document).click(function() {li.removeClass('show');});
+        $('#dropMenu, #currentItem').click(function(e){e.stopPropagation();});
+    }
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data).find('#search').focus();});
+
+    li.addClass('show');
 }
 
 /**
@@ -178,9 +143,9 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
  */
 function switchMore()
 {
-    $('#moreMenu').css('width', $('#defaultMenu').width());
-    $('#moreMenu').toggle();
-    $('#search').focus();
+    $('#search').width($('#search').width()).focus();
+    $('#moreMenu').width($('#defaultMenu').outerWidth());
+    $('#searchResult').toggleClass('show-more');
 }
 
 /**
@@ -236,7 +201,9 @@ function setRequiredFields()
     requiredFields = config.requiredFields.split(',');
     for(i = 0; i < requiredFields.length; i++)
     {
-        $('#' + requiredFields[i]).after('<span class="star"> * </span>');
+        $('#' + requiredFields[i]).closest('td,th').prepend("<div class='required required-wrapper'></div>");
+        var colEle = $('#' + requiredFields[i]).closest('[class*="col-"]');
+        if(colEle.parent().hasClass('form-group')) colEle.addClass('required');
     }
 }
 
@@ -312,11 +279,8 @@ function toggleHelpLink()
 function hideTreeBox(treeType)
 {
     $.cookie(treeType, 'hide', {expires:config.cookieLife, path:config.webRoot});
-    $('.side').hide();
-    $('.divider').hide();
-    $('.treeSlider span').css("border-right", "0 none");
-    $('.treeSlider span').css("border-left", "4px solid #000000");
-
+    $('.outer').addClass('hide-side');
+    $('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
 }
 
 /**
@@ -329,10 +293,8 @@ function hideTreeBox(treeType)
 function showTreeBox(treeType)
 {
     $.cookie(treeType, 'show', {expires:config.cookieLife, path:config.webRoot});
-    $('.side').show();
-    $('.divider').show();
-    $('.treeSlider span').css("border-right", "4px solid #000000");
-    $('.treeSlider span').css("border-left", "0 none");
+    $('.outer').removeClass('hide-side');
+    $('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
 }
 
 /**
@@ -343,11 +305,11 @@ function showTreeBox(treeType)
  */
 function toggleTreeBox()
 {
-    var treeType = $('.treeSlider').attr('id');
-    if(typeof treeType == 'undefined') return;
+    var treeType = $('.side-handle').data('id');
+    if(typeof treeType == 'undefined' || treeType == null) return;
     if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
 
-    $('.treeSlider').toggle
+    $('.side-handle').toggle
     (
         function()
         {
@@ -422,44 +384,18 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-    var winWidth  = window.screen.width;
-    var winHeight = $(window).height();
-    var headerH   = $('#header').height();
-    var navbarH   = $('#modulemenu').height();
-    var footerH   = $('#footer').height() + 15;
+    if($('.outer > .side').length) $('.outer').addClass('with-side');
 
-    var outerH = winHeight - headerH - footerH - navbarH - 50;
-    if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
-    if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
-    $('.outer').css('min-height', outerH);
-
-    if($.browser.msie && ($.browser.version == "6.0") && !$.support.style)
+    var resetOuterHeight = function()
     {
-        winWidth -= 49;
-        $('#wrap').width(winWidth);
+        var height = $(window).height() - $('#header').height() - $('#footer').height() - 33;
+        $('#wrap .outer').css('min-height', height);
+        /* uncomment to ajust treebox height */
+        // $('#treebox').css('min-height', height - $('#featurebar').height() - 18);
     }
-}
 
-/**
- * Set the about link. 
- * 
- * @access public
- * @return void
- */
-function setAbout()
-{
-    if($('a.about').size()) $("a.about").colorbox({width:900, height:330, iframe:true, transition:'none', scrolling:false});
-}
-
-/**
- * Set QR Code. 
- * 
- * @access public
- * @return void
- */
-function setQRCode()
-{
-    if($('a.qrCode').size()) $("a.qrCode").colorbox({width:400, height:400, iframe:true, transition:'none', scrolling:false});
+    $(window).resize(resetOuterHeight);
+    resetOuterHeight();
 }
 
 /**
@@ -559,7 +495,7 @@ function setRepoLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:650, height:240, iframe:true, transition:'none', scrolling:true});
+   // if($('.export').size()) $(".export").colorbox({width:650, height:240, iframe:true, transition:'none', scrolling:true});
 }
 
 /**
@@ -642,7 +578,6 @@ function toggleSearch()
             if(browseType == 'bymodule')
             {
                 $('#treebox').addClass('hidden');
-                $('.divider').addClass('hidden');
                 $('#bymoduleTab').removeClass('active');
             }
             else
@@ -651,14 +586,13 @@ function toggleSearch()
             }
             $('#bysearchTab').addClass('active');
             ajaxGetSearchForm();
-            $('#querybox').removeClass('hidden');
+            $('#querybox').addClass('show');
         },
         function()
         {
             if(browseType == 'bymodule')
             {
                 $('#treebox').removeClass('hidden');
-                $('.divider').removeClass('hidden');
                 $('#bymoduleTab').addClass('active');
             }
             else
@@ -666,7 +600,7 @@ function toggleSearch()
                 $('#' + browseType +'Tab').addClass('active');
             }
             $('#bysearchTab').removeClass('active');
-            $('#querybox').addClass('hidden');
+            $('#querybox').removeClass('show');
         } 
     );
 }
@@ -681,7 +615,8 @@ function ajaxGetSearchForm()
 {
     if($('#querybox').html() == '')
     {
-        $.get(createLink('search', 'buildForm'), function(data){
+        $.get(createLink('search', 'buildForm'), function(data)
+        {
             $('#querybox').html(data);
         });
     }
@@ -826,55 +761,6 @@ function selectItem(SelectID)
 }
 
 /**
- * Set modal for list page.
- *
- * Open operation pages in modal for list pages, after the modal window close, reload the list content and repace the replaceID.
- * 
- * @param string   colorboxClass   the class for colorbox binding.
- * @param string   replaceID       the html object to be replaced.
- * @access public
- * @return void
- */
-function setModal4List(colorboxClass, replaceID, callback, width, height)
-{
-    if(typeof(width) == 'undefined') width = 900
-    if(typeof(height) == 'undefined') height = 500
-    $('.' + colorboxClass).colorbox(
-    {
-        width: width,
-        height: height,
-        iframe: true,
-        transition: 'none',
-
-        onCleanup:function()
-        {
-            var selfClose = $.cookie('selfClose');
-            if(selfClose != 1) return;
-            saveWindowSize();
-
-            var link = self.location.href;
-            $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
-            $('#tmpDiv').load(link + ' #' + replaceID, function()
-            {
-                $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                setModal4List(colorboxClass, replaceID, callback, width, height);
-
-                try{$('.colored').colorize();}catch(err){}
-                $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                try
-                {
-                    $(".date").datePicker({createButton:true, startDate:startDate})
-                    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
-                }
-                catch(err){}
-                if(typeof(callback) == 'function') callback();
-                $.cookie('selfClose', 0);
-            });
-        }
-    });
-}
-
-/**
  * Delete item use ajax.
  * 
  * @param  string url 
@@ -916,13 +802,144 @@ function ajaxDelete(url, replaceID, notice)
     }
 }
 
+/**
+ * Set modal load content with ajax or iframe
+ * 
+ * @access public
+ * @return void
+ */
+function setModal()
+{
+    if($('[data-toggle="modal"], a.iframe').size() == 0) return false;
+
+    /* Addpend modal div. */
+    $('<div id="ajaxModal" class="modal fade"></div>').appendTo('body');
+
+    $('[data-toggle=modal], a.iframe').click(function(event)
+    {
+        var $e   = $(this);
+        var url  = $e.attr('href') || $e.data('url');
+        var type = $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
+        if(type == 'iframe')
+        {
+            var options = 
+            {
+                url: url,
+                width: $e.data('width') || 800,
+                height: $e.data('height') || 'auto',
+                icon: $e.data('icon') || '?',
+                title: $e.data('title') || $e.attr('title') || $e.text(),
+                name: $e.data('name') || 'modalIframe'
+            }
+            if(options.height != 'auto') options.height += 'px';
+            if(options.icon == '?')
+            {
+                var i = $e.find("[class^='icon-']");
+                options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
+            }
+            var modal = $('#ajaxModal').addClass('modal-loading');
+            modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: {height}'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+
+            var frame = document.getElementById(options.name);
+            frame.onload = frame.onreadystatechange = function()
+            {
+                if (this.readyState && this.readyState != 'complete') return;
+                modal.removeClass('modal-loading');
+                if(options.height == 'auto')
+                {
+                    try
+                    {
+                        var $frame = $(window.frames[options.name].document);
+                        if($frame.find('#titlebar').length) modal.addClass('with-titlebar');
+
+                        setTimeout(function()
+                        {
+                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').height()}, 100);
+                        }, 100);
+                    }
+                    catch(e){}
+                }
+            }
+            modal.modal('show');
+        }
+        else
+        {
+            $('#ajaxModal').load(url, function()
+            {
+                /* Set the width of modal dialog. */
+                if($e.data('width'))
+                {
+                    var modalWidth = parseInt($e.data('width'));
+                    $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
+                }
+
+                /* show the modal dialog. */
+                $('#ajaxModal').modal('show');
+            });
+        }
+
+        /* Save the href to rel attribute thus we can save it. */
+        $('#ajaxModal').attr('rel', url);
+
+        return false;
+    });
+}
+
+/**
+ * Set table behavior
+ * 
+ * @access public
+ * @return void
+ */
+function setTableBehavior()
+{
+    $('#wrap .table:not(.table-data, .table-form) tbody tr:not(.actie-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped table-borderless tablesorter');
+}
+
+/**
+ * Make form condensed
+ * 
+ * @access public
+ * @return void
+ */
+function condensedForm()
+{
+    $('.form-condensed legend').click(function()
+    {
+        $(this).closest('fieldset').toggleClass('collapsed');
+    });
+}
+
+/**
+ * Update data to the target element synchronous.
+ * 
+ * @access public
+ * @return void
+ */
+function setSyncTrigger()
+{
+    $("[data-sync-target]").on('input propertychange', function()
+    {
+        var $this = $(this);
+        var val = $this.prop('tagName') == 'INPUT' ? $this.val() : $this.html();
+        var target = $($this.attr('data-sync-target'));
+        console.log(target);
+        if(target.prop('tagName') == 'INPUT') target.val(val);
+        else target.html(val);
+    });
+}
+
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    loadFixedCSS();
+    condensedForm();
+    setModal();
+    setTableBehavior();
     setForm();
     saveWindowSize();
     setDebugWin('white');
@@ -931,8 +948,6 @@ $(document).ready(function()
     setRequiredFields();
     setPlaceholder();
 
-    setAbout();
-    setQRCode();
     setExport();
     setRepoLink();
 
@@ -940,9 +955,12 @@ $(document).ready(function()
     toggleSearch();
     toggleTreeBox();
 
+    setSyncTrigger();
+
     hideClearDataLink();
 
-    $(window).resize(function(){saveWindowSize()});   // When window resized, call it again.
+    $(window).resize(saveWindowSize);   // When window resized, call it again.
+
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
 
     $('.export').bind('click', function()

@@ -13,22 +13,40 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
-  <?php 
-  echo '<span id="today">'      . html::a(inlink('dynamic', "projectID=$projectID&type=today"),      $lang->action->dynamic->today)      . '</span>';
-  echo '<span id="yesterday">'  . html::a(inlink('dynamic', "projectID=$projectID&type=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
-  echo '<span id="twodaysago">' . html::a(inlink('dynamic', "projectID=$projectID&type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
-  echo '<span id="thisweek">'   . html::a(inlink('dynamic', "projectID=$projectID&type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
-  echo '<span id="lastweek">'   . html::a(inlink('dynamic', "projectID=$projectID&type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
-  echo '<span id="thismonth">'  . html::a(inlink('dynamic', "projectID=$projectID&type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
-  echo '<span id="lastmonth">'  . html::a(inlink('dynamic', "projectID=$projectID&type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
-  echo '<span id="all">'        . html::a(inlink('dynamic', "projectID=$projectID&type=all"),        $lang->action->dynamic->all)        . '</span>';
-  echo "<span id='account'>"    . html::select('account', $users, $account, "onchange=changeUser(this.value,$projectID)") . '</span>';
-  ?>
+  <div class='heading'>
+    <?php echo html::icon($lang->icons['dynamic']);?> <?php echo $lang->project->dynamic;?>
+  </div>
+  <ul class='nav'>
+    <?php 
+    echo '<li id="today">'      . html::a(inlink('dynamic', "projectID=$projectID&type=today"),      $lang->action->dynamic->today)      . '</li>';
+    echo '<li id="yesterday">'  . html::a(inlink('dynamic', "projectID=$projectID&type=yesterday"),  $lang->action->dynamic->yesterday)  . '</li>';
+    echo '<li id="twodaysago">' . html::a(inlink('dynamic', "projectID=$projectID&type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</li>';
+    echo '<li id="thisweek">'   . html::a(inlink('dynamic', "projectID=$projectID&type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</li>';
+    echo '<li id="lastweek">'   . html::a(inlink('dynamic', "projectID=$projectID&type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</li>';
+    echo '<li id="thismonth">'  . html::a(inlink('dynamic', "projectID=$projectID&type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</li>';
+    echo '<li id="lastmonth">'  . html::a(inlink('dynamic', "projectID=$projectID&type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</li>';
+    echo '<li id="all">'        . html::a(inlink('dynamic', "projectID=$projectID&type=all"),        $lang->action->dynamic->all)        . '</li>';
+    // echo "<li id='account'>"    . html::select('account', $users, $account, "onchange=changeUser(this.value,$projectID)") . '</li>';
+
+    echo "<li id='account' class='dropdown'>";
+    $current = $users[isset($account) ? $account : ''];
+    if(empty($current)) $current = $lang->project->byUser;
+    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+    echo "<ul class='dropdown-menu'>";
+    foreach ($users as $key => $value)
+    {
+        echo '<li' . ($key == $account ? " class='active'" : '') . '>';
+        if($key == '') echo html::a($this->createLink('project', 'dynamic', "projectID=$projectID&type=all"), $lang->project->all);
+        else echo html::a($this->createLink('project', 'dynamic', "projectID=$projectID&type=account&param=$key"), $value);
+    }
+    echo '</ul></li>';
+    ?>
+  </ul>
 </div>
 
-<table class='table-1 colored tablesorter fixed'>
+<table class='table table-fixed'>
   <thead>
-  <tr class='colhead'>
+  <tr>
     <th class='w-150px'><?php echo $lang->action->date;?></th>
     <th class='w-user'> <?php echo $lang->action->actor;?></th>
     <th class='w-100px'><?php echo $lang->action->action;?></th>
@@ -40,13 +58,13 @@
   <tbody>
   <?php foreach($actions as $action):?>
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
-  <tr class='a-center'>
+  <tr class='text-center'>
     <td><?php echo $action->date;?></td>
     <td><?php isset($users[$action->actor]) ? print($users[$action->actor]) : print($action->actor);?></td>
     <td><?php echo $action->actionLabel;?></td>
     <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
     <td><?php echo $action->objectID;?></td>
-    <td class='a-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
+    <td class='text-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
   </tr>
   <?php endforeach;?>
   </tbody>

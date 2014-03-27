@@ -239,9 +239,7 @@ class common extends control
         global $lang;
 
         if(!common::hasPriv($module, 'edit')) return false;
-        echo "<span class='link-button'>";
-        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()'");
-        echo "</span>";
+        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
     }
 
     /**
@@ -296,11 +294,16 @@ class common extends control
         if($icon == 'createBug') $title  = $lang->testtask->createBug;
 
         /* set the class. */
-        if(!$icon) $icon = $method;
-        if(strpos(',edit,copy,report,export,delete,', ",$icon,") !== false) $module = 'common';
-        $color      = $type == 'button' ? 'green' : ($clickable ? 'green' : 'gray');
+        if(!$icon)
+        {
+            $icon = $lang->icons[$method] ? $lang->icons[$method] : $method;
+        }
+        if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $extraClass = strpos(',export,customFields,', ",$method,") !== false ? $method : $extraClass;
-        $class      = $extraClass ? "icon-$color-$module-$icon $extraClass" : "icon-$color-$module-$icon";
+        $class = "icon-$module-$method";
+        if(!$clickable) $class .= ' disabled';
+        if($icon) $class       .= ' icon-' . $icon;
+  
  
         /* Create the icon link. */
         if($clickable)
@@ -312,30 +315,25 @@ class common extends control
             }
             if($type == 'button')
             {
-                echo "<span class='link-button'>";
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='$extraClass'", true);
+                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass'", true);
                 }
                 else
                 {
-                    $class = "icon-$color-$module-$icon";
-                    echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
+                    echo html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title'", false);
                 }
-                echo "</span>";
             }
             else
             {
-                $class = "icon-$color-$module-$icon";
-                echo html::a($link, "<i class='$class'></i>", $target, "class='link-icon $extraClass' title='$title'", false);
+                echo html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title'", false);
             }
         }
         else
         {
             if($type == 'list')
             {
-                $class = "icon-$color-$module-$icon";
-                echo "<i class='disabled $class' title='$title'></i>";
+                echo "<button class='disabled btn-icon $extraClass'><i class='$class' title='$title'></i></button>";
             }
         }
     }
@@ -353,27 +351,21 @@ class common extends control
         global $lang, $app;
         if(isonlybody()) return false;
 
-        echo "<span class='link-button'>";
-        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "class='link-icon' title={$lang->goback}");
-        echo "</span>";
+        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "class='btn' title={$lang->goback}");
 
         if(isset($preAndNext->pre) and $preAndNext->pre) 
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title;
-            echo "<span class='link-button'>";
-            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '<i class="icon-pre icon-chevron-sign-left"></i>', '', "id='pre' class='link-icon' title='{$title}'");
-            echo "</span>";
+            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '<i class="icon-pre icon-chevron-left"></i>', '', "id='pre' class='btn' title='{$title}'");
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title;
-            echo "<span class='link-button'>";
-            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '<i class="icon-pre icon-chevron-sign-right"></i>', '', "id='next' class='link-icon' title='$title'");
-            echo "</span>";
+            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '<i class="icon-pre icon-chevron-right"></i>', '', "id='next' class='btn' title='$title'");
         }
     }
 

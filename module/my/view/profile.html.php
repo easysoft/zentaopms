@@ -11,113 +11,109 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
-<table align='center' class='table-4'>
-  <caption>
-    <div class='f-left'> <?php echo $lang->my->profile;?></div>
-    <div class='f-right'><?php echo html::a($this->createLink('my', 'editprofile'), $lang->user->editProfile);?></div>
-  </caption>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->dept;?></th>
-    <td>
-    <?php
-    if(empty($deptPath))
-    {
-        echo "/";
-    }
-    else
-    {
-        foreach($deptPath as $key => $dept)
-        {
-            if($dept->name) echo $dept->name;
-            if(isset($deptPath[$key + 1])) echo $lang->arrow;
-        }
-    }
-    ?>
-    </td>
-  </tr>
-
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->account;?></th>
-    <td><?php echo $user->account;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->realname;?></th>
-    <td><?php echo $user->realname;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->role;?></th>
-    <td><?php echo $lang->user->roleList[$user->role];?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->group->priv;?></th>
-    <td><?php foreach($groups as $group) echo $group->name . ' '; ?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->commiter;?></th>
-    <td><?php echo $user->commiter;?></td>
-  </tr>
-  <!--
-  <tr>
-    <?php //echo $lang->user->nickname;?>
-    <?php //echo $user->nickname;?>
-  </tr>
-  -->
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->email;?></th>
-    <td><?php echo $user->email;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->join;?></th>
-    <td><?php echo $user->join;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->visits;?></th>
-    <td><?php echo $user->visits;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->ip;?></th>
-    <td><?php echo $user->ip;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->last;?></th>
-    <td><?php echo $user->last;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->skype;?></th>
-    <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->qq;?></th>
-    <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->yahoo;?></th>
-    <td><?php echo $user->yahoo;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->gtalk;?></th>
-    <td><?php echo $user->gtalk;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->wangwang;?></th>
-    <td><?php echo $user->wangwang;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->mobile;?></th>
-    <td><?php echo $user->mobile;?></td>
-  </tr>
-   <tr>
-    <th class='rowhead'><?php echo $lang->user->phone;?></th>
-    <td><?php echo $user->phone;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->address;?></th>
-    <td><?php echo $user->address;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->user->zipcode;?></th>
-    <td><?php echo $user->zipcode;?></td>
-  </tr>
-</table>
+<div class='container mw-600px'>
+  <div id='featurebar'>
+    <div class='heading'><i class='icon-user'></i> <?php echo $lang->my->profile;?></div>
+    <div class='btn-group pull-right'>
+      <?php echo html::a($this->createLink('my', 'editprofile'), "<i class='icon-pencil'></i> " . $lang->user->editProfile, '', "class='btn btn-primary'");?>
+    </div>
+  </div>
+  <table class='table table-borderless table-data'>
+    <tr>
+      <th class='rowhead w-100px'><?php echo $lang->user->dept;?></th>
+      <td>
+      <?php
+      if(empty($deptPath))
+      {
+          echo "/";
+      }
+      else
+      {
+          foreach($deptPath as $key => $dept)
+          {
+              if($dept->name) echo $dept->name;
+              if(isset($deptPath[$key + 1])) echo $lang->arrow;
+          }
+      }
+      ?>
+      </td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->account;?></th>
+      <td><?php echo $user->account;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->realname;?></th>
+      <td><?php echo $user->realname;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->role;?></th>
+      <td><?php echo $lang->user->roleList[$user->role];?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->group->priv;?></th>
+      <td><?php foreach($groups as $group) echo $group->name . ' '; ?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->commiter;?></th>
+      <td><?php echo $user->commiter;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->email;?></th>
+      <td><?php echo $user->email;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->join;?></th>
+      <td><?php echo $user->join;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->visits;?></th>
+      <td><?php echo $user->visits;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->ip;?></th>
+      <td><?php echo $user->ip;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->last;?></th>
+      <td><?php echo $user->last;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->skype;?></th>
+      <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
+    </tr>  
+    <tr>
+      <th><?php echo $lang->user->qq;?></th>
+      <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
+    </tr>  
+    <tr>
+      <th><?php echo $lang->user->yahoo;?></th>
+      <td><?php echo $user->yahoo;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->user->gtalk;?></th>
+      <td><?php echo $user->gtalk;?></td>
+    </tr>  
+    <tr>
+      <th><?php echo $lang->user->wangwang;?></th>
+      <td><?php echo $user->wangwang;?></td>
+    </tr>  
+    <tr>
+      <th><?php echo $lang->user->mobile;?></th>
+      <td><?php echo $user->mobile;?></td>
+    </tr>
+     <tr>
+      <th><?php echo $lang->user->phone;?></th>
+      <td><?php echo $user->phone;?></td>
+    </tr>  
+    <tr>
+      <th><?php echo $lang->user->address;?></th>
+      <td><?php echo $user->address;?></td>
+    </tr>  
+    <tr>
+      <th><?php echo $lang->user->zipcode;?></th>
+      <td><?php echo $user->zipcode;?></td>
+    </tr>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -17,7 +17,7 @@
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->unlinkedCases;?></div>
-    <div class='f-right'>
+    <div class='text-right'>
       <?php
       $lang->testtask->linkCase = $lang->testtask->linkByStory;
       common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bystory");
@@ -40,14 +40,14 @@
   </thead>
   <tbody>
   <?php foreach($cases as $case):?>
-  <tr class='a-center'>
-    <td class='a-left'>
+  <tr class='text-center'>
+    <td class='text-left'>
       <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
       <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
     </td>
-    <td class='a-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=select-1');?> </td>
+    <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=form-control');?> </td>
     <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
-    <td class='a-left'>
+    <td class='text-left'>
       <?php
       echo $case->title . ' ( ';
       for($i = $case->version; $i >= 1; $i --)
@@ -69,7 +69,7 @@
       <?php if($cases):?>
       <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></div>
       <?php endif;?>
-      <div class='f-right'><?php $pager->show();?></div>
+      <div class='text-right'><?php $pager->show();?></div>
     </td>
   </tr>
   </tfoot>

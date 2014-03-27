@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <h3><?php echo $lang->story->close . $lang->colon . $story->title;?></h3>
   <table class='table-1'>
     <tr>
@@ -32,7 +32,7 @@
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
     <tr>
-      <td class='a-center' colspan='2'>
+      <td class='text-center' colspan='2'>
         <?php
         echo html::submitButton('', "data-inline='true' data-theme='b'");
         echo html::linkButton($lang->goback, $this->createLink('story', 'view', "storyID=$story->id"), 'self', "data-inline='true'");

@@ -20,9 +20,9 @@
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->lblProductAndModule;?></th>
+      <th><?php echo $lang->testcase->lblProductAndModule;?></th>
       <td>
-        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?>
+        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?>
         <span id='moduleIdBox'>
         <?php 
         echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=loadModuleRelated();");
@@ -36,21 +36,21 @@
       </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->type;?></th>
-      <td><?php echo html::select('type', $lang->testcase->typeList, $type, 'class=select-3');?></td>
+      <th><?php echo $lang->testcase->type;?></th>
+      <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
-      <td><?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='select-3' multiple='multiple'");?></td>
+      <th><?php echo $lang->testcase->stage;?></th>
+      <td><?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control' multiple='multiple'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->pri;?></th>
-      <td><?php echo html::select('pri', $lang->testcase->priList, $pri, 'class=select-3');?></td>
+      <th><?php echo $lang->testcase->pri;?></th>
+      <td><?php echo html::select('pri', $lang->testcase->priList, $pri, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
+      <th><?php echo $lang->testcase->lblStory;?></th>
       <td>
-        <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?>
+        <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="form-control" onchange=setPreview();');?>
         <?php if($storyID == 0): ?>
           <a href='' id='preview' class='iframe hidden'><?php echo $lang->preview;?></a>
         <?php else:?>
@@ -60,15 +60,15 @@
       </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->title;?></th>
-      <td><?php echo html::input('title', $caseTitle, "class='text-1'");?></td>
+      <th><?php echo $lang->testcase->title;?></th>
+      <td><?php echo html::input('title', $caseTitle, "class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->precondition;?></th>
-      <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='text-1'");?></td>
+      <th><?php echo $lang->testcase->precondition;?></th>
+      <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='form-control'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
+      <th><?php echo $lang->testcase->steps;?></th>
       <td>
         <table class='w-p90'>
           <tr class='colhead'>
@@ -81,7 +81,7 @@
           foreach($steps as $stepID => $step)
           {
               $stepID += 1;
-              echo "<tr id='row$stepID' class='a-center'>";
+              echo "<tr id='row$stepID' class='text-center'>";
               echo "<th class='stepID'>$stepID</th>";
               echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='w-p100'") . '</td>';
               echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='w-p100'") . '</td>';
@@ -97,15 +97,15 @@
       </td> 
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->testcase->keywords;?></th>
-      <td><?php echo html::input('keywords', $keywords, "class='text-1'");?></td>
+      <th><?php echo $lang->testcase->keywords;?></th>
+      <td><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
     </tr>  
      <tr>
-      <th class='rowhead'><?php echo $lang->testcase->files;?></th>
+      <th><?php echo $lang->testcase->files;?></th>
       <td><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?> </td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
     </tr>
   </table>
 </form>

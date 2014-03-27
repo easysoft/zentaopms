@@ -60,35 +60,35 @@
         <legend><?php echo $lang->testtask->legendBasicInfo;?></legend>
         <table class='table-1 a-left fixed'>
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->project;?></th>
+            <th><?php echo $lang->testtask->project;?></th>
             <td><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->build;?></th>
+            <th><?php echo $lang->testtask->build;?></th>
             <td><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
+            <th><?php echo $lang->testtask->owner;?></th>
             <td><?php echo $users[$task->owner];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->pri;?></th>
+            <th><?php echo $lang->testtask->pri;?></th>
             <td><?php echo $task->pri;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
+            <th><?php echo $lang->testtask->begin;?></th>
             <td><?php echo $task->begin;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->end;?></th>
+            <th><?php echo $lang->testtask->end;?></th>
             <td><?php echo $task->end;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->status;?></th>
+            <th><?php echo $lang->testtask->status;?></th>
             <td><?php echo $lang->testtask->statusList[$task->status];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->testtask->report;?></th>
+            <th><?php echo $lang->testtask->report;?></th>
             <td class='content'><?php echo $task->report;?></td>
           </tr>  
        </table>

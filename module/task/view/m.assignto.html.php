@@ -1,6 +1,6 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <h3><?php echo $lang->task->assignTo . $this->lang->colon . $task->name;?></h3>
   <table class='table-1'>
     <tr>
@@ -15,7 +15,7 @@
       <td><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td colspan="2">
       <?php 
       echo html::submitButton('', 'data-inline="true" data-theme="b"');

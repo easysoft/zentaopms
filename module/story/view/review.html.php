@@ -14,55 +14,73 @@
 <script language='Javascript'>
 var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : print($story->openedBy);?>';
 </script>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $story->title;?></caption>
-    <tr>
-      <th class='w-100px rowhead'><?php echo $lang->story->reviewedDate;?></th>
-      <td><?php echo html::input('reviewedDate', helper::today(), 'class=text-3');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->reviewResult;?></th>
-      <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'class=select-3 onchange="switchShow(this.value)"');?></td>
-    </tr>
-    <tr id='rejectedReasonBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->rejectedReason;?></th>
-      <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=select-3 onchange="setStory(this.value)"');?></td>
-    </tr>
-    <tr id='duplicateStoryBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->duplicateStory;?></th>
-      <td><?php echo html::input('duplicateStory', '', 'class=text-3');?></td>
-    </tr>
-    <tr id='childStoriesBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->childStories;?></th>
-      <td><?php echo html::input('childStories', '', 'class=text-3');?></td>
-    </tr>
-    <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
-    <tr id='preVersionBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->preVersion;?></th>
-      <td><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
-    </tr>
-    <?php endif;?>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, 'class=select-3');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='text-1' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='8' class='area-1'");?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='a-center'>
-      <?php echo html::submitButton();?>
-      <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));?>
-      </td>
-    </tr>
-  </table>
-</form>
-<?php include './affected.html.php';?>
-<?php include '../../common/view/action.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+    <small><?php echo html::icon($lang->icons['review']) . ' ' . $lang->story->review;?></small>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-8'>
+    <div class='main'>
+      <form method='post' target='hiddenwin' class='form-condensed'>
+          <table class='table table-form'>
+            <tr>
+              <th class='w-80px'><?php echo $lang->story->reviewedDate;?></th>
+              <td class='w-p45'><?php echo html::input('reviewedDate', helper::today(), 'class=form-control');?></td><td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->story->reviewResult;?></th>
+              <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'class=form-control onchange="switchShow(this.value)"');?></td><td></td>
+            </tr>
+            <tr id='rejectedReasonBox' class='hidden'>
+              <th><?php echo $lang->story->rejectedReason;?></th>
+              <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
+            </tr>
+            <tr id='duplicateStoryBox' class='hidden'>
+              <th><?php echo $lang->story->duplicateStory;?></th>
+              <td><?php echo html::input('duplicateStory', '', 'class=form-control');?></td><td></td>
+            </tr>
+            <tr id='childStoriesBox' class='hidden'>
+              <th><?php echo $lang->story->childStories;?></th>
+              <td><?php echo html::input('childStories', '', 'class=form-control');?></td><td></td>
+            </tr>
+            <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
+            <tr id='preVersionBox' class='hidden'>
+              <th><?php echo $lang->story->preVersion;?></th>
+              <td colspan='2'><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <th><?php echo $lang->story->assignedTo;?></th>
+              <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, 'class=form-control');?></td><td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->story->reviewedBy;?></th>
+              <td><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td><td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->story->comment;?></th>
+              <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->story->checkAffection;?></th>
+              <td colspan='2'><?php include './affected.html.php';?></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan='2'>
+              <?php echo html::submitButton();?>
+              <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));?>
+              </td>
+            </tr>
+          </table>
+      </form>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <div class='main main-side'><?php include '../../common/view/action.html.php';?></div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

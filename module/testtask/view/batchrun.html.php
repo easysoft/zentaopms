@@ -18,8 +18,8 @@ table .table-1{border:0px; margin:0px;}
 table .table-1 td{border:0px;}
 </style>
 <?php $this->app->loadLang('testcase'); unset($this->lang->testcase->resultList['n/a']); ?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1 fixed'> 
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-fixed table-form'> 
     <caption><?php echo $lang->testtask->common . $lang->colon . $lang->testtask->batchRun;?></caption>
     <tr>
       <th class='w-id'>   <?php  echo $lang->idAB;?></th> 
@@ -31,7 +31,7 @@ table .table-1 td{border:0px;}
     </tr>
     <?php foreach($caseIDList as $caseID):?>
     <?php if(!$productID) $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>
       <td><?php echo $lang->testcase->priList[$cases[$caseID]->pri]?></td>
       <td align='left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
@@ -46,7 +46,7 @@ table .table-1 td{border:0px;}
             <td align='left' width='30%'><?php echo "<span title='$step->desc'>" . $i . "、" . $step->desc . '</span>'?></td>
             <td align='left' width='30%'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
             <td width='50' class='hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass')?></td>
-            <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='text-1'");?></td>
+            <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='form-control'");?></td>
           </tr>
           <?php $i++?>
           <?php endforeach?>
@@ -55,7 +55,7 @@ table .table-1 td{border:0px;}
       </td>
     </tr>  
     <?php endforeach;?>
-    <tr><td colspan='6' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <script type='text/javascript'>

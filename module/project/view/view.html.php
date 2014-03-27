@@ -12,23 +12,32 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($project->deleted) echo "class='deleted'";?>>PROJECT #<?php echo $project->id . ' ' . $project->name;?></div>
-  <div>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['project']) . ' #' . $project->id;?></span>
+    <strong><?php echo $project->name;?></strong>
+    <?php if($project->deleted):?>
+    <span class='label label-danger'><?php echo $lang->project->deleted;?></span>
+    <?php endif; ?>
+  </div>
+  <div class='actions'>
     <?php
     $params = "project=$project->id";
     $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse', "projectID=$project->id");
     if(!$project->deleted)
     {
         ob_start();
+        echo "<div class='btn-group'>";
         common::printIcon('project', 'start',    "projectID=$project->id", $project);
-        common::printIcon('project', 'activate', "projectID=$project->id", $project);
+        common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'text-success');
         common::printIcon('project', 'putoff',   "projectID=$project->id", $project);
         common::printIcon('project', 'suspend',  "projectID=$project->id", $project);
-        common::printIcon('project', 'close',    "projectID=$project->id", $project);
+        common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'text-danger');
+        echo '</div>';
 
-        common::printDivider();
+        echo "<div class='btn-group'>";
         common::printIcon('project', 'edit', $params);
         common::printIcon('project', 'delete', $params, '', 'button', '', 'hiddenwin');
+        echo '</div>';
         common::printRPN($browseLink);
 
         $actionLinks = ob_get_contents();
@@ -42,74 +51,74 @@
     ?>
   </div>
 </div>
-
-<table class='cont-rt5'>
-  <tr valign='top'>
-    <td>
+<div class='row'>
+  <div class='col-md-8 col-lg-9'>
+    <div class='main'>
       <fieldset>
         <legend><?php echo $lang->project->desc;?></legend>
         <div class='content'><?php echo $project->desc;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center actionLink'> <?php if(!$project->deleted) echo $actionLinks;?></div>
-    </td>
-    <td class="divider"></td>
-    <td class="side">
+      <div class='actions'> <?php if(!$project->deleted) echo $actionLinks;?></div>
+    </div>
+  </div>
+  <div class='col-md-4 col-lg-3'>
+    <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->project->basicInfo?></legend>
-        <table class='table-1 a-left'>
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th width='25%' class='a-right'><?php echo $lang->project->name;?></th>
+            <th class='w-80px text-right strong'><?php echo $lang->project->name;?></th>
             <td><?php echo $project->name;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->code;?></th>
+            <th><?php echo $lang->project->code;?></th>
             <td><?php echo $project->code;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->beginAndEnd;?></th>
+            <th><?php echo $lang->project->beginAndEnd;?></th>
             <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->days;?></th>
+            <th><?php echo $lang->project->days;?></th>
             <td><?php echo $project->days;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->type;?></th>
+            <th><?php echo $lang->project->type;?></th>
             <td><?php echo $lang->project->typeList[$project->type];?></td>
           </tr>
           <tr> 
-            <th class='rowhead'><?php echo $lang->project->status;?></th>
+            <th><?php echo $lang->project->status;?></th>
             <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->PM;?></th>
+            <th><?php echo $lang->project->PM;?></th>
             <td><?php echo $users[$project->PM];?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->PO;?></th>
+            <th><?php echo $lang->project->PO;?></th>
             <td><?php echo $users[$project->PO];?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->QD;?></th>
+            <th><?php echo $lang->project->QD;?></th>
             <td><?php echo $users[$project->QD];?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->RD;?></th>
+            <th><?php echo $lang->project->RD;?></th>
             <td><?php echo $users[$project->RD];?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->products;?></th>
+            <th><?php echo $lang->project->products;?></th>
             <td>
               <?php foreach($products as $productID => $productName) echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productName) . '<br />';?>
             </td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->acl;?></th>
+            <th><?php echo $lang->project->acl;?></th>
             <td><?php echo $lang->project->aclList[$project->acl];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
+            <th><?php echo $lang->project->whitelist;?></th>
             <td>
               <?php
               $whitelist = explode(',', $project->whitelist);
@@ -121,14 +130,14 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->project->otherInfo?></legend>
-        <table class='table-1 a-left'>
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->lblStats;?></th>
+            <th class='w-80px'><?php echo $lang->project->lblStats;?></th>
             <td><?php printf($lang->project->stats, $project->totalHours, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
          </tr>
         </table>
       </fieldset>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
   <?php include '../../common/view/footer.html.php';?>

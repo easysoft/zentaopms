@@ -36,7 +36,7 @@ $clientTheme  = $this->app->getClientTheme();
 
   if(isset($pageCss)) css::internal($pageCss);
 
-  echo html::icon($webRoot . 'favicon.ico');
+  echo html::favicon($webRoot . 'favicon.ico');
   ?>
 </head>
 <body>

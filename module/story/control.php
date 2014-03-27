@@ -209,6 +209,7 @@ class story extends control
         $plans['same'] = $this->lang->story->same;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
+        $this->view->productName      = $product->name;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->batchCreate;
@@ -376,6 +377,7 @@ class story extends control
         $this->view->productID         = $productID;
         $this->view->storyIDList       = $storyIDList;
         $this->view->stories           = $stories;
+        $this->view->productName       = $product->name;
         $this->display();
     }
 
@@ -810,7 +812,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
-        $select  = html::select('story', $stories, $storyID, "class='select-3'");
+        $select  = html::select('story', $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));

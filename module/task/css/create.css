@@ -1,4 +1,1 @@
-.button-c {padding:2px}
-#mailto {width:90.5%}
-#preview{line-height: 24px;position: relative;top: -10px;+top:0;}
-caption .f-right a{color:red}
+#preview, #copyButton{line-height: 30px; position: relative; left: 10px}

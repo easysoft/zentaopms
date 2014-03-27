@@ -16,7 +16,7 @@
     <td><?php echo $lang->upgrade->warnningContent;?></td>
   </tr>
   <tr>
-    <td colspan='2' class='a-center'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></td>
+    <td colspan='2' class='text-center'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></td>
   </tr>
 </table>
 <?php include '../../common/view/footer.lite.html.php';?>

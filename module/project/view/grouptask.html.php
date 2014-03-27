@@ -13,21 +13,23 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treetable.html.php';?>
 <?php include './taskheader.html.php';?>
-<table class='table-1 fixed' id='treetable'>
-  <tr class='colhead'>
-    <th class='w-120px'></th>
-    <th><?php echo $lang->task->name;?></th>
-    <th class='w-pri'> <?php echo $lang->priAB;?></th>
-    <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
-    <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
-    <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
-    <th class='w-50px'><?php echo $lang->task->consumedAB;?></th>
-    <th class='w-50px'><?php echo $lang->task->leftAB;?></th>
-    <th class='w-50px'><?php echo $lang->typeAB;?></th>
-    <th class='w-80px'><?php echo $lang->task->deadlineAB;?></th>
-    <th class='w-80px'><?php echo $lang->task->status;?></th>
-    <th class='w-50px'><?php echo $lang->actions;?></th>
-  </tr>
+<table class='table fixed' id='treetable'>
+  <thead>
+    <tr>
+      <th class='w-120px'></th>
+      <th><?php echo $lang->task->name;?></th>
+      <th class='w-pri'> <?php echo $lang->priAB;?></th>
+      <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
+      <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
+      <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
+      <th class='w-50px'><?php echo $lang->task->consumedAB;?></th>
+      <th class='w-50px'><?php echo $lang->task->leftAB;?></th>
+      <th class='w-50px'><?php echo $lang->typeAB;?></th>
+      <th class='w-80px'><?php echo $lang->task->deadlineAB;?></th>
+      <th class='w-80px'><?php echo $lang->task->status;?></th>
+      <th class='w-60px'><?php echo $lang->actions;?></th>
+    </tr>
+  </thead>
   <?php  
     $taskSum       = 0;
     $statusWait    = 0;
@@ -40,10 +42,10 @@
   ?>
   <?php $i = 0;?>
   <?php foreach($tasks as $groupKey => $groupTasks):?>
-  <?php $groupClass = ($i % 2 == 0) ? 'even' : 'bg-yellow'; $i ++;?>
-  <tr id='node-<?php echo $groupKey;?>'>
-    <td class='<?php echo $groupClass;?> a-center f-16px strong'><?php echo $groupKey;?></td>
-    <td colspan='10'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
+  <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i ++;?>
+  <tr id='node-<?php echo $groupKey;?>' class='actie-disabled group-title'>
+    <td class='<?php echo $groupClass;?> text-left large strong group-name'><?php echo $groupKey;?></td>
+    <td colspan='11'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
   <?php
     $groupWait     = 0;
@@ -91,7 +93,7 @@
    ?>
     <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
       <td class='<?php echo $groupClass;?>'></td>
-      <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
+      <td class='text-left'>&nbsp;<?php echo $task->id . $lang->colon; if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
       <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $users[$task->finishedBy];?></td>
@@ -109,6 +111,7 @@
     <?php endforeach;?>
     <tr class='child-of-node-<?php echo $groupKey;?> <?php echo $groupClass;?>'>
       <td colspan='12' class='a-right groupdivider'>
+        <div class='text'>
         <?php if($groupBy == 'assignedto' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
         <?php printf($lang->project->groupSummary, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></div>
       </td>

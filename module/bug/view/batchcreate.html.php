@@ -12,8 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1 fixed'> 
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-fixed table-form'> 
     <caption><?php echo $lang->bug->project . $lang->colon . $lang->bug->batchCreate;?></caption>
     <tr>
       <th class='w-20px'>     <?php echo $lang->idAB;?></th> 
@@ -29,12 +29,12 @@
     </tr>
 
    <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td class='a-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='select-1'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td><?php echo html::select("projects[$i]", $projects, $projectID, "class='select-1' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
-      <td class='a-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1 chosen' multiple data-placeholder=' '");?></td>
-      <td><?php echo html::input("titles[$i]", '', 'class=select-1');?></td>
+      <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1 chosen' multiple data-placeholder=' '");?></td>
+      <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
       <td><?php echo html::textarea("stepses[$i]", '', "rows='1' class=text-1");?></td>
       <td><?php echo html::select("types[$i]", $lang->bug->typeList, '');?></td>
       <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '');?></td>
@@ -42,7 +42,7 @@
       <td><?php echo html::select("browsers[$i]", $lang->bug->browserList, '');?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

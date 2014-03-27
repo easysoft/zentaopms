@@ -357,15 +357,17 @@ $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a>&nbsp; ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'><i class='icon-heart'></i> 捐赠</a>&nbsp; ";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>购买专业版(特惠)！</a>&nbsp; ";
+$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
+$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠 </a>";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-danger'>购买专业版(特惠)！</a>&nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
 
-$lang->noResultsMatch    = "没有匹配结果";
-$lang->chooseUsersToMail = "选择要发信通知的用户...";
+$lang->noResultsMatch     = "没有匹配结果";
+$lang->selectAnOption     = "选择一个选项";
+$lang->selectSomeOptions  = "选择一些选项";
+$lang->chooseUsersToMail  = "选择要发信通知的用户...";
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -400,5 +402,46 @@ $lang->datepicker->dpText->TEXT_CHOOSE_DATE = '选择日期';
 $lang->datepicker->dayNames     = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
+
+/* Common action icons 通用动作图标 */
+$lang->icons['todo']    = 'checked';
+$lang->icons['product'] = 'cube';
+$lang->icons['bug']     = 'bug';
+$lang->icons['task']    = 'check-sign';
+$lang->icons['tasks']   = 'tasks';
+$lang->icons['project'] = 'folder-close-alt';
+$lang->icons['doc']     = 'file-text';
+$lang->icons['story']   = 'lightbulb';
+$lang->icons['release'] = 'tags';
+$lang->icons['roadmap'] = 'code-fork';
+$lang->icons['plan']    = 'flag';
+$lang->icons['dynamic'] = 'volume-up';
+$lang->icons['build']   = 'tag';
+$lang->icons['test']    = 'check';
+$lang->icons['team']    = 'group';
+
+$lang->icons['create']         = 'plus';
+$lang->icons['batchCreate']    = 'plus-sign';
+$lang->icons['batchEdit']      = 'edit-sign';
+$lang->icons['batchClose']     = 'off';
+$lang->icons['edit']           = 'pencil';
+$lang->icons['delete']         = 'remove';
+$lang->icons['copy']           = 'copy';
+$lang->icons['report']         = 'bar-chart';
+$lang->icons['export']         = 'download-alt';
+$lang->icons['finish']         = 'ok-sign';
+$lang->icons['resolve']        = 'ok-sign';
+$lang->icons['start']          = 'play';
+$lang->icons['assign']         = 'hand-right';
+$lang->icons['assignTo']       = 'hand-right';
+$lang->icons['change']         = 'random';
+$lang->icons['link']           = 'link';
+$lang->icons['close']          = 'off';
+$lang->icons['activate']       = 'off';
+$lang->icons['review']         = 'search';
+$lang->icons['putoff']         = 'calendar';
+$lang->icons['suspend']        = 'pause';
+$lang->icons['cancel']         = 'ban-circle';
+$lang->icons['recordEstimate'] = 'time';
 
 include (dirname(__FILE__) . '/menuOrder.php');

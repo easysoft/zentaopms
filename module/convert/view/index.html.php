@@ -13,6 +13,6 @@
 <table align='center' class='table-5'>
   <caption><?php echo $lang->convert->common;?></caption>
   <tr><td><?php echo nl2br($lang->convert->desc);?></td></tr>
-  <tr><td><h3 class='a-center'><?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?></h3></td></tr>
+  <tr><td><h3 class='text-center'><?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?></h3></td></tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>

@@ -40,7 +40,7 @@
   <tbody>
     <?php foreach($stories as $key => $story):?>
       <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
-      <tr class='a-center'>
+      <tr class='text-center'>
       <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
       <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
       <td><?php echo $story->productTitle;?></td>

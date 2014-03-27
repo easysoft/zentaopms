@@ -81,11 +81,11 @@
         <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
         <table class='table-1 a-left'>
           <tr valign='middle'>
-            <th class='rowhead'><?php echo $lang->bug->product;?></th>
+            <th><?php echo $lang->bug->product;?></th>
             <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->module;?></th>
+            <th><?php echo $lang->bug->module;?></th>
             <td> 
               <?php
               if(empty($modulePath))
@@ -104,47 +104,47 @@
             </td>
           </tr>
           <tr valign='middle'>
-            <th class='rowhead'><?php echo $lang->bug->productplan;?></th>
+            <th><?php echo $lang->bug->productplan;?></th>
             <td><?php if(!$bug->plan or !common::printLink('productplan', 'linkBug', "planID=$bug->plan", $bug->planName)) echo $bug->planName;?>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->type;?></td>
+            <td><?php echo $lang->bug->type;?></td>
             <td><?php if(isset($lang->bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->severity;?></td>
+            <td><?php echo $lang->bug->severity;?></td>
             <td><strong><?php echo $lang->bug->severityList[$bug->severity];?></strong></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->pri;?></td>
+            <td><?php echo $lang->bug->pri;?></td>
             <td><strong><?php echo $lang->bug->priList[$bug->pri];?></strong></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->status;?></td>
+            <td><?php echo $lang->bug->status;?></td>
             <td><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->activatedCount;?></td>
+            <td><?php echo $lang->bug->activatedCount;?></td>
             <td><?php echo $bug->activatedCount;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->confirmed;?></td>
+            <td><?php echo $lang->bug->confirmed;?></td>
             <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->lblAssignedTo;?></td>
+            <td><?php echo $lang->bug->lblAssignedTo;?></td>
             <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->os;?></td>
+            <td><?php echo $lang->bug->os;?></td>
             <td><?php echo $lang->bug->osList[$bug->os];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->browser;?></td>
+            <td><?php echo $lang->bug->browser;?></td>
             <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
+            <td><?php echo $lang->bug->keywords;?></td>
             <td><?php echo $bug->keywords;?></td>
           </tr>
         </table>
@@ -179,7 +179,7 @@
             <td> <?php echo $users[$bug->openedBy] . $lang->at . $bug->openedDate;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
+            <th><?php echo $lang->bug->openedBuild;?></th>
             <td>
               <?php
               if($bug->openedBuild)
@@ -195,15 +195,15 @@
             </td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->lblResolved;?></th>
+            <th><?php echo $lang->bug->lblResolved;?></th>
             <td><?php if($bug->resolvedBy) echo $users[$bug->resolvedBy] . $lang->at . $bug->resolvedDate;?>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->resolvedBuild;?></th>
+            <th><?php echo $lang->bug->resolvedBuild;?></th>
             <td><?php if(isset($builds[$bug->resolvedBuild])) echo $builds[$bug->resolvedBuild]; else echo $bug->resolvedBuild;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->resolution;?></th>
+            <th><?php echo $lang->bug->resolution;?></th>
             <td>
               <?php
               echo $lang->bug->resolutionList[$bug->resolution];
@@ -212,11 +212,11 @@
             </td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->closedBy;?></th>
+            <th><?php echo $lang->bug->closedBy;?></th>
             <td><?php if($bug->closedBy) echo $users[$bug->closedBy] . $lang->at . $bug->closedDate;?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->bug->lblLastEdited;?></th>
+            <th><?php echo $lang->bug->lblLastEdited;?></th>
             <td><?php if($bug->lastEditedBy) echo $users[$bug->lastEditedBy] . $lang->at . $bug->lastEditedDate?></td>
           </tr>
         </table>
@@ -230,7 +230,7 @@
             <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
           </tr>
           <tr class='nofixed'>
-            <td class='rowhead'><?php echo $lang->bug->story;?></td>
+            <td><?php echo $lang->bug->story;?></td>
             <td>
               <?php
               if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story"), "#$bug->story $bug->storyTitle");
@@ -244,7 +244,7 @@
             </td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->task;?></td>
+            <td><?php echo $lang->bug->task;?></td>
             <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task"), $bug->taskName);?></td>
           </tr>
         </table>
@@ -257,7 +257,7 @@
             <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
+            <td><?php echo $lang->bug->linkBug;?></td>
             <td>
               <?php
               if(isset($bug->linkBugTitles))
@@ -271,15 +271,15 @@
             </td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->case;?></td>
+            <td><?php echo $lang->bug->case;?></td>
             <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->toStory;?></td>
+            <td><?php echo $lang->bug->toStory;?></td>
             <td><?php if($bug->toStory != 0) echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory"), "#$bug->toStory $bug->toStoryTitle", '_blank');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->toTask;?></td>
+            <td><?php echo $lang->bug->toTask;?></td>
             <td><?php if($bug->toTask != 0) echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
           </tr>
         </table>

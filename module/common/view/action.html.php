@@ -101,8 +101,7 @@ $(function(){
 
 <?php if(!isset($actionTheme)) $actionTheme = 'fieldset';?>
 <?php if($actionTheme == 'fieldset'):?>
-<div id='actionbox'>
-<fieldset>
+<fieldset id='actionbox'>
   <legend>
   <?php echo $lang->history?>
     <span onclick='toggleOrder(this)' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'></span>";?></span>
@@ -117,7 +116,6 @@ $(function(){
   </caption>
   <tr><td>
 <?php endif;?>
-
   <ol id='historyItem'>
     <?php $i = 1; ?>
     <?php foreach($actions as $action):?>
@@ -170,4 +168,3 @@ $(function(){
 <?php else:?>
 </td></tr></table>
 <?php endif;?>
-</div>

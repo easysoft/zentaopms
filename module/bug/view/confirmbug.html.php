@@ -17,27 +17,27 @@ include '../../common/view/chosen.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'confirmbug');
 ?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-form'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->assignedTo;?></th>
+      <th><?php echo $lang->bug->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->pri;?></th>
+      <th><?php echo $lang->bug->pri;?></th>
       <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=select-2');?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->mailto;?></th>
+      <th class='rowhead'><?php echo $lang->bug->mailto;?></td>
       <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="w-p98" multiple');?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></th>
+      <th class='rowhead'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
+      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>

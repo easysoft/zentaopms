@@ -19,7 +19,7 @@ js::set('holders', $lang->user->placeholder) ;
   <h1 style='margin-left:0px;margin-right:0px'><?php echo $app->company->name;?></h1>
 </div>
 <div data-role="content" >
-<form method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table align='center'> 
     <tr><td><?php echo html::input('account')?></td></tr>  
     <tr><td><?php echo html::password('password')?></td></tr>

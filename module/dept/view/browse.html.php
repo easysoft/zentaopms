@@ -21,7 +21,7 @@
           <tr>
             <td>
               <div id='main'><?php echo $depts;?></div>
-              <div class='a-center'><?php echo html::submitButton($lang->dept->updateOrder);?></div>
+              <div class='text-center'><?php echo html::submitButton($lang->dept->updateOrder);?></div>
             </td>
           </tr>
         </table>

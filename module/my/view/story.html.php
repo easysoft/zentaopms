@@ -11,22 +11,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
-  <div class='f-left'>
+  <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->my->story;?></div>
+  <nav class='nav'>
     <?php
-    echo "<span id='assignedToTab'>" . html::a(inlink('story', "type=assignedTo"),  $lang->my->storyMenu->assignedToMe) . "</span>";
-    echo "<span id='openedByTab'>"   . html::a(inlink('story', "type=openedBy"),    $lang->my->storyMenu->openedByMe)   . "</span>";
-    echo "<span id='reviewedByTab'>" . html::a(inlink('story', "type=reviewedBy"),  $lang->my->storyMenu->reviewedByMe) . "</span>";
-    echo "<span id='closedByTab'>"   . html::a(inlink('story', "type=closedBy"),    $lang->my->storyMenu->closedByMe)   . "</span>";
+    echo "<li id='assignedToTab'>" . html::a(inlink('story', "type=assignedTo"),  $lang->my->storyMenu->assignedToMe) . "</li>";
+    echo "<li id='openedByTab'>"   . html::a(inlink('story', "type=openedBy"),    $lang->my->storyMenu->openedByMe)   . "</li>";
+    echo "<li id='reviewedByTab'>" . html::a(inlink('story', "type=reviewedBy"),  $lang->my->storyMenu->reviewedByMe) . "</li>";
+    echo "<li id='closedByTab'>"   . html::a(inlink('story', "type=closedBy"),    $lang->my->storyMenu->closedByMe)   . "</li>";
     ?>
-  </div>
+  </nav>
 </div>
 <form method='post' id='myStoryForm'>
-<table class='table-1 tablesorter fixed colored'>
+<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
-    <tr class='colhead'>
+    <tr class='text-center'>
       <th class='w-id'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-pri'>   <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
       <th class='w-200px'> <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
@@ -46,7 +46,7 @@
     ?>
     <?php foreach($stories as $key => $story):?>
     <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
-    <tr class='a-center'>
+    <tr class='text-center'>
       <td>
         <?php if($canBatchEdit or $canBatchClose):?>
         <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
@@ -55,19 +55,19 @@
       </td>
       <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
       <td><?php echo $story->productTitle;?></td>
-      <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
       <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
       <td><?php echo $lang->story->stageList[$story->stage];?></td>
-      <td class='a-right'>
+      <td class='text-right'>
         <?php
-        common::printIcon('story', 'change',     "storyID=$story->id", $story, 'list');
-        common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list');
-        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list');
-        common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list');
-        common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'createCase');
+        common::printIcon('story', 'change',     "storyID=$story->id", $story, 'list', 'random');
+        common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list', 'search');
+        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', 'off', 'text-danger');
+        common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list', 'pencil');
+        common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'usecase');
         ?>
       </td>
     </tr>
@@ -75,22 +75,22 @@
   </tbody>
   <tfoot>
   <tr>
-    <td colspan='10' class='a-right'>
-      <div class='f-left'>
+    <td colspan='10'>
+      <div class='table-actions clearfix'>
       <?php
       if(count($stories))
       {
-          if($canBatchEdit or $canBatchClose) echo html::selectAll() . html::selectReverse();
+          if($canBatchEdit or $canBatchRun) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
          
           if($canBatchEdit)
           {
               $actionLink = $this->createLink('story', 'batchEdit');
-              echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+              echo html::commonButton("<i class='icon-edit'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\"");
           }
           if($canBatchClose)
           {
               $actionLink = $this->createLink('story', 'batchClose');
-              echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
+              echo html::commonButton("<i class='icon-off'></i> " . $lang->close, "onclick=\"setFormAction('$actionLink')\"");
           }
       }
       ?>

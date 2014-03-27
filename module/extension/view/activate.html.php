@@ -23,7 +23,7 @@
     else
     {
         echo "<h3 class='a-center success'>{$title}</h3>";
-        echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"') . '</p>';
+        echo "<p class='text-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"') . '</p>';
     }
     ?>
     </td>

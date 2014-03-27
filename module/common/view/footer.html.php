@@ -1,10 +1,10 @@
-  </div>
+  </div><?php /* end '.outer' in 'header.html.php'. */ ?>
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php print($config->debug ? 'debugwin' : 'hidden');?>'></iframe>
   <div id='divider'></div>
 <?php $onlybody = zget($_GET, 'onlybody', 'no');?>
 <?php if($onlybody != 'yes'):?>
-</div>
+</div><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id='footer'>
   <div id="crumbs">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>

@@ -45,7 +45,7 @@
         </tr>
         <?php foreach($stories as $storyID => $story):?>
         <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
-        <tr class='a-center'>
+        <tr class='text-center'>
           <td><?php echo sprintf('%03d', $story->id);?></td>
           <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
           <td class='a-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
@@ -70,7 +70,7 @@
         </tr>
         <?php foreach($bugs as $bug):?>
         <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-        <tr class='a-center'>
+        <tr class='text-center'>
           <td><?php echo sprintf('%03d', $bug->id);?></td>
           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
           <td><?php echo $lang->bug->statusList[$bug->status];?></td>
@@ -89,27 +89,27 @@
         <legend><?php echo $lang->build->basicInfo?></legend>
         <table class='table-1 a-left fixed'>
           <tr>
-            <th width='25%' class='a-right'><?php echo $lang->build->product;?></th>
+            <th width='25%' class='text-right'><?php echo $lang->build->product;?></th>
             <td><?php echo $build->productName;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->name;?></th>
+            <th><?php echo $lang->build->name;?></th>
             <td><?php echo $build->name;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->builder;?></th>
+            <th><?php echo $lang->build->builder;?></th>
             <td><?php echo $users[$build->builder];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->date;?></th>
+            <th><?php echo $lang->build->date;?></th>
             <td><?php echo $build->date;?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
+            <th><?php echo $lang->build->scmPath;?></th>
             <td><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->build->filePath;?></th>
+            <th><?php echo $lang->build->filePath;?></th>
             <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
           </tr>
         </table>

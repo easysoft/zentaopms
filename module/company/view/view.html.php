@@ -14,37 +14,37 @@
 <table align='center' class='table-5'> 
   <caption><?php echo $lang->company->view;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->company->name;?></th>
+    <th><?php echo $lang->company->name;?></th>
     <td><?php echo $company->name;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->phone;?></th>
+    <th><?php echo $lang->company->phone;?></th>
     <td><?php echo $company->phone;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->fax;?></th>
+    <th><?php echo $lang->company->fax;?></th>
     <td><?php echo $company->fax;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->address;?></th>
+    <th><?php echo $lang->company->address;?></th>
     <td><?php echo $company->address;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->zipcode;?></th>
+    <th><?php echo $lang->company->zipcode;?></th>
     <td><?php echo $company->zipcode;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->website;?></th>
+    <th><?php echo $lang->company->website;?></th>
     <td><?php echo $company->website;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->backyard;?></th>
+    <th><?php echo $lang->company->backyard;?></th>
     <td><?php echo $company->backyard;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->company->guest;?></th>
+    <th><?php echo $lang->company->guest;?></th>
     <td><?php echo $lang->company->guestList[$company->guest];?></td>
   </tr>  
-  <tr><td colspan='2' class='a-center'><?php common::printLink('company', 'edit', '', '<i class="icon-pencil"></i> ' . $lang->edit, '', 'id="editCompany" class="btn"', true, true);?></td></tr>
+  <tr><td colspan='2' class='text-center'><?php common::printLink('company', 'edit', '', '<i class="icon-pencil"></i> ' . $lang->edit, '', 'id="editCompany" class="btn"', true, true);?></td></tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>

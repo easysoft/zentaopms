@@ -13,17 +13,26 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmRecord', $lang->task->confirmRecord);?>
-<form id="recordForm" method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $task->name;?></caption>
-    <tr>
-      <th class="w-id"><?php echo $lang->idAB;?></th>
-      <th class="w-100px"><?php echo $lang->task->date;?></th>
-      <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
-      <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
-      <th><?php echo $lang->comment;?></th>
-      <th class="w-60px"><?php echo $lang->actions;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;;?></span>
+    <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->task->logEfforts;?> <?php echo html::icon($lang->icons['recordEstimate']);?></small>
+  </div>
+</div>
+<form class='form-condensed' id="recordForm" method='post' target='hiddenwin'>
+  <table class='table table-form'>
+    <?php if(count($estimates)):?>
+    <thead>
+      <tr class='text-center'>
+        <th class="w-id"><?php echo $lang->idAB;?></th>
+        <th class="w-100px"><?php echo $lang->task->date;?></th>
+        <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
+        <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
+        <th><?php echo $lang->comment;?></th>
+        <th class="w-60px"><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
     <?php foreach($estimates as $estimate):?>
     <tr class="a-center">
       <td><?php echo $estimate->id;?></td>
@@ -35,35 +44,35 @@
         <?php
         if($task->status == 'wait' or $task->status == 'doing')
         {
-            common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', 'showinonlybody', true);
-            common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', '', 'hiddenwin', 'showinonlybody');
+            common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
+            common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'remove', 'hiddenwin', 'showinonlybody');
         }
         ?>
       </td>
     </tr>
     <?php endforeach;?>
-  </table>
-  <?php if($task->status == 'wait' or $task->status == 'doing'):?>
-  <table class='table-1'>
-    <caption><?php echo $lang->task->logEfforts;?></caption>
-    <tr>
-      <th class="w-id"><?php echo $lang->idAB;?></th>
-      <th class="w-120px"><?php echo $lang->task->date;?></th>
-      <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
-      <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
-      <th><?php echo $lang->comment;?></th>
-    </tr>
+    <?php endif;?>
+    <?php if($task->status == 'wait' or $task->status == 'doing'):?>
+    <thead>
+      <tr class='text-center'>
+        <th class="w-id"><?php echo $lang->idAB;?></th>
+        <th class="w-120px"><?php echo $lang->task->date;?></th>
+        <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
+        <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
+        <th><?php echo $lang->comment;?></th><th></th>
+      </tr>
+    </thead>
     <?php for($i = 1; $i <= 5; $i++):?>
-    <tr class="a-center">
+    <tr class="text-center">
       <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
-      <td><?php echo html::input("dates[$i]", '', "class='text-6 a-center date'");?></td>
-      <td><?php echo html::input("consumed[$i]", '', "class='text-1 a-center'");?></td>
-      <td><?php echo html::input("left[$i]", '', "class='text-1 a-center left'");?></td>
-      <td class="a-left"><?php echo html::textarea("work[$i]", '', "class='text-1' rows='1'");?></td>
+      <td><?php echo html::input("dates[$i]", '', "class='form-control text-center form-datetime'");?></td>
+      <td><?php echo html::input("consumed[$i]", '', "class='form-control text-center'");?></td>
+      <td><?php echo html::input("left[$i]", '', "class='form-control text-center left'");?></td>
+      <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' rows='1'");?></td>
     </tr>
     <?php endfor;?>
     <tr>
-      <td colspan='6' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
+      <td colspan='6' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
   <?php endif;?>

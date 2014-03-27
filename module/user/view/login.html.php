@@ -11,47 +11,39 @@
 include '../../common/view/header.lite.html.php';
 ?>
 
-<div id="container">
-  <div id="login-panel">
-    <div class="panel-head">
-      <h3><?php printf($lang->welcome, $app->company->name);?></h3>
-      <div class="nav">
-        <a href="###" id="lang" class="btn" title="Change Language/更换语言/更換語言"><?php echo $config->langs[$this->app->getClientLang()]; ?> <i class="icon-caret-down"></i></a>
-        <a href="###" id="mobile" class="btn" title="<?php echo $lang->user->mobileLogin; ?>"><i class="icon-mobile-phone icon-2x"></i></a>
-        <ul class="droppanel" id="langs">
-          <?php foreach($config->langs as $key => $value):?>
-          <li><a href="###" data-value="<?php echo $key; ?>" class="<?php echo $key==$this->app->getClientLang()?'active':''; ?>"><?php echo $value; ?></a></li>
-          <?php endforeach;?>
-        </ul> 
-        <div class="droppanel" id="qrcode">
-          <h4><i class="icon-mobile-phone icon-large"></i> <?php echo $lang->user->mobileLogin ?></h4>
-          <?php if(extension_loaded('gd')):?>
-          <img src='<?php echo $this->createLink('misc', 'qrcode');?>' />
-          <?php else:?>
-          <table width='300' class='mt-10px bd-none'>
-            <tr><td><?php echo $noGDLib;?></td></tr>
-          </table>
-          <?php endif;?>
+<div id='container'>
+  <div id='login-panel'>
+    <div class='panel-head'>
+      <h4><?php printf($lang->welcome, $app->company->name);?></h4>
+      <div class='panel-actions'>
+        <div class='dropdown' id='langs'>
+          <button class='btn' data-toggle='dropdown' title='Change Language/更换语言/更換語言'><?php echo $config->langs[$this->app->getClientLang()]; ?> <span class="caret"></span></button>
+          <ul class='dropdown-menu'>
+            <?php foreach($config->langs as $key => $value):?>
+            <li class="<?php echo $key==$this->app->getClientLang()?'active':''; ?>"><a href="###" data-value="<?php echo $key; ?>"><?php echo $value; ?></a></li>
+            <?php endforeach;?>
+          </ul>
         </div>
+        <button data-placement='bottom' data-toggle='popover' data-content="<?php if(extension_loaded('gd')) echo "<img height='297' width='297' src='" . $this->createLink('misc', 'qrcode') . "' />"; else echo $noGDLib; ?>" data-original-title="<i class='icon-mobile-phone'></i> <?php echo $lang->user->mobileLogin;?>" id='mobile' class='btn' title='<?php echo $lang->user->mobileLogin; ?>'><i class='icon-mobile-phone'></i></button>
       </div>
     </div>
     <div class="panel-content" id="login-form">
-      <form method='post' target='hiddenwin'>
-        <table>
+      <form method='post' target='hiddenwin' class='form-condensed'>
+        <table class='table table-form'>
           <tr>
-            <td class="attr"><?php echo $lang->user->account;?></td>
-            <td><input class='text-2' type='text' name='account' id='account' /></td>
+            <th><?php echo $lang->user->account;?></th>
+            <td><input class='form-control' type='text' name='account' id='account' /></td>
           </tr>
           <tr>
-            <td class="attr"><?php echo $lang->user->password;?></td>
-            <td><input class='text-2' type='password' name='password' /></td>
+            <th><?php echo $lang->user->password;?></th>
+            <td><input class='form-control' type='password' name='password' /></td>
           </tr>
           <tr>
-            <td class="attr"></td>
+            <th></th>
             <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
           </tr>
           <tr>
-            <td></td>
+            <th></th>
             <td>
             <?php 
             echo html::submitButton($lang->login);
@@ -76,7 +68,7 @@ include '../../common/view/header.lite.html.php';
       if(isset($demoUsers['tester1']))        echo html::a(inlink('login') . $sign . "account=tester1&password=123456",        $demoUsers['tester1'],        'hiddenwin');
       ?>  
     </div>  
-    <?php endif;?>  
+    <?php endif;?>
   </div>
   <div id="poweredby">
     powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>)
