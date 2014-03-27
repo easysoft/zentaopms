@@ -709,8 +709,10 @@ class project extends control
 
         $charts = $this->report->createJSChartFlot($project->name, $flotJSON, 900, 400);
 
+        /* Set a space when assemble the string for english. */
+        $space   = $this->app->getClientLang() == 'en' ? ' ' : '';
         $dayList = array_fill(1, floor(count($dateList) / $this->config->project->maxBurnDay) + 5, '');
-        foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
+        foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . $space . ($key + 1) . $space . $this->lang->day;
 
         /* Assign. */
         $this->view->title     = $title;
@@ -720,7 +722,7 @@ class project extends control
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
         $this->view->interval  = $interval;
-        $this->view->dayList   = array('full' => $this->lang->project->interval . 1 . $this->lang->day) + $dayList;
+        $this->view->dayList   = array('full' => $this->lang->project->interval . $space . 1 . $space . $this->lang->day) + $dayList;
 
         $this->display();
     }

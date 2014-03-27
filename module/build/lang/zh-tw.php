@@ -28,7 +28,7 @@ $lang->build->name      = '名稱編號';
 $lang->build->date      = '打包日期';
 $lang->build->builder   = '構建者';
 $lang->build->scmPath   = '原始碼地址';
-$lang->build->filePath  = '存儲地址';
+$lang->build->filePath  = '下載地址';
 $lang->build->desc      = '描述';
 $lang->build->files     = '上傳發行包';
 $lang->build->last      = '上個版本';
@@ -37,10 +37,6 @@ $lang->build->linkStories        = '相關需求';
 $lang->build->linkBugs           = '相關Bug';
 $lang->build->stories            = '已關聯需求';
 $lang->build->bugs               = '已關聯Bug';
-$lang->build->packageType        = '發行包方式';
 
 $lang->build->finishStories = '本次共完成需求%s個';
 $lang->build->resolvedBugs  = '本次共解決Bug%s個';
-
-$lang->build->packageTypeList['path'] = '檔案共享';
-$lang->build->packageTypeList['file'] = '上傳附件';

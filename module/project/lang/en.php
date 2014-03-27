@@ -194,7 +194,7 @@ $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back';
 $lang->project->linkProduct           = 'Select product to link...';
 $lang->project->noweekend             = 'No weekend';
-$lang->project->widthweekend          = 'Width weekend';
+$lang->project->withweekend           = 'With weekend';
 $lang->project->interval              = 'Interval';
 
 /* Report. */

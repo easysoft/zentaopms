@@ -24,7 +24,7 @@
 
 <table class='table tablesorter table-fixed' id='buildList'>
   <thead>
-    <tr>
+    <tr class='colhead'>
       <th class='w-id'><?php echo $lang->build->id;?></th>
       <th class='w-120px'><?php echo $lang->build->product;?></th>
       <th><?php echo $lang->build->name;?></th>
