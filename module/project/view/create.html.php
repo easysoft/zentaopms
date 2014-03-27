@@ -53,7 +53,7 @@ $(document).ready(function() {$('#tipsModal').modal('show');});
       </div>
       <div class='btn-group'>
         <a class='btn text-danger' href='javascript:setCopyProject("");'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?> ?</a>
-        <button class='btn btn-primary' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->reCopyProject;?> ?</button>
+        <button class='btn btn-primary' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->reCopy;?> ?</button>
       </div>
       <?php else:?>
       <button class='btn btn-primary' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copy;?> ?</button>

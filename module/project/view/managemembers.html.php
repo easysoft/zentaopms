@@ -13,70 +13,120 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('roles', $roles);?>
-<form method='post'>
-  <table align='center' class='table-4 a-center'> 
-    <caption>
-      <div class='f-left'><?php echo $lang->project->manageMembers;?></div>
-      <div class='text-right'><?php echo html::select('teams2Import', $teams2Import, $team2Import, 'onchange=importTeam()');?></div>
-    </caption>
-    <tr>
-      <th><?php echo $lang->team->account;?></th>
-      <th><?php echo $lang->team->role;?></th>
-      <th><?php echo $lang->team->days;?></th>
-      <th><?php echo $lang->team->hours;?></th>
-    </tr>
-    <?php $i = 1; $memberCount = 0;?>
-    <?php foreach($currentMembers as $member):?>
-    <?php if(!isset($users[$member->account])) continue; $realname = substr($users[$member->account], 2);?>
-    <?php unset($users[$member->account]);?>
-    <tr>
-      <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $realname;?>' readonly class='text-2' /></td>
-      <td><input type='text' name='roles[]'     id='role<?php echo $i;?>'    value='<?php echo $member->role;?>' class='text-2' /></td>
-      <td><input type='text' name='days[] '     id='days<?php echo $i;?>'    value='<?php echo $member->days;?>' class='text-2' /></td>
-      <td>
-        <input type='text'   name='hours[]' id='hours<?php echo $i;?>' value='<?php echo $member->hours;?>' class='text-2' />
-        <input type='hidden' name='modes[]' value='update' />
-        <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
-      </td>
-    </tr>
-    <?php $i ++; $memberCount ++;?>
-    <?php endforeach;?>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['team']);?></span>
+      <strong> <?php echo $lang->project->manageMembers;?></strong>
+      <small class='text-muted'><i class='icon icon-cogs'></i></small>
+    </div>
+    <div class='actions'>
+      <?php if($team2Import != 0):?>
+      <div class='text text-success'>
+        <i class='icon-ok-sign'></i> <?php printf($lang->project->copyFromTeam, html::icon($lang->icons['group']) . ' ' . $teams2Import[$team2Import]);?>
+      </div>
+      <div class='btn-group'>
+        <a class='btn text-danger' href='javascript:importTeam(0);'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?> ?</a>
+        <button class='btn btn-primary' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->reCopy;?> ?</button>
+      </div>
+      <?php else:?>
+      <button class='btn btn-primary' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?> ?</button>
+      <?php endif; ?>
+    </div>
+  </div>
+  <form class='form-condensed' method='post'>
+    <table class='table table-form'>
+      <thead>
+        <tr class='text-center'>
+          <th><?php echo $lang->team->account;?></th>
+          <th><?php echo $lang->team->role;?></th>
+          <th class='w-100px'><?php echo $lang->team->days;?></th>
+          <th class='w-100px'><?php echo $lang->team->hours;?></th>
+        </tr>
+      </thead>
+      <?php $i = 1; $memberCount = 0;?>
+      <?php foreach($currentMembers as $member):?>
+      <?php if(!isset($users[$member->account])) continue; $realname = substr($users[$member->account], 2);?>
+      <?php unset($users[$member->account]);?>
+      <tr>
+        <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $realname;?>' readonly class='form-control' /></td>
+        <td><input type='text' name='roles[]'     id='role<?php echo $i;?>'    value='<?php echo $member->role;?>' class='form-control' /></td>
+        <td><input type='text' name='days[] '     id='days<?php echo $i;?>'    value='<?php echo $member->days;?>' class='form-control' /></td>
+        <td>
+          <input type='text'   name='hours[]' id='hours<?php echo $i;?>' value='<?php echo $member->hours;?>' class='form-control' />
+          <input type='hidden' name='modes[]' value='update' />
+          <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
+        </td>
+      </tr>
+      <?php $i ++; $memberCount ++;?>
+      <?php endforeach;?>
 
-    <?php foreach($members2Import as $member2Import):?>
-    <tr>
-      <td><?php echo html::select("accounts[$memberCount]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
-      <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='text-2' value='<?php echo $member2Import->role;?>' /></td>
-      <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='text-2' value='<?php echo $project->days?>'/></td>
-      <td>
-        <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='text-2' value='<?php echo $member2Import->hours;?>' />
-        <input type='hidden' name='modes[]' value='create' />
-      </td>
-    </tr>
-    <?php $i ++; $memberCount ++;?>
-    <?php endforeach;?>
+      <?php foreach($members2Import as $member2Import):?>
+      <tr>
+        <td><?php echo html::select("accounts[$memberCount]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+        <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->role;?>' /></td>
+        <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
+        <td>
+          <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->hours;?>' />
+          <input type='hidden' name='modes[]' value='create' />
+        </td>
+      </tr>
+      <?php $i ++; $memberCount ++;?>
+      <?php endforeach;?>
 
-    <?php
-    $count = count($users) - 1;
-    if($count > PROJECTMODEL::LINK_MEMBERS_ONE_TIME) $count = PROJECTMODEL::LINK_MEMBERS_ONE_TIME;
-    ?>
+      <?php
+      $count = count($users) - 1;
+      if($count > PROJECTMODEL::LINK_MEMBERS_ONE_TIME) $count = PROJECTMODEL::LINK_MEMBERS_ONE_TIME;
+      ?>
 
-    <?php for($j = 0; $j < $count; $j ++):?>
-    <tr>
-      <td><?php echo html::select("accounts[$memberCount]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
-      <td><input type='text' name='roles[]' id='role<?php echo ($i);?>' class='text-2' /></td>
-      <td><input type='text' name='days[]'  id='days<?php echo  ($i);?>' class='text-2' value='<?php echo $project->days?>'/></td>
-      <td>
-        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='text-2' value='7' />
-        <input type='hidden' name='modes[]' value='create' />
-      </td>
-    </tr>
-    <?php $i ++; $memberCount ++;?>
-    <?php endfor;?>
-    <tr>
-      <td colspan='4'>
-        <input type='submit' name='submit' value='<?php echo $lang->save;?>' class='button-s' />
-      </td>
-    </tr>
-  </table>
-</form>
+      <?php for($j = 0; $j < $count; $j ++):?>
+      <tr>
+        <td><?php echo html::select("accounts[$memberCount]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+        <td><input type='text' name='roles[]' id='role<?php echo ($i);?>' class='form-control' /></td>
+        <td><input type='text' name='days[]'  id='days<?php echo  ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
+        <td>
+          <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='7' />
+          <input type='hidden' name='modes[]' value='create' />
+        </td>
+      </tr>
+      <?php $i ++; $memberCount ++;?>
+      <?php endfor;?>
+      <tr>
+        <td colspan='4' class='text-center'>
+          <?php echo html::submitButton() ?>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<div class='modal fade' id='importTeamModal'>
+  <div class='modal-dialog mw-700px'>
+    <div class='modal-header'>
+      <button type='button' class='close' data-dismiss='modal'>&times;</button>
+      <h4 class='modal-title' id='myModalLabel'><i class='icon-copy'></i> <?php echo $lang->project->copyTeam;?> <small><?php echo $lang->project->copyTeamTitle;?></small></h4>
+    </div>
+    <div class='modal-body'>
+      <?php if(count($teams2Import) == 1):?>
+      <div class='alert alert-warning'>
+        <i class='icon-info-sign'></i>
+        <div class='content'>
+          <p><?php echo $lang->project->copyNoProject;?></p>
+        </div>
+      </div>
+      <?php else:?>
+      <div id='importTeams' class='row'>
+      <?php foreach ($teams2Import as $id => $name):?>
+      <?php if(empty($id)):?>
+        <?php if($team2Import != 0):?>
+        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
+        <?php endif;?>
+      <?php else: ?>
+        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($team2Import == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['team'], 'text-muted') . ' ' . $name;?></a></div>
+      <?php endif; ?>
+      <?php endforeach;?>
+      </div>
+      <?php endif;?>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

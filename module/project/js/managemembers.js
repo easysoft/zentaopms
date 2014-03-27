@@ -4,9 +4,10 @@
  * @access public
  * @return void
  */
-function importTeam()
+function importTeam(val)
 {
-    location.href = createLink('project', 'manageMembers', 'project=' + projectID + '&teamImport=' + $('#teams2Import').val());
+    if(val == undefined) val = $('#teams2Import').val();
+    location.href = createLink('project', 'manageMembers', 'project=' + projectID + '&teamImport=' + val);
 }
 
 /**
@@ -23,3 +24,10 @@ function setRole(account, roleID)
     roleOBJ = $('#role' + roleID);  // get role object.
     roleOBJ.val(role)               // set the role.
 }
+
+$(function()
+{
+    $('#itBtn').click(function(){$('#importTeamModal').modal('show')});
+    $('#importTeams a').click(function(){importTeam($(this).data('id')); $('#importTeamModal').modal('hide')});
+});
+

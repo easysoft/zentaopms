@@ -182,11 +182,13 @@ $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查
 $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';
 $lang->project->copyTeam        = '复制团队';
+$lang->project->copyFromTeam    = '复制自项目团队： <strong>%s</strong>';
 $lang->project->noMatched       = '找不到包含"%s"的项目';
 $lang->project->copyTitle       = '请选择一个项目来复制';
+$lang->project->copyTeamTitle   = '请选择一个已有的项目团队';
 $lang->project->copyNoProject   = '没有可用的项目来复制';
 $lang->project->copyFromProject = '复制自项目： <strong>%s</strong>';
-$lang->project->reCopyProject   = '重新复制';
+$lang->project->reCopy          = '重新复制';
 $lang->project->cancelCopy      = '取消复制';
 $lang->project->byPeriod        = '按时间段';
 

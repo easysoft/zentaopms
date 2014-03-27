@@ -52,11 +52,11 @@
                     echo html::select('list2Append', array('' => '') + $lists, '', "class='select-2'") . $lang->user->contacts->or;
                 }
                 echo $lang->user->contacts->createList;
-                echo html::input('newList', '', "class='text-2'");
+                echo html::input('newList', '', "class='form-control'");
             }
             else
             {
-                echo html::input('listName', $list->listName, "class='text-2'");
+                echo html::input('listName', $list->listName, "class='form-control'");
                 echo html::hidden('listID',  $list->id);
             }
             ?>

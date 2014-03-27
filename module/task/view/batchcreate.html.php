@@ -66,7 +66,7 @@
       <td>
         <div class='input-group'>
           <span class='input-group-btn'>
-          <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-double-angle-right'></i></a>
+          <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
           </span>
           <?php echo html::input("name[$i]", '', 'class=form-control');?>
         </div>

@@ -81,7 +81,7 @@
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>'><div id='suhosinInfo' class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
     <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
