@@ -134,7 +134,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table-1 a-left'>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->bug->project;?></td>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, 'class=select-3 onchange=loadProjectRelated(this.value)');?></span></td>
+            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, 'class=form-control onchange=loadProjectRelated(this.value)');?></span></td>
           </tr>
           <tr>
             <td><?php echo $lang->bug->story;?></td>
@@ -173,7 +173,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <td><?php echo $lang->bug->resolution;?></td>
-            <td><?php echo html::select('resolution', $lang->bug->resolutionList, $bug->resolution, 'class=select-3 onchange=setDuplicate(this.value)');?></td>
+            <td><?php echo html::select('resolution', $lang->bug->resolutionList, $bug->resolution, 'class=form-control onchange=setDuplicate(this.value)');?></td>
           </tr>
           <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
             <td><?php echo $lang->bug->duplicateBug;?></td>

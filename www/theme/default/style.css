@@ -286,6 +286,9 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .fileBox .form-control[type='text'] {height: 30px;}
 .fileBox .input-control {display: table-cell; border: 1px solid #ccc; padding: 0 10px; border-radius: 2px 0 0 2px}
 
+/* Bug status */
+.bug-closed, .bug-closed a {color: #808080; text-decoration: line-through;}
+
 /* === Layout === */
 /* Background */
 body {font-size: 12px; color:#141414;padding-bottom: 40px;}
@@ -405,7 +408,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
 .outer .table.table-form tr > th:last-child, .outer .table.table-form tr > td:last-child {padding-right: 5px}
 .outer .table.table-form.table-fixed tr > th:last-child, .outer .table.table-form.table-fixed tr > td:last-child {padding-right: 15px}
-.outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 8px}
+.outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5;}
 .outer .table-form .table tr > th:first-child, .outer .table-form .table tr > td:first-child {padding-left: 5px}
 .outer .table-form .table tr > th:last-child, .outer .table-form .table tr > td:last-child {padding-right: 5px}
 .outer .table-form .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 5px}

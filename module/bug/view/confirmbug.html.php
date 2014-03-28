@@ -17,29 +17,39 @@ include '../../common/view/chosen.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'confirmbug');
 ?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;;?></span>
+    <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->bug->confirmBug;?> <?php echo html::icon($lang->icons['confirm']);?></small>
+  </div>
+</div>
+
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'>
-    <caption><?php echo $bug->title;?></caption>
     <tr>
-      <th><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
+      <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
+      <td class='w-p45'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
+      <td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->bug->pri;?></th>
-      <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=select-2');?></td>
+      <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=form-control');?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->mailto;?></td>
-      <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="w-p98" multiple');?></td>
+      <th><?php echo $lang->bug->mailto;?></th>
+      <td colspan='2'><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="form-control chosen" multiple');?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>
+      <th><?php echo $lang->comment;?></th>
+      <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
+      <td colspan='3' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -44,7 +44,7 @@ js::set('refresh', $lang->refresh);
     </tr>  
     <tr>
       <th><?php echo $lang->bug->project;?></th>
-      <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=select-3 onchange=loadProjectRelated(this.value) autocomplete="off"');?></span></td>
+      <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value) autocomplete="off"');?></span></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->openedBuild;?></th>
@@ -84,15 +84,15 @@ js::set('refresh', $lang->refresh);
     <tr>
       <th><?php echo $lang->bug->lblTypeAndSeverity;?></th>
       <td> 
-        <?php echo html::select('type', $lang->bug->typeList, $type, 'class=select-2');?> 
-        <?php echo html::select('severity', $lang->bug->severityList, $severity, 'class=select-2');?>
+        <?php echo html::select('type', $lang->bug->typeList, $type, 'class=form-control');?> 
+        <?php echo html::select('severity', $lang->bug->severityList, $severity, 'class=form-control');?>
       </td>
     </tr>
     <tr>
       <th><nobr><?php echo $lang->bug->lblSystemBrowserAndHardware;?></nobr></th>
       <td>
-        <?php echo html::select('os', $lang->bug->osList, $os, 'class=select-2');?>
-        <?php echo html::select('browser', $lang->bug->browserList, $browser, 'class=select-2');?>
+        <?php echo html::select('os', $lang->bug->osList, $os, 'class=form-control');?>
+        <?php echo html::select('browser', $lang->bug->browserList, $browser, 'class=form-control');?>
       </td>
     </tr>
     <tr>

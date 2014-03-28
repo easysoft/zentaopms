@@ -50,7 +50,7 @@
     <tr>
       <th><?php echo $lang->todo->beginAndEnd;?></th>
       <td>
-        <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=select-2');?>
+        <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=form-control');?>
         <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> ><?php echo $lang->todo->lblDisableDate;?>
       </td>
     </tr>  

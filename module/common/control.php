@@ -299,7 +299,6 @@ class common extends control
             $icon = $lang->icons[$method] ? $lang->icons[$method] : $method;
         }
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
-        $extraClass = strpos(',export,customFields,', ",$method,") !== false ? $method : $extraClass;
         $class = "icon-$module-$method";
         if(!$clickable) $class .= ' disabled';
         if($icon) $class       .= ' icon-' . $icon;

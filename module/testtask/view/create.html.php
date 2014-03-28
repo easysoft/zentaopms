@@ -29,7 +29,7 @@
     <?php endif;?>
     <tr>
       <th><?php echo $lang->testtask->project;?></th>
-      <td><?php echo html::select('project', $projects, '', 'class=select-3 onchange=loadProjectRelated(this.value)');?></td>
+      <td><?php echo html::select('project', $projects, '', 'class=form-control onchange=loadProjectRelated(this.value)');?></td>
     </tr>  
     <tr>
       <th><?php echo $lang->testtask->build;?></th>

@@ -12,17 +12,28 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;;?></span>
+    <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
+    <small class='text-danger'> <?php echo $lang->bug->close;?> <?php echo html::icon($lang->icons['close']);?></small>
+  </div>
+</div>
+
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'>
-    <caption><?php echo $bug->title;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></th>
+      <th class='text-left'><?php echo $lang->comment;?></th>
+    </tr>
+    <tr>
       <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
+      <td class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

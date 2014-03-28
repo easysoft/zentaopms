@@ -460,7 +460,7 @@ class product extends control
     public function ajaxGetProjects($productID, $projectID = 0)
     {
         $projects = $this->product->getProjectPairs($productID, $params = 'nodeleted');
-        die(html::select('project', $projects, $projectID, 'class=select-3 onchange=loadProjectRelated(this.value)'));
+        die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
     }
 
     /**

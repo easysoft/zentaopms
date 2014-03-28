@@ -439,9 +439,11 @@ $lang->icons['link']           = 'link';
 $lang->icons['close']          = 'off';
 $lang->icons['activate']       = 'off';
 $lang->icons['review']         = 'search';
+$lang->icons['confirm']        = 'search';
 $lang->icons['putoff']         = 'calendar';
 $lang->icons['suspend']        = 'pause';
 $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
+$lang->icons['customFields']   = 'cogs';
 
 include (dirname(__FILE__) . '/menuOrder.php');

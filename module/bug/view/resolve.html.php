@@ -12,37 +12,48 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;;?></span>
+    <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
+    <small class='text-success'> <?php echo $lang->bug->resolve;?> <?php echo html::icon($lang->icons['resolve']);?></small>
+  </div>
+</div>
+
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'>
-    <caption><?php echo $bug->title;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->resolution;?></td>
-      <td><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=select-3 onchange=setDuplicate(this.value)');?></td>
+      <th class='w-80px'><?php echo $lang->bug->resolution;?></th>
+      <td class='w-p45'><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td><td></td>
     </tr>
     <tr id='duplicateBugBox' style='display:none'>
-      <th class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
+      <th><?php echo $lang->bug->duplicateBug;?></th>
       <td><?php echo html::input('duplicateBug', '', "class='form-control'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
+      <th><?php echo $lang->bug->resolvedBuild;?></th>
       <td><?php echo html::select('resolvedBuild', $builds, '', "class='form-control'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
-      <td><?php echo html::input('resolvedDate', helper::now(), "class='form-control'");?></td>
+      <th><?php echo $lang->bug->resolvedDate;?></th>
+      <td><?php echo html::input('resolvedDate', helper::now(), "class='form-control form-date'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
+      <th><?php echo $lang->bug->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='form-control chosen'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+      <th><?php echo $lang->comment;?></th>
+      <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
+      <td colspan='3' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

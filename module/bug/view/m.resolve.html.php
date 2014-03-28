@@ -5,7 +5,7 @@
   <table class='table-1'>
     <tr>
       <td class='w-80px'><?php unset($lang->bug->resolutionList['tostory']); echo $lang->bug->resolution ;?></td>
-      <td><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=select-3 onchange=setDuplicate(this.value)');?></div>
+      <td><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></div>
     </tr>
     <tr id='duplicateBugBox' style='display:none'>
       <td class='w-80px'><?php echo $lang->bug->duplicateBug;?></td>
