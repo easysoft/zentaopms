@@ -22,6 +22,7 @@
 
 /* paddings */
 .pd-0 {padding: 0 !important}
+.mg-0 {margin: 0 !important}
 
 /* Style of text */
 .text-latin {font-family: Arial;}
@@ -237,6 +238,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed .table-fixed select.form-control {padding: 5px}
 .form-condensed .chosen-container {font-size: 12px}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
+.form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
 
 /* help in form */
 .help-block {margin-bottom: 5px;}

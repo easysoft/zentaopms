@@ -854,7 +854,7 @@ function setModal()
 
                         setTimeout(function()
                         {
-                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').height()}, 100);
+                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
                         }, 100);
                     }
                     catch(e){}

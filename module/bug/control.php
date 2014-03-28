@@ -1007,7 +1007,7 @@ class bug extends control
         $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID);
         $assignedToList = array_merge($projectMembers, $allUsers);
         
-        die(html::select('assignedTo', $assignedToList, $selectedUser, 'class="select-3"'));
+        die(html::select('assignedTo', $assignedToList, $selectedUser, 'class="form-control"'));
     }
 
     /**

@@ -22,11 +22,11 @@
     </tr>  
     <tr>
       <th><?php echo $lang->task->record;?></th>
-      <td><?php echo html::input('consumed', $estimate->consumed, 'class="select-3"');?></td>
+      <td><?php echo html::input('consumed', $estimate->consumed, 'class="form-control"');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', $estimate->left, 'class="select-3"');?></td>
+      <td><?php echo html::input('left', $estimate->left, 'class="form-control"');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->comment;?></th>

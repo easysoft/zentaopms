@@ -16,7 +16,7 @@
   <caption><?php echo $lang->story->activate;?></caption>
   <tr>
     <th><?php echo $lang->story->assignedTo;?></th>
-    <td><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="select-3"');?></td>
+    <td><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control"');?></td>
   </tr>
   <tr>
     <th><?php echo $lang->story->comment;?></th>

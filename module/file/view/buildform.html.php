@@ -19,7 +19,7 @@ EOT;
 </div>
 
 <?php if(!$writeable):?>
-<h5 class='text-danger a-left'> <?php echo $this->lang->file->errorUnwritable;?> </h5>
+<div class='text-danger help-block'> <?php echo $this->lang->file->errorUnwritable;?> </div>
 <?php else:?>
 <div class="file-form">
   <?php for($i = 0; $i < $fileCount; $i ++):?>

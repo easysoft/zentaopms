@@ -218,7 +218,7 @@ function setStories(moduleID, productID)
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
-        if(!stories) stories = '<select id="story" name="story" class="select-3"></select>';
+        if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
         $('#story').replaceWith(stories);
         $('#story_chzn').remove();
         $("#story").chosen({no_results_text: ''});
