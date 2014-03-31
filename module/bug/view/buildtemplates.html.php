@@ -5,9 +5,9 @@ KindEditor.lang({'savetemplate' : '<?php echo $lang->bug->saveTemplate;?>'});
 <?php 
 foreach($templates as $key => $template)
 {
-    echo "<span id='tplBox$template->id'>";
-    echo '<nobr>' . $lang->arrow. " <span id='tplTitleBox$template->id' onclick='setTemplate($template->id)' style='text-decoration:underline; color:blue' class='hand'>$template->title</span>";
-    echo "&nbsp; <a href='javascript:void();' onclick='deleteTemplate($template->id)' class='link-icon'><i class='icon-remove icon-sm'></i></a></nobr>";
+    echo "<li id='tplBox$template->id' class='nobr'>";
+    echo $lang->arrow. " <a id='tplTitleBox$template->id' href='javascript:setTemplate($template->id)'>$template->title</a>";
+    echo "&nbsp; <a href='javascript:void();' onclick='deleteTemplate($template->id)'><i class='icon-remove'></i></a>";
     echo "<span id='template$template->id' class='hidden'>$template->content</span>";
-    echo '<br /></span>';
+    echo '</li>';
 }

@@ -19,7 +19,7 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->task->create;?></strong>
+      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->task->create;?></strong>
     </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>

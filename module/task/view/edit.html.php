@@ -32,19 +32,21 @@
   <div class='col-md-8'>
     <div class='main'>
       <div class='form-group'>
-        <?php echo html::input('name', $task->name, 'class="form-control"');?>
+        <?php echo html::input('name', $task->name, 'class="form-control" placeholder="' . $lang->task->name . '"');?>
       </div>
       <fieldset>
         <legend><?php echo $lang->task->desc;?></legend>
-        <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='form-control'");?>
+        <div class='form-group'>
+          <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='form-control'");?>
+        </div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->comment;?></legend>
-        <?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?>
+        <div class='form-group'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->files;?></legend>
-        <?php echo $this->fetch('file', 'buildform');?>
+        <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
       </fieldset>
       <div class='actions'>
         <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save) . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id")) .html::hidden('consumed', $task->consumed);?>

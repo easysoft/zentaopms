@@ -239,6 +239,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed .chosen-container {font-size: 12px}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 .form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
+.form-condensed fieldset > .form-group {margin-bottom: 0;}
 
 /* help in form */
 .help-block {margin-bottom: 5px;}
