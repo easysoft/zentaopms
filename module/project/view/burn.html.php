@@ -15,10 +15,12 @@
 <script>$('#burnTab').addClass('active');</script>
 <div class='text-center'>
   <?php
-  echo $charts; 
-  common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
-  echo html::a(inlink('burn', "projectID=$projectID&type=" . ($type == 'noweekend' ? 'withweekend' : 'noweekend')), ($type == 'noweekend' ? $lang->project->withWeekend : $lang->project->noWeekend));
+  if($interval) echo html::select('interval', $dayList, $interval);
+  $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
+  echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn'");
+  common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn' id='computeBurn'");
   echo $lang->project->howToUpdateBurn;
+  echo $charts; 
   ?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
