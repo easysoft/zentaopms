@@ -36,7 +36,7 @@
       <td><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control'");?>
       <td><?php echo html::input("account[$i]", '', "class='text-1 account_$i' autocomplete='off' onchange='changeEmail($i)'");?></td>
       <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>
-      <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='select-1' onchange='changeGroup(this.value, $i)'");?></td>
+      <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
       <td><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='form-control'");?></td>
       <td><?php echo html::input("email[$i]", '', "class='text-1 email_$i' onchange='setDefaultEmail($i)'");?></td>
       <td><?php echo html::radio("gender[$i]", (array)$lang->user->genderList, 'm');?></td>

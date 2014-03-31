@@ -34,7 +34,7 @@
       <td><div id='nameBox'>
         <?php
         $readType = $todo->type != 'custom' ? 'readonly' : '';
-        echo html::input('name', $todo->name, "$readType class=text-1");
+        echo html::input('name', $todo->name, "$readType class=form-control");
         ?>
         </div>
       </td>

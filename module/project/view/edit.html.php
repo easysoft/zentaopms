@@ -102,7 +102,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->project->manageProducts;?></th>
-        <td colspan='2' id='productsBox'><?php echo html::select("products[]", $allProducts, $linkedProducts, "class='select-1 chosen' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
+        <td colspan='2' id='productsBox'><?php echo html::select("products[]", $allProducts, $linkedProducts, "class='form-control chosen' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->project->desc;?></th>

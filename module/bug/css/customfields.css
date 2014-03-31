@@ -1,4 +1,3 @@
-body{background:white; overflow:hidden;}
-.btn-group .btn{display: block;width: 60px;text-align: center; padding: 4px; margin-bottom:2px;}
-.btn-group .btn:hover{z-index: 9999;}
-.btn-group .btn i{line-height: 21px;}
+select.form-control {min-height: 200px; height: auto;}
+.table-form > tbody > tr > td .btn + .btn {margin-left: 0;}
+form {padding: 20px 10%;}

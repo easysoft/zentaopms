@@ -13,8 +13,6 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
-include '../../common/view/colorize.html.php';
-include '../../common/view/dropmenu.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
 js::set('customed', $customed);
@@ -58,7 +56,7 @@ js::set('customed', $customed);
     echo "<li id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</li>";
     echo "<li id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</li>";
     echo "<li id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</li>";
-    echo "<li id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></li> ";
+    echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></li> ";
     ?>
   </ul>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>

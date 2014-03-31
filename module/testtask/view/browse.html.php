@@ -13,24 +13,28 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
-<table class='table-1 colored tablesorter fixed' id='taskList'>
-  <caption class='caption-tl'>
-    <div class='f-left'><?php echo $lang->testtask->browse;?></div>
-    <div class='text-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
-  </caption>
+<div id='featurebar'>
+  <div class='heading'><?php echo html::icon($lang->icons['testtask']);?> <?php echo $lang->testtask->browse;?></div>
+  <div class='actions'>
+    <?php common::printIcon('testtask', 'create', "product=$productID");?>
+  </div>
+</div>
+
+
+<table class='table tablesorter table-fixed' id='taskList'>
   <thead>
   <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-  <tr class='colhead'>
-    <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
-    <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-    <th>               <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-    <th>               <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
-    <th class='w-user'><?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
-    <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
-    <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
-    <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-    <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
-  </tr>
+    <tr>
+      <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
+      <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
+      <th>               <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+      <th>               <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
+      <th class='w-user'><?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
+      <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
+      <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
+      <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+    </tr>
   </thead>
   <tbody>
   <?php foreach($tasks as $task):?>
@@ -45,14 +49,14 @@
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-center'>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
-      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list', 'smile');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
 
       if(common::hasPriv('testtask', 'delete'))
       {
           $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->testtask->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->testtask->delete}' class='btn-icon'");
       }
       ?>
     </td>

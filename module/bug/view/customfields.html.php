@@ -12,34 +12,38 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/colorbox.html.php';?>
-<form method='post' class='mt-20px'>
-  <table class='table-4' align='center'> 
-    <caption class='caption-tl'><?php echo $lang->bug->customFields;?></caption>
-    <tr class='colhead'>
-      <th><?php echo $lang->bug->lblAllFields;?></th>
-      <th></th>
-      <th><?php echo $lang->bug->lblCustomFields;?></th>
-      <th></th>
-    </tr>  
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
+    <strong><?php echo $lang->bug->customFields;?></strong>
+    <small class='text-muted'><?php echo html::icon($lang->icons['customFields']);?></small>
+  </div>
+</div>
+<form class='form-condensed' method='post' class='mt-20px'>
+  <table class='table table-form' align='center'>
+    <tr>
+      <th colspan='2' class='text-left'><?php echo $lang->bug->lblAllFields;?></th>
+      <th colspan='2' class='text-left'><?php echo $lang->bug->lblCustomFields;?></th>
+    </tr>
     <tr>
       <td>
         <?php 
-        echo html::select('allFields[]', $allFields, '', 'class=select-2 size=10 multiple');
+        echo html::select('allFields[]', $allFields, '', 'class=form-control size=10 multiple');
         echo html::select('defaultFields[]', $defaultFields, '', 'class=hidden');
         ?>
       </td>
-      <td class='v-middle btn-group'>
-        <a class='btn' onclick="addItem('allFields', 'customFields')"><i class="icon-chevron-right"></i></a>
-        <a class='btn' onclick="delItem('customFields')"><i class="icon-chevron-left"></i></a>
+      <td class='text-middle w-80px'>
+        <a class='btn btn-block' onclick="addItem('allFields', 'customFields')"><i class="icon-chevron-right"></i></a>
+        <a class='btn btn-block' onclick="delItem('customFields')"><i class="icon-chevron-left"></i></a>
       </td>
-      <td><?php echo html::select('customFields[]', $customFields, '', 'class=select-2 size=10 multiple');?></td>
-      <td class='v-middle btn-group'>
-        <a class='btn' onclick="upItem('customFields')"><i class="icon-plus"></i></a>
-        <a class='btn' onclick="downItem('customFields')"><i class="icon-minus"></i></a>
-        <a class='btn' onclick='restoreDefault()'><?php echo $lang->bug->restoreDefault;?></a>
+      <td><?php echo html::select('customFields[]', $customFields, '', 'class=form-control size=10 multiple');?></td>
+      <td class='text-middle w-80px'>
+        <a class='btn btn-block' onclick="upItem('customFields')"><i class="icon-chevron-up"></i></a>
+        <a class='btn btn-block' onclick="downItem('customFields')"><i class="icon-chevron-down"></i></a>
+        <a class='btn btn-block' onclick='restoreDefault()'><?php echo $lang->bug->restoreDefault;?></a>
       </td>
     </tr>  
-    <tr><td colspan='4' class='text-center'><?php echo html::submitButton('', 'onclick=selectItem("customFields")');?></td></tr>
+    <tr><td></td><td><?php echo html::submitButton('', 'onclick=selectItem("customFields")', 'btn-block btn-primary');?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

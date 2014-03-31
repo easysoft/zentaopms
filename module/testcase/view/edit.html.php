@@ -81,11 +81,11 @@
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-1'");?></td>
+            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?></td>
           </tr>
           <tr>
             <td><?php echo $lang->testcase->module;?></td>
-            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='select-1'");?></span></td>
+            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control'");?></span></td>
           </tr>
           <tr>
             <td><?php echo $lang->testcase->story;?></td>
@@ -98,7 +98,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->stage;?></th>
-            <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='select-1' multiple='multiple'");?></td>
+            <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control' multiple='multiple'");?></td>
           </tr>  
           <tr>
             <td><?php echo $lang->testcase->pri;?></td>

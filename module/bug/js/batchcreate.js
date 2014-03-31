@@ -1,6 +1,6 @@
 $(function()
 {
-    $(".chosenBox select").chosen({no_results_text: noResultsMatch});
+    $(".chosenBox select").chosen(defaultChosenOptions);
 })
 
 /**

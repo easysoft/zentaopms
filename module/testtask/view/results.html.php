@@ -11,42 +11,57 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<h1>CASE#<?php echo $case->id. $lang->colon . $case->title;?></h1>
-<fieldset>
-  <legend><?php echo $lang->testcase->precondition;?></legend>
-  <?php echo $case->precondition;?>
-</fieldset>
-<?php foreach($results as $result):?>
-<table class='table-1'>
-  <caption>
-    <div class='f-left'>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></div>
-    <?php if(isset($build)):?><div class='text-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div><?php endif;?>
-  </caption>
-  <tr>
-    <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
-    <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
-    <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
-    <th><?php echo $lang->testcase->result;?></th>
-    <th class='w-p20'><?php echo $lang->testcase->real;?></th>
-  </tr>
-  <?php 
-  $i = 1;
-  foreach($result->stepResults as $key => $stepResult):
-  ?>
-  <tr>
-    <th><?php echo $i;?></th>
-    <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
-    <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
-    <?php if(!empty($stepResult['result'])):?>
-    <td class='<?php echo $stepResult['result'];?> a-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
-    <td><?php echo $stepResult['real'];?></td>
-  </tr>
-    <?php else:?>
-    <td></td>
-    <td></td>
-  </tr>
-    <?php endif; $i++;?>
-  <?php endforeach;?>
-</table>
-<?php endforeach;?>
+<div class="outer">
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['usecase']) . ' #' . $case->id;?></span>
+      <strong><?php echo $case->title;?></strong>
+      <small class='text-info'><?php echo $lang->testtask->results . ' ' . html::icon($lang->icons['result']);?></small>
+    </div>
+  </div>
+
+  <div class='main'>
+    <fieldset>
+      <legend><?php echo $lang->testcase->precondition;?></legend>
+      <?php echo $case->precondition;?>
+    </fieldset>
+    <?php foreach($results as $result):?>
+    <table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
+      <thead>
+        <tr>
+          <td colspan='5'>
+            <div class='text-left'>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></div>
+            <?php if(isset($build)):?><div class='text-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div><?php endif;?>
+          </td>
+        </tr>
+        <tr>
+          <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+          <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
+          <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
+          <th><?php echo $lang->testcase->result;?></th>
+          <th class='w-p20'><?php echo $lang->testcase->real;?></th>
+        </tr>
+      </thead>
+      <?php 
+      $i = 1;
+      foreach($result->stepResults as $key => $stepResult):
+      ?>
+      <tr>
+        <td class='w-30px text-center'><?php echo $i;?></td>
+        <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
+        <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
+        <?php if(!empty($stepResult['result'])):?>
+        <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
+        <td><?php echo $stepResult['real'];?></td>
+      </tr>
+        <?php else:?>
+        <td></td>
+        <td></td>
+      </tr>
+        <?php endif; $i++;?>
+      <?php endforeach;?>
+    </table>
+    <?php endforeach;?>
+  </div>
 </div>
+

@@ -11,20 +11,28 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID");?>">
-  <table class='table-1 fixed'> 
-    <caption><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchEdit;?></caption>
-    <tr>
-      <th class='w-30px'><?php echo $lang->idAB;?></th> 
-      <th class='w-80px'><?php echo $lang->bug->type;?></th>
-      <th class='w-50px'><?php echo $lang->bug->severityAB;?></th>
-      <th class='w-50px'><?php echo $lang->bug->pri;?></th>
-      <th class='red'> <?php echo $lang->bug->title;?></th>
-      <th class='w-100px'><?php echo $lang->bug->assignedTo;?></th>
-      <th class='w-70px'><?php echo $lang->bug->status;?></th>
-      <th class='w-100px'><?php echo $lang->bug->resolvedByAB;?></th>
-      <th class='w-150px'><?php echo $lang->bug->resolutionAB;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->bug->common . $lang->colon . $lang->bug->batchEdit;?></strong>
+  </div>
+</div>
+
+<form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID");?>">
+  <table class='table table-fixed table-form'>
+    <thead>
+      <tr>
+        <th class='w-30px'><?php echo $lang->idAB;?></th> 
+        <th class='w-90px'><?php echo $lang->bug->type;?></th>
+        <th class='w-60px'><?php echo $lang->bug->severityAB;?></th>
+        <th class='w-60px'><?php echo $lang->bug->pri;?></th>
+        <th class='required'><?php echo $lang->bug->title;?></th>
+        <th class='w-100px'><?php echo $lang->bug->assignedTo;?></th>
+        <th class='w-80px'><?php echo $lang->bug->status;?></th>
+        <th class='w-100px'><?php echo $lang->bug->resolvedByAB;?></th>
+        <th class='w-180px'><?php echo $lang->bug->resolutionAB;?></th>
+      </tr>
+    </thead>
     <?php foreach($bugIDList as $bugID):?>
     <?php
     /**
@@ -45,8 +53,16 @@
       <td><?php echo html::select("statuses[$bugID]",     (array)$lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
       <td><?php echo html::select("resolvedBys[$bugID]",   $users, $bugs[$bugID]->resolvedBy, 'class=form-control');?></td>
       <td>
-        <div class='f-left'><?php echo html::select("resolutions[$bugID]",   $this->lang->bug->resolutionList, $bugs[$bugID]->resolution, "class=w-80px onchange=setDuplicate(this.value,$bugID)");?></div>
-        <div class='f-left' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bugs[$bugID]->resolution != 'duplicate') echo "style='display:none'";?>><?php echo html::input("duplicateBugs[$bugID]", '', "class=w-40px placeholder='{$lang->bug->duplicateBug}'");?></div>
+        <table class='w-p100'>
+          <tr>
+            <td class='pd-0'>
+              <?php echo html::select("resolutions[$bugID]",   $this->lang->bug->resolutionList, $bugs[$bugID]->resolution, "class=form-control onchange=setDuplicate(this.value,$bugID)");?>
+            </td>
+            <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bugs[$bugID]->resolution != 'duplicate') echo "style='display:none'";?>>
+              <?php echo html::input("duplicateBugs[$bugID]", '', "class=form-control placeholder='{$lang->bug->duplicateBug}'");?>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>  
     <?php endforeach;?>

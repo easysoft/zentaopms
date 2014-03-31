@@ -1,2 +1,1 @@
-body{background:white}
-tr, td, th {border:1px solid #eee}
+.outer > #titlebar {display: none}

@@ -16,7 +16,7 @@
     <caption><?php echo $lang->group->create;?></caption>
     <tr>
       <th><?php echo $lang->group->name;?></th>
-      <td><?php echo html::input('name', '', "class=text-1");?></td>
+      <td><?php echo html::input('name', '', "class=form-control");?></td>
     </tr>  
     <tr>
       <th><?php echo $lang->group->desc;?></th>

@@ -12,34 +12,44 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-fixed table-form'> 
-    <caption><?php echo $lang->bug->project . $lang->colon . $lang->bug->batchCreate;?></caption>
-    <tr>
-      <th class='w-20px'>     <?php echo $lang->idAB;?></th> 
-      <th class='w-100px'>    <?php echo $lang->bug->module;?></th>
-      <th class='w-100px'>    <?php echo $lang->bug->project;?></th>
-      <th class='w-150px red'><?php echo $lang->bug->openedBuild;?></th>
-      <th class='red'>        <?php echo $lang->bug->title;?></th>
-      <th>                    <?php echo $lang->bug->steps;?></th>
-      <th class='w-100px'>    <?php echo $lang->typeAB;?></th>
-      <th class='w-80px'>     <?php echo $lang->bug->severity;?></th>
-      <th class='w-120px'>    <?php echo $lang->bug->os;?></th>
-      <th class='w-100px'>    <?php echo $lang->bug->browser;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->bug->common . $lang->colon . $lang->bug->batchCreate;?></strong>
+  </div>
+</div>
 
-   <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
+<form class='form-condensed' class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-fixed table-form'>
+    <thead>
+      <tr>
+        <th class='w-30px'>  <?php echo $lang->idAB;?></th> 
+        <th class='w-100px'> <?php echo $lang->bug->module;?></th>
+        <th class='w-100px'> <?php echo $lang->bug->project;?></th>
+        <th class='w-150px required'><?php echo $lang->bug->openedBuild;?></th>
+        <th class='required'><?php echo $lang->bug->title;?></th>
+        <th>                 <?php echo $lang->bug->steps;?></th>
+        <th class='w-100px'> <?php echo $lang->typeAB;?></th>
+        <th class='w-80px'>  <?php echo $lang->bug->severity;?></th>
+        <th class='w-120px'> <?php echo $lang->bug->os;?></th>
+        <th class='w-100px'> <?php echo $lang->bug->browser;?></th>
+      </tr>
+    </thead>
+    <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
-      <td><?php echo html::select("projects[$i]", $projects, $projectID, "class='select-1' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
-      <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='select-1 chosen' multiple data-placeholder=' '");?></td>
+      <td><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+      <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
       <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
-      <td><?php echo html::textarea("stepses[$i]", '', "rows='1' class=text-1");?></td>
-      <td><?php echo html::select("types[$i]", $lang->bug->typeList, '');?></td>
-      <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '');?></td>
-      <td><?php echo html::select("oses[$i]", $lang->bug->osList, '');?></td>
-      <td><?php echo html::select("browsers[$i]", $lang->bug->browserList, '');?></td>
+      <td>
+        <div class='form-control' contenteditable='true' data-sync-target='#stepses\[<?php echo $i;?>\]'></div>
+        <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control hidden'");?>
+      </td>
+      <td><?php echo html::select("types[$i]", $lang->bug->typeList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("oses[$i]", $lang->bug->osList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("browsers[$i]", $lang->bug->browserList, '', "class='form-control'");?></td>
     </tr>
     <?php endfor;?>
     <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>

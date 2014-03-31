@@ -25,7 +25,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></span> ";
     echo "<span id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</span>";
     echo "<span id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</span>";
-    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#' class='link-icon'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
+    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
   <div class='text-right'>
@@ -94,7 +94,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               if(common::hasPriv('testtask', 'unlinkCase'))
               {
                   $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-green-testtask-unlinkCase"></i>', '', "class='link-icon' title='{$lang->testtask->unlinkCase}'");
+                  echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-green-testtask-unlinkCase"></i>', '', "title='{$lang->testtask->unlinkCase}'");
               }
 
               common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');

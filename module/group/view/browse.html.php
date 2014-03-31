@@ -46,7 +46,7 @@
       if(common::hasPriv('group', 'delete'))
       {
           $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->group->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->group->delete}'");
       }
       ?>
     </td>
