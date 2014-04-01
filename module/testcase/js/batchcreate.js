@@ -2,7 +2,7 @@ $(document).ready(function()
 {
     for(var i = 0; i < testcaseBatchCreateNum; i++) 
     {
-        $("#story" + i).chosen({no_results_text: noResultsMatch}).bind('liszt:showing_dropdown', function()
+        $("#story" + i).chosen(defaultChosenOptions).bind('liszt:showing_dropdown', function()
         {
             index  = $(this).attr('id').substring(5);
             module = $('#module' + index).val();

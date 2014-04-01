@@ -13,8 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($task->deleted) echo "class='deleted'";?>>TESTTASK #<?php echo $task->id . ' ' . $task->name;?></div>
-  <div>
+  <div class='heading'>
+    <span class='prefix' title='TESTTASK'><?php echo html::icon($lang->icons['testtask']) . ' #' . $task->id;?></span>
+    <strong><?php echo $task->name;?></strong>
+    <?php if($task->deleted):?>
+    <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
+    <?php endif; ?>
+  </div>
+  <div class='actions'>
     <?php
     $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");
     $actionLinks = '';
@@ -22,45 +28,50 @@
     {
         ob_start();
 
+        echo "<div class='btn-group'>";
         common::printIcon('testtask', 'start',    "taskID=$task->id", $task);
-        common::printIcon('testtask', 'close',    "taskID=$task->id", $task);
-        common::printIcon('testtask', 'cases',    "taskID=$task->id", $task);
-        common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task);
+        common::printIcon('testtask', 'close',    "taskID=$task->id", $task, 'button', '', '', 'text-danger');
+        common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'smile');
+        common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
+        echo '</div>';
 
-        common::printDivider();
+        echo "<div class='btn-group'>";
         common::printIcon('testtask', 'edit',     "taskID=$task->id");
         common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'button', '', 'hiddenwin');
+        echo '</div>';
 
         $actionLinks = ob_get_contents();
         ob_clean();
         echo $actionLinks;
     }
+    echo "<div class='btn-group'>";
     common::printRPN($browseLink);
+    echo '</div>';
     ?>
   </div>
 </div>
-
-<table class='cont-rt5'>
-  <tr valign='top'>
-    <td>
+<div class='row'>
+  <div class='col-md-8 col-lg-9'>
+    <div class='main'>
       <fieldset>
         <legend><?php echo $lang->testtask->legendDesc;?></legend>
-        <div class='content'><?php echo $task->desc;?></div>
+        <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->testtask->legendReport;?></legend>
-        <div class='content'><?php echo $task->report;?></div>
+        <div class='article-content'><?php echo $task->report;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center actionlink'><?php echo $actionLinks;?></div>
-    </td>
-    <td class='divider'></td>
-    <td class='side'>
+      <div class='actions'><?php echo $actionLinks;?></div>
+    </div>
+  </div>
+  <div class='col-md-4 col-lg-3'>
+    <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testtask->legendBasicInfo;?></legend>
-        <table class='table-1 a-left fixed'>
+        <table class='table table-data table-condensed table-borderless table-fixed'>
           <tr>
-            <th><?php echo $lang->testtask->project;?></th>
+            <th class='w-60px'><?php echo $lang->testtask->project;?></th>
             <td><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
           </tr>  
           <tr>
@@ -93,7 +104,7 @@
           </tr>  
        </table>
       </fieldset>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,0 +1,3 @@
+.table-bordered {border: none}
+.table-bordered thead th {border-top: none}
+.table-form > tbody > tr > th, .table-form > tbody > tr > td {border-bottom: 1px solid #ddd}

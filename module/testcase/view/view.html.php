@@ -11,26 +11,30 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($case->deleted) echo "class='deleted'";?>>
-    CASE #<?php echo $case->id . ' ' . $case->title;?>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['testcase']) . ' #' . $case->id;?></span>
+    <strong><?php echo $case->title;?></strong>
+    <?php if($case->deleted):?>
+    <span class='label label-danger'><?php echo $lang->case->deleted;?></span>
+    <?php endif; ?>
     <?php if($case->version > 1):?>
-    <span class='f-12px gray'>
+    <small class='dropdown'>
+      <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
+      <ul class='dropdown-menu'>
       <?php
-      echo "("; 
       for($i = $case->version; $i >= 1; $i --)
       {
-          $class = $i == $version ? "class='blue'" : "class='gray'";
-          echo html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i, '', "$class"); 
+          $class = $i == $version ? " class='active'" : '';
+          echo '<li' . $class .'>' . html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . '</li>'; 
       }
-      echo ")";
       ?>
-    </span>
-    <?php endif;?>
+      </ul>
+    </small>
+    <?php endif; ?>
   </div>
-  <div>
+  <div class='actions'>
     <?php
     $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
     $actionLinks = '';
@@ -38,19 +42,23 @@
     {
         ob_start();
 
+        echo "<div class='btn-group'>";
         common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
         common::printIcon('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
 
-        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'createBug');
+        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'bug');
+        echo '</div>';
 
-        common::printDivider();
+        echo "<div class='btn-group'>";
         common::printIcon('testcase', 'edit',"caseID=$case->id");
         common::printCommentIcon('testcase');
         common::printIcon('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
         common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'button', '', 'hiddenwin');
+        echo '</div>';
         
-        common::printDivider();
+        echo "<div class='btn-group'>";
         common::printRPN($browseLink, $preAndNext);
+        echo '</div>';
 
         $actionLinks = ob_get_contents();
         ob_clean();
@@ -64,56 +72,60 @@
   </div>
 </div>
 
-<table class='cont-rt5'>
-  <tr valign='top'>
-    <td>
+<div class='row'>
+  <div class='col-md-8 col-lg-9'>
+    <div class='main'>
       <fieldset>
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <?php echo nl2br($case->precondition);?>
       </fieldset>
-      <table class='table-1 colored'>
-        <tr class='colhead'>
-          <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
-          <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></th>
-          <th><?php echo $lang->testcase->stepExpect;?></th>
-        </tr> 
-        <?php
-        foreach($case->steps as $stepID => $step)
-        {
-            $stepID += 1;
-            echo "<tr><th class='rowhead w-id a-center strong'>$stepID</th>";
-            echo "<td>" . nl2br($step->desc) . "</td>";
-            echo "<td>" . nl2br($step->expect) . "</td>";
-            echo "</tr>";
-        }
-        ?>
-      </table>
+      <fieldset>
+        <legend><?php echo $lang->testcase->stepDesc;?></legend>
+        <table class='table table-condensed table-hover table-striped table-borderless'>
+          <thead>
+            <tr>
+              <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
+              <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></th>
+              <th><?php echo $lang->testcase->stepExpect;?></th>
+            </tr>
+          </thead>
+          <?php
+          foreach($case->steps as $stepID => $step)
+          {
+              $stepID += 1;
+              echo "<tr><th class='w-id text-center strong'>$stepID</th>";
+              echo "<td>" . nl2br($step->desc) . "</td>";
+              echo "<td>" . nl2br($step->expect) . "</td>";
+              echo "</tr>";
+          }
+          ?>
+        </table>
+      </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center actionlink'><?php echo $actionLinks;?></div>
-      <div id='commentBox' class='hidden'>
-        <fieldset>
-          <legend><?php echo $lang->comment;?></legend>
-          <form method='post' action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>
-            <table align='center' class='table-1'>
-            <tr><td><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></td></tr>
-            <tr><td><?php echo html::submitButton() . html::backButton();?></td></tr>
-            </table>
-          </form>
-        </fieldset>
-      </div>
-    </td>
-    <td class='divider'></td>
-    <td class='side'>
+      <div class='actions'><?php echo $actionLinks;?></div>
+      <fieldset id='commentBox' class='hidden'>
+        <legend><?php echo $lang->comment;?></legend>
+        <form method='post' action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>
+          <table align='center' class='table-1'>
+          <tr><td><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></td></tr>
+          <tr><td><?php echo html::submitButton() . html::backButton();?></td></tr>
+          </table>
+        </form>
+      </fieldset>
+    </div>
+  </div>
+  <div class='col-md-4 col-lg-3'>
+    <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
-        <table class='table-1 a-left fixed'>
+        <table class='table table-data table-condensed table-borderless table-fixed'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
+            <th class='w-60px'><?php echo $lang->testcase->product;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
           </tr>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->module;?></td>
+            <th><?php echo $lang->testcase->module;?></th>
             <td>
               <?php 
               if(empty($modulePath))
@@ -132,7 +144,7 @@
             </td>
           </tr>
           <tr class='nofixed'>
-            <td><?php echo $lang->testcase->story;?></td>
+            <th><?php echo $lang->testcase->story;?></th>
             <td>
                 <?php
                 if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
@@ -146,11 +158,11 @@
             </td>
           </tr>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->type;?></td>
+            <th><?php echo $lang->testcase->type;?></th>
             <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           </tr>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->stage;?></td>
+            <th><?php echo $lang->testcase->stage;?></th>
             <td>
               <?php 
               if($case->stage)
@@ -166,11 +178,11 @@
             </td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->pri;?></td>
+            <th><?php echo $lang->testcase->pri;?></th>
             <td><?php echo $case->pri;?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->status;?></td>
+            <th><?php echo $lang->testcase->status;?></th>
             <td>
               <?php 
               echo $lang->testcase->statusList[$case->status];
@@ -184,19 +196,19 @@
             </td>
           </tr>
            <tr>
-            <td><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></td>
+            <th><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></th>
             <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo $case->lastRunDate;?></td>
           </tr>
           <tr>
-            <td><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></td>
+            <th><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></th>
             <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->keywords;?></td>
+            <th><?php echo $lang->testcase->keywords;?></th>
             <td><?php echo $case->keywords;?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->linkCase;?></td>
+            <th><?php echo $lang->testcase->linkCase;?></th>
             <td>
               <?php
               if(isset($case->linkCaseTitles))
@@ -214,13 +226,13 @@
 
       <fieldset>
         <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
-        <table class='table-1 a-left'>
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->fromBug;?></td>
+            <th class='w-60px'><?php echo $lang->testcase->fromBug;?></th>
             <td><?php if($case->fromBug) echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugTitle);?></td>
           </tr>
           <tr>
-            <td valign="top" class='rowhead w-p20'><?php echo $lang->testcase->toBug;?></td>
+            <th valign="top"><?php echo $lang->testcase->toBug;?></th>
             <td>
             <?php 
             foreach($case->toBugs as $bugID => $bugTitle) 
@@ -235,18 +247,18 @@
 
       <fieldset>
         <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
-        <table class='table-1 a-left'>
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
+            <th class='w-60px'><?php echo $lang->testcase->openedBy;?></th>
             <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
           </tr>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->lblLastEdited;?></td>
+            <th><?php echo $lang->testcase->lblLastEdited;?></th>
             <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>
           </tr>
         </table>
       </fieldset>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

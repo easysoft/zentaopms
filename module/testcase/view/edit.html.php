@@ -16,121 +16,136 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
-  <div id='main'>
-  CASE #<?php echo $case->id . $lang->colon;?>
-  <?php echo html::input('title', $case->title, 'class=form-control');?>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['testcase']) . ' #' . $case->id;?></span>
+    <strong><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title);?></strong>
+    <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->case->edit;?></small>
   </div>
-  <div><?php echo html::submitButton();?></div>
+  <div class='actions'>
+    <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save)?>
+  </div>
 </div>
-
-<table class='cont-rt5'>
-  <tr valign='top'>
-    <td>
+<div class='row'>
+  <div class='col-md-8'>
+    <div class='main'>
+      <div class='form-group'>
+        <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
+      </div>
       <fieldset>
         <legend><?php echo $lang->testcase->precondition;?></legend>
-        <?php echo html::textarea('precondition', $case->precondition, "rows='4' class='w-p100'");?>
+        <div class='form-group'><?php echo html::textarea('precondition', $case->precondition, "rows='4' class='form-control'");?></div>
       </fieldset>
-      <table class='table-1'>
-       <tr class='colhead'>
-          <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
-          <th><?php echo $lang->testcase->stepDesc;?></th>
-          <th><?php echo $lang->testcase->stepExpect;?></th>
-          <th class='w-100px'><?php echo $lang->actions;?></th>
-        </tr>
-        <?php
-        foreach($case->steps as $stepID => $step)
-        {
-            $stepID += 1;
-            echo "<tr id='row$stepID' class='text-center'>";
-            echo "<th class='stepID'>$stepID</th>";
-            echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='w-p100'") . '</td>';
-            echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='w-p100'") . '</td>';
-            echo "<td class='a-left w-100px'><nobr>";
-            echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' /><br />";
-            echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /><br /> ";
-            echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /><br /> ";
-            echo "</nobr></td>";
-            echo '</tr>';
-        }
-        ?>
-      </table>
-
+      <fieldset>
+        <legend><?php echo $lang->testcase->steps;?></legend>
+        <div class='form-group'>
+          <table class='table table-form'>
+            <thead>
+              <tr>
+                <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
+                <th><?php echo $lang->testcase->stepDesc;?></th>
+                <th><?php echo $lang->testcase->stepExpect;?></th>
+                <th class='w-100px'><?php echo $lang->actions;?></th>
+              </tr>
+            </thead>
+            <?php
+            foreach($case->steps as $stepID => $step)
+            {
+                $stepID += 1;
+                echo "<tr id='row$stepID' class='text-center'>";
+                echo "<td class='stepID strong'>$stepID</td>";
+                echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
+                echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='form-control'") . '</td>';
+                echo "<td class='a-left w-100px'><div class='btn-group-vertical'>";
+                echo "<input type='button' tabindex='-1' class='addbutton btn' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' />";
+                echo "<input type='button' tabindex='-1' class='addbutton btn' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /> ";
+                echo "<input type='button' tabindex='-1' class='delbutton btn' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /> ";
+                echo "</div></td>";
+                echo '</tr>';
+            }
+            ?>
+          </table>
+        </div>
+      </fieldset>
       <fieldset>
         <legend><?php echo $lang->testcase->legendComment;?></legend>
-        <?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?>
+        <div class='form-group'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->testcase->legendAttatch;?></legend>
-        <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
+        <div class='form-group'><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></div>
       </fieldset>
-
-      <div class='text-center'>
+      <div class='actions'>
        <?php echo html::submitButton();?>
-       <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' 
-            onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+       <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
       <?php include '../../common/view/action.html.php';?>
-
-    </td>
-    <td class='divider'></td>
-    <td class='side'>
+    </div>
+  </div>
+  <div class='col-md-4'>
+    <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
-        <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
+        <table class='table table-form' cellpadding='0' cellspacing='0'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
+            <th class='w-80px'><?php echo $lang->testcase->product;?></th>
             <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->module;?></td>
-            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control'");?></span></td>
+            <th><?php echo $lang->testcase->module;?></th>
+            <td>
+              <div class='input-group' id='moduleIdBox'>
+                <?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control'");?>
+              </div>
+            </td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->story;?></td>
+            <th><?php echo $lang->testcase->story;?></th>
             <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control');?></div>
-            </td>       
+            </td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->type;?></td>
-            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?>
+            <th><?php echo $lang->testcase->type;?></th>
+            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->stage;?></th>
-            <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control' multiple='multiple'");?></td>
+            <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control chosen' multiple='multiple'");?></td>
           </tr>  
           <tr>
-            <td><?php echo $lang->testcase->pri;?></td>
-            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=form-control');?>
+            <th><?php echo $lang->testcase->pri;?></th>
+            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->status;?></td>
+            <th><?php echo $lang->testcase->status;?></th>
             <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->keywords;?></td>
+            <th><?php echo $lang->testcase->keywords;?></th>
             <td><?php echo html::input('keywords', $case->keywords, 'class=form-control');?></td>
           </tr>
           <tr>
-            <td><?php echo $lang->testcase->linkCase;?></td>
+            <th><?php echo $lang->testcase->linkCase;?></th>
             <td><?php echo html::input('linkCase', $case->linkCase, 'class=form-control');?></td>
           </tr>
         </table>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
-        <table class='table-1 a-left'>
+        <table class='table table-form'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
+            <th class='w-80px'><?php echo $lang->testcase->openedBy;?></th>
             <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
+          </tr>
           <tr>
-            <td><?php echo $lang->testcase->lblLastEdited;?></td>
+            <th><?php echo $lang->testcase->lblLastEdited;?></th>
             <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>
           </tr>
         </table>
       </fieldset>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>

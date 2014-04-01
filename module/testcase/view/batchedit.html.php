@@ -11,18 +11,26 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit');?>">
-  <table class='table-1 fixed'> 
-    <caption><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></caption>
-    <tr>
-      <th class='w-30px'><?php  echo $lang->idAB;?></th> 
-      <th class='w-50px'><?php  echo $lang->priAB;?></th>
-      <th class='w-70px'><?php  echo $lang->statusAB;?></th>
-      <th class='w-140px'><?php echo $lang->testcase->module;?></th> 
-      <th><?php echo $lang->testcase->title;?></th>
-      <th class='w-100px'><?php echo $lang->testcase->type;?></th>
-      <th class='w-340px'><?php echo $lang->testcase->stage;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></strong>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit');?>">
+  <table class='table table-fixed table-form'>
+    <thead>
+      <tr>
+        <th class='w-30px'><?php  echo $lang->idAB;?></th> 
+        <th class='w-60px'><?php  echo $lang->priAB;?></th>
+        <th class='w-80px'><?php  echo $lang->statusAB;?></th>
+        <th class='w-140px'><?php echo $lang->testcase->module;?></th> 
+        <th><?php echo $lang->testcase->title;?></th>
+        <th class='w-100px'><?php echo $lang->testcase->type;?></th>
+        <th class='w-340px'><?php echo $lang->testcase->stage;?></th>
+      </tr>
+    </thead>
+
     <?php foreach($caseIDList as $caseID):?>
     <?php if(!$productID) $moduleOptionMenu = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0); ?>
     <tr class='text-center'>
@@ -36,7 +44,7 @@
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
     <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
