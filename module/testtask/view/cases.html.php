@@ -18,126 +18,130 @@
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 </script>
-
 <div id='featurebar'>
-  <div class='f-left'>
+  <div class='heading'><?php echo html::icon($lang->icons['usecase']);?></div>
+  <nav class='nav'>
     <?php
-    echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></span> ";
-    echo "<span id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</span>";
-    echo "<span id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</span>";
-    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></span> ";
+    echo "<li id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></li> ";
+    echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
+    echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
+    echo "<li id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
+    ?>
+  </nav>
+  <div class='actions'>
+    <?php
+    echo "<div class='btn-group'>";
+    common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'button', 'link');
+    common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id");
+    echo '</div>';
+    echo "<div class='btn-group'>";
+    common::printRPN($this->session->testtaskList, '');
+    echo '</div>';
     ?>
   </div>
-  <div class='text-right'>
-    <?php
-    common::printIcon('testtask', 'linkCase', "taskID=$task->id");
-    common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id");
-    common::printRPN($this->session->testtaskList, '');
-    ?>
+  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+</div>
+<div class='side' id='treebox'>
+  <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
+  <header class='nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></header>
+  <div class='side-body'>
+    <?php echo $moduleTree;?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
-
-<form method='post' name='casesform'>
-<table class='cont-lt1'>
-  <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>'>
-      <div class='box-title'><?php echo $productName;?></div>
-      <div class='box-content'><?php echo $moduleTree;?></div>
-    </td>
-    <td class='divider <?php echo $treeClass;?>'></td>
-    <td>
+<div class='main'>
+  <form method='post' name='casesform'>
     <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 colored tablesorter datatable mb-zero fixed' id='caseList'>
-        <thead>
-          <tr class='colhead'>
-            <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
-            <th class='w-pri'>     <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
-            <th>                   <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
-            <th class='w-type'>    <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
-            <th class='w-user'>    <?php common::printOrderLink('assignedTo',    $orderBy, $vars, $lang->testtask->assignedTo);?></th>
-            <th class='w-user'>    <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-            <th class='w-100px'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-            <th class='w-80px'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-            <th class='w-status'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-100px {sorter: false}'><?php echo $lang->actions;?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
-          $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
-          $canBatchRun    = common::hasPriv('testtask', 'batchRun');
-          ?>
-          <?php foreach($runs as $run):?>
-          <tr class='text-center'>
-            <td class='text-left'>
-              <?php if($canBatchEdit or $canBatchAssign or $canBatchRun):?>
-              <input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> 
-              <?php endif;?>
-              <?php printf('%03d', $run->case);?>
-            </td>
-            <td><span class='<?php echo 'pri' . $run->pri?>'><?php echo $run->pri?></span></td>
-            <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask"), $run->title, '_blank');?>
-            </td>
-            <td><?php echo $lang->testcase->typeList[$run->type];?></td>
-            <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>
-            <td><?php $lastRunner = $users[$run->lastRunner]; echo substr($lastRunner, strpos($lastRunner, ':') + 1);?></td>
-            <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
-            <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
-            <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
-            <td class='text-center'>
-              <?php
-              common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase');
-              common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
+    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='caseList'>
+      <thead>
+        <tr class='colhead'>
+          <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
+          <th class='w-pri'>     <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+          <th>                   <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='w-type'>    <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
+          <th class='w-user'>    <?php common::printOrderLink('assignedTo',    $orderBy, $vars, $lang->testtask->assignedTo);?></th>
+          <th class='w-user'>    <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+          <th class='w-100px'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+          <th class='w-80px'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
+          <th class='w-status'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-100px {sorter: false}'><?php echo $lang->actions;?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+        $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
+        $canBatchRun    = common::hasPriv('testtask', 'batchRun');
+        ?>
+        <?php foreach($runs as $run):?>
+        <tr class='text-center'>
+          <td class='text-left'>
+            <?php if($canBatchEdit or $canBatchAssign or $canBatchRun):?>
+            <input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> 
+            <?php endif;?>
+            <?php printf('%03d', $run->case);?>
+          </td>
+          <td><span class='<?php echo 'pri' . $run->pri?>'><?php echo $run->pri?></span></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask"), $run->title, '_blank');?>
+          </td>
+          <td><?php echo $lang->testcase->typeList[$run->type];?></td>
+          <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>
+          <td><?php $lastRunner = $users[$run->lastRunner]; echo substr($lastRunner, strpos($lastRunner, ':') + 1);?></td>
+          <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
+          <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
+          <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
+          <td class='text-center'>
+            <?php
+            common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');
+            common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
 
-              if(common::hasPriv('testtask', 'unlinkCase'))
-              {
-                  $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-green-testtask-unlinkCase"></i>', '', "title='{$lang->testtask->unlinkCase}'");
-              }
+            if(common::hasPriv('testtask', 'unlinkCase'))
+            {
+                $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testtask->unlinkCase}' class='btn-icon'");
+            }
 
-              common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');
-              ?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan='10'>
-              <?php if($runs):?>
-              <div class='f-left'>
+            common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'bug');
+            ?>
+          </td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan='10'>
+            <?php if($runs):?>
+            <div class='table-actions clearfix'>
 
-              <?php 
-              if($canBatchEdit or $canBatchAssign or $canBatchRun) echo html::selectAll() . html::selectReverse();
-              if($canBatchEdit)
-              {
-                  $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
-                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-              }
-              if($canBatchAssign)
-              {
-                  $actionLink = inLink('batchAssign', "taskID=$task->id");
-                  echo html::select('assignedTo', $users);
-                  echo html::commonButton($lang->testtask->assign, "onclick=\"setFormAction('$actionLink')\"");
-              }
-              if($canBatchRun)
-              {
-                  $actionLink = inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");
-                  echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
-              }
-              ?>
+            <?php 
+            if($canBatchEdit or $canBatchAssign or $canBatchRun) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+            if($canBatchEdit)
+            {
+                $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
+                echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+            }
+            if($canBatchAssign)
+            {
+                $actionLink = inLink('batchAssign', "taskID=$task->id");
+                echo "<div class='input-group'>";
+                echo html::select('assignedTo', $users, '', 'class="form-control"');
+                echo "<span class='input-group-btn'>";
+                echo html::commonButton($lang->testtask->assign, "onclick=\"setFormAction('$actionLink')\"");
+                echo '</span></div>';
+            }
+            if($canBatchRun)
+            {
+                $actionLink = inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");
+                echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
+            }
+            ?>
 
-              </div>
-              <?php endif;?>
-              <?php echo $pager->show();?>
-            </td>
-          </tr>
-        <tfoot>
-      </table>
-    </td>
-  </tr>
-</table>
-</form>   
+            </div>
+            <?php endif;?>
+            <?php echo $pager->show();?>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

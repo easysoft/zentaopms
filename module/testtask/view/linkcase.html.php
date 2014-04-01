@@ -12,31 +12,42 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div id='querybox'></div>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['testtask']) . ' #' . $task->id;;?></span>
+    <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $task->id), $task->name, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->testtask->linkCase;?> <?php echo html::icon($lang->icons['link']);?></small>
+  </div>
+  <div class='actions'>
+    <?php
+    echo "<div class='btn-group'>";
+    $lang->testtask->linkCase = $lang->testtask->linkByStory;
+    common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bystory", '', 'button', 'link');
+    $lang->testtask->linkCase = $lang->testtask->linkByBug;
+    common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bybug", '', 'button', 'link');
+    echo '</div>';
+    echo "<div class='btn-group'>";
+    common::printRPN($this->session->testtaskList);
+    echo '</div>';
+    ?>
+  </div>
+  <div id='querybox' class='show'></div>
+</div>
 <form method='post'>
-<table class='table-1 colored tablesorter fixed'>
-  <caption class='caption-tl'>
-    <div class='f-left'><?php echo $lang->testtask->unlinkedCases;?></div>
-    <div class='text-right'>
-      <?php
-      $lang->testtask->linkCase = $lang->testtask->linkByStory;
-      common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bystory");
-      $lang->testtask->linkCase = $lang->testtask->linkByBug;
-      common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bybug");
-      common::printRPN($this->session->testtaskList);
-      ?>
-    </div>
+<table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'>
+  <caption class='text-left text-special'>
+    <?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo count($cases);?>)
   </caption>
   <thead>
-  <tr class='colhead'>
-    <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th class='w-60px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
-    <th class='w-pri'><?php echo $lang->priAB;?></th>
-    <th><?php echo $lang->testcase->title;?></th>
-    <th class='w-type'><?php echo $lang->testcase->type;?></th>
-    <th class='w-user'><?php echo $lang->openedByAB;?></th>
-    <th class='w-status'><?php echo $lang->statusAB;?></th>
-  </tr>
+    <tr>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-60px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
+      <th><?php echo $lang->testcase->title;?></th>
+      <th class='w-type'><?php echo $lang->testcase->type;?></th>
+      <th class='w-user'><?php echo $lang->openedByAB;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+    </tr>
   </thead>
   <tbody>
   <?php foreach($cases as $case):?>
@@ -45,7 +56,7 @@
       <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
       <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
     </td>
-    <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=form-control');?> </td>
+    <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class="form-control input-sm" style="padding: 0 5px; height: 20px"');?> </td>
     <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
     <td class='text-left'>
       <?php
@@ -67,7 +78,7 @@
   <tr>
     <td colspan='7'>
       <?php if($cases):?>
-      <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></div>
+        <div class='table-actions clearfix'><?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton();?></div>
       <?php endif;?>
       <div class='text-right'><?php $pager->show();?></div>
     </td>

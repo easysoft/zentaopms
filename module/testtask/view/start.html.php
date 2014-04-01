@@ -13,17 +13,30 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-form'>
-    <caption><?php echo $testtask->name;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
-    </tr>
-  </table>
-  <?php include '../../common/view/action.html.php';?>
-</form>
+<div class='container mw-800px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['testtask']) . ' #' . $testtask->id;;?></span>
+      <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $testtask->id), $testtask->name, '_blank');?></strong>
+      <small class='text-success'> <?php echo $lang->testtask->start;?> <?php echo html::icon($lang->icons['start']);?></small>
+    </div>
+  </div>
+
+  <form class='form-condensed' method='post' target='hiddenwin'>
+    <table class='table table-form'>
+      <tr>
+        <th class='text-left'><?php echo $lang->comment;?></th>
+      </tr>
+      <tr>
+        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+      </tr>
+      <tr>
+        <td class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+      </tr>
+    </table>
+  </form>
+  <div class='main'>
+    <?php include '../../common/view/action.html.php';?>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

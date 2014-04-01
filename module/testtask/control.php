@@ -555,6 +555,7 @@ class testtask extends control
         $this->view->cases   = $cases;
         $this->view->taskID  = $taskID;
         $this->view->pager   = $pager;
+        $this->view->task    = $task;
 
         $this->display();
     }
