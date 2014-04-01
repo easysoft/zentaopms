@@ -19,8 +19,6 @@
     <?php common::printIcon('testtask', 'create', "product=$productID");?>
   </div>
 </div>
-
-
 <table class='table tablesorter table-fixed' id='taskList'>
   <thead>
   <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

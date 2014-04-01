@@ -16,97 +16,114 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
-<form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->testcase->create;?></caption>
-    <tr>
-      <th><?php echo $lang->testcase->lblProductAndModule;?></th>
-      <td>
-        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?>
-        <span id='moduleIdBox'>
-        <?php 
-        echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=loadModuleRelated();");
-        if(count($moduleOptionMenu) == 1)
-        {
-            echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case"), $lang->tree->manage, '_blank');
-            echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
-        }
-        ?>
-        </span>
-      </td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->type;?></th>
-      <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->stage;?></th>
-      <td><?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control' multiple='multiple'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->pri;?></th>
-      <td><?php echo html::select('pri', $lang->testcase->priList, $pri, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->lblStory;?></th>
-      <td>
-        <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="form-control" onchange=setPreview();');?>
-        <?php if($storyID == 0): ?>
-          <a href='' id='preview' class='iframe hidden'><?php echo $lang->preview;?></a>
-        <?php else:?>
-          <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='iframe' id='preview'");?>
-        <?php endif;?>
-        </div>
-      </td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->title;?></th>
-      <td><?php echo html::input('title', $caseTitle, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->precondition;?></th>
-      <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testcase->steps;?></th>
-      <td>
-        <table class='w-p90'>
-          <tr class='colhead'>
-            <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
-            <th><?php echo $lang->testcase->stepDesc;?></th>
-            <th class='w-200px'><?php echo $lang->testcase->stepExpect;?></th>
-            <th class='w-100px'><?php echo $lang->actions;?></th>
-          </tr>
-          <?php
-          foreach($steps as $stepID => $step)
+<div class='container'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
+      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->testcase->create;?></strong>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
+    <table class='table table-form'> 
+      <tr>
+        <th class='w-80px'><?php echo $lang->testcase->lblProductAndModule;?></th>
+        <td class='w-p35'>
+          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?>
+        </td>
+        <td class='w-p25'>
+          <div class='input-group' id='moduleIdBox'>
+          <?php 
+          echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control'");
+          if(count($moduleOptionMenu) == 1)
           {
-              $stepID += 1;
-              echo "<tr id='row$stepID' class='text-center'>";
-              echo "<th class='stepID'>$stepID</th>";
-              echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='w-p100'") . '</td>';
-              echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='w-p100'") . '</td>';
-              echo "<td class='a-left w-100px'><nobr>";
-              echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' /><br />";
-              echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /><br />";
-              echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /><br />";
-              echo "</nobr></td>";
-              echo '</tr>';
+              echo "<span class='input-group-addon'>";
+              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case"), $lang->tree->manage, '_blank');
+              echo '&nbsp; ';
+              echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+              echo '</span>';
           }
           ?>
-        </table>
-      </td> 
-    </tr>
-    <tr>
-      <th><?php echo $lang->testcase->keywords;?></th>
-      <td><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
-    </tr>  
-     <tr>
-      <th><?php echo $lang->testcase->files;?></th>
-      <td><?php echo $this->fetch('file', 'buildform');?></td>
-    </tr>  
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
-    </tr>
-  </table>
-</form>
+          </div>
+        </td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testcase->type;?></th>
+        <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->testcase->stage;?></th>
+        <td><?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->testcase->pri;?></th>
+        <td><?php echo html::select('pri', $lang->testcase->priList, $pri, "class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->testcase->lblStory;?></th>
+        <td colspan='3'>
+          <div class='input-group' id='storyIdBox'>
+            <?php echo html::select('story', $stories, $storyID, 'class="form-control" onchange=setPreview();');?>
+            <span class='input-group-btn' style='width: 0.01%'>
+            <?php if($storyID == 0): ?>
+              <a href='' id='preview' class='btn iframe hidden'><?php echo $lang->preview;?></a>
+            <?php else:?>
+              <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='btn iframe' id='preview'");?>
+            <?php endif;?>
+            </span>
+          </div>
+        </td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->testcase->title;?></th>
+        <td colspan='3'><?php echo html::input('title', $caseTitle, "class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->testcase->precondition;?></th>
+        <td colspan='3'><?php echo html::textarea('precondition', $precondition, " rows='4' class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->testcase->steps;?></th>
+        <td colspan='3'>
+          <table class='table table-form mg-0' style='border: 1px solid #ddd'>
+            <thead>
+              <tr>
+                <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+                <th><?php echo $lang->testcase->stepDesc;?></th>
+                <th class='w-200px'><?php echo $lang->testcase->stepExpect;?></th>
+                <th class='w-100px'><?php echo $lang->actions;?></th>
+              </tr>
+            </thead>
+            <?php
+            foreach($steps as $stepID => $step)
+            {
+                $stepID += 1;
+                echo "<tr id='row$stepID' class='text-center'>";
+                echo "<td class='stepID strong'>$stepID</td>";
+                echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
+                echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='form-control'") . '</td>';
+                echo "<td class='a-left w-100px'><div class='btn-group-vertical'>";
+                echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' />";
+                echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  />";
+                echo "<input type='button' tabindex='-1' class='delbutton btn btn-xs' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   />";
+                echo "</div></td>";
+                echo '</tr>';
+            }
+            ?>
+          </table>
+        </td> 
+      </tr>
+      <tr>
+        <th><?php echo $lang->testcase->keywords;?></th>
+        <td colspan='3'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
+      </tr>  
+       <tr>
+        <th><?php echo $lang->testcase->files;?></th>
+        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+      </tr>  
+      <tr>
+        <td colspan='4' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
+      </tr>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

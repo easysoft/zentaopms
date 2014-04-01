@@ -46,7 +46,7 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 .table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 2px}
 .table-fixed {table-layout: fixed;}
 .table-fixed th, .table-fixed td  {overflow:hidden; white-space:nowrap;}
-.table-fixed tfoot > tr > th, .table-fixed tfoot > tr > td {overflow: visible;}
+.table-fixed tfoot > tr > th, .table-fixed tfoot > tr > td, .table-fixed .nofixed{overflow: visible;}
 
 /* Tables sorters */
 .tablesorter thead tr div {padding:0; margin:0}
@@ -218,6 +218,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 /* Table condensed */
 .table-condensed th, .table-condensed td {padding: 6px 5px;}
 
+/* chosen container in input group */
+.input-group > .chosen-container {display: table-cell;}
+
 /* Condensed form */
 .form-condensed .table-form {margin-bottom: 0;}
 .form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
@@ -226,7 +229,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
 .form-condensed fieldset .table-form {margin-bottom: 0;}
 .form-condensed fieldset.collapsed, .form-condensed fieldset.fieldset-pure.collapsed {padding: 1px!important; background: #eee!important}
-.form-condensed fieldset.collapsed .table-form, .form-condensed fieldset.collapsed .article-content, .form-condensed fieldset.collapsed .form-group {display: none}
+.form-condensed fieldset.collapsed .table-form, .form-condensed fieldset.collapsed .article-content, .form-condensed fieldset.collapsed .form-group, .form-condensed fieldset.collapsed #historyItem {display: none}
 .form-condensed legend {font-size: 12px; font-weight: bold; border:0px solid red; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666}
 .form-condensed .fieldset-pure legend{top: -20px}
 .form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}

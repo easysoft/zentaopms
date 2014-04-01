@@ -51,8 +51,8 @@ function setStories()
     {
         if(!stories) stories = '<select id="story" name="story"></select>';
         $('#story').replaceWith(stories);
-        $('#story_chzn').remove();
-        $("#story").chosen({no_results_text: ''});
+        $('#story_chosen').remove();
+        $("#story").chosen(defaultChosenOptions);
     });
 }
 
@@ -107,14 +107,14 @@ function createRow()
     if(newRowID == 0) newRowID = $('.stepID').size();
     newRowID ++;
     var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
-    newRow += "<th class='stepID'></th>";
-    newRow += "<td class='w-p50'><textarea name='steps[]' rows=3 class='w-p100'></textarea></td>";
-    newRow += "<td><textarea name='expects[]' rows=3 class='w-p100'></textarea></td>";
-    newRow += "<td class='a-left w-100px'><nobr>";
-    newRow += "<input type='button' tabindex='-1' class='addbutton' value='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' /><br />";
-    newRow += "<input type='button' tabindex='-1' class='addbutton' value='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' /><br />";
-    newRow += "<input type='button' tabindex='-1' class='delbutton' value='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' /><br />";
-    newRow += "</nobr></td>";
+    newRow += "<td class='stepID strong'></td>";
+    newRow += "<td class='w-p50'><textarea name='steps[]' rows=3 class='form-control'></textarea></td>";
+    newRow += "<td><textarea name='expects[]' rows=3 class='form-control'></textarea></td>";
+    newRow += "<td class='a-left w-100px'><div class='btn-group-vertical'>";
+    newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' />";
+    newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' />";
+    newRow += "<input type='button' tabindex='-1' class='delbutton btn' value='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' />";
+    newRow += "</div></td>";
     return newRow;
 }
 

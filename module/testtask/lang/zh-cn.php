@@ -12,6 +12,7 @@
 $lang->testtask->index          = "测试任务首页";
 $lang->testtask->create         = "提交测试";
 $lang->testtask->delete         = "删除测试任务";
+$lang->testtask->deleted        = "已删除";
 $lang->testtask->view           = "详情";
 $lang->testtask->edit           = "编辑测试任务";
 $lang->testtask->browse         = "待测列表";
