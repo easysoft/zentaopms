@@ -7,7 +7,8 @@
     echo "<li id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</li>' ;
 
     echo "<li id='statusTab' class='dropdown'>";
-    $current = $lang->project->statusSelects[isset($status) ? $status : ''];
+    $status = isset($status) ? $status : '';
+    $current = zget($lang->project->statusSelects, $status, '');
     if(empty($current)) $current = $lang->project->statusSelects[''];
     echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
     echo "<ul class='dropdown-menu'>";
@@ -20,7 +21,8 @@
     echo '</ul></li>';
 
     echo "<li id='groupTab' class='dropdown'>";
-    $current = $lang->project->groups[isset($groupBy) ? $groupBy : ''];
+    $groupBy = isset($groupBy) ? $groupBy : '';
+    $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
     if(empty($current)) $current = $lang->project->groups[''];
     echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
     echo "<ul class='dropdown-menu'>";
