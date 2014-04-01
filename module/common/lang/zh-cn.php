@@ -411,6 +411,7 @@ $lang->icons['task']    = 'check-sign';
 $lang->icons['tasks']   = 'tasks';
 $lang->icons['project'] = 'folder-close-alt';
 $lang->icons['doc']     = 'file-text';
+$lang->icons['doclib']  = 'folder-close';
 $lang->icons['story']   = 'lightbulb';
 $lang->icons['release'] = 'tags';
 $lang->icons['roadmap'] = 'code-fork';

@@ -30,6 +30,6 @@ function setType(type)
 
 $(document).ready(function()
 {
-    $("#submenucreate").colorbox({width:500, height:200, iframe:true, transition:'none'});  // The create lib link.
-    $("#submenuedit").colorbox({width:500, height:200, iframe:true, transition:'none'});   // The edit lib link.
+    $("#submenucreate").modalTrigger({type: 'iframe', width: 500});
+    $("#submenuedit").modalTrigger({type: 'iframe', width: 500});
 });

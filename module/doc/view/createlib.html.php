@@ -11,16 +11,19 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->doc->createLib;?></caption>
-    <tr>
-      <th><?php echo $lang->doc->libName;?></th>
-      <td><?php echo html::input('name', '', "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-    </tr>
-  </table>
-</form>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
+    <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->doc->createLib;?></strong>
+  </div>
+</div>
+<div class='main'>
+  <form method='post' class='form-condensed'>
+    <div class='form-group'>
+      <label for="name"><?php echo $lang->doc->libName;?></label>
+      <?php echo html::input('name', '', "class='form-control'");?>
+    </div>
+    <?php echo html::submitButton();?>
+  </form>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

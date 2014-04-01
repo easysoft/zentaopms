@@ -808,79 +808,105 @@ function ajaxDelete(url, replaceID, notice)
  */
 function setModal()
 {
-    if($('[data-toggle="modal"], a.iframe').size() == 0) return false;
-
-    /* Addpend modal div. */
-    $('<div id="ajaxModal" class="modal fade"></div>').appendTo('body');
-
-    $('[data-toggle=modal], a.iframe').click(function(event)
+    jQuery.fn.modalTrigger = function(setting)
     {
-        var $e   = $(this);
-        var url  = $e.attr('href') || $e.data('url');
-        var type = $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
-        if(type == 'iframe')
-        {
-            var options = 
-            {
-                url: url,
-                width: $e.data('width') || 800,
-                height: $e.data('height') || 'auto',
-                icon: $e.data('icon') || '?',
-                title: $e.data('title') || $e.attr('title') || $e.text(),
-                name: $e.data('name') || 'modalIframe'
-            }
-            if(options.height != 'auto') options.height += 'px';
-            if(options.icon == '?')
-            {
-                var i = $e.find("[class^='icon-']");
-                options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
-            }
-            var modal = $('#ajaxModal').addClass('modal-loading');
-            modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: {height}'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+        initModalFrame(setting);
 
-            var frame = document.getElementById(options.name);
-            frame.onload = frame.onreadystatechange = function()
+        $(this).click(function(event)
+        {
+            var $e   = $(this);
+            var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
+            var type = (setting ? setting.type : false) || $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
+            if(type == 'iframe')
             {
-                if (this.readyState && this.readyState != 'complete') return;
-                modal.removeClass('modal-loading');
-                if(options.height == 'auto')
+                var options = 
                 {
+                    url: url,
+                    width: $e.data('width') || 800,
+                    height: $e.data('height') || 'auto',
+                    icon: $e.data('icon') || '?',
+                    title: $e.data('title') || $e.attr('title') || $e.text(),
+                    name: $e.data('name') || 'modalIframe'
+                }
+                options = $.extend(options, setting);
+                
+                if(options.height != 'auto') options.height += 'px';
+                if(options.icon == '?')
+                {
+                    var i = $e.find("[class^='icon-']");
+                    options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
+                }
+                var modal = $('#ajaxModal').addClass('modal-loading');
+                modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: {height}'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+
+                var frame = document.getElementById(options.name);
+                frame.onload = frame.onreadystatechange = function()
+                {
+                    if (this.readyState && this.readyState != 'complete') return;
+                    modal.removeClass('modal-loading');
+
                     try
                     {
                         var $frame = $(window.frames[options.name].document);
                         if($frame.find('#titlebar').length) modal.addClass('with-titlebar');
-
-                        setTimeout(function()
+                        if(options.height == 'auto')
                         {
-                            modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
-                        }, 100);
+                            setTimeout(function()
+                            {
+                                modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
+                            }, 100);
+                        }
                     }
                     catch(e){}
                 }
+                modal.modal('show');
             }
-            modal.modal('show');
+            else
+            {
+                $('#ajaxModal').load(url, function()
+                {
+                    /* Set the width of modal dialog. */
+                    if($e.data('width'))
+                    {
+                        var modalWidth = parseInt($e.data('width'));
+                        $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
+                    }
+
+                    /* show the modal dialog. */
+                    $('#ajaxModal').modal('show');
+                });
+            }
+
+            /* Save the href to rel attribute thus we can save it. */
+            $('#ajaxModal').attr('rel', url);
+
+            return false;
+        });
+    }
+
+    function initModalFrame(setting)
+    {
+        if($('#ajaxModal').length)
+        {
+            /* unbind all events */
+            $('#ajaxModal').off('show.bs.modal shown.bs.modal hide.bs.modal hidden.bs.modal');
         }
         else
         {
-            $('#ajaxModal').load(url, function()
-            {
-                /* Set the width of modal dialog. */
-                if($e.data('width'))
-                {
-                    var modalWidth = parseInt($e.data('width'));
-                    $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
-                }
-
-                /* show the modal dialog. */
-                $('#ajaxModal').modal('show');
-            });
+            /* Addpend modal div. */
+            $('<div id="ajaxModal" class="modal fade"></div>').appendTo('body');
         }
 
-        /* Save the href to rel attribute thus we can save it. */
-        $('#ajaxModal').attr('rel', url);
+        /* rebind events */
+        if(!setting) return;
+        $ajaxModal = $('#ajaxModal');
+        if(setting.afterShow && $.isFunction(setting.afterShow)) $ajaxModal.on('show.bs.modal', setting.afterShow);
+        if(setting.afterShown && $.isFunction(setting.afterShown)) $ajaxModal.on('shown.bs.modal', setting.afterShown);
+        if(setting.afterHide && $.isFunction(setting.afterHide)) $ajaxModal.on('hide.bs.modal', setting.afterHide);
+        if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.bs.modal', setting.afterHidden);
+    }
 
-        return false;
-    });
+    $('[data-toggle=modal], a.iframe').modalTrigger();
 }
 
 /**

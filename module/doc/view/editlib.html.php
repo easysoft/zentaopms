@@ -12,17 +12,27 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php if($libID == 'product' or $libID == 'project'):?>
-  <p class='a-center strong mt-10px'><?php echo $lang->doc->errorEditSystemDoc;?></p>
+<div class='main'>
+  <div class='alert alert-info'>
+    <i class='icon-info-sign'></i>
+    <div class='content'><h5><?php echo $lang->doc->errorEditSystemDoc;?></h5></div>
+  </div>
+</div>
 <?php else:?>
-<form method='post'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->doc->editLib;?></caption>
-    <tr>
-      <th><?php echo $lang->doc->libName;?></th>
-      <td><?php echo html::input('name', $libName, "class='form-control'");?></td>
-    </tr>  
-    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
-  </table>
-</form>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
+    <strong><small class='text-muted'><i class='icon icon-pencil'></i></small> <?php echo $lang->doc->editLib;?></strong>
+  </div>
+</div>
+<div class='main'>
+  <form method='post' class='form-condensed'>
+    <div class='form-group'>
+      <label for="name"><?php echo $lang->doc->libName;?></label>
+      <?php echo html::input('name', $libName, "class='form-control'");?>
+    </div>
+    <?php echo html::submitButton();?>
+  </form>
+</div>
 <?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>
