@@ -577,7 +577,6 @@ function toggleSearch()
         {
             if(browseType == 'bymodule')
             {
-                $('#treebox').addClass('hidden');
                 $('#bymoduleTab').removeClass('active');
             }
             else
@@ -592,7 +591,6 @@ function toggleSearch()
         {
             if(browseType == 'bymodule')
             {
-                $('#treebox').removeClass('hidden');
                 $('#bymoduleTab').addClass('active');
             }
             else

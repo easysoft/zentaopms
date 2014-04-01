@@ -1,7 +1,6 @@
 /* Browse by module. */
 function browseByModule()
 {
-    $('#treebox').removeClass('hidden');
     $('.divider').removeClass('hidden');
     $('#bymoduleTab').addClass('active');
     $('#allTab').removeClass('active');
@@ -11,7 +10,6 @@ function browseByModule()
 
 function browseBySearch()
 {
-    $('#treebox').addClass('hidden');
     $('.divider').addClass('hidden');
     $('#bymoduleTab').removeClass('active');
     $('#allTab').addClass('active');

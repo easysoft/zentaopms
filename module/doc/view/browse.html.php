@@ -13,76 +13,71 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
-  <div class='f-left'>
-    <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
-    <span id='bysearchTab'><a href='#' class='link-icon'><i class='icon-search icon icon-large'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></span>
-  </div>
-  <div class='text-right'>
+  <div class='heading'><?php echo html::icon($lang->icons['doc']);?></div>
+  <ul class='nav'>
+    <li id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></li>
+    <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
+  </ul>
+  <div class='actions'>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc");?>
   </div>
+  <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
-
-<table class='cont-lt3'>
-  <tr valign='top'>
-    <td class='side' id='treebox'>
-      <div class='box-title'><?php echo $libName;?></div>
-      <div class='box-content'>
-        <?php echo $moduleTree;?>
-        <div class='text-right'>
-          <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
-          <?php if(is_numeric($libID)) common::printLink('tree', 'fix', "root=$libID&type=customdoc", $lang->tree->fix, 'hiddenwin');?>
-        </div>
-      </div>
-    </td>
-    <td class='divider'></td>
-    <td>
-      <table class='table-1 fixed colored tablesorter datatable' id='docList'>
-        <thead>
-          <tr class='colhead'>
-            <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-            <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
-            <th>                <?php common::printOrderLink('title',     $orderBy, $vars, $lang->doc->title);?></th>
-            <th class='w-100px'><?php common::printOrderLink('type',      $orderBy, $vars, $lang->doc->type);?></th>
-            <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
-            <th class='w-120px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
-            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($docs as $key => $doc):?>
-          <?php
-          $viewLink = $this->createLink('doc', 'view', "docID=$doc->id");
-          $canView  = common::hasPriv('doc', 'view');
+<div class='side' id='treebox'>
+  <button class='side-handle' data-id='treebox'><i class='icon-caret-left'></i></button>
+  <header class='nobr'><?php echo html::icon('folder-close');?> <strong><?php echo $libName;?></strong></header>
+  <div class='side-body'>
+    <?php echo $moduleTree;?>
+    <div class='text-right'>
+      <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
+      <?php if(is_numeric($libID)) common::printLink('tree', 'fix', "root=$libID&type=customdoc", $lang->tree->fix, 'hiddenwin');?>
+    </div>
+  </div>
+</div>
+<div class='main'>
+  <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='docList'>
+    <thead>
+      <tr>
+        <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+        <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+        <th>                <?php common::printOrderLink('title',     $orderBy, $vars, $lang->doc->title);?></th>
+        <th class='w-100px'><?php common::printOrderLink('type',      $orderBy, $vars, $lang->doc->type);?></th>
+        <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
+        <th class='w-120px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+        <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($docs as $key => $doc):?>
+      <?php
+      $viewLink = $this->createLink('doc', 'view', "docID=$doc->id");
+      $canView  = common::hasPriv('doc', 'view');
+      ?>
+      <tr class='text-center'>
+        <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
+        <td class='text-left' title="<?php echo $doc->title?>"><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
+        <td><?php echo $lang->doc->types[$doc->type];?></td>
+        <td><?php isset($users[$doc->addedBy]) ? print($users[$doc->addedBy]) : print($doc->addedBy);?></td>
+        <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
+        <td>
+          <?php 
+          common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
+          if(common::hasPriv('doc', 'delete'))
+          {
+              $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
+          }
           ?>
-          <tr class='text-center'>
-            <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
-            <td class='text-left' title="<?php echo $doc->title?>"><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
-            <td><?php echo $lang->doc->types[$doc->type];?></td>
-            <td><?php isset($users[$doc->addedBy]) ? print($users[$doc->addedBy]) : print($doc->addedBy);?></td>
-            <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
-            <td>
-              <?php 
-              common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
-              if(common::hasPriv('doc', 'delete'))
-              {
-                  $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"docList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='link-icon' title='{$lang->doc->delete}'");
-              }
-              ?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-        <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
-      </table>
-    </td>              
-  </tr>    
-</table>  
+        </td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+    <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>
