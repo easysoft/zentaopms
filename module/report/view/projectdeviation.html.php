@@ -1,14 +1,22 @@
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<table class="cont-lt1">
-  <tr valign='top'>
-    <td class='side'>
-      <?php include 'blockreportlist.html.php';?>
-    </td>
-    <td class='divider'></td>
-    <td>
-      <table class='table-1 fixed colored tablesorter datatable border-sep'>
-        <thead>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['report-file']);?></span>
+    <strong> <?php echo $title;?></strong>
+  </div>
+  <div class='actions'>
+    <div class='text proversion'>
+      <strong class='text-danger small text-latin'>PRO</strong> &nbsp;<span class='text-important'><?php echo $lang->report->proVersion;?></span>
+    </div>
+  </div>
+</div>
+<div class='side'>
+  <button class='side-handle' data-id='projectDeviationTree'><i class='icon-caret-left'></i></button>
+  <?php include 'blockreportlist.html.php';?>
+</div>
+<div class='main'>
+  <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled'>
+    <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->report->id;?></th>
           <th class="w-200px"><?php echo $lang->report->project;?></th>
@@ -23,88 +31,86 @@
           <th><?php echo $lang->report->deviation;?></th>
           <th><?php echo $lang->report->deviationRate;?></th>
         </tr>
-        </thead>
-        <tbody>
-        <?php foreach($projects as $id  =>$project):?>
-          <tr class="a-center">
-            <td><?php echo $id;?></td>
-            <td align="left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
-            <td><?php echo isset($project->tasks) ? $project->tasks : 0;?></td>
-            <td><?php echo isset($project->stories) ? $project->stories : 0;?></td>
-            <td><?php echo isset($project->bugs) ? $project->bugs : 0;?></td>
-            <?php
-                $project->devConsumed  = isset($project->devConsumed) ? $project->devConsumed : 0;
-                $project->testConsumed = isset($project->testConsumed) ? $project->testConsumed : 0;
-                $project->estimate     = isset($project->estimate) ? $project->estimate : 0;
-                $project->consumed     = isset($project->consumed) ? $project->consumed : 0;
-            ?>
-            <td><?php echo $project->devConsumed;?></td>
-            <td><?php echo $project->testConsumed;?></td>
-            <td><?php echo round($project->devConsumed / (($project->testConsumed < 1) ? 1 : $project->testConsumed), 1);?></td>
-            <td><?php echo $project->estimate;?></td>
-            <td><?php echo $project->consumed;?></td>
-            <?php $deviation = $project->consumed - $project->estimate;?>
-            <td class="deviation">
-            <?php 
-                if($deviation > 0)
+    </thead>
+    <tbody>
+    <?php foreach($projects as $id  =>$project):?>
+      <tr class="a-center">
+        <td><?php echo $id;?></td>
+        <td align="left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
+        <td><?php echo isset($project->tasks) ? $project->tasks : 0;?></td>
+        <td><?php echo isset($project->stories) ? $project->stories : 0;?></td>
+        <td><?php echo isset($project->bugs) ? $project->bugs : 0;?></td>
+        <?php
+            $project->devConsumed  = isset($project->devConsumed) ? $project->devConsumed : 0;
+            $project->testConsumed = isset($project->testConsumed) ? $project->testConsumed : 0;
+            $project->estimate     = isset($project->estimate) ? $project->estimate : 0;
+            $project->consumed     = isset($project->consumed) ? $project->consumed : 0;
+        ?>
+        <td><?php echo $project->devConsumed;?></td>
+        <td><?php echo $project->testConsumed;?></td>
+        <td><?php echo round($project->devConsumed / (($project->testConsumed < 1) ? 1 : $project->testConsumed), 1);?></td>
+        <td><?php echo $project->estimate;?></td>
+        <td><?php echo $project->consumed;?></td>
+        <?php $deviation = $project->consumed - $project->estimate;?>
+        <td class="deviation">
+        <?php 
+            if($deviation > 0)
+            {
+                echo '<span class="up">&uarr;</span>' . $deviation;
+            }
+            else if($deviation < 0)
+            {
+                echo '<span class="down">&darr;</span>' . abs($deviation);
+            }
+            else
+            {
+                echo '<span class="zero">0</span>'; 
+            }
+        ?>
+        </td>
+        <td class="deviation">
+          <?php 
+            if($project->estimate)
+            {
+                $num = round($deviation / $project->estimate * 100, 2);
+                if($num >= 50)
                 {
-                    echo '<span class="up">&uarr;</span>' . $deviation;
+                    echo '<span class="u50">' . $num . '%</span>';
                 }
-                else if($deviation < 0)
+                else if($num >= 30)
                 {
-                    echo '<span class="down">&darr;</span>' . abs($deviation);
+                    echo '<span class="u30">' . $num . '%</span>';
                 }
-                else
+                else if($num >= 10)
                 {
-                    echo '<span class="zero">0</span>'; 
+                    echo '<span class="u10">' . $num . '%</span>';
                 }
-            ?>
-            </td>
-            <td class="deviation">
-              <?php 
-                if($project->estimate)
+                else if($num > 0)
                 {
-                    $num = round($deviation / $project->estimate * 100, 2);
-                    if($num >= 50)
-                    {
-                        echo '<span class="u50">' . $num . '%</span>';
-                    }
-                    else if($num >= 30)
-                    {
-                        echo '<span class="u30">' . $num . '%</span>';
-                    }
-                    else if($num >= 10)
-                    {
-                        echo '<span class="u10">' . $num . '%</span>';
-                    }
-                    else if($num > 0)
-                    {
-                        echo '<span class="u0">' . abs($num) . '%</span>';
-                    }
-                    else if($num <= -20)
-                    {
-                        echo '<span class="d20">' . abs($num) . '%</span>';
-                    }
-                    else if($num < 0)
-                    {
-                        echo '<span class="d0">' . abs($num) . '%</span>';
-                    }
-                    else
-                    {
-                        echo '<span class="zero">' . abs($num) . '%</span>';
-                    }
+                    echo '<span class="u0">' . abs($num) . '%</span>';
+                }
+                else if($num <= -20)
+                {
+                    echo '<span class="d20">' . abs($num) . '%</span>';
+                }
+                else if($num < 0)
+                {
+                    echo '<span class="d0">' . abs($num) . '%</span>';
                 }
                 else
                 {
-                    echo '<span class="zero">0%</span>';
+                    echo '<span class="zero">' . abs($num) . '%</span>';
                 }
-              ?>
-            </td>
-          </tr>
-        <?php endforeach;?>
-        </tbody>
-      </table> 
-    </td>
-  </tr>
-</table>
+            }
+            else
+            {
+                echo '<span class="zero">0%</span>';
+            }
+          ?>
+        </td>
+      </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table> 
+</div>
 <?php include '../../common/view/footer.html.php';?>

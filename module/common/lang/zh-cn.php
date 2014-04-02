@@ -435,6 +435,7 @@ $lang->icons['delete']         = 'remove';
 $lang->icons['copy']           = 'copy';
 $lang->icons['report']         = 'bar-chart';
 $lang->icons['export']         = 'download-alt';
+$lang->icons['report-file']    = 'file-powerpoint';
 $lang->icons['import']         = 'upload-alt';
 $lang->icons['finish']         = 'ok-sign';
 $lang->icons['resolve']        = 'ok-sign';
