@@ -12,18 +12,24 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div id='querybox'></div>
-<form method='post'>
-  <table align='center' class='table-1 tablesorter a-center fixed'> 
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
+    <strong><small><?php echo html::icon($lang->icons['link']);?></small> <?php echo $lang->project->linkStory;?></strong>
+  </div>
+  <div id='querybox' class='show'></div>
+</div>
+<form method='post' class='form-condensed'>
+  <table align='center' class='table tablesorter table-fixed'> 
     <thead>
-    <tr class='colhead'>
+    <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->story->product;?></th>
       <th><?php echo $lang->story->title;?></th>
       <th><?php echo $lang->story->plan;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
-      <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
+      <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
     </tr>
     </thead>
     <tbody>
@@ -31,7 +37,7 @@
     <?php foreach($allStories as $story):?>
     <?php if(isset($prjStories[$story->id])) continue;?>
     <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
-    <tr>
+    <tr class='text-center'>
       <td class='text-left'>
         <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
         <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
@@ -39,7 +45,7 @@
       </td>
       <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-      <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
@@ -50,10 +56,13 @@
     <tfoot>
       <tr>
         <td colspan='7' class='text-left'>
+          <div class='table-actions clearfix'>
+            
           <?php 
-          if($storyCount)  echo html::selectAll() . html::selectReverse() . html::submitButton();
-          if(!$storyCount) echo $lang->project->whyNoStories;
+          if($storyCount) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() .'</div>' . html::submitButton();
+          else echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
           ?>
+          </div>
         </td>
       </tr>
     </tfoot>

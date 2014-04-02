@@ -13,52 +13,60 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table class='table table-form'> 
-    <caption><?php echo $lang->testtask->edit;?></caption>
-    <tr>
-      <th><?php echo $lang->testtask->project;?></th>
-      <td><?php echo html::select('project', $projects, $task->project, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->build;?></th>
-      <td><?php echo html::select('build', $builds, $task->build, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->owner;?></th>
-      <td><?php echo html::select('owner', $users, $task->owner, "class='form-control chosen'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->pri;?></th>
-      <td><?php echo html::select('pri', $lang->testtask->priList, $task->pri, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->begin;?></th>
-      <td><?php echo html::input('begin', $task->begin, "class='form-control form-date'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->end;?></th>
-      <td><?php echo html::input('end', $task->end, "class='form-control form-date'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->status;?></th>
-      <td><?php echo html::select('status', $lang->testtask->statusList, $task->status,  "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->name;?></th>
-      <td><?php echo html::input('name', $task->name, "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->desc;?></th>
-      <td><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->testtask->report;?></th>
-      <td><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
-    </tr>
-  </table>
-</form>
+<div class='container mw-800px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix' title='TESTTASK'><?php echo html::icon($lang->icons['testtask']);?></span>
+      <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $task->id), $task->name, '_blank');?></strong>
+      <small class='text-muted'> <?php echo $lang->testtask->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
+    <table class='table table-form'> 
+      <tr>
+        <th class='w-80px'><?php echo $lang->testtask->project;?></th>
+        <td class='w-p45'><?php echo html::select('project', $projects, $task->project, "class='form-control'");?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->build;?></th>
+        <td><?php echo html::select('build', $builds, $task->build, "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->owner;?></th>
+        <td><?php echo html::select('owner', $users, $task->owner, "class='form-control chosen'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->pri;?></th>
+        <td><?php echo html::select('pri', $lang->testtask->priList, $task->pri, "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->begin;?></th>
+        <td><?php echo html::input('begin', $task->begin, "class='form-control form-date'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->end;?></th>
+        <td><?php echo html::input('end', $task->end, "class='form-control form-date'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->status;?></th>
+        <td><?php echo html::select('status', $lang->testtask->statusList, $task->status,  "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->name;?></th>
+        <td colspan='2'><?php echo html::input('name', $task->name, "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->desc;?></th>
+        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->testtask->report;?></th>
+        <td colspan='2'><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='form-control'");?></td>
+      </tr>
+      <tr>
+        <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton();?> </td>
+      </tr>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

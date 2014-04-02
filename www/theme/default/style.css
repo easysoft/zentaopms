@@ -64,7 +64,7 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 
 /* Datepicker */
 .datepicker-wrapper {position: relative;}
-.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 6px; color: #808080; font-size: 14px; top: 4px}
+.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 0}
 .datepicker-wrapper > .form-control {padding-right: 30px;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
