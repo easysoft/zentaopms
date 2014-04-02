@@ -11,11 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table align='center' class='table-4'> 
-    <caption><?php echo $lang->group->edit;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='GROUP'><?php echo html::icon($lang->icons['group']) . ' #' . $group->id;?></span>
+    <strong><?php echo $group->name;?></strong>
+    <small class='text-muted'> <?php echo $lang->group->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+  </div>
+</div>
+
+<form class='form-condensed mw-500px pdb-20' method='post' target='hiddenwin' id='dataform'>
+  <table align='center' class='table table-form'> 
     <tr>
-      <th><?php echo $lang->group->name;?></th>
+      <th class='w-100px'><?php echo $lang->group->name;?></th>
       <td><?php echo html::input('name', $group->name, "class='form-control'");?></td>
     </tr>  
     <tr>

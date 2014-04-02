@@ -11,11 +11,17 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table align='center' class='table-5'> 
-    <caption><?php echo $lang->company->edit;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='COMPANY'><?php echo html::icon($lang->icons['company']) . ' #' . $company->id;?></span>
+    <strong><?php echo $company->name;?></strong>
+    <small class='text-muted'> <?php echo $lang->company->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+  </div>
+</div>
+<form class='form-condensed mw-500px pdb-20' method='post' target='hiddenwin'>
+  <table align='center' class='table table-form'> 
     <tr>
-      <th><?php echo $lang->company->name;?></th>
+      <th class='w-100px'><?php echo $lang->company->name;?></th>
       <td><?php echo html::input('name', $company->name, "class='form-control'");?></td>
     </tr>  
     <tr>
@@ -46,7 +52,7 @@
       <th><?php echo $lang->company->guest;?></th>
       <td><?php echo html::radio('guest', $lang->company->guestList, $company->guest);?></td>
     </tr>  
-    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td></td><td><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

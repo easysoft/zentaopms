@@ -420,7 +420,10 @@ $lang->icons['dynamic'] = 'volume-up';
 $lang->icons['build']   = 'tag';
 $lang->icons['test']    = 'check';
 $lang->icons['testtask']= 'check';
+$lang->icons['group']   = 'group';
 $lang->icons['team']    = 'group';
+$lang->icons['company'] = 'building';
+$lang->icons['dept']    = 'sitemap';
 $lang->icons['usecase'] = 'usecase';
 $lang->icons['testcase']= 'smile';
 $lang->icons['result']  = 'flag-checkered';
@@ -456,5 +459,6 @@ $lang->icons['suspend']        = 'pause';
 $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';
+$lang->icons['manage']         = 'cog';
 
 include (dirname(__FILE__) . '/menuOrder.php');

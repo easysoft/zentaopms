@@ -252,11 +252,14 @@ class common extends control
      * @param  string $type button|list 
      * @param  string $icon 
      * @param  string $target 
+     * @param  string $extraClass 
+     * @param  bool   $onlyBody 
+     * @param  string $misc 
      * @static
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false)
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '')
     {
         if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
 
@@ -316,23 +319,23 @@ class common extends control
             {
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass'", true);
+                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass' $misc", true);
                 }
                 else
                 {
-                    echo html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title'", false);
+                    echo html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
                 }
             }
             else
             {
-                echo html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title'", false);
+                echo html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title' $misc", false);
             }
         }
         else
         {
             if($type == 'list')
             {
-                echo "<button class='disabled btn-icon $extraClass'><i class='$class' title='$title'></i></button>";
+                echo "<button class='disabled btn-icon $extraClass'><i class='$class' title='$title' $misc></i></button>";
             }
         }
     }

@@ -12,62 +12,72 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<table class="cont-lt4">                 
-  <tr valign='top'>
-    <td class='side'>
-      <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'updateOrder');?>'>
-        <table class='table-1'>
-          <caption><?php echo $title;?></caption>
-          <tr>
-            <td>
-              <div id='main'><?php echo $depts;?></div>
-              <div class='text-center'><?php echo html::submitButton($lang->dept->updateOrder);?></div>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </td>
-    <td class='divider'></td>
-    <td>
-      <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>'>
-        <table align='center' class='table-1'>
-          <caption><?php echo $lang->dept->manageChild;?></caption>
-          <tr>
-            <td width='10%'>
-              <nobr>
-              <?php
-              echo html::a($this->createLink('dept', 'browse'), $this->app->company->name);
-              echo $lang->arrow;
-              foreach($parentDepts as $dept)
-              {
-                  echo html::a($this->createLink('dept', 'browse', "deptID=$dept->id"), $dept->name);
+<div id='featurebar'>
+  <div class='heading'><?php echo html::icon($lang->icons['dept']);?> <?php echo $lang->dept->common;?></div>
+</div>
+<div class='main'>
+  <div class='row'>
+    <div class='col-sm-4'>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'>
+          <?php echo html::icon($lang->icons['dept']);?> <strong><?php echo $title;?></strong>
+        </div>
+        <div class='panel-body'>
+          <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'updateOrder');?>'>
+            <div id='main'><?php echo $depts;?></div>
+            <div class='text-center'><?php echo html::submitButton($lang->dept->updateOrder);?></div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class='col-sm-8'>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'>
+          <i class='icon-sitemap'></i> <strong><?php echo $lang->dept->manageChild;?></strong>
+        </div>
+        <div class='panel-body'>
+          <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>' class='form-condensed'>
+            <table class='table table-form'>
+              <tr>
+                <td>
+                  <nobr>
+                  <?php
+                  echo html::a($this->createLink('dept', 'browse'), $this->app->company->name);
                   echo $lang->arrow;
-              }
-              ?>
-              </nobr>
-            </td>
-            <td> 
-              <?php
-              $maxOrder = 0;
-              foreach($sons as $sonDept)
-              {
-                  if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
-                  echo html::input("depts[id$sonDept->id]", $sonDept->name) . '<br />';
-              }
-              for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]") . '<br />';
-             ?>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <?php echo html::submitButton() . html::backButton() . html::hidden('maxOrder', $maxOrder);?>
-              <input type='hidden' value='<?php echo $deptID;?>' name='parentDeptID' />
-            </td>
-          </tr>
-        </table>
-      </form>
-    </td>
-  </tr>
-</table>  
+                  foreach($parentDepts as $dept)
+                  {
+                      echo html::a($this->createLink('dept', 'browse', "deptID=$dept->id"), $dept->name);
+                      echo $lang->arrow;
+                  }
+                  ?>
+                  </nobr>
+                </td>
+                <td class='w-300px'> 
+                  <?php
+                  $maxOrder = 0;
+                  foreach($sons as $sonDept)
+                  {
+                      if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
+                      echo html::input("depts[id$sonDept->id]", $sonDept->name, "class='form-control'");
+                  }
+                  for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control'");
+                 ?>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <?php echo html::submitButton() . html::backButton() . html::hidden('maxOrder', $maxOrder);?>
+                  <input type='hidden' value='<?php echo $deptID;?>' name='parentDeptID' />
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

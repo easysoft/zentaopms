@@ -11,16 +11,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table align='center' class='table-1 a-left'> 
-    <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='GROUP'><?php echo html::icon($lang->icons['group']) . ' #' . $group->id;?></span>
+    <strong><?php echo $group->name;?></strong>
+    <small class='text-muted'> <?php echo $lang->group->manageMember;?> <?php echo html::icon($lang->icons['manage']);?></small>
+  </div>
+</div>
+
+<form class='form-condensed pdb-20' method='post' target='hiddenwin'>
+  <table align='center' class='table table-form'> 
     <?php if($groupUsers):?>
     <tr>
-      <th><?php echo $lang->group->inside;?><?php echo html::selectAll('group', 'checkbox', true);?> </th>
+      <th class='w-100px'><?php echo $lang->group->inside;?><?php echo html::selectAll('group', 'checkbox', true);?> </th>
       <td id='group' class='f-14px pv-10px'><?php $i = 1;?>
         <?php foreach($groupUsers as $account => $realname):?>
-        <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), $account) . '</span>';?></div>
-        <?php if(($i %  8) == 0) echo "<div class='c-both'></div>"; $i ++;?>
+        <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), $account);?></div>
         <?php endforeach;?>
       </td>
     </tr>
@@ -29,8 +35,7 @@
       <th><?php echo $lang->group->outside;?><?php echo html::selectAll('other','checkbox');?> </th>
       <td id='other' class='f-14px pv-10px'><?php $i = 1;?>
         <?php foreach($otherUsers as $account => $realname):?>
-        <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), '') . '</span>';?></div>
-        <?php if(($i %  8) == 0) echo "<div class='c-both'></div>"; $i ++;?>
+        <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
         <?php endforeach;?>
       </td>
     </tr>

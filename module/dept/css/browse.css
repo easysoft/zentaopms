@@ -1,1 +1,4 @@
-.table-1 input{margin-bottom:3px}
+.table.table-form {width: auto;}
+.table-form > tbody > tr > td .form-control {position: relative; z-index: 99}
+.table-form > tbody > tr > td .form-control + .form-control {margin-top: -1px;}
+.table-form > tbody > tr > td .form-control + .form-control:focus {z-index: 9999}
