@@ -234,13 +234,13 @@ class commonModel extends model
         echo "<div class='dropdown' id='langSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->config->langs[$app->cookie->lang] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
         foreach ($app->config->langs as $key => $value)
         {
-            echo "<li" . ($app->cookie->lang == $key ? " class='active'" : '') . "><a href='javascript:;' data-value='" . $key . "'>" . $value . "</a></li>";
+            echo "<li" . ($app->cookie->lang == $key ? " class='active'" : '') . "><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
         }
         echo '</ul></div>';
         echo "<div class='dropdown' id='themeSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->lang->themes[$app->cookie->theme] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
         foreach ($app->lang->themes as $key => $value)
         {
-            echo "<li" . ($app->cookie->theme == $key ? " class='active'" : '') . "><a href='javascript:;' data-value='" . $key . "'>" . $value . "</a></li>";
+            echo "<li" . ($app->cookie->theme == $key ? " class='active'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
         }
         echo '</ul></div>';
     }

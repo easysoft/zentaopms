@@ -482,7 +482,7 @@ EOT;
      * @access public
      * @return string the common button tag.
      */
-    public static function commonButton($label = '', $misc = '', $class = '', $icon)
+    public static function commonButton($label = '', $misc = '', $class = '', $icon = '')
     {
         if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
         if($class) $class = 'btn ' . $class; else $class = 'btn';
