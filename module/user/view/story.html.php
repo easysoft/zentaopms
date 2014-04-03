@@ -13,17 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<div id='featurebar'>
-  <div class='f-left'>
+<div class='sub-featurebar'>
+  <ul class='nav'>
     <?php
-    echo "<span id='assignedToTab'>" . html::a(inlink('story', "account=$account&type=assignedTo"),  $lang->user->assignedTo) . "</span>";
-    echo "<span id='openedByTab'>"   . html::a(inlink('story', "account=$account&type=openedBy"),    $lang->user->openedBy)   . "</span>";
-    echo "<span id='reviewedByTab'>" . html::a(inlink('story', "account=$account&type=reviewedBy"),  $lang->user->reviewedBy) . "</span>";
-    echo "<span id='closedByTab'>"   . html::a(inlink('story', "account=$account&type=closedBy"),    $lang->user->closedBy)   . "</span>";
+    echo "<li id='assignedToTab'>" . html::a(inlink('story', "account=$account&type=assignedTo"),  $lang->user->assignedTo) . "</li>";
+    echo "<li id='openedByTab'>"   . html::a(inlink('story', "account=$account&type=openedBy"),    $lang->user->openedBy)   . "</li>";
+    echo "<li id='reviewedByTab'>" . html::a(inlink('story', "account=$account&type=reviewedBy"),  $lang->user->reviewedBy) . "</li>";
+    echo "<li id='closedByTab'>"   . html::a(inlink('story', "account=$account&type=closedBy"),    $lang->user->closedBy)   . "</li>";
     ?>
-  </div>
+  </ul>
 </div>
-<table class='table-1 tablesorter fixed'>
+<table class='table tablesorter table-fixed'>
   <thead>
     <tr class='colhead'>
       <th class='w-id'>    <?php echo $lang->idAB;?></th>
@@ -44,11 +44,11 @@
       <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
       <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
       <td><?php echo $story->productTitle;?></td>
-      <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
-      <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+      <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
       <td><?php echo $lang->story->stageList[$story->stage];?></td>
     </tr>
     <?php endforeach;?>

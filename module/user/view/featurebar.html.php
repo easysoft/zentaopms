@@ -1,24 +1,25 @@
 <div id='featurebar'>
-  <div class='f-left'>
+  <ul class='nav'>
   <?php
     if(!isset($type))   $type   = 'today';
     if(!isset($period)) $period = 'today';
     $date = isset($date) ? $date : helper::today();
 
-    echo $userList . $lang->arrow;
-    echo "<span id='todoTab'>";    common::printLink('user', 'todo',     "account=$account", $lang->user->todo);  echo '</span>';
-    echo "<span id='storyTab'>";   common::printLink('user', 'story',    "account=$account", $lang->user->story); echo '</span>';
-    echo "<span id='taskTab'>";    common::printLink('user', 'task',     "account=$account", $lang->user->task);  echo '</span>';
-    echo "<span id='bugTab'>" ;    common::printLink('user', 'bug',      "account=$account", $lang->user->bug);   echo '</span>';
-    echo "<span id='testTab'>";    common::printLink('user', 'testtask', "account=$account", $lang->user->test);  echo '</span>';
-    echo "<span id='dynamicTab'>"; common::printLink('user', 'dynamic',  "type=today&account=$account", $lang->user->dynamic); echo '</span>' ;
-    echo "<span id='projectTab'>"; common::printLink('user', 'project',  "account=$account", $lang->user->project); echo '</span>';
-    echo "<span id='profileTab'>"; common::printLink('user', 'profile',  "account=$account", $lang->user->profile); echo '</span>';
+    echo '<li>' . $userList . '</li>';
+    echo '<li> &nbsp; ' . $lang->arrow . ' &nbsp; </li>';
+    echo "<li id='todoTab'>";    common::printLink('user', 'todo',     "account=$account", $lang->user->todo);  echo '</li>';
+    echo "<li id='storyTab'>";   common::printLink('user', 'story',    "account=$account", $lang->user->story); echo '</li>';
+    echo "<li id='taskTab'>";    common::printLink('user', 'task',     "account=$account", $lang->user->task);  echo '</li>';
+    echo "<li id='bugTab'>" ;    common::printLink('user', 'bug',      "account=$account", $lang->user->bug);   echo '</li>';
+    echo "<li id='testTab'>";    common::printLink('user', 'testtask', "account=$account", $lang->user->test);  echo '</li>';
+    echo "<li id='dynamicTab'>"; common::printLink('user', 'dynamic',  "type=today&account=$account", $lang->user->dynamic); echo '</li>' ;
+    echo "<li id='projectTab'>"; common::printLink('user', 'project',  "account=$account", $lang->user->project); echo '</li>';
+    echo "<li id='profileTab'>"; common::printLink('user', 'profile',  "account=$account", $lang->user->profile); echo '</li>';
 
     $activedSpan = $this->app->getMethodName() . 'Tab';
     echo "<script>$('#$activedSpan').addClass('active')</script>";
     ?>
-  </div>
+  </ul>
 </div>
 <script>
 var type   = '<?php echo $type;?>';

@@ -12,17 +12,17 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include './featurebar.html.php';?>
-<div id='featurebar'>
-  <div class='f-left'>
+<div class='sub-featurebar'>
+  <ul class='nav'>
     <?php
-    echo "<span id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him) . "</span>";
-    echo "<span id='case2HimTab'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  $lang->user->case2Him) . "</span>";
-    echo "<span id='caseByHimTab'>" . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  $lang->user->caseByHim) . "</span>";
+    echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him) . "</li>";
+    echo "<li id='case2HimTab'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  $lang->user->case2Him) . "</li>";
+    echo "<li id='caseByHimTab'>" . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  $lang->user->caseByHim) . "</li>";
     ?>
-  </div>
+  </ul>
 </div>
 
-<table class='table-1 fixed tablesorter'>
+<table class='table tablesorter table-fixed'>
   <?php 
     $vars = "account=$account&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
     $this->app->loadLang('testtask');

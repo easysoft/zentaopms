@@ -12,29 +12,33 @@
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <div id='featurebar'>
-    <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
-    <span <?php echo empty($menu) ? "class='active'" : ""?>>
-      <?php echo html::a(inlink('managePriv', sprintf($params, '')), $lang->group->all)?>
-    </span>
+    <div class='heading'><i class='icon-lock'></i></div>
+    <ul class='nav'>
+      <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
+      <li <?php echo empty($menu) ? "class='active'" : ""?>>
+        <?php echo html::a(inlink('managePriv', sprintf($params, '')), $lang->group->all)?>
+      </li>
 
-    <?php foreach($lang->menu as $module => $title):?>
-    <span <?php echo $menu == $module ? "class='active'" : ""?>>
-      <?php echo html::a(inlink('managePriv', sprintf($params, $module)), substr($title, 0, strpos($title, '|')))?>
-    </span>
-    <?php endforeach;?>
+      <?php foreach($lang->menu as $module => $title):?>
+      <li <?php echo $menu == $module ? "class='active'" : ""?>>
+        <?php echo html::a(inlink('managePriv', sprintf($params, $module)), substr($title, 0, strpos($title, '|')))?>
+      </li>
+      <?php endforeach;?>
 
-    <span <?php echo $menu == 'other' ? "class='active'" : "";?>>
-      <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), $lang->group->other);?>
-    </span>
+      <li <?php echo $menu == 'other' ? "class='active'" : "";?>>
+        <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), $lang->group->other);?>
+      </li>
 
-    <span><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value)");?></span>
+      <li><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control'");?></li>
+    </ul>
   </div>
-
-  <table class='table-1 a-left'> 
-    <tr class='colhead'>
-      <th><?php echo $lang->group->module;?></th>
-      <th><?php echo $lang->group->method;?></th>
-    </tr>  
+  <table class='table table-hover table-striped table-bordered table-form'> 
+    <thead>
+      <tr>
+        <th><?php echo $lang->group->module;?></th>
+        <th><?php echo $lang->group->method;?></th>
+      </tr>
+    </thead>
     <?php foreach($lang->resource as $moduleName => $moduleActions):?>
     <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
     <?php
@@ -53,23 +57,22 @@
         if(!$hasMethod) continue;
     }
     ?>
-    <tr class='f-14px <?php echo cycle('even, bg-gray');?>'>
-      <th class='a-right w-150px'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
+    <tr class='<?php echo cycle('even, bg-gray');?>'>
+      <th class='text-right w-150px'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></th>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
         <?php foreach($moduleActions as $action => $actionLabel):?>
         <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
-        <div class='w-p20 f-left'>
+        <div class='group-item'>
           <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
           <span class='priv' id="<?php echo $moduleName . '-' . $actionLabel;?>"><?php echo $lang->$moduleName->$actionLabel;?></span>
         </div>
-        <?php if(($i %  4) == 0) echo "<div class='c-both'></div>"; $i ++;?>
         <?php endforeach;?>
       </td>
     </tr>
     <?php endforeach;?>
     <tr>
-      <th><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
+      <th class='text-right'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
       <td>
         <?php 
         echo html::submitButton($lang->save, "onclick='setNoChecked()'");

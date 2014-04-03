@@ -1,1 +1,3 @@
 .form-condensed select.form-control {height:250px}
+#featurebar > .nav > li > a > .icon-home {display: none}
+.group-item {display:block; width:200px; float:left; font-size: 14px}

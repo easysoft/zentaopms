@@ -394,6 +394,14 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .btn > i {display: inline-block; margin-right: 2px; opacity: 0.8}
 #featurebar .actions {float: right; margin-top: -2px;}
 
+/* sub featurebar */
+.sub-featurebar {border-bottom: 1px solid #ddd; padding: 5px 10px}
+.sub-featurebar > .nav > li {float: left;}
+.sub-featurebar > .nav > li > a {padding: 5px 10px}
+.sub-featurebar > .nav > li.active > a {color: #333; font-weight: bold;}
+
+#featurebar.with-sub > .nav > li.active > a {border: 1px solid #ddd; position: relative; border-bottom: none; background: #fff; padding: 2px 15px 5px}
+
 /* Title bar. */
 #titlebar {background: #F8FAFE; border-bottom: 1px solid #e5e5e5; min-height: 46px; padding: 15px 20px 10px; vertical-align: bottom; position: relative;}
 #titlebar > .heading {font-size: 14px; line-height: 20px; }
