@@ -385,6 +385,7 @@ function saveWindowSize()
 function setOuterBox()
 {
     if($('.outer > .side').length) $('.outer').addClass('with-side');
+    if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
 
     var resetOuterHeight = function()
     {

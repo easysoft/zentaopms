@@ -13,21 +13,21 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<div id='featurebar'>
-  <div class='f-left'>
+<div class='sub-featurebar'>
+  <ul class='nav'>
     <?php 
-    echo "<span id='today'>"      . html::a(inLink('dynamic', "period=today&account=$account"),      $lang->action->dynamic->today)      . '</span>';
-    echo "<span id='yesterday'>"  . html::a(inLink('dynamic', "period=yesterday&account=$account"),  $lang->action->dynamic->yesterday)  . '</span>';
-    echo "<span id='twodaysago'>" . html::a(inLink('dynamic', "period=twodaysago&account=$account"), $lang->action->dynamic->twoDaysAgo) . '</span>';
-    echo "<span id='thisweek'>"   . html::a(inLink('dynamic', "period=thisweek&account=$account"),   $lang->action->dynamic->thisWeek)   . '</span>';
-    echo "<span id='lastweek'>"   . html::a(inLink('dynamic', "period=lastweek&account=$account"),   $lang->action->dynamic->lastWeek)   . '</span>';
-    echo "<span id='thismonth'>"  . html::a(inLink('dynamic', "period=thismonth&account=$account"),  $lang->action->dynamic->thisMonth)  . '</span>';
-    echo "<span id='lastmonth'>"  . html::a(inLink('dynamic', "period=lastmonth&account=$account"),  $lang->action->dynamic->lastMonth)  . '</span>';
-    echo "<span id='all'>"        . html::a(inLink('dynamic', "period=all&account=$account"),        $lang->action->dynamic->all)        . '</span>';
+    echo "<li id='today'>"      . html::a(inLink('dynamic', "period=today&account=$account"),      $lang->action->dynamic->today)      . '</li>';
+    echo "<li id='yesterday'>"  . html::a(inLink('dynamic', "period=yesterday&account=$account"),  $lang->action->dynamic->yesterday)  . '</li>';
+    echo "<li id='twodaysago'>" . html::a(inLink('dynamic', "period=twodaysago&account=$account"), $lang->action->dynamic->twoDaysAgo) . '</li>';
+    echo "<li id='thisweek'>"   . html::a(inLink('dynamic', "period=thisweek&account=$account"),   $lang->action->dynamic->thisWeek)   . '</li>';
+    echo "<li id='lastweek'>"   . html::a(inLink('dynamic', "period=lastweek&account=$account"),   $lang->action->dynamic->lastWeek)   . '</li>';
+    echo "<li id='thismonth'>"  . html::a(inLink('dynamic', "period=thismonth&account=$account"),  $lang->action->dynamic->thisMonth)  . '</li>';
+    echo "<li id='lastmonth'>"  . html::a(inLink('dynamic', "period=lastmonth&account=$account"),  $lang->action->dynamic->lastMonth)  . '</li>';
+    echo "<li id='all'>"        . html::a(inLink('dynamic', "period=all&account=$account"),        $lang->action->dynamic->all)        . '</li>';
     ?>
-  </div>
+  </ul>
 </div>
-<table class='table-1 colored tablesorter fixed'>
+<table class='table tablesorter table-fixed'>
   <thead>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->action->date;?></th>
