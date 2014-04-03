@@ -2,15 +2,24 @@
 .dp-applied{float:left;}
 .choose-date span{line-height:20px;}
 .date{width:80px;}
-ul#report-list{margin:0px;}
 ul li{list-style:none;}
-#product td, tr, th{ border:1px solid #E4E4E4;}
-#workload td, tr, th{ border:1px solid #E4E4E4;}
-#bug td, tr, th{ border:1px solid #E4E4E4;}
+/*#product td, tr, th{ border:1px solid #E4E4E4;}*/
+/*#workload td, tr, th{ border:1px solid #E4E4E4;}*/
+/*#bug td, tr, th{ border:1px solid #E4E4E4;}*/
 #product p{margin:2px 0;}
+.table-bordered, .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: none}
 
-.proversion {text-align:center; margin-top:10px;}
-.proversion a{color:red;}
+#report-list.list-group {margin-bottom: 0;}
+#report-list .list-group-item {padding: 8px 15px; border-left: none; border-right: none;}
+#report-list .list-group-item:first-child {border-top: 1px}
+#report-list .list-group-item:last-child {border-bottom: 1px}
+.proversion a {color: #81511C}
+
+.main > .input-group {margin-bottom: 10px;}
+.main > .input-group > .datepicker-wrapper {display: table-cell;}
+.main > .input-group > .datepicker-wrapper > .form-control {padding: 5px 10px; height: 30px}
+.main > .input-group > .datepicker-wrapper:before {top: 4px}
+
 td .deviation{padding-left:20px; text-align:left;}
 .up{color:red; padding-right:2px;}
 .down{color:green; padding-right:2px;}

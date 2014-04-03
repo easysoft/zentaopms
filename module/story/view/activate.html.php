@@ -11,26 +11,35 @@
  */
 ?>
 <?php include './header.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<table class='table-1'>
-  <caption><?php echo $lang->story->activate;?></caption>
-  <tr>
-    <th><?php echo $lang->story->assignedTo;?></th>
-    <td><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control"');?></td>
-  </tr>
-  <tr>
-    <th><?php echo $lang->story->comment;?></th>
-    <td><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
-  </tr>
-  <tr>
-    <td colspan='2' class='text-center'>
-      <?php 
-      echo html::submitButton();
-      echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
-      ?>
-    </td>
-  </tr>
-</table>
-<?php include '../../common/view/action.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+    <small class='text-success'><?php echo html::icon($lang->icons['activate']) . ' ' . $lang->story->activate;?></small>
+  </div>
+</div>
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+  <table class='table table-form'>
+    <tr>
+      <th class='w-80px'><?php echo $lang->story->assignedTo;?></th>
+      <td class='w-p45'><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control"');?></td><td></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->story->comment;?></th>
+      <td colspan='2'><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan='2'>
+        <?php 
+        echo html::submitButton(html::icon($lang->icons['activate']) . ' ' . $lang->story->activate, '', 'btn-success');
+        echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
+        ?>
+      </td>
+    </tr>
+  </table>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

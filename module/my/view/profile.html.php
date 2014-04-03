@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div class='container mw-600px'>
   <div id='featurebar'>
-    <div class='heading'><i class='icon-user'></i> <?php echo $lang->my->profile;?></div>
+    <div class='heading'><?php echo html::icon($lang->icons['user']);?> <?php echo $lang->my->profile;?></div>
     <div class='btn-group pull-right'>
       <?php echo html::a($this->createLink('my', 'editprofile'), "<i class='icon-pencil'></i> " . $lang->user->editProfile, '', "class='btn btn-primary'");?>
     </div>

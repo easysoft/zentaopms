@@ -10,27 +10,34 @@
  * @link        http://www.zentao.net
  */
 ?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table-6 a-center' align='center'> 
-    <caption class='caption-tl'><?php echo $lang->group->managePriv . $lang->group->byModuleTips;?></caption>
-    <tr class='colhead'>
-      <th><?php echo $lang->group->module;?></th>
-      <th><?php echo $lang->group->method;?></th>
-      <th><?php echo $lang->group->common;?></th>
-    </tr>  
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><i class='icon-lock'></i></span>
+    <strong><small class='text-muted'><i class='icon-cog'></i></small> <?php echo $lang->group->managePriv ;?></strong>
+  </div>
+  <div class='actions'><div class='text text-info'><i class='icon-info-sign'></i> <?php echo $lang->group->byModuleTips; ?></div>&nbsp;&nbsp;</div>
+</div>
+
+<form class='form-condensed pdb-20' method='post' target='hiddenwin'>
+  <table class='table table-form'>
+    <tr class='text-center'>
+      <td class='strong'><?php echo $lang->group->module;?></td>
+      <td class='strong'><?php echo $lang->group->method;?></td>
+      <td class='strong'><?php echo $lang->group->common;?></td>
+    </tr>
     <tr valign='top'>
-      <td><?php echo html::select('module', $modules, '', " size='10' onclick='setModuleActions(this.value)'");?></td>
-      <td id='actionBox'>
+      <td class='w-p30'><?php echo html::select('module', $modules, '', " size='10' onclick='setModuleActions(this.value)' class='form-control'");?></td>
+      <td class='w-p30' id='actionBox'>
         <?php
         $class = '';
         foreach($actions as $module => $moduleActions)
         {
-            echo html::select('actions[]', $moduleActions, '', "multiple='multiple' class='$class {$module}Actions'");
+            echo html::select('actions[]', $moduleActions, '', "multiple='multiple' class='form-control $class {$module}Actions'");
             $class = 'hidden';
         }
         ?>
       </td>
-      <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple'");?></td>
+      <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple' class='form-control'");?></td>
     </tr>
     <tr>
       <td class='text-center' colspan='3'>

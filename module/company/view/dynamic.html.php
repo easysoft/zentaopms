@@ -16,23 +16,27 @@
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
-  <?php 
-  echo '<span id="today">'       . html::a(inlink('dynamic', "browseType=today"),      $lang->action->dynamic->today)      . '</span>';
-  echo '<span id="yesterday">'   . html::a(inlink('dynamic', "browseType=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
-  echo '<span id="twodaysago">'  . html::a(inlink('dynamic', "browseType=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
-  echo '<span id="thisweek">'    . html::a(inlink('dynamic', "browseType=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
-  echo '<span id="lastweek">'    . html::a(inlink('dynamic', "browseType=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
-  echo '<span id="thismonth">'   . html::a(inlink('dynamic', "browseType=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
-  echo '<span id="lastmonth">'   . html::a(inlink('dynamic', "browseType=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
-  echo '<span id="all">'         . html::a(inlink('dynamic', "browseType=all"),        $lang->action->dynamic->all)        . '</span>';
-  echo "<span id='account'>"     . html::select('account', $users, $account, 'onchange=changeUser(this.value)') . '</span>';
-  echo "<span id='product'>"     . html::select('product', $products, $product, 'onchange=changeProduct(this.value)') . '</span>';
-  echo "<span id='project'>"     . html::select('project', $projects, $project, 'onchange=changeProject(this.value)') . '</span>';
-  echo "<span id='bysearchTab'>" . html::a('#', '<i class="icon-search icon"></i>&nbsp;' . $lang->action->dynamic->search) . "</span>";
-  ?>
+  <div class='heading'><?php echo html::icon($lang->icons['dynamic']);?></div>
+  <ul class='nav'>
+    <?php 
+    echo '<li id="today">'       . html::a(inlink('dynamic', "browseType=today"),      $lang->action->dynamic->today)      . '</li>';
+    echo '<li id="yesterday">'   . html::a(inlink('dynamic', "browseType=yesterday"),  $lang->action->dynamic->yesterday)  . '</li>';
+    echo '<li id="twodaysago">'  . html::a(inlink('dynamic', "browseType=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</li>';
+    echo '<li id="thisweek">'    . html::a(inlink('dynamic', "browseType=thisweek"),   $lang->action->dynamic->thisWeek)   . '</li>';
+    echo '<li id="lastweek">'    . html::a(inlink('dynamic', "browseType=lastweek"),   $lang->action->dynamic->lastWeek)   . '</li>';
+    echo '<li id="thismonth">'   . html::a(inlink('dynamic', "browseType=thismonth"),  $lang->action->dynamic->thisMonth)  . '</li>';
+    echo '<li id="lastmonth">'   . html::a(inlink('dynamic', "browseType=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</li>';
+    echo '<li id="all">'         . html::a(inlink('dynamic', "browseType=all"),        $lang->action->dynamic->all)        . '</li>';
+    echo "<li id='account'>"     . html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control"') . '</li>';
+    echo "<li id='product'>"     . html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control"') . '</li>';
+    echo "<li id='project' style='margin-right: 10px;'>"     . html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control"') . '</li>';
+    echo "<li id='bysearchTab'>" . html::a('#', '<i class="icon-search icon"></i>&nbsp;' . $lang->action->dynamic->search) . "</li>";
+    ?>
+  </ul>
+  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
-<table class='table-1 colored tablesorter fixed'>
+  
+<table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'>
   <thead>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->action->date;?></th>

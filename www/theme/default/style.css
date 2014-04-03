@@ -12,7 +12,7 @@
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
 
-.w-auto {width: auto} .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
+.w-auto {width: auto} .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-300px {width:300px}, .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
 .mw-200px {max-width:200px} .mw-400px {max-width:400px} .mw-500px {max-width:500px} .mw-600px {max-width:600px} .mw-700px {max-width:700px} .mw-800px {max-width:800px} .mw-900px {max-width:900px}
 
 .w-id {width:60px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
@@ -23,6 +23,7 @@
 /* paddings */
 .pd-0 {padding: 0 !important}
 .mg-0 {margin: 0 !important}
+.pdb-20 {padding-bottom: 20px !important}
 
 /* Style of text */
 .text-latin {font-family: Arial;}
@@ -64,7 +65,7 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 
 /* Datepicker */
 .datepicker-wrapper {position: relative;}
-.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 6px; color: #808080; font-size: 14px; top: 4px}
+.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 0}
 .datepicker-wrapper > .form-control {padding-right: 30px;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
@@ -402,7 +403,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #titlebar > .heading > small > i {position: relative; top: 1px;}
 #titlebar .actions {position: absolute; right: 20px; top: 13px;}
 #titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
-#titlebar .actions > .text {display: inline-block; margin-left: 8px;}
+#titlebar .actions > .text {display: inline-block; margin-left: 8px; line-height: 30px}
 
 /* table in outer */
 .outer .table {margin-bottom: 0;}
@@ -474,7 +475,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table-data th.strong, .outer .table-data td.strong, .outer .table-data th > strong {font-weight: bold;}
 
 /* side */
-.outer.with-side #featurebar {margin-bottom: 20px;}
+.outer.with-side #featurebar, .outer.with-side #titlebar {margin-bottom: 20px;}
 .outer.with-side .main, .outer.with-side .side + form, .outer.with-side .main, .outer.with-side .side + table {margin-left: 220px; margin-right: 20px; transition: all 0.3s;}
 .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: 1px solid #ddd}
 .outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}

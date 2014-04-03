@@ -11,16 +11,21 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table align='center' class='table-4 a-left'> 
-    <caption><?php echo $lang->group->create;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='GROUP'><?php echo html::icon($lang->icons['group']);?></span>
+    <strong><small><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->group->create;?></strong>
+  </div>
+</div>
+<form class='form-condensed mw-500px pdb-20' method='post' target='hiddenwin' id='dataform'>
+  <table align='center' class='table table-form'> 
     <tr>
-      <th><?php echo $lang->group->name;?></th>
+      <th class='w-80px'><?php echo $lang->group->name;?></th>
       <td><?php echo html::input('name', '', "class=form-control");?></td>
     </tr>  
     <tr>
       <th><?php echo $lang->group->desc;?></th>
-      <td><?php echo html::textarea('desc', '', "rows=5 class=area-1");?></textarea></td>
+      <td><?php echo html::textarea('desc', '', "rows=5 class=form-control");?></td>
     </tr>  
     <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>

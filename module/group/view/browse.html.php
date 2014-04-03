@@ -13,19 +13,24 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->group->confirmDelete);?>
-<table align='center' class='table-1 tablesorter fixed' id='groupList'>
-  <caption class='caption-tl pb-10px'>
-    <div class='f-left'><?php echo $lang->group->browse;?></div>
-    <div class='text-right'><?php common::printIcon('group', 'create');?></div>
-  </caption>
+<div id='featurebar'>
+  <div class='heading'><?php echo html::icon($lang->icons['group']);?> <?php echo $lang->group->browse;?></div>
+  <div class='actions'>
+    <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550'");?>
+    <?php if(common::hasPriv('group', 'managePriv')):?>
+    <?php echo html::a(inlink('managePriv', 'type=byModule&onlybody=yes'), $lang->group->managePrivByModule, '', 'class="btn btn-primary iframe"');?>
+    <?php endif;?>
+  </div>
+</div>
+<table align='center' class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='groupList'>
   <thead>
-  <tr class='colhead'>
-   <th class='w-id'><?php echo $lang->group->id;?></th>
-   <th class='w-100px'><?php echo $lang->group->name;?></th>
-   <th><?php echo $lang->group->desc;?></th>
-   <th class='w-p60'><?php echo $lang->group->users;?></th>
-   <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
-  </tr>
+    <tr>
+     <th class='w-id'><?php echo $lang->group->id;?></th>
+     <th class='w-100px'><?php echo $lang->group->name;?></th>
+     <th><?php echo $lang->group->desc;?></th>
+     <th class='w-p60'><?php echo $lang->group->users;?></th>
+     <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+    </tr>
   </thead>
   <tbody>
   <?php foreach($groups as $group):?>
@@ -37,26 +42,21 @@
     <td class='text-left' title='<?php echo $users;?>'><?php echo $users;?></td>
     <td class='text-center'>
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-      <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list');?>
+      <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list', 'lock');?>
       <?php $lang->group->managemember = $lang->group->manageMember;?>
-      <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list');?>
-      <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list');?>
-      <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list');?>
+      <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list', 'group', '', 'iframe', yes);?>
+      <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list', '', '', 'iframe', yes, "data-width='550'");?>
+      <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list', '', '', 'iframe', yes, "data-width='550'");?>
       <?php
       if(common::hasPriv('group', 'delete'))
       {
           $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->group->delete}'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->group->delete}' class='btn-icon'");
       }
       ?>
     </td>
   </tr>
   <?php endforeach;?>
   </tbody>
-  <?php if(common::hasPriv('group', 'managePriv')):?>
-  <tfoot>
-    <tr><td colspan='5' class='text-center'><?php echo html::linkButton($lang->group->managePrivByModule, inlink('managePriv', 'type=byModule'));?></td></tr>
-  </tfoot>
-  <?php endif;?>
 </table>
 <?php include '../../common/view/footer.html.php';?>

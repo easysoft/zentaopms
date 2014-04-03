@@ -53,7 +53,7 @@
         </button>
         <ul class='dropdown-menu' id='exportActionMenu'>
         <?php 
-        $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $misc = common::hasPriv('task', 'export') ? "class='export iframe' data-width='700'" : "class=disabled";
         $link = common::hasPriv('task', 'export') ?  $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy") : '#';
         echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>
@@ -62,7 +62,7 @@
 
       <div class='btn-group'>
         <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='importAction'>
-            <i class='icon-upload-alt'></i> <?php echo $lang->export ?>
+            <i class='icon-upload-alt'></i> <?php echo $lang->import ?>
             <span class='caret'></span>
         </button>
         <ul class='dropdown-menu' id='importActionMenu'>

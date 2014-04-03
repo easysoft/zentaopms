@@ -43,20 +43,33 @@ function switchEncode(fileType)
     }
 }
 </script>
-<form method='post' target='hiddenwin' onsubmit='setDownloading();' style='margin-top:10px'>
-  <table class='table-1'>
-    <caption><?php echo $lang->export;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['export']);?></span>
+    <strong><?php echo $lang->export;?></strong>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
+  <table class='w-p100'>
     <tr>
-      <td class='text-center' style='padding:30px'>
-        <?php
-        echo $lang->setFileName . ' ';
-        echo html::input('fileName', '', 'class=text-2');
-        echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value)');
-        echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "" : "class='hidden'");
-        echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all');
-        echo html::submitButton();
-        ?>
+      <td>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
+          <?php
+            echo html::input('fileName', '', 'class=form-control');
+          ?>
+        </div>
       </td>
+      <td class='w-60px'>
+        <?php echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?>
+      </td>
+      <td class='w-80px'>
+        <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='hidden'");?>
+      </td>
+      <td class='w-100px'>
+        <?php echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all', "class='form-control'");?>
+      </td>
+      <td><?php echo html::submitButton($lang->export);?></td>
     </tr>
   </table>
 </form>
