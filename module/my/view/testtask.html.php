@@ -33,7 +33,7 @@
     <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
     <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
     <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-    <th class='w-80px'><?php echo $lang->actions;?></th>
+    <th class='w-100px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -48,8 +48,8 @@
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-right'>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list');
-      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'smile');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
 
       if(common::hasPriv('testtask', 'delete'))
