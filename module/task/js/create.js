@@ -13,13 +13,15 @@ function setOwners(result)
 {
     if(result == 'affair')
     {
-        $('#assignedTo').attr('size', 4);
         $('#assignedTo').attr('multiple', 'multiple');
+        $('#assignedTo').chosen('destroy');
+        $('#assignedTo').chosen(defaultChosenOptions);
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
     {
-        $('#assignedTo').removeAttr('size');
         $('#assignedTo').removeAttr('multiple');
+        $('#assignedTo').chosen('destroy');
+        $('#assignedTo').chosen(defaultChosenOptions);
     }
 }
 
