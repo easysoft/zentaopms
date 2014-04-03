@@ -496,11 +496,12 @@ EOT;
      * @param  string $link     the link url
      * @param  string $target   the target window
      * @param  string $misc     other params
+     * @param  string $class    css class
      * @static
      * @access public
      * @return string
      */
-    public static function linkButton($label = '', $link = '', $target = 'self', $misc = '')
+    public static function linkButton($label = '', $link = '', $target = 'self', $misc = '', $class)
     {
         global $config, $lang;
 
@@ -513,7 +514,7 @@ EOT;
             $link .= $onlybody;
         }
 
-        return " <input type='button' value='$label' $misc onclick='{$target}.location=\"$link\"' class='btn' /> ";
+        return " <button type='button' $misc onclick='{$target}.location=\"$link\"' class='btn $class'>$label</div>";
     }
 
     /**
