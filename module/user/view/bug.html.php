@@ -13,17 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<div id='featurebar'>
-  <div class='f-left'>
+<div class='sub-featurebar'>
+  <ul class='nav'>
     <?php
-    echo "<span id='assignedToTab'>"  . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</span>";
-    echo "<span id='openedByTab'>"    . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</span>";
-    echo "<span id='resolvedByTab'>"  . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->user->resolvedBy) . "</span>";
-    echo "<span id='closedByTab'>"    . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</span>";
+    echo "<li id='assignedToTab'>"  . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</li>";
+    echo "<li id='openedByTab'>"    . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</li>";
+    echo "<li id='resolvedByTab'>"  . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->user->resolvedBy) . "</li>";
+    echo "<li id='closedByTab'>"    . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</li>";
     ?>
-  </div>
+  </ul>
 </div>
-<table class='table-1 tablesorter fixed'>
+<table class='table tablesorter table-fixed'>
   <thead>
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -43,7 +43,7 @@
     <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
     <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri]?>'><?php echo $lang->bug->priList[$bug->pri]?></span></td>
     <td><?php echo $lang->bug->typeList[$bug->type]?></td>
-    <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+    <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
     <td><?php echo $users[$bug->openedBy];?></td>
     <td><?php echo $users[$bug->resolvedBy];?></td>
     <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>

@@ -42,7 +42,7 @@
         </td>
         <td><span class='<?php echo 'pri' . $bug->pri;?>'><?php echo $bug->pri?></span></td>
         <td><?php echo $bug->planTitle;?></td>
-        <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+        <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
         <td><?php echo $lang->bug->statusList[$bug->status];?></td>
@@ -84,7 +84,7 @@
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
         </td>
         <td><span class='<?php echo 'pri' . $bug->pri;?>'><?php echo $bug->pri?></span></td>
-        <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+        <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
         <td><?php echo $lang->bug->statusList[$bug->status];?></td>

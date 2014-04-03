@@ -142,7 +142,7 @@
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr class='text-center'>
                 <td><?php echo sprintf('%03d', $bug->id);?></td>
-                <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td><?php echo $lang->bug->statusList[$bug->status];?></td>
                 <td><?php echo $users[$bug->openedBy];?></td>
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>

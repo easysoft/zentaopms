@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<table class='table-1 tablesorter a-center'>
+<table class='table tablesorter'>
   <thead>
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -24,13 +24,13 @@
     <th class='w-status'><?php echo $lang->statusAB;?></th>
     <th class='w-user'><?php echo $lang->team->role;?></th>
     <th class='w-date'><?php echo $lang->team->join;?></th>
-    <th class='w-date'><?php echo $lang->team->hours;?></th>
+    <th class='w-110px'><?php echo $lang->team->hours;?></th>
   </tr>
   </thead>
   <tbody>
   <?php foreach($projects as $project):?>
   <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
-  <tr>
+  <tr class='text-center'>
     <td><?php echo html::a($projectLink, $project->id);?></td>
     <td><?php echo $project->code;?></td>
     <td><?php echo html::a($projectLink, $project->name);?></td>

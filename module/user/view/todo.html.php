@@ -14,20 +14,20 @@
 <?php include "../../common/view/datepicker.html.php"; ?>
 <?php include './featurebar.html.php';?>
 <script language='Javascript'>var account='<?php echo $account;?>'</script>
-<div id='featurebar'>
-  <div class='f-left'>
+<div class='sub-featurebar'>
+  <ul class='nav'>
   <?php 
     foreach($lang->todo->periods as $period => $label)
     {
         $vars = "account={$account}&date=$period";
         if($period == 'before') $vars .= "&status=undone";
-        echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span> ';
+        echo "<li id='$period'>" . html::a(inlink('todo', $vars), $label) . '</li> ';
     }
     ?>
-  </div>
+  </ul>
 </div>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
-  <table class='table-1 tablesorter'>
+  <table class='table tablesorter'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
     <thead>
     <tr class='colhead'>
@@ -38,7 +38,7 @@
       <th>                 <?php common::printOrderLink('name',   $orderBy, $vars, $lang->todo->name);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('begin',  $orderBy, $vars, $lang->todo->beginAB);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('end',    $orderBy, $vars, $lang->todo->endAB);?></th>
-      <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
+      <th class='w-70px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
     </tr>
     </thead>
     <tbody>

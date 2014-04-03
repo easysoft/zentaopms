@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table-1 fixed tablesorter'>
+  <table class='table tablesorter table-fixed'>
     <caption>
     <?php
     $projects = array(0 => $lang->project->fromproject) + $projects;
@@ -46,12 +46,12 @@
 
       <td><?php echo substr($projects[$task->project], 2);?></td>
       <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
-      <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
+      <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $task->left;?></td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList[$task->status];?></td>
-      <td class='a-left nobr'>
+      <td class='text-left nobr'>
         <?php 
         if($task->storyID)
         {

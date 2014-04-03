@@ -63,7 +63,7 @@
                   <td class='w-id a-left' id='bug'>
                     <input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if($bug->status == 'closed' or $bug->status == 'resolved') echo "checked"; ?>> <?php echo sprintf('%03d', $bug->id);?>
                   </td>
-                  <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                  <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                   <td class='w-80px'><?php echo $lang->bug->statusList[$bug->status];?></td>
                 </tr>
                 <?php endforeach;?>
