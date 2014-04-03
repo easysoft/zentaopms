@@ -12,18 +12,22 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php $showDemoUsers = isset($this->config->global->showDemoUsers) ? true : false; js::set('showDemoUsers', $showDemoUsers);?>
-<p class='strong mt-10px'>
-  <?php 
-  echo sprintf($lang->admin->info->version, $config->version);
-  if($bind) echo sprintf($lang->admin->info->account, '<span class="red">' . $account . '</span>');
-  echo $lang->admin->info->links;
-  ?>
-</p>
-<?php include '../../misc/view/links.html.php';?>
+
 <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
-<div id="notice">
-  <div class="f-left"><?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->register->click));?></div>
-  <div class="f-right"><?php echo html::a(inlink('ignore'), $lang->admin->notice->ignore, 'hiddenwin');?></div>
+<div id="notice" class='alert alert-success'>
+  <?php echo html::a(inlink('ignore'), '<i class="icon-remove"></i> ' . $lang->admin->notice->ignore, 'hiddenwin', 'class="close" data-dismiss="alert" style="font-size: 12px"');?>
+  <i class='icon-info-sign'></i>
+  <div class="content"><?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->register->click, '', 'class="alert-link"'));?></div>
 </div>
 <?php endif;?>
+<div id='featurebar'>
+  <div class='heading'>
+    <?php 
+    echo sprintf($lang->admin->info->version, $config->version);
+    if($bind) echo sprintf($lang->admin->info->account, '<span class="red">' . $account . '</span>');
+    echo $lang->admin->info->links;
+    ?>
+  </div>
+</div>
+<?php include '../../misc/view/links.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

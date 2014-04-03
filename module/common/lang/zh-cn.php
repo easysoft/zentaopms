@@ -428,6 +428,8 @@ $lang->icons['dept']    = 'sitemap';
 $lang->icons['usecase'] = 'usecase';
 $lang->icons['testcase']= 'smile';
 $lang->icons['result']  = 'flag-checkered';
+$lang->icons['mail']    = 'envelope';
+$lang->icons['trash']   = 'trash';
 
 $lang->icons['results']        = 'flag-checkered';
 $lang->icons['create']         = 'plus';

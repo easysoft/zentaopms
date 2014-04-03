@@ -1,18 +1,25 @@
-<table class='table-1'>
-  <tr class='colhead'><?php foreach($lang->misc->zentao->labels as $label) echo "<th class='w-p25'>$label</th>";?></tr>
-  <?php
-  unset($lang->misc->zentao->version);
-  unset($lang->misc->zentao->labels);
-  ?>
-  <tr class='text-left' valign='top'>
-    <?php foreach($lang->misc->zentao as $groupItems):?>
-    <td>
-      <ul>
-        <?php foreach($groupItems as $item => $label):?>
-        <li><?php echo html::a("http://api.zentao.net/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
-        <?php endforeach;?>
-      </ul>
-    </td>
+<div class='container mw-900px'>
+  <div class='cards'>
+    <?php
+    unset($lang->misc->zentao->version);
+    ?>
+    <?php foreach($lang->misc->zentao as $label => $groupItems):?>
+    <?php if(strpos(',labels,icons,version,', ",$label,") !== false) continue; ?>
+    <div class='col-sm-6'>
+      <div class='card card-<?php echo $label;?>'>
+        <div class='media'>
+          <?php echo html::icon($lang->misc->zentao->icons[$label], 'icon');?>
+          <h5><?php echo $lang->misc->zentao->labels[$label];?></h5>
+        </div>
+        <div class='card-content'>
+          <ul>
+            <?php foreach($groupItems as $item => $label):?>
+            <li><?php echo html::a("http://api.zentao.net/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
+            <?php endforeach;?>
+          </ul>
+        </div>
+      </div>
+    </div>
     <?php endforeach;?>
-  </tr>
-</table>
+  </div>
+</div>

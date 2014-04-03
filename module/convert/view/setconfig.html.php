@@ -10,14 +10,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' action='<?php echo inlink('checkconfig');?>'>
-  <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->convert->setting . $lang->colon . strtoupper($source);?></caption>
-    <?php echo $setting;?>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-    </tr>
-  </table>
-  <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>
-</form>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
+      <strong><?php echo $lang->convert->common;?></strong>
+      <small class='text-muted'><?php echo $lang->convert->setting . $lang->colon . strtoupper($source) . ' ' . html::icon('cog');?></small>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' action='<?php echo inlink('checkconfig');?>'>
+    <table align='center' class='table table-form'>
+      <?php echo $setting;?>
+      <tr>
+        <td></td><td><?php echo html::submitButton();?></td>
+      </tr>
+    </table>
+    <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>
+  </form>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

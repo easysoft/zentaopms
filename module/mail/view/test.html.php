@@ -17,22 +17,28 @@ if(isset($error))
 ?>
 
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='resultWin'>
-<table class='table-4' align='center'>
-  <caption>
-    <div class='f-left'> <?php echo $lang->mail->test;?></div>
-    <div class='text-right'><?php echo $lang->mail->sendmailTips;?></div>
-  </caption>
-  <tr>
-    <td class='text-center'>
-      <?php 
-      echo html::select('to', $users, $app->user->account);
-      echo html::submitButton($lang->mail->test);
-      echo html::linkButton($lang->mail->edit, inLink('edit'));
-      ?>
-    </td>
-  </tr>
-</table>
-</form>
-<table class='table-4 bd-none' align='center'><tr><td><iframe id='resultWin'></iframe></td></tr></table>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
+      <strong><?php echo $lang->mail->common;?></strong>
+      <small class='text-muted'> <?php echo $lang->mail->test;?> <?php echo html::icon($lang->icons['test']);?></small>
+    </div>
+    <div class='actions'><div class='text text-info'><?php echo $lang->mail->sendmailTips;?></div></div>
+  </div>
+  <form class='form-condensed' method='post' target='resultWin'>
+    <table class='table table-form'>
+      <tr>
+        <td><?php echo html::select('to', $users, $app->user->account, "class='form-control'");?></td>
+        <td class='text-left'>
+          <?php 
+          echo html::submitButton($lang->mail->test);
+          echo html::linkButton($lang->mail->edit, inLink('edit'));
+          ?>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <table class='table table-form'><tr><td><iframe id='resultWin'></iframe></td></tr></table>
+</div>
 <?php include '../../common/view/footer.html.php';?>

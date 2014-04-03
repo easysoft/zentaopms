@@ -11,15 +11,22 @@
  */
 include '../../common/view/header.html.php';
 ?>
-<table class='table-5' align='center'>
-  <caption><?php echo $lang->mail->save ?></caption>
-  <tr>
-    <td>
-      <?php 
-      echo $lang->mail->successSaved;
-      if($this->post->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
-      ?>
-    </td>
-  </tr>
-</table>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
+      <strong><?php echo $lang->mail->common;?></strong>
+      <small class='text-success'> <?php echo $lang->mail->save;?> <?php echo html::icon('ok-sign');?></small>
+    </div>
+  </div>
+  <div class='alert alert-success'>
+    <i class='icon-ok-sign'></i>
+    <div class='content'>
+      <?php echo $lang->mail->successSaved;?>
+      <div class='pdt-20'>
+      <?php if($this->post->turnon and $mailExist) echo html::linkButton($lang->mail->test . ' <i class="icon-rocket"></i>', inlink('test'));?>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

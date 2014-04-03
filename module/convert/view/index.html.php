@@ -10,9 +10,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table align='center' class='table-5'>
-  <caption><?php echo $lang->convert->common;?></caption>
-  <tr><td><?php echo nl2br($lang->convert->desc);?></td></tr>
-  <tr><td><h3 class='text-center'><?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?></h3></td></tr>
-</table>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
+      <strong><?php echo $lang->convert->common;?></strong>
+    </div>
+  </div>
+  <div class='main pdt-20'>
+    <div class='alert'>
+      <div class='content'>
+        <?php echo nl2br($lang->convert->desc);?>
+        <div class='text-center pdt-20'>
+          <?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

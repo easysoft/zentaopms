@@ -11,16 +11,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<table class='table-1 colored tablesorter'>
-  <caption class='caption-tr'>
-    <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback);?>
-    <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), $lang->action->dynamic->hidden);?>
-  </caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['trash']);?></span>
+    <strong><?php echo $lang->action->trash;?></strong>
+  </div>
+  <div class='actions'>
+    <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>
+      <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
+  </div>
+</div>
+
+<table class='table tablesorter'>
   <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <thead>
   <tr class='colhead'>
-    <th class='w-80px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
+    <th class='w-90px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
     <th class='w-id'>  <?php common::printOrderLink('objectID',   $orderBy, $vars, $lang->idAB);?></th>
     <th><?php echo $lang->action->objectName;?></th>
     <th class='w-100px'><?php common::printOrderLink('actor',     $orderBy, $vars, $lang->action->actor);?></th>
@@ -50,12 +56,12 @@
   <tr>
     <td colspan='6'>
       <?php if($trashes and $type == 'all'):?>
-      <div class='f-left'>
+      <div class='table-actions clearfix'>
         <?php echo html::linkButton($lang->action->hideAll, inlink('hideAll'), 'hiddenwin');?>
-        <?php echo $lang->action->trashTips;?>
+        <div class='text'><?php echo $lang->action->trashTips;?></div>
       </div>
       <?php endif;?>
-      <div><?php $pager->show();?></div>
+      <?php $pager->show();?>
     </td>
   </tr>
   </tfoot>

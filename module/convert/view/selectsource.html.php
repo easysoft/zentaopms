@@ -10,22 +10,33 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' action='<?php echo inlink('setConfig');?>'>
-  <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->convert->selectSource;?></caption>
-    <tr>
-      <th class='w-p20'><?php echo $lang->convert->source;?></th>
-      <th><?php echo $lang->convert->version;?></th>
-    </tr>
-    <?php foreach($lang->convert->sourceList as $name => $versions):?>
-    <tr>
-      <th><?php echo $name;?></th>
-      <td><?php echo html::radio('source', $versions);?></td>
-    </tr>
-    <?php endforeach;?>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-    </tr>
-  </table>
-</form>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
+      <strong><?php echo $lang->convert->common;?></strong>
+      <small class='text-muted'><?php echo $lang->convert->selectSource . ' ' . html::icon('bullseye');?></small>
+    </div>
+  </div>
+  <form method='post' action='<?php echo inlink('setConfig');?>'>
+    <table class='table table-form'>
+      <thead>
+        <tr>
+          <th class='w-100px text-right'><?php echo $lang->convert->source;?></th>
+          <th class='text-center'><?php echo $lang->convert->version;?></th>
+        </tr>
+      </thead>
+      <?php foreach($lang->convert->sourceList as $name => $versions):?>
+      <tr>
+        <th><?php echo $name;?></th>
+        <td><?php echo html::radio('source', $versions);?></td>
+      </tr>
+      <?php endforeach;?>
+      <tr>
+        <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
+      </tr>
+    </table>
+  </form>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

@@ -20,11 +20,11 @@ $itemRow = <<<EOT
       <input type='hidden' value="0" name="systems[]">
     </td>
     <td>
-      <input type='text' class="w-p98" value="" name="values[]">
+      <input type='text' class="form-control" value="" name="values[]">
     </td>
     <td class='text-left'>
-      <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
-      <a href='javascript:void()' class='link-icon' onclick='delItem(this)'><i class='icon-delete'></i></a>
+      <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
+      <a href='javascript:void()' class='btn-icon' onclick='delItem(this)'><i class='icon-remove'></i></a>
     </td>
   </tr>
 EOT;
@@ -33,72 +33,77 @@ EOT;
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
 <div id='featurebar'>
-  <div class='f-left'>
+  <ul class='nav'>
   <?php
   foreach($lang->custom->object as $object => $name)
   {
-      echo "<span id='{$object}Tab'>"; 
+      echo "<li id='{$object}Tab'>"; 
       common::printLink('custom', 'set', "module=$object",  $name); 
-      echo '</span>';
+      echo '</li>';
   }
   ?>
-  </div>
+  </ul>
 </div>
-<table class='cont-lt2'>
-  <tr valign='top'>
-    <td class='side'>
-      <div class='box-title'><?php echo $lang->custom->object[$module]?></div>
-      <div class='box-content'>
-        <ul class='tree'>
+<div class='container'>
+  <div class='row'>
+    <div class='col-sm-4 col-md-3'>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'>
+          <i class='icon-cog'></i> <?php echo $lang->custom->object[$module]?>
+        </div>
+        <div class='list-group'>
         <?php 
           foreach($lang->custom->{$module}->fields as $key => $value)
           {
-              echo "<li><span id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</span></li>";
+              echo "<li class='list-group-item' id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</li>";
           }
         ?>
-        </ul>
+        </div>
       </div>
-    </td>
-    <td class='divider'></td>
-    <td>
-      <form method='post'>
-        <table class='table-1'>
-          <caption><?php echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></caption>
-          <tr>
-            <th class='w-100px'><?php echo $lang->custom->key;?></th>
-            <th><?php echo $lang->custom->value;?></th>
-            <?php if($canAdd):?><th class='w-40px'></th><?php endif;?>
-          </tr>
-          <?php foreach($fieldList as $key => $value):?>
-          <tr class='text-center'>
-            <?php $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;?>
-            <td><?php echo $key === '' ? 'NULL' : $key; echo html::hidden('keys[]', $key) . html::hidden('systems[]', $system);?></td>
-            <td>
-              <?php echo html::input("values[]", $value, "class='w-p98'");?>
-            </td>
-            <?php if($canAdd):?>
-            <td class='text-left'>
-              <a href='javascript:void()' class='link-icon' onclick='addItem(this)'><i class='icon-add'></i></a>
-              <?php if(!$system):?><a href='javascript:void()' onclick='delItem(this)' class='link-icon'><i class='icon-delete'></i></a><?php endif;?>
-            </td>
-            <?php endif;?>
-          </tr>
-          <?php endforeach;?>
-          <tfoot>
-            <tr>
-              <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
-              <?php 
-              $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
-              echo html::radio('lang', $appliedTo, 'all');
-              echo html::submitButton();
-              if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin');
-              ?>
-              </td>
+    </div>
+    <div class='col-sm-8 col-md-9'>
+      <form method='post' class='form-condensed'>
+        <div class='panel panel-sm'>
+          <div class='panel-heading'>
+            <strong><?php echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></strong>
+          </div>
+          <table class='table table-borderless active-disabled table-condensed'>
+            <tr class='text-center'>
+              <th class='w-100px'><?php echo $lang->custom->key;?></th>
+              <th><?php echo $lang->custom->value;?></th>
+              <?php if($canAdd):?><th class='w-40px'></th><?php endif;?>
             </tr>
-          <tfoot>
-        </table>
+            <?php foreach($fieldList as $key => $value):?>
+            <tr class='text-center'>
+              <?php $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;?>
+              <td><?php echo $key === '' ? 'NULL' : $key; echo html::hidden('keys[]', $key) . html::hidden('systems[]', $system);?></td>
+              <td>
+                <?php echo html::input("values[]", $value, "class='form-control'");?>
+              </td>
+              <?php if($canAdd):?>
+              <td class='text-left w-100px'>
+                <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
+                <?php if(!$system):?><a href='javascript:void()' onclick='delItem(this)' class='btn-icon'><i class='icon-remove'></i></a><?php endif;?>
+              </td>
+              <?php endif;?>
+            </tr>
+            <?php endforeach;?>
+            <tfoot>
+              <tr>
+                <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
+                <?php 
+                $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
+                echo html::radio('lang', $appliedTo, 'all');
+                echo html::submitButton();
+                if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin');
+                ?>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </form>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
