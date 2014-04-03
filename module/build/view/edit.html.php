@@ -44,10 +44,6 @@
         <td colspan='2'><?php echo html::input('scmPath', $build->scmPath, "class='form-control'");?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->build->packageType;?></th>
-        <td colspan='2'><?php echo html::radio('packageType', $lang->build->packageTypeList, $build->packageType);?></td>
-      </tr>
-      <tr>
         <th><?php echo $lang->build->filePath;?></th>
         <td colspan='2'><?php echo html::input('filePath', $build->filePath, "class='form-control'");?></td>
       </tr>
