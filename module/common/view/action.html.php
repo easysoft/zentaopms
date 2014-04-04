@@ -3,18 +3,21 @@ var fold   = '<?php echo $lang->fold;?>';
 var unfold = '<?php echo $lang->unfold;?>';
 function switchChange(historyID)
 {
-    changeClass = $('#switchButton' + historyID).attr('class');
-    if(changeClass.indexOf('change-show') > 0)
+    $swbtn = $('#switchButton' + historyID);
+    $showTag = $swbtn.find('.change-show');
+    if($showTag.length)
     {
-        $('#switchButton' + historyID).attr('class', changeClass.replace('change-show', 'change-hide'));
-        $('#changeBox' + historyID).show();
-        $('#changeBox' + historyID).prev('.changeDiff').show();
+        $swbtn.closest('li').addClass('show-changes');
+        $showTag.removeClass('change-show').addClass('change-hide');
+        $('#changeBox' + historyID).slideDown('fast');
+        $('#changeBox' + historyID).prev('.changeDiff').slideDown('fast');
     }
     else
     {
-        $('#switchButton' + historyID).attr('class', changeClass.replace('change-hide', 'change-show'));
-        $('#changeBox' + historyID).hide();
-        $('#changeBox' + historyID).prev('.changeDiff').hide();
+        $swbtn.closest('li').removeClass('show-changes');
+        $swbtn.find('.change-hide').removeClass('change-hide').addClass('change-show');
+        $('#changeBox' + historyID).slideUp('fast');
+        $('#changeBox' + historyID).prev('.changeDiff').slideUp('fast');
     }
 }
 
@@ -44,46 +47,42 @@ function toggleStripTags(obj)
 
 function toggleShow(obj)
 {
-    var orderClass = $(obj).find('span').attr('class');
-    if(orderClass == 'change-show')
+    $showTag = $(obj).find('.change-show');
+    if($showTag.length)
     {
-        $(obj).find('span').attr('class', 'change-hide');
+        $showTag.removeClass('change-show').addClass('change-hide');
+        $('#historyItem > li:not(.show-changes) .switch-btn').click();
     }
     else
     {
-        $(obj).find('span').attr('class', 'change-show');
+        $(obj).find('.change-hide').removeClass('change-hide').addClass('change-show');
+        $('#historyItem > li.show-changes .switch-btn').click();
     }
-    $('.changes').each(function(){
-        var box = $(this).parent();
-        while($(box).get(0).tagName.toLowerCase() != 'li') box = $(box).parent();
-        var switchButtonID = ($(box).find('span').find("span").attr('id'));
-        switchChange(switchButtonID.replace('switchButton', ''));
-    })
 }
 
 function toggleOrder(obj)
 {
-    var orderClass = $(obj).find('span').attr('class');
-    if(orderClass == 'log-asc')
+    var $orderTag = $(obj).find('.log-asc');
+    if($orderTag.length)
     {
-        $(obj).find('span').attr('class', 'log-desc');
+        $orderTag.attr('class', 'icon- log-desc');
     }
     else
     {
-        $(obj).find('span').attr('class', 'log-asc');
+        $(obj).find('.log-desc').attr('class', 'icon- log-asc');
     }
     $("#historyItem li").reverseOrder();
 }
 
 function toggleComment(actionID)
 {
-    $('.comment' + actionID).toggle();
-    $('#lastCommentBox').toggle();
+    $('.comment' + actionID).slideToggle('fast');
+    $('#lastCommentBox').slideToggle('fast');
     $('.ke-container').css('width', '100%');
 }
 
 $(function(){
-    var diffButton = "<span onclick='toggleStripTags(this)' class='hidden changeDiff diff-all hand' title='<?php echo $lang->action->original?>'></span>";
+    var diffButton = "<span onclick='toggleStripTags(this)' class='hide changeDiff diff-all hand' title='<?php echo $lang->action->original?>'></span>";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function(){
@@ -101,20 +100,23 @@ $(function(){
 
 <?php if(!isset($actionTheme)) $actionTheme = 'fieldset';?>
 <?php if($actionTheme == 'fieldset'):?>
-<fieldset id='actionbox'>
+<fieldset id='actionbox' class='actionbox'>
   <legend>
-  <?php echo $lang->history?>
-    <span onclick='toggleOrder(this)' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'></span>";?></span>
-    <span onclick='toggleShow(this);' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'></span>";?></span>
+    <i class='icon-time'></i> 
+    <?php echo $lang->history?>
+    <a class='btn-icon' href='javascript:;' onclick='toggleOrder(this)'> <?php echo "<span title='$lang->reverse' class='log-asc icon-'></span>";?></a>
+    <a class='btn-icon' href='javascript:;' onclick='toggleShow(this);'><?php echo "<span title='$lang->switchDisplay' class='change-show icon-'></span>";?></a>
   </legend>
 <?php else:?>
-<table class='table-1' id='actionbox'>
-  <caption>
-    <?php echo $lang->history?>
-    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'></span>";?></span>
-    <span onclick='toggleShow();' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'></span>";?></span>
-  </caption>
-  <tr><td>
+<div id='actionbox' class='actionbox panel panel-sm'>
+  <div class='panel-heading'>
+    <i class='icon-time'></i> <strong><?php echo $lang->history?></strong>
+    <div class='panel-actions'>
+      <a class='btn btn-mini' href='javascript:;' onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc icon-'></span>";?></a>
+      <a class='btn btn-mini' href='javascript:;' onclick='toggleShow();' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show icon-'></span>";?></a>
+    </div>
+  </div>
+  <div class='panel-body'>
 <?php endif;?>
   <ol id='historyItem'>
     <?php $i = 1; ?>
@@ -128,15 +130,15 @@ $(function(){
       ?>
       <span>
         <?php $this->action->printAction($action);?>
-        <?php if(!empty($action->history)) echo "<span id='switchButton$i' class='hand change-show' onclick=switchChange($i)></span>";?>
+        <?php if(!empty($action->history)) echo "<a id='switchButton$i' class='switch-btn btn-icon' onclick='switchChange($i)' href='javascript:;'><i class='change-show icon-'></i></a>";?>
       </span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
-      <?php if(!empty($action->comment)) echo "<div class='history'>";?>
-        <div class='changes hidden' id='changeBox<?php echo $i;?>'>
+      <?php if(!empty($action->comment)) echo "<div class='history alert'>";?>
+        <div class='changes hide alert' id='changeBox<?php echo $i;?>'>
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
         <?php if($canEditComment):?>
-        <span class='link-button f-right comment<?php echo $action->id;?>'><?php echo html::a('#lastCommentBox', '<i class="icon-edit-sign icon-large"></i>', '', "onclick='toggleComment($action->id)'")?></span>
+        <span class='pull-right comment<?php echo $action->id;?>'><?php echo html::a('javascript:toggleComment(' . $action->id . ')', '<i class="icon-pencil"></i>', '', "class='btn btn-mini'")?></span>
         <?php endif;?>
         <?php 
         if($action->comment) 
@@ -147,11 +149,11 @@ $(function(){
         }
         ?>
         <?php if($canEditComment):?>
-        <div class='hidden' id='lastCommentBox'>
+        <div class='hide' id='lastCommentBox'>
           <form method='post' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>
-            <table align='center' class='table-1'>
-              <tr><td><?php echo html::textarea('lastComment', htmlspecialchars($action->comment),"rows='5' class='w-p100'");?></td></tr>
-              <tr><td><?php echo html::submitButton() . html::commonButton($lang->goback, "onclick='toggleComment($action->id)' class='button-b'");?></td></tr>
+            <table align='center' class='table table-form'>
+              <tr><td><?php echo html::textarea('lastComment', htmlspecialchars($action->comment),"rows='5' class='form-control'");?></td></tr>
+              <tr><td><?php echo html::submitButton() . html::a("javascript:toggleComment($action->id)", $lang->goback, '', "class='btn'");?></td></tr>
             </table>
           </form>
         </div>
@@ -166,5 +168,5 @@ $(function(){
 <?php if($actionTheme == 'fieldset'):?>
 </fieldset>
 <?php else:?>
-</td></tr></table>
+</div></div>
 <?php endif;?>

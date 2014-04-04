@@ -168,14 +168,17 @@ i.icon-2x[class^="icon-"], i.icon-2x[class*=" icon-"], .link-icon i.icon-2x[clas
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before {color: #ccc; cursor:not-allowed}
 
-.change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-short{display: inline-block; font-family: FontAwesome;border: 1px solid #555;color: #555; font-size: 13px;font-weight: lighter; width: 14px;height: 13px;line-height: 13px;text-align: center;}
-.change-show:hover,.change-hide:hover,.log-desc:hover,.log-asc:hover,.diff-all:hover,.diff-short:hover{background-color: #333;color: #fff}
-.change-show:before{content: "\f067";}
-.change-hide:before{content: "\f068";}
-.log-desc:before{content: "\f063";}
-.log-asc:before{content: "\f062";}
-.diff-all:before{content: "\f0b2";}
-.diff-short:before{content: "\f036";}
+/* actionbox */
+.change-show:before{content: "\e661";}
+.change-hide:before{content: "\e662";}
+.log-desc:before{content: "\e65d";}
+.log-asc:before{content: "\e65c";}
+.diff-all:before{content: "\e6a3";}
+.diff-short:before{content: "\e633";}
+
+.actionbox .btn-icon {background: #e5e5e5; color: #808080; border: 1px solid #ddd; padding: 0 1px; height: 20px; line-height: 18px}
+.actionbox ol {padding-left: 25px; line-height: 20px}
+.actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px}
 
 /* zenicon */
 .icon-green-testcase-createCase:before,.icon-green-story-createCase:before,.icon-green-task-create:before,
@@ -635,19 +638,6 @@ td>select{padding-left: 0;padding-right: 0}
 /* Select all and select reverse. */
 #allchecker, #reversechecker {padding-right: 5px;padding-left: 5px;}
 
-/* Other items. */
-#actionbox .button-c {font-size:9px; height:20px; padding:0 5px 0 5px}
-.history, .changes {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
-.history .changes {border:none; margin:0; padding:0}
-.content {font-size:14px; padding:10px}
-
-.helplink {font-size:9px}
-#fileform .text-3 {margin-bottom:5px}
-
-.content p, .history p {margin:0}
-
-/* Debug. */
-.debugwin {display:none; width:50px; height:20px; bottom:50px; position:fixed;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
 .box-title {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:8px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
