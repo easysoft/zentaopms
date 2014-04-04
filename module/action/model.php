@@ -240,16 +240,17 @@ class actionModel extends model
         }
         foreach($typeTrashes as $objectType => $objectIds)
         {
+            if(!isset($this->config->objectTables[$objectType]))continue;
+
             $objectIds   = array_unique($objectIds);
             $table       = $this->config->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
 
-            if(!$table) continue;
             $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
         }
 
         /* Add name field to the trashes. */
-        foreach($trashes as $trash) $trash->objectName = $objectNames[$trash->objectType][$trash->objectID];
+        foreach($trashes as $trash) $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
         return $trashes;
     }
 

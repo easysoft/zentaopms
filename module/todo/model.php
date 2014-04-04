@@ -146,6 +146,7 @@ class todoModel extends model
             /* Initialize todos from the post data. */
             foreach($todoIDList as $todoID)
             {
+                $todo = new stdclass();
                 $todo->date   = $this->post->dates[$todoID];
                 $todo->type   = $this->post->types[$todoID];
                 $todo->pri    = $this->post->pris[$todoID];
@@ -157,7 +158,6 @@ class todoModel extends model
                 if($todo->type == 'bug')  $todo->idvalue = isset($this->post->bugs[$todoID]) ? $this->post->bugs[$todoID] : 0;
 
                 $todos[$todoID] = $todo;
-                unset($todo);
             }
 
             foreach($todos as $todoID => $todo)

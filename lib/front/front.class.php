@@ -501,7 +501,7 @@ EOT;
      * @access public
      * @return string
      */
-    public static function linkButton($label = '', $link = '', $target = 'self', $misc = '', $class)
+    public static function linkButton($label = '', $link = '', $target = 'self', $misc = '', $class = '')
     {
         global $config, $lang;
 

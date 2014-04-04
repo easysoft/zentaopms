@@ -70,7 +70,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='9'>
+        <td colspan='10'>
         <?php if($bugs and $canBatchEdit):?>
         <div class='table-actions clearfix'>
         <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton("<i class='icon-edit'></i> " . $lang->edit);?>

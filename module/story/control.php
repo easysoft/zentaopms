@@ -377,7 +377,7 @@ class story extends control
         $this->view->productID         = $productID;
         $this->view->storyIDList       = $storyIDList;
         $this->view->stories           = $stories;
-        $this->view->productName       = $product->name;
+        $this->view->productName       = isset($product) ? $product->name : '';
         $this->display();
     }
 
