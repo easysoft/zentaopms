@@ -15,7 +15,9 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?></strong>
+    <?php if($productName):?>
     <small class='text-muted'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->story->product . $lang->colon . ' ' . $productName;?></small>
+    <?php endif;?>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">

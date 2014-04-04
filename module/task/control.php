@@ -343,7 +343,7 @@ class task extends control
         $this->view->projectID   = $projectID;
         $this->view->taskIDList  = $taskIDList;
         $this->view->tasks       = $tasks;
-        $this->view->projectName = $project->name;
+        $this->view->projectName = isset($project) ? $project->name : '';
 
         $this->display();
     }

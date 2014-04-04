@@ -38,7 +38,7 @@
   <?php foreach($trashes as $action):?>
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
   <tr class='text-center'>
-    <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
+    <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
     <td><?php echo $action->objectID;?></td>
     <td class='text-left'><?php echo html::a($this->createLink($module, 'view', "id=$action->objectID"), $action->objectName);?></td>
     <td><?php echo $users[$action->actor];?></td>

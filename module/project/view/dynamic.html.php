@@ -29,7 +29,7 @@
     // echo "<li id='account'>"    . html::select('account', $users, $account, "onchange=changeUser(this.value,$projectID)") . '</li>';
 
     echo "<li id='account' class='dropdown'>";
-    $current = $users[isset($account) ? $account : ''];
+    $current = zget($users, isset($account) ? $account : '', '');
     if(empty($current)) $current = $lang->project->byUser;
     echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
     echo "<ul class='dropdown-menu'>";
