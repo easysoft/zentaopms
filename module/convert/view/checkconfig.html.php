@@ -10,20 +10,31 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' action='<?php echo inlink('execute');?>'>
-<table align='center' class='w-p65 f-14px'>
-  <caption><?php echo $lang->convert->checkConfig . $lang->colon . strtoupper($source);?></caption>
-  <?php echo $checkResult;?>
-</table>
-<?php 
-echo html::hidden('dbHost',     $this->post->dbHost);
-echo html::hidden('dbPort',     $this->post->dbPort);
-echo html::hidden('dbUser',     $this->post->dbUser);
-echo html::hidden('dbPassword', $this->post->dbPassword);
-echo html::hidden('dbName',     $this->post->dbName);
-echo html::hidden('dbCharset',  $this->post->dbCharset);
-echo html::hidden('dbPrefix',   $this->post->dbPrefix);
-echo html::hidden('installPath',$this->post->installPath);
-?>
-</form>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
+      <strong><?php echo $lang->convert->common;?></strong>
+      <small class='text-muted'><?php echo $lang->convert->checkConfig;?> </small>
+      <strong class='text-important'> <?php echo strtoupper($source);?></strong>
+    </div>
+  </div>
+  <form method='post' action='<?php echo inlink('execute');?>'>
+  <div class='alert'>
+    <table align='center' class='table table-data table-borderless'>
+      <?php echo $checkResult;?>
+    </table>
+  </div>
+  <?php 
+  echo html::hidden('dbHost',     $this->post->dbHost);
+  echo html::hidden('dbPort',     $this->post->dbPort);
+  echo html::hidden('dbUser',     $this->post->dbUser);
+  echo html::hidden('dbPassword', $this->post->dbPassword);
+  echo html::hidden('dbName',     $this->post->dbName);
+  echo html::hidden('dbCharset',  $this->post->dbCharset);
+  echo html::hidden('dbPrefix',   $this->post->dbPrefix);
+  echo html::hidden('installPath',$this->post->installPath);
+  ?>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

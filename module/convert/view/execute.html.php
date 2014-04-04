@@ -10,9 +10,17 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table align='center' class='f-14px'>
-  <caption><?php echo $lang->convert->execute . $lang->colon . strtoupper($source);?></caption>
-  <?php echo $executeResult;?>
-</table>
-</form>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
+      <strong><?php echo $lang->convert->common;?></strong>
+      <small class='text-muted'><?php echo $lang->convert->execute;?> </small>
+      <strong class='text-important'> <?php echo strtoupper($source);?></strong>
+    </div>
+  </div>
+  <div class='alert'>
+    <?php echo $executeResult;?>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

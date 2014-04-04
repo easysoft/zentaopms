@@ -17,13 +17,11 @@
       <strong><?php echo $lang->convert->common;?></strong>
     </div>
   </div>
-  <div class='main pdt-20'>
-    <div class='alert'>
-      <div class='content'>
-        <?php echo nl2br($lang->convert->desc);?>
-        <div class='text-center pdt-20'>
-          <?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?>
-        </div>
+  <div class='alert'>
+    <div class='content'>
+      <?php echo nl2br($lang->convert->desc);?>
+      <div class='text-center pdt-20'>
+        <?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?>
       </div>
     </div>
   </div>

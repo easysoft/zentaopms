@@ -23,6 +23,7 @@
 /* paddings */
 .pd-0 {padding: 0 !important}
 .mg-0 {margin: 0 !important}
+.mgb-20 {margin-bottom: 20px !important}
 .pdb-20 {padding-bottom: 20px !important}
 .pdt-20 {padding-top: 20px !important}
 
@@ -285,7 +286,14 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
 .panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
 
+/* small panel */
 .panel-sm .panel-heading {padding: 6px 10px}
+
+/* list group */
+.list-group-item {padding: 8px 15px}
+.list-group-item.active,.list-group-item.active:hover {background: #fff; border-color: #ddd; background: #f1f1f1; color: #333; font-weight: bold;}
+.list-group-item.active > a {color: #333}
+
 
 /* File form */
 .fileBox {margin-bottom: 10px; width: 100%}
