@@ -112,8 +112,8 @@ $(function(){
   <div class='panel-heading'>
     <i class='icon-time'></i> <strong><?php echo $lang->history?></strong>
     <div class='panel-actions'>
-      <a class='btn btn-mini' href='javascript:;' onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc icon-'></span>";?></a>
-      <a class='btn btn-mini' href='javascript:;' onclick='toggleShow();' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show icon-'></span>";?></a>
+      <a class='btn btn-mini' href='javascript:;' onclick='toggleOrder(this);' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc icon-'></span>";?></a>
+      <a class='btn btn-mini' href='javascript:;' onclick='toggleShow(this);' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show icon-'></span>";?></a>
     </div>
   </div>
   <div class='panel-body'>

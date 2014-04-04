@@ -22,15 +22,15 @@ class editorModel extends model
     public function getModules()
     {
         $modules = glob($this->app->getModuleRoot() . '*');
-        $moduleList  = '<ul>';
+        $moduleList  = "<div class='list-group'>";
         foreach($modules as $module)
         {
             $module = basename($module);
             if($module == 'editor' or $module == 'help' or $module == 'setting') continue;
             $moduleName  = !empty($this->lang->editor->modules[$module]) ? $this->lang->editor->modules[$module] : $module;
-            $moduleList .= '<li>' . html::a(inlink('extend', "moduleDir=$module"),  $moduleName, 'extendWin') . '</li>';
+            $moduleList .= html::a(inlink('extend', "moduleDir=$module"),  $moduleName, 'extendWin', "class='list-group-item'");
         }
-        $moduleList .= '</ul>';
+        $moduleList .= '</div>';
         return $moduleList;
     }
 

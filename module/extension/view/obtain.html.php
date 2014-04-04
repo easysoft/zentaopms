@@ -12,79 +12,90 @@
 ?>
 <?php include 'header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<table class='cont-lt1'>
-  <tr valign='top'>
-    <td class='side'>
-      <div class='box-title'><?php echo $lang->extension->obtain;?></div>
-      <div class='box-content a-center'>
-        <?php
-        echo "<span id='byupdatedtime'>" . html::a(inlink('obtain', 'type=byUpdatedTime'), $lang->extension->byUpdatedTime) . '</span><br />';
-        echo "<span id='byaddedtime'>"   . html::a(inlink('obtain', 'type=byAddedTime'),   $lang->extension->byAddedTime)   . '</span><br />';
-        echo "<span id='bydownloads'>"   . html::a(inlink('obtain', 'type=byDownloads'),   $lang->extension->byDownloads)   . '</span><br />';
-        ?>
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-4 col-lg-3'>
+      <form class='side-search mgb-20' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
+        <div class="input-group">
+          <?php echo html::input('key', $this->post->key, "class='form-control'");?>
+          <span class="input-group-btn">
+            <?php echo html::submitButton('<i class="icon-search"></i> ' . $lang->extension->bySearch, '', ''); ?>
+          </span>
+        </div>
+      </form>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'><?php echo $lang->extension->obtain;?></div>
+        <div class='list-group'>
+            <?php
+            echo html::a(inlink('obtain', 'type=byUpdatedTime'), $lang->extension->byUpdatedTime, '', "class='list-group-item' id='byupdatedtime'");
+            echo html::a(inlink('obtain', 'type=byAddedTime'),   $lang->extension->byAddedTime, '', "class='list-group-item' id='byaddedtime'");
+            echo html::a(inlink('obtain', 'type=byDownloads'),   $lang->extension->byDownloads, '', "class='list-group-item' id='bydownloads'");
+            ?>
+        </div>
       </div>
-      <div class='box-title'><?php echo $lang->extension->bySearch;?></div>
-      <div class='box-content a-center'>
-        <form class='side-search' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
-        <?php echo html::input('key', $this->post->key, "class='form-control'") . html::submitButton($lang->extension->bySearch);?>
-        </form>
+
+      <div class='panel panel-sm'>
+        <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>
+        <div class='panel-body'>
+          <?php $moduleTree ? print($moduleTree) : print($lang->extension->errorGetModules);?>
+        </div>
       </div>
-      <div class='box-title'><?php echo $lang->extension->byCategory;?></div>
-      <div class='box-content' class='tree'>
-        <?php $moduleTree ? print($moduleTree) : print($lang->extension->errorGetModules);?>
-      </div>
-    </td>
-    <td class='divider'></td>
-    <td> 
+    </div>
+    <div class='col-md-8 col-lg-9'>
       <?php if($extensions):?>
+      <div class='cards pd-0 mg-0'>
       <?php foreach($extensions as $extension):?>
         <?php 
         $currentRelease = $extension->currentRelease;
         $latestRelease  = isset($extension->latestRelease) ? $extension->latestRelease : '';
         ?>
-        <table class='table-1 exttable'>
-          <caption>
-            <div class='f-left'><?php echo $extension->name . "($currentRelease->releaseVersion)";?></div>
-            <div class='text-right'>
+        <div class='card'>
+          <div class='card-heading'>
+            <small class='pull-right text-important'>
               <?php 
               if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion) 
               {
                   printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible);
               }?>
+            </small>
+            <h5 class='mg-0'><?php echo $extension->name . "($currentRelease->releaseVersion)";?></h5>
+          </div>
+          <div class='card-content text-muted'>
+            <?php echo $extension->abstract;?>
+          </div>
+          <div class='card-actions'>
+            <div style='margin-bottom: 10px'>
+              <?php
+              echo "{$lang->extension->author}:     {$extension->author} ";
+              echo "{$lang->extension->downloads}:  {$extension->downloads} ";
+              echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
+              
+              echo " {$lang->extension->depends}: ";
+              if(!empty($currentRelease->depends))
+              {
+                  foreach(json_decode($currentRelease->depends) as $code => $limit)
+                  {
+                      echo $code;
+                      if($limit != 'all')
+                      {
+                          echo '(';
+                          if(!empty($limit['min'])) echo '>= v' . $limit['min'];
+                          if(!empty($limit['max'])) echo '<= v' . $limit['min'];
+                          echo ')';
+                      }
+                      echo ' ';
+                  }
+              }
+              ?>
             </div>
-          </caption> 
-          <tr valign='middle'>
-            <td>
-              <div class='mb-10px'><?php echo $extension->abstract;?></div>
-              <div>
-                <?php
-                echo "{$lang->extension->author}:     {$extension->author} ";
-                echo "{$lang->extension->downloads}:  {$extension->downloads} ";
-                echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
-                echo "{$lang->extension->grade}: ",   html::printStars($extension->stars);
-                echo " {$lang->extension->depends}: ";
-                if(!empty($currentRelease->depends))
-                {
-                    foreach(json_decode($currentRelease->depends) as $code => $limit)
-                    {
-                        echo $code;
-                        if($limit != 'all')
-                        {
-                            echo '(';
-                            if(!empty($limit['min'])) echo '>= v' . $limit['min'];
-                            if(!empty($limit['max'])) echo '<= v' . $limit['min'];
-                            echo ')';
-                        }
-                        echo ' ';
-                    }
-                }
-                ?>
-              </div>
-            </td>
-            <td class=' a-right'>
-              <?php 
+            <?php
+              echo "{$lang->extension->grade}: ",   html::printStars($extension->stars);
+            ?>
+            <div class='pull-right' style='margin-top: -15px'>
+              <div class='btn-group'>
+              <?php
               $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->type&overridePackage=no&ignoreCompitable=yes");
-              echo html::a($extension->viewLink, $lang->extension->view, '', 'class="button-c extension"');
+              echo html::a($extension->viewLink, $lang->extension->view, '', 'class="btn extension"');
               if($currentRelease->public)
               {
                   if($extension->type != 'computer' and $extension->type != 'mobile')
@@ -94,7 +105,7 @@
                           if($installeds[$extension->code]->version != $extension->latestRelease->releaseVersion and $this->extension->checkVersion($extension->latestRelease->zentaoCompatible))
                           {
                               $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5=$currentRelease->md5&type=$extension->type");
-                              echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
+                              echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe btn"');
                           }
                           else
                           {
@@ -104,26 +115,34 @@
                       else
                       {
                           $label = $currentRelease->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
-                          echo html::a($installLink, $label, '', 'class="iframe button-c"');
+                          echo html::a($installLink, $label, '', 'class="iframe btn"');
                       }
                   }
               }
-              echo html::a($currentRelease->downLink, $lang->extension->downloadAB, '', 'class="manual button-c"');
-              echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');
-            ?>
-          </td></tr>
-          </table>
-        <?php endforeach;?>
-        <?php if($pager) $pager->show();?>
+              echo html::a($currentRelease->downLink, $lang->extension->downloadAB, '', 'class="manual btn"');
+              echo html::a($extension->site, $lang->extension->site, '_blank', 'class=btn');
+              ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php endforeach;?>
+      </div>
+      <?php if($pager) $pager->show();?>
       <?php elseif($pager):?>
-        <?php $pager->show()?>
+      <?php $pager->show()?>
       <?php else:?>
-        <div class='box-title'><?php echo $lang->extension->errorOccurs;?></div>
-        <div class='box-content'><?php echo $lang->extension->errorGetExtensions;?></div>
+      <div class='alert alert-danger'>
+        <i class='icon icon-remove-sign'></i>
+        <div class='content'>
+          <h4><?php echo $lang->extension->errorOccurs;?></h4>
+          <div><?php echo $lang->extension->errorGetExtensions;?></div>
+        </div>
+      </div>
       <?php endif;?>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
 <script>
 $('#<?php echo $type;?>').addClass('active')
 $('#module<?php echo $moduleID;?>').addClass('active')

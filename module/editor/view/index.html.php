@@ -11,14 +11,19 @@
  */
 ?>
 <?php include '../../extension/view/header.html.php';?>
-<table class='table-1 bd-none'>
-  <tr valign='top'>
-    <td width='160'>
-      <div class='box-title'><?php echo $lang->editor->moduleList?></div>
-      <div class='box-content'><?php echo $moduleList?></div>
-    </td>
-    <td width='300'><iframe frameborder='0' name='extendWin' id='extendWin' width='100%'></iframe></td>
-    <td><iframe frameborder='0' name='editWin' id='editWin' width='100%'></iframe></td>
-  </tr>
-</table>
+<div class='container'>
+  <table class='w-p100'>
+    <tr>
+      <td class='w-200px'>
+        <div class='panel panel-sm'>
+          <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->editor->moduleList?></strong></div>
+          <?php echo $moduleList?>
+        </div>
+      </td>
+      <td class='w-300px'><iframe frameborder='0' name='extendWin' id='extendWin' width='100%'></iframe></td>
+      <td><iframe frameborder='0' name='editWin' id='editWin' width='100%'></iframe></td>
+    </tr>
+  </table> 
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

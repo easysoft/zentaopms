@@ -11,44 +11,55 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table class='table-1'>
-  <caption>
-<?php
-echo $title;
-if(isset($license) and $upgrade == 'yes') printf($lang->extension->upgradeVersion, $this->post->installedVersion, $this->post->upgradeVersion);
-?>
-</caption>
-  <tr>
-    <td valign='middle'>
-    <?php if($error):?>
-      <?php 
-      echo "<h3 class='error'>" . sprintf($lang->extension->installFailed, $installType) . "</h3>"; 
-      echo "<p>$error</p>";
-      echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');
-      ?>
-    <?php elseif(isset($license)):?>
-      <?php
-      echo "<h3 class='text-center'>{$lang->extension->license}</h3>"; 
-      echo html::textarea('license', $license) . '<br />';
-      echo '<h3>' . html::a($agreeLink, $lang->extension->agreeLicense) . '</h3>';
-      ?>
-    <?php else:?>
-      <?php
-      if($downloadedPackage) echo  "<h3 class='success'>{$lang->extension->successDownloadedPackage}</h3>";
-      echo "<h1 class='text-center'>" . sprintf($lang->extension->installFinished, $installType) . "</h1>";
-      echo "<p class='text-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '"') . '</p>';
-      echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
-      echo '<ul>';
-      foreach($files as $fileName => $md5)
-      {
-          echo "<li>$fileName</li>";
-      }
-      echo '</ul>';
-      echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";
-      ?>
-    <?php endif;?>
-    </td>
-  </tr>
-</table>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon('cog');?></span>
+    <strong><?php echo $title;?></strong>
+    <small>
+    <?php
+    if(isset($license) and $upgrade == 'yes') printf($lang->extension->upgradeVersion, $this->post->installedVersion, $this->post->upgradeVersion);
+    ?>
+    </small>
+  </div>
+</div>
+<?php if($error):?>
+<div class='alert alert-danger'>
+  <i class='icon-remove-sign'></i>
+  <div class='content'>
+    <h4><?php sprintf($lang->extension->installFailed, $installType);?></h4>
+    <p><?php echo $error;?></p>
+    <hr>
+    <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
+  </div>
+</div>
+<?php elseif(isset($license)):?>
+<div class='alert'>
+  <i class='icon-info-sign'></i>
+  <div class='content'>
+    <h4><?php echo $lang->extension->license;?></h4>
+    <p><?php echo html::textarea('license', $license, "class='form-control' disabled rows='15'");?></p>
+    <?php echo html::a($agreeLink, $lang->extension->agreeLicense, '', "class='btn btn-primary'");?>
+  </div>
+</div>
+<?php else:?>
+<div class='alert alert-success'>
+  <h4><i class='icon-ok-sign'></i> <?php echo $lang->extension->successDownloadedPackage;?></h4>
+  <h1 class='text-center'><?php echo sprintf($lang->extension->installFinished, $installType);?></h1>
+  <div class='text-center'>
+    <?php echo html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '" class="btn btn-success"');?>
+  </div>
+  <hr>
+  <?php
+  echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
+  echo '<ul>';
+  foreach($files as $fileName => $md5)
+  {
+      echo "<li>$fileName</li>";
+  }
+  echo '</ul>';
+  echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";
+  ?>
+</div>
+<?php endif;?>
 </body>
 </html>

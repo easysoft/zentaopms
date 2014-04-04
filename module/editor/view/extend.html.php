@@ -12,12 +12,12 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<table class='table-1'>
-    <caption><?php echo isset($lang->editor->modules[$module])? $lang->editor->modules[$module] : $module;?></caption>
-  <tr>
-    <td valign='top'><?php echo $tree?></td>
-  </tr>
-</table>
+<div class='panel panel-sm'>
+  <div class='panel-heading'><i class='icon-list-ul'></i> <strong><?php echo isset($lang->editor->modules[$module])? $lang->editor->modules[$module] : $module;?></strong></div>
+  <div class='panel-body'>
+  <?php echo $tree?>
+  </div>
+</div>
 <script type='text/javascript'>
 $(function()
 {

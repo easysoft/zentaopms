@@ -11,9 +11,15 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' enctype='multipart/form-data' class='text-center'>
-  <input type='file' name='file' class='text-5' />
-  <?php echo html::submitButton($lang->extension->install);?>
+<div id='featurebar'>
+  <div class='heading'><?php echo html::icon('upload') . ' ' . $lang->extension->upload;?></div>
+</div>
+
+<form method='post' enctype='multipart/form-data' style='padding: 5% 20%'>
+  <div class='input-group'>
+    <input type='file' name='file' class='form-control' />
+    <span class='input-group-btn'><?php echo html::submitButton($lang->extension->install);?></span>
+  </div>
 </form>
 </body>
 </html>

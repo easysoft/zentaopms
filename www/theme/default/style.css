@@ -72,6 +72,12 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
 
+/* alert */
+.alert>[class*="icon-"]+.content {padding-left: 2em;}
+
+/* code */
+code {margin-left: 0;}
+
 /* Icons */
 .link-icon{color: #498cd0;display: inline-block;}
 .link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}

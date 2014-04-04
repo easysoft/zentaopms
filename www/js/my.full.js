@@ -836,8 +836,9 @@ function setModal()
                     options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                 }
                 var modal = $('#ajaxModal').addClass('modal-loading');
-                modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: {height}'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+                modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: auto'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
+                var modalBody = modal.find('.modal-body');
                 var frame = document.getElementById(options.name);
                 frame.onload = frame.onreadystatechange = function()
                 {
@@ -852,7 +853,7 @@ function setModal()
                         {
                             setTimeout(function()
                             {
-                                modal.find('.modal-body').animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
+                                modalBody.animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
                             }, 100);
                         }
                     }
