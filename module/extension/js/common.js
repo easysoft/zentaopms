@@ -2,5 +2,5 @@
 // if($('a.manual').size()) $("a.manual").colorbox({width:1024, height:600, iframe:true, transition:'none', scrolling:false});
 $(function()
 {
-    $("a.extension").modalTrigger({width:1024, height:600, type:'iframe'});
+    $("a.extension, a.manual").modalTrigger({width:1024, height:600, type:'iframe'});
 })

@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
 <style>
 body{padding-bottom:0px}
 </style>
@@ -25,7 +24,7 @@ function setFileName()
 
 function closeWindow()
 {
-    parent.$.fn.colorbox.close();
+    parent.$.closeModal();
     clearInterval(time);
 }
 </script>

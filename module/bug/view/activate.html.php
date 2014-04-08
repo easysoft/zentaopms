@@ -12,20 +12,28 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $bug->title;?></caption>
+<?php include '../../common/view/chosen.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;;?></span>
+    <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
+    <small class='text-success'> <?php echo $lang->bug->activate;?> <?php echo html::icon($lang->icons['activate']);?></small>
+  </div>
+</div>
+
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+  <table class='table table-form'>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
+      <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->openedBuild;?></td>
-      <td><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class=select-3');?></td>
+      <th><?php echo $lang->bug->openedBuild;?></th>
+      <td><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+      <th><?php echo $lang->comment;?></th>
+      <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->files;?></th>
@@ -35,6 +43,8 @@
       <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<div class='main'>
+  <?php include '../../common/view/action.html.php';?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

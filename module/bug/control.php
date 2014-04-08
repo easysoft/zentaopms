@@ -628,7 +628,7 @@ class bug extends control
             $this->action->logHistory($actionID, $changes);
             $this->sendmail($bugID, $actionID);
 
-            if(isonlybody()) die(js::closeColorbox('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -657,7 +657,7 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->sendmail($bugID, $actionID);
-            if(isonlybody()) die(js::closeColorbox('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -716,7 +716,7 @@ class bug extends control
                 $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                 echo js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, '', 'parent');
             } 
-            if(isonlybody()) die(js::closeColorbox('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -772,7 +772,7 @@ class bug extends control
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
             $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
             $this->sendmail($bugID, $actionID);
-            if(isonlybody()) die(js::closeColorbox('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -807,7 +807,7 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->sendmail($bugID, $actionID);
-            if(isonlybody()) die(js::closeColorbox('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 

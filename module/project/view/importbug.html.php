@@ -15,7 +15,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <script language='Javascript'>
 $(function(){
-     $(".preview").colorbox({width:1000, height:700, iframe:true, transition:'elastic', speed:350, scrolling:true});
+     $(".preview").modalTrigger({width:1000, type:'iframe'});
 })
 var browseType = '<?php echo $browseType;?>';
 </script>

@@ -38,8 +38,3 @@ function syncProject(obj)
     $('#copyModule').attr('onclick', null);
     $('#copyModule').bind('click', function(){syncModule(obj.value, 'task')});
 }
-
-$(document).ready(function()
-{
-    $("a.iframe").colorbox({width:480, height:240, iframe:true, transition:'none'});
-});

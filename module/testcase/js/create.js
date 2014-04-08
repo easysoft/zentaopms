@@ -18,5 +18,5 @@ function setPreview()
 $(function()
 {
      $("#story").chosen({no_results_text: noResultsMatch});
-     $("#preview").colorbox({width:960, height:550, iframe:true, transition:'none', scrolling:true});
+     $("#preview").modalTrigger({width:960, type:'iframe'});
 })

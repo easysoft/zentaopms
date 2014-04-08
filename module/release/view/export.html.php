@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
 <script>
 function setDownloading()
 {
@@ -26,7 +25,7 @@ function closeWindow()
 {
     if($.cookie('downloading') == 1 || i >= 30)
     {
-        parent.$.fn.colorbox.close();
+        parent.$.closeModal();
         $.cookie('downloading', null);
         clearInterval(time);
     }

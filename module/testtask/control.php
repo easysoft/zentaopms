@@ -627,7 +627,7 @@ class testtask extends control
             }
             else
             {
-                die(js::closeColorbox('parent'));
+                die(js::closeModal('parent'));
             }
         }
 

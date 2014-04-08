@@ -5,7 +5,7 @@ $sessionString .= session_name() . '=' . session_id();
 <style>.button-c {padding:1px}</style>
 <script language='Javascript'>
 $(function(){
-     $(".edit").colorbox({width:350, height:160, iframe:true, transition:'none', scrolling:true});
+     $(".edit").modalTrigger({width:350, type:'iframe'});
 })
 
 /* Delete a file. */

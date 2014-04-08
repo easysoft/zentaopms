@@ -6,9 +6,6 @@ if($config->debug)
     js::import($jsRoot . 'jquery/chosen/min.js');
 }
 ?>
-<style>
-#colorbox, #cboxOverlay, #cboxWrapper{z-index:9999;}
-</style>
 <script> 
 noResultsMatch       = '<?php echo $lang->noResultsMatch;?>';
 chooseUsersToMail    = '<?php echo $lang->chooseUsersToMail;?>';

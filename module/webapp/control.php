@@ -159,7 +159,7 @@ class webapp extends control
                 die(js::reload('parent'));
             }
             echo js::alert($this->lang->webapp->successInstall);
-            die(js::closeColorbox('parent.parent'));
+            die(js::closeModal('parent.parent'));
         }
 
         $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->install;

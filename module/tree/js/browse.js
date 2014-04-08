@@ -41,8 +41,3 @@ function syncProductOrProject(obj, type)
     $('#copyModule').attr('onclick', null);
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});
 }
-
-$(document).ready(function()
-{
-    $("a.iframe").colorbox({width:480, height:240, iframe:true, transition:'none'});
-});

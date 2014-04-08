@@ -12,4 +12,4 @@ $(".todo-date").datePicker({createButton:true, startDate:startDate, maxDate:'%y-
      return false;
 });
 
-$(".colorbox").colorbox({width:960, height:550, iframe:true, transition:'none'});
+$(".colorbox").modalTrigger({width:960, type:'iframe'});

@@ -13,7 +13,7 @@ function closeWindow()
 {
     if($.cookie('downloading') == 1)
     {
-        parent.$.fn.colorbox.close();
+        parent.$.closeModal();
         $.cookie('downloading', null);
         clearInterval(time);
     }

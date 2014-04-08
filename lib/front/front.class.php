@@ -759,6 +759,7 @@ EOT;
 
     /**
      * Close colorbox in javascript.
+     * This is a obsolete method, you can use 'closeModal' instead.
      * 
      * @param  string $window 
      * @static
@@ -767,9 +768,22 @@ EOT;
      */
     static public function closeColorbox($window = 'self')
     {
+        return self::closeModal($window);
+    }
+
+    /**
+     * Close modal with javascript.
+     * 
+     * @param  string $window 
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function closeModal($window = 'self')
+    {
         $js  = self::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
-        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.colorbox.close();}";
+        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal();}";
         $js .= self::end();
         return $js;
     }

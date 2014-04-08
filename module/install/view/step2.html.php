@@ -10,7 +10,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
 <form method='post' action='<?php echo $this->createLink('install', 'step3');?>'>
   <table align='center' class='table-6'>
     <caption><?php echo $lang->install->setConfig;?></caption>

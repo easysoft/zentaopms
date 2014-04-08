@@ -427,10 +427,12 @@ function setForm()
         submitObj   = $(this).find(':submit');
         if($(submitObj).size() == 1)
         {
-            submitLabel = $(submitObj).attr('value');
+            var isBtn = submitObj.prop('tagName') == "BUTTON";
+            submitLabel = isBtn ? $(submitObj).text() : $(submitObj).attr('value');
             $(submitObj).attr('disabled', 'disabled');
-            $(submitObj).attr('value', config.submitting);
-            $(submitObj).addClass('button-d');
+            var submitting = submitObj.attr('data-submitting') || config.submitting;
+            if(isBtn) submitObj.text(submitting);
+            else $(submitObj).attr('value', submitting);
             formClicked = true;
         }
     });
@@ -440,7 +442,8 @@ function setForm()
         if(formClicked)
         {
             $(submitObj).removeAttr('disabled');
-            $(submitObj).attr('value', submitLabel);
+            if(submitObj.prop('tagName') == "BUTTON") submitObj.text(submitLabel);
+            else $(submitObj).attr('value', submitLabel);
             $(submitObj).removeClass('button-d');
         }
         formClicked = false;
@@ -856,6 +859,12 @@ function setModal()
                                 modalBody.animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
                             }, 100);
                         }
+
+                        var iframe$ = window.frames[options.name].$;
+                        if(iframe$)
+                        {
+                            iframe$.extend({'closeModal': $.closeModal});
+                        }
                     }
                     catch(e){}
                 }
@@ -897,9 +906,17 @@ function setModal()
             $('<div id="ajaxModal" class="modal fade"></div>').appendTo('body');
         }
 
+        $ajaxModal = $('#ajaxModal');
+        $.extend({'closeModal':function(callback)
+        {
+            $ajaxModal.on('hidden.bs.modal', callback);
+            $ajaxModal.modal('hide');
+        }});
+
+        console.log($.closeModal);
+
         /* rebind events */
         if(!setting) return;
-        $ajaxModal = $('#ajaxModal');
         if(setting.afterShow && $.isFunction(setting.afterShow)) $ajaxModal.on('show.bs.modal', setting.afterShow);
         if(setting.afterShown && $.isFunction(setting.afterShown)) $ajaxModal.on('shown.bs.modal', setting.afterShown);
         if(setting.afterHide && $.isFunction(setting.afterHide)) $ajaxModal.on('hide.bs.modal', setting.afterHide);
@@ -907,6 +924,54 @@ function setModal()
     }
 
     $('[data-toggle=modal], a.iframe').modalTrigger();
+}
+
+/**
+ * Set modal for list page.
+ *
+ * Open operation pages in modal for list pages, after the modal window close, reload the list content and repace the replaceID.
+ * 
+ * @param string   colorboxClass   the class for colorbox binding.
+ * @param string   replaceID       the html object to be replaced.
+ * @access public
+ * @return void
+ */
+function setModal4List(colorboxClass, replaceID, callback, width, height)
+{
+    if(typeof(width) == 'undefined') width = 900
+    if(typeof(height) == 'undefined') height = 500
+    $('.' + colorboxClass).modalTrigger(
+    {
+        width: width,
+        // height: height,
+        type: 'iframe',
+
+        afterHide:function()
+        {
+            var selfClose = $.cookie('selfClose');
+            if(selfClose != 1) return;
+            saveWindowSize();
+
+            var link = self.location.href;
+            $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
+            $('#tmpDiv').load(link + ' #' + replaceID, function()
+            {
+                $('#tmpDiv').replaceWith($('#tmpDiv').html());
+                setModal4List(colorboxClass, replaceID, callback, width, height);
+
+                try{$('.colored').colorize();}catch(err){}
+                $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+                try
+                {
+                    $(".date").datePicker({createButton:true, startDate:startDate})
+                    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+                }
+                catch(err){}
+                if(typeof(callback) == 'function') callback();
+                $.cookie('selfClose', 0);
+            });
+        }
+    });
 }
 
 /**
