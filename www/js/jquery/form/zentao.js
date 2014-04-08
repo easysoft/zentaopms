@@ -54,7 +54,7 @@ $.extend(
                         var i          = triggered.push(false);
 
                         /* Create the error message. */
-                        var errorMSG = '<div id="'  + errorLabel + '" class="text-error red">';
+                        var errorMSG = '<div id="'  + errorLabel + '" class="text-danger red">';
                         errorMSG += $.type(value) == 'string' ? value : value.join(';');
                         errorMSG += '</div>';
 
@@ -62,7 +62,7 @@ $.extend(
                         $('#' + errorLabel).remove(); 
                         $(errorOBJ).parent().append(errorMSG);
                         $(errorOBJ).css('margin-bottom', 0);
-                        $(errorOBJ).css('border-color','#953B39')
+                        $(errorOBJ).css('border-color','#D2322D');
 
                         $(errorOBJ).bind('keydown mousedown', function()
                         {
@@ -113,5 +113,6 @@ $.extend(
 
 $(document).ready(function()
 {
-    $.ajaxForm('.ajaxForm')
+    $.ajaxForm('.ajaxForm');
+    $.ajaxForm("[data-type='ajax']");
 })

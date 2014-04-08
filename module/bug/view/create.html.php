@@ -29,7 +29,7 @@ js::set('refresh', $lang->refresh);
       <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->bug->create;?></strong>
     </div>
   </div>
-  <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
+  <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
