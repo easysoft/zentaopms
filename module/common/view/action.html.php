@@ -23,16 +23,17 @@ function switchChange(historyID)
 
 function toggleStripTags(obj)
 {
-    var diffClass = $(obj).attr('class');
-    if(diffClass.indexOf('diff-all') > 0)
+    var btn = $(obj);
+    var diffTag = btn.find('.diff-all');
+    if(diffTag.length)
     {
-        $(obj).attr('class', diffClass.replace('diff-all', 'diff-short'));
-        $(obj).attr('title', '<?php echo $lang->action->textDiff?>');
+        diffTag.removeClass('diff-all').addClass('diff-short');
+        btn.attr('title', '<?php echo $lang->action->textDiff?>');
     }
     else
     {
-        $(obj).attr('class', diffClass.replace('diff-short', 'diff-all'));
-        $(obj).attr('title', '<?php echo $lang->action->original?>');
+        btn.find('.diff-short').removeClass('diff-short').addClass('diff-all');
+        btn.attr('title', '<?php echo $lang->action->original?>');
     }
     var boxObj  = $(obj).next();
     var oldDiff = '';
@@ -82,7 +83,7 @@ function toggleComment(actionID)
 }
 
 $(function(){
-    var diffButton = "<span onclick='toggleStripTags(this)' class='hide changeDiff diff-all hand' title='<?php echo $lang->action->original?>'></span>";
+    var diffButton = "<a href='javascript:;' onclick='toggleStripTags(this)' class='hide changeDiff btn-icon' title='<?php echo $lang->action->original?>'><i class='icon- diff-all'></i></a>";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function(){
