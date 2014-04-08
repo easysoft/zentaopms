@@ -214,7 +214,7 @@ foreach($fieldParams as $fieldName => $param)
 <table class='table table-condensed table-form'>
   <tr>
     <td>
-      <table class='table'>
+      <table class='table active-disabled'>
       <?php
       $formSessionName = $module . 'Form';
       $formSession     = $this->session->$formSessionName;
@@ -260,7 +260,7 @@ foreach($fieldParams as $fieldName => $param)
     </td>
     <td class='text-center nobr'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control w-60px'")?></td>
     <td>
-      <table class='table'>
+      <table class='table active-disabled'>
       <?php
       for($i = 1; $i <= $groupItems; $i ++)
       {

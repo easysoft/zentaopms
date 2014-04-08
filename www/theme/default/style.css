@@ -471,8 +471,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #titlebar #querybox {margin: 5px -20px -10px}
 
 /* Container in outer */
-.outer .container {padding: 20px;}
-.outer .container .table-form, .outer .container .table-data {margin-top: 10px;}
+.outer > .container {margin: 20px auto; padding: 0 15px 20px; border: 1px solid #ddd;}
+.outer > .container > #featurebar, .outer .container > #titlebar{margin: 0 -15px}
+.outer > .container .table-form, .outer .container .table-data {margin-top: 10px;}
 
 /* Main content in outer */
 .outer .row {padding: 15px 20px;}
