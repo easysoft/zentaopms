@@ -8,6 +8,7 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.net
 */
+
 /* === CSS HELPERS === */
 /* Width definitions */
 .w-p5 {width: 5%} .w-p10 {width: 10%} .w-p15 {width: 15%} .w-p20 {width: 20%} .w-p25 {width: 25%} .w-p30 {width: 30%} .w-p35 {width: 35%} .w-p40 {width: 40%} .w-p45 {width: 45%} .w-p50 {width: 50%} .w-p55 {width: 55%} .w-p60 {width: 60%} .w-p65 {width: 65%} .w-p70 {width: 70%} .w-p75 {width: 75%} .w-p80 {width: 80%} .w-p85 {width: 85%} .w-p90 {width: 90%} .w-p94 {width: 94%} .w-p95 {width: 95%} .w-p98 {width: 98%} .w-p99 {width: 99%} .w-p100{width: 100%}
@@ -79,8 +80,6 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 code {margin-left: 0;}
 
 /* Icons */
-.link-icon{color: #498cd0;display: inline-block;}
-.link-icon:hover{color:#000;text-shadow:1px 1px 3px rgba(0,0,0,0.25);}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{font-size: 14px}
 
 i.icon-2x[class^="icon-"], i.icon-2x[class*=" icon-"], .link-icon i.icon-2x[class^="icon-"], .link-icon i.icon-2x[class*=" icon-"] {font-size: 2em}
@@ -204,7 +203,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 
 /* Button icon */
 .btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0; color: #498CD0; text-align: center;}
+.btn-icon > i {color: #498CD0}
 .btn-icon:hover {text-decoration: none; background: #145CCD; color: #fff;}
+.btn-icon:hover > i {color: #fff}
 .btn-icon.disabled:hover, .btn-icon.disabled:hover > i {background: none!important; color: #ccc!important; cursor: default}
 .btn-icon.text-danger {color: #D2322D}
 .btn-icon.text-danger:hover {background: #D2322D; color: #fff}
@@ -519,9 +520,12 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .side-handle:hover {background: #fff; color: #333}
 .outer.with-transition .side, .outer .side-handle.with-transition { transition: all 0.3s;}
 
-.outer.hide-side .side{width: 0; border: none}
+.outer.hide-side .side{width: 0; border: none;}
 .outer.hide-side .side .side-handle {right: -1px; top: 0; border-radius: 0 4px 4px 0}
 .outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 30px}
+
+/* color of a when visited */
+.outer .table tbody td a:visited, #crumbs a:visited {color: #551A8B}
 
 /* Form in outer */
 .outer form > .btn {margin-right: 10px;}
