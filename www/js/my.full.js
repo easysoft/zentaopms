@@ -819,18 +819,20 @@ function setModal()
         $(this).click(function(event)
         {
             var $e   = $(this);
+            if($e.hasClass('disabled')) return false;
+
             var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
             var type = (setting ? setting.type : false) || $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
             if(type == 'iframe')
             {
                 var options = 
                 {
-                    url: url,
-                    width: $e.data('width') || 800,
+                    url:    url,
+                    width:  $e.data('width') || 800,
                     height: $e.data('height') || 'auto',
-                    icon: $e.data('icon') || '?',
-                    title: $e.data('title') || $e.attr('title') || $e.text(),
-                    name: $e.data('name') || 'modalIframe'
+                    icon:   $e.data('icon') || '?',
+                    title:  $e.data('title') || $e.attr('title') || $e.text(),
+                    name:   $e.data('name') || 'modalIframe'
                 }
                 options = $.extend(options, setting);
                 
@@ -841,15 +843,13 @@ function setModal()
                     options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                 }
                 var modal = $('#ajaxModal').addClass('modal-loading');
-                modal.html("<div class='modal-dialog modal-iframe' style='width: {width}px; height: auto'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+                modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width}px; height: auto'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
                 var modalBody = modal.find('.modal-body');
                 var frame = document.getElementById(options.name);
                 frame.onload = frame.onreadystatechange = function()
                 {
                     if (this.readyState && this.readyState != 'complete') return;
-                    modal.removeClass('modal-loading');
-
                     try
                     {
                         var $frame = $(window.frames[options.name].document);
@@ -858,7 +858,8 @@ function setModal()
                         {
                             setTimeout(function()
                             {
-                                modalBody.animate({height: $frame.find('body').addClass('body-modal').outerHeight()}, 100);
+                                modalBody.css('height', $frame.find('body').addClass('body-modal').outerHeight());
+                                modal.removeClass('modal-loading');
                             }, 100);
                         }
 
@@ -868,7 +869,7 @@ function setModal()
                             iframe$.extend({'closeModal': $.closeModal});
                         }
                     }
-                    catch(e){}
+                    catch(e){modal.removeClass('modal-loading');}
                 }
                 modal.modal('show');
             }
