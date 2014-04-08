@@ -322,6 +322,8 @@ function toggleTreeBox()
             showTreeBox(treeType);
         }
     );
+
+    setTimeout(function(){$('.outer.with-side').addClass('with-transition')}, 1000);
 }
 
 /**

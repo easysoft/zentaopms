@@ -297,7 +297,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
 
 /* small panel */
-.panel-sm .panel-heading {padding: 6px 10px}
+.panel-sm .panel-heading {padding: 7px 10px}
 
 /* list group */
 .list-group-item {padding: 8px 15px}
@@ -506,18 +506,20 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* side */
 .outer.with-side #featurebar, .outer.with-side #titlebar {margin-bottom: 20px;}
-.outer.with-side .main, .outer.with-side .side + form, .outer.with-side .main, .outer.with-side .side + table {margin-left: 220px; margin-right: 20px; transition: all 0.3s;}
+.outer.with-side .main, .outer.with-side .side + form, .outer.with-side .main, .outer.with-side .side + table {margin-left: 220px; margin-right: 20px;}
+.outer.with-side.with-transition .main, .outer.with-side.with-transition .side + form, .outer.with-side.with-transition .main, .outer.with-side.with-transition .side + table {transition: all 0.3s;}
 .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: 1px solid #ddd}
 .outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}
 .outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 8px}
-.outer .side {width: 180px; position: absolute; left: 20px; background: #fafafa; border: 1px solid #ddd; transition: all 0.3s;}
-.outer .side > header {padding: 5px 10px; line-height: 20px; border-bottom: 1px solid #ddd; background: #f1f1f1}
-.outer .side-body {padding: 10px;}
-.outer .side .side-handle {position: absolute; right: 5px; top: 4px; width: 22px; line-height: 18px; border: 1px solid #ddd; background: #e5e5e5; border-radius: 2px; color: #666; transition: all 0.3s;}
-.outer .side .side-handle:hover {background: #fff; color: #333}
+.outer .side {width: 180px; position: absolute; left: 20px; background: #fafafa;}
+.outer .side-body {overflow: hidden;}
+.outer .side-body .panel {min-width: 180px}
+.outer .side-body .panel-body {padding: 10px;}
+.outer .side-handle {position: absolute; right: 5px; top: 4px; width: 22px; line-height: 18px; border: 1px solid #ddd; background: #FFF; border-radius: 2px; color: #666;}
+.outer .side-handle:hover {background: #fff; color: #333}
+.outer.with-transition .side, .outer .side-handle.with-transition { transition: all 0.3s;}
 
-.outer.hide-side .side{width: 0; border: none;}
-.outer.hide-side .side > header, .outer.hide-side .side-body {display: none;}
+.outer.hide-side .side{width: 0; border: none}
 .outer.hide-side .side .side-handle {right: -1px; top: 0; border-radius: 0 4px 4px 0}
 .outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 30px}
 

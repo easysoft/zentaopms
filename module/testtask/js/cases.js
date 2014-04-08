@@ -1,7 +1,5 @@
 function browseByModule(active)
 {
-    $('.side').removeClass('hidden');
-    $('.divider').removeClass('hidden');
     $('#bymoduleTab').addClass('active');
     $('#' + active + 'Tab').removeClass('active');
     $('#querybox').addClass('hidden');
@@ -11,8 +9,6 @@ function browseByModule(active)
 function browseBySearch(active)
 {
     $('#querybox').removeClass('hidden');
-    $('.side').addClass('hidden');
-    $('.divider').addClass('hidden');
     $('#' + active + 'Tab').removeClass('active');
     $('#bysearchTab').addClass('active');
     $('#bymoduleTab').removeClass('active');

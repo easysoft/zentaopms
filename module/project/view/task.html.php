@@ -22,14 +22,20 @@ var browseType  = '<?php echo $browseType;?>';
 
 <div class='side' id='taskTree'>
   <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
-  <header class='nobr'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->name;?></strong></header>
   <div class='side-body'>
-    <?php echo $moduleTree;?>
-    <div class='text-right'>
-      <?php common::printLink('project', 'edit',    "projectID=$projectID", $lang->edit);?>
-      <?php common::printLink('project', 'delete',  "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin');?>
-      <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage);?>
-      <?php common::printLink('tree', 'fix',        "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
+    <div class='panel panel-sm'>
+      <div class='panel-heading nobr'>
+        <?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->name;?></strong>
+      </div>
+      <div class='panel-body'>
+        <?php echo $moduleTree;?>
+        <div class='text-right'>
+          <?php common::printLink('project', 'edit',    "projectID=$projectID", $lang->edit);?>
+          <?php common::printLink('project', 'delete',  "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin');?>
+          <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'fix',        "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
+        </div>
+      </div>
     </div>
   </div>
 </div>

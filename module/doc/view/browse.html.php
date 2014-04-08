@@ -30,12 +30,16 @@ var browseType = '<?php echo $browseType;?>';
 </div>
 <div class='side' id='treebox'>
   <button class='side-handle' data-id='treebox'><i class='icon-caret-left'></i></button>
-  <header class='nobr'><?php echo html::icon('folder-close');?> <strong><?php echo $libName;?></strong></header>
   <div class='side-body'>
-    <?php echo $moduleTree;?>
-    <div class='text-right'>
-      <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
-      <?php if(is_numeric($libID)) common::printLink('tree', 'fix', "root=$libID&type=customdoc", $lang->tree->fix, 'hiddenwin');?>
+    <div class='panel panel-sm'>
+      <div class='panel-heading nobr'><?php echo html::icon('folder-close');?> <strong><?php echo $libName;?></strong></div>
+      <div class='panel-body'>
+        <?php echo $moduleTree;?>
+        <div class='text-right'>
+          <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
+          <?php if(is_numeric($libID)) common::printLink('tree', 'fix', "root=$libID&type=customdoc", $lang->tree->fix, 'hiddenwin');?>
+        </div>
+      </div>
     </div>
   </div>
 </div>

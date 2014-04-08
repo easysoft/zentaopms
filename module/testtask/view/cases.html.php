@@ -43,9 +43,13 @@ var moduleID   = '<?php echo $moduleID;?>';
 </div>
 <div class='side' id='casesbox'>
   <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
-  <header class='nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></header>
   <div class='side-body'>
-    <?php echo $moduleTree;?>
+    <div class='panel panel-sm'>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>
+      <div class='panel-body'>
+        <?php echo $moduleTree;?>
+      </div>
+    </div>
   </div>
 </div>
 <div class='main'>

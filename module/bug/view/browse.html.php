@@ -73,12 +73,18 @@ if($customed)
 
 <div class='side' id='treebox'>
   <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
-  <header class='nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></header>
   <div class='side-body'>
-    <?php echo $moduleTree;?>
-    <div class='text-right'>
-      <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?>
-      <?php common::printLink('tree', 'fix',    "root=$productID&type=bug", $lang->tree->fix, 'hiddenwin');?>
+    <div class='panel panel-sm'>
+      <div class='panel-heading nobr'>
+        <?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong>
+      </div>
+      <div class='panel-body'>
+        <?php echo $moduleTree;?>
+        <div class='text-right'>
+          <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'fix',    "root=$productID&type=bug", $lang->tree->fix, 'hiddenwin');?>
+        </div>
+      </div>
     </div>
   </div>
 </div>
