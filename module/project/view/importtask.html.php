@@ -12,14 +12,22 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->project->importTask;?></strong>
+  </div>
+</div>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table tablesorter table-fixed'>
-    <caption>
-    <?php
-    $projects = array(0 => $lang->project->fromproject) + $projects;
-    echo $lang->project->selectProject . ':';
-    echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)'");
-    ?>
+    <caption class='text-left'>
+      <div class='form-group mg-0'>
+        <div class='input-group'>
+          <?php $projects = array(0 => $lang->project->fromproject) + $projects;?>
+          <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
+          <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control' style='width: 200px'");?>
+        </div>
+      </div>
     </caption>
     <thead>
     <tr class='colhead'>
@@ -68,8 +76,18 @@
       </td>
     </tr>
     <?php endforeach;?>
+    <tfoot>
+      <tr>
+        <td colspan='9'>
+          <div class='table-actions clearfix'>
+            <div class='btn-group'><?php echo html::selectAll() . html::selectReverse();?></div>
+            <?php echo html::submitButton($lang->project->importTask);?>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
     </tbody>
   </table>
-  <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->project->importTask);?></div>
+  <div></div>
 </form>
 <?php include '../../common/view/footer.html.php';?>
