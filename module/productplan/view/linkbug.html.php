@@ -13,11 +13,20 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['plan']) . ' #' . $plan->id;?></span>
+    <strong><?php echo html::a($this->createLink('productplan', 'view', 'planID=' . $plan->id), $plan->title, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->productplan->linkBug;?> <?php echo html::icon($lang->icons['link']);?></small>
+  </div>
+  <div id='querybox' class='show'></div>
+</div>
+
 <div id='querybox'></div>
 <div id='bugList'>
   <form method='post' id='unlinkedBugsForm'>
-    <table class='table-1 tablesorter a-center fixed'> 
-      <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedBugs;?></caption>
+    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
+      <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong> (<?php echo count($allBugs);?>)</caption>
       <thead>
       <tr class='colhead'>
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
@@ -52,16 +61,16 @@
       <tfoot>
       <tr>
         <td colspan='7' class='text-left'>
-          <?php if(count($allBugs)) echo html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') .  html::submitButton($lang->productplan->linkBug);?>
+          <?php if(count($allBugs)) echo "<div class='table-actions clearfix'><div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>' . html::submitButton($lang->productplan->linkBug) . '</div>';?>
         </td>
       </tr>
       </tfoot>
     </table>
   </form>
-   
+  <hr class='mg-0'>
   <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>" id='linkedBugsForm'>
-    <table class='table-1 tablesorter a-center fixed'> 
-      <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedBugs;?></caption>
+    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
+      <caption class='text-left text-important'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->linkedBugs;?></strong> (<?php echo count($planBugs);?>)</caption>
       <thead>
       <tr class='colhead'>
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
@@ -88,12 +97,12 @@
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
         <td><?php echo $lang->bug->statusList[$bug->status];?></td>
-        <td>
+        <td class='text-center'>
           <?php
           if(common::hasPriv('productplan', 'unlinkBug'))
           {
               $unlinkURL = $this->createLink('productplan', 'unlinkBug', "bugID=$bug->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '&nbsp;', '', "class='icon-green-productplan-unlinkBug' title='{$lang->productplan->unlinkBug}'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", "<i class='icon-remove'></i>", '', "title='{$lang->productplan->unlinkBug}' class='btn-icon'");
           }
           ?>
         </td>
@@ -104,8 +113,8 @@
       <tr>
         <td colspan='7' class='text-left'>
         <?php 
-        echo html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm');
-        echo html::submitButton($lang->productplan->batchUnlink);
+        echo  "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>';
+        echo html::submitButton($lang->productplan->batchUnlink) . '</div>';
         ?>
         </td>
       </tr>

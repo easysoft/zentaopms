@@ -13,23 +13,30 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
-<div id='querybox'></div>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['plan']) . ' #' . $plan->id;?></span>
+    <strong><?php echo html::a($this->createLink('productplan', 'view', 'planID=' . $plan->id), $plan->title, '_blank');?></strong>
+    <small class='text-muted'> <?php echo $lang->productplan->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
+  </div>
+  <div id='querybox' class='show'></div>
+</div>
 <div id='storyList'>
   <form method='post' id='unlinkedStoriesForm'>
-    <table class='table-1 tablesorter a-center fixed'> 
-      <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedStories;?></caption>
+    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
+    <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong> (<?php echo count($allStories);?>)</caption>
       <thead>
-      <tr class='colhead'>
-        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
-        <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-        <th class='w-200px'> <?php echo $lang->story->plan;?></th>
-        <th>                 <?php echo $lang->story->title;?></th>
-        <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-        <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
-        <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
-        <th class='w-status'><?php echo $lang->statusAB;?></th>
-        <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
-      </tr>
+        <tr>
+          <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
+          <th class='w-pri'>   <?php echo $lang->priAB;?></th>
+          <th class='w-200px'> <?php echo $lang->story->plan;?></th>
+          <th>                 <?php echo $lang->story->title;?></th>
+          <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
+          <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
+          <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='w-status'><?php echo $lang->statusAB;?></th>
+          <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
+        </tr>
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
@@ -54,18 +61,18 @@
       <?php endforeach;?>
       </tbody>
       <tfoot>
-      <tr>
-        <td colspan='9' class='text-left'>
-          <?php if(count($allStories)) echo html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') .  html::submitButton($lang->story->linkStory);?>
-        </td>
-      </tr>
+        <tr>
+          <td colspan='9' class='text-left'>
+            <?php if(count($allStories)) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') . '</div>' . html::submitButton($lang->story->linkStory) . '</div>';?>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </form>
-   
+  <hr class='mg-0'>
   <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>" id='linkedStoriesForm'>
-    <table class='table-1 tablesorter a-center fixed'> 
-      <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
+    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
+      <caption class='text-left text-important'><?php echo html::icon('link');?> &nbsp;<strong><?php echo $lang->productplan->linkedStories;?></strong> (<?php echo count($planStories);?>)</caption>
       <thead>
       <tr class='colhead'>
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
@@ -96,12 +103,12 @@
         <td><?php echo $story->estimate;?></td>
         <td><?php echo $lang->story->statusList[$story->status];?></td>
         <td><?php echo $lang->story->stageList[$story->stage];?></td>
-        <td>
+        <td class='text-center'>
           <?php
           if(common::hasPriv('productplan', 'unlinkStory'))
           {
               $unlinkURL = $this->createLink('productplan', 'unlinkStory', "storyID=$story->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "title='{$lang->productplan->unlinkStory}'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "title='{$lang->productplan->unlinkStory}' class='btn-icon'");
           }
           ?>
         </td>
@@ -112,8 +119,7 @@
       <tr>
         <td colspan='9' class='text-left'>
         <?php 
-        echo html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm');
-        echo html::submitButton($lang->productplan->batchUnlink);
+        echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm') . '</div>' . html::submitButton($lang->productplan->batchUnlink) . '</div>';
         ?>
         </td>
       </tr>

@@ -37,6 +37,9 @@ tr.text-center > td.text-left, tr.text-center > th.text-left {text-align: left;}
 tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: right;}
 
 /* === Components === */
+/* hr */
+hr.small {margin: 10px 0}
+
 /* Buttons */
 .btn.text-danger {color: #D2322D}
 .btn.text-info {color: #39B3D7}
