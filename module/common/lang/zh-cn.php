@@ -404,7 +404,7 @@ $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五'
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
 
 /* Common action icons 通用动作图标 */
-$lang->icons['todo']      = 'checked';
+$lang->icons['todo']      = 'check';
 $lang->icons['product']   = 'cube';
 $lang->icons['bug']       = 'bug';
 $lang->icons['task']      = 'check-sign';

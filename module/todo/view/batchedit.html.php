@@ -12,50 +12,60 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
-  <table class='table-1 fixed'> 
-    <caption><?php echo $lang->todo->batchEdit . $lang->colon;?></caption>
-    <tr>
-      <th class='w-20px'>   <?php echo $lang->idAB;?></th> 
-      <th class='w-150px'>  <?php echo $lang->todo->date;?></th>
-      <th class='w-100px'>  <?php echo $lang->todo->type;?></th>
-      <th class='w-70px'>   <?php echo $lang->todo->pri;?></th>
-      <th class='w-p65 red'><?php echo $lang->todo->name;?></th>
-      <th class='w-140px'>  <?php echo $lang->todo->beginAndEnd;?></th>
-      <th class='w-70px'>   <?php echo $lang->todo->status;?></th>
-    </tr>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['todo']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->todo->common . $lang->colon . $lang->todo->batchEdit;?></strong>
+  </div>
+</div>
 
+<form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
+  <table class='table table-form table-fixed'>
+    <thead>
+      <tr>
+        <th class='w-40px'>   <?php echo $lang->idAB;?></th> 
+        <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
+        <th class='w-90px'>  <?php echo $lang->todo->type;?></th>
+        <th class='w-80px'>   <?php echo $lang->todo->pri;?></th>
+        <th class='w-p65 red'><?php echo $lang->todo->name;?></th>
+        <th class='w-140px'>  <?php echo $lang->todo->beginAndEnd;?></th>
+        <th class='w-90px'>   <?php echo $lang->todo->status;?></th>
+      </tr>
+    </thead>
     <?php foreach($editedTodos as $todo):?>
     <tr class='text-center'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
-      <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-2 date'");?></td>
+      <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='form-control'");?></td>
       <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=form-control');?></td>
       <td>
-        <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='f-left text-1 hiddenwin'"); ?></div>
+        <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin'"); ?></div>
         <div class='<?php echo "nameBox" . $todo->id;?>'>
         <?php 
         if($todo->type == 'custom')
         {
-          echo html::input("names[$todo->id]", $todo->name, "class='f-left text-1'"); ;
+          echo html::input("names[$todo->id]", $todo->name, "class='text-left form-control'"); ;
         }
         elseif($todo->type == 'task')
         {
-          echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="select-1 f-left"');
+          echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control text-left"');
         }
         elseif($todo->type == 'bug')
         {
-          echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="select-1 f-left"');
+          echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control text-left"');
         }
         ?>
         </div>
       </td>
-      <td><?php echo html::select("begins[$todo->id]", $times, $todo->begin) . html::select("ends[$todo->id]", $times, $todo->end);?></td>
+      <td>
+        <div class='input-group'>
+          <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control" style="width: 50%"') . html::select('end', $times, $todo->end, 'class="form-control" style="width: 50%"');?>
+        </div>
       <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='6'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='6'><div class='text-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
     <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>

@@ -15,7 +15,7 @@
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
-    <div class='heading'><i class='icon-folder-open-alt'></i> <?php echo $lang->my->todo;?>  </div>
+    <div class='heading'><?php echo html::icon($lang->icons['todo']);?> <?php echo $lang->my->todo;?>  </div>
     <ul class='nav'>
       <?php 
       foreach($lang->todo->periods as $period => $label)
@@ -41,7 +41,7 @@
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </ul>  
     <div class='btn-group pull-right'>
-      <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn'") ?>
+      <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn iframe'") ?>
       <?php echo html::a(helper::createLink('todo', 'batchCreate'), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
       <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
     </div>

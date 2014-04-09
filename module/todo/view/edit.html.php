@@ -13,14 +13,25 @@
 <?php include '../../common/view/header.html.php';?>
  <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['todo']) . ' #' . $todo->id;;?></span>
+    <strong><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), $todo->name);?></strong>
+    <small class='text-success'> <?php echo $lang->todo->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+  </div>
+</div>
+
 <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table class='table-1 a-left'> 
-    <caption><?php echo $lang->todo->edit;?></caption>
+  <table class='table table-form'> 
     <tr>
-      <th><?php echo $lang->todo->date;?></th>
-      <td><?php echo html::input('date', $todo->date, "class='select-3 date'");?>
-       <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?> </td>
-    </tr>  
+      <th class='w-80px'><?php echo $lang->todo->date;?></th>
+      <td class='w-p45'>
+        <div class='input-group'>
+          <?php echo html::input('date', $todo->date, "class='form-control form-date'");?>
+          <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
+        </div>
+      </td><td></td>
+    </tr>
     <tr>
       <th><?php echo $lang->todo->type;?></th>
       <td><input type='hidden' name='type' value='<?php echo $todo->type;?>' /><?php echo $lang->todo->typeList[$todo->type];?></td>
@@ -31,7 +42,7 @@
     </tr>  
     <tr>
       <th><?php echo $lang->todo->name;?></th>
-      <td><div id='nameBox'>
+      <td colspan='2'><div id='nameBox'>
         <?php
         $readType = $todo->type != 'custom' ? 'readonly' : '';
         echo html::input('name', $todo->name, "$readType class=form-control");
@@ -41,7 +52,7 @@
     </tr>  
     <tr>
       <th><?php echo $lang->todo->desc;?></th>
-      <td><?php echo html::textarea('desc', htmlspecialchars($todo->desc), "rows=8 class=area-1");?></td>
+      <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($todo->desc), "rows=8 class=area-1");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->todo->status;?></th>
@@ -50,8 +61,12 @@
     <tr>
       <th><?php echo $lang->todo->beginAndEnd;?></th>
       <td>
-        <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=form-control');?>
-        <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> ><?php echo $lang->todo->lblDisableDate;?>
+        <div class='input-group'>
+          <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control" style="width: 50%"') . html::select('end', $times, $todo->end, 'class="form-control" style="width: 50%"');?>
+        </div>
+      </td>
+      <td>
+        <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> > <?php echo $lang->todo->lblDisableDate;?>
       </td>
     </tr>  
     <tr>
@@ -59,7 +74,8 @@
       <td><input type='checkbox' name='private' id='private' value='1' <?php if($todo->private) echo 'checked';?>></td>
     </tr>  
     <tr>
-      <td colspan='2' class='text-center'>
+      <td></td>
+      <td>
         <?php echo html::submitButton() . html::backButton();?>
       </td>
     </tr>
