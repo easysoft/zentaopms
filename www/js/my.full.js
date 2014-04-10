@@ -916,8 +916,6 @@ function setModal()
             $ajaxModal.modal('hide');
         }});
 
-        console.log($.closeModal);
-
         /* rebind events */
         if(!setting) return;
         if(setting.afterShow && $.isFunction(setting.afterShow)) $ajaxModal.on('show.bs.modal', setting.afterShow);
