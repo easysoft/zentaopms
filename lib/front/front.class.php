@@ -235,20 +235,26 @@ class html
      * @param  string $attrib    other attribs.
      * @return string
      */
-    static public function checkbox($name, $options, $checked = "", $attrib = "")
+    static public function checkbox($name, $options, $checked = "", $attrib = "", $type = 'inline')
     {
         $options = (array)($options);
         if(!is_array($options) or empty($options)) return false;
         $string  = '';
         $checked = ",$checked,";
+        $isBlock = $type == 'block';
 
         foreach($options as $key => $value)
         {
             $key     = str_replace('item', '', $key);
-            $string .= "<label class='checkbox-inline'><input type='checkbox' name='{$name}[]' value='$key' ";
-            $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
+            if($isBlock) $string .= "<div class='checkbox'><label>";
+            else $string .= "<label class='checkbox-inline'>";
+            $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
+            $string .= (strpos($checked, ",$key,") !== false) ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /> $value</label>\n";
+            $string .= " id='$name$key' /> ";
+            $string .= $value;
+            if($isBlock) $string .= '</label></div>';
+            else $string .= '</label>';
         }
         return $string;
     }
