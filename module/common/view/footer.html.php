@@ -1,11 +1,12 @@
   </div><?php /* end '.outer' in 'header.html.php'. */ ?>
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php print($config->debug ? 'debugwin' : 'hidden');?>'></iframe>
+  
   <div id='divider'></div>
 <?php $onlybody = zget($_GET, 'onlybody', 'no');?>
 <?php if($onlybody != 'yes'):?>
 </div><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id='footer'>
+  <?php if($config->debug) include 'debug.html.php';?>
   <div id="crumbs">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
   </div>

@@ -16,6 +16,7 @@ $lang->dot          = '。';
 $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
+$lang->debug        = '调试';
 
 $lang->zentaoPMS    = '禅道管理';
 $lang->welcome      = "欢迎使用『%s』{$lang->colon} {$lang->zentaoPMS}";
