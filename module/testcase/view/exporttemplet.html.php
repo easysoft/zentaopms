@@ -19,17 +19,29 @@ function closeWindow()
     }
 }
 </script>
-<form method='post' target='hiddenwin' onsubmit='setDownloading();'>
-<table class='table-1 mt-10px'>
-  <caption><?php echo $lang->testcase->exportTemplet?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['export']);?></span>
+    <strong><?php echo $lang->testcase->exportTemplet;?></strong>
+  </div>
+</div>
+
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
+<table class='w-p100'>
   <tr>
-    <td align='center' style="padding:30px">
-    <?php
-    echo $lang->testcase->num;
-    echo html::input('num', '10');
-    echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8');
-    echo html::submitButton();
-    ?>
+    <td>
+      <div class='input-group'>
+        <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
+        <?php
+          echo html::input('num', '10', 'class=form-control');
+        ?>
+      </div>
+    </td>
+    <td class='w-80px'>
+      <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
+    </td>
+    <td>
+      <?php echo html::submitButton();?>
     </td>
   </tr>
 </table>

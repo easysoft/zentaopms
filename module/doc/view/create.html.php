@@ -29,7 +29,7 @@
       </tr>  
       <?php elseif($libID == 'project'):?>
       <tr>
-        <th><?php echo $lang->doc->project;?></th>
+        <th class='w-80px'><?php echo $lang->doc->project;?></th>
         <td><?php echo html::select('project', $projects, $projectID, "class='form-control' onchange=loadProducts(this.value);");?></td>
       </tr>  
       <tr>

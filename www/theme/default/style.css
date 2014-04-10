@@ -395,6 +395,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 /* Main content in outer */
 .outer .row {padding: 15px 20px;}
 .outer .main {margin-bottom: 20px;}
+.outer .container > .main {margin: 0 15px 20px}
 .outer .main fieldset {margin-bottom: 15px; border: 1px solid #e5e5e5; padding: 10px 15px 15px;}
 .outer .main fieldset.fieldset-pure {background: none; padding: 0; border: none}
 .outer .main fieldset.collapsed {border: none}
@@ -416,7 +417,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .main .nav-tabs > li {margin-bottom: -2px;}
 .outer .main .nav-tabs > li.active > a, .outer .main .nav-tabs > li.active > a:hover, .outer .main .nav-tabs > li.active > a:focus {color: #333; font-weight: bold;}
 .outer .main .tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 15px}
-/*.outer .main .tab-pane > .table {margin: -10px -15px}*/
 
 /* Table data in outer */
 .outer .table-data.table-condensed td, .outer .table-data.table-condensed th {padding: 3px 8px}
