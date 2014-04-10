@@ -51,7 +51,6 @@
       <td colspan='3' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
 <div class='main'>
   <?php include '../../common/view/action.html.php';?>

@@ -518,7 +518,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /*-----------------------FORM SETTING----------------------------*/
 .text-1 {width: 90%}
-td>.text-1,td>.area-1{padding-left:2px;padding-right: 2px}
 .text-2 {width: 120px}
 .text-3 {width: 240px}
 select.text-3 {width: 250px}
@@ -532,18 +531,12 @@ select.select-1 {width: 90%}
 select.select-3{width: 250px;}
 .select-4 {width: 360px}
 .select-5 {width: 480px}
-td>select{padding-left: 0;padding-right: 0}
 
 .area-1{width: 90%;}
 .area-2{width: 120px}
 .area-3{width: 240px}
 .area-4{width: 360px}
 .area-5{width: 480px}
-
-.text-1, .text-2, .text-3, .text-4, .text-5,
-.select-1, .select-2, .select-3, .select-4, .select-5,
-.area-1, .area-2, .area-3, .area-4, .area-5 {border:1px solid #ccc}
-
 
 /*-----------------------NAV----------------------------*/
 /* The nav bar. */
@@ -553,44 +546,13 @@ td>select{padding-left: 0;padding-right: 0}
 .navbar li>a:hover {color:#ff3600;}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
-/* Tree slider. */
-.treeSlider{position:absolute;background-color: #bbb;background-repeat: repeat-x;border: 1px solid #bbb;border-left:none;cursor: pointer;width: 8px;height: 50px;left: 20px;border-radius:0px 10px 10px 0px}
-.treeSlider span {position:absolute;top:40%;left:2px;border-bottom: 4px solid transparent;border-top: 4px solid transparent;border-right: 4px solid #000000;border-left: 0 none;height: 0;width: 0;}
-
 /* Tree menu. */
 .tree li  {list-style-type:none;}
 .tree .active {color:blue; font-weight:bold}
 .tree a  {color:#003366}
 
-
-/* Form settings */
-.actionlink{font-size:14px; font-weight:bold; padding-top:8px}
-.actionlink span{padding:5px 3px}
-
-/* Product, project switcher. */
-#switcher {color:white; font-style:bold; background:red; cursor:pointer;}
-
 /* Select all and select reverse. */
 #allchecker, #reversechecker {padding-right: 5px;padding-left: 5px;}
-
-
-/*-----------------------OTHERS SETTINGS --------------------*/
-.box-title {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:8px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
-.box-content{border:1px solid #e4e4e4; padding:5px}
-.done  {color:#078F0E;}
-.wait  {color:#888;}
-.doing  {color:#F30;}
-.delayed {background:#e84e0f; color:white;}
-.pass  {color:#078F0E;}
-.blocked {background:yellow;}
-.fail  {color:red}
-.hand  {cursor:pointer}
-.strong {font-weight:bold}
-.deleted {text-decoration:line-through}
-.linkbox a {display:block}
-.owner  {background:#e4e4e4; font-size:smaller}
-.notice { background-color:#ffffcc; border:1px solid #ffcc00; padding:15px 25px;}
-.button-create{}
 
 /*-----------------------ICONS --------------------*/
 /* Common icons. */
@@ -613,9 +575,3 @@ td>select{padding-left: 0;padding-right: 0}
 .severity4 {background-color: #dcbe1a;}
 .severity5 {background-color: #d0d836;}
 .severity6 {background-color: #99c323;}
-
-/* Link-button. */
-.link-button{display: inline-block;}
-.link-button a{ color:#036; font-weight:normal; font-size:14px;padding: 3px 4px;}
-.link-button a i{font-size: 18px;}
-.link-button a:hover {color:#000;}
