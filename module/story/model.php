@@ -1267,7 +1267,7 @@ class storyModel extends model
         $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
 
         /* Format these stories. */
-        $storyPairs = array('' => '&nbsp;');
+        $storyPairs = array('' => '');
         foreach($stories as $story)
         {
             if($type == 'short')

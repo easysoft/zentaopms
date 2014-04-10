@@ -19,9 +19,7 @@ $(function()
 
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
     {
-        $("#story").chosen({no_results_text:noResultsMatch});
-        $("#task").chosen({no_results_text:noResultsMatch});
-        $("#mailto").chosen({no_results_text:noResultsMatch});
+        $("#story, #task, #mailto").chosen(defaultChosenOptions);
     }
 });
 
@@ -76,7 +74,7 @@ function loadProductModules(productID)
 function loadProductStories(productID)
 {
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleId=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
+    $('#storyIdBox').load(link, function(){$('#story').chosen(defaultChosenOptions);});
 }
 
 /**
@@ -162,7 +160,7 @@ function loadProjectRelated(projectID)
 function loadProjectTasks(projectID)
 {
     link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID + '&taskID=' + oldTaskID);
-    $('#taskIdBox').load(link, function(){$('#task').chosen({no_results_text:noResultsMatch});});
+    $('#taskIdBox').load(link, function(){$('#task').chosen(defaultChosenOptions);});
 }
 
 /**
@@ -175,7 +173,7 @@ function loadProjectTasks(projectID)
 function loadProjectStories(projectID)
 {
     link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&moduleID=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
+    $('#storyIdBox').load(link, function(){$('#story').chosen(defaultChosenOptions);});
 }
 
 /**
