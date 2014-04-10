@@ -11,12 +11,10 @@ noResultsMatch       = '<?php echo $lang->noResultsMatch;?>';
 chooseUsersToMail    = '<?php echo $lang->chooseUsersToMail;?>';
 selectAnOption       = '<?php echo $lang->selectAnOption;?>';
 selectSomeOptions    = '<?php echo $lang->selectSomeOptions;?>';
-defaultChosenOptions = {no_results_text: noResultsMatch, allow_single_deselect: true, disable_search_threshold: 10, width: '100%', placeholder_text_single: selectAnOption, placeholder_text_multiple: selectSomeOptions};
+defaultChosenOptions = {no_results_text: noResultsMatch, allow_single_deselect: true, disable_search_threshold: 10, width: '100%', placeholder_text_single: selectAnOption, placeholder_text_multiple: selectSomeOptions, search_contains: true};
 $(document).ready(function()
 {
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
-    $("#productID").chosen({no_results_text: noResultsMatch, width: '100%'});
-    $("#projectID").chosen({no_results_text: noResultsMatch, width: '100%'});
-    $(".chosen").chosen(defaultChosenOptions);
+    $(".chosen, #productID").chosen(defaultChosenOptions);
 });
 </script>
