@@ -28,6 +28,9 @@
 .pdb-20 {padding-bottom: 20px !important}
 .pdt-20 {padding-top: 20px !important}
 
+/* borders */
+.bd-0, .borderless, .bd-none {border: none !important;}
+
 /* Style of text */
 .text-latin {font-family: Arial;}
 .text-lg {font-size: 24px;}

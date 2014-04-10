@@ -1,4 +1,4 @@
-<div class='container mw-900px'>
+<div class='container mw-900px bd-0'>
   <div class='cards'>
     <?php
     unset($lang->misc->zentao->version);
