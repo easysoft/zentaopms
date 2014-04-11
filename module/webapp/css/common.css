@@ -1,21 +1,6 @@
-.active a {color:blue; font-weight:bold;}
-.button-c {padding:1px 3px; border:1px solid gray; background:#e4e4ef; color:black; text-decoration:none}
-.error    {color:red; font-size:14px}
-.success  {color:green; font-size:14px}
-
-.exttable tr {padding:5px 0px}
-.exttable td {padding:1px 5px 1px 10px}
-.exttable caption{background:#efefef; border-color:#CCC9C9; margin-left:0}
-.exttable {border-color:#CCC9C9; border-top:none;}
-.exttable td{border-color:#CCC9C9}
-
-#webapps li {float:left; width:25%; list-style:none}
-#webapps li table {border:0px; width:95%; border:1px solid #ddd;}
-#webapps li table .webapp-name{font-size:14px; color:#039; padding-top:2px;}
-#webapps li table .webapp-icon{padding:5px;vertical-align:middle;text-align:center}
-#webapps li table .webapp-info{color:#888; padding-top:2px; height:32px; white-space:pre-wrap;}
-#webapps li table .webapp-actions{padding-top:5px; padding-bottom:5px;}
-#webapps li table .webapp-actions .button-c{font-size:12px;}
-
-small{font-weight:normal}
-#webapps .button-c{min-width: 0;}
+.webapps .card {position: relative; padding-left: 85px;}
+.webapps .card > .card-content {height: 30px}
+.webapps .card > .card-actions .btn {padding: 3px 12px; min-width: 70px}
+.webapps .card > .media {position: absolute; left: 10px; top: 10px;}
+.webapps .card > .card-heading > .pull-right {display: none}
+.webapps .card:hover > .card-heading > .pull-right {display: block;}

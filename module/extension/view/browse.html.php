@@ -15,7 +15,7 @@
   <div class='cards'>
     <?php foreach($extensions as $extension):?>
     <div class='col-md-6'><div class='card'>
-      <div class='card-heading'><strong><?php echo "$extension->name";?></strong></div>
+      <div class='card-heading'><strong><?php echo $extension->name;?></strong></div>
       <div class='card-content text-muted'><?php echo $extension->desc;?></div>
       <div class='card-actions'>
         <div class='pull-right'>

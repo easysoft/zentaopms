@@ -12,50 +12,42 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<table class='table-1'>
-  <tr>
-    <td>
-      <ul id='webapps'>
-        <?php foreach($webapps as $webapp):?>
-        <li>
-          <table class='fixed exttable' id='webapp<?php echo $webapp->id?>'>
-            <tr>
-              <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? $config->webRoot . 'theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
-              <td class='webapp-name' title='<?php echo $webapp->name?>'><?php echo $webapp->name . "($webapp->author)"?></td>
-            </tr>
-            <tr><td valign='top'><div class='webapp-info' title='<?php echo $webapp->abstract?>'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></div></td></tr>
-            <tr>
-              <td>
-                <div class='webapp-actions'>
-                  <?php
-                  $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
-                  $method  = '';
-                  $popup   = '';
-                  $target  = '_self';
-                  if($webapp->target == 'blank') $target   = '_blank';
-                  if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id, \"$webapp->name\");";
-                  if($webapp->target == 'popup')
-                  {
-                      $width  = 0;
-                      $height = 0;
-                      if($webapp->size) list($width, $height) = explode('x', $webapp->size);
-                      $method = "popup($width, $height);";
-                      $popup  = 'popup';
-                  }
-                  echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
-                  common::printLink('webapp', 'view', "webappID=$webapp->id", $lang->webapp->view, '',  "class='button-c webapp'");
-                  common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
-                  ?>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </li>
-        <?php endforeach;?>
-      </ul>
-    </td>
-  </tr>
-</table>
+<div class='container bd-0'>
+  <div class='cards webapps' id='webapps'>
+    <?php foreach($webapps as $webapp):?>
+    <div class='col-md-4 col-sm-6'><div class='card' id='webapp<?php echo $webapp->id?>'>
+      <div class='media webapp-icon'><img src='<?php echo empty($webapp->icon) ? $config->webRoot . 'theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></div>
+      <div class='card-heading' class='webapp-name' title='<?php echo $webapp->name?>'>
+        <div class='pull-right'>
+        <?php common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", "<i class='icon-remove'></i> " . $lang->webapp->uninstall, 'hiddenwin',  "class='text-muted'"); ?>
+        </div>
+        <strong><?php common::printLink('webapp', 'view', "webappID=$webapp->id", $webapp->name, '',  "class='webapp'");?></strong> <small class='text-muted'><?php echo $webapp->author;?></small></div>
+      <div class='card-content text-muted'><?php echo $webapp->abstract;?></div>
+      <div class='card-actions webapp-actions'>
+        <div class='pull-right'>
+        <?php
+        $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
+        $method  = '';
+        $popup   = '';
+        $target  = '_self';
+        if($webapp->target == 'blank') $target   = '_blank';
+        if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id, \"$webapp->name\");";
+        if($webapp->target == 'popup')
+        {
+            $width  = 0;
+            $height = 0;
+            if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+            $method = "popup($width, $height);";
+            $popup  = 'popup';
+        }
+        echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='btn btn-success $popup' onclick='addView($webapp->id);$method'");
+        ?>
+        </div>
+      </div>
+    </div></div>
+    <?php endforeach;?>
+  </div>
+</div>
 <script type='text/javascript'>
 var packup = '<?php echo $lang->webapp->packup?>';
 var useapp = '<?php echo $lang->webapp->useapp?>';

@@ -1,16 +1,3 @@
-if($('a.iframe').size())
-{
-    $("a.iframe").modalTrigger({width:450, type:'iframe', afterHide:function()
-    {
-        var selfClose = $.cookie('selfClose');
-        if(selfClose != 1) return;
-        $(this).replaceWith("<input type='button' value='" + installed + "' disabled='disabled' style='color:gray' class='button-c'>");
-        $.cookie('selfClose', 0);
-    }});
-}
-if($('a.webapp').size()) $("a.webapp").modalTrigger({width:700, type:'iframe'});
-if($('a.apiapp').size()) $("a.apiapp").modalTrigger({width:700, type:'iframe'});
-if($('a.popup').size()) $("a.popup").modalTrigger({width:900, type:'iframe'});
 
 function popup(width, height)
 {
@@ -26,7 +13,7 @@ function toggleShowapp(webappID, webappName)
         height = document.documentElement.clientHeight - 110;
         if(url[webappID] == undefined) url[webappID] = $('#useapp' + webappID).attr('href');
         $('#useapp' + webappID).attr('href', '#iframe' + webappID);
-        var html = "<tr id='iframe" + webappID + "'><td><p>" + webappName + "<span class='text-right'><button class='button-c' onclick='toggleShowapp(" + webappID + ", \" " + webappName + "\")'>" + packup + "</button></span></p><iframe src='" + url[webappID] + "' height='" + height + "' width='100%' style='border:1px solid #999;'></iframe></td></tr>";
+        var html = "<tr id='iframe" + webappID + "'><td><p>" + webappName + "<span class='text-right'><button class='btn' onclick='toggleShowapp(" + webappID + ", \" " + webappName + "\")'>" + packup + "</button></span></p><iframe src='" + url[webappID] + "' height='" + height + "' width='100%' style='border:1px solid #999;'></iframe></td></tr>";
         $('#webapps').parent().parent().after(html);
         show[webappID] = true;
     }
@@ -65,6 +52,21 @@ function customSize(value)
 }
 
 $(function(){
+    if($('a.iframe').length)
+    {
+        $("a.iframe").modalTrigger({width:450, type:'iframe', afterHide:function()
+        {
+            var selfClose = $.cookie('selfClose');
+            if(selfClose != 1) return;
+            $(this).replaceWith("<input type='button' value='" + installed + "' disabled='disabled' style='color:gray' class='btn'>");
+            $.cookie('selfClose', 0);
+        }});
+    }
+
+    if($('a.webapp').length) $("a.webapp").modalTrigger({width:700, type:'iframe'});
+    if($('a.apiapp').length) $("a.apiapp").modalTrigger({width:700, type:'iframe'});
+    if($('a.popup').length) $("a.popup").modalTrigger({width:900, type:'iframe'});
+
     setSize($('#target').val());
     $('#target').change(function(){setSize($(this).val())});
     $('#size').change(function(){customSize($(this).val())});
