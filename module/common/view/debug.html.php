@@ -5,7 +5,7 @@
   </header>
   <div id='debugContent'></div>
   <div id='debugIframeTip' class='hidden'><strong id='debugIframeTipId'></strong> <span class='debugIframeTipTime'></span> The following content from iframe.</div>
-  <iframe style='width:580px; height: 400px ' frameborder='0' name='debugwin' id='debugwin' scrolling='no' class='debugwin'></iframe>
+  <iframe style='width:580px; height: 400px ' frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin'></iframe>
 </div>
 <style>
 /* debug panel */
@@ -22,7 +22,7 @@ body > #debugPanel, body > #debugPanel.show {position: fixed; bottom: 0; top: in
 #debugContent .cell > header, #debugIframeTip {color: #ccc; font-size: 12px; line-height: 16px}
 #debugContent .cell > .content {border-radius: 4px; padding: 3px 5px}
 #debugIframeTip {padding-top: 0;}
-#debugPanel.with-iframe-content #debugwin {border: 1px solid #ddd; border-radius: 4px; margin: 0 10px}
+#debugPanel.with-iframe-content #hiddenwin {border: 1px solid #ddd; border-radius: 4px; margin: 0 10px}
 </style>
 <script>
 function debug(title)
@@ -50,13 +50,13 @@ function debug(title)
             dph.toggleClass('icon-chevron-up', !showed).toggleClass('icon-chevron-down', showed);
         });
 
-        var frame = document.getElementById('debugwin');
+        var frame = document.getElementById('hiddenwin');
         frame.onload = frame.onreadystatechange = function()
         {
             if (this.readyState && this.readyState != 'complete') return;
             try
             {
-                var $frame = $(window.frames['debugwin'].document);
+                var $frame = $(window.frames['hiddenwin'].document);
                 if($frame.find('body').html() != '')
                 {
                     $('#debugIframeTipId').text(id++);
