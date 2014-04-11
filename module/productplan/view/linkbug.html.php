@@ -26,7 +26,7 @@
 <div id='bugList'>
   <form method='post' id='unlinkedBugsForm'>
     <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
-      <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong> (<?php echo count($allBugs);?>)</caption>
+      <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></caption>
       <thead>
       <tr class='colhead'>
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>

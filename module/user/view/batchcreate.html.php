@@ -13,38 +13,48 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('roleGroup', $roleGroup);?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['user']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->user->batchCreate;?></strong>
+  </div>
+</div>
+
 <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table class='table-1 fixed'> 
-    <caption><?php echo $lang->user->batchCreate;?></caption>
-    <tr>
-      <th class='w-20px'><?php echo $lang->idAB;?></th> 
-      <th class='w-150px'><?php echo $lang->user->dept;?></th>
-      <th class='w-130px red'><?php echo $lang->user->account;?></th>
-      <th class='w-130px red'><?php echo $lang->user->realname;?></th>
-      <th class='w-100px red'><?php echo $lang->user->role;?></th>
-      <th class='w-100px'><?php echo $lang->user->group;?></th>
-      <th><?php echo $lang->user->email;?></th>
-      <th class='w-70px'><?php echo $lang->user->gender;?></th>
-      <th class="red"><?php echo $lang->user->password;?></th>
-    </tr>
+  <table class='table table-form table-fixed'> 
+    <thead>
+      <tr>
+        <th class='w-40px'><?php echo $lang->idAB;?></th> 
+        <th class='w-150px'><?php echo $lang->user->dept;?></th>
+        <th class='w-130px red'><?php echo $lang->user->account;?></th>
+        <th class='w-130px red'><?php echo $lang->user->realname;?></th>
+        <th class='w-100px red'><?php echo $lang->user->role;?></th>
+        <th class='w-100px'><?php echo $lang->user->group;?></th>
+        <th><?php echo $lang->user->email;?></th>
+        <th class='w-90px'><?php echo $lang->user->gender;?></th>
+        <th class="red"><?php echo $lang->user->password;?></th>
+      </tr>
+    </thead>
     <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
     <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
     <?php $groupList = $groupList + array('ditto' => $lang->user->ditto)?>
     <?php for($i = 0; $i < $config->user->batchCreate; $i++):?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control'");?>
-      <td><?php echo html::input("account[$i]", '', "class='text-1 account_$i' autocomplete='off' onchange='changeEmail($i)'");?></td>
+      <td><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control'");?></td>
+      <td><?php echo html::input("account[$i]", '', "class='form-control account_$i' autocomplete='off' onchange='changeEmail($i)'");?></td>
       <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>
       <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
       <td><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='form-control'");?></td>
-      <td><?php echo html::input("email[$i]", '', "class='text-1 email_$i' onchange='setDefaultEmail($i)'");?></td>
+      <td><?php echo html::input("email[$i]", '', "class='form-control email_$i' onchange='setDefaultEmail($i)'");?></td>
       <td><?php echo html::radio("gender[$i]", (array)$lang->user->genderList, 'm');?></td>
       <td align='left'>
-      <?php
-      echo html::input("password[$i]", '', "class='w-p70' autocomplete='off' onkeyup='toggleCheck(this, $i)'");
-      if($i != 0) echo "<input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}";
-      ?>
+        <div class='input-group'>
+        <?php
+        echo html::input("password[$i]", '', "class='form-control' autocomplete='off' onkeyup='toggleCheck(this, $i)'");
+        if($i != 0) echo "<span class='input-group-addon'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
+        ?>
+        </div>
       </td>
     </tr>  
     <?php endfor;?>

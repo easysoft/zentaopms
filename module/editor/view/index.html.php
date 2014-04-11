@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../extension/view/header.html.php';?>
-<div class='container'>
+<div class='container bd-0'>
   <table class='w-p100'>
     <tr>
       <td class='w-200px'>

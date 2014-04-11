@@ -14,55 +14,62 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('holders', $lang->user->placeholder);?>
 <?php js::set('roleGroup', $roleGroup);?>
-<form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table align='center' class='table-5'> 
-    <caption><?php echo $lang->user->create;?></caption>
-    <tr>
-      <th><?php echo $lang->user->dept;?></th>
-      <td><?php echo html::select('dept', $depts, $deptID, "class='form-control'");?>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->account;?></th>
-      <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->realname;?></th>
-      <td><?php echo html::input('realname', '', "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->password;?></th>
-      <td><?php echo html::password('password1', '', "class='form-control' autocomplete='off'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->password2;?></th>
-      <td><?php echo html::password('password2', '', "class='form-control' autocomplete='off'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->role;?></th>
-      <td><?php echo html::select('role', $lang->user->roleList, '', "class='form-control' onchange='changeGroup(this.value)'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->group;?></th>
-      <td><?php echo html::select('group', $groupList, '', "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->email;?></th>
-      <td><?php echo html::input('email', '', "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->commiter;?></th>
-      <td><?php echo html::input('commiter', '', "class='form-control'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->join;?></th>
-      <td><?php echo html::input('join', '', "class='form-control form-date'");?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->gender;?></th>
-      <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
-    </tr>  
+<div class='container mw-600px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['user']);?></span>
+      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->user->create;?></strong>
+    </div>
+  </div>
+  <form class='form-condensed mw-500px' method='post' target='hiddenwin' id='dataform'>
+    <table align='center' class='table table-form'> 
+      <tr>
+        <th class='w-100px'><?php echo $lang->user->dept;?></th>
+        <td><?php echo html::select('dept', $depts, $deptID, "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->account;?></th>
+        <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->realname;?></th>
+        <td><?php echo html::input('realname', '', "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->password;?></th>
+        <td><?php echo html::password('password1', '', "class='form-control' autocomplete='off'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->password2;?></th>
+        <td><?php echo html::password('password2', '', "class='form-control' autocomplete='off'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->role;?></th>
+        <td><?php echo html::select('role', $lang->user->roleList, '', "class='form-control' onchange='changeGroup(this.value)'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->group;?></th>
+        <td><?php echo html::select('group', $groupList, '', "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->email;?></th>
+        <td><?php echo html::input('email', '', "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->commiter;?></th>
+        <td><?php echo html::input('commiter', '', "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->join;?></th>
+        <td><?php echo html::input('join', '', "class='form-control form-date'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->user->gender;?></th>
+        <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
+      </tr>
 
-    <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
-  </table>
-</form>
+      <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

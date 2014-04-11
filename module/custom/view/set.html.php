@@ -44,8 +44,8 @@ EOT;
   ?>
   </ul>
 </div>
-<div class='container'>
-  <div class='row'>
+<div class='container bd-0'>
+  <div class='row pd-0'>
     <div class='col-sm-4 col-md-3'>
       <div class='panel panel-sm'>
         <div class='panel-heading'>

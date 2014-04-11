@@ -17,7 +17,7 @@
       <strong><?php echo $lang->convert->common;?></strong>
     </div>
   </div>
-  <div class='alert'>
+  <div class='alert mg-0 bd-0'>
     <div class='content'>
       <?php echo nl2br($lang->convert->desc);?>
       <div class='text-center pdt-20'>
