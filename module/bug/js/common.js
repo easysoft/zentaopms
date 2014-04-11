@@ -218,7 +218,7 @@ function setStories(moduleID, productID)
     {
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
         $('#story').replaceWith(stories);
-        $('#story_chzn').remove();
+        $('#story_chosen').remove();
         $("#story").chosen({no_results_text: ''});
     });
 }

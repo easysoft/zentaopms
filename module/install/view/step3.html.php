@@ -30,43 +30,53 @@ if(!isset($error))
 EOT;
 }
 ?>
-<?php if(isset($error)):?>
-<table class='table-6' align='center'>
-<caption><?php echo $lang->install->error;?></caption>
-  <tr><td><?php echo $error;?></td></tr>
-  <tr><td><?php echo html::commonButton($lang->install->pre, "onclick='javascript:history.back(-1)'");?></td></tr>
-</table>
-<?php else:?>
-<table class='table-6' align='center'>
-  <caption><?php echo $lang->install->saveConfig;?></caption>
-  <tr>
-    <td class='text-center'><?php echo html::textArea('config', $configContent, "rows='15' class='area-1 f-12px'");?></td>
-  </tr>
-  <tr>
-    <td>
-    <?php
-    $configRoot   = $this->app->getConfigRoot();
-    $myConfigFile = $configRoot . 'my.php';
-    if(is_writable($configRoot))
-    {
-        if(@file_put_contents($myConfigFile, $configContent))
+<div class='container'>
+  <div class='modal-dialog'>
+  <?php if(isset($error)):?>
+    <div class='modal-header'>
+      <strong><?php echo $lang->install->error;?></strong>
+    </div>
+    <div class='modal-body'>
+      <div class='alert alert-danger'>
+        <i class='icon-info-sign'></i>
+        <div class='content'><?php echo $error;?></div>
+      </div>
+    </div>
+    <div class='modal-footer'>
+      <?php echo html::commonButton($lang->install->pre, "onclick='javascript:history.back(-1)'");?>
+    </div>
+  <?php else:?>
+    <div class='modal-header'>
+      <strong><?php echo $lang->install->saveConfig;?></strong>
+    </div>
+    <div class='modal-body'>
+      <div class='form-group'>
+        <?php echo html::textArea('config', $configContent, "rows='15' class='form-control'");?>
+      </div>
+      <div class='help-block text-center'>
+        <?php
+        $configRoot   = $this->app->getConfigRoot();
+        $myConfigFile = $configRoot . 'my.php';
+        if(is_writable($configRoot))
         {
-            printf($lang->install->saved2File, $myConfigFile);
+            if(@file_put_contents($myConfigFile, $configContent))
+            {
+                printf($lang->install->saved2File, $myConfigFile);
+            }
+            else
+            {
+                printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+            }
         }
         else
         {
             printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
         }
-    }
-    else
-    {
-        printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
-    }
-    echo "<br />";
-    echo "<div class='text-center'>" . html::a($this->createLink('install', 'step4'), $lang->install->next) . '</div>';
-    ?>
-    </td>
-  </tr>
-</table>
-<?php endif;?>
+        ?>
+      </div>
+    </div>
+    <div class='modal-footer'><?php echo html::a($this->createLink('install', 'step4'), $lang->install->next, '', "class='btn btn-primary'");?></div>
+  <?php endif;?>
+  </div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

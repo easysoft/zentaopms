@@ -170,6 +170,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
 .form-condensed .chosen-container-single .chosen-single {padding: 4px 10px; height: 30px}
 .form-condensed .chosen-container-single .chosen-single div {padding: 4px 10px}
+.form-condensed .chosen-container-multi .chosen-choices {min-height: 30px}
+.form-condensed .chosen-container-multi .chosen-choices li {margin: 4px 0 0 4px}
+.form-condensed .chosen-container-multi .chosen-choices li.search-field {margin-bottom: 4px;}
 .form-condensed .table-fixed .form-control {padding: 5px 6px}
 .form-condensed .table-fixed select.form-control {padding: 5px}
 .form-condensed .chosen-container {font-size: 12px}

@@ -1,0 +1,8 @@
+h3{font-size:16px; margin-bottom: 20px;}
+blockquote{padding: 0; border-left: 0;}
+li{line-height: 2em}
+.modal-dialog{position: relative; line-height: 20px}
+.modal-header{position: absolute; right: 15px; top: 10px; border: none;z-index: 999}
+.modal-body{padding: 20px 60px;}
+
+.dropdown-menu {min-width: 120px; margin-top: 0;}

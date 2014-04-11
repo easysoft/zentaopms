@@ -10,26 +10,21 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table align='center' class='table-5 f-14px'>
-  <caption><?php echo $lang->upgrade->$result;?></caption>
-  <tr>
-    <td>
-    <?php
-    if($result == 'fail')
-    {
-        echo nl2br(join('\n', $errors));
-    }
-    else
-    {
-        echo "<p id='tohome'></p>";
-    }
-    ?>
-    </td>
-  </tr>
-  <tr>
-    <td id='checkExtension'><?php if($result == 'success') echo $lang->upgrade->checkExtension?></td>
-  </tr>
-</table>
+<div class='container'>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <strong><?php echo $lang->upgrade->result;?></strong>
+    </div>
+    <div class='modal-body'>
+      <?php if($result == 'fail'):?>
+      <pre><?php echo nl2br(join('\n', $errors));?></pre>
+      <?php else:?>
+      <div id='tohome'></div>
+      <?php endif;?>
+      <div id='checkExtension'><?php if($result == 'success') echo $lang->upgrade->checkExtension?></div>
+    </div>
+  </div>
+</div>
 <script>
 var tohome = <?php echo json_encode(html::linkButton($lang->upgrade->tohome, 'index.php'))?>;
 var result = '<?php echo $result?>';

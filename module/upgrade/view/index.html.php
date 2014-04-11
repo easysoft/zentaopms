@@ -10,13 +10,18 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table align='center' class='table-5 f-14px'>
-  <caption><?php echo $lang->upgrade->warnning;?></caption>
-  <tr>
-    <td><?php echo $lang->upgrade->warnningContent;?></td>
-  </tr>
-  <tr>
-    <td colspan='2' class='text-center'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></td>
-  </tr>
-</table>
+<div class='container'>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <strong><?php echo $lang->upgrade->warnning;?></strong>
+    </div>
+    <div class='modal-body'>
+      <div class='alert alert-warning'>
+        <i class='icon-info-sign'></i>
+        <div class='content'><?php echo $lang->upgrade->warnningContent;?></div>
+      </div>
+    </div>
+    <div class='modal-footer'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></div>
+  </div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

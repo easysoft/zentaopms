@@ -10,20 +10,29 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' action='<?php echo inlink('confirm');?>'>
-  <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->upgrade->selectVersion;?></caption>
-    <tr>
-      <th class='w-p20 rowhead'><?php echo $lang->upgrade->fromVersion;?></th>
-      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version) . "<span class='red'>{$lang->upgrade->noteVersion}</span>";?></td>
-    </tr>
-    <tr>
-      <th class='w-p20 rowhead'><?php echo $lang->upgrade->toVersion;?></th>
-      <td><?php echo $config->version;?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton($lang->upgrade->common);?></td>
-    </tr>
-  </table>
-</form>
+<div class='container'>
+  <form class='form-condensed' method='post' action='<?php echo inlink('confirm');?>'>
+    <div class='modal-dialog'>
+      <div class='modal-header'>
+        <strong><?php echo $lang->upgrade->selectVersion;?></strong>
+      </div>
+      <div class='modal-body'>
+        <table class='table table-form'>
+          <tr>
+            <th class='w-100px'><?php echo $lang->upgrade->fromVersion;?></th>
+            <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version, "class='form-control'");?></td>
+            <td class='text-danger'><?php echo $lang->upgrade->noteVersion;?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->upgrade->toVersion;?></th>
+            <td><?php echo $config->version;?></td>
+          </tr>
+        </table>
+      </div>
+      <div class='modal-footer'>
+        <?php echo html::submitButton($lang->upgrade->common);?>
+      </div>
+    </div>
+  </form>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

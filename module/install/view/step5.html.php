@@ -10,12 +10,24 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table align='center' class='table-6'>
-  <caption><?php echo $lang->install->success;?></caption>
-  <tr>
-	<td>
-	  <?php echo nl2br(sprintf($lang->install->joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')));?>
-	</td>
-  </tr>
-</table>
+<div class='container'>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <strong><?php echo $lang->install->success;?></strong>
+    </div>
+    <div class='modal-body'>
+      <div class='alert alert-success'>
+        <i class='icon-ok-sign'></i>
+        <div class='content'><?php echo nl2br(sprintf($lang->install->joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')));?></div>
+      </div>
+    </div>
+    <div class='modal-footer'>
+      <?php 
+      echo html::a('http://www.zentao.net', $lang->install->regist, '_blank', "class='btn btn-success'");
+      echo "<span class='text-muted'> &nbsp; " . $lang->install->or . ' &nbsp; </span>';
+      echo html::a('/index', $lang->install->login, '', "class='btn btn-primary'");
+      ?>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

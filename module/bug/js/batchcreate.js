@@ -26,7 +26,7 @@ function loadProjectBuilds(productID, projectID, index)
     $.get(link, function(builds)
     {
         $('#buildBox' + index).html(builds);
-        $('#openedBuilds' + index + '_chzn').remove();
+        $('#openedBuilds' + index + '_chosen').remove();
         $('#buildBox' + index + ' select').removeClass('select-3');
         $('#buildBox' + index + ' select').addClass('select-1');
         $('#buildBox' + index + ' select').attr('id', 'openedBuilds[' + index + '][]');

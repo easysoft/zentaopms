@@ -11,7 +11,8 @@
 /* debug panel */
 #debugPanel {width: 160px; height: 40px; background: rgba(255,255,255,0.8); float: left; transition:all 0.3s;}
 #debugPanel.show {width: 600px; height: 540px; position: relative; top: -500px; box-shadow: 2px 2px 5px rgba(0,0,0,0.25); background: #fff}
-#debugPanel > header {color: #fff; padding: 0 15px; background: rgba(0,0,0,0.8); cursor: pointer; transition: all 0.5s;}
+body > #debugPanel, body > #debugPanel.show {position: fixed; bottom: 0; top: inherit;} 
+#debugPanel > header {color: #fff; padding: 0 15px; background: rgba(0,0,0,0.8); cursor: pointer; transition: all 0.5s; line-height: 40px}
 #debugPanel.with-content > header {background: #D2322D}
 #debugPanel > header > .icon {display: inline-block; border-radius: 4px; background: #ddd; background: rgba(255,255,255,0.3); padding: 2px 5px; margin-right: 5px;}
 #debugHandle {color: #ddd}

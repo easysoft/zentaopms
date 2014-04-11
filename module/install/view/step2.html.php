@@ -10,49 +10,56 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' action='<?php echo $this->createLink('install', 'step3');?>'>
-  <table align='center' class='table-6'>
-    <caption><?php echo $lang->install->setConfig;?></caption>
-    <tr>
-      <th class='w-p20'><?php echo $lang->install->key;?></th>
-      <th class='text-left'><?php echo $lang->install->value?></th>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->defaultLang;?></th>
-      <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->dbHost;?></th>
-      <td><?php echo html::input('dbHost', '127.0.0.1', "class='form-control'");?><?php echo $lang->install->dbHostNote;?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->dbPort;?></th>
-      <td><?php echo html::input('dbPort', '3306', "class='form-control'");?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->dbUser;?></th>
-      <td><?php echo html::input('dbUser', 'root', "class='form-control'");?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->dbPassword;?></th>
-      <td><?php echo html::input('dbPassword', '', "class='form-control'");?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->dbName;?></th>
-      <td><?php echo html::input('dbName', 'zentao', "class='form-control'");?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->install->dbPrefix;?></th>
-      <td>
-      <?php 
-      echo html::input('dbPrefix', 'zt_', "class='form-control'");
-      echo html::checkBox('clearDB', $lang->install->clearDB);
-      ?>
-      </td>
-    </tr>
-    <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::hidden('requestType', 'GET');?></td>
-    </tr>
-  </table>
-</form>
+<div class='container'>
+  <div class='modal-dialog'>
+    <form method='post' action='<?php echo $this->createLink('install', 'step3');?>' class='form-condensed'>
+      <div class='modal-header'><strong><?php echo $lang->install->setConfig;?></strong></div>
+      <div class='modal-body'>
+        <table align='center' class='table table-bordered table-form'>
+          <thead>
+            <tr class='text-center'>
+              <th class='w-p20'><?php echo $lang->install->key;?></th>
+              <th class='text-left' colspan='2'><?php echo $lang->install->value?></th>
+            </tr>
+          </thead>
+          <tr>
+            <th><?php echo $lang->install->defaultLang;?></th>
+            <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->install->dbHost;?></th>
+            <td><?php echo html::input('dbHost', '127.0.0.1', "class='form-control'");?></td>
+            <td><?php echo $lang->install->dbHostNote;?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->install->dbPort;?></th>
+            <td><?php echo html::input('dbPort', '3306', "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->install->dbUser;?></th>
+            <td><?php echo html::input('dbUser', 'root', "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->install->dbPassword;?></th>
+            <td><?php echo html::input('dbPassword', '', "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->install->dbName;?></th>
+            <td><?php echo html::input('dbName', 'zentao', "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->install->dbPrefix;?></th>
+            <td>
+            <?php echo html::input('dbPrefix', 'zt_', "class='form-control'");?>
+            </td>
+            <td><?php echo html::checkBox('clearDB', $lang->install->clearDB);?></td>
+          </tr>
+        </table>
+      </div>
+      <div class='modal-footer'>
+        <?php echo html::submitButton() . html::hidden('requestType', 'GET');?>
+      </div>
+    </form>
+  </div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

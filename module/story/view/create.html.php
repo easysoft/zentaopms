@@ -98,10 +98,12 @@
        <tr>
         <th><nobr><?php echo $lang->story->mailto;?></nobr></th>
         <td colspan='3'>
-          <?php 
-          echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "multiple"); 
-          if($contactLists) echo html::select('', $contactLists, '', "class='text-right' onchange=\"setMailto('mailto', this.value)\"");
-          ?>
+          <div class='input-group'>
+            <?php 
+            echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "multiple"); 
+            if($contactLists) echo html::select('', $contactLists, '', "class='form-control' style='width: 150px' onchange=\"setMailto('mailto', this.value)\"");
+            ?>
+          </div>
         </td>
       </tr>
 

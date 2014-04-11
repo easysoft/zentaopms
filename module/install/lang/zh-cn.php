@@ -26,17 +26,18 @@ $lang->install->desc             = <<<EOT
 
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 
-禅道项目管理软件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='red'>青岛易软天创网络科技有限公司</a>开发</strong>。
+禅道项目管理软件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>青岛易软天创网络科技有限公司</a>开发</strong>。
 官方网站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
 技术支持: <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
 新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
 腾讯微博：<a href='http://t.qq.com/zentaopms/' target='_blank'>t.qq.com/zentaopms</a>
 
-您现在正在安装的版本是 <strong class='red'>%s</strong>。
+您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
-$lang->install->newReleased= "<strong class='red'>提示</strong>：官网网站已有最新版本<strong class='red'>%s</strong>, 发布日期于 %s。";
+$lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官网网站已有最新版本<strong class='text-danger'>%s</strong>, 发布日期于 %s。";
 $lang->install->choice     = '您可以选择：';
+$lang->install->or         = '或者';
 $lang->install->checking   = '系统检查';
 $lang->install->ok         = '检查通过(√)';
 $lang->install->fail       = '检查失败(×)';
@@ -128,8 +129,10 @@ $lang->install->groupList['OTHERS']['name'] = '其他';
 $lang->install->groupList['OTHERS']['desc'] = '其他';
 
 $lang->install->success = "安装成功";
+$lang->install->login   = '登录禅道管理系统';
+$lang->install->regist  = '禅道社区注册';
 
 $lang->install->joinZentao = <<<EOT
-您已经成功安装禅道管理系统%s，<strong class='red'>请及时删除install.php</strong>。现在您可以直接<input type='button' value='登录禅道管理系统' onclick='location.href="index.php"'>，设置用户及分组！
-<i>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>)进行登记。</i>
+<p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。现在您可以直接 <a class='alert-link' href="index.php">登录禅道管理系统</a>，设置用户及分组！</p>
+<p>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)进行登记。</p>
 EOT;

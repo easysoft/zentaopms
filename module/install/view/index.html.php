@@ -10,27 +10,42 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table align='center' class='table-6'>
-  <caption><?php echo $lang->install->welcome;?></caption>
-  <tr><td><?php echo nl2br(sprintf($lang->install->desc, $config->version));?></td></tr>
-  <tr>
-    <td>
-    <?php if(isset($latestRelease) and (version_compare($latestRelease->version, $config->version) > 0)):?>
-    <?php vprintf($lang->install->newReleased, $latestRelease);?>
-    <h3 class='text-center'>
-      <?php 
-      echo $lang->install->choice;
-      echo html::a($latestRelease->url, $lang->install->seeLatestRelease, '_blank');
-      echo html::a($this->createLink('install', 'step1'), $lang->install->keepInstalling);
-      ?>
-    </h3>
-	<?php else:?>
-      <h3 class='text-center'>
-        <?php echo html::select('', $app->config->langs, $app->cookie->lang,  'onchange="selectLang(this.value)"');?>
-        <?php echo html::a($this->createLink('install', 'step1'), $lang->install->start);?>
-      </h3>
-    <?php endif;?>
-    </td>
-  </tr>
-</table>
+<div class='container'>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <div class='btn-group'>
+        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><?php echo $app->config->langs[$app->cookie->lang];?> <span class='caret'></span></button>
+        <ul class='dropdown-menu'>
+        <?php
+        foreach ($app->config->langs as $key => $value)
+        {
+            if($key == $app->cookie->lang) continue;
+            echo '<li>' . html::a('javascript:selectLang("' . $key . '")', $value) . '</li>';
+        }
+        ?>
+        </ul>
+      </div>
+    </div>
+    <div class='modal-body'>
+      <h3><?php echo $lang->install->welcome;?></h3>
+      <div><?php echo nl2br(sprintf($lang->install->desc, $config->version));?></div>
+    </div>
+    <div class='modal-footer'>
+      <?php if(isset($latestRelease) and (version_compare($latestRelease->version, $config->version) > 0)):?>
+      <div class='mgb-20'><?php vprintf($lang->install->newReleased, $latestRelease);?></div>
+      <div class='form-group'>
+        <?php 
+        echo html::a($latestRelease->url, $lang->install->seeLatestRelease, '_blank', "class='btn btn-success'");
+        echo "<span class='text-muted'> &nbsp; " . $lang->install->or . ' &nbsp; </span>';
+        echo html::a($this->createLink('install', 'step1'), $lang->install->keepInstalling, '', "class='btn btn-primary'");
+        ?>
+      </div>
+      <?php else:?>
+      <div class='form-group'>
+        <?php echo html::a($this->createLink('install', 'step1'), $lang->install->start, '', "class='btn btn-primary'");?>
+      </div>
+      <?php endif;?>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

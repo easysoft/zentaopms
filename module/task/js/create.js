@@ -114,7 +114,7 @@ function setStories(moduleID, projectID)
         $('#story').replaceWith(stories);
         $('#story').val(storyID);
         setPreview();
-        $('#story_chzn').remove();
+        $('#story_chosen').remove();
         $("#story").chosen({no_results_text: ''});
     });
 }

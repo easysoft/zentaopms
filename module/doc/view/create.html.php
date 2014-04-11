@@ -38,7 +38,7 @@
       </tr>  
       <?php endif;?>
       <tr>
-        <th><?php echo $lang->doc->module;?></th>
+        <th class='w-80px'><?php echo $lang->doc->module;?></th>
         <td><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       </tr>  
       <tr>
