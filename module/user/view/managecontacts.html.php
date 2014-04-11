@@ -11,61 +11,79 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table class='cont-lt1'>
-  <tr valign='top'>
-    <td class='side'>
-      <div class='box-title'><?php echo $lang->user->contacts->contactsList;?></div>
-      <div class='box-content'>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='COMPANY'><?php echo html::icon($lang->icons['company']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon('cogs');?></small> <?php echo $lang->user->contacts->manage;?></strong>
+  </div>
+  <div class='actions'>
+    <?php if($mode != 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger'");?>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-3 col-lg-2'>
+    <div class='panel panel-sm'>
+      <div class='panel-heading'>
+        <i class='icon-list-ul'></i> <strong><?php echo $lang->user->contacts->contactsList;?></strong>
+      </div>
+      <ul class='list-group'>
         <?php 
-        foreach($lists as $listID => $listName) echo html::a(inlink('managecontacts', "listID=$listID"), $listName) . '<br />';
+        foreach($lists as $listID => $listName) echo html::a(inlink('managecontacts', "listID=$listID"), $listName, '', "class='list-group-item'");
         ?>
-      </div>
-    </td>
-    <td class=='divider'></td>
-    <td>
-      <form method='post' target='hiddenwin' id='dataform' style='margin:0 0 0 10px; padding:0'>
-      <div class='box-title' style='height:15px'>
-        <div class='f-left'><?php echo $lang->user->contacts->manage;?></div>
-        <div class='text-right'><?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin');?></div>
-      </div>
-      <table class='table-1 fixed'> 
-        <tr>
-          <th><?php echo $lang->user->contacts->selectedUsers;?></th>
-          <td>
-            <?php
-            foreach($this->view->users as $account => $realname)
-            {
-                echo "<span class='userSpan'><input type='checkbox' name='users[]' value='$account' checked='checked'>$realname</span>";
-            }
-            ?>
-          </td>
-        </tr>
-        <tr>
-          <th><?php $mode == 'new' ? print($lang->user->contacts->selectList) : print($lang->user->contacts->listName);?></th>
-          <td>
-            <?php 
-            if($mode == 'new')
-            {
-                if($lists)
+      </ul>
+    </div>
+  </div>
+  <div class='col-md-9 col-lg-10'>
+    <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'>
+          <i class='icon-cogs'></i> <strong><?php echo $lang->user->contacts->manage;?></strong>
+        </div>
+        <div class='panel-body'>
+          <table class='table table-form table-fixed'> 
+            <tr>
+              <th class='w-80px'><?php echo $lang->user->contacts->selectedUsers;?></th>
+              <td>
+                <?php
+                foreach($this->view->users as $account => $realname)
                 {
-                    echo $lang->user->contacts->appendToList;
-                    echo html::select('list2Append', array('' => '') + $lists, '', "class='select-2'") . $lang->user->contacts->or;
+                    echo "<div class='userSpan group-item'><input type='checkbox' name='users[]' value='$account' checked='checked'> $realname</div>";
                 }
-                echo $lang->user->contacts->createList;
-                echo html::input('newList', '', "class='form-control'");
-            }
-            else
-            {
-                echo html::input('listName', $list->listName, "class='form-control'");
-                echo html::hidden('listID',  $list->id);
-            }
-            ?>
-          </td>
-        </tr>
-        <tr><td></td><td><?php echo html::submitButton() . html::hidden('mode', $mode);?></td></tr>
-      </table>
-      </form>
-    </td>
-  </tr>
-</table>
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <th><?php $mode == 'new' ? print($lang->user->contacts->selectList) : print($lang->user->contacts->listName);?></th>
+              <td>
+                <div class='input-group'>
+                <?php 
+                if($mode == 'new')
+                {
+                    if($lists)
+                    {
+                        echo "<span class='input-group-addon'>" . $lang->user->contacts->appendToList . '</span>';
+                        echo html::select('list2Append', array('' => '') + $lists, '', "class='form-control'");
+                    }
+                    echo "<span class='input-group-addon'>";
+                    if($lists) echo $lang->user->contacts->or;
+                    echo $lang->user->contacts->createList;
+                    echo '</span>';
+                    echo html::input('newList', '', "class='form-control'");
+                }
+                else
+                {
+                    echo html::input('listName', $list->listName, "class='form-control'");
+                    echo html::hidden('listID',  $list->id);
+                }
+                ?>
+                </div>
+              </td>
+            </tr>
+            <tr><td></td><td><?php echo html::submitButton() . html::hidden('mode', $mode);?></td></tr>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

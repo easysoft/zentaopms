@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <div class='main'>
+  <div class='main pdb-20'>
     <fieldset>
       <legend><?php echo $lang->testcase->precondition;?></legend>
       <?php echo $case->precondition;?>

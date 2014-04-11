@@ -27,8 +27,16 @@ class docModel extends model
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
-        $selectHtml = html::select('libID', $libs, $libID, "onchange=\"switchDocLib(this.value, '$currentModule', '$currentMethod', '$extra');\"");
-        common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml . $this->lang->arrow);
+        $selectHtml .= "<div class='dropdown'>" . html::a('javascript:;', $libs[$libID] . " <span class='caret'></span>", '', "data-toggle='dropdown'") . "<ul class='dropdown-menu'>";
+        foreach ($libs as $key => $value)
+        {
+            $selectHtml .= "<li>" . html::a('javascript:;', $value) . '</li>';
+        }
+        $selectHtml .= '</ul></div>';
+
+
+        html::select('libID', $libs, $libID, "onchange=\"switchDocLib(this.value, '$currentModule', '$currentMethod', '$extra');\" class='form-control input-sm'");
+        common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
         foreach($this->lang->doc->menu as $key => $menu)
         {
             if($key != 'list') common::setMenuVars($this->lang->doc->menu, $key, $libID);

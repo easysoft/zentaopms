@@ -11,16 +11,31 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo inLink('clearData', 'confirm=no')?>'>
-  <table align='center' class='table-5'>
-    <caption><?php echo $lang->admin->clearData;?></caption>
-    <tr><td><?php echo nl2br($lang->admin->clearDataDesc);?></td></tr>
-    <tr>
-      <td class='text-center'>
-        <span><?php echo $this->lang->admin->pleaseInputYes . html::input('sure', '', "class='form-control' onkeyup='showClearButton()' autocomplete='off'");?></span>
-        <?php echo html::submitButton($lang->admin->clearData, "class='hidden btn btn-danger'");?>
-      </td>
-    </tr>
-  </table>
-</form>
+<div class='container mw-700px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon('bolt');?></span>
+      <strong><?php echo $lang->admin->clearData;?></strong>
+    </div>
+  </div>
+  <div class='alert mg-0'>
+    <i class='icon-exclamation-sign text-danger'></i>
+    <div class='content'>
+      <?php echo nl2br($lang->admin->clearDataDesc);?>
+      <hr>
+      <div class='text-center'>
+        <form method='post' target='hiddenwin' action='<?php echo inLink('clearData', 'confirm=no')?>'>
+          <div class='form-group' style='margin: 0 auto; max-width: 500px'>
+            <div class='input-group w-p100' style='margin-bottom:10px'>
+              <span class='input-group-addon'><?php echo $this->lang->admin->pleaseInputYes;?></span>
+              <?php echo html::input('sure', '', "class='form-control' onkeyup='showClearButton()' autocomplete='off'");?>
+            </div>
+          </div>
+            <?php echo html::submitButton($lang->admin->clearData, "class='hidden btn-block btn btn-danger'");?>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php include '../../common/view/footer.html.php';?>

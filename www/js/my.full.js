@@ -250,7 +250,7 @@ function setPlaceholder()
             }
             else
             {
-                $("#" + key).parent().append(holders[key]);
+                $("#" + key).parent().append("<span class='help-block'>" + holders[key] + '</span>');
             }
         }
     }
