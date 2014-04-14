@@ -12,77 +12,88 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<table class='cont-lt1'>
-  <tr valign='top'>
-    <td class='side'>
-      <div class='box-title'><?php echo $lang->webapp->obtain;?></div>
-      <div class='box-content a-center'>
-        <?php
-        echo "<span id='byupdatedtime'>" . html::a(inlink('obtain', 'type=byUpdatedTime'), $lang->webapp->byUpdatedTime) . '</span><br />';
-        echo "<span id='byaddedtime'>"   . html::a(inlink('obtain', 'type=byAddedTime'),   $lang->webapp->byAddedTime)   . '</span><br />';
-        echo "<span id='bydownloads'>"   . html::a(inlink('obtain', 'type=byDownloads'),   $lang->webapp->byDownloads)   . '</span><br />';
-        ?>
+<div class='container bd-0'>
+  <div class='row pd-0'>
+    <div class='col-md-3'>
+      <form class='side-search mgb-20' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
+        <div class="input-group">
+          <?php echo html::input('key', $this->post->key, "class='form-control'");?>
+          <span class="input-group-btn">
+            <?php echo html::submitButton('<i class="icon-search"></i> ' . $lang->webapp->bySearch, '', ''); ?>
+          </span>
+        </div>
+      </form>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'><?php echo $lang->webapp->obtain;?></div>
+        <div class='list-group'>
+            <?php
+            echo html::a(inlink('obtain', 'type=byUpdatedTime'), $lang->webapp->byUpdatedTime, '', "class='list-group-item' id='byupdatedtime'");
+            echo html::a(inlink('obtain', 'type=byAddedTime'),   $lang->webapp->byAddedTime, '', "class='list-group-item' id='byaddedtime'");
+            echo html::a(inlink('obtain', 'type=byDownloads'),   $lang->webapp->byDownloads, '', "class='list-group-item' id='bydownloads'");
+            ?>
+        </div>
       </div>
-      <div class='box-title'><?php echo $lang->webapp->bySearch;?></div>
-      <div class='box-content a-center'>
-        <form method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
-        <?php echo html::input('key', $this->post->key, "class='form-control'") . html::submitButton($lang->webapp->bySearch);?>
-        </form>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'><?php echo $lang->webapp->byCategory;?></div>
+        <div class='panel-body'>
+          <?php $moduleTree ? print($moduleTree) : print($lang->webapp->errorGetModules);?>
+        </div>
       </div>
-      <div class='box-title'><?php echo $lang->webapp->byCategory;?></div>
-      <div class='box-content' class='tree'>
-        <?php $moduleTree ? print($moduleTree) : print($lang->webapp->errorGetModules);?>
-      </div>
-    </td>
-    <td class='divider'></td>
-    <td> 
+    </div>
+    <div class='col-md-9'>
       <?php if($webapps):?>
-      <ul id='webapps'>
+      <div id='webapps' class='cards webstore webapps pd-0 mg-0'>
         <?php foreach($webapps as $webapp):?>
-        <li>
-          <table class='fixed exttable'>
-            <tr>
-              <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $config->webapp->url . $webapp->icon?>' width='72' height='72' /></td>
-              <td class='webapp-name' title='<?php echo $webapp->name?>'><?php echo $webapp->name?></td>
-            </tr>
-            <tr><td valign='top'><div class='webapp-info' title='<?php echo $webapp->abstract?>'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></div></td></tr>
-            <tr>
-              <td>
-                <div class='webapp-actions'>
-                  <?php
-                  $url     = $webapp->url;
-                  $method  = '';
-                  $popup   = '';
-                  $target  = '_self';
-                  if($webapp->target == 'popup')
-                  {
-                      $width  = 0;
-                      $height = 0;
-                      if($webapp->size) list($width, $height) = explode('x', $webapp->size);
-                      $method = "popup($width, $height);";
-                      $popup  = 'popup';
-                  }
-                  else
-                  {
-                      $method = "popup(1024, 600);";
-                      $popup  = 'popup';
-                  }
-                  echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'");
-                  common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $lang->webapp->view, '',  "class='button-c apiapp'");
-                  echo html::a($url, $lang->webapp->preview, '', "id='useapp$webapp->id' class='button-c $popup' onclick='$method'");
-                  ?>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </li>
+        <div class='col-md-6 col-sm-6'><div class='card' id='webapp<?php echo $webapp->id?>'>
+          <div class='media webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $config->webapp->url . $webapp->icon?>' width='72' height='72' /></div>
+          <div class='card-heading' class='webapp-name' title='<?php echo $webapp->name?>'>
+            <strong><?php common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $webapp->name, '',  "class='apiapp'");?></strong> <small class='text-muted'><?php echo $webapp->author;?></small>
+          </div>
+          <div class='card-content text-muted' title='<?php echo $webapp->abstract?>'><?php echo $webapp->abstract;?></div>
+          <div class='card-actions webapp-actions'>
+            <div class='pull-right'>
+              <div class='btn-group'>
+              <?php
+              $url     = $webapp->url;
+              $popup   = '';
+              $target  = '_self';
+              $misc    = '';
+              if($webapp->target == 'popup')
+              {
+                  $width  = 0;
+                  $height = 0;
+                  if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+                  $misc = "data-width='" . $width . "' data-height='" . $height . "'";
+                  $popup  = 'popup';
+              }
+              else
+              {
+                  $method = "popup(1024, 600);";
+                  $misc = "data-width='1024' data-height='600'";
+                  $popup  = 'popup';
+              }
+              echo isset($installeds[$webapp->id]) ? html::commonButton("<i class='icon-ok'></i> " . $lang->webapp->installed, "disabled='disabled'", 'btn-success') : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='btn btn-primary iframe'");
+
+              echo html::a($url, $lang->webapp->preview, '', "id='useapp$webapp->id' class='btn runapp $popup' data-title='$webapp->name' $misc");
+              ?>
+              </div>
+            </div>
+          </div>
+        </div></div>
         <?php endforeach;?>
-      </ul>
+      </div>
       <p class='c-left'><?php if($pager) $pager->show();?></p>
       <?php else:?>
         <div class='box-title'><?php echo $lang->webapp->errorOccurs;?></div>
         <div class='box-content'><?php echo $lang->webapp->errorGetExtensions;?></div>
-      <?php endif;?>
+      <?php endif;?>    
+    </div>
+  </div>
+</div>
+<table class='cont-lt1'>
+  <tr valign='top'>
+    <td> 
+
     </td>
   </tr>
 </table>

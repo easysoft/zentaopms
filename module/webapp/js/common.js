@@ -48,10 +48,11 @@ function addView(webappID)
 function customSize(value)
 {
     $('.customSize').hide();
-    if(value == 'custom') $('.customSize').show();
+    if(value == 'custom') $('.customSize').removeClass('hidden').show();
 }
 
-$(function(){
+$(function()
+{
     if($('a.iframe').length)
     {
         $("a.iframe").modalTrigger({width:450, type:'iframe', afterHide:function()
@@ -65,11 +66,12 @@ $(function(){
 
     if($('a.webapp').length) $("a.webapp").modalTrigger({width:700, type:'iframe'});
     if($('a.apiapp').length) $("a.apiapp").modalTrigger({width:700, type:'iframe'});
-    if($('a.popup').length) $("a.popup").modalTrigger({width:900, type:'iframe'});
+    $('.runapp.popup').modalTrigger({width:700, type:'iframe'});
+    $('.runapp:not(.popup)').modalTrigger({size:'fullscreen', type:'iframe', cssClass:'app-inside'});
 
     setSize($('#target').val());
     $('#target').change(function(){setSize($(this).val())});
     $('#size').change(function(){customSize($(this).val())});
     $('#modulemenu ul li').removeClass('active');
-    if(typeof(module) != "undefined") $('#modulemenu ul li #submenu' + module).parent().addClass('active');
+    if(typeof(module) == "string") $('#modulemenu ul li #submenu' + module).parent().addClass('active');
 })

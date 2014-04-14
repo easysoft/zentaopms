@@ -4,7 +4,7 @@
     <i class='icon icon-terminal'></i> <strong id='debugTitle'><?php echo $lang->debug;?></strong>
   </header>
   <div id='debugContent'></div>
-  <div id='debugIframeTip' class='hidden'><strong id='debugIframeTipId'></strong> <span class='debugIframeTipTime'></span> The following content from iframe.</div>
+  <div id='debugIframeTip' class='hidden'>#<strong id='debugIframeTipId'></strong> <span class='debugIframeTipTime'></span> The following content from iframe.</div>
   <iframe style='width:580px; height: 400px ' frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin'></iframe>
 </div>
 <style>

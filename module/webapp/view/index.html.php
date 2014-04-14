@@ -21,26 +21,26 @@
         <div class='pull-right'>
         <?php common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", "<i class='icon-remove'></i> " . $lang->webapp->uninstall, 'hiddenwin',  "class='text-muted'"); ?>
         </div>
-        <strong><?php common::printLink('webapp', 'view', "webappID=$webapp->id", $webapp->name, '',  "class='webapp'");?></strong> <small class='text-muted'><?php echo $webapp->author;?></small></div>
-      <div class='card-content text-muted'><?php echo $webapp->abstract;?></div>
+        <strong><?php common::printLink('webapp', 'view', "webappID=$webapp->id", $webapp->name, '',  "class='webapp'");?></strong> <small class='text-muted'><?php echo $webapp->author;?></small>
+      </div>
+      <div class='card-content text-muted' title='<?php echo $webapp->abstract?>'><?php echo $webapp->abstract;?></div>
       <div class='card-actions webapp-actions'>
         <div class='pull-right'>
         <?php
         $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
-        $method  = '';
         $popup   = '';
         $target  = '_self';
+        $misc    = '';
         if($webapp->target == 'blank') $target   = '_blank';
-        if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id, \"$webapp->name\");";
         if($webapp->target == 'popup')
         {
             $width  = 0;
             $height = 0;
             if($webapp->size) list($width, $height) = explode('x', $webapp->size);
-            $method = "popup($width, $height);";
+            $misc = "data-width='" . $width . "' data-height='" . $height . "'";
             $popup  = 'popup';
         }
-        echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='btn btn-success $popup' onclick='addView($webapp->id);$method'");
+        echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='btn btn-success runapp $popup' onclick='addView($webapp->id);' data-title='$webapp->name' $misc");
         ?>
         </div>
       </div>

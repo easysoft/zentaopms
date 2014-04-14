@@ -33,7 +33,6 @@
             ?>
         </div>
       </div>
-
       <div class='panel panel-sm'>
         <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>
         <div class='panel-body'>

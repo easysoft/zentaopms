@@ -462,9 +462,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* modal with iframe */
 .modal-dialog {transition: all .5s;}
-.modal-loading .modal-dialog {margin-top: -100%;}
-.loader {display: none}
-.modal-loading .loader{display: block; text-align: center; font-size: 56px; color: #fff; margin-top: 10%}
 .modal-iframe .modal-body {transition: all 0.5s; padding: 0}
 .modal.with-titlebar .modal-header {position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
 .modal.with-titlebar .modal-header .modal-body {z-index: 990}
@@ -475,6 +472,14 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .body-modal .outer > .main, .body-modal .outer > .container > .main, .body-modal > .main {padding: 10px 20px; margin: 0}
 .body-modal > form {padding-bottom: 15px;}
 .body-modal .outer > .container {padding: 0}
+.body-modal #titlebar .actions {right: 40px}
+
+.modal-dialog.fullscreen {width: 100% !important; height: 100% !important; margin: 0; border: none !important;}
+.modal-dialog.fullscreen .modal-body iframe {height: 100%}
+
+.modal-loading .modal-dialog {margin-top: -100%;}
+.loader {display: none}
+.modal-loading .loader{display: block; text-align: center; font-size: 56px; color: #fff; margin-top: 10%}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 

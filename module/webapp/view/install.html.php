@@ -11,17 +11,27 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-<div class='box-title'><?php echo $lang->webapp->install?></div>
-<div class='box-content'>
-  <p align='center' style='margin:30px 0;'><span><?php echo $lang->webapp->selectModule?></span>
-  <?php
-  echo html::select('module', $modules);
-  echo html::submitButton();
-  common::printLink('tree', 'browse', "rootID=0&view=webapp", $lang->tree->manage, '_parent');
-  ?>
-  </p>
-<div>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='WEBAPP'><?php echo html::icon($lang->icons['app']);?></span>
+    <strong><small class='text-muted'> <i class='icon-cog'></i></small> <?php echo $lang->webapp->install;?></strong>
+  </div>
+</div>
+<div class='main'>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin' style='padding: 40px 5%'>
+  <table class='table table-form'>
+    <tr>
+      <td>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->webapp->selectModule?></span>
+          <?php echo html::select('module', $modules, '', "class='form-control'");?>
+        </div>
+      </td>
+      <td><?php echo html::submitButton();?></td>
+      <td class='w-80px'><?php common::printLink('tree', 'browse', "rootID=0&view=webapp", $lang->tree->manage, '_parent');?></td>
+    </tr>
+  </table>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>
 

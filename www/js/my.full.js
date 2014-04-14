@@ -462,7 +462,7 @@ function setForm()
  */
 function setFormAction(actionLink, hiddenwin)
 {
-  if(hiddenwin) $('form').attr('target', hiddenwin);
+  // if(hiddenwin) $('form').attr('target', hiddenwin);
   $('form').attr('action', actionLink).submit();
 }
 
@@ -805,6 +805,24 @@ function ajaxDelete(url, replaceID, notice)
 }
 
 /**
+ * Judge the string is a integer number
+ * 
+ * @access public
+ * @return bool
+ */
+function isNum(s)
+{
+    if(s!=null)
+    {
+        var r, re;
+        re = /\d*/i;
+        r = s.match(re);
+        return (r == s) ? true : false;
+    }
+    return false;
+}
+
+/**
  * Set modal load content with ajax or iframe
  * 
  * @access public
@@ -832,28 +850,52 @@ function setModal()
                     height: $e.data('height') || 'auto',
                     icon:   $e.data('icon') || '?',
                     title:  $e.data('title') || $e.attr('title') || $e.text(),
-                    name:   $e.data('name') || 'modalIframe'
+                    name:   $e.data('name') || 'modalIframe',
+                    cssClass: $e.data('class')
                 }
                 options = $.extend(options, setting);
                 
-                if(options.height != 'auto') options.height += 'px';
+                if(isNum(options.height.toString())) options.height += 'px';
+                if(isNum(options.width.toString())) options.width += 'px';
+                if(options.size == 'fullscreen')
+                {
+                    var $w = $(window);
+                    options.width = $w.width();
+                    options.height = $w.height();
+                    options.cssClass += ' fullscreen';
+                }
+
                 if(options.icon == '?')
                 {
                     var i = $e.find("[class^='icon-']");
                     options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                 }
                 var modal = $('#ajaxModal').addClass('modal-loading');
-                modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width}px; height: auto'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+                modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
                 var modalBody = modal.find('.modal-body');
+                if(options.cssClass)
+                {
+                    modal.find('.modal-dialog').addClass(options.cssClass);
+                }
                 var frame = document.getElementById(options.name);
                 frame.onload = frame.onreadystatechange = function()
                 {
                     if (this.readyState && this.readyState != 'complete') return;
+
+                    modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
+
                     try
                     {
                         var $frame = $(window.frames[options.name].document);
-                        if($frame.find('#titlebar').length) modal.addClass('with-titlebar');
+                        if($frame.find('#titlebar').length)
+                        {
+                            modal.addClass('with-titlebar');
+                            if(options.size == 'fullscreen')
+                            {
+                                modalBody.css('height', options.height);
+                            }
+                        }
                         if(options.height == 'auto')
                         {
                             setTimeout(function()

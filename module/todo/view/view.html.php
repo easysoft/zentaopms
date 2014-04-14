@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
-  <div id='titlebar'>
+<div id='titlebar'>
   <div class='heading'>
     <span class='prefix' title='TODO'><?php echo html::icon($lang->icons['todo']) . ' #' . $todo->id;?></span>
     <strong><?php echo $todo->name;?></strong>
