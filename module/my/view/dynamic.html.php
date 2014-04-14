@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
-  <div class='heading'><i class='icon-volume-up'></i> <?php echo $lang->my->dynamic;?></div>
+  <div class='heading'><?php echo html::icon($lang->icons['dynamic']);?> <?php echo $lang->my->dynamic;?></div>
   <nav class='nav'>
     <?php 
     echo '<li id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</li>';
