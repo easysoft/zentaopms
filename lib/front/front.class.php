@@ -541,9 +541,11 @@ EOT;
             $halfStars = $stars - $redStars ? 1 : 0;
             $whiteStars = 5 - ceil($stars);
         }
-        for($i = 1; $i <= $redStars;   $i ++) echo "<img src='theme/default/images/raty/star-on.png' />";
-        for($i = 1; $i <= $halfStars;  $i ++) echo "<img src='theme/default/images/raty/star-half.png' />";
-        for($i = 1; $i <= $whiteStars; $i ++) echo "<img src='theme/default/images/raty/star-off.png' />";
+        echo "<span class='stars-list'>";
+        for($i = 1; $i <= $redStars;   $i ++) echo "<i class='icon-star'></i>";
+        for($i = 1; $i <= $halfStars;  $i ++) echo "<i class='icon-star-half-full'></i>";
+        for($i = 1; $i <= $whiteStars; $i ++) echo "<i class='icon-star-empty'></i>";
+        echo '</span>';
     }
 }
 

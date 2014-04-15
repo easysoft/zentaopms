@@ -134,6 +134,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .btn-icon.text-danger {color: #D2322D}
 .btn-icon.text-danger:hover {background: #D2322D; color: #fff}
 
+/* stars list */
+.stars-list {color: #E48600}
+
 /* === Views === */
 /* Table form */
 .table-form > tbody > tr > th {text-align:right;vertical-align:middle; border-bottom:none}
