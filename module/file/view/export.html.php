@@ -54,9 +54,7 @@ function switchEncode(fileType)
       <td>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
-          <?php
-            echo html::input('fileName', '', 'class=form-control');
-          ?>
+          <?php echo html::input('fileName', '', 'class=form-control');?>
         </div>
       </td>
       <td class='w-60px'>

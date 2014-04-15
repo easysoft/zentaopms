@@ -11,21 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table class='table-1'>
-  <caption><?php echo $title;?></caption>
-  <tr>
-    <td valign='middle'>
-    <?php
-    echo "<h3 class='a-center success'>{$title}</h3>";
-    if($removeCommands)
-    {
-        echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
-        echo join($removeCommands, '<br />');
-    }
-    echo "<p class='text-center'>" . html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"') . '</p>';
-    ?>
-    </td>
-  </tr>
-</table>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
+    <strong><?php echo $title;?></strong>
+    <small class='text-danger'><?php echo $lang->extension->deactivate;?> <?php echo html::icon($lang->icons['activate']);?></small>
+  </div>
+</div>
+<div class='alert alert-success'>
+  <i class='icon-ok-sign'></i>
+  <div class='content'>
+    <h3><?php echo $title;?></h3>
+    <?php if($removeCommands):?>
+    <p><strong><?php echo $lang->extension->unremovedFiles;?></strong></p>
+    <p><?php echo join($removeCommands, '<br />');?></p>
+    <?php endif;?>
+    <p class='text-center'><?php echo html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"');?></p>
+  </div>
+</div>
 </body>
 </html>

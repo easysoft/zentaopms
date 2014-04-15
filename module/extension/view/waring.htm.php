@@ -11,19 +11,21 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table class='table-1'>
-  <caption><?php echo $title;?></caption>
-  <tr>
-    <td valign='middle'>
-      <?php if($error):?>
-        <?php 
-        echo "<h3 class='error'>{$lang->extension->waringInstall}</h3>"; 
-        echo "<p>$error</p>";
-        echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');
-        ?>
-      <?php endif;?>
-    </td>
-  </tr>
-</table>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
+    <strong><?php echo $title;?></strong>
+  </div>
+</div>
+<?php if($error):?>
+<div class='alert alert-danger'>
+  <i class='icon-info-sign'></i>
+  <div class='content'>
+    <h3><?php echo $lang->extension->waringInstall;?></h3>
+    <p><?php echo $error;?></p>
+    <p class='text-center'><?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?></p>
+  </div>
+</div>
+<?php endif;?>
 </body>
 </html>

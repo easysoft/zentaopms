@@ -11,25 +11,41 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table class='table-1'>
-  <caption><?php echo $title;?></caption>
-  <tr>
-    <td valign='middle'>
-    <?php if(isset($confirm) and $confirm == 'no'):?>
-    <?php
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
+    <strong><?php echo $title;?></strong>
+    <small class='text-danger'><?php echo html::icon('cog');?> <?php echo $lang->extension->uninstall;?></small>
+  </div>
+</div>
+<?php if(isset($confirm) and $confirm == 'no'):?>
+<div class='alert alert-warning'>
+  <i class='icon-info-sign'></i>
+  <div class='content'>
+  <?php
     echo "<p class='waring'>{$lang->extension->confirmUninstall}";
     echo html::a(inlink('uninstall', "extension=$code&confirm=yes"), $lang->extension->uninstall, '', "class='btn'");
     echo "</p>";
     echo "<p>{$lang->extension->noticeBackupDB}</p>"
-    ?>
-    <?php elseif(!empty($error)):?>
-    <?php 
+  ?>
+  </div>
+</div>
+<?php elseif(!empty($error)):?>
+<div class='alert alert-danger'>
+  <i class='icon-info-sign'></i>
+  <div class='content'>
+  <?php
     echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>"; 
     echo "<p>$error</p>";
-    ?>
-    <?php else:?>
+  ?>
+  </div>
+</div>
+<?php else:?>
+<div class='alert alert-success'>
+  <i class='icon-ok-sign'></i>
+  <div class='content'>
     <?php
-    echo "<h3 class='a-center success'>{$title}</h3>";
+    echo "<h3>{$title}</h3>";
     if(!empty($backupFile)) echo '<p>' . sprintf($lang->extension->backDBFile, $backupFile) . '</p>';
     if($removeCommands)
     {
@@ -38,9 +54,8 @@
     }
     echo "<p class='text-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
     ?>
-    <?php endif;?>
-    </td>
-  </tr>
-</table>
+  </div>
+</div>
+<?php endif;?>
 </body>
 </html>

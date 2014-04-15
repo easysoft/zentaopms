@@ -32,16 +32,23 @@ function closeWindow()
     i ++;
 }
 </script>
-<br /><br />
-<form method='post' target='hiddenwin' onsubmit='setDownloading();'>
-  <table class='table-1'>
-    <caption><?php echo $lang->export;?></caption>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['export']);?></span>
+    <strong><?php echo $lang->export;?></strong>
+  </div>
+</div>
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
+  <table class='w-p100'>
     <tr>
-      <td class='text-center'>
-        <?php echo $lang->setFileName;?>
-        <?php echo html::input('fileName', '', 'size=15') . ".html";?>
-        <?php echo html::submitButton();?>
+      <td>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
+          <?php echo html::input('fileName', '', 'class=form-control');?>
+          <span class='input-group-addon'>.html</span>
+        </div>
       </td>
+      <td><?php echo html::submitButton($lang->export);?></td>
     </tr>
   </table>
 </form>

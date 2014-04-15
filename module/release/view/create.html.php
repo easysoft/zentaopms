@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-900px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['release']);?></span>
@@ -23,7 +23,7 @@
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
     <table class='table table-form'> 
       <tr>
-        <th class='w-80px'><?php echo $lang->release->name;?></th>
+        <th class='w-110px'><?php echo $lang->release->name;?></th>
         <td class='w-p45'>
           <div class='input-group'>
             <?php echo html::input('name', '', "class='form-control'");?>

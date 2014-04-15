@@ -17,8 +17,6 @@
     <strong><small class='text-muted'> <i class='icon-cog'></i></small> <?php echo $lang->webapp->install;?></strong>
   </div>
 </div>
-<div class='main'>
-</div>
 <form class='form-condensed' method='post' target='hiddenwin' style='padding: 40px 5%'>
   <table class='table table-form'>
     <tr>

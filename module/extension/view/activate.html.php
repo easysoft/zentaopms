@@ -11,23 +11,26 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<table class='table-1'>
-  <caption><?php echo $title;?></caption>
-  <tr>
-    <td valign='middle'>
-     <?php
-    if(isset($error) and $error)
-    {
-        echo $error;
-    }
-    else
-    {
-        echo "<h3 class='a-center success'>{$title}</h3>";
-        echo "<p class='text-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"') . '</p>';
-    }
-    ?>
-    </td>
-  </tr>
-</table>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
+    <strong><?php echo $title;?></strong>
+    <small class='text-success'><?php echo $lang->extension->activate;?> <?php echo html::icon($lang->icons['activate']);?></small>
+  </div>
+</div>
+<?php if(isset($error) and $error):?>
+<div class='alert alert-danger'>
+  <i class='icon-info-sign'></i>
+  <div class='content'><?php $error;?></div>
+</div>
+<?php else:?>
+<div class='alert alert-success'>
+  <i class='icon-ok-sign'></i>
+  <div class='content'>
+    <h3><?php echo $title;?></h3>
+    <p class='text-center'><?php echo html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"');?></p>
+  </div>
+</div>
+<?php endif;?>
 </body>
 </html>

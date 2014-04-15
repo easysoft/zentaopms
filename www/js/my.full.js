@@ -229,7 +229,7 @@ function setHelpLink()
         $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
     });
 
-    if($('a.helplink').size()) $("a.helplink").colorbox({width:600, height:240, iframe:true, transition:'none', scrolling:false});
+    $("a.helplink").modalTrigger({width:600, type:'iframe'});
 }
 
 /**
@@ -493,13 +493,13 @@ function setImageSize(image, maxWidth)
  */
 function setRepoLink()
 {
-    if($('.repolink').size()) $('.repolink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+    $('.repolink').modalTrigger({width:960, type:'iframe'});
 }
 
-/* Set the colorbox of export. */
+/* Set the modal dialog of export. */
 function setExport()
 {
-   // if($('.export').size()) $(".export").colorbox({width:650, height:240, iframe:true, transition:'none', scrolling:true});
+   $(".export").modalTrigger({width:650, type:'iframe'});
 }
 
 /**

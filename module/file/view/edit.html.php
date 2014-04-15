@@ -28,15 +28,23 @@ function closeWindow()
     clearInterval(time);
 }
 </script>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['edit']);?></span>
+    <strong><?php echo $lang->file->inputFileName;?></strong>
+  </div>
+</div>
 
-<form method='post' target='hiddenwin' onsubmit='setFileName();'>
-  <table class='table-1'>
-    <caption><?php echo $lang->file->inputFileName;?></caption>
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setFileName();' style='padding: 30px 5%'>
+  <table class='w-p100'>
     <tr>
-      <td class='text-center' style='padding-top:30px;'>
-        <?php echo html::input('fileName', $file->title) . "<strong>.{$file->extension}</strong>";?>
-        <?php echo html::submitButton();?>
+      <td>
+        <div class='input-group'>
+          <?php echo html::input('fileName', $file->title, "class='form-control'");?>
+          <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
+        </div>
       </td>
+      <td><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

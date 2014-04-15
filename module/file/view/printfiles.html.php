@@ -2,7 +2,7 @@
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
 ?>
-<style>.button-c {padding:1px}</style>
+<style> .files-list {margin: 0; max-width: 300px;} .files-list > .list-group-item {padding-right: 5px;} .files-list > .list-group-item a {color: #666} .files-list > .list-group-item:hover a {color: #333} .files-list > .list-group-item > .pull-right {opacity: 0.2; transition: all 0.3s;} .files-list > .list-group-item:hover > .pull-right {opacity: 1}</style>
 <script language='Javascript'>
 $(function(){
      $(".edit").modalTrigger({width:350, type:'iframe'});
@@ -28,17 +28,18 @@ function downloadFile(fileID)
 <fieldset>
   <legend><?php echo $lang->file->common;?></legend>
 <?php endif;?>
-  <div>
+  <div class='list-group files-list'>
   <?php
   foreach($files as $file)
   {
       if(common::hasPriv('file', 'download'))
       {
-          echo '<div>';
-          echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
-          common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit link-icon' title='{$lang->file->edit}'");
-          if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='link-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
-          echo '</div>';
+          echo "<li class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;";
+          echo '<strong>' . html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'") . '</strong>';
+          echo "<span class='pull-right'>";
+          common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit btn-icon' title='{$lang->file->edit}'");
+          if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
+          echo '</span></li>';
       }
   }
   ?>

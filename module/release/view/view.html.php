@@ -123,10 +123,6 @@
           </div>
           <div class='tab-pane' id='bugs'>
             <table class='table table-hover table-condensed table-borderless'>
-              <caption class='caption-t1'>
-                <?php echo $lang->release->bugs;?>
-                <div class='text-right'></div>
-              </caption>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -170,7 +166,7 @@
     <div class='main-side main'>
       <fieldset>
         <legend><?php echo $lang->release->basicInfo?></legend>
-        <table class='table-data'>
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
             <th class='w-80px'><?php echo $lang->release->product;?></th>
             <td><?php echo $release->productName;?></td>

@@ -258,8 +258,8 @@ $lang->company->menu->dept         = array('link' => '部门|dept|browse', 'subM
 $lang->company->menu->browseGroup  = array('link' => '权限|group|browse', 'subModule' => 'group');
 $lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = '动态|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<i class="icon-plus"></i>&nbsp;添加分组|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<i class="icon-green-user-batchCreate"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<i class="icon-group"></i>&nbsp;添加分组|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus-sign"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
