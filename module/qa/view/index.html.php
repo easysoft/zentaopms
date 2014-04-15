@@ -12,5 +12,5 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='doc3'>
-</div>  
+</div>
 <?php include '../../common/view/footer.html.php';?>

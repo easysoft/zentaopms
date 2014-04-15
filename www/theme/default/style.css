@@ -108,6 +108,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .actionbox ol {padding-left: 25px; line-height: 20px}
 .actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px}
 .actionbox #historyItem {margin:0}
+.actionbox blockquote {margin:0}
 
 /* zenicon */
 .icon-green-testcase-createCase:before,.icon-green-story-createCase:before,.icon-green-task-create:before,

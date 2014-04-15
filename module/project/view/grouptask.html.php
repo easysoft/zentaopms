@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treetable.html.php';?>
 <?php include './taskheader.html.php';?>
-<table class='table fixed' id='treetable'>
+<table class='table table-fixed' id='treetable'>
   <thead>
     <tr>
       <th class='w-120px'></th>

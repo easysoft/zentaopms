@@ -425,6 +425,7 @@ $lang->icons['team']      = 'group';
 $lang->icons['company']   = 'building';
 $lang->icons['user']      = 'user';
 $lang->icons['dept']      = 'sitemap';
+$lang->icons['tree']      = 'sitemap';
 $lang->icons['usecase']   = 'usecase';
 $lang->icons['testcase']  = 'smile';
 $lang->icons['result']    = 'flag-checkered';

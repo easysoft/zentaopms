@@ -11,29 +11,36 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' class='mt-10px' id='dataform'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->tree->edit;?></caption>
-    <?php $hidden = ($type != 'story' and $module->type == 'story');?>
-    <tr <?php if($hidden) echo "style='display:none'";?>>
-      <th><?php echo $lang->tree->parent;?></th>
-      <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control'");?></td>
-    </tr>
-    <tr <?php if($hidden) echo "style='display:none'";?>>
-      <th><?php echo $lang->tree->name;?></th>
-      <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
-    </tr>
-    <?php if($type == 'bug'):?>
-    <tr>
-      <th><?php echo $lang->tree->owner;?></th>
-      <td><?php echo html::select('owner', $users, $module->owner, "class='form-control'", true);?></td>
-    </tr>  
-    <?php endif;?>
-    <tr>
-      <td colspan='2' class='text-center'>
-      <?php echo html::submitButton();?>
-      </td>
-    </tr>
-  </table>
-</form>
+<div class='container mw-500px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['tree']);?></span>
+      <strong><small class='text-muted'><?php echo html::icon($lang->icons['edit']);?></small> <?php echo $lang->tree->edit;?></strong>
+    </div>
+  </div>
+  <form class='form-condensed' method='post' class='mt-10px' id='dataform'>
+    <table class='table table-form'> 
+      <?php $hidden = ($type != 'story' and $module->type == 'story');?>
+      <tr <?php if($hidden) echo "style='display:none'";?>>
+        <th class='w-80px'><?php echo $lang->tree->parent;?></th>
+        <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control'");?></td>
+      </tr>
+      <tr <?php if($hidden) echo "style='display:none'";?>>
+        <th class='w-80px'><?php echo $lang->tree->name;?></th>
+        <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
+      </tr>
+      <?php if($type == 'bug'):?>
+      <tr>
+        <th class='w-80px'><?php echo $lang->tree->owner;?></th>
+        <td><?php echo html::select('owner', $users, $module->owner, "class='form-control'", true);?></td>
+      </tr>  
+      <?php endif;?>
+      <tr>
+        <td colspan='2' class='text-center'>
+        <?php echo html::submitButton();?>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

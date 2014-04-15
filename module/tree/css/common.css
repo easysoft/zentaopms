@@ -2,3 +2,5 @@
 .copy {display:block; margin-bottom:5px;}
 
 .outer .row .col-md-8 .table-form {max-width: 600px}
+
+#moduleBox span > .form-control {margin-bottom: 5px;}
