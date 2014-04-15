@@ -13,24 +13,19 @@
 <?php if(isset($tips)):?>
 <?php $defaultURL = $this-> createLink('project', 'task', 'projectID=' . $projectID);?>
 <?php include '../../common/view/header.lite.html.php';?>
-<body>
-<script>
-$(document).ready(function() {$('#tipsModal').modal('show');});
-</script>
-<div class='modal fade' id='tipsModal'>
-  <div class='modal-dialog mw-500px'>
+<body style='background: #e5e5e5'>
+  <div class='modal-dialog mw-500px' id='tipsModal'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'>&times;</a>
-      <h4 class='modal-title' id='myModalLabel'><i class='icon-info-sign'></i></h4>
+      <h4 class='modal-title' id='myModalLabel'><i class='icon-ok-sign'></i> <?php echo $lang->project->tips;?></h4>
     </div>
     <div class='modal-body'>
-      <?php echo $tips;?>
+    <?php echo $tips;?>
     </div>
     <div class='modal-footer'>
       <div class='text-center'><a href='<?php echo $defaultURL;?>' class='btn btn-primary'><?php echo $lang->project->task;?> <i class='icon-arrow-right'></i></div></a>
     </div>
   </div>
-</div>
 </body>
 </html>
 <?php exit;?>

@@ -66,7 +66,7 @@ js::set('customed', $customed);
 if($customed)
 {
     include './browse.custom.html.php'; 
-    include '../../common/view/footer.lite.html.php';
+    include '../../common/view/footer.html.php';
     exit;
 }
 ?>

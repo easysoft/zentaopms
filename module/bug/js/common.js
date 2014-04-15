@@ -42,7 +42,7 @@ function loadAll(productID)
     if(changeProductConfirmed || firstChoice)
     {
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
-        $('#task').chosen({no_results_text: noResultsMatch});
+        $('#task').chosen(defaultChosenOptions);
         loadProductModules(productID); 
         loadProductProjects(productID); 
         loadProductBuilds(productID);
@@ -116,7 +116,7 @@ function loadProductBuilds(productID)
 
     if(page == 'create')
     {
-        $('#buildBox').load(link, function(){ notice(); });
+        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions)});
     }
     else
     {
@@ -219,7 +219,7 @@ function setStories(moduleID, productID)
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
         $('#story').replaceWith(stories);
         $('#story_chosen').remove();
-        $("#story").chosen({no_results_text: ''});
+        $("#story").chosen(defaultChosenOptions);
     });
 }
 
@@ -233,15 +233,18 @@ function notice()
 {
     if($('#openedBuild').find('option').length <= 1) 
     {
+        var html = '';
         if($('#project').val() == '')
         {
-            $('#buildBox').append('<a href="' + createLink('release', 'create','productID=' + $('#product').val()) + '" target="_blank">' + createRelease + ' </a>');
-            $('#buildBox').append('<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>');
+            html += '<a href="' + createLink('release', 'create','productID=' + $('#product').val()) + '" target="_blank">' + createRelease + ' </a>';
+            html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
         {
-            $('#buildBox').append('<a href="' + createLink('build', 'create','projectID=' + $('#project').val()) + '" target="_blank">' + createBuild + '</a>');
-            $('#buildBox').append('<a href="javascript:loadProjectBuilds(' + $('project').val() + ')">' + refresh + '</a>');
+            html += '<a href="' + createLink('build', 'create','projectID=' + $('#project').val()) + '" target="_blank">' + createBuild + '</a>';
+            html += '<a href="javascript:loadProjectBuilds(' + $('project').val() + ')">' + refresh + '</a>';
         }
+        var $bba = $('#buildBoxActions');
+        if($bba.length) $bba.html(html); else $('#buildBox').append(html);
     }
 }

@@ -18,7 +18,7 @@
         if($product->status == 'closed') $closeds++;
     }
  
-    if($iCharges and $others) echo "<span class='black'>{$lang->product->mine}</span>";
+    if($iCharges and $others) echo "<li class='heading'>{$lang->product->mine}</li>";
     foreach($products as $product)
     {
         if($product->status == 'normal' and $product->PO == $this->app->user->account) 
@@ -27,7 +27,7 @@
         }
     }
  
-    if($iCharges and $others) echo "<span class='black'>{$lang->product->other}</span>";
+    if($iCharges and $others) echo "<li class='heading'>{$lang->product->other}</li>";
     $class = ($iCharges and $others) ? "class='other'" : '';
     foreach($products as $product)
     {

@@ -49,7 +49,7 @@ KindEditor.plugin('savetemplate', function(K)
         click: function(id) 
         {
             content = self.html();
-            jPrompt(setTemplateTitle, '','', function(r)
+            bootbox.prompt(setTemplateTitle, function(r)
             {
                 if(!r || !content) return;
                 saveTemplateLink = createLink('bug', 'saveTemplate');
@@ -66,9 +66,10 @@ KindEditor.plugin('savetemplate', function(K)
 /* Set template. */
 function setTemplate(templateID)
 {
-    $('#tplTitleBox' + templateID).attr('style', 'text-decoration:underline; color:#8B008B');
+    $('#tplBox .list-group-item.active').removeClass('active');
+    $('#tplTitleBox' + templateID).closest('.list-group-item').addClass('active');
     steps = $('#template' + templateID).html();
-    editor.html(steps);
+    editor['#'].html(steps);
 }
 
 /* Delete template. */

@@ -14,7 +14,6 @@
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
 include '../../common/view/chosen.html.php';
-include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
@@ -35,7 +34,6 @@ js::set('refresh', $lang->refresh);
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td class='w-400px'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control' autocomplete='off'");?>
-
         </td>
         <td>
           <div class='input-group' id='moduleIdBox'>
@@ -64,6 +62,7 @@ js::set('refresh', $lang->refresh);
           <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
           </span>
         </td>
+        <td id='buildBoxActions'></td>
       </tr>
       <tr>
         <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
@@ -77,7 +76,7 @@ js::set('refresh', $lang->refresh);
         <th><?php echo $lang->bug->steps;?></th>
         <td colspan='2'><?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?></td>
         <td style='vertical-align: top;'>
-          <ul id='tplBox' style='list-unstyled'><?php echo $this->fetch('bug', 'buildTemplates');?></ul>
+          <ul id='tplBox' class='list-group'><?php echo $this->fetch('bug', 'buildTemplates');?></ul>
         </td>
       </tr>  
       <tr>

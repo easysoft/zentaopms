@@ -435,6 +435,7 @@ $lang->icons['app']       = 'th-large';
 
 $lang->icons['results']        = 'flag-checkered';
 $lang->icons['create']         = 'plus';
+$lang->icons['post']           = 'edit';
 $lang->icons['batchCreate']    = 'plus-sign';
 $lang->icons['batchEdit']      = 'edit-sign';
 $lang->icons['batchClose']     = 'off';

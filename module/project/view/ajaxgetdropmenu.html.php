@@ -18,7 +18,7 @@
         if($project->status == 'done') $dones++;
     }
  
-    if($iCharges and $others) echo "<span class='black'>{$lang->project->mine}</span>";
+    if($iCharges and $others) echo "<li class='heading'>{$lang->project->mine}</li>";
     foreach($projects as $project)
     {
         if($project->status != 'done' and $project->PM == $this->app->user->account)
@@ -27,7 +27,7 @@
         }
     }
  
-    if($iCharges and $others) echo "<span class='black'>{$lang->project->other}</span>";
+    if($iCharges and $others) echo "<li class='heading'>{$lang->project->other}</li>";
     $class = ($iCharges and $others) ? "class='other'" : '';
     foreach($projects as $project)
     {

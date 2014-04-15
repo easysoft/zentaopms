@@ -1,11 +1,9 @@
-<table align='center' class='table-3' style='margin-top:10px'> 
-  <caption><?php echo $lang->project->tips;?></caption>
-  <tr>
-    <td><?php echo $lang->project->afterInfo;?>
-    <div class='f-14px pt-10px'><?php echo $lang->arrow . html::a($this->createLink('project', 'team', "projectID=$projectID"), $lang->project->setTeam);?></div>
-    <div class='f-14px pt-10px'><?php echo $lang->arrow . html::a($this->createLink('project', 'linkstory', "projectID=$projectID"), $lang->project->linkStory);?></div>
-    <div class='f-14px pt-10px'><?php echo $lang->arrow . html::a($this->createLink('task', 'create', "project=$projectID"), $lang->project->createTask);?></div>
-    <div class='f-14px pt-10px'><?php echo $lang->arrow . html::a($this->createLink('project', 'task', "projectID=$projectID"), $lang->project->goback);?></div>
-    </td>
-  </tr>  
-</table>
+<div style='margin: 0 auto; max-width: 300px'>
+  <h6><?php echo $lang->project->afterInfo;?></h6>
+  <div class='list-group mg-0'>
+    <?php echo html::a($this->createLink('project', 'team', "projectID=$projectID"), $lang->project->setTeam . " <i class='icon-chevron-right pull-right'></i>", '', "class='list-group-item'");?>
+    <?php echo html::a($this->createLink('project', 'linkstory', "projectID=$projectID"), $lang->project->linkStory . " <i class='icon-chevron-right pull-right'></i>", '', "class='list-group-item'");?>
+    <?php echo html::a($this->createLink('task', 'create', "project=$projectID"), $lang->project->createTask . " <i class='icon-chevron-right pull-right'></i>", '', "class='list-group-item'");?>
+    <?php echo html::a($this->createLink('project', 'task', "projectID=$projectID"), $lang->project->goback . " <i class='icon-chevron-right pull-right'></i>", '', "class='list-group-item'");?>
+  </div>
+</div>
