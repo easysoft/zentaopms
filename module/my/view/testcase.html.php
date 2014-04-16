@@ -14,7 +14,6 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->testcase->confirmDelete)?>
 <div id='featurebar'>
-  <div class='heading'><i class='icon-list-alt'></i> <?php echo $lang->my->testCase;?></div>
   <nav class='nav'>
     <?php
     echo "<li id='testtask'>"      . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</li>";

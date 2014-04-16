@@ -44,7 +44,10 @@ tr.text-top td {vertical-align: top!important;}
 /* === Components === */
 /* Lable */
 .label-badge {padding: 2px 6px}
-/*small .label-badge, small.label-badge，.small.label-badge {padding: 2px 4px}*/
+
+/* dropdown */
+.dropdown-menu > li > a {font-size: 12px;}
+.dropdown-menu > .active > a {font-weight: bold;}
 
 /* hr */
 hr.small {margin: 10px 0}
@@ -272,7 +275,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 #searchbox {position: absolute; right: 0; top: 1px; width: 220px; border-radius: 12px; overflow: hidden;}
 #searchbox.input-group .form-control, #searchbox.input-group .btn {width: 50%; padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0}
-#searchbox.input-group .btn {height: 24px; width: 30px; color: #666}
+#searchbox.input-group .btn {height: 24px; width: 40px; color: #666}
 #searchbox.input-group select.form-control {color: #666}
 #searchbox .btn, #searchbox .form-control {border-radius: 0}
 
@@ -322,19 +325,19 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #crumbs a i.icon-home{display: none;}
 #crumbs {float: left;margin-left: 20px;}
 #crumbs .icon-angle-right{margin-right: 6px;}
-#poweredby {float: right;margin-right: 20px;}
+#footer #poweredby {float: right; margin-right: 20px;}
 
 /* Feature bar. */
-#featurebar {padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px;}
+#featurebar {padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px; min-height: 30px\0;}
 #featurebar .heading {float: left; padding: 0 5px; color: #666}
 #featurebar .heading:after {content: "\e6e1"; font-family: ZenIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
 #featurebar .heading > i {color: #808080}
 
 #featurebar .nav {height: 30px; float: left;}
 #featurebar .nav > li {float: left; margin-right: 2px;}
-#featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px; margin-right: 10px;}
+#featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px; height: 26px\0; margin-right: 10px;}
 #featurebar .nav > li > .form-control.form-date {width: 110px}
-#featurebar .nav > li.datepicker-wrapper:before {right: 15px; top: 0}
+#featurebar .nav > li.datepicker-wrapper:before {right: 15px; top: 0; top: -2px\0;}
 #featurebar .nav > li > a {padding: 0px 6px;}
 #featurebar .nav > li.active > a, #featurebar .nav > li.active > a:hover, #featurebar .nav > li.active > a:active, #featurebar .nav > li.active > a:focus {font-weight: bold; color: #333}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}
@@ -356,15 +359,26 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar.with-sub > .nav > li.active > a {border: 1px solid #ddd; position: relative; border-bottom: none; background: #fff; padding: 2px 15px 5px}
 
 /* Title bar. */
-#titlebar {background: #F8FAFE; border-bottom: 1px solid #e5e5e5; min-height: 46px; padding: 15px 20px 10px; vertical-align: bottom; position: relative;}
+#titlebar {background: #F8FAFE; border-bottom: 1px solid #e5e5e5; min-height: 46px; min-height: 20px\0; padding: 13px 20px; vertical-align: bottom; position: relative;}
 #titlebar > .heading {font-size: 14px; line-height: 20px; }
-#titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666; border-radius: 4px; margin-bottom: 5px;}
-#titlebar > .heading > .prefix > i {font-size: 28px; vertical-align: middle; color: #808080}
-#titlebar > .heading > strong {display: inline-block; vertical-align: middle; margin-right: 5px;}
+#titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666; border-radius: 4px;}
+#titlebar > .heading > .prefix > i {font-size: 14px; color: #808080}
+#titlebar > .heading > strong {display: inline-block; margin-right: 5px;}
+#titlebar > .heading > strong > i, #titlebar > .heading > strong > small > i {display: none}
 #titlebar > .heading > small > i {position: relative; top: 1px;}
-#titlebar .actions {position: absolute; right: 20px; top: 13px;}
+#titlebar .actions {position: absolute; right: 20px; top: 8px;}
 #titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
 #titlebar .actions > .text {display: inline-block; margin-left: 8px; line-height: 30px}
+
+/* Button in titlebar and featurebar */
+#featurebar > .actions .btn:not(.btn-primary), #titlebar > .actions .btn:not(.btn-primary), #featurebar > .pull-right .btn:not(.btn-primary), #titlebar > .pull-right .btn:not(.btn-primary) {border-color: transparent; background: none; box-shadow: none; padding: 4px 8px; border-radius: 2px; text-shadow: none;}
+#featurebar > .actions .btn:not(.btn-primary):hover, #titlebar > .actions .btn:not(.btn-primary):hover ,#featurebar > .pull-right .btn:not(.btn-primary):hover, #titlebar > .pull-right .btn:not(.btn-primary):hover{background: #ddd; border-color: #ddd;}
+
+/* Following style to fixed ie8 */
+#featurebar > .actions .btn, #titlebar > .actions .btn, #featurebar > .pull-right .btn, #titlebar > .pull-right .btn {border-color: transparent\0; background: none\0; box-shadow: none\0; padding: 4px 8px\0;}
+#featurebar > .actions .btn:hover, #titlebar > .actions .btn:hover ,#featurebar > .pull-right .btn:hover, #titlebar > .pull-right .btn:hover{background: #ddd\0; border-color: #ddd\0;}
+#featurebar > .actions .btn.btn-primary, #titlebar > .actions .btn.btn-primary, #featurebar > .pull-right .btn.btn-primary, #titlebar > .pull-right .btn.btn-primary {border-color: #103152\0; background: #1A4F85\0; padding: 4px 8px\0; color: #e5e5e5}
+#featurebar > .actions .btn.btn-primary:hover, #titlebar > .actions .btn.btn-primary:hover ,#featurebar > .pull-right .btn.btn-primary:hover, #titlebar > .pull-right .btn:hover{background: #133B63\0; border-color: #0C243C\0; color: #fff}
 
 /* table in outer */
 .outer .table {margin-bottom: 0;}
@@ -373,8 +387,8 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
 .outer .table th {vertical-align: middle;}
-.outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 15px}
-.outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 15px}
+.outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 20px}
+.outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 20px}
 .outer .table.table-form tr > th:last-child, .outer .table.table-form tr > td:last-child {padding-right: 5px}
 .outer .table.table-form.table-fixed tr > th:last-child, .outer .table.table-form.table-fixed tr > td:last-child {padding-right: 15px}
 .outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5;}

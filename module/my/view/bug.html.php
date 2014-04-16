@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
-  <div class='heading'><i class='icon-bug'></i> <?php echo $lang->my->bug;?></div>
   <ul class='nav'>
     <?php
     echo "<li id='assignedToTab'>"  . html::a(inlink('bug', "type=assignedTo"),  $lang->bug->assignToMe)    . "</li>";

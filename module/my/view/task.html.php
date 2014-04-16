@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <script language="Javascript">var type='<?php echo $type;?>';</script>
 <div id='featurebar'>
-  <div class='heading'><i class='icon-tasks'></i> <?php echo $lang->my->task;?></div>
   <ul class='nav'>
     <?php
     echo "<li id='assignedToTab'>" . html::a(inlink('task', "type=assignedTo"),  $lang->my->taskMenu->assignedToMe) . "</li>";

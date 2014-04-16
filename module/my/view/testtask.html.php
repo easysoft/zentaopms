@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id='featurebar'>
-  <div class='heading'><i class='icon-list-alt'></i> <?php echo $lang->my->testTask;?></div>
   <nav class='nav'>
     <?php
     echo "<li id='testtaskTab'>"   . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</li>";

@@ -392,7 +392,7 @@ class commonModel extends model
         echo "<div class='input-group input-group-sm' id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject, "class='form-control'");
         echo html::input('searchQuery', '', "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'");
-        echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();return false;' class='btn'><i class='icon-circle-arrow-right'></i></a></div>";
+        echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();return false;' class='btn'>GO! </a></div>";
         echo "</div>\n";
     }
 
@@ -547,7 +547,7 @@ class commonModel extends model
     public static function printQRCodeLink($color = '')
     {
         global $lang;
-        echo html::a(helper::createLink('misc', 'qrCode'), "<i class='icon-mobile-phone icon-large'></i> " . $lang->user->mobileLogin, '', "class='qrCode iframe $color' data-width='340'");
+        echo html::a(helper::createLink('misc', 'qrCode'), "<i class='icon-mobile-phone icon-large'></i> " . $lang->user->mobileLogin, '', "class='qrCode iframe $color' data-width='340' data-class='modal-qrcode'");
     }
 
     /**

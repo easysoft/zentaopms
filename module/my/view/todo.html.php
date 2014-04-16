@@ -15,7 +15,6 @@
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
-    <div class='heading'><?php echo html::icon($lang->icons['todo']);?> <?php echo $lang->my->todo;?>  </div>
     <ul class='nav'>
       <?php 
       foreach($lang->todo->periods as $period => $label)
