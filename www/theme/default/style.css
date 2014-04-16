@@ -130,9 +130,9 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .done, [class$="-done"]  {color:#078F0E;}
 .wait, [class$="-wait"]  {color:#888;}
 .doing, [class$="-doing"]  {color:#F30;}
-.delayed, [class$="-delayed"] {background:#e84e0f; color:white;}
+.delayed, [class$="-delayed"] {background:#e84e0f!important; color:white;}
 .pass, [class$="-pass"]  {color:#078F0E;}
-.blocked, [class$="-blocked"] {background:yellow;}
+.blocked, [class$="-blocked"] {background:yellow!important;}
 .fail, [class$="-fail"]  {color:red}
 
 /* === Views === */
@@ -555,18 +555,17 @@ select.select-3{width: 250px;}
 .area-4{width: 360px}
 .area-5{width: 480px}
 
-/*-----------------------NAV----------------------------*/
-/* The nav bar. */
-.navbar ul {margin:0; padding:0;}
-.navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none;}
-.navbar li>a {text-decoration:none;-webkit-transition: all .2s;-o-transition: all .2s;-moz-transition: all .2s;transition: all .2s;}
-.navbar li>a:hover {color:#ff3600;}
-
-/*-----------------------SPECIAL PART SETTING--------------------*/
 /* Tree menu. */
-.tree li  {list-style-type:none;}
-.tree .active {color:blue; font-weight:bold}
-.tree a  {color:#003366}
+.tree {padding: 0; margin: 0;}
+.tree li,.tree ul {margin: 0; padding: 0; display: block; position: relative;}
+.tree > li {margin-right: 20px; font-weight: 400; padding-bottom: 8px;}
+.tree > li > ul li {padding: 10px 15px 0; margin: 0;}
+.tree li:before {display: inline-block; margin-right: 6px; content: '\e6ec'; font-family: ZenIcon; color: #ddd;}
+.tree > li ul {border-left: 1px dashed #ccc; margin-left: 7px; font-weight: normal;}
+.tree > li ul > li:before {content: '\e6e8';}
+.tree > li ul > li:hover:before {content: '\e6ec';}
+.tree > li ul > li:after {position: absolute; display: block; content: ""; width: 15px; left: -1px; top: 20px; height: 20px; border-top: 1px dashed #ccc;}
+.tree > li > ul li:last-child:after {border-left: 1px solid #fff;}
 
 /* Select all and select reverse. */
 #allchecker, #reversechecker {padding-right: 5px;padding-left: 5px;}

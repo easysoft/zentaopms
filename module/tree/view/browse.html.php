@@ -61,22 +61,22 @@
                 {
                     if($allProject)
                     {
-                        echo "<span class='copy'>";
+                        echo "<div class='copy'>";
                         echo html::select('allProject', $allProject, '', "class='form-control' onchange=\"syncProductOrProject(this,'project')\"");
                         echo html::select('projectModule', $projectModules, '', "class='form-control'");
                         echo html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'");
-                        echo '</span>';
+                        echo '</div>';
                     }
                 }
                 else if($viewType == 'story')
                 {
                     if($allProduct)
                     {
-                        echo "<span class='copy'>";
+                        echo "<div class='copy'>";
                         echo html::select('allProduct', $allProduct, '', "class='form-control' onchange=\"syncProductOrProject(this,'product')\"");
                         echo html::select('productModule', $productModules, '', "class='form-control'");
                         echo html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'");
-                        echo '</span>';
+                        echo '</div>';
                     }
                 }
                 $maxOrder = 0;

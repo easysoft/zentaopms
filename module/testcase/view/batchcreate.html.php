@@ -19,7 +19,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->testcase->batchCreate;?></strong>
     <?php if($story):?>
-    <small><?php echo html::icon($lang->icons['story']) . '#' . $story->id . ' ' . $story->title ?></small>
+    <small class='text-muted'><?php echo html::icon($lang->icons['story']) . ' ' . $story->title ?></small>
     <?php endif;?>
   </div>
 </div>

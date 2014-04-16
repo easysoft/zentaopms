@@ -4,3 +4,6 @@
 .outer .row .col-md-8 .table-form {max-width: 600px}
 
 #moduleBox span > .form-control {margin-bottom: 5px;}
+#moduleBox .copy {display: table; width: 100%}
+#moduleBox .copy > .form-control, #moduleBox .copy > .btn {display: table-cell; width: auto}
+#moduleBox .copy > .form-control {margin-right: -1px; min-width: 100px}
