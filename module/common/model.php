@@ -229,7 +229,7 @@ class commonModel extends model
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
-        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true'");
         echo $lang->agileTraining;
         echo "<div class='dropdown' id='langSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->config->langs[$app->cookie->lang] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
         foreach ($app->config->langs as $key => $value)
