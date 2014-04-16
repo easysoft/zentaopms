@@ -6,7 +6,7 @@
 .card:hover > .media {background: #e5e5e5}
 .card:hover > .media > .icon {color: #ccc}
 .card .card-content {padding: 10px 25px}
-.card-content > ul {padding-left: 20px;}
+.card-content > ul {padding-left: 10px;}
 .card-content > ul > li {margin-bottom: 3px;}
 
 .card-about.card:hover > .media {background: #E5F9FF}

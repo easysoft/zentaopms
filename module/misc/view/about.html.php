@@ -1,7 +1,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table table-form'>
   <tr>
-    <td class='side a-center'>
+    <td class='text-center w-160px'>
       <img src='theme/default/images/main/logo2.png' />
       <h4><?php printf($lang->misc->zentao->version, $config->version);?></h4>
     </td>
