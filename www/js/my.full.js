@@ -898,11 +898,17 @@ function setModal()
                         }
                         if(options.height == 'auto')
                         {
+                            var $framebody = $frame.find('body');
                             setTimeout(function()
                             {
-                                modalBody.css('height', $frame.find('body').addClass('body-modal').outerHeight());
+                                modalBody.css('height', $framebody.addClass('body-modal').outerHeight());
                                 modal.removeClass('modal-loading');
                             }, 100);
+
+                            $framebody.resize(function()
+                            {
+                                modalBody.css('height', $framebody.outerHeight());
+                            });
                         }
 
                         var iframe$ = window.frames[options.name].$;
