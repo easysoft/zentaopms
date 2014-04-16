@@ -77,7 +77,6 @@ function shortcut()
  */
 function showDropMenu(objectType, objectID, module, method, extra)
 {
-    console.log(arguments);
     var li = $('#currentItem').closest('li');
     if(li.hasClass('show')) {li.removeClass('show'); return;}
 
@@ -845,13 +844,14 @@ function setModal()
             {
                 var options = 
                 {
-                    url:    url,
-                    width:  $e.data('width') || 800,
-                    height: $e.data('height') || 'auto',
-                    icon:   $e.data('icon') || '?',
-                    title:  $e.data('title') || $e.attr('title') || $e.text(),
-                    name:   $e.data('name') || 'modalIframe',
-                    cssClass: $e.data('class')
+                    url:      url,
+                    width:    $e.data('width') || 800,
+                    height:   $e.data('height') || 'auto',
+                    icon:     $e.data('icon') || '?',
+                    title:    $e.data('title') || $e.attr('title') || $e.text(),
+                    name:     $e.data('name') || 'modalIframe',
+                    cssClass: $e.data('class'),
+                    headerless: $e.data('headerless') || false
                 }
                 options = $.extend(options, setting);
                 
@@ -863,6 +863,10 @@ function setModal()
                     options.width = $w.width();
                     options.height = $w.height();
                     options.cssClass += ' fullscreen';
+                }
+                if(options.headerless)
+                {
+                    options.cssClass += ' hide-header';
                 }
 
                 if(options.icon == '?')
@@ -1062,7 +1066,6 @@ function setSyncTrigger()
         var $this = $(this);
         var val = $this.prop('tagName') == 'INPUT' ? $this.val() : $this.html();
         var target = $($this.attr('data-sync-target'));
-        console.log(target);
         if(target.prop('tagName') == 'INPUT') target.val(val);
         else target.html(val);
     });

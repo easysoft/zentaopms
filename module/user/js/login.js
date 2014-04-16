@@ -6,7 +6,6 @@ $(document).ready(function()
     $("#langs li > a").click(function() 
     {
         selectLang($(this).data('value'));
-        console.log($(this).data('value'));
     });
 
     $('#mobile').popover({html: true, container: 'body'});
