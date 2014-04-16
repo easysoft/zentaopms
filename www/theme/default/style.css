@@ -446,7 +446,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: 1px solid #ddd}
 .outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}
 .outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 8px}
-.outer .side {width: 180px; position: absolute; left: 20px; background: #fafafa;}
+.outer .side {width: 180px; position: absolute; left: 20px;}
 .outer .side-body {overflow: hidden;}
 .outer .side-body .panel {min-width: 180px}
 .outer .side-body .panel-body {padding: 10px;}
