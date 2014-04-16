@@ -1,3 +1,4 @@
+<?php if($config->debug):?>
 <div id='debugPanel'>
   <header>
     <div class='actions pull-right'><i id='debugHandle' class='icon-chevron-up'></i></div>
@@ -80,3 +81,6 @@ $(function()
     window.debug = new debug('Debug');
 });
 </script>
+<?php else:?>
+<iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
+<?php endif;?>

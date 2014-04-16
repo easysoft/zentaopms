@@ -80,7 +80,7 @@ hr.small {margin: 10px 0}
 
 /* Datepicker */
 .datepicker-wrapper {position: relative;}
-.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 0}
+.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px}
 .datepicker-wrapper > .form-control {padding-right: 30px;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
@@ -334,7 +334,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .nav > li {float: left; margin-right: 2px;}
 #featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px; margin-right: 10px;}
 #featurebar .nav > li > .form-control.form-date {width: 110px}
-#featurebar .nav > li.datepicker-wrapper:before {right: 15px}
+#featurebar .nav > li.datepicker-wrapper:before {right: 15px; top: 0}
 #featurebar .nav > li > a {padding: 0px 6px;}
 #featurebar .nav > li.active > a, #featurebar .nav > li.active > a:hover, #featurebar .nav > li.active > a:active, #featurebar .nav > li.active > a:focus {font-weight: bold; color: #333}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}
@@ -591,3 +591,6 @@ select.select-3{width: 250px;}
 .severity4 {background-color: #dcbe1a;}
 .severity5 {background-color: #d0d836;}
 .severity6 {background-color: #99c323;}
+
+/* debug panel */
+#debugPanel {display: none}

@@ -6,7 +6,7 @@
 <?php if($onlybody != 'yes'):?>
 </div><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id='footer'>
-  <?php if($config->debug) include 'debug.html.php';?>
+  <?php include 'debug.html.php';?>
   <div id="crumbs">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
   </div>
