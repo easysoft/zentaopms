@@ -205,6 +205,8 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 /* Table condensed */
 .table-condensed th, .table-condensed td {padding: 6px 5px;}
 
+ .input-group > select.form-control {float:left; margin-left: -1px;} 
+
 /* chosen container in input group */
 .input-group > .chosen-container {display: table-cell;}
 
