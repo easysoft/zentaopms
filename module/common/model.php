@@ -547,7 +547,9 @@ class commonModel extends model
     public static function printQRCodeLink($color = '')
     {
         global $lang;
-        echo html::a(helper::createLink('misc', 'qrCode'), "<i class='icon-mobile-phone icon-large'></i> " . $lang->user->mobileLogin, '', "class='qrCode iframe $color' data-width='340' data-class='modal-qrcode'");
+        echo html::a('javascript:;', "<i class='icon-mobile-phone icon-large'></i> " . $lang->user->mobileLogin, '', "class='qrCode $color' id='qrcodeBtn'");
+        echo "<div class='popover top' id='qrcodePopover'><div class='arrow'></div><h3 class='popover-title'>{$lang->user->mobileLogin}</h3><div class='popover-content'><img src=\"" . helper::createLink('misc', 'qrCode') . "\"></div></div>";
+        echo '<script>$(function(){$("#qrcodeBtn").click(function(){$("#qrcodePopover").toggleClass("show");}); $("#wrap").click(function(){$("#qrcodePopover").removeClass("show");});});</script>';
     }
 
     /**
