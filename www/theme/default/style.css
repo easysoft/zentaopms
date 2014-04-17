@@ -126,6 +126,15 @@ hr.small {margin: 10px 0}
 /* alert */
 .alert>[class*="icon-"]+.content {padding-left: 2em;}
 
+/* datetime picker */
+.datetimepicker {border-radius: 0!important; background: #fafafa; font-size: 12px}
+.datetimepicker .datetimepicker-days td, .datetimepicker .datetimepicker-days th {width: 22px!important; padding: 1px 0 !important}
+.datetimepicker .datetimepicker-days td, .datetimepicker .datetimepicker-days th.dow {border: 1px solid #ddd !important; border-radius: 0!important}
+.datetimepicker .datetimepicker-days thead th {padding-bottom: 5px!important;}
+.datetimepicker .datetimepicker-days th.dow {background: #e5e5e5; border-color: #ccc!important}
+.datetimepicker th.switch {width: 120px!important}
+.datetimepicker .datetimepicker-years table tr td span, .datetimepicker .datetimepicker-months table tr td span {width: 42px; height: 42px; line-height: 42px; border: 1px solid #ddd; margin: -1px 0 0 -1px; border-radius: 0}
+
 /* code */
 code {margin-left: 0;}
 
@@ -147,7 +156,6 @@ code {margin-left: 0;}
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{font-size: 14px}
 
 i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before {color: #ccc; cursor:not-allowed}
-
 
 /* Icon rotate */
 .icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
@@ -242,7 +250,7 @@ form .star {display: none;}/* hide star */
 .table-form > thead > tr > th.required:after {top: 2px; padding-left: 4px;}
 
 /* Auto Height textarea */
-div.form-control[contenteditable='true'] {height: auto; text-align: left; outline: 0; overflow-x: hidden; overflow-y: auto;}
+div.form-control[contenteditable='true'] {height: auto; text-align: left; outline: 0; overflow-x: hidden; overflow-y: auto; min-height: 30px}
 
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
@@ -291,13 +299,12 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #header {padding: 12px 20px 0; background:#003366;}
 
 #topbar {color: #ACCADF;}
-#topbar > .pull-right {margin-top: -2px;}
-#topnav .dropdown {display: inline-block;}
+#topbar > .pull-right {margin-top: -4px;}
 #topnav .dropdown-menu {min-width: 100px;}
 #topnav > .dropdown .caret {border-top-color: #fff}
-#topnav > .dropdown, #topnav > a {display: inline-block; margin-left: 5px;}
-#topnav > .dropdown:before, #topnav > a:before {content: '|'; display: inline-block; margin-right: 6px; color: #999}
-#topnav > *:first-child:before {display: none}
+#topnav > .dropdown, #topnav > a {display: block; float: left; padding: 3px 10px; position: relative;}
+#topnav > .dropdown:hover, #topnav > .dropdown.open, #topnav > a:hover {background: #185695}
+#topnav > a:before {content: ' '; display: block; position: absolute; left: -1px; border-left: 1px solid #999; height: 14px; top: 4px}
 #topnav > a, #topnav > .dropdown > a, #companyname a {color:#d1e4f2;text-decoration:none;}
 #topnav > a:hover, #topnav > .dropdown > a:hover, #companyname a:hover {color: #fff;}
 #companyname {color:#ffcc00; font-weight: normal; margin: 0}
@@ -310,15 +317,16 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #mainmenu li.active > a { background-color:#e5e5e5;color:#21841d; font-weight:bold;}
 
 #searchbox {position: absolute; right: 0; top: 1px; width: 220px; border-radius: 12px; overflow: hidden;}
-#searchbox.input-group .form-control, #searchbox.input-group .btn {width: 50%; padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0}
+#searchbox.input-group .form-control, #searchbox.input-group .btn {width: 50%; padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}
 #searchbox.input-group .btn {height: 24px; width: 40px; color: #666}
-#searchbox.input-group select.form-control {color: #666; border-right: 0}
+#searchbox .form-control {color: #666; border-left: 0}
+#searchbox input.form-control {border-right: 0;}
 #searchbox .btn, #searchbox .form-control {border-radius: 0}
 #searchbox .btn {margin-left: -1px\0;}
 
 /* Module menu. */
 #modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative; height: 40px;}
-#modulemenu .nav > li {line-height: 30px; padding:5px 0px 1px;display: block; float: left;}
+#modulemenu .nav > li {line-height: 30px; padding:5px 0px 1px;display: block; float: left; color: #808080}
 #modulemenu .nav > li > .dropdown > a {border: 1px solid transparent;}
 #modulemenu .nav > li > .dropdown > .dropdown-menu {border-radius: 0; margin-top: -2px; border-top: 0}
 #modulemenu .nav > li > a, #modulemenu .nav > li > .dropdown > a {display: block; padding: 0 7px; color:#003366}
@@ -326,7 +334,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #modulemenu .nav > li.active > a,#modulemenu .nav > li.active > a:hover {color:#21841d; font-weight:bold; }
 #modulemenu .nav > li.right {float:right; font-weight:bold;}
 #modulemenu .nav > li.right > a {font-weight:bold}
-#modulemenu #myname {display: inline-block; color: #808080; line-height: 34px;}
+#modulemenu #myname {display: inline-block; line-height: 30px; line-height: 26px\0}
 
 /* Drop menu. */
 #dropMenu {background: #fff; position:absolute; display:none; font-size:12px; z-index:9999; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);border: 1px solid #CBCBCB; border: 1px solid rgba(0, 0, 0, 0.15); top: 36px; border-top: none; min-width: 250px; padding: 10px 15px;}
@@ -457,7 +465,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* Container in outer */
 .outer > .container {margin: 20px auto; padding: 0; border: 1px solid #ddd;}
-.outer > .container > form {padding: 10px 15px}
+.outer > .container > form {padding: 10px 30px 10px 15px}
 .outer > .container > .table.table-data {margin: 10px 0}
 
 /* Main content in outer */

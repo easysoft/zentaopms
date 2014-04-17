@@ -18,7 +18,7 @@
 #bysearchTab.active:hover {background: #f1f1f1}
 #bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
 #featurebar .nav {z-index: 999; position: relative;}
-#querybox .form-control {padding: 2px;}
+#querybox .form-control {padding: 2px; padding: 6px 2px\0;}
 #querybox .table-form td {border: none}
 #querybox .btn {padding: 5px 8px;}
 #querybox .table-form td td {padding: 2px;}
