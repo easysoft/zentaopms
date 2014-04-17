@@ -40,8 +40,8 @@ $config->views  = ',html,json,mhtml,';
 $config->wideSize = 1400;
 
 /* Supported languages. */
-$config->langs['zh-cn'] = '中文简体';
-$config->langs['zh-tw'] = '中文繁體';
+$config->langs['zh-cn'] = '简体';
+$config->langs['zh-tw'] = '繁體';
 $config->langs['en']    = 'English';
 
 /* Supported charsets. */

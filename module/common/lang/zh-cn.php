@@ -122,7 +122,11 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
+/* 语言 */
+$lang->lang = '语言';
+
 /* 风格列表。*/
+$lang->theme               = '主题';
 $lang->themes['default']   = '默认';
 $lang->themes['green']     = '绿色';
 $lang->themes['red']       = '红色';

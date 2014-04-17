@@ -219,30 +219,38 @@ class commonModel extends model
     {
         global $lang, $app;
 
-        printf($lang->todayIs, date(DT_DATE4));
-        if(isset($app->user)) echo $app->user->realname . ' ';
-        if(isset($app->user) and $app->user->account != 'guest')
+        if(isset($app->user))
         {
-            echo html::a(helper::createLink('user', 'logout'), $lang->logout);
-        }
-        else
-        {
-            echo html::a(helper::createLink('user', 'login'), $lang->login);
+            echo "<div class='dropdown' id='userMenu'>";
+            echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
+            if($app->user->account == 'guest')
+            {
+                echo ' &nbsp; ' . html::a(helper::createLink('user', 'login'), $lang->login);
+            }
+
+            echo "<ul class='dropdown-menu pull-right'>";
+            if($app->user->account != 'guest')
+            {
+                echo '<li>' . html::a(helper::createLink('user', 'logout'), $lang->logout) . '</li>';
+                echo "<li class='divider'></li>";
+            }
+
+            echo "<li class='dropdown-header'>" . $lang->theme . '</li>';
+            foreach ($app->lang->themes as $key => $value)
+            {
+                echo "<li class='theme-option" . ($app->cookie->theme == $key ? " active" : '') . "'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+            }
+
+            echo "<li class='divider'></li>";
+            echo "<li class='dropdown-header'>" . $lang->lang . '</li>';
+            foreach ($app->config->langs as $key => $value)
+            {
+                echo "<li class='lang-option" . ($app->cookie->lang == $key ? " active" : '') . "'><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+            }
+            
+            echo '</ul></div>';
         }
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true'");
-        echo $lang->agileTraining;
-        echo "<div class='dropdown' id='langSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->config->langs[$app->cookie->lang] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
-        foreach ($app->config->langs as $key => $value)
-        {
-            echo "<li" . ($app->cookie->lang == $key ? " class='active'" : '') . "><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
-        }
-        echo '</ul></div>';
-        echo "<div class='dropdown' id='themeSelection'><a href='javascript:;' data-toggle='dropdown'>" . $app->lang->themes[$app->cookie->theme] . " <span class='caret'></span></a><ul class='dropdown-menu pull-right'>";
-        foreach ($app->lang->themes as $key => $value)
-        {
-            echo "<li" . ($app->cookie->theme == $key ? " class='active'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
-        }
-        echo '</ul></div>';
     }
 
     /**
