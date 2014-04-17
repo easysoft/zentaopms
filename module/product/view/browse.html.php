@@ -152,7 +152,6 @@
                     foreach($lang->story->reviewResultList as $key => $result)
                     {
                         $actionLink = $this->createLink('story', 'batchReview', "result=$key");
-                        echo "<li>";
                         if($key == 'reject')
                         {
                             echo "<li class='dropdown-submenu'>";
@@ -173,9 +172,8 @@
                         }
                         else
                         {
-                            echo html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+                          echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
                         }
-                        echo "</li>";
                     }
                     echo '</ul></li>';
                 }
