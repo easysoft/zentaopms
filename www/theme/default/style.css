@@ -111,6 +111,7 @@ hr.small {margin: 10px 0}
 .tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \e6be";font-size: 14px;color:#2973EA;}
 
 .table tr.active td, .table-hover>tbody>tr.active:hover>td, .table-hover>tbody>tr.active:hover>th, .table-striped>tbody>tr.active:nth-child(odd).active>td, .table-striped>tbody>tr.active:nth-child(odd)>th {background-color: #FCE6A2}
+.table tr>td.active, .table tr>th.active, .table tr.active>td, .table tr.active>th {background-color: #FCE6A2}
 
 .table caption {padding: 8px 20px; border-bottom: 1px solid #ddd; background: #fafafa;}
 .table.table-condensed caption {padding: 6px 15px;}
@@ -152,8 +153,8 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
 
 /* Button icon */
-.btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0; color: #498CD0; text-align: center;}
-.btn-icon > i {color: #498CD0}
+.btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0; color: #4d90fe; text-align: center;}
+.btn-icon > i {color: #4d90fe}
 .btn-icon:hover {text-decoration: none; background: #145CCD; color: #fff;}
 .btn-icon:hover > i {color: #fff}
 .btn-icon.disabled:hover, .btn-icon.disabled:hover > i {background: none!important; color: #ccc!important; cursor: default}
@@ -311,8 +312,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #searchbox {position: absolute; right: 0; top: 1px; width: 220px; border-radius: 12px; overflow: hidden;}
 #searchbox.input-group .form-control, #searchbox.input-group .btn {width: 50%; padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0}
 #searchbox.input-group .btn {height: 24px; width: 40px; color: #666}
-#searchbox.input-group select.form-control {color: #666}
+#searchbox.input-group select.form-control {color: #666; border-right: 0}
 #searchbox .btn, #searchbox .form-control {border-radius: 0}
+#searchbox .btn {margin-left: -1px\0;}
 
 /* Module menu. */
 #modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative; height: 40px;}
@@ -376,7 +378,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px; height: 26px\0; margin-right: 10px;}
 #featurebar .nav > li > .form-control.form-date {width: 110px}
 #featurebar .nav > li.datepicker-wrapper:before {right: 15px; top: 0; top: -2px\0;}
-#featurebar .nav > li > a {padding: 0px 6px;}
+#featurebar .nav > li > a {padding: 0px 4px;}
 #featurebar .nav > li.active > a, #featurebar .nav > li.active > a:hover, #featurebar .nav > li.active > a:active, #featurebar .nav > li.active > a:focus {font-weight: bold; color: #333}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}
 #featurebar .btn-group {margin-right: 5px;}
@@ -527,7 +529,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .modal.with-titlebar .modal-header, .modal-dialog.hide-header .modal-header{position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
 .modal.with-titlebar .modal-header .modal-body,  .modal-dialog.hide-header .modal-header .modal-body {z-index: 990}
 .modal.with-titlebar .modal-header .modal-title, .modal-dialog.hide-header .modal-header .modal-title {display: none}
-.modal.with-titlebar .modal-header .close, .modal-dialog.hide-header .modal-header .close {position: absolute; right: 15px; top: 20px}
+.modal.with-titlebar .modal-header .close, .modal-dialog.hide-header .modal-header .close {position: absolute; right: 15px; top: 15px}
 .body-modal {padding-bottom: 0; overflow: hidden;}
 .body-modal .outer > form, .body-modal .outer > .container > form {margin: 10px 15px 20px}
 .body-modal .outer > .main, .body-modal .outer > .container > .main, .body-modal > .main {padding: 10px 20px; margin: 0}
@@ -538,9 +540,12 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .modal-dialog.fullscreen {width: 100% !important; height: 100% !important; margin: 0; border: none !important;}
 .modal-dialog.fullscreen .modal-body iframe {height: 100%}
 
-.modal-loading .modal-dialog {margin-top: -100%;}
+.modal-loading .modal-dialog {margin-top: -100% !important}
 .loader {display: none}
 .modal-loading .loader{display: block; text-align: center; font-size: 56px; color: #fff; margin-top: 10%}
+
+/* about dialog */
+.modal .modal-about.modal-dialog {margin-top: 9%;}
 
 /* Tree menu. */
 .tree {padding: 0; margin: 0;}

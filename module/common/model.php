@@ -250,7 +250,7 @@ class commonModel extends model
             
             echo '</ul></div>';
         }
-        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true'");
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
     }
 
     /**
@@ -400,7 +400,7 @@ class commonModel extends model
         echo "<div class='input-group input-group-sm' id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject, "class='form-control'");
         echo html::input('searchQuery', '', "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'");
-        echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();return false;' class='btn'>GO! </a></div>";
+        echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();' class='btn'>GO! </a></div>";
         echo "</div>\n";
     }
 

@@ -42,7 +42,7 @@ $config->wideSize = 1400;
 /* Supported languages. */
 $config->langs['zh-cn'] = '简体';
 $config->langs['zh-tw'] = '繁體';
-$config->langs['en']    = 'English';
+$config->langs['en']    = 'EN';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';

@@ -1,15 +1,14 @@
 .cards {padding-bottom: 0;}
-.card {height: 160px; position: relative; padding-left: 150px; border-radius: 6px}
-.card > .media {position: absolute; left: 0; top: 0; width: 150px; background: #f1f1f1; height: 160px; bottom: 0; overflow: hidden; z-index: 90; transition: all 0.4s;}
-.card > .media > .icon {position: absolute; display: block; font-size: 140px; color: #ddd; z-index: 99; bottom: -20px; left: -20px; transition: all 0.4s;}
-.card > .media > h5 {position: absolute; display: block; color: #666; z-index: 100; font-size: 16px; right: 20px; top: 10px; transition: all 0.4s;}
+.cards > .col-sm-6 {width: 25%; padding: 0 10px}
+.card {height: 225px; position: relative; padding-top: 50px; border-radius: 6px; margin: 0}
+.card > .media {position: absolute; left: 0; top: 0; width: 100%; background: #f1f1f1; height:50px; bottom: 0; overflow: hidden; z-index: 90; transition: all 0.4s;}
+.card > .media > .icon {position: absolute; display: block; font-size: 56px; color: #ddd; z-index: 99; bottom: -10px; right: -6px; transition: all 0.4s;}
+.card > .media > h5 {position: absolute; display: block; color: #666; z-index: 100; font-size: 14px; left: 15px; top: 10px; transition: all 0.4s;}
 .card:hover > .media {background: #e5e5e5}
 .card:hover > .media > .icon {color: #ccc}
-.card .card-content {padding: 10px 25px}
-.card-content > ul {padding-left: 10px;}
-.card-content > ul > li {margin-bottom: 3px;}
-
-.card:hover a {transition: none;}
+.card .card-content {padding: 10px 20px}
+.card-content > ul {padding-left: 8px;}
+.card-content > ul > li {margin-bottom: 5px;}
 
 .card-about.card:hover > .media {background: #E5F9FF}
 .card-about.card:hover > .media > .icon {color: #c8eef9}
@@ -24,7 +23,7 @@
 .card-service.card:hover > .media > .icon {color: #f9d0ce}
 .card-service.card:hover > .media > h5 {color: #D2322D}
 
-body {padding: 20px;}
+body {padding: 20px; font-size: 12px}
 .modal-dialog.hide-header .modal-header .close {top: 5px; right: 20px}
 .copyright {padding: 0 20px 20px}
 

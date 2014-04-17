@@ -7,12 +7,13 @@
     </td>
     <td> 
       <?php include './links.html.php';?>
+    </td>
+  </tr>
+  <tr>
+    <td colspan='2'>
       <div class='text-right copyright'>
         <?php echo $lang->misc->copyright;?>
       </div>
     </td>
-  </tr>
-  <tr>
-
   </tr>
 </table>
