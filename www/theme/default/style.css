@@ -16,7 +16,7 @@
 .w-auto {width: auto} .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-300px {width:300px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
 .mw-200px {max-width:200px!important} .mw-300px {max-width:300px!important} .mw-400px {max-width:400px!important} .mw-500px {max-width:500px!important} .mw-600px {max-width:600px!important} .mw-700px {max-width:700px!important} .mw-800px {max-width:800px!important} .mw-900px {max-width:900px!important}
 
-.w-id {width:60px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
+.w-id {width:70px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
 /* Height definitions */
 .h-5px {height:5px} .h-10px {height:10px} .h-20px {height:20px} .h-30px {height:30px} .h-35px {height:35px} .h-40px {height:40px} .h-45px {height:45px} .h-50px {height:50px} .h-60px {height:60px} .h-70px {height:70px} .h-80px {height:80px} .h-100px {height:100px} .h-120px {height:120px} .h-130px {height:130px} .h-140px {height:140px} .h-150px {height:150px} .h-200px {height:200px}
@@ -429,6 +429,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table-form .table tr > th:last-child, .outer .table-form .table tr > td:last-child {padding-right: 5px}
 .outer .table-form .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 5px}
 .outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
+.outer .table tfoot td {border-top: 1px solid #ddd}
 .outer .table tfoot .dropdown-menu {min-width: 100px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
 .outer .table tfoot .btn {padding: 4px 12px;}
@@ -490,9 +491,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: 1px solid #ddd}
 .outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}
 .outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 8px}
-.outer .side {width: 180px; position: absolute; left: 20px;}
+.outer .side {width: 182px; position: absolute; left: 20px;}
 .outer .side-body {overflow: hidden;}
-.outer .side-body .panel {min-width: 180px}
+.outer .side-body .panel {min-width: 180px;}
 .outer .side-body .panel-body {padding: 10px;}
 .outer .side-handle {position: absolute; right: 5px; top: 4px; width: 22px; line-height: 18px; border: 1px solid #ddd; background: #FFF; border-radius: 2px; color: #666;}
 .outer .side-handle:hover {background: #fff; color: #333}
