@@ -101,7 +101,7 @@
                 echo "<td class='stepID strong'>$stepID</td>";
                 echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
                 echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='form-control'") . '</td>';
-                echo "<td class='a-left w-100px'><div class='btn-group-vertical'>";
+                echo "<td class='text-left w-100px'><div class='btn-group-vertical'>";
                 echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' />";
                 echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  />";
                 echo "<input type='button' tabindex='-1' class='delbutton btn btn-xs' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   />";

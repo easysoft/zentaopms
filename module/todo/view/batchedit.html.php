@@ -29,7 +29,7 @@
         <th class='w-80px'>   <?php echo $lang->todo->pri;?></th>
         <th class='w-p65 red'><?php echo $lang->todo->name;?></th>
         <th class='w-140px'>  <?php echo $lang->todo->beginAndEnd;?></th>
-        <th class='w-90px'>   <?php echo $lang->todo->status;?></th>
+        <th class='w-100px'>   <?php echo $lang->todo->status;?></th>
       </tr>
     </thead>
     <?php foreach($editedTodos as $todo):?>
@@ -59,8 +59,9 @@
       </td>
       <td>
         <div class='input-group'>
-          <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control" style="width: 50%"') . html::select('end', $times, $todo->end, 'class="form-control" style="width: 50%"');?>
+          <?php echo html::select('begins[$i]', $times, $todo->begin, 'class="form-control" style="width: 50%"') . html::select('ends[$i]', $times, $todo->end, 'class="form-control" style="width: 50%"');?>
         </div>
+      </td>
       <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
     </tr>  
     <?php endforeach;?>

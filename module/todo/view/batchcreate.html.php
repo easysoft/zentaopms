@@ -12,26 +12,22 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['todo']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->common . $lang->colon . $lang->todo->batchCreate;?></strong>
-  </div>
-</div>
 <form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-form' >
-    <caption class='text-left'>
-      <div class='form-group mg-0 w-300px'>
-        <div class='input-group'>
-          <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
-          <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
-          <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
-        </div>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix pull-left'><?php echo html::icon($lang->icons['todo']);?></span>
+      <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->common . $lang->colon . $lang->todo->batchCreate;?></strong>
+      <div class='input-group w-200px pull-left' id='datepicker'>
+        <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
+        <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
+        <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
       </div>
-    </caption>
+    </div>
+  </div>
+  <table class='table table-form table-fixed'>
     <thead>
       <tr>
-        <th class='w-20px'><?php echo $lang->idAB;?></th> 
+        <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-100px'><?php echo $lang->todo->type;?></th>
         <th class='w-80px'><?php echo $lang->todo->pri;?></th>
         <th class='w-p40 red'><?php echo $lang->todo->name;?></th>
@@ -52,7 +48,7 @@
       <td><div class='form-control' contenteditable='true' data-sync-target='#descs\[<?php echo $i;?>\]'></div><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control hidden'");?></td>
       <td>
         <div class='input-group'>
-          <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class="form-control" style="width: 50%"') . html::select('end', $times, '', 'class="form-control" style="width: 50%"');?>
+          <?php echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'") . html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'");?>
         </div>
       </td>
     </tr>  

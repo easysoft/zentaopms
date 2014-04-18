@@ -12,6 +12,8 @@ function loadList(type, id)
         divClass = '.nameBox';
         divID    = '#nameBox';
     }
+    console.log("divClass:"+divClass);
+    console.log("divID:"+divID);
     customHtml = $(divID).html();
 
     if(type == 'bug')
@@ -37,6 +39,7 @@ function loadList(type, id)
         }
     }
 
+    console.log("link:"+link);
     if(type == 'bug' || type == 'task')
     {
         $(divClass).load(link);
@@ -49,7 +52,7 @@ function loadList(type, id)
 
 function selectNext()
 {
-    $("#end ").get(0).selectedIndex = $("#begin ").get(0).selectedIndex + 3;
+    $("#end ")[0].selectedIndex = $("#begin ")[0].selectedIndex + 3;
 }
 
 function setBeginsAndEnds(i, beginOrEnd)
@@ -58,20 +61,20 @@ function setBeginsAndEnds(i, beginOrEnd)
     {
         for(j = 0; j < batchCreateNum; j++)
         {
-            if(j != 0) $("#begins" + j).get(0).selectedIndex = $("#ends" + (j - 1)).get(0).selectedIndex;
-            $("#ends" + j).get(0).selectedIndex = $("#begins" + j).get(0).selectedIndex + 3;
+            if(j != 0) $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
+            $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
         }
     }
     else
     {
         if(beginOrEnd == 'begin')
         {
-            $("#ends" + i).get(0).selectedIndex = $("#begins" + i).get(0).selectedIndex + 3;
+            $("#ends" + i)[0].selectedIndex = $("#begins" + i)[0].selectedIndex + 3;
         }
         for(j = i+1; j < batchCreateNum; j++)
         {
-            $("#begins" + j).get(0).selectedIndex = $("#ends" + (j - 1)).get(0).selectedIndex;
-            $("#ends" + j).get(0).selectedIndex = $("#begins" + j).get(0).selectedIndex + 3;
+            $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
+            $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
         }
     }
 }

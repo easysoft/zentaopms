@@ -973,7 +973,7 @@ class bug extends control
         if($account == '') $account = $this->app->user->account;
         $bugs = $this->bug->getUserBugPairs($account);
 
-        if($id) die(html::select("bugs[$id]", $bugs, '', 'class="select-1 f-left"'));
+        if($id) die(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
         die(html::select('bug', $bugs, '', 'class=form-control'));
     }
 
