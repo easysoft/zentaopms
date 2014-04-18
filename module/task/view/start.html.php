@@ -25,7 +25,7 @@
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->task->realStarted;?></th>
-      <td class='w-p45'><div class='datepicker-wrapper'><?php echo html::input('realStarted', helper::today(), "class='form-control form-datetime'");?></div></td><td></td>
+      <td class='w-p25-f'><div class='datepicker-wrapper'><?php echo html::input('realStarted', helper::today(), "class='form-control form-datetime'");?></div></td><td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->task->consumed;?></th>

@@ -25,29 +25,29 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->productplan->product;?></th>
-        <td class='w-p45'><?php echo $product->name;?></td><td></td>
-      </tr>  
+        <td class='w-p25-f'><?php echo $product->name;?></td><td></td>
+      </tr>
       <tr>
         <th><?php echo $lang->productplan->title;?></th>
-        <td><?php echo html::input('title', '', "class='form-control'");?></td><td></td>
-      </tr>  
+        <td><?php echo html::input('title', '', "class='form-control'");?></td>
+      </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $begin, "class='form-control date'");?></td><td></td>
-      </tr>  
+        <td><?php echo html::input('begin', $begin, "class='form-control form-date'");?></td>
+      </tr>
       <tr>
         <th><?php echo $lang->productplan->end;?></th>
-        <td colspan='2'>
-          <div class='input-group w-p100'>
-            <?php echo html::input('end', '', "class='form-control form-date'");?>
-            <span class='input-group-addon'><?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?></span>
-          </div>
+        <td>
+          <?php echo html::input('end', '', "class='form-control form-date'");?>
+        </td>
+        <td>
+          &nbsp; &nbsp; <?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <td></td>
         <td colspan='2'>

@@ -195,7 +195,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <legend><?php echo $lang->bug->legendMisc;?></legend>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->bug->linkBug;?></th>
+            <th class='w-60px'><?php echo $lang->bug->linkBug;?></th>
             <td><?php echo html::input('linkBug', $bug->linkBug, 'class="form-control"');?></td>
           </tr>
           <tr>

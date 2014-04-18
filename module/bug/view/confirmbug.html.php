@@ -29,7 +29,7 @@ js::set('page', 'confirmbug');
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
-      <td class='w-p45'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
+      <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
       <td></td>
     </tr>  
     <tr>

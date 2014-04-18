@@ -28,7 +28,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           <table class='table table-form'>
             <tr>
               <th class='w-80px'><?php echo $lang->story->reviewedDate;?></th>
-              <td class='w-p45'><?php echo html::input('reviewedDate', helper::today(), 'class=form-control');?></td><td></td>
+              <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), 'class=form-control');?></td><td></td>
             </tr>
             <tr>
               <th><?php echo $lang->story->reviewResult;?></th>
@@ -58,7 +58,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
             </tr>
             <tr>
               <th><?php echo $lang->story->reviewedBy;?></th>
-              <td><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td><td></td>
+              <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->story->comment;?></th>

@@ -25,7 +25,7 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->build->product;?></th>
-        <td class='w-p45'><?php echo html::select('product', $products, $build->product, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('product', $products, $build->product, "class='form-control'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->name;?></th>

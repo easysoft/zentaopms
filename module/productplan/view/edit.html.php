@@ -25,19 +25,19 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->productplan->product;?></th>
-        <td class='w-p45'><?php echo $product->name;?></td><td></td>
+        <td class='w-p25-f'><?php echo $product->name;?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->title;?></th>
-        <td><?php echo html::input('title', $plan->title, 'class="form-control"');?></td><td></td>
+        <td><?php echo html::input('title', $plan->title, 'class="form-control"');?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $plan->begin, 'class="form-control date"');?></td><td></td>
+        <td><?php echo html::input('begin', $plan->begin, 'class="form-control date"');?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->end;?></th>
-        <td><?php echo html::input('end', $plan->end, 'class="form-control form-date"');?></td><td></td>
+        <td><?php echo html::input('end', $plan->end, 'class="form-control form-date"');?></td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->desc;?></th>

@@ -28,8 +28,8 @@ js::set('page', 'assignedto');
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-60px'><?php echo $lang->bug->assignedTo;?></th>
-      <td class='w-p45'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td><td></td>
+      <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
+      <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td><td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->bug->mailto;?></th>

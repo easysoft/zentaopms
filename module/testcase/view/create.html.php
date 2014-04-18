@@ -27,10 +27,10 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->testcase->lblProductAndModule;?></th>
-        <td class='w-p35'>
+        <td class='w-p25-f'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?>
         </td>
-        <td class='w-p25'>
+        <td class='w-p25-f'>
           <div class='input-group' id='moduleIdBox'>
           <?php 
           echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control'");

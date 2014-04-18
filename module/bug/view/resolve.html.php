@@ -25,7 +25,7 @@
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->bug->resolution;?></th>
-      <td class='w-p45'><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td><td></td>
+      <td class='w-p35-f'><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td><td></td>
     </tr>
     <tr id='duplicateBugBox' style='display:none'>
       <th><?php echo $lang->bug->duplicateBug;?></th>

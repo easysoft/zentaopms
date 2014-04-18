@@ -26,7 +26,7 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->todo->date;?></th>
-        <td class='w-p45'>
+        <td class='w-p25-f'>
           <div class='input-group'>
             <?php echo html::input('date', $todo->date, "class='form-control form-date'");?>
             <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>

@@ -3,6 +3,7 @@
 
 .outer .row .col-md-8 .table-form {max-width: 600px}
 
+#sonModule {max-width: 240px}
 #moduleBox span > .form-control {margin-bottom: 5px;}
 #moduleBox .copy {display: table; width: 100%}
 #moduleBox .copy > .form-control, #moduleBox .copy > .btn {display: table-cell; width: auto}

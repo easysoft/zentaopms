@@ -32,11 +32,11 @@ js::set('refresh', $lang->refresh);
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
-        <td class='w-400px'>
+        <td class='w-p25-f'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control' autocomplete='off'");?>
         </td>
         <td>
-          <div class='input-group' id='moduleIdBox'>
+          <div class='input-group w-p25-f' id='moduleIdBox'>
           <?php
           echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control'");
           if(count($moduleOptionMenu) == 1)

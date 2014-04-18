@@ -24,13 +24,12 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->release->name;?></th>
-        <td class='w-p45'>
-          <div class='input-group'>
-            <?php echo html::input('name', '', "class='form-control'");?>
-            <?php if($lastRelease) echo '<span class="input-group-addon">(' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>
-          </div>
+        <td class='w-p25-f'>
+          <?php echo html::input('name', '', "class='form-control'");?>
         </td>
-        <td></td>
+        <td>
+          <?php if($lastRelease) echo '<span class="help-block"> &nbsp; (' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->release->build;?></th>

@@ -1,1 +1,2 @@
 #datepicker {position: relative; top: -6px; margin-left: 10px;}
+.input-group > .form-control:first-child {border-right: 0}

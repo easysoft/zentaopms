@@ -24,19 +24,19 @@
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->task->consumed;?></th>
-      <td class='w-p45'><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
+      <td class='w-p25-f'><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>
     <tr>
-      <td><?php echo $lang->task->assignedTo;?></td>
+      <th><?php echo $lang->task->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $members, $task->openedBy, "class='form-control chosen'");?></td><td></td>
     </tr>
     <tr>
-      <td><?php echo $lang->task->finishedDate;?></td>
+      <th><?php echo $lang->task->finishedDate;?></th>
       <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-datetime'");?></div></td><td></td>
     </tr>
 
     <tr>
-      <td><?php echo $lang->comment;?></td>
+      <th><?php echo $lang->comment;?></th>
       <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>

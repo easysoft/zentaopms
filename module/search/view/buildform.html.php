@@ -28,9 +28,9 @@
 .outer #querybox .table tbody > tr:last-child td {padding: 2px}
 #querybox a:hover {text-decoration: none;}
 
-#selectPeriod {padding: 4px; height: 244px}
-#selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 5px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 4px; color: #333}
-#selectPeriod li > a {padding: 6px 15px; border-radius: 4px}
+#selectPeriod {padding: 4px; height: 197px}
+#selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 4px; color: #333}
+#selectPeriod li > a {padding: 4px 15px; border-radius: 4px}
 
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: block;}
@@ -103,7 +103,7 @@ function setDateField(query)
     {
         var $e = $(e.target);
         var ePos = $e.offset();
-        $period.css({'left': ePos.left + 200, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).find('li.active').removeClass('active');
+        $period.css({'left': ePos.left + 175, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).find('li.active').removeClass('active');
         $period.find("li > a[href='" + $e.val().replace('$', '#') + "']").closest('li').addClass('active');
     }).on('hide', function(e){setTimeout(function(){$period.hide();}, 100)});
 }

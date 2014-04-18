@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container'>
+<div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['product']);?></span>
@@ -23,7 +23,7 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-90px'><?php echo $lang->product->name;?></th>
-        <td class='w-p45'><?php echo html::input('name', '', "class='form-control'");?></td><td></td>
+        <td class='w-p35-f'><?php echo html::input('name', '', "class='form-control'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->product->code;?></th>

@@ -25,13 +25,13 @@
           <table class='table table-form'>
             <tr>
               <th class='w-80px'><?php echo $lang->story->closedReason;?></th>
-              <td class='w-p45'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
+              <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
             </tr>
-            <tr id='duplicateStoryBox' class='hidden1'>
+            <tr id='duplicateStoryBox' style='display:none'>
               <th><?php echo $lang->story->duplicateStory;?></th>
               <td><?php echo html::input('duplicateStory', '', 'class=form-control');?></td><td></td>
             </tr>
-            <tr id='childStoriesBox' class='hidden1'>
+            <tr id='childStoriesBox' style='display:none'>
               <th><?php echo $lang->story->childStories;?></th>
               <td><?php echo html::input('childStories', '', 'class=form-control');?></td><td></td>
             </tr>

@@ -25,7 +25,7 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->testtask->project;?></th>
-        <td class='w-p45'><?php echo html::select('project', $projects, $task->project, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, $task->project, "class='form-control'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->build;?></th>
