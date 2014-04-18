@@ -31,6 +31,13 @@
 #selectPeriod {padding: 4px; height: 244px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 5px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 4px; color: #333}
 #selectPeriod li > a {padding: 6px 15px; border-radius: 4px}
+
+#searchform.showmore #searchmore, #searchform #searchlite {display: none;}
+#searchform.showmore #searchlite, #searchform #searchmore {display: block;}
+#searchmore > i, #searchlite > i {font-size: 28px;}
+#searchlite, #searchmore {color: #4d90fe; width: 30px; width: 40px; position: absolute; top: -10px; right: -10px; bottom: -10px; padding: 0 10px; padding-top: 40%;}
+#searchlite {padding-top: 120%;}
+#searchmore:hover, #searchlite:hover {color: #145CCD; background: #f1f1f1}
 </style>
 <script language='Javascript'>
 var dtOptions = 
@@ -165,9 +172,8 @@ function showmore()
         }
     }
 
-    $('#searchmore').addClass('hidden');
-    $('#searchlite').removeClass('hidden');
     $('#formType').val('more');
+    $('#searchform').addClass('showmore');
 }
 
 /**
@@ -186,8 +192,7 @@ function showlite()
             $('#searchbox' + i).addClass('hidden');
         }
     }
-    $('#searchmore').removeClass('hidden');
-    $('#searchlite').addClass('hidden');
+    $('#searchform').removeClass('showmore');
     $('#formType').val('lite');
 }
 
@@ -360,9 +365,9 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </div>
     </td>
-    <th width='50' class='text-center' style='cursor:pointer; padding:0'>
+    <th class='w-40px text-center pd-0' style='position: relative'>
       <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
-      <a id="searchlite" href="javascript:showlite()" class="hidden"><i class="icon-double-angle-up icon-2x"></i></a>
+      <a id="searchlite" href="javascript:showlite()"><i class="icon-double-angle-up icon-2x"></i></a>
       <?php echo html::hidden('formType', 'lite');?>
     </th>
   </tr>
