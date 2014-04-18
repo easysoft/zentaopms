@@ -26,15 +26,15 @@
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='required'>   <?php echo $lang->task->name?></th>
+        <th>   <?php echo $lang->task->name?> <span class='required'></span></th>
         <th class='w-150px'><?php echo $lang->task->module?></th>
         <th class='w-100px'><?php echo $lang->task->assignedTo;?></th>
-        <th class='w-80px required'><?php echo $lang->typeAB;?></th>
+        <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
         <th class='w-90px'><?php echo $lang->task->status;?></th>
         <th class='w-60px'><?php echo $lang->task->pri;?></th>
-        <th class='w-40px required'><?php echo $lang->task->estimateAB;?></th>
-        <th class='w-60px required'><?php echo $lang->task->consumedThisTime?></th>
-        <th class='w-40px required'><?php echo $lang->task->leftAB?></th>
+        <th class='w-40px'><?php echo $lang->task->estimateAB;?> <span class='required'></span></th>
+        <th class='w-60px'><?php echo $lang->task->consumedThisTime?> <span class='required'></span></th>
+        <th class='w-40px'><?php echo $lang->task->leftAB?> <span class='required'></span></th>
         <th class='w-100px'><?php echo $lang->task->finishedBy;?></th>
         <th class='w-100px'><?php echo $lang->task->closedBy;?></th>
         <th class='w-100px'><?php echo $lang->task->closedReason;?></th>

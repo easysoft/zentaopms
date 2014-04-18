@@ -26,8 +26,8 @@
         <th class='w-30px'>  <?php echo $lang->idAB;?></th> 
         <th class='w-100px'> <?php echo $lang->bug->module;?></th>
         <th class='w-100px'> <?php echo $lang->bug->project;?></th>
-        <th class='w-150px required'><?php echo $lang->bug->openedBuild;?></th>
-        <th class='required'><?php echo $lang->bug->title;?></th>
+        <th class='w-150px'><?php echo $lang->bug->openedBuild;?> <span class='required'></span></th>
+        <th><?php echo $lang->bug->title;?> <span class='required'></span></th>
         <th>                 <?php echo $lang->bug->steps;?></th>
         <th class='w-100px'> <?php echo $lang->typeAB;?></th>
         <th class='w-80px'>  <?php echo $lang->bug->severity;?></th>

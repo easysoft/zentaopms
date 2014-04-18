@@ -27,7 +27,7 @@
         <th class='w-30px'> <?php echo $lang->idAB;?></th> 
         <th class='w-p15'><?php echo $lang->story->module;?></th>
         <th class='w-p15'><?php echo $lang->story->planAB;?></th>
-        <th class='required'>    <?php echo $lang->story->title;?></th>
+        <th>    <?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-50px'> <?php echo $lang->story->estimateAB;?></th>
         <th class='w-50px'> <?php echo $lang->priAB;?></th>
         <th class='w-80px'> <?php echo $lang->story->source;?></th>

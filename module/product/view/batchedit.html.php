@@ -21,8 +21,8 @@
     <thead>
       <tr>
         <th class='w-id'>   <?php echo $lang->idAB;?></th>
-        <th class='required'>    <?php echo $lang->product->name;?></th>
-        <th class='w-150px required'><?php echo $lang->product->code;?></th>
+        <th>    <?php echo $lang->product->name;?> <span class='required'></span></th>
+        <th class='w-150px'><?php echo $lang->product->code;?> <span class='required'></span></th>
         <th class='w-110px'><?php echo $lang->product->PO;?></th>
         <th class='w-110px'><?php echo $lang->product->QD;?></th>
         <th class='w-110px'><?php echo $lang->product->RD;?></th>

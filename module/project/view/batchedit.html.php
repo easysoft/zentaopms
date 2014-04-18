@@ -22,12 +22,12 @@
   <thead>
     <tr class='text-center'>
       <th class='w-30px'>     <?php echo $lang->idAB;?></th>
-      <th class='required'>        <?php echo $lang->project->name;?></th>
-      <th class='w-150px required'><?php echo $lang->project->code;?></th>
+      <th>        <?php echo $lang->project->name;?> <span class='required'></span></th>
+      <th class='w-150px'><?php echo $lang->project->code;?> <span class='required'></span></th>
       <th class='w-110px'>    <?php echo $lang->project->PM;?></th>
       <th class='w-100px'>    <?php echo $lang->project->status;?></th>
-      <th class='w-110px required'><?php echo $lang->project->begin;?></th>
-      <th class='w-110px required'><?php echo $lang->project->end;?></th>
+      <th class='w-110px'><?php echo $lang->project->begin;?> <span class='required'></span></th>
+      <th class='w-110px'><?php echo $lang->project->end;?> <span class='required'></span></th>
       <th class='w-150px'>    <?php echo $lang->project->days;?></th>
     </tr>
   </thead>

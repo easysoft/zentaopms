@@ -26,7 +26,7 @@
         <th class='w-90px'><?php echo $lang->bug->type;?></th>
         <th class='w-60px'><?php echo $lang->bug->severityAB;?></th>
         <th class='w-60px'><?php echo $lang->bug->pri;?></th>
-        <th class='required'><?php echo $lang->bug->title;?></th>
+        <th><?php echo $lang->bug->title;?> <span class='required'></span></th>
         <th class='w-100px'><?php echo $lang->bug->assignedTo;?></th>
         <th class='w-80px'><?php echo $lang->bug->status;?></th>
         <th class='w-100px'><?php echo $lang->bug->resolvedByAB;?></th>

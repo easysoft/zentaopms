@@ -19,6 +19,7 @@
 #bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
 #featurebar .nav {z-index: 999; position: relative;}
 #querybox .form-control {padding: 2px; padding: 6px 2px\0;}
+@-moz-document url-prefix() {#querybox .form-control {padding: 6px 2px;}}
 #querybox .table-form td {border: none}
 #querybox .btn {padding: 5px 8px;}
 #querybox .table-form td td {padding: 2px;}
@@ -32,12 +33,11 @@
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 4px; color: #333}
 #selectPeriod li > a {padding: 4px 15px; border-radius: 4px}
 
+#searchlite, #searchmore {color: #4d90fe; width: 30px; padding: 0 5px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
-#searchform.showmore #searchlite, #searchform #searchmore {display: block;}
+#searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
 #searchmore > i, #searchlite > i {font-size: 28px;}
-#searchlite, #searchmore {color: #4d90fe; width: 30px; width: 40px; position: absolute; top: -10px; right: -10px; bottom: -10px; padding: 0 10px; padding-top: 40%;}
-#searchlite {padding-top: 120%;}
-#searchmore:hover, #searchlite:hover {color: #145CCD; background: #f1f1f1}
+#searchmore:hover, #searchlite:hover {color: #145CCD;}
 </style>
 <script language='Javascript'>
 var dtOptions = 
@@ -365,7 +365,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </div>
     </td>
-    <th class='w-40px text-center pd-0' style='position: relative'>
+    <th class='w-40px text-right'>
       <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
       <a id="searchlite" href="javascript:showlite()"><i class="icon-double-angle-up icon-2x"></i></a>
       <?php echo html::hidden('formType', 'lite');?>

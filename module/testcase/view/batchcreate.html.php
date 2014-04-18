@@ -32,7 +32,7 @@
         <th class='w-300px'><?php echo $lang->testcase->module;?></th>
         <th class='w-180px'><?php echo $lang->testcase->type;?></th>
         <?php if(!$story) echo "<th>{$lang->testcase->story}</th>";?>
-        <th class='required'><?php echo $lang->testcase->title;?></th>
+        <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
       </tr>
     </thead>
 
