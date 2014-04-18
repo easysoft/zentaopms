@@ -18,10 +18,25 @@
   <?php echo $tree?>
   </div>
 </div>
-<script type='text/javascript'>
+<script>
 $(function()
 {
     $("#extendTree").treeview();
+    $('.hitarea').click(function()
+    {
+        var $this  = $(this);
+        var parent = $this.parent();
+        if(parent.hasClass('expandable'))
+        {
+            parent.removeClass('expandable').addClass('collapsable');
+            $this.removeClass('expandable-hitarea').addClass('collapsable-hitarea');
+        }
+        else
+        {
+            parent.addClass('expandable').removeClass('collapsable');
+            $this.addClass('expandable-hitarea').removeClass('collapsable-hitarea');
+        }
+    });
 });
 </script>
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='hidden'></iframe>

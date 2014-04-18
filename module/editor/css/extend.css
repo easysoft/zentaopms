@@ -1,2 +1,2 @@
-#extendTree li      {list-style-type:none;}
-#extendTree .active {color:blue; font-weight:bold}
+  .expandable > ul {display: none!important}
+  .collapsable > ul {display: block!important}

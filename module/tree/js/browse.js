@@ -41,3 +41,9 @@ function syncProductOrProject(obj, type)
     $('#copyModule').attr('onclick', null);
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});
 }
+
+$(document).ready(function()
+{
+    $("#submenucreate").modalTrigger({type: 'iframe', width: 500});
+    $("#submenuedit").modalTrigger({type: 'iframe', width: 500});
+});
