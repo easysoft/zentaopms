@@ -11,10 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='titlebar'>
+<div id='featurebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['trash']);?></span>
-    <strong><?php echo $lang->action->trash;?></strong>
+    <?php echo html::icon($lang->icons['trash']);?> <?php echo $lang->action->trash;?>
   </div>
   <div class='actions'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>

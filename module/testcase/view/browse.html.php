@@ -19,7 +19,6 @@ js::set('moduleID'  , $moduleID);
 js::set('confirmDelete', $lang->testcase->confirmDelete);
 ?>
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['usecase']);?></div>
   <ul class='nav'>
     <?php
     echo "<li id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</li>";

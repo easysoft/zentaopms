@@ -1,7 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['extension']) . ' ' . $lang->extension->common;?></div>
   <ul class='nav'>
   <?php 
   echo '<li id="installed">'  . html::a($this->createLink('extension', 'browse', "type=installed"),   $lang->extension->installed)   . '</li>';

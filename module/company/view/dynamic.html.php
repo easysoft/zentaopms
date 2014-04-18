@@ -16,7 +16,6 @@
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['dynamic']);?></div>
   <ul class='nav'>
     <?php 
     echo '<li id="today">'       . html::a(inlink('dynamic', "browseType=today"),      $lang->action->dynamic->today)      . '</li>';

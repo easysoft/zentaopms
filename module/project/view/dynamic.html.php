@@ -13,9 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
-  <div class='heading'>
-    <?php echo html::icon($lang->icons['dynamic']);?> <?php echo $lang->project->dynamic;?>
-  </div>
   <ul class='nav'>
     <?php 
     echo '<li id="today">'      . html::a(inlink('dynamic', "projectID=$projectID&type=today"),      $lang->action->dynamic->today)      . '</li>';

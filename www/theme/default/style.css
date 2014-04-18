@@ -252,7 +252,7 @@ form .star {display: none;}/* hide star */
 .table-form > thead > tr > th.required:after {top: 2px; padding-left: 4px;}
 
 /* Auto Height textarea */
-div.form-control[contenteditable='true'] {height: auto; text-align: left; outline: 0; overflow-x: hidden; overflow-y: auto; min-height: 30px}
+div.form-control[contenteditable='true'] {height: auto; text-align: left; outline: 0; overflow-x: hidden; overflow-y: auto; min-height: 30px; min-height: 18px\0}
 
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}

@@ -17,9 +17,7 @@ js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
 js::set('customed', $customed);
 ?>
-
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['bug']);?></div>
   <div class='actions'>
     <div class='btn-group'>
       <div class='btn-group'>

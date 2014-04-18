@@ -18,7 +18,6 @@
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['doc']);?></div>
   <ul class='nav'>
     <li id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></li>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
