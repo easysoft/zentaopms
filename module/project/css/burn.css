@@ -1,5 +1,6 @@
-.pr-25px{padding-right:25px;}
+.container {max-width: 950px;}
+.container .actions {margin-bottom: 10px; padding: 0 25px}
+.container .actions > .text {padding: 5px 5px 5px 15px; line-height: 20px}
+.mw-220px {max-width: 220px!important}
 #burn h1{font-size:14px;}
-.icon-question-sign{color:#666}
-a.btn{padding:1.5px 10px;}
 #interval{margin-right:10px;}

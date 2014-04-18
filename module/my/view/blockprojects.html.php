@@ -33,7 +33,7 @@
         <div class="progressbar" style='width:<?php echo $project->hours->progress;?>px'>&nbsp;</div>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
-      <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
+      <td class='projectline text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
    </tr>
    <?php endforeach;?>
   </tbody>
