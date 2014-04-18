@@ -579,7 +579,7 @@ class js
      */
     static private function start($full = true)
     {
-        if($full) return "<html><meta charset=utf-8'/><style>body{background:white}</style><script>";
+        if($full) return "<html><meta charset='utf-8'/><style>body{background:white}</style><script>";
         return "<script>";
     }
 

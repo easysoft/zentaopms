@@ -10,7 +10,6 @@
  */
 include '../../common/view/header.lite.html.php';
 ?>
-
 <div id='container'>
   <div id='login-panel'>
     <div class='panel-head'>
@@ -79,5 +78,4 @@ include '../../common/view/header.lite.html.php';
     <?php endif;?>
   </div>
 </div>
-
 <?php include '../../common/view/footer.lite.html.php';?>
