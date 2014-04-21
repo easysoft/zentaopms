@@ -70,10 +70,7 @@ include '../../common/view/header.lite.html.php';
     <?php endif;?>
   </div>
   <div id="poweredby">
-    powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>)
-    <?php echo $lang->donate;?>
     <?php if($config->checkVersion):?>
-    <br />
     <iframe id='updater' class='hidden' frameborder='0' width='100%' scrolling='no' allowtransparency='true' src="http://api.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html?lang=<?php echo str_replace('-', '_', $this->app->getClientLang())?>"></iframe>
     <?php endif;?>
   </div>
