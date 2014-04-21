@@ -304,9 +304,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #topbar > .pull-right {margin-top: -4px;}
 #topnav .dropdown-menu {min-width: 100px;}
 #topnav > .dropdown .caret {border-top-color: #fff}
-#topnav > .dropdown, #topnav > a {display: block; float: left; padding: 3px 10px; position: relative;}
+#topnav > .dropdown, #topnav > a {display: block; float: left;}
+#topnav > .dropdown > a, #topnav > a {display: block; padding: 3px 8px; position: relative;}
 #topnav > .dropdown:hover, #topnav > .dropdown.open, #topnav > a:hover {background: #185695}
-#topnav > a:before {content: ' '; display: block; position: absolute; left: -1px; border-left: 1px solid #999; height: 14px; top: 4px}
 #topnav > a, #topnav > .dropdown > a, #companyname a {color:#d1e4f2;text-decoration:none;}
 #topnav > a:hover, #topnav > .dropdown > a:hover, #companyname a:hover {color: #fff;}
 #companyname {color:#ffcc00; font-weight: normal; margin: 0}

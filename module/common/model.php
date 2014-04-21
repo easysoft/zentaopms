@@ -223,19 +223,8 @@ class commonModel extends model
         {
             echo "<div class='dropdown' id='userMenu'>";
             echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
-            if($app->user->account == 'guest')
-            {
-                echo ' &nbsp; ' . html::a(helper::createLink('user', 'login'), $lang->login);
-            }
 
-            echo "<ul class='dropdown-menu pull-right'>";
-            if($app->user->account != 'guest')
-            {
-                echo '<li>' . html::a(helper::createLink('user', 'logout'), $lang->logout) . '</li>';
-                echo "<li class='divider'></li>";
-            }
-
-            echo "<li class='dropdown-header'>" . $lang->theme . '</li>';
+            echo "<ul class='dropdown-menu pull-right'><li class='dropdown-header'>" . $lang->theme . '</li>';
             foreach ($app->lang->themes as $key => $value)
             {
                 echo "<li class='theme-option" . ($app->cookie->theme == $key ? " active" : '') . "'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
@@ -249,6 +238,15 @@ class commonModel extends model
             }
             
             echo '</ul></div>';
+
+            if($app->user->account == 'guest')
+            {
+                echo html::a(helper::createLink('user', 'login'), $lang->login);
+            }
+            else
+            {
+                echo html::a(helper::createLink('user', 'logout'), $lang->logout);
+            }
         }
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
     }
