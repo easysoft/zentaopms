@@ -1,5 +1,5 @@
 <?php include '../../common/view/header.lite.html.php';?>
-<table class='table-1 mt-10px'>
+<table class='table'>
   <caption><?php echo $lang->story->tasks;?></caption>
   <?php
   foreach($tasks as $task)

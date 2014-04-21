@@ -11,10 +11,15 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='doc3'>
+<div class='container mw-600px'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix'><?php echo html::icon($lang->icons['project']);?></span>
+      <strong><?php echo $lang->project->manageChilds;?></strong>
+    </div>
+  </div>
   <form method='post'>
-    <table align='center' class='table-5 a-left'> 
-      <caption><?php echo $lang->project->manageChilds;?></caption>
+    <table align='center' class='table table-form'> 
       <tr>
         <td>
         <?php
@@ -22,7 +27,7 @@
         ?>
         </td>
       </tr>
-      <tr><td class='text-center'><input type='submit' name='submit' /></td></tr>
+      <tr><td class='text-center'><input type='submit' name='submit' class='btn btn-primary' /></td></tr>
     </table>
   </form>
 </div>
