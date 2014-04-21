@@ -12,7 +12,7 @@ html,body{background-color: #036}
 #login-panel .panel-content .button-s{width: 80px}
 #login-panel .panel-content .button-c{width: 88px;margin-right: 0}
 #login-panel .panel-foot{text-align: center;padding: 15px;line-height: 2em;background-color: #e5e5e5;border-top: 1px solid #dfdfdf}
-#poweredby{float: none; color: #eee;text-align: center;margin: 30px auto}
+#poweredby{float: none; color: #eee;text-align: center;margin: 10px auto}
 #poweredby a{color: #fff}
 #keeplogin label {font-weight: normal}
 .popover {max-width: 500px}
