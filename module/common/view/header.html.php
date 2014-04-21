@@ -9,7 +9,7 @@ include 'chosen.html.php';
   <div id='topbar'>
     <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
     <h5 id='companyname'>
-      <?php echo $app->company->name;?>
+      <?php printf($lang->welcome, $app->company->name);?>
       <small class='actions'>
         <?php
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
