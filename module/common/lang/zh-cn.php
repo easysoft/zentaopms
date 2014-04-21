@@ -17,8 +17,8 @@ $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
 
-$lang->zentaoPMS    = '禅道管理';
-$lang->welcome      = "欢迎使用『%s』{$lang->colon} {$lang->zentaoPMS}";
+$lang->zentaoPMS    = '禅道项目';
+$lang->welcome      = "%s项目管理系统";
 $lang->myControl    = "我的地盘";
 $lang->currentPos   = '当前位置：';
 $lang->logout       = '退出';

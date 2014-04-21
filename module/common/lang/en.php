@@ -17,8 +17,8 @@ $lang->at           = ' at ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
 
-$lang->zentaoPMS    = 'ZenTaoPMS';
-$lang->welcome      = "Welcome to『%s』{$lang->colon} {$lang->zentaoPMS}";
+$lang->zentaoPMS    = 'zentao';
+$lang->welcome      = "%s PMS";
 $lang->myControl    = "Dashboard";
 $lang->currentPos   = 'Current';
 $lang->logout       = 'Logout';
