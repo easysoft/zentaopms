@@ -115,7 +115,7 @@ function setStories(moduleID, projectID)
         $('#story').val(storyID);
         setPreview();
         $('#story_chosen').remove();
-        $("#story").chosen({no_results_text: ''});
+        $("#story").chosen(defaultChosenOptions);
     });
 }
 

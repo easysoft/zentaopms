@@ -15,5 +15,5 @@ function getList()
 
 $(document).ready(function()
 {
-    $("#story").chosen({no_results_text: noResultsMatch});
+    $("#story").chosen(defaultChosenOptions);
 });

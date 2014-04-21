@@ -1,7 +1,6 @@
 $(function() 
 {
-    $("#story").chosen({no_results_text: noResultsMatch});
-    $("#mailto").chosen({no_results_text: noResultsMatch});
+    $("#story, #mailto").chosen(defaultChosenOptions);
     $('.iframe').modalTrigger({width:900, type:'iframe', afterHide:function(){parent.location.href=parent.location.href;}});
 })
 

@@ -30,6 +30,6 @@ function loadProjectBuilds(productID, projectID, index)
         $('#buildBox' + index + ' select').removeClass('select-3');
         $('#buildBox' + index + ' select').addClass('select-1');
         $('#buildBox' + index + ' select').attr('id', 'openedBuilds[' + index + '][]');
-        $('#buildBox' + index + ' select').chosen({no_results_text: ''});
+        $('#buildBox' + index + ' select').chosen(defaultChosenOptions);
     });
 }

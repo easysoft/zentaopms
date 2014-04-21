@@ -17,6 +17,6 @@ function setPreview()
 
 $(function()
 {
-     $("#story").chosen({no_results_text: noResultsMatch});
+     $("#story").chosen(defaultChosenOptions);
      $("#preview").modalTrigger({width:960, type:'iframe'});
 })

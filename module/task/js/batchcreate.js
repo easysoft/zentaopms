@@ -13,7 +13,7 @@ function setStories(moduleID, projectID, num)
         $('#story' + num).replaceWith(stories);
         $('#story' + num).val(storyID);
         $('#story' + num + '_chzn').remove();
-        $("#story" + num).chosen({no_results_text: ''});
+        $("#story" + num).chosen(defaultChosenOptions);
     });
 }
 
