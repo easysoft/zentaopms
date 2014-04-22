@@ -77,6 +77,7 @@ tr.text-top td {vertical-align: top!important;}
 .label-badge {padding: 2px 6px}
 
 /* dropdown */
+.dropdown-menu {min-width: 80px}
 .dropdown-menu > li > a {font-size: 12px; padding: 5px 25px}
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:active {background: #f1f1f1; font-weight: bold;}
 .dropdown-menu > .active {position: relative;}
@@ -447,7 +448,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table-form .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5; padding-top: 5px}
 .outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
 .outer .table tfoot td {border-top: 1px solid #ddd}
-.outer .table tfoot .dropdown-menu {min-width: 100px}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
 .outer .table tfoot .btn {padding: 4px 12px;}
 .outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; opacity: 0.8}
