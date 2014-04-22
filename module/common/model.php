@@ -224,7 +224,7 @@ class commonModel extends model
             echo "<div class='dropdown' id='userMenu'>";
             echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
 
-            echo "<ul class='dropdown-menu pull-right'><li class='dropdown-header'>" . $lang->theme . '</li>';
+            echo "<ul class='dropdown-menu'><li class='dropdown-header'>" . $lang->theme . '</li>';
             foreach ($app->lang->themes as $key => $value)
             {
                 echo "<li class='theme-option" . ($app->cookie->theme == $key ? " active" : '') . "'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";

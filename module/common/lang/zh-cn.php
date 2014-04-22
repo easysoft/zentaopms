@@ -130,7 +130,7 @@ $lang->theme               = '主题';
 $lang->themes['default']   = '默认';
 $lang->themes['green']     = '绿色';
 $lang->themes['red']       = '红色';
-$lang->themes['classblue'] = '经典蓝';
+$lang->themes['lightblue'] = '亮蓝';
 
 /* 首页菜单设置。*/
 $lang->index = new stdclass();
