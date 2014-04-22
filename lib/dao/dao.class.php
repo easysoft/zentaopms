@@ -486,7 +486,7 @@ class dao
 
             /* Remove the part after order and limit. */
             $subLength = strlen($sql);
-            $orderPOS  = strripos($sql, 'order');
+            $orderPOS  = strripos($sql, 'order ');
             $limitPOS  = strripos($sql , 'limit');
             if($limitPOS) $subLength = $limitPOS;
             if($orderPOS) $subLength = $orderPOS;
