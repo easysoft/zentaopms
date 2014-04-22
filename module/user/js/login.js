@@ -11,10 +11,10 @@ $(document).ready(function()
     $('#mobile').popover({html: true, container: 'body'}).click(function(event)
     {
         event.stopPropagation();
+        $(document).one('click', function()
+        {
+            $('#mobile').popover('hide');
+        });
     });
 
-    $(document).click(function()
-    {
-        $('#mobile').popover('hide');
-    });
 })
