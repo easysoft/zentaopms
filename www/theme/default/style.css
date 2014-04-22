@@ -374,7 +374,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #crumbs .icon-angle-right{margin-right: 6px;}
 #footer #poweredby {float: right; margin-right: 20px;}
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit;}
-#qrcodePopover.popover.top .arrow {left: 85%}
+#qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 
 
 /* Feature bar. */

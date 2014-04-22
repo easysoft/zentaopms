@@ -8,5 +8,13 @@ $(document).ready(function()
         selectLang($(this).data('value'));
     });
 
-    $('#mobile').popover({html: true, container: 'body'});
+    $('#mobile').popover({html: true, container: 'body'}).click(function(event)
+    {
+        event.stopPropagation();
+    });
+
+    $(document).click(function()
+    {
+        $('#mobile').popover('hide');
+    });
 })
