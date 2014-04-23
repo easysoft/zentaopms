@@ -152,7 +152,7 @@ var browseType  = '<?php echo $browseType;?>';
                 $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
 
                 echo "<div class='btn-group dropup'>";
-                echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, $misc);
+                echo html::commonButton($lang->edit, $misc);
                 echo "<button id='moreAction' type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu' id='moreActionMenu'>";
                 $actionLink = $this->createLink('task', 'batchClose');

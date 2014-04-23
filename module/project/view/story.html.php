@@ -112,12 +112,12 @@
               if($canBatchEdit)
               {
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
-                  echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
               }
               if($canBatchClose)
               {
                   $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
-                  echo html::commonButton("<i class='icon-off'></i> " . $lang->close, "onclick=\"setFormAction('$actionLink')\"");
+                  echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
               }
               echo '</div>';
           }
