@@ -47,13 +47,13 @@ tr.text-top td {vertical-align: top!important;}
 .label-badge {padding: 2px 6px}
 
 /* dropdown */
-.dropdown-menu {min-width: 80px}
-.dropdown-menu > li > a {font-size: 12px; padding: 5px 25px}
+.dropdown-menu {min-width: 80px; padding: 4px 0}
+.dropdown-menu > li > a, .dropdown-header {font-size: 12px; padding: 5px 25px 5px 15px}
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:active {background: #f1f1f1; font-weight: bold;}
 .dropdown-menu > .active {position: relative;}
-.dropdown-menu > .active > a:before {content: '\e60d'; font-family: ZenIcon; font-size: 14px; position: absolute; left: 5px; top: 4px; display: block; color: #808080; font-weight: normal;}
-.dropdown-menu .divider {margin: 1px 0}
-.dropdown-header {padding: 5px 25px}
+.dropdown-menu > .active > a:before {content: '\e60d'; font-family: ZenIcon; font-size: 14px; position: absolute; right: 8px; top: 4px; display: block; color: #808080; font-weight: normal;}
+.dropdown-menu .divider {margin: 4px 0}
+.dropdown-submenu.left > .dropdown-menu{left: -100%;}
 
 /* hr */
 hr.small {margin: 10px 0}

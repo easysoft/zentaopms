@@ -17,15 +17,16 @@ $lang->at           = ' at ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
 
-$lang->zentaoPMS    = 'zentao';
-$lang->welcome      = "%s PMS";
-$lang->myControl    = "Dashboard";
-$lang->currentPos   = 'Current';
-$lang->logout       = 'Logout';
-$lang->login        = 'Login';
-$lang->aboutZenTao  = 'About';
-$lang->todayIs      = '%s, ';
-$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
+$lang->zentaoPMS      = 'zentao';
+$lang->welcome        = "%s PMS";
+$lang->myControl      = "Dashboard";
+$lang->currentPos     = 'Current';
+$lang->logout         = 'Logout';
+$lang->login          = 'Login';
+$lang->aboutZenTao    = 'About';
+$lang->profile        = 'Profile';
+$lang->changePassword = 'Password';
+$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
 
 $lang->reset        = 'Reset';
 $lang->refresh      = 'Refresh';

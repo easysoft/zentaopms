@@ -17,15 +17,16 @@ $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
 
-$lang->zentaoPMS    = '禅道项目';
-$lang->welcome      = "%s项目管理系统";
-$lang->myControl    = "我的地盘";
-$lang->currentPos   = '当前位置：';
-$lang->logout       = '退出';
-$lang->login        = '登录';
-$lang->aboutZenTao  = '关于';
-$lang->todayIs      = '今天是%s，';
-$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
+$lang->zentaoPMS      = '禅道项目';
+$lang->welcome        = "%s项目管理系统";
+$lang->myControl      = "我的地盘";
+$lang->currentPos     = '当前位置：';
+$lang->logout         = '退出';
+$lang->login          = '登录';
+$lang->aboutZenTao    = '关于';
+$lang->profile        = '个人档案';
+$lang->changePassword = '更改密码';
+$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 
 $lang->reset        = '重填';
 $lang->refresh      = '刷新';

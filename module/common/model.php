@@ -221,14 +221,28 @@ class commonModel extends model
 
         if(isset($app->user))
         {
+            $isGuest = $app->user->account == 'guest';
+
+
             echo "<div class='dropdown' id='userMenu'>";
             echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
 
-            echo "<ul class='dropdown-menu'><li class='dropdown-header'>" . $lang->theme . '</li>';
+            echo "<ul class='dropdown-menu'>";
+
+            if(!$isGuest)
+            {
+                echo '<li>' . html::a(helper::createLink('my', 'profile'), $lang->profile) . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'changepassword'), $lang->changePassword) . '</li>';
+                echo "<li class='divider'></li>";
+            }
+            
+            echo "<li class='dropdown-submenu" . (($app->company->website || $app->company->backyard) ? '' : ' left') . "'>";
+            echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu'>";
             foreach ($app->lang->themes as $key => $value)
             {
                 echo "<li class='theme-option" . ($app->cookie->theme == $key ? " active" : '') . "'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
             }
+            echo '</ul></li>';
 
             echo "<li class='divider'></li>";
             echo "<li class='dropdown-header'>" . $lang->lang . '</li>';
@@ -239,7 +253,7 @@ class commonModel extends model
             
             echo '</ul></div>';
 
-            if($app->user->account == 'guest')
+            if($isGuest)
             {
                 echo html::a(helper::createLink('user', 'login'), $lang->login);
             }
