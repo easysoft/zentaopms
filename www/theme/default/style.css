@@ -30,36 +30,6 @@
 .pdb-20 {padding-bottom: 20px !important}
 .pdt-20 {padding-top: 20px !important}
 
-.margin-zero {margin: 0}
-.margin-10px {margin: 10px}
-.margin-15px {margin: 15px}
-.margin-20px {margin: 20px}
-.padding-zero{padding: 0}
-.padding-10px{padding: 10px}
-.padding-5px {padding: 5px}
-
-.mt-10px {margin-top: 10px}
-.mr-10px {margin-right: 10px}
-.mb-10px {margin-bottom: 10px}
-.ml-10px {margin-left: 10px}
-
-.mt-zero {margin-top: 0}
-.mr-zero {margin-right: 0}
-.mb-zero {margin-bottom: 0}
-.ml-zero {margin-left: 0}
-
-.pt-10px {padding-top: 10px}
-.pr-10px {padding-right: 10px}
-.pb-10px {padding-bottom:10px}
-.pl-10px {padding-left: 10px}
-.ph-10px {padding-left:10px; padding-right:10px}
-.pv-10px {padding-top: 10px; padding-bottom:10px}
-
-/* display type */
-.hidden {display:none}
-.block {display:block}
-.inline {display:inline}
-
 /* borders */
 .bd-0, .borderless, .bd-none {border: none !important;}
 
@@ -140,20 +110,6 @@ hr.small {margin: 10px 0}
 /* code */
 code {margin-left: 0;}
 
-/* actionbox */
-.change-show:before{content: "\e661";}
-.change-hide:before{content: "\e662";}
-.log-desc:before{content: "\e65d";}
-.log-asc:before{content: "\e65c";}
-.diff-all:before{content: "\e6a3";}
-.diff-short:before{content: "\e633";}
-
-.actionbox .btn-icon {background: #e5e5e5; color: #808080; border: 1px solid #ddd; padding: 0 1px; height: 20px; line-height: 18px}
-.actionbox ol {padding-left: 25px; line-height: 20px}
-.actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px}
-.actionbox #historyItem {margin:0}
-.actionbox blockquote {margin:0}
-
 /* Icons */
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{font-size: 14px}
 
@@ -163,11 +119,28 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
 
 /* Button icon */
-.btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; line-height: 20px; font-size: 14px; border: none; background: none; padding: 0; color: #4d90fe!important; text-align: center;}
-.btn-icon:hover {text-decoration: none; background: #145CCD; color: #fff!important;}
+.btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; border: none; background: none; padding: 0; color: #4d90fe!important; text-align: center;}
+.btn-icon > i {font-size: 18px; line-height: 20px}
+.btn-icon:hover {color: #002563!important}
 .btn-icon.disabled:hover, .btn-icon.disabled:hover > i {background: none!important; color: #ccc!important; cursor: default}
 .btn-icon.text-danger {color: #D2322D!important}
-.btn-icon.text-danger:hover {background: #D2322D; color: #fff!important}
+.btn-icon.text-danger:hover {color: #7e0501!important}
+
+/* actionbox */
+.change-show:before{content: "\e661";}
+.change-hide:before{content: "\e662";}
+.log-desc:before{content: "\e65d";}
+.log-asc:before{content: "\e65c";}
+.diff-all:before{content: "\e6a3";}
+.diff-short:before{content: "\e633";}
+
+.actionbox .btn-icon {background: #f1f1f1; color: #666!important; border: 1px solid #ccc; padding: 0 1px; height: 18px; line-height: 16px; width: 18px}
+.actionbox .btn-icon > .icon- {font-size: 14px!important; line-height: 16px}
+.actionbox .btn-icon:hover {color: #333!important; border-color: #aaa; background: #fff}
+.actionbox ol {padding-left: 25px; line-height: 20px}
+.actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px}
+.actionbox #historyItem {margin:0}
+.actionbox blockquote {margin:0}
 
 /* stars list */
 .stars-list {color: #E48600}
@@ -433,7 +406,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 
 /* table in outer */
 .outer .table {margin-bottom: 0;}
-.outer .table .btn-icon {margin-left: -2px}
 .outer .table thead tr th {text-align: center;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
@@ -459,6 +431,9 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .table-actions > .text {line-height: 30px; color: #808080}
 .table-actions > .text strong {color: #333}
 .outer .table tfoot .pager {margin: 0;}
+
+/* color of a when visited */
+.outer .table tbody td a:visited, #crumbs a:visited, .side > a:visited {color: #551A8B}
 
 /* Querybox */
 #querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none; padding: 10px}
@@ -519,9 +494,6 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer.hide-side .side{width: 0; border: none;}
 .outer.hide-side .side .side-handle {right: -1px; top: 0; border-radius: 0 4px 4px 0}
 .outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 30px}
-
-/* color of a when visited */
-.outer .table tbody td a:visited, #crumbs a:visited {color: #551A8B}
 
 /* Form in outer */
 .outer form > .btn {margin-right: 10px;}
