@@ -294,14 +294,14 @@ function selectAll(checker, scope, type)
     {
         if(type == 'button')
         {
-            $('input').each(function() 
+            $('input:checkbox').each(function() 
             {
                 $(this).attr("checked", true)
             });
         }
         else if(type == 'checkbox')
         { 
-            $('input').each(function() 
+            $('input:checkbox').each(function() 
             {
                 $(this).attr("checked", checker.checked)
             });
@@ -351,7 +351,7 @@ function selectReverse(scope)
     }
     else
     {
-        $('input').each(function() 
+        $('input:checkbox').each(function() 
         {
             $(this).attr("checked", !$(this).attr("checked"))
         });
@@ -362,6 +362,34 @@ EOT;
         global $lang;
         $string .= "<input type='button' name='reversechecker' id='reversechecker' class='btn btn-select-reverse' value='{$lang->selectReverse}' onclick='selectReverse(\"$scope\")'/>";
 
+        return  $string;
+    }
+
+    /**
+     * Create select buttons include 'selectAll' and 'selectAll'.
+     * 
+     * @param  string $scope  the scope of select reverse.
+     * @return string
+     */
+    static public function selectButton($scope = "")
+    {
+                $string = <<<EOT
+<script>
+function selectAll(scope)
+{ 
+    if(scope) $('#' + scope + ' input').each(function() { $(this).attr("checked", true);});
+    else $('input:checkbox').each(function() { $(this).attr("checked", true);});
+}
+function selectReverse(scope)
+{ 
+    if(scope) $('#' + scope + ' input').each(function() { $(this).attr("checked", !$(this).attr("checked"));});
+    else $('input:checkbox').each(function(){ $(this).attr("checked", !$(this).attr("checked"));});
+}
+</script>
+EOT;
+        global $lang;
+        $string .= "<a id='allchecker' class='btn btn-select-all' href='javascript:selectAll(\"$scope\")' >{$lang->selectAll}</a>";
+        $string .= "<a id='reversechecker' class='btn btn-select-reverse' href='javascript:selectReverse(\"$scope\")'>{$lang->selectReverse}</a>";
         return  $string;
     }
 

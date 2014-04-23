@@ -124,14 +124,14 @@
         <td colspan='11'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
-            <div class='btn-group'><?php echo html::selectAll() . html::selectReverse();?></div>
+            <div class='btn-group'><?php echo html::selectButton();?></div>
             <?php
             $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
             ?>
             <div class='btn-group dropup'>
-              <?php echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");?>
+              <?php echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");?>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
               <ul class='dropdown-menu'>
                 <?php 

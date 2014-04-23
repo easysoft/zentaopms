@@ -16,7 +16,7 @@
 .w-auto {width: auto} .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-300px {width:300px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
 .mw-200px {max-width:200px!important} .mw-300px {max-width:300px!important} .mw-400px {max-width:400px!important} .mw-500px {max-width:500px!important} .mw-600px {max-width:600px!important} .mw-700px {max-width:700px!important} .mw-800px {max-width:800px!important} .mw-900px {max-width:900px!important}
 
-.w-id {width:70px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:48px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
+.w-id {width:70px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:54px;} .w-date {width:80px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
 
 .w-p15-f {width: 15% !important; min-width: 120px} .w-p25-f {width: 25% !important; min-width: 200px} .w-p35-f {width: 35% !important; min-width: 300px} .w-p45-f {width: 45% !important; min-width: 400px}
 
@@ -79,8 +79,8 @@ hr.small {margin: 10px 0}
 .tablesorter thead tr .header a,.tablesorter thead tr .headerSortUp a,.tablesorter thead tr .headerSortDown a{display: inline-block; text-decoration:none}
 .tablesorter thead tr .header a {color:#333;}
 .tablesorter thead tr .header:after {font-family: ZenIcon; font-weight: normal;content: " \e6bd";font-size: 14px;}
-.tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \e6bf";font-size: 14px;color:#2973EA;}
-.tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \e6be";font-size: 14px;color:#2973EA;}
+.tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \e6b9";font-size: 14px;color:#03C;}
+.tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \e6b8";font-size: 14px;color:#03C;}
 
 .table tr.active td, .table-hover>tbody>tr.active:hover>td, .table-hover>tbody>tr.active:hover>th, .table-striped>tbody>tr.active:nth-child(odd).active>td, .table-striped>tbody>tr.active:nth-child(odd)>th {background-color: #FCE6A2}
 .table tr>td.active, .table tr>th.active, .table tr.active>td, .table tr.active>th {background-color: #FCE6A2}
@@ -269,7 +269,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* === Layout === */
 /* Background */
-body {font-size: 12px; color:#141414;padding-bottom: 40px;}
+body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* Header */
 #header {padding: 12px 20px 0; background:#003366;}
@@ -362,7 +362,8 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #featurebar .nav > li > .form-control {margin-left: 6px; padding: 1px 8px; height: 30px; height: 26px\0; margin-right: 10px;}
 #featurebar .nav > li > .form-control.form-date {width: 110px}
 #featurebar .nav > li.datepicker-wrapper:before {right: 15px; top: 0; top: -2px\0;}
-#featurebar .nav > li > a {padding: 0px 4px;}
+#featurebar .nav > li > a {padding: 0px 4px; border-radius: 2px}
+#featurebar .nav > li > a:hover {background: #ddd; color: #333}
 #featurebar .nav > li.active > a, #featurebar .nav > li.active > a:hover, #featurebar .nav > li.active > a:active, #featurebar .nav > li.active > a:focus {font-weight: bold; color: #333}
 #featurebar .nav > li.active > .form-control, #featurebar .nav > li.active > .form-control:hover, #featurebar .nav > li.active > .form-control:active, #featurebar .nav > li.active > .form-control:focus {border-color: #009900}
 #featurebar .btn-group {margin-right: 5px;}
@@ -395,8 +396,8 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 #titlebar .actions > .text {display: inline-block; margin-left: 8px; line-height: 30px}
 
 /* Button in titlebar and featurebar */
-#featurebar > .actions .btn:not(.btn-primary), #titlebar > .actions .btn:not(.btn-primary), #featurebar > .pull-right .btn:not(.btn-primary), #titlebar > .pull-right .btn:not(.btn-primary) {border-color: transparent; background: none; box-shadow: none; padding: 4px 8px; border-radius: 2px; text-shadow: none;}
-#featurebar > .actions .btn:not(.btn-primary):hover, #titlebar > .actions .btn:not(.btn-primary):hover ,#featurebar > .pull-right .btn:not(.btn-primary):hover, #titlebar > .pull-right .btn:not(.btn-primary):hover{background: #ddd; border-color: #ddd;}
+#featurebar > .actions .btn:not(.btn-primary), #titlebar > .actions .btn:not(.btn-primary), #featurebar > .pull-right .btn:not(.btn-primary), #titlebar > .pull-right .btn:not(.btn-primary) {border-color: transparent; background: none; box-shadow: none; padding: 4px 8px; border-radius: 2px; text-shadow: none; color: #036}
+#featurebar > .actions .btn:not(.btn-primary):hover, #titlebar > .actions .btn:not(.btn-primary):hover ,#featurebar > .pull-right .btn:not(.btn-primary):hover, #titlebar > .pull-right .btn:not(.btn-primary):hover{background: #ddd; border-color: #ddd; color: #333}
 
 /* Following style to fixed ie8 */
 #featurebar > .actions .btn, #titlebar > .actions .btn, #featurebar > .pull-right .btn, #titlebar > .pull-right .btn {border-color: transparent\0; background: none\0; box-shadow: none\0; padding: 4px 8px\0;}
@@ -421,7 +422,7 @@ body {font-size: 12px; color:#141414;padding-bottom: 40px;}
 .outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
 .outer .table tfoot td {border-top: 1px solid #ddd}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
-.outer .table tfoot .btn {padding: 4px 12px;}
+.outer .table tfoot .btn {padding-top: 4px; padding-bottom: 4px;}
 .outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; opacity: 0.8}
 .outer .table tfoot .datepicker-wrapper:before {top: 5px}
 .outer .table tfoot .form-control.form-date {width: 110px}
