@@ -8,5 +8,15 @@ $(document).ready(function()
         selectLang($(this).data('value'));
     });
 
-    $('#mobile').popover({html: true, container: 'body'});
+    var mBtn = $('#mobile');
+    mBtn.popover({html: true, container: 'body'}).click(function(event)
+    {
+        event.stopPropagation();
+        $(document).one('click', function()
+        {
+            $('#mobile').popover('hide');
+        });
+    });
+    mBtn.attr('title', mBtn.attr('data-original-title'));
+
 })

@@ -10,12 +10,6 @@ include 'chosen.html.php';
     <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
     <h5 id='companyname'>
       <?php printf($lang->welcome, $app->company->name);?>
-      <small class='actions'>
-        <?php
-        if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
-        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');      
-        ?>
-      </small>
     </h5>
   </div>
   <nav id='mainmenu'>

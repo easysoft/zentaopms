@@ -126,7 +126,7 @@ $lang->exportTypeList['selected'] = 'Only checked';
 $lang->themes['default']   = 'Default';
 $lang->themes['green']     = 'Green';
 $lang->themes['red']       = 'Red';
-$lang->themes['classblue'] = 'Blue';
+$lang->themes['lightblue'] = 'Light Blue';
 
 /* Index mododule menu. */
 $lang->index = new stdclass();

@@ -224,7 +224,7 @@ class commonModel extends model
             echo "<div class='dropdown' id='userMenu'>";
             echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
 
-            echo "<ul class='dropdown-menu pull-right'><li class='dropdown-header'>" . $lang->theme . '</li>';
+            echo "<ul class='dropdown-menu'><li class='dropdown-header'>" . $lang->theme . '</li>';
             foreach ($app->lang->themes as $key => $value)
             {
                 echo "<li class='theme-option" . ($app->cookie->theme == $key ? " active" : '') . "'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
@@ -248,6 +248,10 @@ class commonModel extends model
                 echo html::a(helper::createLink('user', 'logout'), $lang->logout);
             }
         }
+
+        if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
+        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');      
+
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
     }
 
@@ -553,7 +557,7 @@ class commonModel extends model
     public static function printQRCodeLink($color = '')
     {
         global $lang;
-        echo html::a('javascript:;', "<i class='icon-mobile-phone icon-large'></i> " . $lang->user->mobileLogin, '', "class='qrCode $color' id='qrcodeBtn'");
+        echo html::a('javascript:;', "<i class='icon-qrcode'></i>", '', "class='qrCode $color' id='qrcodeBtn' title='{$lang->user->mobileLogin}'");
         echo "<div class='popover top' id='qrcodePopover'><div class='arrow'></div><h3 class='popover-title'>{$lang->user->mobileLogin}</h3><div class='popover-content'><img src=\"" . helper::createLink('misc', 'qrCode') . "\"></div></div>";
         echo '<script>$(function(){$("#qrcodeBtn").click(function(){$("#qrcodePopover").toggleClass("show");}); $("#wrap").click(function(){$("#qrcodePopover").removeClass("show");});});</script>';
     }
