@@ -46,5 +46,10 @@ $(function()
         forceParse: 0,
         format: 'hh:ii'
     });
+
+    $('.datepicker-wrapper').click(function()
+    {
+        $(this).find('.form-date, .form-datetime, .form-time').datetimepicker('show').focus();
+    });
 });
 </script>
