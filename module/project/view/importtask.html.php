@@ -80,7 +80,7 @@
       <tr>
         <td colspan='9'>
           <div class='table-actions clearfix'>
-            <div class='btn-group'><?php echo html::selectAll() . html::selectReverse();?></div>
+            <div class='btn-group'><?php echo html::selectButton();?></div>
             <?php echo html::submitButton($lang->project->importTask);?>
           </div>
         </td>

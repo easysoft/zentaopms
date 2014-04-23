@@ -74,7 +74,7 @@
       <tr>
         <td colspan='11'>
           <div class='table-actions clearfix'>
-            <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';?>
+            <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
           </div>
         </td>

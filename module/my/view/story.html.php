@@ -79,7 +79,7 @@
       <?php
       if(count($stories))
       {
-          if($canBatchEdit or $canBatchRun) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+          if($canBatchEdit or $canBatchRun) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
          
           if($canBatchEdit)
           {

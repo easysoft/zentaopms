@@ -118,7 +118,7 @@
                       <?php 
                       if(count($planStories) and $canBatchUnlink)
                       {
-                          echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
                           echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
                       }
                       ?>
@@ -176,7 +176,7 @@
                   <td colspan='7'>
                     <div class='table-actions clearfix'>
                       <?php 
-                      echo "<div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>';
+                      echo "<div class='btn-group'>" . html::selectButton('linkedBugsForm') . '</div>';
                       echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
                       ?>
                       <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?> </div>

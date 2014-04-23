@@ -100,7 +100,7 @@
           <?php 
           if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))
           {
-            echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+            echo "<div class='btn-group'>" . html::selectButton() . '</div>';
           }
           echo "<div class='btn-group'>";
           if(common::hasPriv('todo', 'batchEdit'))

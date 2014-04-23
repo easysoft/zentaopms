@@ -113,7 +113,7 @@
       <tr>
         <td colspan='7' class='text-left'>
         <?php 
-        echo  "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>';
+        echo  "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectButton('linkedBugsForm') . '</div>';
         echo html::submitButton($lang->productplan->batchUnlink) . '</div>';
         ?>
         </td>

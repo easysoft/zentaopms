@@ -30,8 +30,7 @@
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts, '', 'block');?>
           <div class='btn-group'>
-            <?php echo html::selectAll(); ?>
-            <?php echo html::selectReverse(); ?>
+            <?php echo html::selectButton(); ?>
             <?php echo html::submitButton($lang->bug->report->create);?>
           </div>
         </form>

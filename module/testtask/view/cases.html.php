@@ -42,7 +42,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <div class='side' id='casesbox'>
-  <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>
@@ -117,7 +117,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <div class='table-actions clearfix'>
 
             <?php 
-            if($canBatchEdit or $canBatchAssign or $canBatchRun) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+            if($canBatchEdit or $canBatchAssign or $canBatchRun) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
             if($canBatchEdit)
             {
                 $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");

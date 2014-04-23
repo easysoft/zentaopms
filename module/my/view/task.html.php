@@ -78,7 +78,7 @@
         <?php if(count($tasks)):?>
         <div class='table-actions clearfix'>
         <?php 
-        if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+        if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
         if($canBatchEdit)
         {
             $actionLink = $this->createLink('task', 'batchEdit', "projectID=0&orderBy=$orderBy");

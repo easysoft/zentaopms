@@ -231,12 +231,12 @@ class commonModel extends model
 
             if(!$isGuest)
             {
-                echo '<li>' . html::a(helper::createLink('my', 'profile'), $lang->profile) . '</li>';
-                echo '<li>' . html::a(helper::createLink('my', 'changepassword'), $lang->changePassword) . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', 'onlybody=yes'), $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'changepassword', 'onlybody=yes'), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
                 echo "<li class='divider'></li>";
             }
             
-            echo "<li class='dropdown-submenu" . (($app->company->website || $app->company->backyard) ? '' : ' left') . "'>";
+            echo "<li class='dropdown-submenu" . (($app->company->website and $app->company->backyard) ? '' : ' left') . "'>";
             echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu'>";
             foreach ($app->lang->themes as $key => $value)
             {

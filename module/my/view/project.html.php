@@ -12,9 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><i class='icon-folder-open-alt'></i> <?php echo $lang->my->myProject;?></div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn'") ?>
   </div>
 </div>

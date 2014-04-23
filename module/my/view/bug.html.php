@@ -72,7 +72,7 @@
         <td colspan='10'>
         <?php if($bugs and $canBatchEdit):?>
         <div class='table-actions clearfix'>
-        <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton("<i class='icon-edit'></i> " . $lang->edit);?>
+        <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>' . html::submitButton("<i class='icon-edit'></i> " . $lang->edit);?>
         </div>
         <?php endif;?>
         <?php $pager->show();?>

@@ -21,7 +21,7 @@ var browseType  = '<?php echo $browseType;?>';
 </script>
 
 <div class='side' id='taskTree'>
-  <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'>
@@ -146,7 +146,7 @@ var browseType  = '<?php echo $browseType;?>';
             $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
             if(count($tasks))
             {
-                echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+                echo "<div class='btn-group'>" . html::selectButton() . '</div>';
 
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
                 $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";

@@ -21,7 +21,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
   <div id='querybox' class='show'><?php echo $searchForm?></div>
 </div>
 <div class='side'>
-  <button class='side-handle' data-id='companyTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='companyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
@@ -98,7 +98,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <td colspan='12'>
       <div class='table-actions clearfix'>
       <?php
-      if($canBatchEdit or $canManageContacts) echo "<div class='input-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+      if($canBatchEdit or $canManageContacts) echo "<div class='input-group'>" . html::selectButton() . '</div>';
       if($canBatchEdit) echo html::submitButton($lang->edit, 'onclick=batchEdit()', 'btn-default');
       if($canManageContacts) echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
       ?>

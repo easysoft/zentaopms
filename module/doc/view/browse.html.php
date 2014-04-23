@@ -28,7 +28,7 @@ var browseType = '<?php echo $browseType;?>';
   <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
 <div class='side' id='treebox'>
-  <button class='side-handle' data-id='treebox'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='treebox'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'><?php echo html::icon('folder-close');?> <strong><?php echo $libName;?></strong></div>

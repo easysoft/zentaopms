@@ -78,7 +78,7 @@
   <tr>
     <td colspan='7'>
       <?php if($cases):?>
-        <div class='table-actions clearfix'><?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton();?></div>
+        <div class='table-actions clearfix'><?php echo "<div class='btn-group'>" . html::selectButton() . '</div>' . html::submitButton();?></div>
       <?php endif;?>
       <div class='text-right'><?php $pager->show();?></div>
     </td>
