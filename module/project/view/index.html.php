@@ -13,7 +13,7 @@
 <?php include '../../common/view/sparkline.html.php';?>
 <div id='featurebar'>
   <div class='heading'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->project->allProject;?>  </div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
   </div>
   <ul class='nav'>

@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><i class='icon-folder-close'></i> <?php echo $lang->product->project;?>  </div>
 </div>
 <table class='table'>

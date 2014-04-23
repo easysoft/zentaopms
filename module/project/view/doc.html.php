@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <div class='container'>
-  <div id='featurebar'>
+  <div id='titlebar'>
     <div class='heading'>
       <?php echo html::icon($lang->icons['doc']);?> <?php echo $lang->project->doc;?>
     </div>

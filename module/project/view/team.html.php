@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkMember', $lang->project->confirmUnlinkMember)?>
 <div class='container mw-700px'>
-  <div id='featurebar'>
+  <div id='titlebar'>
     <div class='heading'>
       <?php echo html::icon($lang->icons['team']);?> <?php echo $lang->project->team;?>
     </div>

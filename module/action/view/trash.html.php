@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'>
     <?php echo html::icon($lang->icons['trash']);?> <?php echo $lang->action->trash;?>
   </div>

@@ -14,7 +14,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
   <div class='heading'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->product->index;?>  </div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>
 </div>

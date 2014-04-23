@@ -12,9 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><i class='icon-flag'></i> <?php echo $lang->productplan->browse;?>  </div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php common::printIcon('productplan', 'create', "productID=$product->id", '', 'button', 'plus');?>
   </div>
 </div>

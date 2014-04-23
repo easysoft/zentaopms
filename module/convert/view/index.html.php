@@ -21,7 +21,7 @@
     <div class='content'>
       <?php echo nl2br($lang->convert->desc);?>
       <div class='text-center pdt-20'>
-        <?php echo html::a($this->createLink('convert', 'selectsource'), '<i class="icon-exchange"></i> ' . $lang->convert->start, '', 'class="btn btn-primary"');?>
+        <?php echo html::a($this->createLink('convert', 'selectsource'), $lang->convert->start, '', 'class="btn btn-primary"');?>
       </div>
     </div>
   </div>

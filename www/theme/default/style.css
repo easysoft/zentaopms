@@ -446,7 +446,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #titlebar #querybox {margin: 5px -20px -10px}
 
 /* Container in outer */
-.outer > .container {margin: 20px auto; padding: 0; border: 1px solid #ddd;}
+.outer > .container {margin: 0 auto 20px; padding: 0; border: 1px solid #ddd;}
 .outer > .container > #featurebar, .outer > .container > #titlebar {margin: 0}
 .outer > .container > form, body > .container > form{padding: 10px 30px 10px 15px}
 .outer > .container > .table-data {margin: 10px 0}

@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <div class='container'>
-  <div id='featurebar'>
+  <div id='titlebar'>
     <div class='heading'><i class='icon-globe'></i> <?php echo $lang->sso->browse;?></div>
     <div class='actions'><?php common::printIcon('sso', 'create');?></div>
   </div>
