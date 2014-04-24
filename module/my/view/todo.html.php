@@ -106,13 +106,13 @@
           if(common::hasPriv('todo', 'batchEdit'))
           {
               $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
-              echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"", '', 'edit');
+              echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
 
           }
           if(common::hasPriv('todo', 'batchFinish'))
           {
               $actionLink = $this->createLink('todo', 'batchFinish');
-              echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"", '', 'ok');
+              echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
 
           }
           echo '</div>';

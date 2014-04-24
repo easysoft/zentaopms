@@ -1,8 +1,8 @@
 /*treeview*/
 .treeview .hitarea {position: absolute; left: 15px; top: 10px; background-color: #fff; cursor: pointer;}
-.treeview > li > .hitarea {left: 0px; top: 0px;}
-.treeview .hitarea:before {color: #999; content: '\e710'; font-family: ZenIcon; transition:all 0.3s;}
+.treeview > li > .hitarea {left: -1px; top: -1px;}
+.treeview .hitarea:before {color: #999; content: '\e6f1'; font-family: ZenIcon; transition:all 0.3s; font-size: 14px}
 .treeview li:hover .hitarea:before {color: #2973EA;}
-.treeview .hitarea.collapsable-hitarea:before {content: '\e712';}
+.treeview .hitarea.collapsable-hitarea:before {content: '\e6f2';}
 
-.treeview .form-control {padding: 1px 2px; height: 22px;}
+.treeview .form-control {padding: 1px 2px; height: 22px; display: inline-block;}

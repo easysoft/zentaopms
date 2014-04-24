@@ -75,8 +75,7 @@
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=form-control');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=form-control text-center');?></td>
       <td>
-        <div class='form-control' contenteditable='true' data-sync-target='#desc\[<?php echo $i;?>\]'></div>
-        <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control hidden'");?>
+        <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control'");?>
       </td>
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>

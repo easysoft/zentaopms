@@ -16,7 +16,7 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix pull-left'><?php echo html::icon($lang->icons['todo']);?></span>
-      <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->common . $lang->colon . $lang->todo->batchCreate;?></strong>
+      <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->batchCreate;?></strong>
       <div class='input-group w-200px pull-left' id='datepicker'>
         <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
         <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
@@ -45,7 +45,7 @@
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
       </td>
-      <td><div class='form-control' contenteditable='true' data-sync-target='#descs\[<?php echo $i;?>\]'></div><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control hidden'");?></td>
+      <td><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
       <td>
         <div class='input-group'>
           <?php echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'") . html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'");?>

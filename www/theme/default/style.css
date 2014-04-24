@@ -393,7 +393,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #titlebar > .heading {font-size: 14px; line-height: 20px; font-weight: bold;}
 #titlebar > .heading > i {display: none;}
 #titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666; border-radius: 4px;}
-#titlebar > .heading > .prefix > i {font-size: 14px; color: #808080}
+#titlebar > .heading > .prefix > i {font-size: 14px; color: #808080; display: none}
 #titlebar > .heading > strong {display: inline-block; margin-right: 5px;}
 #titlebar > .heading > strong > i, #titlebar > .heading > strong > small > i {display: none}
 #titlebar > .heading > small > i {position: relative; top: 1px;}
@@ -414,7 +414,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* table in outer */
 .outer .table {margin-bottom: 0; border: 1px solid #ddd;}
-.outer .table.table-form, .outer .table.table-data {border: none}
 .outer .table thead tr th {text-align: center;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
@@ -453,6 +452,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer > .container {margin: 0 auto 20px; padding: 0; border: 1px solid #ddd;}
 .outer > .container > #featurebar, .outer > .container > #titlebar {margin: 0}
 .outer > .container > form, body > .container > form{padding: 10px 30px 10px 15px}
+.outer > .container .table-form, .outer > .container .table-data {border: none}
 .outer > .container > .table-data {margin: 10px 0}
 
 /* Main content in outer */
@@ -548,13 +548,13 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 /* Tree menu. */
 .tree {padding: 0; margin: 0;}
 .tree li,.tree ul {margin: 0; padding: 0; display: block; position: relative;}
-.tree > li {margin-right: 20px; font-weight: 400; padding-bottom: 8px;}
-.tree > li > ul li {padding: 10px 15px 0; margin: 0;}
-.tree li:before {display: inline-block; margin-right: 6px; content: '\e6ec'; font-family: ZenIcon; color: #ddd;}
-.tree > li ul {border-left: 1px dashed #ccc; margin-left: 7px; font-weight: normal;}
-.tree > li ul > li:before {content: '\e6e8';}
-.tree > li ul > li:hover:before {content: '\e6ec';}
-.tree > li ul > li:after {position: absolute; display: block; content: ""; width: 15px; left: -1px; top: 20px; height: 20px; border-top: 1px dashed #ccc;}
+.tree > li {margin-right: 20px; font-weight: 400; padding-bottom: 6px;}
+.tree > li > ul li {padding: 6px 15px 0; margin: 0;}
+.tree li:before {display: inline-block; margin-right: 6px; position: relative; top: 0; left: 0; content: ' '; width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px}
+.tree > li ul {border-left: 1px dotted #aaa; margin-left: 3px; font-weight: normal;}
+.tree > li ul > li:before {margin-right: 4px;}
+.tree > li ul > li:hover:before {content: ' ';}
+.tree > li ul > li:after {position: absolute; display: block; content: ""; width: 15px; left: -1px; top: 16px; height: 20px; border-top: 1px dotted #aaa;}
 .tree > li > ul li:last-child:after {border-left: 1px solid #fff;}
 
 /* Select all and select reverse. */

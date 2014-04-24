@@ -41,8 +41,7 @@
       <td><?php echo html::select("plan[$i]", $plans, $planID, 'class=form-control');?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
       <td>
-        <div class='form-control' contenteditable='true' data-sync-target='#spec\[<?php echo $i;?>\]'></div>
-        <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control hidden'");?>
+        <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?>
       </td>
       <td><?php echo html::select("pri[$i]", (array)$lang->story->priList, $pri, 'class=form-control');?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>

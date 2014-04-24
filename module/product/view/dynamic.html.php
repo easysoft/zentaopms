@@ -34,7 +34,7 @@
     <th class='w-150px'><?php echo $lang->action->date;?></th>
     <th class='w-80px'> <?php echo $lang->action->actor;?></th>
     <th class='w-100px'><?php echo $lang->action->action;?></th>
-    <th class='w-80px'> <?php echo $lang->action->objectType;?></th>
+    <th class='w-90px'> <?php echo $lang->action->objectType;?></th>
     <th class='w-id'>   <?php echo $lang->idAB;?></th>
     <th><?php echo $lang->action->objectName;?></th>
   </tr>
