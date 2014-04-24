@@ -120,6 +120,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 
 /* Icon rotate */
 .icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
+.icon-rotate-180:before {display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -ms-transform: rotate(180deg); -o-transform: rotate(180deg); transform: rotate(180deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);}
 
 /* Button icon */
 .btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; border: none; background: none; padding: 0; color: #4d90fe!important; text-align: center;}
@@ -508,10 +509,15 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer form .panel {margin-bottom: 0;}
 
 /* Pager. */
-.pager {margin-bottom:0;line-height: 30px; color: #999}
-#_recPerPage, #_pageID, .pager .btn{display: inline-block; min-width: 30px; font-size: 10px; padding: 1px 4px; line-height: 20px; height: 24px}
-#_recPerPage {width: 60px}
-#goto {padding: 1px 6px;}
+.pager {margin-bottom:0;line-height: 20px; color: #999}
+.pager .dropdown {display: inline-block;}
+.pager a {color: #444}
+.pager a:hover {color: #141414}
+.pager > .dropdown > a, .pager > i, .pager > a {display: inline-block; position: relative; padding: 5px; min-width: 25px; text-align: center; margin-left: -5px;}
+.pager .dropdown > a:hover, .pager > a:hover {background: #e5e5e5;}
+.pager .dropdown-menu {margin-top: 0; width: 212px; top: auto; bottom: 100%; margin-left: -5px; padding: 0;}
+.pager .dropdown-menu > li {display: block; float: left; width: 70px; border-right: 1px dotted #ddd; border-bottom: 1px dotted #ddd}
+#_pageID, #goto {display: none}
 
 /* modal with iframe */
 .modal-dialog {transition: all .3s;}

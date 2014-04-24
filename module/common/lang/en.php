@@ -349,11 +349,12 @@ $lang->error->noData          = 'No data';
 /* Pager. */
 $lang->pager = new stdclass();
 $lang->pager->noRecord  = "No records yet.";
-$lang->pager->digest    = "<strong>%s</strong> records, <strong>%s</strong> per page, <strong>%s/%s</strong> ";
-$lang->pager->first     = "First";
-$lang->pager->pre       = "Previous";
-$lang->pager->next      = "Next";
-$lang->pager->last      = "Last";
+$lang->pager->digest    = "<strong>%s</strong> records, %s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage= "<strong>%s</strong> per page";
+$lang->pager->first     = "<i class='icon-step-backward' title='First'></i>";
+$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='Previous'></i>";
+$lang->pager->next      = "<i class='icon-play' title='Next'></i>";
+$lang->pager->last      = "<i class='icon-step-forward' title='Last'></i>";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "Official Site";
