@@ -104,7 +104,7 @@ function showDropMenu(objectType, objectID, module, method, extra)
  */
 function showDropResult(objectType, objectID, module, method, extra)
 {
-    $('#resultList').load(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra) + ' #searchResult');
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data).find('#search').focus();});
 }
 
 /**
@@ -125,7 +125,6 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     {
         showMenu = 0;
         showDropResult(objectType, objectID, module, method, extra);
-        setTimeout(function(){$("#dropMenu #search").focus();}, 300);
     }
     else
     {

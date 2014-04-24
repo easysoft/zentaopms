@@ -23,12 +23,12 @@
     {
         if($product->status == 'normal' and $product->PO == $this->app->user->account) 
         {
-            echo "<li>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='mine'"). "</li>";
+            echo "<li>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='mine text-important'"). "</li>";
         }
     }
  
     if($iCharges and $others) echo "<li class='heading'>{$lang->product->other}</li>";
-    $class = ($iCharges and $others) ? "class='other'" : '';
+    $class = ($iCharges and $others) ? "class='other text-special'" : '';
     foreach($products as $product)
     {
         if($product->status == 'normal' and !($product->PO == $this->app->user->account))
