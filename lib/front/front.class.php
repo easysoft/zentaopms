@@ -520,7 +520,7 @@ EOT;
     {
         if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
         if($class) $class = 'btn ' . $class; else $class = 'btn';
-        return " <button $misc class='$class'>$label</button>";
+        return " <button type='button' $misc class='$class'>$label</button>";
     }
 
     /**

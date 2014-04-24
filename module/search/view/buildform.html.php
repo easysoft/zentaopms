@@ -30,15 +30,17 @@
 .outer #querybox .table tbody > tr:last-child td {padding: 2px}
 #querybox a:hover {text-decoration: none;}
 
-#selectPeriod {padding: 4px; height: 197px}
-#selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 4px; color: #333}
-#selectPeriod li > a {padding: 4px 15px; border-radius: 4px}
+#selectPeriod {padding: 4px; height: 197px; min-width: 120px}
+#selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
+#selectPeriod li > a {padding: 4px 15px; border-radius: 2px}
 
 #searchlite, #searchmore {color: #4d90fe; width: 30px; padding: 0 5px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
 #searchmore > i, #searchlite > i {font-size: 28px;}
 #searchmore:hover, #searchlite:hover {color: #145CCD;}
+
+.bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
 </style>
 <script language='Javascript'>
 var dtOptions = 
@@ -82,21 +84,23 @@ var actionURL     = '<?php echo $actionURL;?>';
  * @param  string $query 
  * @return void
  */
-function setDateField(query)
+function setDateField(query, fieldNO)
 {
     var $period = $('#selectPeriod');
     if(!$period.length)
     {
-        $period = $("<ul id='selectPeriod' class='dropdown-menu show'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
-        $period.find('li > a').click(function()
+        $period = $("<ul id='selectPeriod' class='dropdown-menu'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
+        $period.find('li > a').click(function(event)
         {
             var target = $('#' + $period.data('target'));
             if(target.length)
             {
+                console.log($(this).attr('href'));
                 target.val($(this).attr('href').replace('#', '$'));
-                // target.datetimepicker('hide');
+                $('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }
+            event.stopPropagation();
             return false;
         });
     }
@@ -104,9 +108,14 @@ function setDateField(query)
     {
         var $e = $(e.target);
         var ePos = $e.offset();
-        $period.css({'left': ePos.left + 175, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).find('li.active').removeClass('active');
+        $period.css({'left': ePos.left + 175, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).data('fieldNO', fieldNO).find('li.active').removeClass('active');
         $period.find("li > a[href='" + $e.val().replace('$', '#') + "']").closest('li').addClass('active');
-    }).on('hide', function(e){setTimeout(function(){$period.hide();}, 100)});
+    }).on('changeDate', function()
+    {
+        var opt = $('#operator' + $period.data('fieldNO'));
+        if(opt.val() == 'between') opt.val('<=');
+        $period.hide();
+    }).on('hide', function(){setTimeout(function(){$period.hide();}, 200);});
 }
 
 /**
@@ -125,7 +134,7 @@ function setField(fieldName, fieldNO)
 
     if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
-        setDateField("#value" + fieldNO);
+        setDateField("#value" + fieldNO, fieldNO);
         $("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
         var groupItems = <?php echo $config->search->groupItems?>;
         var maxNO      = 2 * groupItems;
@@ -137,7 +146,7 @@ function setField(fieldName, fieldNO)
             $('#operator' + nextNO).val('<=');
             $('#valueBox' + nextNO).html($('#box' + fieldName).children().clone());
             $('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
-            setDateField("#value" + nextNO);
+            setDateField("#value" + nextNO, nextNO);
             $("#value" + nextNO).addClass('date');
         }
     }
@@ -205,7 +214,7 @@ function showlite()
  */
 function saveQuery()
 {
-    jPrompt(setQueryTitle, '', '', function(r) 
+    bootbox.prompt(setQueryTitle, function(r)
     {
         if(!r) return;
         saveQueryLink = createLink('search', 'saveQuery');
@@ -259,7 +268,7 @@ foreach($fieldParams as $fieldName => $param)
 <table class='table table-condensed table-form'>
   <tr>
     <td>
-      <table class='table active-disabled'>
+      <table class='table active-disabled w-400px pull-right'>
       <?php
       $formSessionName = $module . 'Form';
       $formSession     = $this->session->$formSessionName;
@@ -281,7 +290,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-100px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
+          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -304,7 +313,7 @@ foreach($fieldParams as $fieldName => $param)
       </table>
     </td>
     <td class='text-center nobr'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control w-60px'")?></td>
-    <td>
+    <td class='w-400px'>
       <table class='table active-disabled'>
       <?php
       for($i = 1; $i <= $groupItems; $i ++)
@@ -323,7 +332,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-100px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
+          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -346,13 +355,13 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </table>
     </td>
-    <td class='w-180px'> 
+    <td class='w-150px'> 
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
       echo "<div class='btn-group'>";
-      echo html::submitButton("<i class='icon-search'></i> " . $lang->search->common, '', 'btn-primary');
+      echo html::submitButton($lang->search->common, '', 'btn-primary');
       echo html::commonButton($lang->search->reset, 'onclick=resetForm(); class=btn');
       echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
       echo '</div>';
@@ -366,7 +375,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </div>
     </td>
-    <th class='w-40px text-right'>
+    <th class='text-right'>
       <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
       <a id="searchlite" href="javascript:showlite()"><i class="icon-double-angle-up icon-2x"></i></a>
       <?php echo html::hidden('formType', 'lite');?>

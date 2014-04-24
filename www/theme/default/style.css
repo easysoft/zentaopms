@@ -521,6 +521,9 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* modal with iframe */
 .modal-dialog {transition: all .3s;}
+.modal-title {font-size: 14px;}
+
+/* modal with iframe */
 .modal-iframe .modal-body {transition: all 0.3s; padding: 0}
 .modal.with-titlebar .modal-header, .modal-dialog.hide-header .modal-header{position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
 .modal.with-titlebar .modal-header .modal-body,  .modal-dialog.hide-header .modal-header .modal-body {z-index: 990}
