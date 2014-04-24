@@ -843,14 +843,15 @@ function setModal()
             {
                 var options = 
                 {
-                    url:      url,
-                    width:    $e.data('width') || 800,
-                    height:   $e.data('height') || 'auto',
-                    icon:     $e.data('icon') || '?',
-                    title:    $e.data('title') || $e.attr('title') || $e.text(),
-                    name:     $e.data('name') || 'modalIframe',
-                    cssClass: $e.data('class'),
-                    headerless: $e.data('headerless') || false
+                    url:        url,
+                    width:      $e.data('width') || 800,
+                    height:     $e.data('height') || 'auto',
+                    icon:       $e.data('icon') || '?',
+                    title:      $e.data('title') || $e.attr('title') || $e.text(),
+                    name:       $e.data('name') || 'modalIframe',
+                    cssClass:   $e.data('class'),
+                    headerless: $e.data('headerless') || false,
+                    center:     $e.data('center') || true,
                 }
                 options = $.extend(options, setting);
                 
@@ -876,10 +877,10 @@ function setModal()
                 var modal = $('#ajaxModal').addClass('modal-loading');
                 modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
-                var modalBody = modal.find('.modal-body');
+                var modalBody = modal.find('.modal-body'), dialog = modal.find('.modal-dialog');
                 if(options.cssClass)
                 {
-                    modal.find('.modal-dialog').addClass(options.cssClass);
+                    dialog.addClass(options.cssClass);
                 }
                 var frame = document.getElementById(options.name);
                 frame.onload = frame.onreadystatechange = function()
@@ -905,6 +906,7 @@ function setModal()
                             setTimeout(function()
                             {
                                 modalBody.css('height', $framebody.addClass('body-modal').outerHeight());
+                                if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
                                 modal.removeClass('modal-loading');
                             }, 100);
 
