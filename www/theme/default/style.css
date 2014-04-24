@@ -43,6 +43,9 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 tr.text-top td {vertical-align: top!important;}
 
 /* === Components === */
+/* remove outline of links */
+a,a:focus,a:active {text-decoration: none; outline:none;}
+
 /* Lable */
 .label-badge {padding: 2px 6px}
 
