@@ -191,16 +191,16 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed .table-form {margin-bottom: 0;}
 .form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
 .form-condensed .table-form >  td + td, .form-condensed .table-form > th + th, .form-condensed .table-form > tbody > td + td, .form-condensed .table-form > tbody > th + th {padding-left: 5%;}
-.form-condensed fieldset {background-color: #eee; padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 2px; position: relative;}
+.form-condensed fieldset {padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 2px; position: relative;}
 .form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
 .form-condensed fieldset .table-form {margin-bottom: 0;}
 .form-condensed fieldset.collapsed, .form-condensed fieldset.fieldset-pure.collapsed {padding: 1px!important; background: #eee!important}
 .form-condensed fieldset.collapsed .table-form, .form-condensed fieldset.collapsed .article-content, .form-condensed fieldset.collapsed .form-group, .form-condensed fieldset.collapsed #historyItem {display: none}
-.form-condensed legend {font-size: 12px; font-weight: bold; border:0px solid red; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666}
+.form-condensed legend {font-size: 12px; font-weight: bold; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666; background: #f1f1f1;}
 .form-condensed .fieldset-pure legend{top: -20px}
-.form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}
+/*.form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}*/
 .form-condensed legend:hover {color: #333;}
-.form-condensed fieldset.collapsed legend:before {content: '\e6bb'}
+/*.form-condensed fieldset.collapsed legend:before {content: '\e6bb'}*/
 .form-condensed .chosen-container-single .chosen-single {padding: 4px 10px; height: 30px}
 .form-condensed .chosen-container-single .chosen-single div {padding: 4px 10px}
 .form-condensed .chosen-container-multi .chosen-choices {min-height: 30px}
@@ -520,11 +520,10 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #_pageID, #goto {display: none}
 
 /* modal with iframe */
-.modal-dialog {transition: all .3s;}
 .modal-title {font-size: 14px;}
 
 /* modal with iframe */
-.modal-iframe .modal-body {transition: all 0.3s; padding: 0}
+.modal-iframe .modal-body {padding: 0}
 .modal.with-titlebar .modal-header, .modal-dialog.hide-header .modal-header{position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
 .modal.with-titlebar .modal-header .modal-body,  .modal-dialog.hide-header .modal-header .modal-body {z-index: 990}
 .modal.with-titlebar .modal-header .modal-title, .modal-dialog.hide-header .modal-header .modal-title {display: none}
@@ -541,9 +540,9 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .modal-dialog.fullscreen {width: 100% !important; height: 100% !important; margin: 0; border: none !important;}
 .modal-dialog.fullscreen .modal-body iframe {height: 100%}
 
-.modal-loading .modal-dialog {margin-top: -100% !important}
+.modal-loading .modal-dialog {margin-top: -100%!important;}
 .loader {display: none}
-.modal-loading .loader{display: block; text-align: center; font-size: 56px; color: #fff; margin-top: 10%}
+.modal-loading .loader{position: absolute; display: block; text-align: center; font-size: 56px; color: #fff; top: 35%; width: 100%}
 
 /* about dialog */
 .modal .modal-about.modal-dialog {margin-top: 9%;}

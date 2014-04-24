@@ -88,7 +88,7 @@
         </tr>
       </table>
     </fieldset>
-    <?php echo html::submitButton('', '', 'btn-primary') . html::backButton();?>
+    <div class='text-center'><?php echo html::submitButton('', '', 'btn-primary') . ' &nbsp; ' . html::backButton();?></div>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

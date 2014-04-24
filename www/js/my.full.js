@@ -874,7 +874,7 @@ function setModal()
                     var i = $e.find("[class^='icon-']");
                     options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                 }
-                var modal = $('#ajaxModal').addClass('modal-loading');
+                var modal = $('#ajaxModal').addClass('modal-loading').data('first', true);
                 modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
                 var modalBody = modal.find('.modal-body'), dialog = modal.find('.modal-dialog');
@@ -886,6 +886,7 @@ function setModal()
                 frame.onload = frame.onreadystatechange = function()
                 {
                     if (this.readyState && this.readyState != 'complete') return;
+                    if(!modal.data('first')) modal.addClass('modal-loading');
 
                     modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
 
@@ -908,6 +909,7 @@ function setModal()
                                 modalBody.css('height', $framebody.addClass('body-modal').outerHeight());
                                 if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
                                 modal.removeClass('modal-loading');
+                                if(modal.data('first')) modal.data('first', false);
                             }, 100);
 
                             $framebody.resize(function()
