@@ -32,31 +32,21 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('holders', $lang->project->placeholder);?>
-<div class='container mw-900px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['project']);?></span>
       <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->project->create;?></strong>
     </div>
     <div class='actions'>
-      <?php if($copyProjectID != 0):?>
-      <div class='text text-success'>
-        <i class='icon-ok-sign'></i> <?php printf($lang->project->copyFromProject, html::icon($lang->icons['project']) . ' ' . $projects[$copyProjectID]);?>
-      </div>
-      <div class='btn-group'>
-        <a class='btn text-danger' href='javascript:setCopyProject("");'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?> ?</a>
-        <button class='btn btn-primary' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->reCopy;?> ?</button>
-      </div>
-      <?php else:?>
-      <button class='btn btn-primary' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copy;?> ?</button>
-      <?php endif; ?>
+      <button class='btn' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copy;?></button>
     </div>
   </div>
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
     <table class='table table-form'> 
       <tr>
         <th class='w-90px'><?php echo $lang->project->name;?></th>
-        <td class='w-p35-f'><?php echo html::input('name', $name, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::input('name', $name, "class='form-control'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->project->code;?></th>
@@ -69,15 +59,10 @@
             <?php echo html::input('begin',date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
             <span class='input-group-addon'><?php echo $lang->project->to;?></span>
             <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "'");?>
-            <div class='input-group-btn'>
-              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><?php echo $lang->project->byPeriod;?> <span class='caret'></span></button>
-              <ul class='dropdown-menu'>
-              <?php foreach ($lang->project->endList as $key => $name):?>
-                <li><a href='javascript:computeEndDate("<?php echo $key;?>")'><?php echo $name;?></a></li>
-              <?php endforeach;?>
-              </ul>
-            </div>
           </div>
+        </td>
+        <td>
+          &nbsp; &nbsp; <?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?>
         </td>
       </tr>
       <tr>
@@ -97,7 +82,9 @@
         <th><?php echo $lang->project->type;?></th>
         <td>
           <?php echo html::select('type', $lang->project->typeList, '', "class='form-control'");?>
-          <div class='help-block'><i class='icon-question-sign'></i> <?php echo $lang->project->typeDesc;?></div>
+        </td>
+        <td>
+          <div class='help-block'><?php echo $lang->project->typeDesc;?></div>
         </td>
       </tr>
       <tr>
@@ -115,10 +102,9 @@
       <tr id='whitelistBox' <?php if($acl != 'custom') echo "class='hidden'";?>>
         <th><?php echo $lang->project->whitelist;?></th>
         <td colspan='2'><?php echo html::checkbox('whitelist', $groups, $whitelist);?></td>
-      </tr>  
+      </tr>
       <tr>
-        <td></td>
-        <td colspan='2'><?php echo html::submitButton() . html::backButton();?></td>
+        <td></td><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
       </tr>
     </table>
   </form>
@@ -127,7 +113,7 @@
   <div class='modal-dialog mw-800px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'>&times;</button>
-      <h4 class='modal-title' id='myModalLabel'><i class='icon-copy'></i> <?php echo $lang->project->copy;?> <small><?php echo $lang->project->copyTitle;?></small></h4>
+      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
     </div>
     <div class='modal-body'>
       <?php if(count($projects) == 1):?>

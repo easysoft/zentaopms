@@ -30,7 +30,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->task->module;?></th>
-        <td id='moduleIdBox' class='w-p35'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control' onchange='setStories(this.value,$project->id)'");?></td><td class='w-p40'></td><td></td>
+        <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control' onchange='setStories(this.value,$project->id)'");?></td><td class='w-p40'></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->assignedTo;?></th>
@@ -43,16 +43,21 @@
       <tr>
         <th><?php echo $lang->task->story;?></th>
         <td colspan='2'>
-          <?php echo html::select('story', $stories, $task->story, 'class=form-control onchange=setStoryRelated();');?>
-        </td><td><a href='#' id='preview' class='iframe'><i class='icon-eye-open'></i> <?php echo $lang->preview;?></a></td>
+          <div class='input-group'>
+            <?php echo html::select('story', $stories, $task->story, "class=form-control onchange='setStoryRelated();'");?>
+            <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><i class='icon-eye-open'></i> <?php echo $lang->preview;?></a></span>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->task->name;?></th>
         <td colspan='2'>
-          <?php echo html::input('name', $task->name, "class='form-control'");?>
+          <div class='input-group'>
+            <?php echo html::input('name', $task->name, "class='form-control'");?>
+            <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><i class='icon-copy'></i> <?php echo $lang->task->copyStoryTitle;?></a></span>
+          </div>
         </td>
-        <td><a href='#' id='copyButton' onclick='copyStoryTitle()'><i class='icon-copy'></i> <?php echo $lang->task->copyStoryTitle;?></a></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->task->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', $task->desc, "rows='7' class='form-control'");?></td><td></td>

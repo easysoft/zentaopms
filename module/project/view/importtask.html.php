@@ -14,21 +14,17 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->project->importTask;?></strong>
+    <span class='prefix pull-left'><?php echo html::icon($lang->icons['task']);?></span>
+    <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->project->importTask;?></strong>
+    <div class='input-group pull-left'>
+      <?php $projects = array(0 => $lang->project->fromproject) + $projects;?>
+      <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
+      <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control'");?>
+    </div>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table tablesorter table-fixed'>
-    <caption class='text-left'>
-      <div class='form-group mg-0'>
-        <div class='input-group'>
-          <?php $projects = array(0 => $lang->project->fromproject) + $projects;?>
-          <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
-          <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control' style='width: 200px'");?>
-        </div>
-      </div>
-    </caption>
     <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>

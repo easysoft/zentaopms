@@ -7,7 +7,8 @@
         foreach($lang->reportList->$submenu->lists as $list)
         {
             list($label, $module, $method) = explode('|', $list);
-            echo html::a($this->createLink($module, $method), "<i class='icon-file-powerpoint'></i> " . $label, '', "class='list-group-item'");
+            $class = $label == $title ? ' active' : '';
+            echo html::a($this->createLink($module, $method), "<i class='icon-bar-chart'></i> " . $label, '', "class='list-group-item $class'");
         }
     ?>
     </ul>

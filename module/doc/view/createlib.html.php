@@ -18,12 +18,11 @@
   </div>
 </div>
 <div class='main'>
-  <form method='post' class='form-condensed'>
-    <div class='form-group'>
-      <label for="name"><?php echo $lang->doc->libName;?></label>
-      <?php echo html::input('name', '', "class='form-control'");?>
+  <form method='post' class='form-condensed' style='margin: 30px 50px'>
+    <div class='input-group'>
+      <?php echo html::input('name', '', "class='form-control' placeholder='{$lang->doc->libName}'");?>
+      <span class='input-group-btn'><?php echo html::submitButton();?></span>
     </div>
-    <?php echo html::submitButton();?>
   </form>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

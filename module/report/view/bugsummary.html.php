@@ -5,17 +5,15 @@
     <span class='prefix'><?php echo html::icon($lang->icons['report-file']);?></span>
     <strong> <?php echo $title;?></strong>
   </div>
-  <div class='actions'>
+</div>
+<div class='side'>
+  <?php include 'blockreportlist.html.php';?>
+  <div class='panel panel-body' style='padding: 10px 6px'>
     <div class='text proversion'>
       <strong class='text-danger small text-latin'>PRO</strong> &nbsp;<span class='text-important'><?php echo $lang->report->proVersion;?></span>
     </div>
   </div>
 </div>
-<div class='side'>
-  <a class='side-handle' data-id='bugSummaryTree'><i class='icon-caret-left'></i></a>
-  <?php include 'blockreportlist.html.php';?>
-</div>
-
 <div class='main'>
   <div class='input-group w-300px input-group-sm'>
     <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>

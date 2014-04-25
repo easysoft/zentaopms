@@ -161,7 +161,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .fail, [class$="-fail"]  {color:red}
 
 /* tabs */
-.nav-tabs > li > a {padding: 5px 10px; color: #333}
+.nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px;}
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {color: #333; font-weight: bold; line-height: 20px}
 .tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 10px}
 .tab-pane > h6 {margin-top: 0; margin-bottom: 3px;}
@@ -186,6 +186,8 @@ fieldset > .form-group {margin-bottom: 0;}
 .table-form > tbody > tr > td > .row {margin-right: 0;}
 .table-form > tbody > tr > td > .row > [class*="col-"] {padding-right: 0;line-height: 34px}
 .table-form > tbody > tr > td .checkbox {margin: 0}
+.table-form > tbody > tr > td > .radio:first-child {margin-top: 0;}
+.table-form > tbody > tr > td > .radio:last-child {margin-bottom: 0;}
 .table-form > tbody > tr > td .btn + .btn {margin-left: 8px;}
 .table-form > tbody > tr > td .btn-group .btn + .btn {margin-left: -1px;}
 .table-form  tr > td > .input-group {width: 100%}
@@ -446,7 +448,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table tfoot .pager {margin: 0;}
 
 /* color of a when visited */
-.outer .table tbody td a:visited, #crumbs a:visited, .side > a:visited {color: #551A8B}
+.outer .table tbody td > a:visited, #crumbs > a:visited, .side > a:visited {color: #551A8B}
 
 /* Querybox */
 #querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none; padding: 10px}
@@ -513,17 +515,18 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .pager .dropdown-menu > li {display: block; float: left; width: 70px; border-right: 1px dotted #ddd; border-bottom: 1px dotted #ddd}
 #_pageID, #goto {display: none}
 
-/* modal with iframe */
+/* modal */
+.modal-dialog {border: 8px solid #666; border-color: rgba(0,0,0,.25)}
 .modal-title {font-size: 14px;}
 
 /* modal with iframe */
-.modal-iframe {border: 8px solid #666; border-color: rgba(0,0,0,.25)}
 .modal-iframe .modal-body {padding: 0;}
 .modal.with-titlebar .modal-header, .modal-dialog.hide-header .modal-header{position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
 .modal.with-titlebar .modal-header .modal-body,  .modal-dialog.hide-header .modal-header .modal-body {z-index: 990}
 .modal.with-titlebar .modal-header .modal-title, .modal-dialog.hide-header .modal-header .modal-title {display: none}
 .modal.with-titlebar .modal-header .close, .modal-dialog.hide-header .modal-header .close {position: absolute; right: 15px; top: 15px}
 .body-modal {padding-bottom: 0; overflow: hidden;}
+.body-modal .outer > .row {margin: 10px 0 0}
 .body-modal .outer > form, .body-modal .outer > .container > form {margin: 10px 20px 10px; padding: 5px 20px 10px 10px;}
 .body-modal .outer > form > .table-form, .body-modal .outer > .container > form > .table-form {border:none;}
 .body-modal .outer > .main, .body-modal .outer > .container > .main, .body-modal > .main {padding: 10px 20px; margin: 0}

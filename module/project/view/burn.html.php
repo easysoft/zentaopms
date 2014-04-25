@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?>
+<?php js::set('projectID', $projectID);?>
+<?php js::set('type', $type);?>
 <div class='container text-center bd-0'>
   <div class='clearfix'>
     <div class='actions pull-right'>

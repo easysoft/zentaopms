@@ -60,7 +60,7 @@ function setPreview()
         var concat = config.requestType == 'PATH_INFO' ? '?'  : '&';
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
-        $('#preview').attr('href', storyLink);
+        $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
     }
 
@@ -121,8 +121,6 @@ function setStories(moduleID, projectID)
 
 $(document).ready(function()
 {
-    var options = {no_results_text: noResultsMatch, allow_single_deselect: true, disable_search_threshold: 10, width: '100%', placeholder_text_single: selectAnOption, placeholder_text_multiple: selectSomeOptions};
     setPreview();
-    $("#story").chosen(options);
-    $("#mailto").chosen(options);
+    $("#story, #mailto").chosen(defaultChosenOptions);
 });

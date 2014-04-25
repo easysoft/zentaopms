@@ -21,17 +21,7 @@
       <small class='text-muted'><i class='icon icon-cogs'></i></small>
     </div>
     <div class='actions'>
-      <?php if($team2Import != 0):?>
-      <div class='text text-success'>
-        <i class='icon-ok-sign'></i> <?php printf($lang->project->copyFromTeam, html::icon($lang->icons['group']) . ' ' . $teams2Import[$team2Import]);?>
-      </div>
-      <div class='btn-group'>
-        <a class='btn text-danger' href='javascript:importTeam(0);'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?> ?</a>
-        <button class='btn btn-primary' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->reCopy;?> ?</button>
-      </div>
-      <?php else:?>
-      <button class='btn btn-primary' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?> ?</button>
-      <?php endif; ?>
+      <button class='btn' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?></button>
     </div>
   </div>
   <form class='form-condensed' method='post'>
@@ -103,7 +93,7 @@
   <div class='modal-dialog mw-700px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'>&times;</button>
-      <h4 class='modal-title' id='myModalLabel'><i class='icon-copy'></i> <?php echo $lang->project->copyTeam;?> <small><?php echo $lang->project->copyTeamTitle;?></small></h4>
+      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTeamTitle;?></h4>
     </div>
     <div class='modal-body'>
       <?php if(count($teams2Import) == 1):?>

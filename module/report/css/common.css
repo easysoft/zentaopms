@@ -3,9 +3,7 @@
 .choose-date span{line-height:20px;}
 .date{width:80px;}
 ul li{list-style:none;}
-/*#product td, tr, th{ border:1px solid #E4E4E4;}*/
-/*#workload td, tr, th{ border:1px solid #E4E4E4;}*/
-/*#bug td, tr, th{ border:1px solid #E4E4E4;}*/
+
 #product p{margin:2px 0;}
 .table-bordered, .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: none}
 
@@ -19,6 +17,7 @@ ul li{list-style:none;}
 .main > .input-group > .datepicker-wrapper {display: table-cell;}
 .main > .input-group > .datepicker-wrapper > .form-control {padding: 5px 10px; height: 30px}
 .main > .input-group > .datepicker-wrapper:before {top: 4px}
+.main > .input-group > .datepicker-wrapper + .input-group-addon {border-left: none;border-right: none;}
 
 td .deviation{padding-left:20px; text-align:left;}
 .up{color:red; padding-right:2px;}
@@ -30,3 +29,5 @@ td .deviation{padding-left:20px; text-align:left;}
 .u0{color:#FFCB05;}
 .d0{color:#76B043;}
 .d20{color:#33A52E;}
+
+#titlebar {display: none}

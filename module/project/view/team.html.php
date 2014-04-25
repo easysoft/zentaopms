@@ -19,7 +19,7 @@
       <?php echo html::icon($lang->icons['team']);?> <?php echo $lang->project->team;?>
     </div>
     <div class='actions'>
-      <?php common::printLink('project', 'managemembers', "projectID=$project->id", "<i class='icon-cogs'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary'");?>
+      <?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary'");?>
     </div>
   </div>
   <table class='table tablesorter' id='memberList'>

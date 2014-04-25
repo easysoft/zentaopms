@@ -10,3 +10,7 @@
 
 .outer .container .table-form {margin-top: 0;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 5px;}
+
+.modal-dialog {margin-top: 10%;}
+
+.table-form thead > tr > th {background: none; border: none}
