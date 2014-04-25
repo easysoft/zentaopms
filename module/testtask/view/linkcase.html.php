@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['testtask']) . ' #' . $task->id;;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['testtask']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $task->id), $task->name, '_blank');?></strong>
     <small class='text-muted'> <?php echo $lang->testtask->linkCase;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
@@ -78,7 +78,7 @@
   <tr>
     <td colspan='7'>
       <?php if($cases):?>
-        <div class='table-actions clearfix'><?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton();?></div>
+        <div class='table-actions clearfix'><?php echo "<div class='btn-group'>" . html::selectButton() . '</div>' . html::submitButton();?></div>
       <?php endif;?>
       <div class='text-right'><?php $pager->show();?></div>
     </td>

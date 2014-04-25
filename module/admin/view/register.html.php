@@ -29,7 +29,7 @@
     <table align='center' class='table table-form'>
       <tr>
         <th class='w-100px'><?php echo $lang->user->account;?></th>
-    	  <td>
+    	<td>
           <div class="required required-wrapper"></div>
           <?php echo html::input('account', '', "class='form-control'");?>
           <div class='help-block'><?php echo $lang->admin->register->lblAccount;?></div>

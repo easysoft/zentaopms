@@ -43,8 +43,7 @@
       <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
       <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
       <td>
-        <div class='form-control' contenteditable='true' data-sync-target='#stepses\[<?php echo $i;?>\]'></div>
-        <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control hidden'");?>
+        <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control'");?>
       </td>
       <td><?php echo html::select("types[$i]", $lang->bug->typeList, '', "class='form-control'");?></td>
       <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>

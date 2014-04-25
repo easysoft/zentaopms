@@ -15,7 +15,7 @@
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['plan']) . ' #' . $plan->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['plan']);?> <strong><?php echo $plan->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('productplan', 'view', 'planID=' . $plan->id), $plan->title, '_blank');?></strong>
     <small class='text-muted'> <?php echo $lang->productplan->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
@@ -119,7 +119,7 @@
       <tr>
         <td colspan='9' class='text-left'>
         <?php 
-        echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm') . '</div>' . html::submitButton($lang->productplan->batchUnlink) . '</div>';
+        echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectButton('linkedStoriesForm') . '</div>' . html::submitButton($lang->productplan->batchUnlink) . '</div>';
         ?>
         </td>
       </tr>

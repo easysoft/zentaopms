@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['release']) . ' #' . $release->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
     <strong><?php echo $release->name;?></strong>
     <?php if($release->deleted):?>
     <span class='label label-danger'><?php echo $lang->release->deleted;?></span>

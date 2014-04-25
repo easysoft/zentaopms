@@ -22,7 +22,7 @@ $(document).ready(function()
 <div class='container mw-900px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['doc']) . ' #' . $doc->id;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['doc']);?> <strong><?php echo $doc->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title);?></strong>
       <small class='text-muted'> <?php echo html::icon($lang->icons['edit']) . ' ' . $lang->doc->edit;?></small>
     </div>

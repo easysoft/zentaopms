@@ -14,9 +14,9 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?>  <strong><?php echo $bug->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
-    <small class='text-danger'> <?php echo $lang->bug->close;?> <?php echo html::icon($lang->icons['close']);?></small>
+    <small class='text-danger'> <?php echo $lang->bug->close;?></small>
   </div>
 </div>
 

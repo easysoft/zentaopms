@@ -39,13 +39,13 @@
       ?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </ul>  
-    <div class='btn-group pull-right'>
+    <div class='actions'>
       <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn iframe'") ?>
       <?php echo html::a(helper::createLink('todo', 'batchCreate'), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
       <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
     </div>
   </div>
-  <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='todoList'>
+  <table class='table table-condensed table-hover table-striped tablesorter' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
       <tr class='text-center'>
@@ -100,19 +100,19 @@
           <?php 
           if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))
           {
-            echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+            echo "<div class='btn-group'>" . html::selectButton() . '</div>';
           }
           echo "<div class='btn-group'>";
           if(common::hasPriv('todo', 'batchEdit'))
           {
               $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
-              echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"", '', 'edit');
+              echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
 
           }
           if(common::hasPriv('todo', 'batchFinish'))
           {
               $actionLink = $this->createLink('todo', 'batchFinish');
-              echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"", '', 'ok');
+              echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
 
           }
           echo '</div>';

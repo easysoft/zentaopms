@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <div class='container mw-800px'>
-  <div id='featurebar'>
+  <div id='titlebar'>
     <div class='heading'><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></div>
   </div>
   <form method='post' target='hiddenwin' class='form-condensed'>
@@ -25,19 +25,19 @@
           <td><?php echo html::input('account', $user->account, "class='form-control' disabled='disabled'");?></td>
           <th class='w-100px'><?php echo $lang->user->realname;?></th>
           <td><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->user->commiter;?></th>
           <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
           <th><?php echo $lang->user->email;?></th>
           <td><?php echo html::input('email', $user->email, "class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->user->gender;?></th>
           <td><?php echo html::radio('gender', $lang->user->genderList, $user->gender);?></td>
           <th><?php echo $lang->user->password;?></th>
           <td><?php echo html::password('password1', '', "class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->user->password2;?></th>
           <td><?php echo html::password('password2', '', "class='form-control'");?></td>
@@ -88,7 +88,7 @@
         </tr>
       </table>
     </fieldset>
-    <?php echo html::submitButton('', '', 'btn-primary') . html::backButton();?>
+    <div class='text-center'><?php echo html::submitButton('', '', 'btn-primary') . ' &nbsp; ' . html::backButton();?></div>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

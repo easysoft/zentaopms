@@ -22,7 +22,7 @@
   </ul>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-  <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='bugList'>
+  <table class='table table-condensed table-hover table-striped tablesorter' id='bugList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>
@@ -72,7 +72,7 @@
         <td colspan='10'>
         <?php if($bugs and $canBatchEdit):?>
         <div class='table-actions clearfix'>
-        <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>' . html::submitButton("<i class='icon-edit'></i> " . $lang->edit);?>
+        <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>' . html::submitButton($lang->edit, '', '');?>
         </div>
         <?php endif;?>
         <?php $pager->show();?>

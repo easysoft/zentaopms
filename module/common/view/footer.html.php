@@ -11,7 +11,7 @@
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
   </div>
   <div id="poweredby">
-    <span><a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span> &nbsp;
+    <span><a href='http://www.zentao.net' target='_blank'><?php echo $lang->zentaoPMS . $config->version;?></a></span> &nbsp;
     <?php echo $lang->proVersion;?>
     <?php commonModel::printNotifyLink();?>
     <?php commonModel::printQRCodeLink();?>

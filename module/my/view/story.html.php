@@ -22,7 +22,7 @@
   </nav>
 </div>
 <form method='post' id='myStoryForm'>
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
+<table class='table table-condensed table-hover table-striped tablesorter'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
     <tr class='text-center'>
@@ -79,7 +79,7 @@
       <?php
       if(count($stories))
       {
-          if($canBatchEdit or $canBatchRun) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+          if($canBatchEdit or $canBatchRun) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
          
           if($canBatchEdit)
           {

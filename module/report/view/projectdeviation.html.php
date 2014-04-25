@@ -11,7 +11,7 @@
   </div>
 </div>
 <div class='side'>
-  <button class='side-handle' data-id='projectDeviationTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='projectDeviationTree'><i class='icon-caret-left'></i></a>
   <?php include 'blockreportlist.html.php';?>
 </div>
 <div class='main'>

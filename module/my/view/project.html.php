@@ -12,13 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div id='featurebar'>
+<div id='titlebar' class='hide'>
   <div class='heading'><i class='icon-folder-open-alt'></i> <?php echo $lang->my->myProject;?></div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn'") ?>
   </div>
 </div>
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
+<table class='table table-condensed table-hover table-striped tablesorter'>
   <thead>
   <tr class='text-center'>
     <th class='w-id'><?php echo $lang->idAB;?></th>

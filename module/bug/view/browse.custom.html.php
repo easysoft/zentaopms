@@ -1,5 +1,5 @@
 <div class='side' id='treebox'>
-  <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>
@@ -75,7 +75,7 @@
             <?php if(!empty($bugs)):?>
             <div class='table-actions clearfix'>
               <div class='btn-group'>
-              <?php echo html::selectAll() . html::selectReverse();?>
+              <?php echo html::selectButton();?>
               </div>
               <div class='btn-group dropup'>
                 <?php 

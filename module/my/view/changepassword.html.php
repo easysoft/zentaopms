@@ -12,13 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div class='container mw-500px'>
-  <div id='featurebar'>
+  <div id='titlebar'>
     <div class='heading'><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></div>
   </div>
   <form class='form-condensed' method='post' target='hiddenwin'>
-    <table align='center' class='table table-form w-400px'> 
+    <table align='center' class='table table-form w-300px'> 
       <tr>
-        <th class='rowhead w-100px'><?php echo $lang->user->account;?></th>
+        <th class='rowhead w-80px'><?php echo $lang->user->account;?></th>
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
       </tr>  
       <tr>

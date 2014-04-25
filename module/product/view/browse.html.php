@@ -53,7 +53,7 @@
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <div class='side' id='treebox'>
-  <button class='side-handle' data-id='productTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='productTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>
@@ -111,7 +111,7 @@
           $vars = "story={$story->id}";
           common::printIcon('story', 'change',     $vars, $story, 'list', 'random');
           common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
-          common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'text-danger');
+          common::printIcon('story', 'close',      $vars, $story, 'list', 'off');
           common::printIcon('story', 'edit',       $vars, $story, 'list', 'pencil');
           common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'list', 'usecase');
           ?>
@@ -124,14 +124,14 @@
         <td colspan='11'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
-            <div class='btn-group'><?php echo html::selectAll() . html::selectReverse();?></div>
+            <div class='btn-group'><?php echo html::selectButton();?></div>
             <?php
             $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
             ?>
             <div class='btn-group dropup'>
-              <?php echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");?>
+              <?php echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");?>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
               <ul class='dropdown-menu'>
                 <?php 

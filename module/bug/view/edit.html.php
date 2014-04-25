@@ -31,7 +31,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 <form class='form-condensed' method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?> <strong><?php echo $bug->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->bug->edit;?></small>
   </div>

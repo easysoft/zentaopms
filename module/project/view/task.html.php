@@ -21,7 +21,7 @@ var browseType  = '<?php echo $browseType;?>';
 </script>
 
 <div class='side' id='taskTree'>
-  <button class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></button>
+  <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'>
@@ -146,13 +146,13 @@ var browseType  = '<?php echo $browseType;?>';
             $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
             if(count($tasks))
             {
-                echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+                echo "<div class='btn-group'>" . html::selectButton() . '</div>';
 
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
                 $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
 
                 echo "<div class='btn-group dropup'>";
-                echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, $misc);
+                echo html::commonButton($lang->edit, $misc);
                 echo "<button id='moreAction' type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu' id='moreActionMenu'>";
                 $actionLink = $this->createLink('task', 'batchClose');

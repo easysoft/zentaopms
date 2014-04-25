@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'>
     <?php echo html::icon($lang->icons['build']);?> <?php echo $lang->project->build;?>
   </div>

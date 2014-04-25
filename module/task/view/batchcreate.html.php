@@ -16,8 +16,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->common . $lang->colon . $lang->task->batchCreate;?></strong>
-    <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->project . $lang->colon . ' ' . $project->name;?></small>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . ' ' . $lang->task->common;?></strong>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin'>
@@ -61,22 +60,19 @@
       <td class='text-center'><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $modules, $module, 'class=form-control')?></td>
       <td style='overflow: visible'>
-        <?php echo html::select("story[$i]", $stories, $story, "class='form-control'");?>
-      </td>
-      <td>
         <div class='input-group'>
-          <span class='input-group-btn'>
-          <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
-          </span>
-          <?php echo html::input("name[$i]", '', 'class=form-control');?>
+        <?php echo html::select("story[$i]", $stories, $story, "class='form-control'");?>
+        <span class='input-group-btn'>
+        <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
+        </span>
         </div>
       </td>
+      <td><?php echo html::input("name[$i]", '', 'class=form-control');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=form-control');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=form-control text-center');?></td>
       <td>
-        <div class='form-control' contenteditable='true' data-sync-target='#desc\[<?php echo $i;?>\]'></div>
-        <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control hidden'");?>
+        <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control'");?>
       </td>
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>

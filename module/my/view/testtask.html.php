@@ -21,7 +21,7 @@
     ?>
   </nav>
 </div>
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='taskList'>
+<table class='table table-condensed table-hover table-striped tablesorter' id='taskList'>
   <?php $vars = "orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='text-center'>

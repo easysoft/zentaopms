@@ -1,1 +1,3 @@
+#titlebar #querybox {margin-top: -14px;}
+#titlebar > .heading {display: none}
 form {position:relative}

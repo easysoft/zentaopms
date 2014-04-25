@@ -16,7 +16,7 @@
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['testtask']) . ' #' . $testtask->id;;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['testtask']);?> <strong><?php echo $testtask->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $testtask->id), $testtask->name, '_blank');?></strong>
       <small class='text-success'> <?php echo $lang->testtask->start;?> <?php echo html::icon($lang->icons['start']);?></small>
     </div>

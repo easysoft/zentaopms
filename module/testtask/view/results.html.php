@@ -14,7 +14,7 @@
 <div class="outer">
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['usecase']) . ' #' . $case->id;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['usecase']);?> <strong><?php echo $case->id;?></strong></span>
       <strong><?php echo $case->title;?></strong>
       <small class='text-info'><?php echo $lang->testtask->results . ' ' . html::icon($lang->icons['result']);?></small>
     </div>

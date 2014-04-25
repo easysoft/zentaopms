@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->group->confirmDelete);?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><?php echo html::icon($lang->icons['group']);?> <?php echo $lang->group->browse;?></div>
   <div class='actions'>
     <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550'");?>

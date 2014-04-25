@@ -66,9 +66,11 @@
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='6'><div class='text-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <tr><td colspan='7'><div class='text-left text-info'><?php echo $suhosinInfo;?>fdsafsdf</div></td></tr>
     <?php endif;?>
-    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tfoot>
+      <tr><td colspan='7'><?php echo html::submitButton();?></td></tr>
+    </tfoot>
   </table>
 </form>
 <?php include './footer.html.php';?>

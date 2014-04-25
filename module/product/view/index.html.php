@@ -14,7 +14,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
   <div class='heading'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->product->index;?>  </div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>
 </div>
@@ -74,8 +74,8 @@
       <tr>
         <td colspan='11'>
           <div class='table-actions clearfix'>
-            <?php echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';?>
-            <?php echo html::submitButton("<i class='icon-pencil'></i> " . $lang->product->batchEdit, '', '');?>
+            <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
+            <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
           </div>
         </td>
       </tr>

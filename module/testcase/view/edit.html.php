@@ -19,7 +19,7 @@
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['testcase']) . ' #' . $case->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title);?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->case->edit;?></small>
   </div>

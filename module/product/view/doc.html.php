@@ -13,9 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><i class='icon-file-text'></i> <?php echo $lang->product->doc;?>  </div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php common::printIcon('doc', 'create', "libID=product&moduleID=0&productID={$product->id}&projectID=0&from=product");?>
   </div>
 </div>

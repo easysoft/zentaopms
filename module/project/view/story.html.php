@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
   <div class='actions'>
     <div class='btn-group'>
@@ -40,9 +40,9 @@
         <th class='w-80px {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+        <th class='w-70px {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
         <th class='w-70px'>                  <?php echo $lang->story->taskCount;?></th>
-        <th class='w-100px {sorter:false}'>  <?php echo $lang->actions;?></th>
+        <th class='w-110px {sorter:false}'>  <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -57,7 +57,7 @@
       $totalEstimate += $story->estimate;
       ?>
       <tr class='text-center' id="story<?php echo $story->id?>">
-        <td>
+        <td class='text-left'>
           <?php if($canBatchEdit or $canBatchClose):?>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
           <?php endif;?>
@@ -106,18 +106,18 @@
           <?php
           if(count($stories))
           {
-            if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+            if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
 
               echo "<div class='btn-group'>";
               if($canBatchEdit)
               {
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
-                  echo html::commonButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+                  echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
               }
               if($canBatchClose)
               {
                   $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
-                  echo html::commonButton("<i class='icon-off'></i> " . $lang->close, "onclick=\"setFormAction('$actionLink')\"");
+                  echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
               }
               echo '</div>';
           }

@@ -59,7 +59,7 @@
           <div class='table-actions clearfix'>
             
           <?php 
-          if($storyCount) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() .'</div>' . html::submitButton();
+          if($storyCount) echo "<div class='btn-group'>" . html::selectButton() .'</div>' . html::submitButton();
           else echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
           ?>
           </div>

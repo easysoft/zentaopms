@@ -438,13 +438,12 @@ class pager
         <script>
         vars = '$vars';
         pageCookie = '$this->pageCookie';
-        function submitPage(mode)
+        function submitPage(mode, perPage)
         {
             pageTotal  = parseInt(document.getElementById('_pageTotal').value);
             pageID     = document.getElementById('_pageID').value;
-            recPerPage = document.getElementById('_recPerPage').value;
+            recPerPage = document.getElementById('_recPerPage').getAttribute('data-value');
             recTotal   = document.getElementById('_recTotal').value;
-            $.cookie(pageCookie, recPerPage, {expires:config.cookieLife, path:config.webRoot});
             if(mode == 'changePageID')
             {
                 if(pageID > pageTotal) pageID = pageTotal;
@@ -452,8 +451,10 @@ class pager
             }
             else if(mode == 'changeRecPerPage')
             {
+                recPerPage = perPage;
                 pageID = 1;
             }
+            $.cookie(pageCookie, recPerPage, {expires:config.cookieLife, path:config.webRoot});
 
             vars = vars.replace('_recTotal_', recTotal)
             vars = vars.replace('_recPerPage_', recPerPage)
@@ -478,7 +479,13 @@ EOT;
         $range[200]  = 200;
         $range[500]  = 500;
         $range[1000] = 1000;
-        return html::select('_recPerPage', $range, $this->recPerPage, "onchange='submitPage(\"changeRecPerPage\");' class='form-control'");
+        $html = "<div class='dropdown'><a href='javascript:;' data-toggle='dropdown' id='_recPerPage' data-value='{$this->recPerPage}'>" . (sprintf($this->lang->pager->recPerPage, $this->recPerPage)) . "<span class='caret'></span></a><ul class='dropdown-menu'>";
+        foreach ($range as $key => $value)
+        {
+            $html .= '<li' . ($this->recPerPage == $value ? " class='active'" : '') .'>' . "<a href='javascript:submitPage(\"changeRecPerPage\", $value)'>{$value}</a>" . '</li>';
+        }
+        $html .= '</ul></div>';
+        return $html;
     }
 
     /**

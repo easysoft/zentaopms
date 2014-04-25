@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix' title='TESTTASK'><?php echo html::icon($lang->icons['testtask']) . ' #' . $task->id;?></span>
+    <span class='prefix' title='TESTTASK'><?php echo html::icon($lang->icons['testtask']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo $task->name;?></strong>
     <?php if($task->deleted):?>
     <span class='label label-danger'><?php echo $lang->task->deleted;?></span>

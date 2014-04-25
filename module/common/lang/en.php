@@ -17,15 +17,16 @@ $lang->at           = ' at ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
 
-$lang->zentaoPMS    = 'zentao';
-$lang->welcome      = "%s PMS";
-$lang->myControl    = "Dashboard";
-$lang->currentPos   = 'Current';
-$lang->logout       = 'Logout';
-$lang->login        = 'Login';
-$lang->aboutZenTao  = 'About';
-$lang->todayIs      = '%s, ';
-$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
+$lang->zentaoPMS      = 'zentao';
+$lang->welcome        = "%s PMS";
+$lang->myControl      = "Dashboard";
+$lang->currentPos     = 'Current';
+$lang->logout         = 'Logout';
+$lang->login          = 'Login';
+$lang->aboutZenTao    = 'About';
+$lang->profile        = 'Profile';
+$lang->changePassword = 'Password';
+$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
 
 $lang->reset        = 'Reset';
 $lang->refresh      = 'Refresh';
@@ -126,7 +127,7 @@ $lang->exportTypeList['selected'] = 'Only checked';
 $lang->themes['default']   = 'Default';
 $lang->themes['green']     = 'Green';
 $lang->themes['red']       = 'Red';
-$lang->themes['classblue'] = 'Blue';
+$lang->themes['lightblue'] = 'Light Blue';
 
 /* Index mododule menu. */
 $lang->index = new stdclass();
@@ -348,18 +349,19 @@ $lang->error->noData          = 'No data';
 /* Pager. */
 $lang->pager = new stdclass();
 $lang->pager->noRecord  = "No records yet.";
-$lang->pager->digest    = "<strong>%s</strong> records, <strong>%s</strong> per page, <strong>%s/%s</strong> ";
-$lang->pager->first     = "First";
-$lang->pager->pre       = "Previous";
-$lang->pager->next      = "Next";
-$lang->pager->last      = "Last";
+$lang->pager->digest    = "<strong>%s</strong> records, %s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage= "<strong>%s</strong> per page";
+$lang->pager->first     = "<i class='icon-step-backward' title='First'></i>";
+$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='Previous'></i>";
+$lang->pager->next      = "<i class='icon-play' title='Next'></i>";
+$lang->pager->last      = "<i class='icon-step-forward' title='Last'></i>";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "Official Site";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum community</a> ";
 $lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>Training</a> ";
 $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>Donate</a> ";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red f-14px'>Try pro version!</a> ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red f-14px'>zentaoPRO!</a> ";
 $lang->downNotify     = "Down notify";
 
 $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";

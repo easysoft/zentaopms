@@ -24,7 +24,7 @@
   </ul>
 </div>
 <form method='post' id='myTaskForm'>
-  <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='tasktable'>
+  <table class='table table-condensed table-hover table-striped tablesorter' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>
@@ -78,18 +78,20 @@
         <?php if(count($tasks)):?>
         <div class='table-actions clearfix'>
         <?php 
-        if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+        if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+        echo "<div class='btn-group'>";
         if($canBatchEdit)
         {
             $actionLink = $this->createLink('task', 'batchEdit', "projectID=0&orderBy=$orderBy");
-            echo html::commonButton("<i class='icon-edit'></i> " . $lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+            echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
         }
         if($canBatchClose)
         {
             $actionLink = $this->createLink('task', 'batchClose');
-            echo html::commonButton("<i class='icon-remove'></i> " . $lang->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+            echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
         }
-         ?>
+        echo '</div>';
+        ?>
         </div> 
         <?php endif;?>
         <?php $pager->show();?>

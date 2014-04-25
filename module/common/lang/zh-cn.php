@@ -17,15 +17,16 @@ $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
 
-$lang->zentaoPMS    = '禅道项目';
-$lang->welcome      = "%s项目管理系统";
-$lang->myControl    = "我的地盘";
-$lang->currentPos   = '当前位置：';
-$lang->logout       = '退出';
-$lang->login        = '登录';
-$lang->aboutZenTao  = '关于';
-$lang->todayIs      = '今天是%s，';
-$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
+$lang->zentaoPMS      = '禅道项目';
+$lang->welcome        = "%s项目管理系统";
+$lang->myControl      = "我的地盘";
+$lang->currentPos     = '当前位置：';
+$lang->logout         = '退出';
+$lang->login          = '登录';
+$lang->aboutZenTao    = '关于';
+$lang->profile        = '个人档案';
+$lang->changePassword = '更改密码';
+$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 
 $lang->reset        = '重填';
 $lang->refresh      = '刷新';
@@ -130,7 +131,7 @@ $lang->theme               = '主题';
 $lang->themes['default']   = '默认';
 $lang->themes['green']     = '绿色';
 $lang->themes['red']       = '红色';
-$lang->themes['classblue'] = '经典蓝';
+$lang->themes['lightblue'] = '亮蓝';
 
 /* 首页菜单设置。*/
 $lang->index = new stdclass();
@@ -152,8 +153,8 @@ $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subMod
 $lang->my->menu->story          = array('link' => '需求|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = '项目|my|project|';
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '档案|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '密码|my|changepassword|';
+$lang->my->menu->profile        = array('link' => '档案|my|profile|onlybody=yes', 'alias' => 'editprofile');
+$lang->my->menu->changePassword = '密码|my|changepassword|onlybody=yes';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -352,18 +353,19 @@ $lang->error->noData          = '没有数据';
 /* 分页信息。*/
 $lang->pager = new stdclass();
 $lang->pager->noRecord  = "暂时没有记录";
-$lang->pager->digest    = "共<strong>%s</strong>条记录，每页 <strong>%s</strong>条，<strong>%s/%s</strong> ";
-$lang->pager->first     = "首页";
-$lang->pager->pre       = "上页";
-$lang->pager->next      = "下页";
-$lang->pager->last      = "末页";
+$lang->pager->digest    = "共 <strong>%s</strong> 条记录，%s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage= "每页 <strong>%s</strong> 条";
+$lang->pager->first     = "<i class='icon-step-backward' title='首页'></i>";
+$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='上一页'></i>";
+$lang->pager->next      = "<i class='icon-play' title='下一页'></i>";
+$lang->pager->last      = "<i class='icon-step-forward' title='末页'></i>";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
 $lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
 $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠 </a>";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-danger'>购买专业版(特惠)！</a>&nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-danger'>升至专业版!</a>&nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";

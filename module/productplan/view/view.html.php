@@ -16,7 +16,7 @@
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <div id='titlebar'>
   <div class='heading'>
-  <span class='prefix'><?php echo html::icon($lang->icons['plan']) . ' #' . $plan->id;?></span>
+  <span class='prefix'><?php echo html::icon($lang->icons['plan']);?> <strong><?php echo $plan->id;?></strong></span>
     <strong><?php echo $plan->title;?></strong>
     <?php if($plan->deleted):?>
     <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>
@@ -118,7 +118,7 @@
                       <?php 
                       if(count($planStories) and $canBatchUnlink)
                       {
-                          echo "<div class='btn-group'>" . html::selectAll() . html::selectReverse() . '</div>';
+                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
                           echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
                       }
                       ?>
@@ -176,7 +176,7 @@
                   <td colspan='7'>
                     <div class='table-actions clearfix'>
                       <?php 
-                      echo "<div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>';
+                      echo "<div class='btn-group'>" . html::selectButton('linkedBugsForm') . '</div>';
                       echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
                       ?>
                       <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?> </div>

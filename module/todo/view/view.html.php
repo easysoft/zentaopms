@@ -15,7 +15,7 @@
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix' title='TODO'><?php echo html::icon($lang->icons['todo']) . ' #' . $todo->id;?></span>
+      <span class='prefix' title='TODO'><?php echo html::icon($lang->icons['todo']);?> <strong><?php echo $todo->id;?></strong></span>
       <strong><?php echo $todo->name;?></strong>
     </div>
   </div>
@@ -38,7 +38,7 @@
       </div>
       <div class='panel-body'>
         <div class='article-content'><?php echo $todo->desc;?></div>
-        <hr style='margin: 10px 0'>
+        <hr class='small'>
         <table class='table table-data table-borderless'> 
           <tr>
             <th class='w-80px'><?php echo $lang->todo->account;?></th>

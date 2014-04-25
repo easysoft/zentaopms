@@ -1,10 +1,1 @@
 #tipsModal {margin-top: 10%;}
-#copyProjects {padding: 0}
-#copyProjects {padding: 0 2px}
-#copyProjects > div {position: relative;}
-#copyProjects a {display: block; min-height: 30px; line-height: 30px; padding: 5px 15px; border: 1px solid #e5e5e5; color: #333; margin: 5px 0}
-#copyProjects a > i {display: inline-block; margin-right: 5px;}
-#copyProjects a:hover {border:1px solid #39B3D7; background-color: #E5F9FF; text-decoration: none}
-#copyProjects a.active {border-color: #229F24; color: #229F24; background-color: #E5FFE6}
-#copyProjects a.active:after {position: absolute; content: '\e60d'; font-family: ZenIcon; font-size: 20px; right: 25px;}
-#copyProjects a.cancel {color: #D2322D}

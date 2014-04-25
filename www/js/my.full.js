@@ -104,7 +104,7 @@ function showDropMenu(objectType, objectID, module, method, extra)
  */
 function showDropResult(objectType, objectID, module, method, extra)
 {
-    $('#resultList').load(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra) + ' #searchResult');
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data).find('#search').focus();});
 }
 
 /**
@@ -125,7 +125,6 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     {
         showMenu = 0;
         showDropResult(objectType, objectID, module, method, extra);
-        setTimeout(function(){$("#dropMenu #search").focus();}, 300);
     }
     else
     {
@@ -844,14 +843,15 @@ function setModal()
             {
                 var options = 
                 {
-                    url:      url,
-                    width:    $e.data('width') || 800,
-                    height:   $e.data('height') || 'auto',
-                    icon:     $e.data('icon') || '?',
-                    title:    $e.data('title') || $e.attr('title') || $e.text(),
-                    name:     $e.data('name') || 'modalIframe',
-                    cssClass: $e.data('class'),
-                    headerless: $e.data('headerless') || false
+                    url:        url,
+                    width:      $e.data('width') || 800,
+                    height:     $e.data('height') || 'auto',
+                    icon:       $e.data('icon') || '?',
+                    title:      $e.data('title') || $e.attr('title') || $e.text(),
+                    name:       $e.data('name') || 'modalIframe',
+                    cssClass:   $e.data('class'),
+                    headerless: $e.data('headerless') || false,
+                    center:     $e.data('center') || true,
                 }
                 options = $.extend(options, setting);
                 
@@ -874,18 +874,19 @@ function setModal()
                     var i = $e.find("[class^='icon-']");
                     options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                 }
-                var modal = $('#ajaxModal').addClass('modal-loading');
+                var modal = $('#ajaxModal').addClass('modal-loading').data('first', true);
                 modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
-                var modalBody = modal.find('.modal-body');
+                var modalBody = modal.find('.modal-body'), dialog = modal.find('.modal-dialog');
                 if(options.cssClass)
                 {
-                    modal.find('.modal-dialog').addClass(options.cssClass);
+                    dialog.addClass(options.cssClass);
                 }
                 var frame = document.getElementById(options.name);
                 frame.onload = frame.onreadystatechange = function()
                 {
                     if (this.readyState && this.readyState != 'complete') return;
+                    if(!modal.data('first')) modal.addClass('modal-loading');
 
                     modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
 
@@ -906,7 +907,9 @@ function setModal()
                             setTimeout(function()
                             {
                                 modalBody.css('height', $framebody.addClass('body-modal').outerHeight());
+                                if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
                                 modal.removeClass('modal-loading');
+                                if(modal.data('first')) modal.data('first', false);
                             }, 100);
 
                             $framebody.resize(function()

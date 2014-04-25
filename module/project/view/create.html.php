@@ -17,13 +17,10 @@
   <div class='modal-dialog mw-500px' id='tipsModal'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'>&times;</a>
-      <h4 class='modal-title' id='myModalLabel'><i class='icon-ok-sign'></i> <?php echo $lang->project->tips;?></h4>
+      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->tips;?></h4>
     </div>
     <div class='modal-body'>
     <?php echo $tips;?>
-    </div>
-    <div class='modal-footer'>
-      <div class='text-center'><a href='<?php echo $defaultURL;?>' class='btn btn-primary'><?php echo $lang->project->task;?> <i class='icon-arrow-right'></i></div></a>
     </div>
   </div>
 </body>

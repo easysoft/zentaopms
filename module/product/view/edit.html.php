@@ -15,7 +15,7 @@
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['product']) . ' #' . $product->id;;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $product->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></strong>
       <small class='text-muted'> <?php echo $lang->product->edit;?> <i class='icon icon-pencil'></i></small>
     </div>

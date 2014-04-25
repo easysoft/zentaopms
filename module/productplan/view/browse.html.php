@@ -12,9 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
-<div id='featurebar'>
+<div id='titlebar'>
   <div class='heading'><i class='icon-flag'></i> <?php echo $lang->productplan->browse;?>  </div>
-  <div class='btn-group pull-right'>
+  <div class='actions'>
     <?php common::printIcon('productplan', 'create', "productID=$product->id", '', 'button', 'plus');?>
   </div>
 </div>
@@ -35,7 +35,7 @@
   <tr class='text-center'>
     <td><?php echo $plan->id;?></td>
     <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
-    <td class='text-left content' title='<?php echo $plan->desc;?>'><?php echo $plan->desc;?></td>
+    <td class='text-left content' data-original-title='<?php echo $plan->title;?>' data-toggle='popover' data-content='<div class="article-content"><?php echo $plan->desc;?></div>'><div class='article-content'><?php echo $plan->desc;?></div></td>
     <td><?php echo $plan->begin;?></td>
     <td><?php echo $plan->end;?></td>
     <td class='text-center'>
