@@ -37,6 +37,7 @@ function setAssignedTo(moduleID, productID)
     $.get(link, function(owner)
     {
         $('#assignedTo').val(owner);
+        $("#assignedTo").trigger("chosen:updated");
     });
 }
 
