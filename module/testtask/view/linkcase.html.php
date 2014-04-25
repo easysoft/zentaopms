@@ -34,7 +34,7 @@
   <div id='querybox' class='show'></div>
 </div>
 <form method='post'>
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'>
+<table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
   <caption class='text-left text-special'>
     <?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo count($cases);?>)
   </caption>

@@ -49,6 +49,22 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
 }
 
 /**
+ * Bind Event for searchbox
+ * 
+ */
+function setSearchBox()
+{
+    $('#typeSelector a').click(function()
+    {
+        $('#typeSelector li.active').removeClass('active');
+        var $this = $(this);
+        $this.closest('li').addClass('active');
+        $("#searchType").val($this.data('value'));
+        $("#searchTypeName").text($this.text());
+    });
+}
+
+/**
  * Go to the view page of one object.
  * 
  * @access public
@@ -395,22 +411,6 @@ function setOuterBox()
 
     $(window).resize(resetOuterHeight);
     resetOuterHeight();
-}
-
-/**
- * Set the css of the iframe.
- * 
- * @param  string $color 
- * @access public
- * @return void
- */
-function setDebugWin(color)
-{  
-    if($.browser.msie && $('.debugwin').size() == 1)
-    {
-        var debugWin = $(".debugwin")[0].contentWindow.document;
-        $("body", debugWin).append("<style>body{background:" + color + "}</style>");
-    }
 }
 
 /**
@@ -1039,7 +1039,7 @@ function setModal4List(colorboxClass, replaceID, callback, width, height)
 function setTableBehavior()
 {
     $('#wrap .table:not(.table-data, .table-form, .active-disabled) tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
-    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped table-borderless tablesorter');
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped tablesorter');
 }
 
 /**
@@ -1086,7 +1086,7 @@ $(document).ready(function()
     setTableBehavior();
     setForm();
     saveWindowSize();
-    setDebugWin('white');
+    setSearchBox();
     setOuterBox();
 
     setRequiredFields();

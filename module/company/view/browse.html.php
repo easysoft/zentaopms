@@ -34,7 +34,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
 </div>
 <div class='main'>
 <form action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
-  <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='userList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='userList'>
     <thead>
     <tr class='colhead'>
       <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

@@ -25,7 +25,7 @@
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->task->edit;?></small>
   </div>
   <div class='actions'>
-    <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save)?>
+    <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
 <div class='row'>
@@ -34,22 +34,22 @@
       <div class='form-group'>
         <?php echo html::input('name', $task->name, 'class="form-control" placeholder="' . $lang->task->name . '"');?>
       </div>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->task->desc;?></legend>
         <div class='form-group'>
           <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='form-control'");?>
         </div>
       </fieldset>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->comment;?></legend>
         <div class='form-group'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
       </fieldset>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->files;?></legend>
         <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
       </fieldset>
-      <div class='actions'>
-        <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save) . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id")) .html::hidden('consumed', $task->consumed);?>
+      <div class='actions actions-form'>
+        <?php echo html::submitButton($lang->save) . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id")) .html::hidden('consumed', $task->consumed);?>
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>

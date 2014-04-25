@@ -32,7 +32,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->task->finishedDate;?></th>
-      <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-datetime'");?></div></td><td></td>
+      <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-date'");?></div></td><td></td>
     </tr>
 
     <tr>

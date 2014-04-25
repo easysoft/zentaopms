@@ -46,7 +46,9 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tfoot>
+      <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    </tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

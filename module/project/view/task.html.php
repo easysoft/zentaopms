@@ -41,7 +41,7 @@ var browseType  = '<?php echo $browseType;?>';
 </div>
 <div class='main'>
   <form method='post' id='projectTaskForm'>
-    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='taskList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList'>
       <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
       <thead>
         <tr>

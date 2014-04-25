@@ -71,7 +71,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
 </div>
 <div class='main'>
   <form id='batchForm' method='post'>
-    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='caseList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>

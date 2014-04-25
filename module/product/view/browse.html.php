@@ -69,7 +69,7 @@
 </div>
 <div class='main'>
   <form method='post' id='productStoryForm'>
-    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='storyList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
       <thead>
       <tr>
         <?php $vars = "productID=$productID&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

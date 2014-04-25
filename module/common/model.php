@@ -412,9 +412,18 @@ class commonModel extends model
         {
             $searchObject = $methodName;
         }
+        if(empty($lang->searchObjects[$searchObject])) $searchObject = 'bug';
 
         echo "<div class='input-group input-group-sm' id='searchbox'>"; 
-        echo html::select('searchType', $lang->searchObjects, $searchObject, "class='form-control'");
+        echo "<div class='input-group-btn' id='typeSelector'>";
+        echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span> <span class='caret'></span></button>";
+        echo html::hidden('searchType', $searchObject);
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->searchObjects as $key => $value)
+        {
+            echo "<li><a href='javascript:;' data-value='{$key}'>{$value}</a></li>"; 
+        }
+        echo '</ul></div>';
         echo html::input('searchQuery', '', "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'");
         echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();' class='btn'>GO! </a></div>";
         echo "</div>\n";

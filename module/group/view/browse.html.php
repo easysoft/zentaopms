@@ -22,7 +22,7 @@
     <?php endif;?>
   </div>
 </div>
-<table align='center' class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='groupList'>
+<table align='center' class='table table-condensed table-hover table-striped  tablesorter table-fixed' id='groupList'>
   <thead>
     <tr>
      <th class='w-id'><?php echo $lang->group->id;?></th>

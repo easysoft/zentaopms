@@ -36,7 +36,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->bug->edit;?></small>
   </div>
   <div class='actions'>
-    <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save)?>
+    <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
 <div class='row'>

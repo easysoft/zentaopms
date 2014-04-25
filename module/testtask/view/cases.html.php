@@ -55,7 +55,7 @@ var moduleID   = '<?php echo $moduleID;?>';
 <div class='main'>
   <form method='post' name='casesform'>
     <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='caseList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
       <thead>
         <tr class='colhead'>
           <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>

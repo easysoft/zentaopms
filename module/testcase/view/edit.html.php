@@ -21,10 +21,10 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title);?></strong>
-    <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->case->edit;?></small>
+    <small><?php echo $lang->case->edit;?></small>
   </div>
   <div class='actions'>
-    <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save)?>
+    <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
 <div class='row'>
@@ -33,11 +33,11 @@
       <div class='form-group'>
         <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
       </div>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <div class='form-group'><?php echo html::textarea('precondition', $case->precondition, "rows='4' class='form-control'");?></div>
       </fieldset>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->testcase->steps;?></legend>
         <div class='form-group'>
           <table class='table table-form'>
@@ -68,17 +68,17 @@
           </table>
         </div>
       </fieldset>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->testcase->legendComment;?></legend>
         <div class='form-group'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
       </fieldset>
-      <fieldset>
+      <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->testcase->legendAttatch;?></legend>
         <div class='form-group'><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></div>
       </fieldset>
-      <div class='actions'>
+      <div class='text-center mgb-20'>
        <?php echo html::submitButton();?>
-       <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+       <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>

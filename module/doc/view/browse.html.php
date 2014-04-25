@@ -43,7 +43,7 @@ var browseType = '<?php echo $browseType;?>';
   </div>
 </div>
 <div class='main'>
-  <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='docList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='docList'>
     <thead>
       <tr>
         <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

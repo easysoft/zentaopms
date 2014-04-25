@@ -48,7 +48,9 @@
       <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='<?php $story ? print '4' : print '5'?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tfoot>
+      <tr><td colspan='<?php $story ? print '4' : print '5'?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    </tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

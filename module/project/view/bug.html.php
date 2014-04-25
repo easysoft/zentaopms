@@ -20,7 +20,7 @@
     <?php common::printIcon('bug', 'create', "productID=$productID&extra=projectID=$project->id");?>
   </div>
 </div>
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed' id='bugList'>
+<table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
   <thead>
     <tr>
       <?php $vars = "projectID={$project->id}&orderBy=%s&build=$buildID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

@@ -23,7 +23,7 @@
 </div>
 <div id='storyList'>
   <form method='post' id='unlinkedStoriesForm'>
-    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
     <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></caption>
       <thead>
         <tr>
@@ -71,7 +71,7 @@
   </form>
   <hr class='mg-0'>
   <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>" id='linkedStoriesForm'>
-    <table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
       <caption class='text-left text-important'><?php echo html::icon('link');?> &nbsp;<strong><?php echo $lang->productplan->linkedStories;?></strong> (<?php echo count($planStories);?>)</caption>
       <thead>
       <tr class='colhead'>

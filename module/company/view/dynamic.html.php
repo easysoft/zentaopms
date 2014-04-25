@@ -35,7 +35,7 @@ var browseType = '<?php echo $browseType;?>';
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
   
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter table-fixed'>
+<table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
   <thead>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->action->date;?></th>

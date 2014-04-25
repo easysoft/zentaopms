@@ -19,7 +19,7 @@
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->story->edit;?></small>
   </div>
   <div class='actions'>
-    <?php echo html::submitButton(html::icon('save') . ' ' . $lang->save)?>
+    <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
 <div class='row'>
@@ -41,7 +41,7 @@
       </fieldset>
       <div class='actions'>
         <?php 
-        echo html::submitButton(html::icon('save') . ' ' . $lang->save);
+        echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
         ?>
       </div>
