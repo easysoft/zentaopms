@@ -75,6 +75,7 @@ hr.small {margin: 10px 0}
 .table-fixed {table-layout: fixed;}
 .table-fixed th, .table-fixed td  {overflow:hidden; white-space:nowrap;}
 .table-fixed tfoot > tr > th, .table-fixed tfoot > tr > td, .table-fixed .nofixed{overflow: visible;}
+.table-borderless {border: none!important}
 
 /* Tables sorters */
 .tablesorter thead tr div {padding:0; margin:0}
@@ -145,6 +146,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px}
 .actionbox #historyItem {margin:0}
 .actionbox blockquote {margin:0}
+.actionbox > legend > i, .actionbox > .panel-heading > i {display: none}
 
 /* stars list */
 .stars-list {color: #E48600}
@@ -157,6 +159,11 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .pass, [class$="-pass"]  {color:#078F0E;}
 .blocked, [class$="-blocked"] {background:yellow!important;}
 .fail, [class$="-fail"]  {color:red}
+
+/* tabs */
+.nav-tabs > li > a {padding: 5px 10px; color: #333}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {color: #333; font-weight: bold; line-height: 20px}
+.tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 10px}
 
 /* === Views === */
 /* Table form */
@@ -191,6 +198,10 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed .table-form {margin-bottom: 0;}
 .form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
 .form-condensed .table-form >  td + td, .form-condensed .table-form > th + th, .form-condensed .table-form > tbody > td + td, .form-condensed .table-form > tbody > th + th {padding-left: 5%;}
+.form-condensed .table-form > tfoot td {padding-bottom: 10px!important; border-top: none!important}
+.form-condensed .table-form > tfoot td[colspan] {text-align: center;}
+.form-condensed .table-form > tfoot td > .btn {margin-right: 10px;}
+
 .form-condensed fieldset {padding: 2px 15px 2px 5px; margin-bottom: 10px; margin-top: 35px; border-radius: 2px; position: relative;}
 .form-condensed fieldset.fieldset-primary {background-color: transparent; padding: 0; margin-top: 0;}
 .form-condensed fieldset .table-form {margin-bottom: 0;}
@@ -198,9 +209,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .form-condensed fieldset.collapsed .table-form, .form-condensed fieldset.collapsed .article-content, .form-condensed fieldset.collapsed .form-group, .form-condensed fieldset.collapsed #historyItem {display: none}
 .form-condensed legend {font-size: 12px; font-weight: bold; padding: 5px; position: absolute; top: -25px; left: 0; cursor: pointer; line-height: 14px; vertical-align: top; color: #666; background: #f1f1f1;}
 .form-condensed .fieldset-pure legend{top: -20px}
-/*.form-condensed legend:before {font-family: ZenIcon; content: '\e6b8'; font-size: 14px; color: #999; display: inline-block; margin-right: 4px; -webkit-font-smoothing: antialiased;}*/
 .form-condensed legend:hover {color: #333;}
-/*.form-condensed fieldset.collapsed legend:before {content: '\e6bb'}*/
 .form-condensed .chosen-container-single .chosen-single {padding: 4px 10px; height: 30px}
 .form-condensed .chosen-container-single .chosen-single div {padding: 4px 10px}
 .form-condensed .chosen-container-multi .chosen-choices {min-height: 30px}
@@ -351,7 +360,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #crumbs {float: left;margin-left: 20px;}
 #crumbs .icon-angle-right{margin-right: 6px;}
 #footer #poweredby {float: right; margin-right: 20px;}
-#qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit;}
+#qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 
 /* Feature bar. */
@@ -450,16 +459,15 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #titlebar #querybox {margin: 5px -20px -10px}
 
 /* Container in outer */
-.outer > .container {margin: 0 auto 20px; padding: 0; border: 1px solid #ddd;}
+.outer > .container {margin: 0 auto; padding: 0; border: 1px solid #ddd;}
 .outer > .container > #featurebar, .outer > .container > #titlebar {margin: 0}
-.outer > .container > form, body > .container > form{padding: 10px 30px 10px 15px}
+.outer > .container > form, body > .container > form{padding: 10px 40px 10px 20px}
 .outer > .container .table-form, .outer > .container .table-data {border: none}
 .outer > .container > .table-data {margin: 10px 0}
 
 /* Main content in outer */
 .outer .row {padding: 15px 20px;}
-.outer .main {margin-bottom: 20px;}
-.outer .container > .main {margin: 0 15px 20px}
+.outer .container > .main {padding: 10px 20px}
 .outer .main fieldset {margin-bottom: 15px; border: 1px solid #e5e5e5; padding: 10px 15px 15px;}
 .outer .main fieldset.fieldset-pure {background: none; padding: 0; border: none}
 .outer .main fieldset.collapsed {border: none}
@@ -476,11 +484,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .main-side > fieldset {padding: 5px 15px 10px;}
 
 .outer .main .tabs {margin-bottom: 15px;}
-.outer .main .table-form td > .tabs {margin-bottom: 0;}
-.outer .main .nav-tabs > li > a {padding: 5px 10px; color: #333}
-.outer .main .nav-tabs > li {margin-bottom: -2px;}
-.outer .main .nav-tabs > li.active > a, .outer .main .nav-tabs > li.active > a:hover, .outer .main .nav-tabs > li.active > a:focus {color: #333; font-weight: bold; line-height: 20px}
-.outer .main .tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 15px}
 
 /* Table data in outer */
 .outer .table-data.table-condensed td, .outer .table-data.table-condensed th {padding: 3px 8px}
@@ -524,13 +527,15 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .modal-title {font-size: 14px;}
 
 /* modal with iframe */
-.modal-iframe .modal-body {padding: 0}
+.modal-iframe {border: 8px solid #666; border-color: rgba(0,0,0,.25)}
+.modal-iframe .modal-body {padding: 0;}
 .modal.with-titlebar .modal-header, .modal-dialog.hide-header .modal-header{position: relative; height: 0; padding: 0; border: none; z-index: 999; min-height: 0}
 .modal.with-titlebar .modal-header .modal-body,  .modal-dialog.hide-header .modal-header .modal-body {z-index: 990}
 .modal.with-titlebar .modal-header .modal-title, .modal-dialog.hide-header .modal-header .modal-title {display: none}
 .modal.with-titlebar .modal-header .close, .modal-dialog.hide-header .modal-header .close {position: absolute; right: 15px; top: 15px}
 .body-modal {padding-bottom: 0; overflow: hidden;}
-.body-modal .outer > form, .body-modal .outer > .container > form {padding: 10px 30px 10px 25px}
+.body-modal .outer > form, .body-modal .outer > .container > form {margin: 10px 20px 10px; padding: 5px 20px 10px 10px;}
+.body-modal .outer > form > .table-form, .body-modal .outer > .container > form > .table-form {border:none;}
 .body-modal .outer > .main, .body-modal .outer > .container > .main, .body-modal > .main {padding: 10px 20px; margin: 0}
 .body-modal > form {padding-bottom: 15px;}
 .body-modal .outer > .container, .body-modal > .container{padding: 0; margin: 0; max-width: inherit !important; border: 0}

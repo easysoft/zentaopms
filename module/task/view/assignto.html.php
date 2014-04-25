@@ -16,7 +16,7 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
-    <small class='text-muted'> <?php echo $lang->task->assign;?> <?php echo html::icon($lang->icons['assign']);?></small>
+    <small class='text-muted'> <?php echo $lang->task->assign;?></small>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin'>

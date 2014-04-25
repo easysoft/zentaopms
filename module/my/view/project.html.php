@@ -18,7 +18,7 @@
     <?php echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn'") ?>
   </div>
 </div>
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
+<table class='table table-condensed table-hover table-striped tablesorter'>
   <thead>
   <tr class='text-center'>
     <th class='w-id'><?php echo $lang->idAB;?></th>

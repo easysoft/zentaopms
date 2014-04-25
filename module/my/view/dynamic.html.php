@@ -26,7 +26,7 @@
   </nav>
 </div>
 
-<table class='table table-condensed table-hover table-striped table-borderless tablesorter'>
+<table class='table table-condensed table-hover table-striped tablesorter'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>

@@ -18,7 +18,7 @@
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['todo']);?> <strong><?php echo $todo->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), $todo->name);?></strong>
-      <small class='text-success'> <?php echo $lang->todo->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+      <small class='text-muted'> <?php echo $lang->todo->edit;?></small>
     </div>
   </div>
 

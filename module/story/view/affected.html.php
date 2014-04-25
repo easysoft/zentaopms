@@ -68,7 +68,7 @@
       <table class='table table-borderless table-condensed'>
         <thead>
           <tr>
-            <th class='w-60px'><?php echo $lang->testcase->id;?></th>
+            <th class='w-70px'><?php echo $lang->testcase->id;?></th>
             <th><?php echo $lang->testcase->title;?></th>
             <th class='w-70px'><?php echo $lang->testcase->status;?></th>
             <th class='w-70px'><?php echo $lang->testcase->openedBy;?></th>

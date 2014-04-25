@@ -67,10 +67,11 @@
       <div class='f-left blue'><?php echo $suhosinInfo;?></div>
     </td></tr>
     <?php endif;?>
-
-    <tr><td colspan='<?php echo $this->config->task->batchEdit->columns;?>' class='text-center'>
-      <?php echo html::submitButton();?>
-    </td></tr>
+    <tfoot>
+      <tr><td colspan='<?php echo $this->config->task->batchEdit->columns;?>'>
+        <?php echo html::submitButton();?>
+      </td></tr>
+    </tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

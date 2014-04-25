@@ -38,7 +38,7 @@
       </div>
       <div class='panel-body'>
         <div class='article-content'><?php echo $todo->desc;?></div>
-        <hr style='margin: 10px 0'>
+        <hr class='small'>
         <table class='table table-data table-borderless'> 
           <tr>
             <th class='w-80px'><?php echo $lang->todo->account;?></th>
