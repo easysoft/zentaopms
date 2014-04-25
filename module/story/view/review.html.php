@@ -16,7 +16,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
 </script>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
     <small><?php echo html::icon($lang->icons['review']) . ' ' . $lang->story->review;?></small>
   </div>

@@ -15,7 +15,7 @@
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix' title='TODO'><?php echo html::icon($lang->icons['todo']) . ' #' . $todo->id;?></span>
+      <span class='prefix' title='TODO'><?php echo html::icon($lang->icons['todo']);?> <strong><?php echo $todo->id;?></strong></span>
       <strong><?php echo $todo->name;?></strong>
     </div>
   </div>

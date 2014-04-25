@@ -15,7 +15,7 @@
 <?php js::set('confirmRecord', $lang->task->confirmRecord);?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
     <small class='text-muted'> <?php echo $lang->task->logEfforts;?> <?php echo html::icon($lang->icons['recordEstimate']);?></small>
   </div>

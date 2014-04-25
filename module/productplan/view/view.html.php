@@ -16,7 +16,7 @@
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <div id='titlebar'>
   <div class='heading'>
-  <span class='prefix'><?php echo html::icon($lang->icons['plan']) . ' #' . $plan->id;?></span>
+  <span class='prefix'><?php echo html::icon($lang->icons['plan']);?> <strong><?php echo $plan->id;?></strong></span>
     <strong><?php echo $plan->title;?></strong>
     <?php if($plan->deleted):?>
     <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>

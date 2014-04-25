@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['project']) . ' #' . $project->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->id;?></strong></span>
     <strong><?php echo $project->name;?></strong>
     <?php if($project->deleted):?>
     <span class='label label-danger'><?php echo $lang->project->deleted;?></span>

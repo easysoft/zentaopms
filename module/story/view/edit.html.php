@@ -14,7 +14,7 @@
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->story->edit;?></small>
   </div>

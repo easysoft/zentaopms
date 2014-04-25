@@ -16,7 +16,7 @@
 <div class='container mw-600px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix' title='USER'><?php echo html::icon($lang->icons['user']) . ' #' . $user->id;?></span>
+      <span class='prefix' title='USER'><?php echo html::icon($lang->icons['user']);?> <strong><?php echo $user->id;?></strong></span>
       <strong><?php echo $user->realname;?> (<small><?php echo $user->account;?></small>)</strong>
       <small class='text-muted'> <?php echo $lang->user->profile;?> <?php echo html::icon('eye-open');?></small>
     </div>

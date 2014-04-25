@@ -113,9 +113,9 @@
       </tr>
      <tr>
         <th><?php echo $lang->story->legendAttatch;?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
-      <tr><td></td><td colspan='3'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><td></td><td colspan='3' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>
     <span id='responser'></span>
   </form>

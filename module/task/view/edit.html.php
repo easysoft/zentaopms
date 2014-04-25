@@ -20,7 +20,7 @@
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->task->edit;?></small>
   </div>

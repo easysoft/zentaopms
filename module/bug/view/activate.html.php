@@ -15,9 +15,9 @@
 <?php include '../../common/view/chosen.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['bug']) . ' #' . $bug->id;;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?> <strong><?php echo $bug->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
-    <small class='text-success'> <?php echo $lang->bug->activate;?> <?php echo html::icon($lang->icons['activate']);?></small>
+    <small class='text-success'> <?php echo $lang->bug->activate;?></small>
   </div>
 </div>
 

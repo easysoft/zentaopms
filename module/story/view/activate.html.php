@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $story->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
     <small class='text-success'><?php echo html::icon($lang->icons['activate']) . ' ' . $lang->story->activate;?></small>
   </div>

@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']) . ' #' . $product->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $product->id;?></strong></span>
     <strong><?php echo $story->title;?></strong>
     <?php if($story->version > 1):?>
     <small class='dropdown'>

@@ -16,7 +16,7 @@
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['task']) . ' #' . $task->id;;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
     <small class='text-muted'> <?php echo $lang->task->start;?> <?php echo html::icon($lang->icons['start']);?></small>
   </div>

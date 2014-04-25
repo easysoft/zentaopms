@@ -392,7 +392,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .body-modal #titlebar {margin: 0}
 #titlebar > .heading {font-size: 14px; line-height: 20px; font-weight: bold;}
 #titlebar > .heading > i {display: none;}
-#titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666; border-radius: 4px;}
+#titlebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666;}
+#titlebar > .heading > .prefix > strong {border-radius: 4px; border: 1px solid #aaa; padding: 1px 5px; background: #fff; text-align: center; min-width: 20px; color: #666;}
 #titlebar > .heading > .prefix > i {font-size: 14px; color: #808080; display: none}
 #titlebar > .heading > strong {display: inline-block; margin-right: 5px;}
 #titlebar > .heading > strong > i, #titlebar > .heading > strong > small > i {display: none}
@@ -403,14 +404,14 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* Button in titlebar and featurebar */
 #titlebar > .actions .btn {padding-top: 4px; padding-bottom: 4px;}
-#featurebar > .actions .btn:not(.btn-primary), #titlebar > .actions .btn:not(.btn-primary), #featurebar > .pull-right .btn:not(.btn-primary), #titlebar > .pull-right .btn:not(.btn-primary) {border-color: transparent; background: none; box-shadow: none; padding: 4px 7px; border-radius: 2px; text-shadow: none; color: #036}
-#featurebar > .actions .btn:not(.btn-primary):hover, #titlebar > .actions .btn:not(.btn-primary):hover ,#featurebar > .pull-right .btn:not(.btn-primary):hover, #titlebar > .pull-right .btn:not(.btn-primary):hover{background: #ddd; border-color: #ddd; color: #333}
+#featurebar > .actions .btn:not(.btn-primary), #titlebar > .actions .btn:not(.btn-primary), .main > .actions .btn:not(.btn-primary) {border-color: transparent; background: none; box-shadow: none; padding: 4px 7px; border-radius: 2px; text-shadow: none; color: #036}
+#featurebar > .actions .btn:not(.btn-primary):hover, #titlebar > .actions .btn:not(.btn-primary):hover, .main > .actions .btn:not(.btn-primary):hover {background: #ddd; border-color: #ddd; color: #333}
 
 /* Following style to fixed ie8 */
-#featurebar > .actions .btn, #titlebar > .actions .btn, #featurebar > .pull-right .btn, #titlebar > .pull-right .btn {border-color: transparent\0; background: none\0; box-shadow: none\0; padding: 4px 8px\0;}
-#featurebar > .actions .btn:hover, #titlebar > .actions .btn:hover ,#featurebar > .pull-right .btn:hover, #titlebar > .pull-right .btn:hover{background: #ddd\0; border-color: #ddd\0;}
-#featurebar > .actions .btn.btn-primary, #titlebar > .actions .btn.btn-primary, #featurebar > .pull-right .btn.btn-primary, #titlebar > .pull-right .btn.btn-primary {border-color: #103152\0; background: #1A4F85\0; padding: 4px 8px\0; color: #e5e5e5}
-#featurebar > .actions .btn.btn-primary:hover, #titlebar > .actions .btn.btn-primary:hover ,#featurebar > .pull-right .btn.btn-primary:hover, #titlebar > .pull-right .btn:hover{background: #133B63\0; border-color: #0C243C\0; color: #fff}
+#featurebar > .actions .btn, #titlebar > .actions .btn {border-color: transparent\0; background: none\0; box-shadow: none\0; padding: 4px 8px\0;}
+#featurebar > .actions .btn:hover, #titlebar > .actions .btn:hover {background: #ddd\0; border-color: #ddd\0;}
+#featurebar > .actions .btn.btn-primary, #titlebar > .actions .btn.btn-primary{border-color: #103152\0; background: #1A4F85\0; padding: 4px 8px\0; color: #e5e5e5}
+#featurebar > .actions .btn.btn-primary:hover, #titlebar > .actions .btn.btn-primary:hover {background: #133B63\0; border-color: #0C243C\0; color: #fff}
 
 /* table in outer */
 .outer .table {margin-bottom: 0; border: 1px solid #ddd;}

@@ -16,7 +16,7 @@
 <div class='container'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['build']) . ' #' . $build->id;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name, '_blank');?></strong>
       <small class='text-muted'> <?php echo $lang->build->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
     </div>

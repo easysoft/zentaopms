@@ -16,7 +16,7 @@
 <div class='container'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['release']) . ' #' . $release->id;;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
       <strong><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></strong>
       <small class='text-muted'> <?php echo $lang->release->edit;?> <i class='icon icon-pencil'></i></small>
     </div>

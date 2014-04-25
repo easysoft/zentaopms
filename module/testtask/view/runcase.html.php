@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['usecase']) . ' #' . $run->case->id;?></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['usecase']);?> <strong><?php echo $run->case->id;?></strong></span>
     <strong><?php echo $run->case->title;?></strong>
     <small class='text-warning'> <?php echo $lang->testtask->runCase;?> <?php echo html::icon($lang->icons['run']);?></small>
   </div>

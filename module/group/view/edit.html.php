@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix' title='GROUP'><?php echo html::icon($lang->icons['group']) . ' #' . $group->id;?></span>
+    <span class='prefix' title='GROUP'><?php echo html::icon($lang->icons['group']);?> <strong><?php echo $group->id;?></strong></span>
     <strong><?php echo $group->name;?></strong>
     <small class='text-muted'> <?php echo $lang->group->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
   </div>

@@ -14,10 +14,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></strong>
-    <?php if($projectName):?>
-    <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->project . $lang->colon . ' ' . $projectName;?></small>
-    <?php endif;?>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->task->batchEdit . ' ' . $lang->task->common;?></strong>
   </div>
 </div>
 

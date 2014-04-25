@@ -15,7 +15,7 @@
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['project']) . ' #' . $project->id;;?></span>
+      <span class='prefix'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?></strong>
       <small class='text-danger'> <?php echo $lang->project->close;?> <?php echo html::icon($lang->icons['close']);?></small>
     </div>

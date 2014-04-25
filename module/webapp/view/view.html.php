@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix' title='WEBAPP'><?php echo html::icon($lang->icons['app']) . ' #' . $webapp->id;?></span>
+    <span class='prefix' title='WEBAPP'><?php echo html::icon($lang->icons['app']);?> <strong><?php echo $webapp->id;?></strong></span>
     <strong><?php echo $webapp->name;?></strong>
     <small class='text-muted'> <i class='icon-file-text'></i> <?php echo $lang->webapp->view?></small>
   </div>

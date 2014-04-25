@@ -24,7 +24,7 @@ function copyStoryTitle(num)
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
-    $('#story' + num).parent().next().find('input:first').val(storyTitle);
+    $('#name\\[' + num + '\\]').val(storyTitle);
 }
 
 /* Set the story module. */
