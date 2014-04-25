@@ -31,7 +31,7 @@
               <?php echo html::input('sure', '', "class='form-control' onkeyup='showClearButton()' autocomplete='off'");?>
             </div>
           </div>
-            <?php echo html::submitButton($lang->admin->clearData, "class='hidden btn-block btn btn-danger'");?>
+          <?php echo html::submitButton($lang->admin->clearData, "class='hidden btn-block btn btn-danger'");?>
         </form>
       </div>
     </div>

@@ -12,12 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
-  <div class='heading'>
-    <?php echo html::icon($lang->icons['trash']);?> <?php echo $lang->action->trash;?>
-  </div>
+  <div class='heading'><?php echo html::icon($lang->icons['trash']);?> <?php echo $lang->action->trash;?></div>
   <div class='actions'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>
-      <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
+    <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
   </div>
 </div>
 
