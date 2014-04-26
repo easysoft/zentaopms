@@ -48,7 +48,7 @@ function switchEncode(fileType)
     <strong><?php echo $lang->export;?></strong>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 80px 15%'>
   <table class='w-p100'>
     <tr>
       <td>
@@ -57,10 +57,10 @@ function switchEncode(fileType)
           <?php echo html::input('fileName', '', 'class=form-control');?>
         </div>
       </td>
-      <td class='w-60px'>
+      <td class='w-80px'>
         <?php echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?>
       </td>
-      <td class='w-80px'>
+      <td class='w-90px'>
         <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='hidden'");?>
       </td>
       <td class='w-100px'>

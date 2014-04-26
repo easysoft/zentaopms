@@ -14,8 +14,7 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
-      <strong><?php echo $lang->convert->common;?></strong>
-      <small class='text-muted'><?php echo $lang->convert->checkConfig;?> </small>
+      <strong><?php echo $lang->convert->checkConfig;?></strong>
       <strong class='text-important'> <?php echo strtoupper($source);?></strong>
     </div>
   </div>

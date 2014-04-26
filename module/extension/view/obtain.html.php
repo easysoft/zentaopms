@@ -17,21 +17,18 @@
     <div class='col-md-4 col-lg-3'>
       <form class='side-search mgb-20' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
         <div class="input-group">
-          <?php echo html::input('key', $this->post->key, "class='form-control'");?>
+          <?php echo html::input('key', $this->post->key, "class='form-control' placeholder='{$lang->extension->bySearch}'");?>
           <span class="input-group-btn">
-            <?php echo html::submitButton('<i class="icon-search"></i> ' . $lang->extension->bySearch, '', ''); ?>
+            <?php echo html::submitButton('<i class="icon-search"></i>', '', ''); ?>
           </span>
         </div>
       </form>
-      <div class='panel panel-sm'>
-        <div class='panel-heading'><?php echo $lang->extension->obtain;?></div>
-        <div class='list-group'>
-            <?php
-            echo html::a(inlink('obtain', 'type=byUpdatedTime'), $lang->extension->byUpdatedTime, '', "class='list-group-item' id='byupdatedtime'");
-            echo html::a(inlink('obtain', 'type=byAddedTime'),   $lang->extension->byAddedTime, '', "class='list-group-item' id='byaddedtime'");
-            echo html::a(inlink('obtain', 'type=byDownloads'),   $lang->extension->byDownloads, '', "class='list-group-item' id='bydownloads'");
-            ?>
-        </div>
+      <div class='list-group'>
+          <?php
+          echo html::a(inlink('obtain', 'type=byUpdatedTime'), $lang->extension->byUpdatedTime, '', "class='list-group-item' id='byupdatedtime'");
+          echo html::a(inlink('obtain', 'type=byAddedTime'),   $lang->extension->byAddedTime, '', "class='list-group-item' id='byaddedtime'");
+          echo html::a(inlink('obtain', 'type=byDownloads'),   $lang->extension->byDownloads, '', "class='list-group-item' id='bydownloads'");
+          ?>
       </div>
       <div class='panel panel-sm'>
         <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>

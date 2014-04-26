@@ -14,8 +14,7 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
-      <strong><?php echo $lang->convert->common;?></strong>
-      <small class='text-muted'><?php echo $lang->convert->setting . $lang->colon . strtoupper($source) . ' ' . html::icon('cog');?></small>
+      <strong><?php echo $lang->convert->setting;?> <?php echo strtoupper($source) . ' ' . html::icon('cog');?></strong>
     </div>
   </div>
   <form class='form-condensed' method='post' action='<?php echo inlink('checkconfig');?>'>

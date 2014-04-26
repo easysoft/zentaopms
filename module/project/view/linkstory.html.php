@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='titlebar'>
-  <div class='heading'>
+  <div class='heading' style='margin-bottom: 15px'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong><small><?php echo html::icon($lang->icons['link']);?></small> <?php echo $lang->project->linkStory;?></strong>
   </div>

@@ -1,0 +1,2 @@
+.outer > .container > form {padding: 20px}
+.outer > .container > form .table-form {border: 1px solid #ddd}

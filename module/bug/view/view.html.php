@@ -161,6 +161,10 @@
                 <th><?php echo $lang->bug->keywords;?></th>
                 <td><?php echo $bug->keywords;?></td>
               </tr>
+              <tr>
+                <th><?php echo $lang->bug->mailto;?></th>
+                <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+              </tr>
             </table>
           </div>
           <div class='tab-pane' id='legendPrjStoryTask'>
@@ -194,7 +198,6 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendLife' data-toggle='tab'><?php echo $lang->bug->legendLife;?></a></li>
-          <li><a href='#case' data-toggle='tab'><?php echo $lang->bug->case;?></a></li>
           <li><a href='#legendMisc' data-toggle='tab'><?php echo $lang->bug->legendMisc;?></a></li>
         </ul>
         <div class='tab-content'>
@@ -247,14 +250,14 @@
               </tr>
             </table>
           </div>
-          <div class='tab-pane active' id='case'>
-            <table class='table table-data table-condensed table-borderless'>
+          <div class='tab-pane' id='legendMisc'>
+            <table class='table table-data table-condensed table-borderless table-fixed'>
               <tr>
                 <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
                 <td><?php if($bug->case) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), $bug->caseTitle);?></td>
               </tr>
               <tr>
-                <th valign="top" class='rowhead w-p20'><?php echo $lang->bug->toCase;?></th>
+                <th><?php echo $lang->bug->toCase;?></th>
                 <td>
                 <?php 
                 foreach($bug->toCases as $caseID => $case) 
@@ -263,14 +266,6 @@
                 }
                 ?>
                 </td>
-              </tr>
-            </table>
-          </div>
-          <div class='tab-pane active' id='legendMisc'>
-            <table class='table table-data table-condensed table-borderless table-fixed'>
-              <tr>
-                <th class='w-60px'><?php echo $lang->bug->mailto;?></th>
-                <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->linkBug;?></th>

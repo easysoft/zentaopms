@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-700px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['todo']);?></span>
@@ -57,10 +57,10 @@
         <th><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <div class='input-group'>
-            <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class="form-control" style="width: 50%"') . html::select('end', $times, '', 'class="form-control" style="width: 50%"');?>
+            <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class="form-control" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control" style="width: 50%; margin-left:-1px"');?>
           </div>
         </td>
-        <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?></td>
+        <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);'> <?php echo $lang->todo->lblDisableDate;?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->todo->private;?></th>

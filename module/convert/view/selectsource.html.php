@@ -14,12 +14,11 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon('cloud-upload');?></span>
-      <strong><?php echo $lang->convert->common;?></strong>
-      <small class='text-muted'><?php echo $lang->convert->selectSource . ' ' . html::icon('bullseye');?></small>
+      <strong><?php echo $lang->convert->selectSource;?></strong>
     </div>
   </div>
   <form method='post' action='<?php echo inlink('setConfig');?>'>
-    <table class='table table-form'>
+    <table class='table table-form mgb-20'>
       <thead>
         <tr>
           <th class='w-100px text-right'><?php echo $lang->convert->source;?></th>
@@ -32,10 +31,10 @@
         <td><?php echo html::radio('source', $versions);?></td>
       </tr>
       <?php endforeach;?>
-      <tr>
-        <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-      </tr>
     </table>
+    <div class='text-center'>
+      <?php echo html::submitButton();?>
+    </div>
   </form>
 </div>
 

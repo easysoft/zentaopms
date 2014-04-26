@@ -15,7 +15,6 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->story->batchCreate;?></strong>
-    <small class='text-muted'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->story->product . $lang->colon . ' ' . $productName;?></small>
   </div>
 </div>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>

@@ -24,8 +24,8 @@
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td>
+      <th class='w-70px'><?php echo $lang->bug->assignedTo;?></th>
+      <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td><td></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->openedBuild;?></th>
@@ -33,14 +33,14 @@
     </tr>
     <tr>
       <th><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+      <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->files;?></th>
-      <td class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
+      <td colspan='2' class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
+      <td colspan='3' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
 </form>
