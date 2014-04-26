@@ -504,7 +504,7 @@ EOT;
     {
         global $lang;
         if(isonlybody()) return false;
-        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='btn btn-back' $misc/>";
+        return  "<a href='javascript:history.go(-1);' class='btn btn-back' $misc >{$lang->goback}</a>";
     }
 
     /**

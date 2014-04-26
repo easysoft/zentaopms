@@ -275,6 +275,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .fileBox .form-control[type='text'] + .input-group-btn > .btn {border-left: 0}
 .fileBox .form-control[type='text'] {height: 30px;}
 .fileBox .input-control {display: table-cell; border: 1px solid #ccc; padding: 0 10px; border-radius: 2px 0 0 2px}
+.fileBox .input-control > input[type='file'] {width: 100%; height: 100%; height: 26px; padding: 0 5px; line-height: 26px; border: none; position: relative; top: 0;}
 
 /* Bug status */
 .bug-closed, .bug-closed a {color: #808080; text-decoration: line-through;}
@@ -361,7 +362,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 
 /* Feature bar. */
-#featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 30px; box-sizing:content-box;}
+#featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; overflow:auto;_height:1%}
 #featurebar .heading {float: left; padding: 0 5px; color: #666}
 #featurebar .heading:after {content: "\e6e1"; font-family: ZenIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
 #featurebar .heading > i {color: #808080}
@@ -414,10 +415,10 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #featurebar > .actions .btn:not(.btn-primary):hover, #titlebar > .actions .btn:not(.btn-primary):hover, .main > .actions:not(.actions-form) .btn:not(.btn-primary):hover {background: #ddd; border-color: #ddd; color: #333}
 
 /* Following style to fixed ie8 */
-#featurebar > .actions .btn, #titlebar > .actions .btn {border-color: transparent\0; background: none\0; box-shadow: none\0; padding: 4px 8px\0;}
-#featurebar > .actions .btn:hover, #titlebar > .actions .btn:hover {background: #ddd\0; border-color: #ddd\0;}
-#featurebar > .actions .btn.btn-primary, #titlebar > .actions .btn.btn-primary{border-color: #103152\0; background: #1A4F85\0; padding: 4px 8px\0; color: #e5e5e5}
-#featurebar > .actions .btn.btn-primary:hover, #titlebar > .actions .btn.btn-primary:hover {background: #133B63\0; border-color: #0C243C\0; color: #fff}
+#featurebar > .actions .btn, #titlebar > .actions .btn, .main > .actions .btn {border-color: transparent\0; background: none\0; box-shadow: none\0; padding: 4px 8px\0;; color: #036\0}
+#featurebar > .actions .btn:hover, #titlebar > .actions .btn:hover, .main > .actions .btn:hover {background: #ddd\0; border-color: #ddd\0; color: #333\0;}
+#featurebar > .actions .btn.btn-primary, #titlebar > .actions .btn.btn-primary, .main > .actions .btn.btn-primary {border-color: #103152\0; background: #1A4F85\0; padding: 4px 8px\0; color: #e5e5e5}
+#featurebar > .actions .btn.btn-primary:hover, #titlebar > .actions .btn.btn-primary:hover, .main > .actions .btn.btn-primary:hover {background: #133B63\0; border-color: #0C243C\0; color: #fff}
 
 /* table in outer */
 .outer .table {margin-bottom: 0; border: 1px solid #ddd;}

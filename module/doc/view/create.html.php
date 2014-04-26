@@ -49,11 +49,11 @@
         <th><?php echo $lang->doc->title;?></th>
         <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
       </tr> 
-      <tr id='urlBox' class='hidden'>
+      <tr id='urlBox' class='hide'>
         <th><?php echo $lang->doc->url;?></th>
         <td colspan='2'><?php echo html::input('url', '', "class='form-control'");?></td>
       </tr>  
-      <tr id='contentBox' class='hidden'>
+      <tr id='contentBox' class='hide'>
         <th><?php echo $lang->doc->content;?></th>
         <td colspan='2'><?php echo html::textarea('content', '', "class='form-control' style='width:90%; height:200px'");?></td>
       </tr>  

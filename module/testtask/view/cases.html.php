@@ -126,10 +126,10 @@ var moduleID   = '<?php echo $moduleID;?>';
             if($canBatchAssign)
             {
                 $actionLink = inLink('batchAssign', "taskID=$task->id");
-                echo "<div class='input-group'>";
+                echo "<div class='input-group w-200px'>";
                 echo html::select('assignedTo', $users, '', 'class="form-control"');
                 echo "<span class='input-group-btn'>";
-                echo html::commonButton($lang->testtask->assign, "onclick=\"setFormAction('$actionLink')\"");
+                echo html::commonButton($lang->testtask->assign, "onclick=\"setFormAction('$actionLink')\" style='border-left:none'");
                 echo '</span></div>';
             }
             if($canBatchRun)

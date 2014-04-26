@@ -24,7 +24,4 @@
     </div>
   </form>
 </div>
-<form method='post'>
-
-</form>
 <?php include '../../common/view/footer.html.php';?>

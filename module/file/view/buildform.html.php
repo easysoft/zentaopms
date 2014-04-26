@@ -3,7 +3,7 @@
   /* Define the html code of a file row. */
   $fileRow = <<<EOT
   <div class='fileBox input-group' id='fileBox\$i'>
-    <span class='input-control w-p45'><input type='file' name='files[]' class='fileControl'  tabindex='-1' /></span>
+    <span class='input-control w-p45 pd-0'><input type='file' name='files[]' class='fileControl'  tabindex='-1' /></span>
     <span class="input-group-addon">{$lang->file->label}</span>
     <input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' />
     <span class='input-group-btn'>

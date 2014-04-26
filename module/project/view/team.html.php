@@ -22,7 +22,7 @@
       <?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary'");?>
     </div>
   </div>
-  <table class='table tablesorter' id='memberList'>
+  <table class='table tablesorter bd-0' id='memberList'>
     <thead>
       <tr>
         <th><?php echo $lang->team->account;?></th>
