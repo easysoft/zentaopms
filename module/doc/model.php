@@ -27,7 +27,7 @@ class docModel extends model
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
-        $selectHtml .= "<div class='dropdown'>" . html::a('javascript:;', $libs[$libID] . " <span class='caret'></span>", '', "data-toggle='dropdown'") . "<ul class='dropdown-menu'>";
+        $selectHtml = "<div class='dropdown'>" . html::a('javascript:;', $libs[$libID] . " <span class='caret'></span>", '', "data-toggle='dropdown'") . "<ul class='dropdown-menu'>";
         foreach ($libs as $key => $value)
         {
             $class = $libID == $key ? 'active' : '';
