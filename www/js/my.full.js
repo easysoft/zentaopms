@@ -965,9 +965,17 @@ function setModal()
         }
 
         $ajaxModal = $('#ajaxModal');
-        $.extend({'closeModal':function(callback)
+        $.extend({'closeModal':function(callback, location)
         {
-            $ajaxModal.on('hidden.bs.modal', callback);
+            $ajaxModal.on('hidden.bs.modal', function()
+            {
+                if(location)
+                {
+                    if(location == 'this') window.location.reload();
+                    else window.location = location;
+                }
+                callback();
+            });
             $ajaxModal.modal('hide');
         }});
 
@@ -1056,25 +1064,6 @@ function condensedForm()
     });
 }
 
-/**
- * Update data to the target element synchronous.
- * 
- * @access public
- * @return void
- */
-function setSyncTrigger()
-{
-    $("[data-sync-target]").on('input propertychange', function()
-    {
-        var $this = $(this);
-        var val = $this.prop('tagName') == 'INPUT' ? $this.val() : $this.html();
-        var target = $($this.attr('data-sync-target'));
-        if(target.prop('tagName') == 'INPUT') target.val(val);
-        else target.html(val);
-    });
-}
-
-
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1098,8 +1087,6 @@ $(document).ready(function()
     autoCheck();
     toggleSearch();
     toggleTreeBox();
-
-    setSyncTrigger();
 
     hideClearDataLink();
 
