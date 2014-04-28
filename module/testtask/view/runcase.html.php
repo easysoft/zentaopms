@@ -15,7 +15,7 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['usecase']);?> <strong><?php echo $run->case->id;?></strong></span>
     <strong><?php echo $run->case->title;?></strong>
-    <small class='text-warning'> <?php echo $lang->testtask->runCase;?> <?php echo html::icon($lang->icons['run']);?></small>
+    <small class='text-muted'> <?php echo $lang->testtask->runCase;?> <?php echo html::icon($lang->icons['run']);?></small>
   </div>
 </div>
 <div class='main'>

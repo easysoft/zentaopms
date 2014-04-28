@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('holders ', $lang->doc->placeholder);?>
-<div class='container mw-900px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['doc']);?></span>
@@ -30,11 +30,11 @@
       <?php elseif($libID == 'project'):?>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->project;?></th>
-        <td><?php echo html::select('project', $projects, $projectID, "class='form-control' onchange=loadProducts(this.value);");?></td>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, $projectID, "class='form-control' onchange=loadProducts(this.value);");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->product;?></th>
-        <td><span id='productBox'><?php echo html::select('product', $products, '', "class='form-control'");?></span></td>
+        <td class='w-p25-f'><span id='productBox'><?php echo html::select('product', $products, '', "class='form-control'");?></span></td><td></td>
       </tr>  
       <?php endif;?>
       <tr>

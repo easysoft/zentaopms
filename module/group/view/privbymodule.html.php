@@ -14,8 +14,8 @@
   <div class='heading'>
     <span class='prefix'><i class='icon-lock'></i></span>
     <strong><small class='text-muted'><i class='icon-cog'></i></small> <?php echo $lang->group->managePriv ;?></strong>
+    <small class='text-muted'> <?php echo $lang->group->byModuleTips; ?></small>
   </div>
-  <div class='actions'><div class='text text-info'><i class='icon-info-sign'></i> <?php echo $lang->group->byModuleTips; ?></div>&nbsp;&nbsp;</div>
 </div>
 
 <form class='form-condensed pdb-20' method='post' target='hiddenwin'>

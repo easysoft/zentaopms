@@ -15,7 +15,7 @@
   <div id='titlebar'>
     <div class='heading'><?php echo html::icon($lang->icons['user']);?> <?php echo $lang->my->profile;?></div>
     <div class='actions'>
-      <?php echo html::a($this->createLink('my', 'editprofile'), $lang->user->editProfile, '', "class='btn btn-primary'");?>
+      <?php echo html::a($this->createLink('my', 'editprofile', '', '', true), $lang->user->editProfile, '', "class='btn btn-primary'");?>
     </div>
   </div>
   <table class='table table-borderless table-data'>

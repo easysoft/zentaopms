@@ -26,16 +26,15 @@
       <?php echo $case->precondition;?>
     </fieldset>
     <?php foreach($results as $result):?>
-    <table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
+    <table class='table table-condensed table-hover table-striped table-fixed'>
+      <caption class='text-left bd-0'>
+        <?php if(!isset($build)):?><div class='pull-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div>
+        <?php endif; ?>
+        RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?>
+      </caption>
       <thead>
         <tr>
-          <td colspan='5'>
-            <div class='text-left'>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></div>
-            <?php if(isset($build)):?><div class='text-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div><?php endif;?>
-          </td>
-        </tr>
-        <tr>
-          <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+          <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
           <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
           <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
           <th><?php echo $lang->testcase->result;?></th>

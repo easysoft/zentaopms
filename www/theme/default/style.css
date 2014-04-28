@@ -535,7 +535,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .body-modal > form {padding-bottom: 15px;}
 .body-modal .outer > .container, .body-modal > .container{padding: 0; margin: 0; max-width: inherit !important; border: 0}
 .body-modal #titlebar .actions {right: 40px}
-.body-modal #header, .body-modal #footer {display: none}
 .body-modal .outer, .body-modal #wrap{padding: 0!important; margin: 0!important;}
 
 .modal-dialog.fullscreen {width: 100% !important; height: 100% !important; margin: 0; border: none !important;}
