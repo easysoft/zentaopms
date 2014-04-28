@@ -41,6 +41,7 @@
 #searchmore:hover, #searchlite:hover {color: #145CCD;}
 
 .bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
+#groupAndOr {display: inline-block;}
 </style>
 <script language='Javascript'>
 var dtOptions = 

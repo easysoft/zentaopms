@@ -42,3 +42,4 @@ $lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236
 
 $lang->my->form->lblBasic   = 'Basic info';
 $lang->my->form->lblContact = 'Contact info';
+$lang->my->form->lblAccount = 'Account info';

@@ -44,3 +44,4 @@ $lang->my->home->noProductsTip = "这里还没有产品。";
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';
+$lang->my->form->lblAccount = '帐号信息';

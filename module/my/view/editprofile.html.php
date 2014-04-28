@@ -21,26 +21,14 @@
       <legend><?php echo $lang->my->form->lblBasic;?></legend>
       <table class='table table-form'> 
         <tr>
-          <th class='w-100px'><?php echo $lang->user->account;?></th>
-          <td><?php echo html::input('account', $user->account, "class='form-control' disabled='disabled'");?></td>
-          <th class='w-100px'><?php echo $lang->user->realname;?></th>
+          <th class='w-90px'><?php echo $lang->user->realname;?></th>
           <td><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->user->commiter;?></th>
-          <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
-          <th><?php echo $lang->user->email;?></th>
+          <th class='w-90px'><?php echo $lang->user->email;?></th>
           <td><?php echo html::input('email', $user->email, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->gender;?></th>
           <td><?php echo html::radio('gender', $lang->user->genderList, $user->gender);?></td>
-          <th><?php echo $lang->user->password;?></th>
-          <td><?php echo html::password('password1', '', "class='form-control'");?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->user->password2;?></th>
-          <td><?php echo html::password('password2', '', "class='form-control'");?></td>
           <th><?php echo $lang->user->birthyear;?></th>
           <td><?php echo html::input('birthday', $user->birthday,"class='form-date form-control'");?></td>
         </tr>
@@ -55,12 +43,29 @@
       </table>
     </fieldset>
     <fieldset>
+      <legend><?php echo $lang->my->form->lblAccount;?></legend>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-90px'><?php echo $lang->user->account;?></th>
+          <td><?php echo html::input('account', $user->account, "class='form-control' disabled='disabled'");?></td>
+          <th class='w-90px'><?php echo $lang->user->commiter;?></th>
+          <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->password;?></th>
+          <td><?php echo html::password('password1', '', "class='form-control'");?></td>
+          <th><?php echo $lang->user->password2;?></th>
+          <td><?php echo html::password('password2', '', "class='form-control'");?></td>
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset>
       <legend><?php echo $lang->my->form->lblContact;?></legend>
         <table class='table table-form'>
          <tr>
-          <th class='w-100px'><?php echo $lang->user->skype;?></th>
+          <th class='w-90px'><?php echo $lang->user->skype;?></th>
           <td><?php echo html::input('skype', $user->skype, "class='form-control'");?></td>
-          <th class='w-100px'><?php echo $lang->user->qq;?></th>
+          <th class='w-90px'><?php echo $lang->user->qq;?></th>
           <td><?php echo html::input('qq', $user->qq, "class='form-control'");?></td>
         </tr>  
         <tr>

@@ -1,2 +1,2 @@
-.alert-link {text-decoration: underline;}
-.alert .content {width: 100%;}
+.alert-link:hover {text-decoration: underline;}
+.alert {width: 100%; display: table;}
