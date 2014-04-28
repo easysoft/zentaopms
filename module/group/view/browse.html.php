@@ -44,9 +44,9 @@
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
       <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list', 'lock');?>
       <?php $lang->group->managemember = $lang->group->manageMember;?>
-      <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list', 'group', '', 'iframe', yes);?>
-      <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list', '', '', 'iframe', yes, "data-width='550'");?>
-      <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list', '', '', 'iframe', yes, "data-width='550'");?>
+      <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list', 'group', '', 'iframe', 'yes');?>
+      <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+      <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
       <?php
       if(common::hasPriv('group', 'delete'))
       {
