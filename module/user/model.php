@@ -630,7 +630,7 @@ class userModel extends model
         }
         else
         {
-            $locked    = date('Y-m-d H:i:s', mktime());
+            $locked    = date('Y-m-d H:i:s', time());
             $failTimes = 0;
         }
         $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec();
