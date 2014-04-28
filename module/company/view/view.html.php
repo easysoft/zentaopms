@@ -15,7 +15,7 @@
   <div id='titlebar'>
     <div class='heading'><?php echo html::icon($lang->icons['company']);?> <?php echo $lang->company->view;?></div>
     <div class='actions'>
-      <?php common::printLink('company', 'edit', '', '<i class="icon-pencil"></i> ' . $lang->edit, '', 'id="editCompany" class="btn btn-primary iframe" data-width="580"', true, true);?>
+      <?php common::printLink('company', 'edit', '', $lang->edit, '', 'id="editCompany" class="btn btn-primary iframe" data-width="580"', true, true);?>
     </div>
   </div>
   <table class='table table-borderless table-data'> 

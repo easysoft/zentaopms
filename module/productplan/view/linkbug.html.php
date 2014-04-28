@@ -21,7 +21,6 @@
   </div>
   <div id='querybox' class='show'></div>
 </div>
-
 <div id='querybox'></div>
 <div id='bugList'>
   <form method='post' id='unlinkedBugsForm'>

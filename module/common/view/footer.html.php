@@ -6,7 +6,7 @@
 <?php if($onlybody != 'yes'):?>
 </div><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id='footer'>
-  <?php include 'debug.html.php';?>
+  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
   <div id="crumbs">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
   </div>

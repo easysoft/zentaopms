@@ -1,0 +1,4 @@
+#titlebar > .heading {margin-bottom: 15px;}
+#storyList  .table {margin-bottom: 20px;}
+.table > caption {border:1px solid #ddd; border-bottom: none;}
+#linkedStoriesForm .table caption {border-top: none}
