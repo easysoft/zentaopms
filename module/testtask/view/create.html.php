@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-800px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['testtask']);?></span>
@@ -24,18 +24,18 @@
     <table class='table table-form'> 
       <?php if(isset($projectID)):?>
       <tr>
-        <th class='w-80px'><?php echo $lang->testtask->product;?></th>
-        <td class='w-p45'><?php echo html::select('product', $products, '', "class='form-control'");?></td><td></td>
+        <th class='w-90px'><?php echo $lang->testtask->product;?></th>
+        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control'");?></td><td></td>
       </tr>  
       <?php else:?>
       <tr class='hidden'>
-        <th class='w-80px'><?php echo $lang->testtask->product;?></th>
-        <td class='w-p45'><?php echo html::input('product', $productID, "class='form-control'");?></td><td></td>
+        <th class='w-90px'><?php echo $lang->testtask->product;?></th>
+        <td class='w-p25-f'><?php echo html::input('product', $productID, "class='form-control'");?></td><td></td>
       </tr>  
       <?php endif;?>
       <tr>
-        <th class='w-80px'><?php echo $lang->testtask->project;?></th>
-        <td class='w-p45'><?php echo html::select('project', $projects, '', 'class=form-control onchange=loadProjectRelated(this.value)');?></td><td></td>
+        <th class='w-90px'><?php echo $lang->testtask->project;?></th>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, '', 'class=form-control onchange=loadProjectRelated(this.value)');?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testtask->build;?></th>

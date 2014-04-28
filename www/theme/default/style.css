@@ -122,6 +122,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 /* Icon rotate */
 .icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
 .icon-rotate-180:before {display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -ms-transform: rotate(180deg); -o-transform: rotate(180deg); transform: rotate(180deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);}
+.icon-rotate-90:before {display: inline-block; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);}
 
 /* Button icon */
 .btn-icon {border-radius: 2px; display: inline-block; width: 20px; height: 20px; border: none; background: none; padding: 0; color: #4d90fe!important; text-align: center;}
@@ -362,7 +363,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 
 /* Feature bar. */
-#featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; overflow:auto;_height:1%}
+#featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px;}
 #featurebar .heading {float: left; padding: 0 5px; color: #666}
 #featurebar .heading:after {content: "\e6e1"; font-family: ZenIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
 #featurebar .heading > i {color: #808080}
