@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix' title='COMPANY'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $build->id;?></strong></span>
     <strong><?php echo $company->name;?></strong>
     <small class='text-muted'> <?php echo $lang->company->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
   </div>
