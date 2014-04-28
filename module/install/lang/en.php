@@ -37,6 +37,7 @@ EOT;
 
 $lang->install->newReleased= "<strong class='red'>Notice</strong>：There is a new version <strong class='red'>%s</strong>, released on %s。";
 $lang->install->choice     = 'You can ';
+$lang->install->or         = 'or';
 $lang->install->checking   = 'System checking';
 $lang->install->ok         = 'OK(√)';
 $lang->install->fail       = 'Failed(×)';
@@ -127,7 +128,9 @@ $lang->install->groupList['TOP']['desc']    = 'for top manager';
 $lang->install->groupList['OTHERS']['name'] = 'Others';
 $lang->install->groupList['OTHERS']['desc'] = 'for others';
 
-$lang->install->success = "Success installed";
+$lang->install->success  = "Success installed";
+$lang->install->login    = 'Sign into ZentaoPMS';
+$lang->install->register = 'Register Zentao community website';
 
 $lang->install->joinZentao = <<<EOT
 You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>。Now you can <a href='index.php'>login ZenTaoPMS</a>, create groups and grant priviledges.

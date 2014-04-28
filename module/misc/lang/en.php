@@ -20,6 +20,11 @@ $lang->misc->zentao->labels['support'] = 'Support';
 $lang->misc->zentao->labels['cowin']   = 'Help us';
 $lang->misc->zentao->labels['service'] = 'Services';
 
+$lang->misc->zentao->icons['about']   = 'group';
+$lang->misc->zentao->icons['support'] = 'question-sign';
+$lang->misc->zentao->icons['cowin']   = 'hand-right';
+$lang->misc->zentao->icons['service'] = 'heart';
+
 $lang->misc->zentao->about['proversion']   = 'Try pro version free!';
 $lang->misc->zentao->about['official']     = "Official site";
 $lang->misc->zentao->about['changelog']    = "Change log";

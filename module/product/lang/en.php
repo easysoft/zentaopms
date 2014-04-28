@@ -19,6 +19,7 @@ $lang->product->batchEdit = "Batch Edit";
 $lang->product->create    = "Create";
 $lang->product->read      = "Info";
 $lang->product->delete    = "Delete";
+$lang->product->deleted   = "Deleted";
 $lang->product->close     = "Close";
 $lang->product->select    = '--select product--';
 $lang->product->mine      = 'I charge : ';

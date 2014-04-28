@@ -35,7 +35,7 @@ $lang->project->closedBy      = '由谁关闭';
 $lang->project->closedDate    = '关闭日期';
 $lang->project->canceledBy    = '由谁取消';
 $lang->project->canceledDate  = '取消日期';
-$lang->project->Person        = '负责人';
+$lang->project->owner         = '负责人';
 $lang->project->PO            = '产品负责人';
 $lang->project->PM            = '项目负责人';
 $lang->project->QD            = '测试负责人';
@@ -191,6 +191,7 @@ $lang->project->copyFromProject = '复制自项目： <strong>%s</strong>';
 $lang->project->reCopy          = '重新复制';
 $lang->project->cancelCopy      = '取消复制';
 $lang->project->byPeriod        = '按时间段';
+$lang->project->byUser          = '按用户';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';
@@ -231,5 +232,3 @@ $lang->project->selectGroup->suspended = '(已挂起)';
 $lang->project->selectGroup->done      = '(已结束)';
 
 $lang->project->projectTasks = '项目';
-
-$lang->project->byUser = '按用户';

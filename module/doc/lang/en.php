@@ -30,6 +30,7 @@ $lang->doc->addedDate      = 'Added date';
 $lang->doc->editedBy       = 'Edited by';
 $lang->doc->editedDate     = 'Edited date';
 $lang->doc->basicInfo      = 'Basic Info';
+$lang->doc->deleted        = 'Deleted';
 
 $lang->doc->moduleDoc      = 'By module';
 $lang->doc->searchDoc      = 'By search';

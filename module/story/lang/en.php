@@ -160,6 +160,7 @@ $lang->story->lblReview            = 'Review';
 $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
 
+$lang->story->checkAffection       = 'Check Affection';
 $lang->story->affectedProjects     = 'Affected projects';
 $lang->story->affectedBugs         = 'Affected bugs';
 $lang->story->affectedCases        = 'Affected cases';

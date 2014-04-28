@@ -12,6 +12,7 @@
 $lang->testtask->index          = "Index";
 $lang->testtask->create         = "Create";
 $lang->testtask->delete         = "Delete";
+$lang->testtask->deleted        = "Deleted";
 $lang->testtask->view           = "Info";
 $lang->testtask->edit           = "Edit";
 $lang->testtask->browse         = "Testtask browse";

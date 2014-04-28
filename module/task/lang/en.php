@@ -16,6 +16,7 @@ $lang->task->batchEdit          = "Batch edit";
 $lang->task->import             = "Import undone";
 $lang->task->edit               = "Update";
 $lang->task->delete             = "Delete";
+$lang->task->deleted            = "Deleted";
 $lang->task->view               = "Info";
 $lang->task->logEfforts         = "Log working hours";
 $lang->task->record             = "Estimate";

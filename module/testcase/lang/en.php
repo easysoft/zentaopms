@@ -60,6 +60,7 @@ $lang->testcase->view               = "Info";
 $lang->testcase->edit               = "Edit";
 $lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
+$lang->testcase->deleted            = "Deleted";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->import             = "Import";
 $lang->testcase->importID           = "Linenum";

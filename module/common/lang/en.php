@@ -123,7 +123,11 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All records';
 $lang->exportTypeList['selected'] = 'Only checked';
 
+/* Language. */
+$lang->lang = 'Language';
+
 /* Themes. */
+$lang->theme               = 'Theme';
 $lang->themes['default']   = 'Default';
 $lang->themes['green']     = 'Green';
 $lang->themes['red']       = 'Red';
