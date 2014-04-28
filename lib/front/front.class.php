@@ -815,11 +815,11 @@ EOT;
      * @access public
      * @return void
      */
-    static public function closeModal($window = 'self')
+    static public function closeModal($window = 'self', $location)
     {
         $js  = self::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
-        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal();}";
+        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal(null, '$location');}";
         $js .= self::end();
         return $js;
     }
