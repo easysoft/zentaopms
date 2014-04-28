@@ -18,7 +18,7 @@
   <div class='actions'>
     <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550'");?>
     <?php if(common::hasPriv('group', 'managePriv')):?>
-    <?php echo html::a(inlink('managePriv', 'type=byModule&onlybody=yes'), $lang->group->managePrivByModule, '', 'class="btn btn-primary iframe"');?>
+    <?php echo html::a($this->createLink('group', 'managePriv', 'type=byModule', '', true), $lang->group->managePrivByModule, '', 'class="btn btn-primary iframe"');?>
     <?php endif;?>
   </div>
 </div>
