@@ -18,6 +18,7 @@
 #bysearchTab.active:hover {background: #ddd}
 #bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
 #featurebar .nav {z-index: 999; position: relative;}
+#querybox form{padding-right: 40px;}
 #querybox .form-control {padding: 2px; padding: 6px 2px\0;}
 @-moz-document url-prefix() {#querybox .form-control {padding: 6px 2px;}}
 #querybox .table {border: none}

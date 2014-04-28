@@ -24,11 +24,11 @@
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-200px'><?php echo $lang->task->module?></th>
+        <th class='w-150px'><?php echo $lang->task->module?></th>
         <th><?php echo $lang->task->story;?></th>
         <th><?php echo $lang->task->name;?> <span class='required'></span></th>
-        <th class='w-70px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
-        <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
+        <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
+        <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
         <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
         <th class='w-p20'><?php echo $lang->task->desc;?></th>
         <th class='w-70px'><?php echo $lang->task->pri;?></th>
