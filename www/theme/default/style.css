@@ -453,7 +453,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table tbody td > a:visited, #crumbs > a:visited, .side > a:visited {color: #551A8B}
 
 /* Querybox */
-#querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none; padding: 10px}
+#querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none;}
+#querybox form {padding: 10px}
 #querybox.show {display: block; height: auto}
 #titlebar #querybox {margin: 5px -20px -10px}
 

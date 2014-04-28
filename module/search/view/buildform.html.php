@@ -45,6 +45,8 @@
 
 .bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
 #groupAndOr {display: inline-block;}
+
+.outer > #querybox {margin: -20px -20px 20px; border-top: none; border-bottom: 1px solid #ddd}
 </style>
 <script language='Javascript'>
 var dtOptions = 
