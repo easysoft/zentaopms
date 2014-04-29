@@ -9,13 +9,13 @@
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
-$lang->colon        = '::';
-$lang->comma        = '，';
-$lang->dot          = '。';
-$lang->at           = ' 于 ';
-$lang->downArrow    = '↓';
-$lang->null         = '空';
+$lang->arrow     = '&nbsp;<span class="icon-angle-right"></span>';
+$lang->colon     = '::';
+$lang->comma     = '，';
+$lang->dot       = '。';
+$lang->at        = ' 于 ';
+$lang->downArrow = '↓';
+$lang->null      = '空';
 
 $lang->zentaoPMS      = '禅道项目';
 $lang->welcome        = "%s项目管理系统";
