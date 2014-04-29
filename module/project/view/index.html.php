@@ -70,7 +70,7 @@
       <td colspan='10'>
         <div class='table-actions clearfix'>
         <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
-        <?php echo html::submitButton(html::icon($lang->icons['edit']) . ' ' . $lang->project->batchEdit);?>
+        <?php echo html::submitButton($lang->project->batchEdit);?>
         </div>
       </td>
     </tr>

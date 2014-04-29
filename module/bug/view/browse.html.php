@@ -18,30 +18,6 @@ js::set('moduleID', $moduleID);
 js::set('customed', $customed);
 ?>
 <div id='featurebar'>
-  <div class='actions'>
-    <div class='btn-group'>
-      <div class='btn-group'>
-        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-          <i class='icon-download-alt'></i> <?php echo $lang->export ?>
-          <span class='caret'></span>
-        </button>
-        <ul class='dropdown-menu' id='exportActionMenu'>
-          <?php 
-          $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
-          $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
-          echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
-          ?>
-        </ul>
-      </div>
-    <?php
-    common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-    common::printIcon('bug', 'customFields', '', '', 'button', '', '', 'iframe', true);
-    echo "</div><div class='btn-group'>";
-    common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
-    common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
-    echo '</div>';
-    ?>
-  </div>
   <ul class='nav'>
     <?php
     echo "<li id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</li>";
@@ -57,6 +33,35 @@ js::set('customed', $customed);
     echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></li> ";
     ?>
   </ul>
+  <div class='actions'>
+    <div class='btn-group'>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+          <i class='icon-download-alt'></i> <?php echo $lang->export ?>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='exportActionMenu'>
+          <?php 
+          $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
+          $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+          echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
+          ?>
+        </ul>
+      </div>
+      <div class='btn-group'>
+      <?php
+        common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
+        common::printIcon('bug', 'customFields', '', '', 'button', '', '', 'iframe', true);
+        ?>
+      </div>
+    </div>
+    <div class='btn-group'>
+      <?php
+      common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
+      common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
+      ?>
+    </div>
+  </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 
