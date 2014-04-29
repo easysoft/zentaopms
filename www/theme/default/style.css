@@ -162,7 +162,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .fail, [class$="-fail"]  {color:red}
 
 /* tabs */
-.nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px;}
+.nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px; max-height: 32px}
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {color: #333; font-weight: bold; line-height: 20px}
 .tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 10px}
 .tab-pane > h6 {margin-top: 0; margin-bottom: 3px;}
