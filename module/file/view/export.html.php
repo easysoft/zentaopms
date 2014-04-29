@@ -48,7 +48,7 @@ function switchEncode(fileType)
     <strong><?php echo $lang->export;?></strong>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 80px 15%'>
+<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
   <table class='w-p100'>
     <tr>
       <td>
