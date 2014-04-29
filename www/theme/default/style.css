@@ -162,7 +162,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .fail, [class$="-fail"]  {color:red}
 
 /* tabs */
-.nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px;}
+.nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px; max-height: 32px}
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {color: #333; font-weight: bold; line-height: 20px}
 .tab-content {border: 1px solid #ddd; border-top: 0; padding: 10px 10px}
 .tab-pane > h6 {margin-top: 0; margin-bottom: 3px;}
@@ -173,6 +173,9 @@ fieldset.fieldset-pure {background: none; padding: 0; border: none; padding-top:
 fieldset.collapsed {border: none}
 fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
 fieldset > .form-group {margin-bottom: 0;}
+
+/* placeholder */
+.placeholder {color: #999}
 
 /* === Views === */
 /* Table form */
@@ -363,7 +366,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 
 /* Feature bar. */
-#featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px;}
+#featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px; min-height: 30px\0}
 #featurebar .heading {float: left; padding: 0 5px; color: #666}
 #featurebar .heading:after {content: "\e6e1"; font-family: ZenIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
 #featurebar .heading > i {color: #808080}
@@ -453,7 +456,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table tbody td > a:visited, #crumbs > a:visited, .side > a:visited {color: #551A8B}
 
 /* Querybox */
-#querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none; padding: 10px}
+#querybox {margin: 35px -10px -7px; background-color: #fff; height: 0; transition: all 1s; border-top: 1px solid #ddd; position: relative; z-index: 199; overflow: hidden; display: none;}
+#querybox form {padding: 10px}
 #querybox.show {display: block; height: auto}
 #titlebar #querybox {margin: 5px -20px -10px}
 

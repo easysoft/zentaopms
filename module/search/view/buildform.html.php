@@ -14,10 +14,11 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <style>
 #bysearchTab {transition: all .3s cubic-bezier(.175, .885, .32, 1);}
-#bysearchTab.active {background: #fff; padding: 2px 10px 3px; border: 1px solid #ddd; border-bottom: none}
+#bysearchTab.active {background: #fff; padding: 2px 10px 3px; padding-bottom: 2px\0; border: 1px solid #ddd; border-bottom: none}
 #bysearchTab.active:hover {background: #ddd}
 #bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
 #featurebar .nav {z-index: 999; position: relative;}
+#querybox form{padding-right: 40px;}
 #querybox .form-control {padding: 2px; padding: 6px 2px\0;}
 @-moz-document url-prefix() {#querybox .form-control {padding: 6px 2px;}}
 #querybox .table {border: none}
@@ -34,14 +35,18 @@
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #selectPeriod li > a {padding: 4px 15px; border-radius: 2px}
 
-#searchlite, #searchmore {color: #4d90fe; width: 30px; padding: 0 5px}
+#moreOrLite {position: absolute; right: 0; top: 0; bottom: 0}
+#searchlite, #searchmore {color: #4d90fe; width: 50px; padding: 0 5px; line-height: 70px; text-align: center;}
+#searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
 #searchmore > i, #searchlite > i {font-size: 28px;}
-#searchmore:hover, #searchlite:hover {color: #145CCD;}
+#searchmore:hover, #searchlite:hover {color: #145CCD; background: #e5e5e5}
 
 .bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
 #groupAndOr {display: inline-block;}
+
+.outer > #querybox {margin: -20px -20px 20px; border-top: none; border-bottom: 1px solid #ddd}
 </style>
 <script language='Javascript'>
 var dtOptions = 
@@ -266,10 +271,10 @@ foreach($fieldParams as $fieldName => $param)
 ?>
 </div>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform' class='form-condensed'>
-<table class='table table-condensed table-form'>
+<table class='table table-condensed table-form' style='max-width: 1200px; margin: 0 auto'>
   <tr>
-    <td>
-      <table class='table active-disabled w-400px pull-right'>
+    <td class='w-400px'>
+      <table class='table active-disabled'>
       <?php
       $formSessionName = $module . 'Form';
       $formSession     = $this->session->$formSessionName;
@@ -376,13 +381,13 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </div>
     </td>
-    <th class='text-right'>
-      <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
-      <a id="searchlite" href="javascript:showlite()"><i class="icon-double-angle-up icon-2x"></i></a>
-      <?php echo html::hidden('formType', 'lite');?>
-    </th>
   </tr>
 </table>
+<div id='moreOrLite'>
+  <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
+  <a id="searchlite" href="javascript:showlite()"><i class="icon-double-angle-up icon-2x"></i></a>
+  <?php echo html::hidden('formType', 'lite');?>
+</div>
 </form>
 <script language='Javascript'>
 <?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}()";?>

@@ -13,6 +13,7 @@ $lang->build->common    = 'Build';
 $lang->build->create    = "Create";
 $lang->build->edit      = "Edit";
 $lang->build->delete    = "Delete";
+$lang->build->deleted   = "Deleted";
 $lang->build->view      = "Info";
 $lang->build->ajaxGetProductBuilds = 'API:Product builds';
 $lang->build->ajaxGetProjectBuilds = 'API:Project builds';

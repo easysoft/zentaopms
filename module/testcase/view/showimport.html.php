@@ -2,28 +2,33 @@
 <style>
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
-<form target='hiddenwin' method='post'>
-<table class='table-1'>
-  <tr class='colhead'>
-    <th><?php echo $lang->testcase->id?></th>
-    <th><?php echo $lang->testcase->title?></th>
-    <th><?php echo $lang->testcase->module?></th>
-    <th><?php echo $lang->testcase->story?></th>
-    <th><?php echo $lang->testcase->pri?></th>
-    <th><?php echo $lang->testcase->type?></th>
-    <th><?php echo $lang->testcase->status?></th>
-    <th><?php echo $lang->testcase->frequency?></th>
-    <th><?php echo $lang->testcase->stage?></th>
-    <th><?php echo $lang->testcase->precondition?></th>
-    <th><?php echo $lang->testcase->steps?>
-      <table class='table-1'>
-        <tr>
-          <th><?php echo $lang->testcase->stepDesc?></th>
-          <th><?php echo $lang->testcase->stepExpect?></th>
-        </tr>
-      </table>
-    </th>
-  </tr>
+<form target='hiddenwin' method='post' class='form-condensed'>
+<table class='table active-disabled'>
+  <thead>
+    <tr>
+      <th class='w-80px'><?php echo $lang->testcase->id?></th>
+      <th><?php echo $lang->testcase->title?></th>
+      <th class='w-90px'><?php echo $lang->testcase->module?></th>
+      <th class='w-100px'><?php echo $lang->testcase->story?></th>
+      <th class='w-70px'><?php echo $lang->testcase->pri?></th>
+      <th><?php echo $lang->testcase->type?></th>
+      <th><?php echo $lang->testcase->status?></th>
+      <th><?php echo $lang->testcase->frequency?></th>
+      <th><?php echo $lang->testcase->stage?></th>
+      <th><?php echo $lang->testcase->precondition?></th>
+      <th class='pd-0'>
+        <table class='w-p100 table-borderless'>
+          <tr>
+            <th colspan='2'><?php echo $lang->testcase->steps?></th>
+          </tr>
+          <tr>
+            <th><?php echo $lang->testcase->stepDesc?></th>
+            <th><?php echo $lang->testcase->stepExpect?></th>
+          </tr>
+        </table>
+      </th>
+    </tr>
+  </thead>
   <?php foreach($caseData as $key => $case):?>
   <tr valign='top' align='center'>
     <td>
@@ -40,21 +45,21 @@
       ?>
     </td>
     <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
-    <td><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='select-2'")?></td>
-    <td><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='select-2'")?></td>
-    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''))?></td>
-    <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type)?></td>
-    <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : '')?></td>
-    <td><?php echo html::input("frequency[$key]", isset($case->frequency) ? $case->frequency : 1, "size='2'")?></td>
-    <td><?php echo html::select("stage[$key][]", $lang->testcase->stageList, isset($case->stage) ? $case->stage : '', "multiple='multiple'")?></td>
-    <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? $case->precondition : "", "style='margin-top:2px; height:65px;'")?></td>
+    <td><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control'")?></td>
+    <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : '', "class='form-control'")?></td>
+    <td><?php echo html::input("frequency[$key]", isset($case->frequency) ? $case->frequency : 1, "class='form-control'")?></td>
+    <td><?php echo html::select("stage[$key][]", $lang->testcase->stageList, isset($case->stage) ? $case->stage : '', "multiple='multiple' class='form-control' style='height:auto'")?></td>
+    <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? $case->precondition : "", "class='form-control'")?></td>
     <td>
       <?php if(isset($stepData[$key]['desc'])):?>
-      <table class='table-1'>
+      <table class='w-p100 bd-0'>
       <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
         <tr>
-          <td><?php echo html::textarea("desc[$key][$id]", $desc)?></td>
-          <td><?php echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]) ? $stepData[$key]['expect'][$id] : '')?></td>
+          <td><?php echo html::textarea("desc[$key][$id]", $desc, "class='form-control'")?></td>
+          <td><?php echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]) ? $stepData[$key]['expect'][$id] : '', "class='form-control'")?></td>
         </tr>
       <?php endforeach;?>
       </table>
@@ -63,8 +68,12 @@
   </tr>
   <?php unset($caseData[$key]);?>
   <?php endforeach;?>
+  <tfoot>
+    <tr>
+      <td colspan='11' class='text-center'><?php echo html::submitButton() . ' &nbsp; ' . html::backButton()?></td>
+    </tr>
+  </tfoot>
 </table>
-<p><?php echo html::submitButton() . html::backButton()?></p>
 </form>
 <script>
 $(function(){affix('.colhead')})

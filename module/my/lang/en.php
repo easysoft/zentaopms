@@ -39,7 +39,9 @@ $lang->my->home->productHome   = 'Product home';
 $lang->my->home->createProject = "create a project?";
 $lang->my->home->createProduct = "create a product?";
 $lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>Help Book</a>";
+$lang->my->home->noProductsTip = "There is no product.";
 
+$lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basic info';
 $lang->my->form->lblContact = 'Contact info';
 $lang->my->form->lblAccount = 'Account info';

@@ -12,7 +12,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->project->allProject;?>  </div>
   <div class='actions'>
     <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
   </div>
@@ -71,7 +70,7 @@
       <td colspan='10'>
         <div class='table-actions clearfix'>
         <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
-        <?php echo html::submitButton(html::icon($lang->icons['edit']) . ' ' . $lang->project->batchEdit);?>
+        <?php echo html::submitButton($lang->project->batchEdit);?>
         </div>
       </td>
     </tr>

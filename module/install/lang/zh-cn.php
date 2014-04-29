@@ -128,9 +128,9 @@ $lang->install->groupList['TOP']['desc']    = '高层管理';
 $lang->install->groupList['OTHERS']['name'] = '其他';
 $lang->install->groupList['OTHERS']['desc'] = '其他';
 
-$lang->install->success = "安装成功";
-$lang->install->login   = '登录禅道管理系统';
-$lang->install->regist  = '禅道社区注册';
+$lang->install->success  = "安装成功";
+$lang->install->login    = '登录禅道管理系统';
+$lang->install->register = '禅道社区注册';
 
 $lang->install->joinZentao = <<<EOT
 <p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。现在您可以直接 <a class='alert-link' href="index.php">登录禅道管理系统</a>，设置用户及分组！</p>

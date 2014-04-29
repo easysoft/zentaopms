@@ -18,8 +18,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
 ?>
 <div id='titlebar'>
   <div class='heading'><?php echo html::icon($lang->icons['company']);?> <?php echo $lang->company->browse;?></div>
-  <div id='querybox' class='show'><?php echo $searchForm?></div>
 </div>
+<div id='querybox' class='show'><?php echo $searchForm?></div>
 <div class='side'>
   <a class='side-handle' data-id='companyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>

@@ -107,6 +107,7 @@ class group extends control
         {
             $this->group->copy($groupID);
             if(dao::isError()) die(js::error(dao::getError()));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
@@ -198,6 +199,7 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
         $group      = $this->group->getById($groupID);

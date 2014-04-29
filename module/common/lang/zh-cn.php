@@ -153,8 +153,8 @@ $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subMod
 $lang->my->menu->story          = array('link' => '需求|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = '项目|my|project|';
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '档案|my|profile|onlybody=yes', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '密码|my|changepassword|onlybody=yes';
+$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
+$lang->my->menu->changePassword = '密码|my|changepassword';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;

@@ -13,6 +13,7 @@ $lang->release->common    = 'Release';
 $lang->release->create    = "Create";
 $lang->release->edit      = "Edit";
 $lang->release->delete    = "Delete";
+$lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
 

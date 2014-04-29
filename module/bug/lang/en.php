@@ -87,6 +87,7 @@ $lang->bug->activate           = 'Activate';
 $lang->bug->reportChart        = 'Report';
 $lang->bug->export             = 'Export data';
 $lang->bug->delete             = 'Delete Bug';
+$lang->bug->deleted            = 'Deleted';
 $lang->bug->saveTemplate       = 'Save template';
 $lang->bug->deleteTemplate     = 'Delete template';
 $lang->bug->customFields       = 'Custom';
