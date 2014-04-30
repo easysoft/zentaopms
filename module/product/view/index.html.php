@@ -32,7 +32,7 @@
 </div>
 <?php else:?>
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
-  <table class='table table-condensed table-hover table-striped table-borderless'>
+  <table class='table table-condensed table-hover table-striped'>
     <thead>
       <tr>
         <th class='w-id'>   <?php echo $lang->idAB;?></th>

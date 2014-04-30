@@ -1,1 +1,2 @@
 .alert>[class*="icon-"]+.content {padding-left: 20px;}
+#featurebar {display: none}

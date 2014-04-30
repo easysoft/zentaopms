@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-900px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['plan']);?></span>
@@ -33,7 +33,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $plan->begin, 'class="form-control date"');?></td>
+        <td><?php echo html::input('begin', $plan->begin, 'class="form-control form-date"');?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->end;?></th>
