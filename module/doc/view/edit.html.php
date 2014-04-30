@@ -19,7 +19,7 @@ $(document).ready(function()
     setType(type);
 });
 </script>
-<div class='container mw-900px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['doc']);?> <strong><?php echo $doc->id;?></strong></span>
