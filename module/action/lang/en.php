@@ -29,7 +29,7 @@ $lang->action->editComment = 'Edit comment';
 $lang->action->trashTips      = "Tips:The deleting actions in zentao are all logic";
 $lang->action->textDiff       = 'Text mode';
 $lang->action->original       = 'Original content';
-$lang->action->confirmHideAll = '您确定要全部隐藏这些记录吗？';
+$lang->action->confirmHideAll = 'Are you sure you hide these records?';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';

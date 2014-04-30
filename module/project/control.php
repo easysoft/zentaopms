@@ -711,7 +711,7 @@ class project extends control
 
         /* Set a space when assemble the string for english. */
         $space   = $this->app->getClientLang() == 'en' ? ' ' : '';
-        $dayList = array_fill(1, floor(count($dateList) / $this->config->project->maxBurnDay) + 5, '');
+        $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . $space . ($key + 1) . $space . $this->lang->day;
 
         /* Assign. */
