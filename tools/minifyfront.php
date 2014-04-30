@@ -15,7 +15,7 @@ $jqueryRoot = $jsRoot . 'jquery/';
 $jsFiles[] = $jqueryRoot . 'lib.js'; 
 $jsFiles[] = $jsRoot     . 'my.full.js';
 $jsFiles[] = $jqueryRoot . 'colorbox/min.js';
-$jsFiles[] = $jqueryRoot . 'chosen/chosen.min.js';
+$jsFiles[] = $jqueryRoot . 'chosen/min.js';
 $jsFiles[] = $jqueryRoot . 'treeview/min.js';
 $jsFiles[] = $jqueryRoot . 'datepicker/date.js';
 $jsFiles[] = $jqueryRoot . 'datepicker/min.js';
@@ -63,7 +63,6 @@ foreach($langs as $lang)
     foreach($themes as $theme)
     {
         /* Common css files. */
-        $cssCode  = file_get_contents($themeRoot . 'default/yui.css');
         $cssCode .= file_get_contents($themeRoot . 'default/style.css');
         $cssCode .= file_get_contents($themeRoot . 'default/colorbox.css');
         $cssCode .= file_get_contents($themeRoot . 'default/chosen.css');
