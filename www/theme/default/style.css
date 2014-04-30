@@ -16,7 +16,7 @@
 .w-auto {width: auto} .w-20px {width:20px} .w-30px {width:30px} .w-35px {width:35px} .w-40px {width:40px} .w-45px {width:45px} .w-50px {width:50px} .w-60px {width:60px} .w-70px {width:70px} .w-80px {width:80px} .w-90px {width:90px} .w-100px {width:100px} .w-110px {width:110px} .w-120px {width:120px} .w-130px {width:130px} .w-140px {width:140px} .w-150px {width:150px} .w-160px {width:160px} .w-180px {width:180px} .w-200px {width:200px} .w-300px {width:300px} .w-400px {width:400px} .w-500px {width:500px} .w-600px {width:600px} .w-700px {width:700px} .w-800px {width:800px} .w-900px {width:900px}
 .mw-200px {max-width:200px!important} .mw-300px {max-width:300px!important} .mw-400px {max-width:400px!important} .mw-500px {max-width:500px!important} .mw-600px {max-width:600px!important} .mw-700px {max-width:700px!important} .mw-800px {max-width:800px!important} .mw-900px {max-width:900px!important}
 
-.w-id {width:70px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:54px;} .w-date {width:90px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:60px}
+.w-id {width:70px;} .w-pri {width:40px;} .w-severity {width:50px;} .w-hour {width:54px;} .w-date {width:90px;} .w-user {width:65px;} .w-status {width:55px} .w-type {width:80px} .w-resolution {width:70px}
 
 .w-p15-f {width: 15% !important; min-width: 120px} .w-p25-f {width: 25% !important; min-width: 200px} .w-p35-f {width: 35% !important; min-width: 300px} .w-p45-f {width: 45% !important; min-width: 400px}
 
