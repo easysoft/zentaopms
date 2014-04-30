@@ -31,7 +31,7 @@ var browseType = '<?php echo $browseType;?>';
   <a class='side-handle' data-id='treebox'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon('folder-close');?> <strong><?php echo $libName;?></strong></div>
+      <div class='panel-heading nobr'><?php echo html::icon('folder-close-alt');?> <strong><?php echo $libName;?></strong></div>
       <div class='panel-body'>
         <?php echo $moduleTree;?>
         <div class='text-right'>
