@@ -37,7 +37,7 @@
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe', true);
 
         common::printIcon('bug', 'toStory', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
-        common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'usecase');
+        common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'sitemap');
         echo '</div>';
 
         echo "<div class='btn-group'>";

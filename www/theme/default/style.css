@@ -232,6 +232,9 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
 
+/* chosen container in col-side */
+.col-side .chosen-single {max-width: 218px}
+
 /* help in form */
 .help-block {margin-bottom: 5px;}
 

@@ -66,7 +66,7 @@
         common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list', 'search');
         common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', 'off', 'text-danger');
         common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list', 'pencil');
-        common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'usecase');
+        common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'sitemap');
         ?>
       </td>
     </tr>
