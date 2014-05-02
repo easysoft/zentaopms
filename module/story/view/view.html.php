@@ -230,23 +230,17 @@
             <table class='table table-data table-condensed table-borderless'>
               <tr class='text-top'>
                 <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
-                <td>
+                <td class='pd-0'>
                   <ul class='list-unstyled'>
                   <?php
                   if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . " <span class='label label-warning'>{$lang->story->legendFromBug}</span></li>";
-                  ?>
-                  <?php
-                  foreach($cases as $case)
-                  {
-                      echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
-                  }
                   ?>
                   </ul>
                 </td>
               </tr>
               <tr class='text-top'>
                 <th><?php echo $lang->story->legendCases;?></th>
-                <td>
+                <td class='pd-0'>
                   <ul class='list-unstyled'>
                   <?php
                   foreach($cases as $case)
@@ -259,7 +253,7 @@
               </tr>
               <tr class='text-top'>
                 <th><?php echo $lang->story->legendLinkStories;?></th>
-                <td>
+                <td class='pd-0'>
                   <ul class='list-unstyled'>
                     <?php
                     $linkStories = explode(',', $story->linkStories) ;    
