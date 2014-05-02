@@ -1,4 +1,2 @@
 #productplan tbody > tr > td{border-right:1px solid #E4E4E4;}
-.popover {max-width: 500px;}
-.popover-content .article-content {max-width: 500px; overflow: hidden; max-height: 150px}
-.table td .article-content {max-height: 20px; overflow: hidden; padding: 0}
+.table td .article-content {padding: 0}
