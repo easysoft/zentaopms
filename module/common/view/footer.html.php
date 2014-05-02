@@ -2,11 +2,11 @@
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
   
   <div id='divider'></div>
+  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
 <?php $onlybody = zget($_GET, 'onlybody', 'no');?>
 <?php if($onlybody != 'yes'):?>
 </div><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id='footer'>
-  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
   <div id="crumbs">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
   </div>
