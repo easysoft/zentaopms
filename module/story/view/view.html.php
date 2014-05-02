@@ -101,7 +101,6 @@
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->story->legendBasicInfo;?></a></li>
           <li><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
-          <li><a href='#legendLifeTime' data-toggle='tab'><?php echo $lang->story->legendLifeTime;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
@@ -179,7 +178,15 @@
             ?>
             </ul>
           </div>
-          <div class='tab-pane' id='legendLifeTime'>
+        </div>
+      </div>
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#legendLifeTime' data-toggle='tab'><?php echo $lang->story->legendLifeTime;?></a></li>
+          <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active' id='legendLifeTime'>
             <table class='table table-data table-condensed table-borderless'>
               <tr>
                 <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
@@ -219,52 +226,43 @@
               </tr>
             </table>
           </div>
-        </div>
-      </div>
-      <div class='tabs'>
-        <ul class='nav nav-tabs'>
-          <li class='active'><a href='#legendBugs' data-toggle='tab'><?php echo $lang->story->legendBugs;?></a></li>
-          <li><a href='#legendCases' data-toggle='tab'><?php echo $lang->story->legendCases;?></a></li>
-          <li><a href='#legendLinkStories' data-toggle='tab'><?php echo $lang->story->legendLinkStories;?></a></li>
-        </ul>
-        <div class='tab-content'>
-          <div class='tab-pane active' id='legendBugs'>
+          <div class='tab-pane' id='legendRelated'>
             <ul class='list-unstyled'>
-            <?php
-            if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . " <span class='label label-warning'>{$lang->story->legendFromBug}</span></li>";
-            ?>
-            <?php
-            foreach($cases as $case)
-            {
-                echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
-            }
-            ?>
-            </ul>
-          </div>
-          <div class='tab-pane' id='legendCases'>
-            <ul class='list-unstyled'>
-            <?php
-            foreach($cases as $case)
-            {
-                echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
-            }
-            ?>
-            </ul>
-          </div>
-          <div class='tab-pane' id='legendLinkStories'>
-            <ul class='list-unstyled'>
-              <?php
-              $linkStories = explode(',', $story->linkStories) ;    
-              foreach($linkStories as $linkStoryID)
-              {
-                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
-              }
-              $childStories = explode(',', $story->childStories) ;    
-              foreach($childStories as $childStoryID)
-              {
-                if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . " <span class='label label-info'>{$lang->story->legendChildStories}</span></li>";
-              }
-              ?>
+              <li><?php echo $lang->story->legendBugs?></li>
+              <li>
+                <ul class='list-unstyled'>
+                <?php
+                if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . " <span class='label label-warning'>{$lang->story->legendFromBug}</span></li>";
+                ?>
+              </li>
+              <li><?php echo $lang->story->legendCases?></li>
+              <li>
+                <ul class='list-unstyled'>
+                <?php
+                foreach($cases as $case)
+                {
+                    echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
+                }
+                ?>
+                </ul>
+              </li>
+              <li><?php echo $lang->story->legendLinkStories?></li>
+              <li>
+                <ul class='list-unstyled'>
+                  <?php
+                  $linkStories = explode(',', $story->linkStories) ;    
+                  foreach($linkStories as $linkStoryID)
+                  {
+                      if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+                  }
+                  $childStories = explode(',', $story->childStories) ;    
+                  foreach($childStories as $childStoryID)
+                  {
+                    if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . " <span class='label label-info'>{$lang->story->legendChildStories}</span></li>";
+                  }
+                  ?>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>
