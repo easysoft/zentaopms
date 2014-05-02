@@ -42,8 +42,8 @@
         echo "<div class='btn-group'>";
         common::printIcon('story', 'change',     "storyID=$story->id", $story);
         common::printIcon('story', 'review',     "storyID=$story->id", $story);
-        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody text-danger', true);
-        common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody text-success', true);
+        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
+        common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
         common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'usecase');
         echo '</div>';
 
