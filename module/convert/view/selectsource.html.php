@@ -18,16 +18,10 @@
     </div>
   </div>
   <form method='post' action='<?php echo inlink('setConfig');?>'>
-    <table class='table table-form mgb-20'>
-      <thead>
-        <tr>
-          <th class='w-100px text-right'><?php echo $lang->convert->source;?></th>
-          <th class='text-center'><?php echo $lang->convert->version;?></th>
-        </tr>
-      </thead>
+    <table class='table bd-none table-form mgb-20'>
       <?php foreach($lang->convert->sourceList as $name => $versions):?>
       <tr>
-        <th><?php echo $name;?></th>
+        <th class='w-100px'><?php echo $name;?></th>
         <td><?php echo html::radio('source', $versions);?></td>
       </tr>
       <?php endforeach;?>
