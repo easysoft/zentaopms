@@ -40,7 +40,7 @@
 tr.text-center > td, tr.text-center > th {text-align: center;}
 tr.text-center > td.text-left, tr.text-center > th.text-left {text-align: left;}
 tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: right;}
-tr.text-top td, tr.text-top th {vertical-align: top!important;}
+.text-top, tr.text-top td, tr.text-top th {vertical-align: top!important;}
 
 /* columns */
 .row-table {display: table; width: 100%}

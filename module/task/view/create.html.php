@@ -85,17 +85,22 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->mailto;?></th>
-        <td colspan='3'>
+        <td colspan='2'>
           <?php
           echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");
+          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
+          ?>
+        </td>
+        <td class='text-top'>
+          <?php
           if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
           ?>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->files;?></th>
-        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
-      </tr>  
+        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+      </tr>
       <tr>
         <th><?php echo $lang->task->afterSubmit;?></th>
         <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td>

@@ -22,7 +22,7 @@
 </div>
 <div class='row'>
   <div class='col-md-3 col-lg-2'>
-    <div class='panel panel-sm'>
+    <div class='panel panel-sm with-list'>
       <div class='panel-heading'>
         <i class='icon-list-ul'></i> <strong><?php echo $lang->user->contacts->contactsList;?></strong>
       </div>

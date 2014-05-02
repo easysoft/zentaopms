@@ -114,7 +114,7 @@ js::set('refresh', $lang->refresh);
           echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
           ?>
         </td>
-        <td>
+        <td class='text-top'>
           <?php
           if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
           ?>
