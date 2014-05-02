@@ -10,7 +10,7 @@ function syncModule(rootID, type)
         $.each(modules, function(key, value)
         {   
             moduleName = value;
-            $('.text-3').each(function()
+            $('.form-control').each(function()
             {
                 if(this.value == moduleName) modules[key] = null;
                 if(!this.value) $(this).parent().remove();
@@ -19,7 +19,7 @@ function syncModule(rootID, type)
 
         $.each(modules, function(key, value)
         {  
-            if(value) $('#sonModule').append("<span><input type='text' name='modules[]' value='" + value + "' style='margin-bottom:5px' class='text-3' /><br /><span>");
+            if(value) $('#sonModule').append("<span><input type='text' name='modules[]' value='" + value + "' style='margin-bottom:5px' class='form-control' /><span>");
         })
     })
 }
