@@ -176,7 +176,6 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 /* fieldset */
 fieldset {margin-bottom: 15px; border: 1px solid #e5e5e5; padding: 10px 15px 15px;}
 fieldset.fieldset-pure {background: none; padding: 0; border: none; padding-top: 5px;}
-fieldset.collapsed {border: none}
 fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
 fieldset > .form-group {margin-bottom: 0;}
 
