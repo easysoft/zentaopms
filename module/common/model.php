@@ -235,8 +235,10 @@ class commonModel extends model
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
                 echo "<li class='divider'></li>";
             }
+
+            $isLeft = ($app->company->website and $app->company->backyard) ? '' : ' left';
             
-            echo "<li class='dropdown-submenu" . (($app->company->website and $app->company->backyard) ? '' : ' left') . "'>";
+            echo "<li class='dropdown-submenu{$isLeft}'>";
             echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu'>";
             foreach ($app->lang->themes as $key => $value)
             {
@@ -244,12 +246,13 @@ class commonModel extends model
             }
             echo '</ul></li>';
 
-            echo "<li class='divider'></li>";
-            echo "<li class='dropdown-header'>" . $lang->lang . '</li>';
+            echo "<li class='dropdown-submenu{$isLeft}'>";
+            echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu'>";
             foreach ($app->config->langs as $key => $value)
             {
                 echo "<li class='lang-option" . ($app->cookie->lang == $key ? " active" : '') . "'><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
             }
+            echo '</ul></li>';
             
             echo '</ul></div>';
 
