@@ -72,7 +72,7 @@
         <td><?php echo html::select('status', $lang->project->statusList, $project->status, "class='form-control'");?></td>
       </tr>
       <tr>
-        <th rowspan='2'><?php echo $lang->project->Person;?></th>
+        <th rowspan='2'><?php echo $lang->project->owner;?></th>
         <td>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->project->PO;?></span>
