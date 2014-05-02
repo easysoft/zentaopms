@@ -982,7 +982,7 @@ function setModal()
                     if(location == 'this') window.location.reload();
                     else window.location = location;
                 }
-                callback();
+                if(callback && $.isFunction(callback)) callback();
             });
             $ajaxModal.modal('hide');
         }});
@@ -1087,7 +1087,7 @@ $(document).ready(function()
 
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
 
-    $('.export').bind('mousedown', function()
+    $('.export').bind('click', function()
     {
         var checkeds = '';
         $(':checkbox').each(function()

@@ -119,11 +119,12 @@
           if(common::hasPriv('todo', 'import2Today') and $importFuture)
           {
               $actionLink = $this->createLink('todo', 'import2Today');
-              echo "<div class='input-group'><span class='input-group-btn'>";
-              echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"", '', 'signin');
-              echo '</span>';
+              echo "<div class='pull-left'><div class='input-group'>";
               echo "<div class='datepicker-wrapper datepicker-date'>" . html::input('date', date('Y-m-d'), "class='form-control form-date'") . '</div>';
-              echo '</div>';
+              echo "<span class='input-group-btn'>";
+              echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
+              echo '</span>';
+              echo '</div></div>';
           }
           ?>
           </div>

@@ -32,14 +32,7 @@ function closeWindow()
 }
 function switchEncode(fileType)
 {
-    if(fileType == 'csv') 
-    {
-        $('#encode').removeAttr('class');
-    }
-    else
-    {
-        $('#encode').attr('class', 'hidden');
-    }
+    $('#encode').toggleClass('hidden', fileType != 'csv');
 }
 </script>
 <div id='titlebar'>
@@ -61,7 +54,7 @@ function switchEncode(fileType)
         <?php echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?>
       </td>
       <td class='w-90px'>
-        <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='hidden'");?>
+        <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control hidden'");?>
       </td>
       <td class='w-100px'>
         <?php echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all', "class='form-control'");?>

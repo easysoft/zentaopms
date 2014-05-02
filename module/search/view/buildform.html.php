@@ -101,7 +101,6 @@ function setDateField(query, fieldNO)
             var target = $('#' + $period.data('target'));
             if(target.length)
             {
-                console.log($(this).attr('href'));
                 target.val($(this).attr('href').replace('#', '$'));
                 $('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();

@@ -253,7 +253,7 @@ class commonModel extends model
                 echo "<li class='lang-option" . ($app->cookie->lang == $key ? " active" : '') . "'><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
             }
             echo '</ul></li>';
-            
+
             echo '</ul></div>';
 
             if($isGuest)
@@ -569,7 +569,7 @@ class commonModel extends model
             $notifyFile = $app->getBasePath() . 'www/data/notify/notify.zip';
 
             if(!file_exists($notifyFile)) return false;
-            echo html::a(helper::createLink('misc', 'downNotify'), $lang->downNotify);
+            html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i> " . $lang->downNotify) . ' &nbsp; ';
         }
     }
 

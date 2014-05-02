@@ -11,9 +11,6 @@ function loadList(type, id)
     {
         divClass = '.nameBox';
         divID    = '#nameBox';
-    }
-    console.log("divClass:"+divClass);
-    console.log("divID:"+divID);
     customHtml = $(divID).html();
 
     if(type == 'bug')
@@ -39,7 +36,6 @@ function loadList(type, id)
         }
     }
 
-    console.log("link:"+link);
     if(type == 'bug' || type == 'task')
     {
         $(divClass).load(link);
