@@ -157,10 +157,10 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 fieldset.actionbox {padding-bottom: 10px;}
 
 /* actionbox, hack for ie8 */
-fieldset.actionbox {padding-top:20px\0/;}
-@media all and (min-width:0) {fieldset.actionbox {padding-top:10px\9;}}
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){fieldset.actionbox  {padding-top:10px;}}
-:root fieldset.actionbox  {padding-top:10px\9;}
+fieldset.actionbox ol {padding-top: 8px\0/;}
+@media all and (min-width:0) {fieldset.actionbox ol {padding-top: 8px\9;}}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){fieldset.actionbox ol {padding-top: 8px;}}
+:root fieldset.actionbox ol {padding-top: 8px\9;}
 
 /* stars list */
 .stars-list {color: #E48600}
