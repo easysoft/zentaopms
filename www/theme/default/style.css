@@ -150,7 +150,7 @@ i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disable
 .actionbox .btn-icon > .icon- {font-size: 14px!important; line-height: 16px}
 .actionbox .btn-icon:hover {color: #333!important; border-color: #aaa; background: #fff}
 .actionbox ol {padding-left: 25px; line-height: 20px}
-.actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px}
+.actionbox .alert {margin:2px 0 8px; padding: 5px 10px; min-height: 34px; min-height: 20px}
 .actionbox #historyItem {margin:0}
 .actionbox blockquote {margin:0}
 .actionbox > legend > i, .actionbox > .panel-heading > i {display: none}
