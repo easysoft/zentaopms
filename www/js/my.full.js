@@ -1087,7 +1087,7 @@ $(document).ready(function()
 
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
 
-    $('.export').bind('click', function()
+    $('.export').bind('mousedown', function()
     {
         var checkeds = '';
         $(':checkbox').each(function()
