@@ -99,9 +99,9 @@ hr.small {margin: 10px 0}
 .table.table-condensed caption {padding: 6px 15px;}
 
 /* Datepicker */
-.datepicker-wrapper {position: relative;}
-.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px}
-.datepicker-wrapper > .form-control {padding-right: 30px;}
+.datepicker-wrapper {position: relative; cursor: pointer;}
+.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px;}
+.datepicker-wrapper > .form-control {padding-right: 30px; cursor: pointer;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
 
@@ -231,6 +231,8 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 .form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
+
+@-moz-document url-prefix(){.form-condensed textarea.form-control {height: 30px;min-height: 30px;}}
 
 /* chosen container in col-side */
 .col-side .chosen-single {max-width: 218px}
