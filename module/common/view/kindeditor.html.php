@@ -41,6 +41,7 @@ function initKindeditor(afterInit)
     $.each(editor.id, function(key, editorID)
     {
         editorTool = simpleTools;
+        console.log(editor.tools);
         if(editor.tools == 'bugTools')  editorTool = bugTools;
         if(editor.tools == 'fullTools') editorTool = fullTools;
 

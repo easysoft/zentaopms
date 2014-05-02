@@ -45,7 +45,7 @@
         <td colspan='2'>
           <div class='input-group'>
             <?php echo html::select('story', $stories, $task->story, "class=form-control onchange='setStoryRelated();'");?>
-            <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><i class='icon-eye-open'></i> <?php echo $lang->preview;?></a></span>
+            <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
           </div>
         </td>
       </tr>  
@@ -54,7 +54,7 @@
         <td colspan='2'>
           <div class='input-group'>
             <?php echo html::input('name', $task->name, "class='form-control'");?>
-            <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><i class='icon-copy'></i> <?php echo $lang->task->copyStoryTitle;?></a></span>
+            <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
           </div>
         </td>
       </tr>

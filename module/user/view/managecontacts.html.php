@@ -55,7 +55,7 @@
             <tr>
               <th><?php $mode == 'new' ? print($lang->user->contacts->selectList) : print($lang->user->contacts->listName);?></th>
               <td>
-                <div class='input-group'>
+                <div class='input-group' style='width:300px'>
                 <?php 
                 if($mode == 'new')
                 {

@@ -1,4 +1,5 @@
-.ke-outline .ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;}
+.ke-toolbar .ke-outline[data-name='savetemplate'] {display: block;}
+.ke-outline  .ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;}
 
 /* template box */
 #tplBox .list-group-item {padding: 6px 6px;}

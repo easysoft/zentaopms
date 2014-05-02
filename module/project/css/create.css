@@ -1,5 +1,6 @@
 #tipsModal {margin-top: 10%;}
 #begin + .input-group-addon {border-left: none; border-right: none;}
+#begin,#end {max-width: 120px; width: auto}
 
 #copyProjectModal {padding: 0}
 #copyProjectModal {padding: 0 2px}
@@ -11,4 +12,4 @@
 #copyProjectModal a.active:after {position: absolute; content: '\e60d'; font-family: ZenIcon; font-size: 20px; right: 25px;}
 #copyProjectModal a.cancel {color: #D2322D}
 
-.modal-dialog {margin-top: 10%;}
+.modal-dialog {margin-top: 10%!important;}
