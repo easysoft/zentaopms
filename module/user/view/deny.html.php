@@ -12,9 +12,7 @@ include '../../common/view/header.lite.html.php';
 ?>
 <div class='container'>
   <div class='modal-dialog'>
-    <div class='modal-header'>
-      <i class='icon-info-sign'></i> <strong><?php echo $app->user->account, ' ', $lang->user->deny;?></strong>
-    </div>
+    <div class='modal-header'><strong><?php echo $app->user->account, ' ', $lang->user->deny;?></strong></div>
     <div class='modal-body'>
       <div class='alert alert-warning'>
         <i class='icon-info-sign'></i>

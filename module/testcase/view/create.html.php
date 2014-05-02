@@ -67,7 +67,7 @@
             <?php if($storyID == 0): ?>
               <a href='' id='preview' class='btn iframe hidden'><?php echo $lang->preview;?></a>
             <?php else:?>
-              <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='btn iframe' id='preview'");?>
+              <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn iframe' id='preview'");?>
             <?php endif;?>
             </span>
           </div>
