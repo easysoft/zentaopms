@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $product->id;?></strong></span>
+    <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
     <strong><?php echo $story->title;?></strong>
     <?php if($story->version > 1):?>
     <small class='dropdown'>
@@ -227,43 +227,56 @@
             </table>
           </div>
           <div class='tab-pane' id='legendRelated'>
-            <ul class='list-unstyled'>
-              <li><?php echo $lang->story->legendBugs?></li>
-              <li>
-                <ul class='list-unstyled'>
-                <?php
-                if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . " <span class='label label-warning'>{$lang->story->legendFromBug}</span></li>";
-                ?>
-              </li>
-              <li><?php echo $lang->story->legendCases?></li>
-              <li>
-                <ul class='list-unstyled'>
-                <?php
-                foreach($cases as $case)
-                {
-                    echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
-                }
-                ?>
-                </ul>
-              </li>
-              <li><?php echo $lang->story->legendLinkStories?></li>
-              <li>
-                <ul class='list-unstyled'>
+            <table class='table table-data table-condensed table-borderless'>
+              <tr class='text-top'>
+                <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
+                <td>
+                  <ul class='list-unstyled'>
                   <?php
-                  $linkStories = explode(',', $story->linkStories) ;    
-                  foreach($linkStories as $linkStoryID)
+                  if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . " <span class='label label-warning'>{$lang->story->legendFromBug}</span></li>";
+                  ?>
+                  <?php
+                  foreach($cases as $case)
                   {
-                      if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
-                  }
-                  $childStories = explode(',', $story->childStories) ;    
-                  foreach($childStories as $childStoryID)
-                  {
-                    if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . " <span class='label label-info'>{$lang->story->legendChildStories}</span></li>";
+                      echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
                   }
                   ?>
-                </ul>
-              </li>
-            </ul>
+                  </ul>
+                </td>
+              </tr>
+              <tr class='text-top'>
+                <th><?php echo $lang->story->legendCases;?></th>
+                <td>
+                  <ul class='list-unstyled'>
+                  <?php
+                  foreach($cases as $case)
+                  {
+                      echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
+                  }
+                  ?>
+                  </ul>
+                </td>
+              </tr>
+              <tr class='text-top'>
+                <th><?php echo $lang->story->legendLinkStories;?></th>
+                <td>
+                  <ul class='list-unstyled'>
+                    <?php
+                    $linkStories = explode(',', $story->linkStories) ;    
+                    foreach($linkStories as $linkStoryID)
+                    {
+                        if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+                    }
+                    $childStories = explode(',', $story->childStories) ;    
+                    foreach($childStories as $childStoryID)
+                    {
+                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . " <span class='label label-info'>{$lang->story->legendChildStories}</span></li>";
+                    }
+                    ?>
+                  </ul>
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>

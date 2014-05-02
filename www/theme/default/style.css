@@ -40,7 +40,13 @@
 tr.text-center > td, tr.text-center > th {text-align: center;}
 tr.text-center > td.text-left, tr.text-center > th.text-left {text-align: left;}
 tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: right;}
-tr.text-top td {vertical-align: top!important;}
+tr.text-top td, tr.text-top th {vertical-align: top!important;}
+
+/* columns */
+.row-table {display: table; width: 100%}
+.col-side, .col-main {padding: 0; display: table-cell; vertical-align: top;}
+.col-side {width: 350px; padding-left: 10px;}
+.col-main {padding-right: 10px;}
 
 /* === Components === */
 /* remove outline of links */
@@ -222,7 +228,7 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .chosen-container-multi .chosen-choices li.search-field {margin-bottom: 4px;}
 .form-condensed .table-fixed .form-control {padding: 5px 6px}
 .form-condensed .table-fixed select.form-control {padding: 5px}
-.form-condensed .chosen-container {font-size: 12px}
+.form-condensed .chosen-container {font-size: 13px}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 .form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
@@ -524,7 +530,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #_pageID, #goto {display: none}
 
 /* modal */
-.modal-dialog {border: 8px solid #666; border-color: rgba(0,0,0,.25)}
+.modal .modal-dialog {border: 8px solid #666; border-color: rgba(0,0,0,.25)}
 .modal-title {font-size: 14px;}
 
 /* modal with iframe */
@@ -543,6 +549,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .body-modal #titlebar .actions {right: 40px}
 .body-modal .outer, .body-modal #wrap{padding: 0!important; margin: 0!important;}
 
+.body-modal .row-table {padding: 20px}
+
 .modal-dialog.fullscreen {width: 100% !important; height: 100% !important; margin: 0; border: none !important;}
 .modal-dialog.fullscreen .modal-body iframe {height: 100%}
 
@@ -557,7 +565,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .tree {padding: 0; margin: 0;}
 .tree li,.tree ul {margin: 0; padding: 0; display: block; position: relative;}
 .tree > li {margin-right: 20px; font-weight: 400; padding-bottom: 6px;}
-.tree > li > ul li {padding: 6px 15px 0; margin: 0;}
+.tree > li > ul li {padding: 6px 5px 0 15px; margin: 0;}
 .tree li:before {display: inline-block; margin-right: 6px; position: relative; top: 0; left: 0; content: ' '; width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px}
 .tree > li ul {border-left: 1px dotted #aaa; margin-left: 3px; font-weight: normal;}
 .tree > li ul > li:before {margin-right: 4px;}
