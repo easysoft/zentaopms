@@ -96,18 +96,18 @@ $lang->menu->company  = '组织|company|index';
 $lang->menu->admin    = '后台|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
-$lang->searchObjects['bug']         = 'B:Bug';
-$lang->searchObjects['story']       = 'S:需求';
-$lang->searchObjects['task']        = 'T:任务';
-$lang->searchObjects['testcase']    = 'C:用例';
-$lang->searchObjects['project']     = 'P:项目';
-$lang->searchObjects['product']     = 'P:产品';
-$lang->searchObjects['user']        = 'U:用户';
-$lang->searchObjects['build']       = 'B:版本';
-$lang->searchObjects['release']     = 'R:发布';
-$lang->searchObjects['productplan'] = 'P:产品计划';
-$lang->searchObjects['testtask']    = 'T:测试任务';
-$lang->searchObjects['doc']         = 'D:文档';
+$lang->searchObjects['bug']         = 'Bug';
+$lang->searchObjects['story']       = '需求';
+$lang->searchObjects['task']        = '任务';
+$lang->searchObjects['testcase']    = '用例';
+$lang->searchObjects['project']     = '项目';
+$lang->searchObjects['product']     = '产品';
+$lang->searchObjects['user']        = '用户';
+$lang->searchObjects['build']       = '版本';
+$lang->searchObjects['release']     = '发布';
+$lang->searchObjects['productplan'] = '产品计划';
+$lang->searchObjects['testtask']    = '测试任务';
+$lang->searchObjects['doc']         = '文档';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
