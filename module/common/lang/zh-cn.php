@@ -124,7 +124,7 @@ $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
 /* 语言 */
-$lang->lang = '语言';
+$lang->lang = 'Language';
 
 /* 风格列表。*/
 $lang->theme               = '主题';
