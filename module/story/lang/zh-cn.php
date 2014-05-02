@@ -24,6 +24,7 @@ $lang->story->batchClose  = '批量关闭';
 $lang->story->activate    = '激活';
 $lang->story->delete      = "删除";
 $lang->story->view        = "需求详情";
+$lang->story->legend      = "相关";
 $lang->story->tasks       = "相关任务";
 $lang->story->taskCount   = '任务数';
 $lang->story->bugs        = "Bug";

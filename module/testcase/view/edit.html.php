@@ -27,8 +27,8 @@
     <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-md-8'>
+<div class='row-table'>
+  <div class='col-main'>
     <div class='main'>
       <div class='form-group'>
         <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
@@ -83,7 +83,7 @@
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class='col-md-4'>
+  <div class='col-side'>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
