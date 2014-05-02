@@ -460,7 +460,15 @@ function setForm()
  */
 function setFormAction(actionLink, hiddenwin)
 {
-  // if(hiddenwin) $('form').attr('target', hiddenwin);
+  if(hiddenwin)
+  {
+      $('form').attr('target', hiddenwin);
+  }
+  else
+  {
+      $('form').removeAttr('target');
+  }
+
   $('form').attr('action', actionLink).submit();
 }
 
