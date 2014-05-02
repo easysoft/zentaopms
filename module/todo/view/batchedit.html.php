@@ -59,7 +59,7 @@
       </td>
       <td>
         <div class='input-group'>
-          <?php echo html::select('begins[$i]', $times, $todo->begin, 'class="form-control" style="width: 50%"') . html::select('ends[$i]', $times, $todo->end, 'class="form-control" style="width: 50%"');?>
+          <?php echo html::select("begins[$todo->id]", $times, $todo->begin, 'class="form-control" style="width: 50%"') . html::select("ends[$todo->id]", $times, $todo->end, 'class="form-control" style="width: 50%"');?>
         </div>
       </td>
       <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
