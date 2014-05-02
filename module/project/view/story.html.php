@@ -87,7 +87,7 @@
           common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');
 
           $lang->testcase->batchCreate = $lang->testcase->create;
-          if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list', 'usecase');
+          if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
           if(common::hasPriv('project', 'unlinkStory'))
           {

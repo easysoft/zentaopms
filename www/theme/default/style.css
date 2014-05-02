@@ -99,9 +99,9 @@ hr.small {margin: 10px 0}
 .table.table-condensed caption {padding: 6px 15px;}
 
 /* Datepicker */
-.datepicker-wrapper {position: relative;}
-.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px}
-.datepicker-wrapper > .form-control {padding-right: 30px;}
+.datepicker-wrapper {position: relative; cursor: pointer;}
+.datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px;}
+.datepicker-wrapper > .form-control {padding-right: 30px; cursor: pointer;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
 
@@ -231,6 +231,11 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 .form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
+
+@-moz-document url-prefix(){.form-condensed textarea.form-control {height: 30px;min-height: 30px;}}
+
+/* chosen container in col-side */
+.col-side .chosen-single {max-width: 218px}
 
 /* help in form */
 .help-block {margin-bottom: 5px;}
@@ -369,6 +374,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #footer #poweredby {float: right; margin-right: 20px;}
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
+.icon-zentao, a .icon-zentao {background: url(images/main/icon.png) center no-repeat; display: inline-block; width: 14px; height: 14px; position: relative; top: 2px}
 
 /* Feature bar. */
 #featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px; min-height: 30px\0;}

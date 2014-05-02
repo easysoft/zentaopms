@@ -11,11 +11,10 @@
  */
 ?>
 <?php include '../../extension/view/header.html.php';?>
-<div class='container bd-0'>
   <table class='w-p100'>
     <tr>
       <td class='w-200px'>
-        <div class='panel panel-sm'>
+        <div class='panel panel-sm with-list'>
           <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->editor->moduleList?></strong></div>
           <?php echo $moduleList?>
         </div>
@@ -24,6 +23,5 @@
       <td><iframe frameborder='0' name='editWin' id='editWin' width='100%'></iframe></td>
     </tr>
   </table> 
-</div>
 
 <?php include '../../common/view/footer.html.php';?>
