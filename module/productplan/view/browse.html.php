@@ -35,7 +35,7 @@
   <tr class='text-center'>
     <td><?php echo $plan->id;?></td>
     <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
-    <td class='text-left content' data-original-title='<?php echo $plan->title;?>' data-toggle='popover' data-content='<div class="article-content"><?php echo $plan->desc;?></div>'><div class='article-content'><?php echo $plan->desc;?></div></td>
+    <td class='text-left content' data-original-title='<?php echo $plan->title;?>'><div class='article-content'><?php echo $plan->desc;?></div></td>
     <td><?php echo $plan->begin;?></td>
     <td><?php echo $plan->end;?></td>
     <td class='text-center'>
