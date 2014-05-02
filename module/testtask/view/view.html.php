@@ -50,8 +50,8 @@
     ?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-md-8 col-lg-9'>
+<div class='row-table'>
+  <div class='col-main'>
     <div class='main'>
       <fieldset>
         <legend><?php echo $lang->testtask->legendDesc;?></legend>
@@ -65,7 +65,7 @@
       <div class='actions'><?php echo $actionLinks;?></div>
     </div>
   </div>
-  <div class='col-md-4 col-lg-3'>
+  <div class='col-side'>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testtask->legendBasicInfo;?></legend>

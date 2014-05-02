@@ -16,7 +16,7 @@
   <div class='heading'><i class='icon-cogs'></i> <?php echo $lang->tree->common;?>  </div>
 </div>
 <div class='row'>
-  <div class='col-md-4 col-lg-3'>
+  <div class='col-sm-6 col-md-4 col-lg-3'>
     <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "root={$root->id}&viewType=$viewType");?>'>
       <div class='panel'>
         <div class='panel-heading'>
@@ -31,7 +31,7 @@
       </div>
     </form>
   </div>
-  <div class='col-md-8 col-lg-9'>
+  <div class='col-sm-6 col-md-8 col-lg-9'>
     <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
       <div class='panel'>
         <div class='panel-heading'>

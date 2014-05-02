@@ -22,28 +22,28 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blocktodoes.html.php';?>
   </div>
   <?php if($app->user->role and strpos('qa|qd', $app->user->role) !== false):?>
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blockbugs.html.php';?>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blocktasks.html.php';?>
   </div>
   <?php elseif($app->user->role and strpos('po|pd', $app->user->role) !== false):?>
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blockstories.html.php';?>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blockbugs.html.php';?>
   </div>
   <?php else:?>
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blocktasks.html.php';?>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-6">
     <?php include './blockbugs.html.php';?>
   </div>
   <?php endif;?>

@@ -20,8 +20,8 @@
     <?php endif; ?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-md-8'>
+<div class='row-table'>
+  <div class='col-main'>
     <div class='main'>
       <fieldset>
         <legend><?php echo $lang->build->desc;?></legend>
@@ -123,7 +123,7 @@
       </div>
     </div>
   </div>
-  <div class='col-md-4'>
+  <div class='col-side'>
     <div class='main-side main'>
       <fieldset>
         <legend><?php echo $lang->build->basicInfo?></legend>

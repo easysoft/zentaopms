@@ -22,8 +22,8 @@
     <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-md-8'>
+<div class='row-table'>
+  <div class='col-main'>
     <div class='main'>
       <fieldset>
         <legend><?php echo $lang->story->legendSpec;?></legend>
@@ -48,7 +48,7 @@
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class='col-md-4'>
+  <div class='col-side'>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->story->legendBasicInfo;?></legend>

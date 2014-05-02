@@ -1058,27 +1058,12 @@ function setTableBehavior()
     $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped tablesorter');
 }
 
-/**
- * Make form condensed
- * 
- * @access public
- * @return void
- */
-function condensedForm()
-{
-    $('.form-condensed legend').click(function()
-    {
-        $(this).closest('fieldset').toggleClass('collapsed');
-    });
-}
-
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    condensedForm();
     setModal();
     setTableBehavior();
     setForm();

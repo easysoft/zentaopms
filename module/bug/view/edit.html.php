@@ -39,8 +39,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
     <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-md-8'>
+<div class='row-table'>
+  <div class='col-main'>
     <div class='main'>
       <div class='form-group'>
         <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class="form-control" placeholder="' . $lang->bug->title . '"');?>
@@ -67,7 +67,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class='col-md-4'>
+  <div class='col-side'>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
