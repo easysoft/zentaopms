@@ -22,28 +22,28 @@ function loadList(type, id)
         divClass   = '.nameBox';
         divID      = '#nameBox';
         customHtml = $(divID).html();
+    }
 
-        if(type == 'bug')
+    if(type == 'bug')
+    {
+        if(id)
         {
-            if(id)
-            {
-              link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account + '&id=' + id);
-            }
-            else
-            {
-              link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account);
-            }
+          link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account + '&id=' + id);
         }
-        else if(type == 'task')
+        else
         {
-            if(id)
-            {
-              link = createLink('task', 'ajaxGetUserTasks', 'account=' + account + '&id=' + id);
-            }
-            else
-            {
-              link = createLink('task', 'ajaxGetUserTasks', 'account=' + account);
-            }
+          link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account);
+        }
+    }
+    else if(type == 'task')
+    {
+        if(id)
+        {
+          link = createLink('task', 'ajaxGetUserTasks', 'account=' + account + '&id=' + id);
+        }
+        else
+        {
+          link = createLink('task', 'ajaxGetUserTasks', 'account=' + account);
         }
     }
 
