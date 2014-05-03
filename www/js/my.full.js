@@ -914,12 +914,11 @@ function setModal()
                                 if(modal.data('first')) modal.data('first', false);
                             }, 100);
 
-                            if($framebody.data('resizing'))
+                            if(!$framebody.data('resizing'))
                             {
                                 $framebody.data('resizing', true).resize(function()
                                 {
                                     modalBody.css('height', $framebody.outerHeight());
-                                    console.log('resize'+(new Date()));
                                 });
                             }
                         }
