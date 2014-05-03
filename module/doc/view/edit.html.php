@@ -45,11 +45,11 @@ $(document).ready(function()
         <th><?php echo $lang->doc->keywords;?></th>
         <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control'");?></td>
       </tr>  
-      <tr id='urlBox' class='hidden'>
+      <tr id='urlBox' class='hide'>
         <th><?php echo $lang->doc->url;?></th>
         <td colspan='2'><?php echo html::input('url', urldecode($doc->url), "class='form-control'");?></td>
       </tr>  
-      <tr id='contentBox' class='hidden'>
+      <tr id='contentBox' class='hide'>
         <th><?php echo $lang->doc->content;?></th>
         <td colspan='2'><?php echo html::textarea('content', $doc->content, "class='form-control' rows='8' style='width:90%; height:200px'");?></td>
       </tr>  
@@ -61,7 +61,7 @@ $(document).ready(function()
         <th><?php echo $lang->doc->comment;?></th>
         <td colspan='2'><?php echo html::textarea('comment','', "class='form-control' rows=3");?></td>
       </tr> 
-      <tr id='fileBox' class='hidden'>
+      <tr id='fileBox' class='hide'>
         <th><?php echo $lang->doc->files;?></th>
         <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=2');?></td>
       </tr>
