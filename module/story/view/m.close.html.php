@@ -19,11 +19,11 @@
       <td class='w-70px'><?php echo $lang->story->closedReason;?></td>
       <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'onchange="setStory(this.value)"');?></td>
     </tr>
-    <tr id='duplicateStoryBox' class='hidden'>
+    <tr id='duplicateStoryBox' class='hide'>
       <td><?php echo $lang->story->duplicateStory;?></td>
       <td><?php echo html::input('duplicateStory', '');?></td>
     </tr>
-    <tr id='childStoriesBox' class='hidden'>
+    <tr id='childStoriesBox' class='hide'>
       <td><?php echo $lang->story->childStories;?></td>
       <td><?php echo html::input('childStories', '');?></td>
     </tr>

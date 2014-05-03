@@ -28,7 +28,7 @@
         <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control'");?></td><td></td>
       </tr>  
       <?php else:?>
-      <tr class='hidden'>
+      <tr class='hide'>
         <th class='w-90px'><?php echo $lang->testtask->product;?></th>
         <td class='w-p25-f'><?php echo html::input('product', $productID, "class='form-control'");?></td><td></td>
       </tr>  

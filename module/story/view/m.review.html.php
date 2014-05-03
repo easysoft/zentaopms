@@ -23,20 +23,20 @@
       <td><?php echo $lang->story->reviewResult;?></td>
       <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'onchange="switchShow(this.value)"');?></td>
     </tr>
-    <tr id='rejectedReasonBox' class='hidden'>
+    <tr id='rejectedReasonBox' class='hide'>
       <td><?php echo $lang->story->rejectedReason;?></td>
       <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'onchange="setStory(this.value)"');?></td>
     </tr>
-    <tr id='duplicateStoryBox' class='hidden'>
+    <tr id='duplicateStoryBox' class='hide'>
       <td><?php echo $lang->story->duplicateStory;?></td>
       <td><?php echo html::input('duplicateStory', '');?></td>
     </tr>
-    <tr id='childStoriesBox' class='hidden'>
+    <tr id='childStoriesBox' class='hide'>
       <td><?php echo $lang->story->childStories;?></td>
       <td><?php echo html::input('childStories', '');?></td>
     </tr>
     <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
-    <tr id='preVersionBox' class='hidden'>
+    <tr id='preVersionBox' class='hide'>
       <td><?php echo $lang->story->preVersion;?></td>
       <td><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
     </tr>

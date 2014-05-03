@@ -53,7 +53,7 @@
         <th><?php echo $lang->webapp->size?></th>
         <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='form-control'")?></td>
       </tr>
-      <tr class="customSize <?php if($webapp->size != 'custom') echo 'hidden'?>">
+      <tr class="customSize <?php if($webapp->size != 'custom') echo 'hide'?>">
         <th><?php echo $lang->webapp->custom?></th>
         <td>
           <div class='input-group'>

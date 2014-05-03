@@ -36,11 +36,11 @@
         <th><?php echo $lang->webapp->target?></th>
         <td><?php echo html::select('target', $lang->webapp->targetList, '', "class='form-control'")?></td>
       </tr>
-      <tr class="size hidden">
+      <tr class="size hide">
         <th><?php echo $lang->webapp->size?></th>
         <td><?php echo html::select('size', $lang->webapp->sizeList, '', "class='form-control'")?></td>
       </tr>
-      <tr class="customSize hidden">
+      <tr class="customSize hide">
         <th><?php echo $lang->webapp->custom?></th>
         <td><?php echo html::input('customWidth', '', "class='w-40px'") . 'px X ' . html::input('customHeight', '', "class='w-40px'") . 'px';?></td>
       </tr>
