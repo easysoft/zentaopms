@@ -60,6 +60,7 @@ $lang->testcase->view               = "用例詳情";
 $lang->testcase->edit               = "編輯";
 $lang->testcase->batchEdit          =  "批量編輯 ";
 $lang->testcase->delete             = "刪除";
+$lang->testcase->deleted            = "已刪除";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->import             = "導入";
 $lang->testcase->importID           = "行號";

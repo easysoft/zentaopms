@@ -101,6 +101,7 @@ class upgradeModel extends model
             case '5_2_1':
                 $this->mergeProjectGoalAndDesc();
                 $this->execSQL($this->getUpgradeFile('5.2.1'));
+            case '5_3':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -159,6 +160,7 @@ class upgradeModel extends model
         case '5_1':
         case '5_2':
         case '5_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('5.2.1'));
+        case '5_3':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

@@ -19,6 +19,7 @@ $lang->product->batchEdit = "批量編輯";
 $lang->product->create    = "新增產品";
 $lang->product->read      = "產品詳情";
 $lang->product->delete    = "刪除產品";
+$lang->product->deleted   = "已刪除";
 $lang->product->close     = "關閉";
 $lang->product->select    = '--請選擇產品--';
 $lang->product->mine      = '我負責：';

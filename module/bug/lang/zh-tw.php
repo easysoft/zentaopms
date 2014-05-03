@@ -87,6 +87,7 @@ $lang->bug->activate           = '激活';
 $lang->bug->reportChart        = '報表統計';
 $lang->bug->export             = '導出數據';
 $lang->bug->delete             = '刪除';
+$lang->bug->deleted            = '已刪除';
 $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->customFields       = '自定義欄位';

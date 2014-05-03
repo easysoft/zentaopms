@@ -79,3 +79,4 @@ $lang->upgrade->fromVersions['5_0']       = '5.0';
 $lang->upgrade->fromVersions['5_1']       = '5.1';
 $lang->upgrade->fromVersions['5_2']       = '5.2';
 $lang->upgrade->fromVersions['5_2_1']     = '5.2.1';
+$lang->upgrade->fromVersions['5_3']       = '5.3';

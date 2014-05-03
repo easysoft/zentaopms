@@ -36,6 +36,12 @@ $lang->my->home->projects      =  '項目';
 $lang->my->home->products      =  '產品';
 $lang->my->home->projectHome   = '訪問項目主頁';
 $lang->my->home->productHome   = '訪問產品主頁';
-$lang->my->home->createProject = "創建一個項目？";
-$lang->my->home->createProduct = "創建一個產品？";
+$lang->my->home->createProject = "創建一個項目";
+$lang->my->home->createProduct = "創建一個產品";
 $lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>幫助文檔</a>";
+$lang->my->home->noProductsTip = "這裡還沒有產品。";
+
+$lang->my->form = new stdclass();
+$lang->my->form->lblBasic   = '基本信息';
+$lang->my->form->lblContact = '聯繫信息';
+$lang->my->form->lblAccount = '帳號信息';

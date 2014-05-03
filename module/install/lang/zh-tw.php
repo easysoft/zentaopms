@@ -26,17 +26,18 @@ $lang->install->desc             = <<<EOT
 
 禪道項目管理軟件使用PHP + MySQL開發，基于自主的PHP開發框架──ZenTaoPHP而成。第三方開發者或者企業可以非常方便的開發插件或者進行定製。
 
-禪道項目管理軟件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='red'>青島易軟天創網絡科技有限公司</a>開發</strong>。
+禪道項目管理軟件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>青島易軟天創網絡科技有限公司</a>開發</strong>。
 官方網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
 技術支持: <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
 新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
 騰訊微博：<a href='http://t.qq.com/zentaopms/' target='_blank'>t.qq.com/zentaopms</a>
 
-您現在正在安裝的版本是 <strong class='red'>%s</strong>。
+您現在正在安裝的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
-$lang->install->newReleased= "<strong class='red'>提示</strong>：官網網站已有最新版本<strong class='red'>%s</strong>, 發佈日期于 %s。";
+$lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官網網站已有最新版本<strong class='text-danger'>%s</strong>, 發佈日期于 %s。";
 $lang->install->choice     = '您可以選擇：';
+$lang->install->or         = '或者';
 $lang->install->checking   = '系統檢查';
 $lang->install->ok         = '檢查通過(√)';
 $lang->install->fail       = '檢查失敗(×)';
@@ -127,9 +128,11 @@ $lang->install->groupList['TOP']['desc']    = '高層管理';
 $lang->install->groupList['OTHERS']['name'] = '其他';
 $lang->install->groupList['OTHERS']['desc'] = '其他';
 
-$lang->install->success = "安裝成功";
+$lang->install->success  = "安裝成功";
+$lang->install->login    = '登錄禪道管理系統';
+$lang->install->register = '禪道社區註冊';
 
 $lang->install->joinZentao = <<<EOT
-您已經成功安裝禪道管理系統%s，<strong class='red'>請及時刪除install.php</strong>。現在您可以直接<input type='button' value='登錄禪道管理系統' onclick='location.href="index.php"'>，設置用戶及分組！
-<i>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>)進行登記。</i>
+<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。現在您可以直接 <a class='alert-link' href="index.php">登錄禪道管理系統</a>，設置用戶及分組！</p>
+<p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
 EOT;

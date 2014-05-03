@@ -13,6 +13,7 @@ $lang->build->common    = "Build";
 $lang->build->create    = "創建版本";
 $lang->build->edit      = "編輯版本";
 $lang->build->delete    = "刪除版本";
+$lang->build->deleted   = "已刪除";
 $lang->build->view      = "版本詳情";
 $lang->build->ajaxGetProductBuilds = '介面:產品版本列表';
 $lang->build->ajaxGetProjectBuilds = '介面:項目版本列表';

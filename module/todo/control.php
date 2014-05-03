@@ -177,7 +177,6 @@ class todo extends control
             {
                 if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
                 if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                $todo->date  = str_replace('-', '', $todo->date);
                 $todo->begin = str_replace(':', '', $todo->begin);
                 $todo->end   = str_replace(':', '', $todo->end);
             }

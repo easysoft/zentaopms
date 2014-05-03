@@ -60,6 +60,9 @@ $lang->webapp->targetList['popup']  = '彈窗';
 $lang->webapp->targetList['iframe'] = '內嵌';
 $lang->webapp->targetList['blank']  = '新窗口';
 
+$lang->webapp->width  = '寬度';
+$lang->webapp->height = '高度';
+
 $lang->webapp->sizeList['']         = "";
 $lang->webapp->sizeList['1024x600'] = "1024 x 600";
 $lang->webapp->sizeList['900x600']  = "900 x 600";

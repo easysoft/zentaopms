@@ -20,7 +20,12 @@ $lang->misc->zentao->labels['support'] = '技術支持';
 $lang->misc->zentao->labels['cowin']   = '幫助我們';
 $lang->misc->zentao->labels['service'] = '服務列表';
 
-$lang->misc->zentao->about['proversion']   = '免費試用專業版本';
+$lang->misc->zentao->icons['about']   = 'group';
+$lang->misc->zentao->icons['support'] = 'question-sign';
+$lang->misc->zentao->icons['cowin']   = 'hand-right';
+$lang->misc->zentao->icons['service'] = 'heart';
+
+$lang->misc->zentao->about['proversion']   = '升級專業版本';
 $lang->misc->zentao->about['official']     = "官方網站";
 $lang->misc->zentao->about['changelog']    = "版本歷史";
 $lang->misc->zentao->about['license']      = "授權協議";
@@ -48,4 +53,4 @@ $lang->misc->zentao->service['servicemore']= '更多服務...';
 
 $lang->misc->mobile    = "手機訪問";
 $lang->misc->noGDLib   = "請用手機瀏覽器訪問：<strong>%s</strong>";
-$lang->misc->copyright = "版權所有 &copy;2009-2013 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";
+$lang->misc->copyright = "版權所有 &copy; 2009 - 2014 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";

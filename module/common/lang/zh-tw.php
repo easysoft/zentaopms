@@ -9,23 +9,24 @@
  * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
-$lang->colon        = '::';
-$lang->comma        = '，';
-$lang->dot          = '。';
-$lang->at           = ' 于 ';
-$lang->downArrow    = '↓';
-$lang->null         = '空';
+$lang->arrow     = '&nbsp;<span class="icon-angle-right"></span>';
+$lang->colon     = '::';
+$lang->comma     = '，';
+$lang->dot       = '。';
+$lang->at        = ' 于 ';
+$lang->downArrow = '↓';
+$lang->null      = '空';
 
-$lang->zentaoPMS    = '禪道管理';
-$lang->welcome      = "歡迎使用『%s』{$lang->colon} {$lang->zentaoPMS}";
-$lang->myControl    = "我的地盤";
-$lang->currentPos   = '當前位置：';
-$lang->logout       = '退出';
-$lang->login        = '登錄';
-$lang->aboutZenTao  = '關於';
-$lang->todayIs      = '今天是%s，';
-$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
+$lang->zentaoPMS      = '禪道項目';
+$lang->welcome        = "%s項目管理系統";
+$lang->myControl      = "我的地盤";
+$lang->currentPos     = '當前位置：';
+$lang->logout         = '退出';
+$lang->login          = '登錄';
+$lang->aboutZenTao    = '關於';
+$lang->profile        = '個人檔案';
+$lang->changePassword = '更改密碼';
+$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 
 $lang->reset        = '重填';
 $lang->refresh      = '刷新';
@@ -95,18 +96,18 @@ $lang->menu->company  = '組織|company|index';
 $lang->menu->admin    = '後台|admin|index';
 
 /* 查詢條中可以選擇的對象列表。*/
-$lang->searchObjects['bug']         = 'B:Bug';
-$lang->searchObjects['story']       = 'S:需求';
-$lang->searchObjects['task']        = 'T:任務';
-$lang->searchObjects['testcase']    = 'C:用例';
-$lang->searchObjects['project']     = 'P:項目';
-$lang->searchObjects['product']     = 'P:產品';
-$lang->searchObjects['user']        = 'U:用戶';
-$lang->searchObjects['build']       = 'B:版本';
-$lang->searchObjects['release']     = 'R:發佈';
-$lang->searchObjects['productplan'] = 'P:產品計劃';
-$lang->searchObjects['testtask']    = 'T:測試任務';
-$lang->searchObjects['doc']         = 'D:文檔';
+$lang->searchObjects['bug']         = 'Bug';
+$lang->searchObjects['story']       = '需求';
+$lang->searchObjects['task']        = '任務';
+$lang->searchObjects['testcase']    = '用例';
+$lang->searchObjects['project']     = '項目';
+$lang->searchObjects['product']     = '產品';
+$lang->searchObjects['user']        = '用戶';
+$lang->searchObjects['build']       = '版本';
+$lang->searchObjects['release']     = '發佈';
+$lang->searchObjects['productplan'] = '產品計劃';
+$lang->searchObjects['testtask']    = '測試任務';
+$lang->searchObjects['doc']         = '文檔';
 $lang->searchTips                   = '編號(ctrl+g)';
 
 /* 導入支持的編碼格式。*/
@@ -122,11 +123,15 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部記錄';
 $lang->exportTypeList['selected'] = '選中記錄';
 
+/* 語言 */
+$lang->lang = 'Language';
+
 /* 風格列表。*/
+$lang->theme               = '主題';
 $lang->themes['default']   = '預設';
 $lang->themes['green']     = '綠色';
 $lang->themes['red']       = '紅色';
-$lang->themes['classblue'] = '經典藍';
+$lang->themes['lightblue'] = '亮藍';
 
 /* 首頁菜單設置。*/
 $lang->index = new stdclass();
@@ -148,8 +153,8 @@ $lang->my->menu->testtask       = array('link' => '測試|my|testtask|', 'subMod
 $lang->my->menu->story          = array('link' => '需求|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = '項目|my|project|';
 $lang->my->menu->dynamic        = '動態|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '檔案|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '密碼|my|changepassword|';
+$lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
+$lang->my->menu->changePassword = '密碼|my|changepassword';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -245,9 +250,9 @@ $lang->report->menu->staff   = array('link' => '組織|report|workload');
 /* 資源視圖菜單設置。*/
 $lang->webapp = new stdclass();
 $lang->webapp->menu = new stdclass();
-$lang->webapp->menu->obtain     = array('link' => '<span class="icon-webapp-obtain">&nbsp;</span>應用商店|webapp|obtain', 'float' => 'right');
-$lang->webapp->menu->manageTree = array('link' => "<span class='icon-webapp-manage'>&nbsp;</span>維護分類|tree|browse|rootID=0&view=webapp", 'float' => 'right');
-$lang->webapp->menu->create     = array('link' => "<span class='icon-webapp-create'>&nbsp;</span>創建應用|webapp|create", 'float' => 'right');
+$lang->webapp->menu->obtain     = array('link' => '<span class="icon-shopping-cart">&nbsp;</span>應用商店|webapp|obtain', 'float' => 'right');
+$lang->webapp->menu->manageTree = array('link' => "<span class='icon-cogs'>&nbsp;</span>維護分類|tree|browse|rootID=0&view=webapp", 'float' => 'right');
+$lang->webapp->menu->create     = array('link' => "<span class='icon-plus'>&nbsp;</span>創建應用|webapp|create", 'float' => 'right');
 
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
@@ -258,8 +263,8 @@ $lang->company->menu->dept         = array('link' => '部門|dept|browse', 'subM
 $lang->company->menu->browseGroup  = array('link' => '權限|group|browse', 'subModule' => 'group');
 $lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = '動態|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<i class="icon-plus"></i>&nbsp;添加分組|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<i class="icon-green-user-batchCreate"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<i class="icon-group"></i>&nbsp;添加分組|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus-sign"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
@@ -348,24 +353,27 @@ $lang->error->noData          = '沒有數據';
 /* 分頁信息。*/
 $lang->pager = new stdclass();
 $lang->pager->noRecord  = "暫時沒有記錄";
-$lang->pager->digest    = "共<strong>%s</strong>條記錄，每頁 <strong>%s</strong>條，<strong>%s/%s</strong> ";
-$lang->pager->first     = "首頁";
-$lang->pager->pre       = "上頁";
-$lang->pager->next      = "下頁";
-$lang->pager->last      = "末頁";
+$lang->pager->digest    = "共 <strong>%s</strong> 條記錄，%s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage= "每頁 <strong>%s</strong> 條";
+$lang->pager->first     = "<i class='icon-step-backward' title='首頁'></i>";
+$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='上一頁'></i>";
+$lang->pager->next      = "<i class='icon-play' title='下一頁'></i>";
+$lang->pager->last      = "<i class='icon-step-forward' title='末頁'></i>";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方網站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a>&nbsp; ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a>&nbsp; ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'><i class='icon-heart'></i> 捐贈</a>&nbsp; ";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>購買專業版(特惠)！</a>&nbsp; ";
+$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a> ";
+$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐贈 </a>";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 升至專業版！</a> &nbsp; ";
 $lang->downNotify     = "下載桌面提醒";
 
 $lang->suhosinInfo = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
 
-$lang->noResultsMatch    = "沒有匹配結果";
-$lang->chooseUsersToMail = "選擇要發信通知的用戶...";
+$lang->noResultsMatch     = "沒有匹配結果";
+$lang->selectAnOption     = "選擇一個選項";
+$lang->selectSomeOptions  = "選擇一些選項";
+$lang->chooseUsersToMail  = "選擇要發信通知的用戶...";
 
 /* 時間格式設置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -400,5 +408,70 @@ $lang->datepicker->dpText->TEXT_CHOOSE_DATE = '選擇日期';
 $lang->datepicker->dayNames     = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
+
+/* Common action icons 通用動作表徵圖 */
+$lang->icons['todo']      = 'check';
+$lang->icons['product']   = 'cube';
+$lang->icons['bug']       = 'bug';
+$lang->icons['task']      = 'check-sign';
+$lang->icons['tasks']     = 'tasks';
+$lang->icons['project']   = 'folder-close-alt';
+$lang->icons['doc']       = 'file-text';
+$lang->icons['doclib']    = 'folder-close';
+$lang->icons['story']     = 'lightbulb';
+$lang->icons['release']   = 'tags';
+$lang->icons['roadmap']   = 'code-fork';
+$lang->icons['plan']      = 'flag';
+$lang->icons['dynamic']   = 'volume-up';
+$lang->icons['build']     = 'tag';
+$lang->icons['test']      = 'check';
+$lang->icons['testtask']  = 'check';
+$lang->icons['group']     = 'group';
+$lang->icons['team']      = 'group';
+$lang->icons['company']   = 'building';
+$lang->icons['user']      = 'user';
+$lang->icons['dept']      = 'sitemap';
+$lang->icons['tree']      = 'sitemap';
+$lang->icons['usecase']   = 'sitemap';
+$lang->icons['testcase']  = 'smile';
+$lang->icons['result']    = 'flag-checkered';
+$lang->icons['mail']      = 'envelope';
+$lang->icons['trash']     = 'trash';
+$lang->icons['extension'] = 'th-large';
+$lang->icons['app']       = 'th-large';
+
+$lang->icons['results']        = 'flag-checkered';
+$lang->icons['create']         = 'plus';
+$lang->icons['post']           = 'edit';
+$lang->icons['batchCreate']    = 'plus-sign';
+$lang->icons['batchEdit']      = 'edit-sign';
+$lang->icons['batchClose']     = 'off';
+$lang->icons['edit']           = 'pencil';
+$lang->icons['delete']         = 'remove';
+$lang->icons['copy']           = 'copy';
+$lang->icons['report']         = 'bar-chart';
+$lang->icons['export']         = 'download-alt';
+$lang->icons['report-file']    = 'file-powerpoint';
+$lang->icons['import']         = 'upload-alt';
+$lang->icons['finish']         = 'ok-sign';
+$lang->icons['resolve']        = 'ok-sign';
+$lang->icons['start']          = 'play';
+$lang->icons['run']            = 'play';
+$lang->icons['runCase']        = 'play';
+$lang->icons['batchRun']       = 'play-sign';
+$lang->icons['assign']         = 'hand-right';
+$lang->icons['assignTo']       = 'hand-right';
+$lang->icons['change']         = 'random';
+$lang->icons['link']           = 'link';
+$lang->icons['close']          = 'off';
+$lang->icons['activate']       = 'off';
+$lang->icons['review']         = 'search';
+$lang->icons['confirm']        = 'search';
+$lang->icons['putoff']         = 'calendar';
+$lang->icons['suspend']        = 'pause';
+$lang->icons['cancel']         = 'ban-circle';
+$lang->icons['recordEstimate'] = 'time';
+$lang->icons['customFields']   = 'cogs';
+$lang->icons['manage']         = 'cog';
 
 include (dirname(__FILE__) . '/menuOrder.php');
