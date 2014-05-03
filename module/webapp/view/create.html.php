@@ -42,7 +42,14 @@
       </tr>
       <tr class="customSize hide">
         <th><?php echo $lang->webapp->custom?></th>
-        <td><?php echo html::input('customWidth', '', "class='w-40px'") . 'px X ' . html::input('customHeight', '', "class='w-40px'") . 'px';?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('customWidth', '', "class='w-40px form-control'");?>
+            <span class='input-group-addon'>X</span>
+            <?php echo html::input('customHeight', '', "class='w-40px form-control'");?>
+            <span class='input-group-addon'>px</span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->webapp->abstract?></th>
