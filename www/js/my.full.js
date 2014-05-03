@@ -914,12 +914,11 @@ function setModal()
                                 if(modal.data('first')) modal.data('first', false);
                             }, 100);
 
-                            if($framebody.data('resizing'))
+                            if(navigator.userAgent.indexOf("MSIE 8.0") < 0)
                             {
-                                $framebody.data('resizing', true).resize(function()
+                                $framebody.resize(function()
                                 {
                                     modalBody.css('height', $framebody.outerHeight());
-                                    console.log('resize'+(new Date()));
                                 });
                             }
                         }
@@ -930,7 +929,7 @@ function setModal()
                             iframe$.extend({'closeModal': $.closeModal});
                         }
                     }
-                    catch(e){modal.removeClass('modal-loading'); console.log('error');}
+                    catch(e){modal.removeClass('modal-loading');}
                 }
                 modal.modal('show');
             }

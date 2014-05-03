@@ -45,7 +45,7 @@ function initKindeditor(afterInit)
         if(editor.tools == 'fullTools') editorTool = fullTools;
 
         var K = KindEditor, $editor = $('#' + editorID);
-        window.editor['#'] = window.editor[editorID] = K.create('#' + editorID,
+        var options = 
         {
             cssPath:[themeRoot + 'zui/css/min.css'],
             width:'100%',
@@ -106,7 +106,9 @@ function initKindeditor(afterInit)
                 }
                 /* End */
             }
-        });
+        };
+        try {window.editor['#'] = window.editor[editorID] = K.create('#' + editorID, options);}
+        catch(e){}
     });
 
     if($.isFunction(afterInit)) afterInit();
