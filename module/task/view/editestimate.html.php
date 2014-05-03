@@ -21,7 +21,6 @@
       <small class='text-muted'><?php echo html::icon($lang->icons['edit']);?></small>
     </div>
   </div>
-
   <form class='form-condensed' method='post' target='hiddenwin' <?php if($estimate->isLast) echo "onsubmit='return confirmLeft();'"?>>
     <table class='table table-form'>
       <tr>

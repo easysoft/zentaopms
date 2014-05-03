@@ -61,22 +61,22 @@
                 {
                     if($allProject)
                     {
-                        echo "<div class='copy'>";
-                        echo html::select('allProject', $allProject, '', "class='form-control' onchange=\"syncProductOrProject(this,'project')\"");
-                        echo html::select('projectModule', $projectModules, '', "class='form-control'");
-                        echo html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'");
-                        echo '</div>';
+                        echo "<table class='copy w-p100'><tr>";
+                        echo "<td class='w-260px'>" . html::select('allProject', $allProject, '', "class='form-control' onchange=\"syncProductOrProject(this,'project')\"") . '</td>';
+                        echo "<td class='w-200px'>" . html::select('projectModule', $projectModules, '', "class='form-control'") . '</td>';
+                        echo "<td class=''>" . html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'") . '</td>';
+                        echo '</tr></table>';
                     }
                 }
                 else if($viewType == 'story')
                 {
                     if($allProduct)
                     {
-                        echo "<div class='copy'>";
-                        echo html::select('allProduct', $allProduct, '', "class='form-control' onchange=\"syncProductOrProject(this,'product')\"");
-                        echo html::select('productModule', $productModules, '', "class='form-control'");
-                        echo html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'");
-                        echo '</div>';
+                        echo "<table class='copy w-p100'><tr>";
+                        echo "<td class='w-260px'>" . html::select('allProduct', $allProduct, '', "class='form-control' onchange=\"syncProductOrProject(this,'product')\"") . '</td>';
+                        echo "<td class='w-200px'>" . html::select('productModule', $productModules, '', "class='form-control'") . '</td>';
+                        echo "<td class=''>" . html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'") . '</td>';
+                        echo '</tr></table>';
                     }
                 }
                 $maxOrder = 0;
