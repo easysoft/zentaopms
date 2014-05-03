@@ -914,10 +914,14 @@ function setModal()
                                 if(modal.data('first')) modal.data('first', false);
                             }, 100);
 
-                            $framebody.resize(function()
+                            if($framebody.data('resizing'))
                             {
-                                modalBody.css('height', $framebody.outerHeight());
-                            });
+                                $framebody.data('resizing', true).resize(function()
+                                {
+                                    modalBody.css('height', $framebody.outerHeight());
+                                    console.log('resize'+(new Date()));
+                                });
+                            }
                         }
 
                         var iframe$ = window.frames[options.name].$;
@@ -926,7 +930,7 @@ function setModal()
                             iframe$.extend({'closeModal': $.closeModal});
                         }
                     }
-                    catch(e){modal.removeClass('modal-loading');}
+                    catch(e){modal.removeClass('modal-loading'); console.log('error');}
                 }
                 modal.modal('show');
             }
