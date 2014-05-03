@@ -13,12 +13,12 @@ $jqueryRoot = $jsRoot . 'jquery/';
 
 /* Set js files to combined. */
 $jsFiles[] = $jqueryRoot . 'lib.js'; 
+$jsFiles[] = $jsRoot     . 'zui/min.js'; 
 $jsFiles[] = $jsRoot     . 'my.full.js';
 $jsFiles[] = $jqueryRoot . 'colorbox/min.js';
 $jsFiles[] = $jqueryRoot . 'chosen/min.js';
 $jsFiles[] = $jqueryRoot . 'treeview/min.js';
-$jsFiles[] = $jqueryRoot . 'datepicker/date.js';
-$jsFiles[] = $jqueryRoot . 'datepicker/min.js';
+$jsFiles[] = $jqueryRoot . 'datetimepicker/min.js';
 $jsFiles[] = $jqueryRoot . 'alert/min.js';
 $jsFiles[] = $jqueryRoot . 'colorize/min.js';
 
@@ -58,17 +58,19 @@ $langs  = array_keys($config->langs);
 $themes = array_keys($lang->themes);
 
 /* Create css files for every them and every lang. */
+$zuiCode  = str_replace('../fonts', '../zui/fonts', file_get_contents($themeRoot . 'zui/css/min.css'));
 foreach($langs as $lang)
 {
     foreach($themes as $theme)
     {
         /* Common css files. */
-        $cssCode .= file_get_contents($themeRoot . 'default/style.css');
-        $cssCode .= file_get_contents($themeRoot . 'default/colorbox.css');
-        $cssCode .= file_get_contents($themeRoot . 'default/chosen.css');
-        $cssCode .= file_get_contents($themeRoot . 'default/treeview.css');
-        $cssCode .= file_get_contents($themeRoot . 'default/datepicker.css');
-        $cssCode .= file_get_contents($themeRoot . 'default/alert.css');
+        $cssCode  = $zuiCode;
+        $cssCode .= file_get_contents($themeRoot  . 'default/style.css');
+        $cssCode .= file_get_contents($themeRoot  . 'default/colorbox.css');
+        $cssCode .= file_get_contents($jqueryRoot . 'chosen/min.css');
+        $cssCode .= file_get_contents($themeRoot  . 'default/treeview.css');
+        $cssCode .= file_get_contents($jqueryRoot . 'datetimepicker/min.css');
+        $cssCode .= file_get_contents($themeRoot  . 'default/alert.css');
 
         /* Css file for current lang and current them. */
         $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");

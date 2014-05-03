@@ -31,7 +31,7 @@ $clientTheme  = $this->app->getClientTheme();
   else
   {
       js::import($jsRoot . 'm.all.js', $config->version);
-      css::import($defaultTheme . 'm.' . $this->cookie->lang . '.' . $this->cookie->theme . '.css', $config->version);
+      css::import($defaultTheme . 'm.' . $this->cookie->lang . '.default.css', $config->version);
   }
 
   if(isset($pageCss)) css::internal($pageCss);
