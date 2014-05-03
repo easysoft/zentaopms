@@ -8,7 +8,7 @@ $langTheme    = $themeRoot . 'lang/' . $app->getClientLang() . '.css';
 $clientTheme  = $this->app->getClientTheme();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang='<?php echo $app->getClientLang();?>'>
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
