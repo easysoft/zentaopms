@@ -24,6 +24,7 @@ $lang->story->batchClose  = '批量關閉';
 $lang->story->activate    = '激活';
 $lang->story->delete      = "刪除";
 $lang->story->view        = "需求詳情";
+$lang->story->legend      = "相關";
 $lang->story->tasks       = "相關任務";
 $lang->story->taskCount   = '任務數';
 $lang->story->bugs        = "Bug";
@@ -160,11 +161,12 @@ $lang->story->lblReview            = '評審需求';
 $lang->story->lblActivate          = '激活需求';
 $lang->story->lblClose             = '關閉需求';
 
+$lang->story->checkAffection       = '檢查影響';
 $lang->story->affectedProjects     = '影響的項目';
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
-$lang->story->specTemplate          = "建議參考的模板：作為一名<<i class='red'>某種類型的用戶</i>>，我希望<<i class='red'>達成某些目的</i>>，這樣可以<<i class='red'>開發的價值</i>>。";
+$lang->story->specTemplate          = "建議參考的模板：作為一名<<i class='text-important'>某種類型的用戶</i>>，我希望<<i class='text-important'>達成某些目的</i>>，這樣可以<<i class='text-important'>開發的價值</i>>。";
 $lang->story->needNotReview         = '不需要評審';
 $lang->story->afterSubmit           = "添加之後";
 $lang->story->successSaved          = "需求成功添加，";

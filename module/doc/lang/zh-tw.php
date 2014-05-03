@@ -30,6 +30,7 @@ $lang->doc->addedDate      = '添加時間';
 $lang->doc->editedBy       = '由誰編輯';
 $lang->doc->editedDate     = '編輯時間';
 $lang->doc->basicInfo      = '基本信息';
+$lang->doc->deleted        = '已刪除';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';

@@ -24,6 +24,7 @@ $lang->story->batchClose  = 'Batch close';
 $lang->story->activate    = 'Activate';
 $lang->story->delete      = "Delete";
 $lang->story->view        = "Info";
+$lang->story->legend      = "Related";
 $lang->story->tasks       = "Tasks";
 $lang->story->taskCount   = 'Tasks count';
 $lang->story->bugs        = "Bug";

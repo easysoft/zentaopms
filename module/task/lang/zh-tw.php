@@ -16,6 +16,7 @@ $lang->task->batchEdit          = "批量編輯";
 $lang->task->import             = "導入之前未完任務";
 $lang->task->edit               = "編輯";
 $lang->task->delete             = "刪除";
+$lang->task->deleted            = "已刪除";
 $lang->task->view               = "查看任務";
 $lang->task->logEfforts         = "記錄工時";
 $lang->task->record             = "工時";

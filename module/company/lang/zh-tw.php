@@ -30,8 +30,8 @@ $lang->company->phone    = '聯繫電話';
 $lang->company->fax      = '傳真';
 $lang->company->address  = '通訊地址';
 $lang->company->zipcode  = '郵政編碼';
-$lang->company->website  = '公司官網';
-$lang->company->backyard = '公司內網';
+$lang->company->website  = '官網';
+$lang->company->backyard = '內網';
 $lang->company->pms      = 'PMS網站';
 $lang->company->guest    = '匿名登錄';
 

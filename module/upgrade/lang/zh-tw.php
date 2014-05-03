@@ -20,7 +20,7 @@ $lang->upgrade->warnningContent = <<<EOT
 備份方法：<br />
 1. 可以通過phpMyAdmin進行備份。<br />
 2. 使用mysql命令行的工具。<br />
-   # mysqldump -u <span class='red'>username</span> -p <span class='red'>dbname</span> > <span class='red'>filename</span> <br />
+   # mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> <br />
    要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。<br />
    比如： mysqldump -u root -p zentao >zentao.bak
 EOT;
@@ -79,3 +79,4 @@ $lang->upgrade->fromVersions['5_0']       = '5.0';
 $lang->upgrade->fromVersions['5_1']       = '5.1';
 $lang->upgrade->fromVersions['5_2']       = '5.2';
 $lang->upgrade->fromVersions['5_2_1']     = '5.2.1';
+$lang->upgrade->fromVersions['5_3']       = '5.3';

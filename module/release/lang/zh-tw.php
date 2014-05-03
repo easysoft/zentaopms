@@ -13,6 +13,7 @@ $lang->release->common    = '發佈';
 $lang->release->create    = "創建發佈";
 $lang->release->edit      = "編輯發佈";
 $lang->release->delete    = "刪除發佈";
+$lang->release->deleted   = '已刪除';
 $lang->release->view      = "發佈詳情";
 $lang->release->browse    = "瀏覽發佈";
 
