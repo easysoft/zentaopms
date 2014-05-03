@@ -36,13 +36,20 @@
         <th><?php echo $lang->webapp->target?></th>
         <td><?php echo html::select('target', $lang->webapp->targetList, '', "class='form-control'")?></td>
       </tr>
-      <tr class="size hidden">
+      <tr class="size hide">
         <th><?php echo $lang->webapp->size?></th>
         <td><?php echo html::select('size', $lang->webapp->sizeList, '', "class='form-control'")?></td>
       </tr>
-      <tr class="customSize hidden">
+      <tr class="customSize hide">
         <th><?php echo $lang->webapp->custom?></th>
-        <td><?php echo html::input('customWidth', '', "class='w-40px'") . 'px X ' . html::input('customHeight', '', "class='w-40px'") . 'px';?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('customWidth', '', "class='w-40px form-control'");?>
+            <span class='input-group-addon'>X</span>
+            <?php echo html::input('customHeight', '', "class='w-40px form-control'");?>
+            <span class='input-group-addon'>px</span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->webapp->abstract?></th>
