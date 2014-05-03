@@ -133,6 +133,6 @@ $lang->install->login    = 'Sign into ZentaoPMS';
 $lang->install->register = 'Register Zentao community website';
 
 $lang->install->joinZentao = <<<EOT
-You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>。Now you can <a href='index.php'>login ZenTaoPMS</a>, create groups and grant priviledges.
+<p>You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>.</p>
 <i>Tips: For you get zentao news in time, please register Zetao community(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>).</i> 
 EOT;

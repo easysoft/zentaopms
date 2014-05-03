@@ -133,6 +133,6 @@ $lang->install->login    = '登錄禪道管理系統';
 $lang->install->register = '禪道社區註冊';
 
 $lang->install->joinZentao = <<<EOT
-<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。現在您可以直接 <a class='alert-link' href="index.php">登錄禪道管理系統</a>，設置用戶及分組！</p>
+<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。</p>
 <p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
 EOT;
