@@ -930,7 +930,7 @@ function setModal()
                             iframe$.extend({'closeModal': $.closeModal});
                         }
                     }
-                    catch(e){modal.removeClass('modal-loading'); console.log('error');}
+                    catch(e){modal.removeClass('modal-loading');}
                 }
                 modal.modal('show');
             }
