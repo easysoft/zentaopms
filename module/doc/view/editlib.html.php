@@ -22,16 +22,15 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-    <strong><small class='text-muted'><i class='icon icon-pencil'></i></small> <?php echo $lang->doc->editLib;?></strong>
+    <strong><?php echo $lang->doc->editLib;?></strong>
   </div>
 </div>
 <div class='main'>
-  <form method='post' class='form-condensed'>
-    <div class='form-group'>
-      <label for="name"><?php echo $lang->doc->libName;?></label>
-      <?php echo html::input('name', $libName, "class='form-control'");?>
+  <form method='post' class='form-condensed' style='margin: 30px 50px'>
+    <div class='input-group'>
+      <?php echo html::input('name', $libName, "class='form-control' placeholder='{$lang->doc->libName}'");?>
+      <span class='input-group-btn'><?php echo html::submitButton();?></span>
     </div>
-    <?php echo html::submitButton();?>
   </form>
 </div>
 <?php endif;?>

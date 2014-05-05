@@ -570,9 +570,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .loader {display: none}
 .modal-loading .loader{position: absolute; display: block; text-align: center; font-size: 56px; color: #fff; top: 35%; width: 100%}
 
-/* about dialog */
-.modal .modal-about.modal-dialog {margin-top: 9%;}
-
 /* Tree menu. */
 .tree {padding: 0; margin: 0;}
 .tree li,.tree ul {margin: 0; padding: 0; display: block; position: relative;}
