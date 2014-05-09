@@ -120,7 +120,7 @@ class testcase extends control
             if(strpos($this->session->testcaseQuery, $allProduct) !== false)
             {
                 $products  = array_keys($this->loadModel('product')->getPrivProducts());
-                $caseQuery = str_replace($allProduct, '1', $this->session->testcaseQuery);
+                $caseQuery = str_replace($allProduct, '1', $caseQuery);
                 $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
                 $queryProductID = 'all';
             }
