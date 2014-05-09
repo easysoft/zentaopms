@@ -55,10 +55,10 @@
             <tr>
               <th><?php $mode == 'new' ? print($lang->user->contacts->selectList) : print($lang->user->contacts->listName);?></th>
               <td>
-                <div class='input-group' style='width:300px'>
                 <?php 
                 if($mode == 'new')
                 {
+                    echo "<div class='input-group clearfix mw-700px'>";
                     if($lists)
                     {
                         echo "<span class='input-group-addon'>" . $lang->user->contacts->appendToList . '</span>';
@@ -69,6 +69,7 @@
                     echo $lang->user->contacts->createList;
                     echo '</span>';
                     echo html::input('newList', '', "class='form-control'");
+                    echo '</div>';
                 }
                 else
                 {
@@ -76,7 +77,6 @@
                     echo html::hidden('listID',  $list->id);
                 }
                 ?>
-                </div>
               </td>
             </tr>
             <tr><td></td><td><?php echo html::submitButton() . html::hidden('mode', $mode);?></td></tr>

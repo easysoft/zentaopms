@@ -16,7 +16,6 @@
 <div class='container mw-600px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
       <strong><?php echo $lang->task->editEstimate;?></strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['edit']);?></small>
     </div>

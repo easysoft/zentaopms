@@ -335,7 +335,7 @@ class common extends control
         {
             if($type == 'list')
             {
-                echo "<button class='disabled btn-icon $extraClass'><i class='$class' title='$title' $misc></i></button>";
+                echo "<button type='button' class='disabled btn-icon $extraClass'><i class='$class' title='$title' $misc></i></button>";
             }
         }
     }
