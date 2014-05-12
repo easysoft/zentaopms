@@ -403,12 +403,15 @@ function setOuterBox()
     if($('.outer > .side').length) $('.outer').addClass('with-side');
     if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
 
+    var side   = $('#wrap .outer > .side');
     var resetOuterHeight = function()
     {
-        var height = $(window).height() - $('#header').height() - $('#footer').height() - 33;
+        var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
+        var height = Math.max(sideH, $(window).height() - $('#header').height() - $('#footer').height() - 33);
         $('#wrap .outer').css('min-height', height);
     }
 
+    side.resize(resetOuterHeight);
     $(window).resize(resetOuterHeight);
     resetOuterHeight();
 }
