@@ -28,7 +28,7 @@
     <?php foreach($results as $result):?>
     <table class='table table-condensed table-hover table-striped table-fixed'>
       <caption class='text-left bd-0'>
-        <?php if(!isset($build)):?><div class='pull-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div>
+        <?php if(isset($build)):?><div class='pull-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div>
         <?php endif; ?>
         RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?>
       </caption>

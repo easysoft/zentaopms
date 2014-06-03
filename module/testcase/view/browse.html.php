@@ -45,8 +45,8 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
         ?>
         </ul>
       </div>
-      <?php common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');?>
       <?php 
+      common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');
       common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");
       common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID");
       ?>
