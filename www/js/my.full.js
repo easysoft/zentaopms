@@ -840,6 +840,8 @@ function setModal()
         $(this).click(function(event)
         {
             var $e   = $(this);
+            if($e.closest('.body-modal').length) return;
+
             if($e.hasClass('disabled')) return false;
 
             var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
