@@ -1057,7 +1057,7 @@ function setModal4List(colorboxClass, replaceID, callback, width, height)
 function setTableBehavior()
 {
     $('#wrap .table:not(.table-data, .table-form, .active-disabled) tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
-    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped tablesorter');
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
 }
 
 /* Ping the server every some minutes to keep the session. */
