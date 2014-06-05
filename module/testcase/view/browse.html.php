@@ -28,7 +28,6 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
   </ul>
   <div class='actions'>
     <div class='btn-group'>
-      <?php common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');?>
       <div class='btn-group'>
         <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
           <i class='icon-download-alt'></i> <?php echo $lang->export ?>
@@ -47,6 +46,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
         </ul>
       </div>
       <?php 
+      common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');
       common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");
       common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID");
       ?>

@@ -170,8 +170,8 @@ $lang->product->menu->plan    = array('link' => '计划|productplan|browse|produ
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = array('link' => '维护|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
+$lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = '项目|product|project|status=all&productID=%s';
 $lang->product->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加产品|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<i class="icon-th"></i>&nbsp;所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
@@ -198,7 +198,7 @@ $lang->project->menu->testtask  = '测试|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
-$lang->project->menu->view      = array('link' => '维护|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->project->menu->view      = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => '<i class="icon-plus"></i>&nbsp;添加项目|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;所有项目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
@@ -282,7 +282,7 @@ $lang->admin->menu->index     = array('link' => '首页|admin|index');
 $lang->admin->menu->extension = array('link' => '扩展|extension|browse', 'subModule' => 'extension,editor');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData = array('link' => '清除数据|admin|cleardata');
+$lang->admin->menu->clearData = array('link' => '重置禅道|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->sso       = array('link' => '单点登录|sso|browse', 'subModule' => 'sso');

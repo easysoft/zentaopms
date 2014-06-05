@@ -17,7 +17,7 @@
   <thead>
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th class='w-80px'><?php echo $lang->project->code;?></th>
+    <th class='w-100px'><?php echo $lang->project->code;?></th>
     <th><?php echo $lang->project->name;?></th>
     <th class='w-date'><?php echo $lang->project->begin;?></th>
     <th class='w-date'><?php echo $lang->project->end;?></th>

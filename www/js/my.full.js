@@ -403,12 +403,15 @@ function setOuterBox()
     if($('.outer > .side').length) $('.outer').addClass('with-side');
     if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
 
+    var side   = $('#wrap .outer > .side');
     var resetOuterHeight = function()
     {
-        var height = $(window).height() - $('#header').height() - $('#footer').height() - 33;
+        var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
+        var height = Math.max(sideH, $(window).height() - $('#header').height() - $('#footer').height() - 33);
         $('#wrap .outer').css('min-height', height);
     }
 
+    side.resize(resetOuterHeight);
     $(window).resize(resetOuterHeight);
     resetOuterHeight();
 }
@@ -837,6 +840,8 @@ function setModal()
         $(this).click(function(event)
         {
             var $e   = $(this);
+            if($e.closest('.body-modal').length) return;
+
             if($e.hasClass('disabled')) return false;
 
             var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
@@ -1052,7 +1057,7 @@ function setModal4List(colorboxClass, replaceID, callback, width, height)
 function setTableBehavior()
 {
     $('#wrap .table:not(.table-data, .table-form, .active-disabled) tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
-    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form').addClass('table table-condensed table-hover table-striped tablesorter');
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
 }
 
 /* Ping the server every some minutes to keep the session. */

@@ -170,8 +170,8 @@ $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|product
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = array('link' => 'Manage|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
+$lang->product->menu->view    = array('link' => 'Info|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = 'Projects|product|project|status=all&productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<span class="icon-th">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
@@ -198,7 +198,7 @@ $lang->project->menu->testtask  = 'Testtask|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = array('link' => 'Product|project|manageproducts|projectID=%s', 'alias' => 'edit,start,suspend,delay,close');
-$lang->project->menu->view      = 'Manage|project|view|projectID=%s';
+$lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>New|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;Projects|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
@@ -282,7 +282,7 @@ $lang->admin->menu->index     = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension,editor');
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData = array('link' => 'Clear data|admin|cleardata');
+$lang->admin->menu->clearData = array('link' => 'Reset|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 $lang->admin->menu->sso       = array('link' => 'SSO|sso|browse', 'subModule' => 'sso');
