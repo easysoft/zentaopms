@@ -913,7 +913,9 @@ function setModal()
                             var $framebody = $frame.find('body');
                             setTimeout(function()
                             {
-                                modalBody.css('height', $framebody.addClass('body-modal').outerHeight());
+                                var fbH = $framebody.addClass('body-modal').outerHeight();
+                                if(typeof fbH == 'object') fbH = $framebody.height();
+                                modalBody.css('height', fbH);
                                 if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
                                 modal.removeClass('modal-loading');
                                 if(modal.data('first')) modal.data('first', false);
@@ -923,7 +925,9 @@ function setModal()
                             {
                                 $framebody.resize(function()
                                 {
-                                    modalBody.css('height', $framebody.outerHeight());
+                                    var fbH = $framebody.addClass('body-modal').outerHeight();
+                                    if(typeof fbH == 'object') fbH = $framebody.height();
+                                    modalBody.css('height', fbH);
                                 });
                             }
                         }
