@@ -835,8 +835,6 @@ function setModal()
 {
     jQuery.fn.modalTrigger = function(setting)
     {
-        initModalFrame(setting);
-
         $(this).click(function(event)
         {
             var $e   = $(this);
@@ -914,6 +912,8 @@ function setModal()
         {
             options = $.extend(options, settings);
         }
+
+        initModalFrame(options);
 
         if(isNum(options.height.toString())) options.height += 'px';
         if(isNum(options.width.toString())) options.width += 'px';
