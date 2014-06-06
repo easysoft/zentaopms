@@ -48,5 +48,7 @@ $(function()
     {
         $(this).find('.form-date, .form-datetime, .form-time').datetimepicker('show').focus();
     });
+
+    window.datepickerOptions = options;
 });
 </script>

@@ -858,89 +858,16 @@ function setModal()
                     name:       $e.data('name') || 'modalIframe',
                     cssClass:   $e.data('class'),
                     headerless: $e.data('headerless') || false,
-                    center:     $e.data('center') || true,
-                }
-                options = $.extend(options, setting);
-                
-                if(isNum(options.height.toString())) options.height += 'px';
-                if(isNum(options.width.toString())) options.width += 'px';
-                if(options.size == 'fullscreen')
-                {
-                    var $w = $(window);
-                    options.width = $w.width();
-                    options.height = $w.height();
-                    options.cssClass += ' fullscreen';
-                }
-                if(options.headerless)
-                {
-                    options.cssClass += ' hide-header';
-                }
+                    center:     $e.data('center') || true
+                };
 
                 if(options.icon == '?')
                 {
                     var i = $e.find("[class^='icon-']");
                     options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                 }
-                var modal = $('#ajaxModal').addClass('modal-loading').data('first', true);
-                modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
 
-                var modalBody = modal.find('.modal-body'), dialog = modal.find('.modal-dialog');
-                if(options.cssClass)
-                {
-                    dialog.addClass(options.cssClass);
-                }
-                var frame = document.getElementById(options.name);
-                frame.onload = frame.onreadystatechange = function()
-                {
-                    if (this.readyState && this.readyState != 'complete') return;
-                    if(!modal.data('first')) modal.addClass('modal-loading');
-
-                    modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
-
-                    try
-                    {
-                        var $frame = $(window.frames[options.name].document);
-                        if($frame.find('#titlebar').length)
-                        {
-                            modal.addClass('with-titlebar');
-                            if(options.size == 'fullscreen')
-                            {
-                                modalBody.css('height', options.height);
-                            }
-                        }
-                        if(options.height == 'auto')
-                        {
-                            var $framebody = $frame.find('body');
-                            setTimeout(function()
-                            {
-                                var fbH = $framebody.addClass('body-modal').outerHeight();
-                                if(typeof fbH == 'object') fbH = $framebody.height();
-                                modalBody.css('height', fbH);
-                                if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
-                                modal.removeClass('modal-loading');
-                                if(modal.data('first')) modal.data('first', false);
-                            }, 100);
-
-                            if(navigator.userAgent.indexOf("MSIE 8.0") < 0)
-                            {
-                                $framebody.resize(function()
-                                {
-                                    var fbH = $framebody.addClass('body-modal').outerHeight();
-                                    if(typeof fbH == 'object') fbH = $framebody.height();
-                                    modalBody.css('height', fbH);
-                                });
-                            }
-                        }
-
-                        var iframe$ = window.frames[options.name].$;
-                        if(iframe$)
-                        {
-                            iframe$.extend({'closeModal': $.closeModal});
-                        }
-                    }
-                    catch(e){modal.removeClass('modal-loading');}
-                }
-                modal.modal('show');
+                showIframeModal($.extend(options, setting));
             }
             else
             {
@@ -963,6 +890,106 @@ function setModal()
 
             return false;
         });
+    }
+
+    function showIframeModal(settings)
+    {
+        var options = 
+        {
+            width:      800,
+            height:     'auto',
+            icon:       '?',
+            title:      '',
+            name:       'modalIframe',
+            cssClass:   '',
+            headerless: false,
+            center:     true
+        }
+        
+        if(typeof(settings) == 'string')
+        {
+            options.url = settings;
+        }
+        else
+        {
+            options = $.extend(options, settings);
+        }
+
+        if(isNum(options.height.toString())) options.height += 'px';
+        if(isNum(options.width.toString())) options.width += 'px';
+        if(options.size == 'fullscreen')
+        {
+            var $w = $(window);
+            options.width = $w.width();
+            options.height = $w.height();
+            options.cssClass += ' fullscreen';
+        }
+        if(options.headerless)
+        {
+            options.cssClass += ' hide-header';
+        }
+
+        var modal = $('#ajaxModal').addClass('modal-loading').data('first', true);
+
+        modal.html("<div class='icon-spinner icon-spin loader'></div><div class='modal-dialog modal-iframe' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'><iframe id='{name}' name='{name}' src='{url}' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0px;'></iframe></div></div></div>".format(options));
+
+        var modalBody = modal.find('.modal-body'), dialog = modal.find('.modal-dialog');
+        if(options.cssClass)
+        {
+            dialog.addClass(options.cssClass);
+        }
+        var frame = document.getElementById(options.name);
+        frame.onload = frame.onreadystatechange = function()
+        {
+            if (this.readyState && this.readyState != 'complete') return;
+            if(!modal.data('first')) modal.addClass('modal-loading');
+
+            modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
+
+            try
+            {
+                var $frame = $(window.frames[options.name].document);
+                if($frame.find('#titlebar').length)
+                {
+                    modal.addClass('with-titlebar');
+                    if(options.size == 'fullscreen')
+                    {
+                        modalBody.css('height', options.height);
+                    }
+                }
+                if(options.height == 'auto')
+                {
+                    var $framebody = $frame.find('body');
+                    setTimeout(function()
+                    {
+                        var fbH = $framebody.addClass('body-modal').outerHeight();
+                        if(typeof fbH == 'object') fbH = $framebody.height();
+                        modalBody.css('height', fbH);
+                        if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
+                        modal.removeClass('modal-loading');
+                        if(modal.data('first')) modal.data('first', false);
+                    }, 100);
+
+                    if(navigator.userAgent.indexOf("MSIE 8.0") < 0)
+                    {
+                        $framebody.resize(function()
+                        {
+                            var fbH = $framebody.addClass('body-modal').outerHeight();
+                            if(typeof fbH == 'object') fbH = $framebody.height();
+                            modalBody.css('height', fbH);
+                        });
+                    }
+                }
+
+                var iframe$ = window.frames[options.name].$;
+                if(iframe$)
+                {
+                    iframe$.extend({'closeModal': $.closeModal});
+                }
+            }
+            catch(e){modal.removeClass('modal-loading');}
+        }
+        modal.modal('show');
     }
 
     function initModalFrame(setting)
@@ -1000,6 +1027,10 @@ function setModal()
         if(setting.afterHide && $.isFunction(setting.afterHide)) $ajaxModal.on('hide.bs.modal', setting.afterHide);
         if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.bs.modal', setting.afterHidden);
     }
+
+    $.extend({modalTrigger: showIframeModal});
+    
+    
 
     $('[data-toggle=modal], a.iframe').modalTrigger();
 }
