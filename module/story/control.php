@@ -438,7 +438,7 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
             $this->sendmail($storyID, $actionID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -611,7 +611,7 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
             $this->action->logHistory($actionID, $changes);
             $this->sendmail($storyID, $actionID);
-            if(isonlybody()) die(js::closeModal('parent.parent'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 

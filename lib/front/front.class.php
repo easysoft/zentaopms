@@ -815,7 +815,7 @@ EOT;
      * @access public
      * @return void
      */
-    static public function closeModal($window = 'self', $location)
+    static public function closeModal($window = 'self', $location = '')
     {
         $js  = self::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
