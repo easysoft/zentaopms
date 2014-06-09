@@ -1006,19 +1006,21 @@ function setModal()
         }
 
         $ajaxModal = $('#ajaxModal');
+        $ajaxModal.data('cancel-reload', false);
+
         $.extend({'closeModal':function(callback, location)
         {
+            $ajaxModal.modal('hide');
             $ajaxModal.on('hidden.bs.modal', function()
             {
-                if(location)
+                if(location && (!$ajaxModal.data('cancel-reload')))
                 {
                     if(location == 'this') window.location.reload();
                     else window.location = location;
                 }
                 if(callback && $.isFunction(callback)) callback();
             });
-            $ajaxModal.modal('hide');
-        }});
+        }, 'cancelReloadCloseModal': function(){$ajaxModal.data('cancel-reload', true);}});
 
         /* rebind events */
         if(!setting) return;
@@ -1045,14 +1047,12 @@ function setModal()
  * @access public
  * @return void
  */
-function setModal4List(colorboxClass, replaceID, callback, width, height)
+function setModal4List(colorboxClass, replaceID, callback, width)
 {
     if(typeof(width) == 'undefined') width = 900
-    if(typeof(height) == 'undefined') height = 500
     $('.' + colorboxClass).modalTrigger(
     {
         width: width,
-        // height: height,
         type: 'iframe',
 
         afterHide:function()
@@ -1061,24 +1061,28 @@ function setModal4List(colorboxClass, replaceID, callback, width, height)
             if(selfClose != 1) return;
             saveWindowSize();
 
-            var link = self.location.href;
-            $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
-            $('#tmpDiv').load(link + ' #' + replaceID, function()
+            if(typeof(replaceID) == 'string' && replaceID.length > 0)
             {
-                $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                setModal4List(colorboxClass, replaceID, callback, width, height);
+                $.cancelReloadCloseModal();
 
-                try{$('.colored').colorize();}catch(err){}
-                $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                try
+
+                var link = self.location.href;
+                $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
+                $('#tmpDiv').load(link + ' #' + replaceID, function()
                 {
-                    $(".date").datePicker({createButton:true, startDate:startDate})
-                    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
-                }
-                catch(err){}
-                if(typeof(callback) == 'function') callback();
-                $.cookie('selfClose', 0);
-            });
+                    $('#tmpDiv').replaceWith($('#tmpDiv').html());
+                    setModal4List(colorboxClass, replaceID, callback, width);
+
+                    $('#' + replaceID + ' tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
+                    try
+                    {
+                        $(".date").datetimepicker(datepickerOptions);
+                    }
+                    catch(err){}
+                    if(typeof(callback) == 'function') callback();
+                    $.cookie('selfClose', 0);
+                });
+            }
         }
     });
 }
