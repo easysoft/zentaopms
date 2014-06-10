@@ -943,7 +943,7 @@ function setModal()
 
         if(options.waittime > 0)
         {
-            options.waitingFuc = setTimeout(function(){showModal(options, modal, modalBody);}, options.waittime );
+            options.waitingFuc = setTimeout(function(){showModal(options, modal, modalBody, dialog);}, options.waittime );
         }
 
         var frame = document.getElementById(options.name);
@@ -958,12 +958,12 @@ function setModal()
             {
                 clearTimeout(options.waitingFuc);
             }
-            showModal(options, modal, modalBody);
+            showModal(options, modal, modalBody, dialog);
         }
         modal.modal('show');
     }
 
-    function showModal(options, modal, modalBody)
+    function showModal(options, modal, modalBody, dialog)
     {
         modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
         try
