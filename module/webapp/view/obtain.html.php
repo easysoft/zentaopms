@@ -77,7 +77,7 @@
     </div></div>
     <?php endforeach;?>
   </div>
-  <p class='clearfix'><?php if($pager) $pager->show();?></p>
+  <div class='clearfix'><?php if($pager) $pager->show();?></div>
   <?php else:?>
     <div class='box-title'><?php echo $lang->webapp->errorOccurs;?></div>
     <div class='box-content'><?php echo $lang->webapp->errorGetExtensions;?></div>

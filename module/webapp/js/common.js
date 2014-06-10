@@ -64,10 +64,10 @@ $(function()
         }});
     }
 
-    if($('a.webapp').length) $("a.webapp").modalTrigger({width:700, type:'iframe'});
-    if($('a.apiapp').length) $("a.apiapp").modalTrigger({width:700, type:'iframe'});
-    $('.runapp.popup').modalTrigger({width:700, type:'iframe'});
-    $('.runapp:not(.popup)').modalTrigger({size:'fullscreen', type:'iframe', cssClass:'app-inside'});
+    $("a.webapp").modalTrigger({width:700, type:'iframe', icon: 'th-large'});
+    $("a.apiapp").modalTrigger({width:700, type:'iframe', icon: 'th-large'});
+    $('.runapp.popup').modalTrigger({type:'iframe', icon: 'th-large', waittime: 1000});
+    $('.runapp:not(.popup)').modalTrigger({size:'fullscreen', type:'iframe', cssClass:'app-inside', waittime: 1000});
 
     setSize($('#target').val());
     $('#target').change(function(){setSize($(this).val())});

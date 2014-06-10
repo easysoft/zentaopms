@@ -901,6 +901,7 @@ function setModal()
             name:       'modalIframe',
             cssClass:   '',
             headerless: false,
+            waittime:   0,
             center:     true
         }
         
@@ -938,58 +939,81 @@ function setModal()
         {
             dialog.addClass(options.cssClass);
         }
+
+        if(options.waittime > 0)
+        {
+            options.waitingFuc = setTimeout(function(){showModal(options, modal, modalBody);}, options.waittime );
+        }
+
         var frame = document.getElementById(options.name);
         frame.onload = frame.onreadystatechange = function()
         {
-            if (this.readyState && this.readyState != 'complete') return;
+
+            if(this.readyState && this.readyState != 'complete') return;
+            if(!modal.hasClass('modal-loading')) return;
             if(!modal.data('first')) modal.addClass('modal-loading');
 
-            modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
-
-            try
+            if(options.waittime > 0)
             {
-                var $frame = $(window.frames[options.name].document);
-                if($frame.find('#titlebar').length)
+                clearTimeout(options.waitingFuc);
+            }
+            showModal(options, modal, modalBody);
+        }
+        modal.modal('show');
+    }
+
+    function showModal(options, modal, modalBody)
+    {
+        modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
+        try
+        {
+            var $frame = $(window.frames[options.name].document);
+            if($frame.find('#titlebar').length)
+            {
+                modal.addClass('with-titlebar');
+                if(options.size == 'fullscreen')
                 {
-                    modal.addClass('with-titlebar');
-                    if(options.size == 'fullscreen')
-                    {
-                        modalBody.css('height', options.height);
-                    }
+                    modalBody.css('height', options.height);
                 }
-                if(options.height == 'auto')
+            }
+            if(options.height == 'auto')
+            {
+                var $framebody = $frame.find('body');
+                setTimeout(function()
                 {
-                    var $framebody = $frame.find('body');
-                    setTimeout(function()
+                    var fbH = $framebody.addClass('body-modal').outerHeight();
+                    if(typeof fbH == 'object') fbH = $framebody.height();
+                    modalBody.css('height', fbH);
+                    if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
+                    modal.removeClass('modal-loading');
+                    if(modal.data('first')) modal.data('first', false);
+                }, 100);
+
+                if(navigator.userAgent.indexOf("MSIE 8.0") < 0)
+                {
+                    $framebody.resize(function()
                     {
                         var fbH = $framebody.addClass('body-modal').outerHeight();
                         if(typeof fbH == 'object') fbH = $framebody.height();
                         modalBody.css('height', fbH);
-                        if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
-                        modal.removeClass('modal-loading');
-                        if(modal.data('first')) modal.data('first', false);
-                    }, 100);
-
-                    if(navigator.userAgent.indexOf("MSIE 8.0") < 0)
-                    {
-                        $framebody.resize(function()
-                        {
-                            var fbH = $framebody.addClass('body-modal').outerHeight();
-                            if(typeof fbH == 'object') fbH = $framebody.height();
-                            modalBody.css('height', fbH);
-                        });
-                    }
-                }
-
-                var iframe$ = window.frames[options.name].$;
-                if(iframe$)
-                {
-                    iframe$.extend({'closeModal': $.closeModal});
+                    });
                 }
             }
-            catch(e){modal.removeClass('modal-loading');}
+            else
+            {
+                modal.removeClass('modal-loading');
+            }
+
+            var iframe$ = window.frames[options.name].$;
+            if(iframe$)
+            {
+                iframe$.extend({'closeModal': $.closeModal});
+            }
         }
-        modal.modal('show');
+        catch(e)
+        {
+            modal.removeClass('modal-loading');
+        }
     }
 
     function initModalFrame(setting)
