@@ -951,7 +951,7 @@ function setModal()
         {
 
             if(this.readyState && this.readyState != 'complete') return;
-            if(!modal.hasClass('modal-loading')) return;
+            if(modal.data('first') && (!modal.hasClass('modal-loading'))) return;
             if(!modal.data('first')) modal.addClass('modal-loading');
 
             if(options.waittime > 0)
@@ -1056,8 +1056,6 @@ function setModal()
     }
 
     $.extend({modalTrigger: showIframeModal});
-    
-    
 
     $('[data-toggle=modal], a.iframe').modalTrigger();
 }
