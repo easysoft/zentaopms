@@ -45,7 +45,7 @@
       </td>
       <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
