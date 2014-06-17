@@ -30,7 +30,6 @@
       <tr class='colhead'>
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-        <th class='w-200px'> <?php echo $lang->bug->plan;?></th>
         <th>                 <?php echo $lang->bug->title;?></th>
         <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
         <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
@@ -49,7 +48,6 @@
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . $bug->pri;?>'><?php echo $bug->pri?></span></td>
-        <td><?php echo $bug->planTitle;?></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
@@ -59,7 +57,7 @@
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='7' class='text-left'>
+        <td colspan='6' class='text-left'>
           <?php if(count($allBugs)) echo "<div class='table-actions clearfix'><div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>' . html::submitButton($lang->productplan->linkBug) . '</div>';?>
         </td>
       </tr>

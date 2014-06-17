@@ -213,12 +213,13 @@ class bugModel extends model
     /**
      * getActiveBugs 
      * 
-     * @param  object   $pager 
+     * @param  array    $products
      * @param  int      $projectID 
+     * @param  object   $pager 
      * @access public
      * @return array
      */
-    public function getActiveBugs($pager, $projectID, $products)
+    public function getActiveBugs($products, $projectID, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
