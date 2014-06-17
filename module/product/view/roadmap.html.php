@@ -23,10 +23,10 @@
         echo "<th><h4>$year</h4></th>";
     }
     echo '</tr>';
-    echo '<tr class="text-center">';
+    echo '<tr class="text-center text-top">';
     foreach($years as $year)
     {
-        echo '<td class="a-center">';
+        echo '<td>';
         foreach($roadmaps[$year] as $key => $roadmap)
         {
             if(isset($roadmap->build))
