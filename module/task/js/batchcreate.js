@@ -1,5 +1,5 @@
 $(function() {
-    for(i=0; i<batchCreateNum; i++) $("#story" + i).chosen(defaultChosenOptions);
+    for(i = 0; i < batchCreateNum; i++) $("#story" + i).chosen(defaultChosenOptions);
 })
 
 /* Get select of stories.*/

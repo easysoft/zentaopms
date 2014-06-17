@@ -29,7 +29,7 @@
   </div>
 </div>
 <form method='post' id='projectStoryForm'>
-  <table class='table tablesorter' id='storyList'>
+  <table class='table tablesorter table-fixed' id='storyList'>
     <thead>
       <tr class='colhead'>
       <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
