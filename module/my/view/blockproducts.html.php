@@ -4,7 +4,7 @@
   <i class='icon-cube icon'></i> <strong><?php echo $lang->my->home->products;?></strong>
 </div>
 <div class='panel-body text-center'><br><br>
-  <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProduct,'', "class='btn btn-success'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
+  <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProduct,'', "class='btn btn-primary'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
 </div>
 <?php else:?>
 <table class='table table-condensed table-hover table-striped table-borderless'>

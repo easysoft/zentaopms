@@ -4,7 +4,7 @@
   <i class='icon-folder-close-alt icon'></i> <strong><?php echo $lang->my->home->projects;?></strong>
 </div>
 <div class='panel-body text-center'><br><br>
-  <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject,'', "class='btn btn-success'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
+  <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject,'', "class='btn btn-primary'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
 </div>
 <?php else:?>
 <table class='table table-condensed table-hover table-striped table-borderless'>
