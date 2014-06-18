@@ -15,7 +15,6 @@ include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
-js::set('customed', $customed);
 ?>
 <div id='featurebar'>
   <ul class='nav'>
@@ -49,10 +48,7 @@ js::set('customed', $customed);
         </ul>
       </div>
       <div class='btn-group'>
-      <?php
-        common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
-        common::printIcon('bug', 'customFields', '', '', 'button', '', '', 'iframe', true);
-        ?>
+        <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID"); ?>
       </div>
     </div>
     <div class='btn-group'>
@@ -64,16 +60,6 @@ js::set('customed', $customed);
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
-
-<?php 
-if($customed)
-{
-    include './browse.custom.html.php'; 
-    include '../../common/view/footer.html.php';
-    exit;
-}
-?>
-
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>

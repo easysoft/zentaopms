@@ -107,13 +107,6 @@ class bug extends control
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
 
-        /* Get custom fields. */
-        $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
-        $customed     = !($customFields == $this->config->bug->list->defaultFields);
- 
-        /* If customed, get related name or titles. */
-        if($customed) $bugs = $this->bug->formCustomedBugs($bugs);
-
         /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['queryID']   = $queryID;
@@ -161,8 +154,6 @@ class bug extends control
         $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
         $this->view->moduleID     = $moduleID;
-        $this->view->customed     = $customed;
-        $this->view->customFields = explode(',', str_replace(' ', '', trim($customFields)));
 
         $this->display();
     }
