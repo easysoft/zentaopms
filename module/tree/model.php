@@ -586,7 +586,7 @@ class treeModel extends model
         else
         {
             if(common::hasPriv('tree', 'edit')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}&type=$type"), $this->lang->tree->edit, '', 'class="iframe" data-width="400"');
-            if(common::hasPriv('tree', 'browse') and strpos('productdoc,projectdoc', $module->type) === false and $module->type != 'webapp') $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type=$type&module={$module->id}"), $this->lang->tree->child);
+            if(common::hasPriv('tree', 'browse') and strpos($this->config->tree->noBrowse, ",$module->type,") === false) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type=$type&module={$module->id}"), $this->lang->tree->child);
             if(common::hasPriv('tree', 'delete')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "root={$module->root}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
             if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'class="text-center w-30px form-control inline input-sm"');
         }
@@ -658,20 +658,6 @@ class treeModel extends model
     public function createTestTaskLink($type, $module, $extra)
     {
         $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
-    }
-
-    /**
-     * Create Webapp Link 
-     * 
-     * @param  int    $module 
-     * @param  int    $extra 
-     * @access public
-     * @return void
-     */
-    public function createWebappLink($type, $module, $extra)
-    {
-        $linkHtml = html::a(helper::createLink('webapp', 'index', "module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
