@@ -87,7 +87,7 @@
         <th><?php echo $lang->task->mailto;?></th>
         <td colspan='2'>
           <?php
-          echo html::select('mailto[]', $members, str_replace(' ', '', $task->mailto), "multiple class='form-control'");
+          echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");
           if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
           ?>
         </td>
