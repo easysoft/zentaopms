@@ -310,15 +310,6 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .list-group-item.active,.list-group-item.active:hover {background: #fff; border-color: #ddd; background: #f1f1f1; color: #333; font-weight: bold;}
 .list-group-item.active > a {color: #333}
 
-/* File form */
-.fileBox {margin-bottom: 10px; width: 100%}
-#fileform > .fileBox:last-child {margin-bottom: 0;}
-.fileBox .input-group-addon{text-indent: -9999em; padding: 0 !important; border-left: 0; border-right: 0}
-.fileBox .form-control[type='text'] + .input-group-btn > .btn {border-left: 0}
-.fileBox .form-control[type='text'] {height: 30px;}
-.fileBox .input-control {display: table-cell; border: 1px solid #ccc; padding: 0 10px; border-radius: 2px 0 0 2px}
-.fileBox .input-control > input[type='file'] {width: 100%; height: 100%; height: 26px; padding: 0 5px; line-height: 26px; border: none; position: relative; top: 0;}
-
 /* Bug status */
 .bug-closed, .bug-closed a {color: #808080; text-decoration: line-through;}
 

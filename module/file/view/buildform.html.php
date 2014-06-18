@@ -1,18 +1,22 @@
+<style>
+.fileBox {margin-bottom: 10px; width: 100%}
+table.fileBox td {padding: 0!important}
+.fileBox .input-control > input[type='file'] {width: 100%; height: 100%; height: 26px; line-height: 26px; border: none; position: relative;}
+.fileBox td .btn {border-radius: 0; border-left: none}
+.file-wrapper.form-control {border-right: 0}
+</style>
 <div id='fileform'>
   <?php 
   /* Define the html code of a file row. */
   $fileRow = <<<EOT
-  <div class='fileBox input-group' id='fileBox\$i'>
-    <span class='input-control w-p45 pd-0'><input type='file' name='files[]' class='fileControl'  tabindex='-1' /></span>
-    <span class="input-group-addon">{$lang->file->label}</span>
-    <input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' />
-    <span class='input-group-btn'>
-      <a href='javascript:void();' onclick='addFile(this)' class='btn'><i class='icon-plus'></i></a>
-    </span>
-    <span class='input-group-btn'>
-      <a href='javascript:void();' onclick='delFile(this)' class='btn'><i class='icon-remove'></i></a>
-    </span>
-  </div>
+  <table class='fileBox' id='fileBox\$i'>
+    <tr>
+    <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='files[]' class='fileControl'  tabindex='-1' /></div></td>
+      <td class=''><input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' /></td>
+      <td class='w-30px'><a href='javascript:void();' onclick='addFile(this)' class='btn btn-block'><i class='icon-plus'></i></a></td>
+      <td class='w-30px'><a href='javascript:void();' onclick='delFile(this)' class='btn btn-block'><i class='icon-remove'></i></a></td>
+    </tr>
+  </table>
 EOT;
   for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
 ?>
