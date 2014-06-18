@@ -30,7 +30,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->task->module;?></th>
-        <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control' onchange='setStories(this.value,$project->id)'");?></td><td class='w-p40'></td><td></td>
+        <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control' onchange='setStories(this.value,$project->id)'");?></td><td></td><td class='w-150px'></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->assignedTo;?></th>
@@ -85,17 +85,8 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->mailto;?></th>
-        <td colspan='2'>
-          <?php
-          echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");
-          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
-          ?>
-        </td>
-        <td class='text-top'>
-          <?php
-          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
-          ?>
-        </td>
+        <td colspan='2'><?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?></td>
+        <td class='text-top'><?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->files;?></th>

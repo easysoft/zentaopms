@@ -53,7 +53,6 @@ $lang->moduleOrder[155] = 'api';
 $lang->moduleOrder[160] = 'file';
 $lang->moduleOrder[165] = 'misc';
 $lang->moduleOrder[170] = 'sso';
-$lang->moduleOrder[175] = 'webapp';
 
 $lang->resource = new stdclass();
 
@@ -740,23 +739,6 @@ $lang->convert->methodOrder[45] = 'execute';
 $lang->convert->methodOrder[50] = 'convertBugFree';
 $lang->convert->methodOrder[55] = 'convertRedmine';
 
-$lang->resource->webapp = new stdclass();
-$lang->resource->webapp->index     = 'index';
-$lang->resource->webapp->obtain    = 'obtain';
-$lang->resource->webapp->create    = 'create';
-$lang->resource->webapp->edit      = 'edit';
-$lang->resource->webapp->view      = 'view';
-$lang->resource->webapp->install   = 'install';
-$lang->resource->webapp->uninstall = 'uninstall';
-
-$lang->webapp->methodOrder[5] = 'index';
-$lang->webapp->methodOrder[10] = 'obtain';
-$lang->webapp->methodOrder[15] = 'create';
-$lang->webapp->methodOrder[20] = 'edit';
-$lang->webapp->methodOrder[25] = 'view';
-$lang->webapp->methodOrder[30] = 'install';
-$lang->webapp->methodOrder[35] = 'uninstall';
-
 /* Others. */
 $lang->resource->api = new stdclass();
 $lang->resource->api->getModel    = 'getModel';
@@ -886,12 +868,6 @@ $lang->changelog['3.3'][] = 'report-bugAssign';
 $lang->changelog['4.0.beta1'][] = 'user-batchCreate';
 $lang->changelog['4.0.beta1'][] = 'user-unlock';
 $lang->changelog['4.0.beta1'][] = 'admin-checkDB';
-$lang->changelog['4.0.beta1'][] = 'webapp-index';
-$lang->changelog['4.0.beta1'][] = 'webapp-obtain';
-$lang->changelog['4.0.beta1'][] = 'webapp-create';
-$lang->changelog['4.0.beta1'][] = 'webapp-edit';
-$lang->changelog['4.0.beta1'][] = 'webapp-install';
-$lang->changelog['4.0.beta1'][] = 'webapp-uninstall';
 
 $lang->changelog['4.0.beta2'][] = 'todo-batchEdit';
 $lang->changelog['4.0.beta2'][] = 'story-batchEdit';
@@ -912,7 +888,6 @@ $lang->changelog['4.0'][] = 'project-close';
 $lang->changelog['4.0'][] = 'task-record';
 $lang->changelog['4.0'][] = 'testtask-start';
 $lang->changelog['4.0'][] = 'testtask-close';
-$lang->changelog['4.0'][] = 'webapp-view';
 $lang->changelog['4.0'][] = 'action-hideOne';
 $lang->changelog['4.0'][] = 'action-hideAll';
 $lang->changelog['4.0'][] = 'task-editEstimate';

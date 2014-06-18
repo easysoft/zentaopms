@@ -91,7 +91,6 @@ $lang->menu->project  = '项目|project|index';
 $lang->menu->qa       = '测试|qa|index';
 $lang->menu->doc      = '文档|doc|index';
 $lang->menu->report   = '统计|report|index';
-$lang->menu->webapp   = '应用|webapp|index';
 $lang->menu->company  = '组织|company|index';
 $lang->menu->admin    = '后台|admin|index';
 
@@ -246,13 +245,6 @@ $lang->report->menu->product = array('link' => '产品|report|productinfo');
 $lang->report->menu->prj     = array('link' => '项目|report|projectdeviation');
 $lang->report->menu->test    = array('link' => '测试|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
-
-/* 资源视图菜单设置。*/
-$lang->webapp = new stdclass();
-$lang->webapp->menu = new stdclass();
-$lang->webapp->menu->obtain     = array('link' => '<span class="icon-shopping-cart">&nbsp;</span>应用商店|webapp|obtain', 'float' => 'right');
-$lang->webapp->menu->manageTree = array('link' => "<span class='icon-cogs'>&nbsp;</span>维护分类|tree|browse|rootID=0&view=webapp", 'float' => 'right');
-$lang->webapp->menu->create     = array('link' => "<span class='icon-plus'>&nbsp;</span>创建应用|webapp|create", 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();

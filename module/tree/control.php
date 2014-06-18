@@ -31,7 +31,6 @@ class tree extends control
             $this->view->root = $product;
             $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }
-
         /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -103,20 +102,6 @@ class tree extends control
             $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
             $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCustomDoc;
-        }
-        elseif(strpos($viewType, 'webapp') !== false)
-        {
-            $this->loadModel('webapp')->setMenu();
-            $this->lang->tree->menu      = $this->lang->webapp->menu;
-            $this->lang->set('menugroup.tree', 'webapp');
-
-            $title      = $this->lang->tree->manageWebapp;
-            $position[] = $this->lang->tree->manageWebapp;
-
-            $root = new stdclass();
-            $root->name = $this->lang->tree->manageWebapp;
-            $root->id   = 0;
-            $this->view->root = $root;
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);

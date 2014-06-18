@@ -1,9 +1,0 @@
-.webapps .card {position: relative; padding-left: 85px;}
-.webapps .card > .card-content {height: 20px; overflow: hidden; text-overflow:ellipsis; padding-bottom: 0;margin-bottom: 5px;}
-.webapps.webstore .card > .card-content {height: 40px; overflow: hidden; text-overflow:ellipsis; padding-bottom: 0;margin-bottom: 5px;}
-.webapps .card > .card-actions .btn {padding: 3px 12px; min-width: 70px}
-.webapps .card > .media {position: absolute; left: 10px; top: 10px;}
-.webapps .card > .card-heading strong {font-size: 14px}
-.webapps .card > .card-heading > .pull-right {display: none}
-.webapps .card:hover > .card-heading > .pull-right {display: block;}
-.webapp-icon img {width: 72px; min-width: 72px}
