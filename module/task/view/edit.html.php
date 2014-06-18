@@ -89,7 +89,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->mailto;?></th>
-            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?></td>
+            <td><?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?></td>
           </tr>
         </table>
       </fieldset>
