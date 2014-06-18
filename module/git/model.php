@@ -96,6 +96,7 @@ class gitModel extends model
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
             $this->printLog("get " . count($logs) . " logs");
+            if(empty($logs)) continue;
 
             $this->printLog('begin parsing logs');
             $latestRevision = $logs[0]->revision;
@@ -253,7 +254,7 @@ class gitModel extends model
         exec($cmd, $list, $return);
 
         if(!$list and $return) die("Some error occers: \nThe command is $cmd\n");
-        if(!$list and !$return) exit;
+        if(!$list and !$return) return array();
 
         /* Process logs. */
         $logs = array();

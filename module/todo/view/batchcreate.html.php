@@ -32,7 +32,7 @@
         <th class='w-80px'><?php echo $lang->todo->pri;?></th>
         <th class='w-p40 red'><?php echo $lang->todo->name;?></th>
         <th><?php echo $lang->todo->desc;?></th>
-        <th class='w-200px'><?php echo $lang->todo->beginAndEnd;?></th>
+        <th class='w-300ox'><?php echo $lang->todo->beginAndEnd;?></th>
       </tr>
     </thead>
     <?php $pri = 3;?>
@@ -49,6 +49,7 @@
       <td>
         <div class='input-group'>
           <?php echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'") . html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'");?>
+          <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'><?php echo $lang->todo->periods['future'];?></span>
         </div>
       </td>
     </tr>  

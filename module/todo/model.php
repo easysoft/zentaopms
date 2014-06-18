@@ -71,8 +71,8 @@ class todoModel extends model
                 $todo->pri     = $todos->pris[$i];
                 $todo->name    = isset($todos->names[$i]) ? htmlspecialchars($todos->names[$i]) : '';
                 $todo->desc    = htmlspecialchars($todos->descs[$i]);
-                $todo->begin   = $todos->begins[$i];
-                $todo->end     = $todos->ends[$i];
+                $todo->begin   = isset($todos->begins[$i]) ? $todos->begins[$i] : 2400;
+                $todo->end     = isset($todos->ends[$i]) ? $todos->ends[$i] : 2400;
                 $todo->status  = "wait";
                 $todo->private = 0;
                 $todo->idvalue = 0;

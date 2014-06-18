@@ -352,7 +352,7 @@ class productplan extends control
         {
             $projects = $this->loadModel('project')->getPairs();
             $projects[0] = '';
-            $allBugs= $this->loadModel('bug')->getAllBugs($this->view->product->id, $projects, 'id_desc');
+            $allBugs= $this->bug->getActiveBugs($this->view->product->id, $projects);
         }
 
         $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkBug;
