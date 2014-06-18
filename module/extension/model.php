@@ -751,7 +751,7 @@ class extensionModel extends model
         $backupTables = array();
         foreach($sqls as $sql)
         {
-            $sql = trim($sql);
+            $sql = preg_replace('/IF EXISTS /i', '', trim($sql));
             if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
             {
                 if(!empty($out[1])) $backupTables[$out[1]] = $out[1];
