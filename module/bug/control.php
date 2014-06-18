@@ -397,6 +397,12 @@ class bug extends control
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        if($bug->project and !$this->loadModel('project')->checkPriv($this->project->getByID($bug->project)))
+        {
+            echo(js::alert($this->lang->project->accessDenied));
+            die(js::locate('back'));
+        }
+
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
