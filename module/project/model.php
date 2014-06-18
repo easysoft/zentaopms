@@ -688,7 +688,7 @@ class projectModel extends model
             }
 
             // Process the end time.
-            $project->end = date(DT_DATE4, strtotime($project->end));
+            $project->end = date("Y-m-d", strtotime($project->end));
 
             /* Process the burns. */
             $project->burns = array();
