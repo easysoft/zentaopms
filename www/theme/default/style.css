@@ -77,7 +77,7 @@ hr.small {margin: 10px 0}
 .btn.text-special {color: #8957A1}
 
 /* Table */
-.table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 2px}
+.table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 1px; position: relative; top: 2px}
 .table-fixed {table-layout: fixed;}
 .table-fixed th, .table-fixed td  {overflow:hidden; white-space:nowrap;}
 .table-fixed tfoot > tr > th, .table-fixed tfoot > tr > td, .table-fixed .nofixed{overflow: visible;}
@@ -312,6 +312,9 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* Bug status */
 .bug-closed, .bug-closed a {color: #808080; text-decoration: line-through;}
+
+/* progressbar */
+.progressbar {display: inline-block; height: 16px; background: #229F24; position: relative; top: 1px}
 
 /* === Layout === */
 /* Background */

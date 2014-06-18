@@ -9,9 +9,4 @@ $(function()
     row2Height = $('#row2').height() - 10;
     row2Height = row2Height > 200 ? row2Height : 200;
     $('#row2 .block').each(function(){$(this).css('height', row2Height);})
-
-    $('.projectline').each(function()
-    {
-        $(this).sparkline('html', {height:'25px'});
-    })
 });
