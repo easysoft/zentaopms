@@ -375,7 +375,10 @@ class doc extends control
         /* Get doc. */
         $doc = $this->doc->getById($docID, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($doc->project != 0 and !$this->project->checkPriv($this->project->getById($doc->project)))
+
+        /* Check priv when lib is product or project. */
+        $systemLib = ($doc->lib == 'project' or $doc->lib == 'product') ? $doc->lib : '';
+        if($systemLib and !$this->{$systemLib}->checkPriv($this->{$systemLib}->getById($doc->{$systemLib})))
         {
             echo(js::alert($this->lang->error->accessDenied));
             die(js::locate('back'));
