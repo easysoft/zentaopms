@@ -40,10 +40,7 @@
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
-      <?php
-      if(isset($planStories[$story->id])) continue;
-      if($story->plan and helper::diffDate($plans[$story->plan], helper::today()) > 0) continue;
-      ?>
+      <?php if(isset($planStories[$story->id])) continue; ?>
       <tr>
         <td class='text-left'>
           <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
