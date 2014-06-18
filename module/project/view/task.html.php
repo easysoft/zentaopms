@@ -16,9 +16,7 @@
 <?php include './taskheader.html.php';?>
 <?php js::set('moduleID', $moduleID);?>
 <?php js::set('productID', $productID);?>
-<script language='Javascript'>
-var browseType  = '<?php echo $browseType;?>';
-</script>
+<?php js::set('browseType', $browseType);?>
 
 <div class='side' id='taskTree'>
   <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
