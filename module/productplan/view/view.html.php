@@ -71,7 +71,7 @@
                   <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
                   <th class='w-60px'>  <?php echo $lang->story->estimateAB;?></th>
                   <th class='w-status'><?php echo $lang->statusAB;?></th>
-                  <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
+                  <th class='w-80px'>  <?php echo $lang->story->stageAB;?></th>
                   <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
                 </tr>
                 </thead>
