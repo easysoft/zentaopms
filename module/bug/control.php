@@ -369,6 +369,11 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID);
         }
 
+        /* Remove the unused types. */
+        unset($this->lang->bug->typeList['designchange']);
+        unset($this->lang->bug->typeList['newfeature']);
+        unset($this->lang->bug->typeList['trackthings']);
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
