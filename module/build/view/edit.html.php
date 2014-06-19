@@ -41,11 +41,11 @@
       </tr>
       <tr>
         <th><?php echo $lang->build->scmPath;?></th>
-        <td colspan='2'><?php echo html::input('scmPath', $build->scmPath, "class='form-control'");?></td>
+        <td colspan='2'><?php echo html::input('scmPath', $build->scmPath, "class='form-control' placeholder='{$lang->build->placeholder->scmPath}'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->filePath;?></th>
-        <td colspan='2'><?php echo html::input('filePath', $build->filePath, "class='form-control'");?></td>
+        <td colspan='2'><?php echo html::input('filePath', $build->filePath, "class='form-control' placeholder='{$lang->build->placeholder->filePath}'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->files;?></th>

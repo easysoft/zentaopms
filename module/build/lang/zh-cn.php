@@ -41,3 +41,7 @@ $lang->build->bugs               = '已关联Bug';
 
 $lang->build->finishStories = '本次共完成需求%s个';
 $lang->build->resolvedBugs  = '本次共解决Bug%s个';
+
+$lang->build->placeholder = new stdclass();
+$lang->build->placeholder->scmPath  = ' 软件源代码库，如Subversion、Git库地址';
+$lang->build->placeholder->filePath = ' 该版本软件包下载存储地址';
