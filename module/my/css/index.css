@@ -6,7 +6,6 @@
 .panel-block td, .panel-block th {padding: 6px 6px 5px;}
 .panel-block.dynamic td {padding: 5px 6px 5px; overflow: hidden;}
 .panel-block tr > td:first-child, .panel-block tr > th:first-child, .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 10px;}
-.panel-block td .progressbar {display: inline-block; height: 16px; background: #229F24;}
 .panel-block .icon {color: #666; display: inline-block; margin-right: 2px;}
 #wrap .outer {padding: 20px 20px 0}
 .outer .panel-block .table tbody > tr:last-child td {border-bottom: none}

@@ -58,7 +58,7 @@
     <td><?php echo $project->hours->totalConsumed;?></td>
     <td><?php echo $project->hours->totalLeft;?></td>
     <td class='text-left w-150px'>
-      <img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: />
+      <div class="progressbar" style='width:<?php echo $project->hours->progress;?>px'>&nbsp;</div>
       <small><?php echo $project->hours->progress;?>%</small>
     </td>
     <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
@@ -67,7 +67,7 @@
   <?php if($canBatchEdit):?>
   <tfoot>
     <tr>
-      <td colspan='10'>
+      <td colspan='11'>
         <div class='table-actions clearfix'>
         <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
         <?php echo html::submitButton($lang->project->batchEdit);?>
