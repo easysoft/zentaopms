@@ -320,7 +320,7 @@ class treeModel extends model
         foreach($products as $id => $product)
         {
             $extra['productID'] = $id;
-            if($userFunc[1] == 'createTaskManageLink')
+            if($manage)
             {
                 $menu .= "<li>" . $product;
             }
@@ -332,7 +332,7 @@ class treeModel extends model
             /* tree menu. */
             $treeMenu = array();
             $query = $this->dao->select('*')->from(TABLE_MODULE)
-                ->where("((root = $rootID and type = 'task') OR (root = $id and type = 'story'))")
+                ->where("((root = $rootID and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->orderBy('grade desc, type, `order`')
                 ->get();
@@ -367,6 +367,46 @@ class treeModel extends model
             $tree     = isset($treeMenu[0]) ? $treeMenu[0] : '';
             $lastMenu = "<ul class='tree'>" . $tree . "</ul>\n";
             $menu    .= $lastMenu . '</li>';
+        }
+
+        if($startModule == 0)
+        {
+            /* tree menu. */
+            $treeMenu = array();
+            $query = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where("root = $rootID and type = 'task'")
+                ->orderBy('grade desc, type, `order`')
+                ->get();
+            $stmt = $this->dbh->query($query);
+            while($module = $stmt->fetch())
+            {
+                /* if not manage, ignore unused modules. */
+                if(!$manage and !isset($projectModules[$module->id])) continue;
+
+                $linkHtml = call_user_func($userFunc, 'task', $module, $extra);
+
+                if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
+                {
+                    if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
+                    $treeMenu[$module->parent] .= "<li class='closed'>$linkHtml";  
+                    $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
+                }
+                else
+                {
+                    if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
+                    {
+                        $treeMenu[$module->parent] .= "<li>$linkHtml\n";
+                    }
+                    else
+                    {
+                        $treeMenu[$module->parent] = "<li>$linkHtml\n";
+                    }
+                }
+                $treeMenu[$module->parent] .= "</li>\n";
+            }
+
+            $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            $menu .= $tree . '</li>';
         }
         return $menu;
     }
