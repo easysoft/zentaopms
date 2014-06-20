@@ -41,3 +41,7 @@ $lang->build->bugs               = 'Linked bugs';
 
 $lang->build->finishStories = 'The total demand for a complete %s';
 $lang->build->resolvedBugs  = 'The total solution of bug%s';
+
+$lang->build->placeholder = new stdclass();
+$lang->build->placeholder->scmPath  = 'Software source code repository, such as Subversion or Git';
+$lang->build->placeholder->filePath = 'The path of this build package to download';

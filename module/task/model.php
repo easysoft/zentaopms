@@ -13,8 +13,6 @@
 <?php
 class taskModel extends model
 {
-    const CUSTOM_STATUS_ORDER = 'wait,doing,done,cancel,closed';
-
     /**
      * Create a task.
      * 
@@ -45,8 +43,6 @@ class taskModel extends model
                 ->get();
 
             if($assignedTo) $task->assignedDate = helper::now();
-
-            $this->setStatus($task);
 
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -121,7 +117,6 @@ class taskModel extends model
             $data[$i]->status       = 'wait';
             $data[$i]->openedBy     = $this->app->user->account;
             $data[$i]->openedDate   = $now;
-            $data[$i]->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, 'wait') + 1;
             if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
 
@@ -184,7 +179,6 @@ class taskModel extends model
             ->remove('comment,files,labels')
             ->join('mailto', ',')
             ->get();
-        $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
 
         if($task->consumed < $oldTask->consumed) 
         {
@@ -268,7 +262,6 @@ class taskModel extends model
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
-            $this->setStatus($task);
             if(isset($this->post->assignedTos[$taskID])) 
             {
                 $task->assignedDate = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
@@ -412,7 +405,6 @@ class taskModel extends model
         {
             $task->status = 'doing';
         }
-        $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -553,8 +545,6 @@ class taskModel extends model
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
-        $this->setStatus($task);
-
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->check('consumed', 'notempty')
@@ -585,7 +575,6 @@ class taskModel extends model
             ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel') 
             ->remove('_recPerPage')
             ->remove('comment')->get();
-        $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
@@ -613,7 +602,6 @@ class taskModel extends model
             ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
             ->setDefault('canceledDate, lastEditedDate', $now) 
             ->remove('comment')->get();
-        $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
@@ -639,7 +627,6 @@ class taskModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->remove('comment')->get();
-        $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -705,7 +692,6 @@ class taskModel extends model
      */
     public function getTasksByModule($projectID = 0, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
-        $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -735,7 +721,6 @@ class taskModel extends model
      */
     public function getProjectTasks($projectID, $type = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
-        $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $type    = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
@@ -1052,18 +1037,6 @@ class taskModel extends model
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
 
         return $task;
-    }
-
-    /**
-     * Set the status field of a task.
-     * 
-     * @param  object $task 
-     * @access private
-     * @return void
-     */
-    public function setStatus($task)
-    {
-        $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
     }
     
     /**

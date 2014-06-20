@@ -1,0 +1,5 @@
+ALTER TABLE `zt_task` DROP `statusCustom`;
+ALTER TABLE `zt_story` CHANGE `status` `status` enum('','draft','active','closed','changed') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `estimate`;
+ALTER TABLE `zt_story` CHANGE `stage` `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released') COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'wait' AFTER `status`;
+ALTER TABLE `zt_testTask` CHANGE `status` `status` enum('wait','doing','done','blocked') COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'wait' AFTER `report`;
+ALTER TABLE `zt_todo` CHANGE `status` `status` enum('wait','doing','done') COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'wait' AFTER `desc`;

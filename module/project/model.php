@@ -887,7 +887,6 @@ class projectModel extends model
             }
 
             $data->status       = $task->consumed > 0 ? 'doing' : 'wait';
-            $data->statusCustom = strpos(TASKMODEL::CUSTOM_STATUS_ORDER, $data->status) + 1;
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
@@ -949,7 +948,6 @@ class projectModel extends model
             $task->pri          = $BugToTasks->pri[$key];
             $task->consumed     = 0;
             $task->status       = 'wait';
-            $task->statusCustom = strpos(taskModel::CUSTOM_STATUS_ORDER, 'wait') + 1;
             $task->desc         = $bugLang->bug->resolve . ':' . '#' . html::a(helper::createLink('bug', 'view', "bugID=$key"), sprintf('%03d', $key));
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
