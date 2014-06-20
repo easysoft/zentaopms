@@ -94,30 +94,39 @@ class misc extends control
     {
         $notifyDir   = $this->app->getBasePath() . 'www/data/notify/';
         $packageFile = $notifyDir . 'notify.zip';
-        $tmpDir      = $notifyDir . 'notify';
-        $loginFile   = $tmpDir . '/tmp/.logininfo';
+        $loginFile   = $notifyDir . 'config.json';
 
-        $this->app->loadClass('pclzip', true);
-        $sourceZip = new pclzip($packageFile);
-        $files = $sourceZip->extract(PCLZIP_OPT_PATH, $notifyDir);
-        if($files == 0) die("Error : ".$sourceZip->errorInfo(true));
-
+        /* write login info into tmp file. */
         $loginInfo = new stdclass();
-        $loginInfo->account   = $this->app->user->account;
-        $loginInfo->password  = $this->app->user->password;
-        $loginInfo->zentaourl = common::getSysURL() . $this->config->webRoot;
+        $userInfo  = new stdclass();
+        $userInfo->Account        = $this->app->user->account;
+        $userInfo->Url            = common::getSysURL() . $this->config->webRoot;
+        $userInfo->PassMd5        = $this->app->user->password;
+        $userInfo->Role           = $this->app->user->role;
+        $userInfo->AutoSignIn     = true;
+        $userInfo->Lang           = $this->cookie->lang;
+        $loginInfo->User          = $userInfo;
+        $loginInfo->LastLoginTime = time() / 86400 + 25569;
         $loginInfo = json_encode($loginInfo);
 
         file_put_contents($loginFile, $loginInfo);
 
-        unlink($packageFile);
-        $newZip = new pclzip($packageFile);
-        if($newZip->create($tmpDir, PCLZIP_OPT_REMOVE_PATH, $notifyDir))
-        {
-            $this->zfile = $this->app->loadClass('zfile');
-            $this->zfile->removeDir($tmpDir);
-        }
+        define('PCLZIP_TEMPORARY_DIR', $notifyDir);
+        $this->app->loadClass('pclzip', true);
+
+        /* remove the old config.json, add a new one. */
+        $archive = new pclzip($packageFile);
+        $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
+        if($result == 0) die("Error : " . $archive->errorInfo(true));
+
+        $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH);
+        if($result == 0) die("Error : " . $archive->errorInfo(true));
+        
+        unlink($loginFile);
+
         $this->fetch('file', 'sendDownHeader', array('fileName' => 'notify.zip', 'zip', file_get_contents($packageFile)));
+        $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
+        if($result == 0) die("Error : " . $archive->errorInfo(true));
     }
 
     /**
