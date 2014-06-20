@@ -73,15 +73,6 @@ fi
 echo $checkdb > $basePath/checkdb.sh
 echo "checkdb.sh ok"
 
-# win to unix
-if [ $requestType == 'PATH_INFO' ]; then
-  win2Unix="$phpcli $basePath/ztcli '$pmsRoot/admin-win2Unix'";
-else
-  win2Unix="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=admin&f=win2Unix'";
-fi
-echo $win2Unix > $basePath/win2unix.sh
-echo "win2unix.sh ok"
-
 # syncsvn.
 if [ $requestType == 'PATH_INFO' ]; then
   syncsvn="$phpcli $basePath/ztcli '$pmsRoot/svn-run'";
