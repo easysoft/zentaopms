@@ -19,6 +19,7 @@ class upgrade extends control
      */
     public function index()
     {
+        $this->view->title = $this->lang->upgrade->common;
         $this->display();
     }
 
