@@ -1548,6 +1548,7 @@ class router
         if(!empty($this->config->debug)) $this->saveSQL();
 
         /* If any error occers, save it. */
+        if(!function_exists('error_get_last')) return;
         $error = error_get_last();
         if($error) $this->saveError($error['type'], $error['message'], $error['file'], $error['line']);
     }
