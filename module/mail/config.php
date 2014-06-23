@@ -36,6 +36,8 @@ $config->mail->provider['vip.sohu.com']['host'] = 'smtp.vip.sohu.com';
 $config->mail->provider['21cn.com']['host']     = 'smtp.21cn.com';
 
 $config->mail->provider['qq.com']['host']       = 'smtp.qq.com';
+$config->mail->provider['qq.com']['secure']     = 'ssl';
+$config->mail->provider['qq.com']['port']       = '465';
 
 $config->mail->provider['gmail.com']['host']    = 'smtp.gmail.com';
 $config->mail->provider['gmail.com']['secure']  = 'ssl';
