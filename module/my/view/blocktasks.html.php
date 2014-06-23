@@ -5,7 +5,7 @@
       <?php echo html::a($this->createLink('my', 'task'), $lang->more . " <i class='icon icon-double-angle-right'></i>");?>
     </div>
   </div>
-  <table class='table table-condensed table-hover table-striped table-borderless'>
+  <table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
   <?php 
   foreach($tasks as $task)
   {
