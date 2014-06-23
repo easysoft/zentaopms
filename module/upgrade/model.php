@@ -102,6 +102,8 @@ class upgradeModel extends model
                 $this->mergeProjectGoalAndDesc();
                 $this->execSQL($this->getUpgradeFile('5.2.1'));
             case '5_3':
+            case '6_0_beta1':
+                $this->fixBugOSInfo();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -817,6 +819,18 @@ class upgradeModel extends model
                 ->exec();
         }
         return true;
+    }
+
+    /**
+     * Fix OS info of bugs.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixBugOSInfo()
+    {
+        $this->dao->update(TABLE_BUG)->set('os')->eq('android')->where('os')->eq('andriod')->exec();
+        $this->dao->update(TABLE_BUG)->set('os')->eq('osx')->where('os')->eq('mac')->exec();
     }
 
     /**
