@@ -5,7 +5,7 @@ function browseByModule()
     $('#bymoduleTab').addClass('active');
     $('#allTab').removeClass('active');
     $('#bysearchTab').removeClass('active');
-    $('#querybox').addClass('hidden');
+    $('#querybox').removeClass('show');
 }
 
 function browseBySearch()
@@ -14,7 +14,7 @@ function browseBySearch()
     $('#bymoduleTab').removeClass('active');
     $('#allTab').addClass('active');
     $('#bysearchTab').addClass('active');
-    $('#querybox').removeClass('hidden');
+    $('#querybox').addClass('show');
 }
 
 $(function(){
