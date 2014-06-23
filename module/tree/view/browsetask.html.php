@@ -65,31 +65,23 @@
                         echo '<span>' . html::input("products[id$id]", $product, 'class=form-control disabled="true"') . '</span>';
                     }
                 }
-                else
+                foreach($sons as $sonModule)
                 {
-                    echo '<div id="sonModule">';
-                    foreach($sons as $sonModule)
-                    {
-                        if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
-                        $disabled = $sonModule->type == 'task' ? '' : 'disabled="true"';
-                        echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=form-control ' . $disabled) . '</span>';
-                    }
-                    for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=form-control') . '</span>';
+                    if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
+                    $disabled = $sonModule->type == 'task' ? '' : 'disabled="true"';
+                    echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=form-control ' . $disabled) . '</span>';
                 }
+                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=form-control') . '</span>';
                 ?>
-                </div>
               </td>
             </tr>
             <tr>
               <td></td>
               <td colspan='2'>
                 <?php 
-                if(!$newModule or $productID)
-                {
-                    echo html::submitButton() . html::backButton();
-                    echo html::hidden('parentModuleID', $currentModuleID);
-                    echo html::hidden('maxOrder', $maxOrder);
-                }
+                echo html::submitButton() . html::backButton();
+                echo html::hidden('parentModuleID', $currentModuleID);
+                echo html::hidden('maxOrder', $maxOrder);
                 ?>      
                 <input type='hidden' value='<?php echo $currentModuleID;?>' name='parentModuleID' />
               </td>

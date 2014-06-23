@@ -569,7 +569,7 @@ class commonModel extends model
             $notifyFile = $app->getBasePath() . 'www/data/notify/notify.zip';
 
             if(!file_exists($notifyFile)) return false;
-            echo html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i> " . $lang->downNotify) . ' &nbsp; ';
+            echo html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i>", '', "title='$lang->downNotify'") . ' &nbsp; ';
         }
     }
 
