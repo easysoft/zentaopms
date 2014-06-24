@@ -13,7 +13,7 @@ $(function()
         oldProjectID           = 0;
         oldOpenedBuild         = '';
         oldTaskID              = 0;
-        if(!assignedto)setAssignedTo(moduleID, productID);
+        if(!assignedto) setAssignedTo(moduleID, productID);
         notice();
     }
 
@@ -236,7 +236,7 @@ function notice()
         var html = '';
         if($('#project').val() == '')
         {
-            html += '<a href="' + createLink('release', 'create','productID=' + $('#product').val()) + '" target="_blank">' + createRelease + ' </a>';
+            html += '<a href="' + createLink('release', 'create', 'productID=' + $('#product').val()) + '" target="_blank">' + createRelease + ' </a>';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
