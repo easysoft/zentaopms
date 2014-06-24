@@ -202,7 +202,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
 }
 
 echo '-------------demo data checking. -----------------' . "\n";
-$demoSQL = file("../../db/demo.sql");
+$demoSQL = file("../db/demo.sql");
 foreach($demoSQL as $line => $sql)
 {
     if(strpos($sql, 'INSERT') === false) continue;
