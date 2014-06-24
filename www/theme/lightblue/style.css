@@ -427,6 +427,13 @@ table.tablesorter thead tr .headerSortDown:after {
   background-color: #e5e5e5!important;
   color: #444444 !important;
 }
+#mainmenu #searchbox .dropdown-menu li > a {
+  background: #ffffff !important;
+}
+#mainmenu #searchbox .dropdown-menu li > a:hover {
+  background: #ebf2f9 !important;
+  color: #0d3d88;
+}
 #topnav > .dropdown:hover,
 #topnav > .dropdown.open,
 #topnav > a:hover {
