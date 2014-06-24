@@ -1,4 +1,5 @@
 <?php
+$config->upgrade = new stdclass();
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables['zt_caseStep']       = 'zt_casestep';
 $config->upgrade->lowerTables['zt_docLib']         = 'zt_doclib';

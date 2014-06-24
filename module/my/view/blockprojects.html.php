@@ -7,7 +7,7 @@
   <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject,'', "class='btn btn-primary'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
 </div>
 <?php else:?>
-<table class='table table-condensed table-hover table-striped table-borderless'>
+<table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
   <thead>
     <tr class='text-center'>
       <th class='w-150px'><div class='text-left'><i class="icon-folder-close-alt icon"></i> <?php echo $lang->project->name;?></div></th>
@@ -16,7 +16,7 @@
       <th><?php echo $lang->project->totalEstimate;?></th>
       <th><?php echo $lang->project->totalConsumed;?></th>
       <th><?php echo $lang->project->totalLeft;?></th>
-      <th class='w-120px'><?php echo $lang->project->progess;?></th>
+      <th class='w-150px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
   </thead>

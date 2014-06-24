@@ -450,6 +450,7 @@ class taskModel extends model
                 $estimates[$id]->consumed = $record->consumed[$id];
                 $estimates[$id]->left     = $record->left[$id];
                 $estimates[$id]->work     = $record->work[$id];
+                $estimates[$id]->account  = $this->app->user->account;
             }
         }
 

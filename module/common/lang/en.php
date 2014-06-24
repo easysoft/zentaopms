@@ -126,11 +126,12 @@ $lang->exportTypeList['selected'] = 'Only checked';
 $lang->lang = 'Language';
 
 /* Themes. */
-$lang->theme               = 'Theme';
-$lang->themes['default']   = 'Default';
-$lang->themes['green']     = 'Green';
-$lang->themes['red']       = 'Red';
-$lang->themes['lightblue'] = 'Light Blue';
+$lang->theme                = 'Theme';
+$lang->themes['default']    = 'Default';
+$lang->themes['green']      = 'Green';
+$lang->themes['red']        = 'Red';
+$lang->themes['lightblue']  = 'Light Blue';
+$lang->themes['blackberry'] = 'Blackberry';
 
 /* Index mododule menu. */
 $lang->index = new stdclass();

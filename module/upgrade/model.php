@@ -102,6 +102,9 @@ class upgradeModel extends model
                 $this->mergeProjectGoalAndDesc();
                 $this->execSQL($this->getUpgradeFile('5.2.1'));
             case '5_3':
+            case '6_0_beta1':
+                $this->fixBugOSInfo();
+                $this->fixTaskFinishedBy();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -817,6 +820,48 @@ class upgradeModel extends model
                 ->exec();
         }
         return true;
+    }
+
+    /**
+     * Fix OS info of bugs.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixBugOSInfo()
+    {
+        $this->dao->update(TABLE_BUG)->set('os')->eq('android')->where('os')->eq('andriod')->exec();
+        $this->dao->update(TABLE_BUG)->set('os')->eq('osx')->where('os')->eq('mac')->exec();
+    }
+
+    /**
+     * Fix finishedBy of task.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixTaskFinishedBy()
+    {
+        $tasks = $this->dao->select('t1.id,t2.actor,t2.date')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')
+            ->on('t1.id = t2.objectID')
+            ->leftJoin(TABLE_HISTORY)->alias('t3')
+            ->on('t2.id = t3.action')
+            ->where('t3.new')->eq(0)
+            ->andWhere('t3.field')->eq('left')
+            ->andWhere('t2.objectType')->eq('task')
+            ->andWhere('t1.finishedBy')->eq('')
+            ->andWhere('t1.status')->in('done,closed')
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+        foreach($tasks as $taskID => $task)
+        {
+            $this->dao->update(TABLE_TASK)
+                ->set('finishedBy')->eq($task->actor)
+                ->set('finishedDate')->eq($task->date)
+                ->where('id')->eq($taskID)
+                ->exec();
+        }
     }
 
     /**

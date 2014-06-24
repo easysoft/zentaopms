@@ -5,7 +5,7 @@
       <?php echo html::a($this->createLink('my', 'bug'), $lang->more . "&nbsp;<i class='icon icon-double-angle-right'></i>");?>
     </div>
   </div>
-  <table class='table table-condensed table-hover table-striped table-borderless'>
+  <table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
   <?php
   foreach($bugs as $bugID => $bugTitle)
   {

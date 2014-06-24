@@ -187,14 +187,14 @@ $lang->bug->osList['win2012'] = 'Windows 2012';
 $lang->bug->osList['win2008'] = 'Windows 2008';
 $lang->bug->osList['win2003'] = 'Windows 2003';
 $lang->bug->osList['win2000'] = 'Windows 2000';
-$lang->bug->osList['andriod'] = 'Andriod';
+$lang->bug->osList['android'] = 'Android';
 $lang->bug->osList['ios']     = 'IOS';
 $lang->bug->osList['wp8']     = 'WP8';
 $lang->bug->osList['wp7']     = 'WP7';
 $lang->bug->osList['symbian'] = 'Symbian';
 $lang->bug->osList['linux']   = 'Linux';
 $lang->bug->osList['freebsd'] = 'FreeBSD';
-$lang->bug->osList['mac']     = 'Mac OS';
+$lang->bug->osList['osx']     = 'OS X';
 $lang->bug->osList['unix']    = 'Unix';
 $lang->bug->osList['others']  = '其他';
 

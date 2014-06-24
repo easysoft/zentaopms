@@ -796,11 +796,7 @@ function ajaxDelete(url, replaceID, notice)
                         {
                             sortTable(); 
                         }
-                        else
-                        {
-                            $('.colored').colorize();
-                            $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                        }
+                        $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                     });
                 }
             }
@@ -1058,6 +1054,14 @@ function setModal()
     $.extend({modalTrigger: showIframeModal});
 
     $('[data-toggle=modal], a.iframe').modalTrigger();
+
+    jQuery.fn.colorbox = function(setting)
+    {
+        if((typeof setting == 'object') && setting.iframe)
+        {
+            $(this).modalTrigger({type: 'iframe', width: setting['width'], afterHide: setting['onCleanup'], url: setting['href']});
+        }
+    }
 }
 
 /**
@@ -1097,6 +1101,7 @@ function setModal4List(colorboxClass, replaceID, callback, width)
                     setModal4List(colorboxClass, replaceID, callback, width);
 
                     $('#' + replaceID + ' tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
+                    $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                     try
                     {
                         $(".date").datetimepicker(datepickerOptions);
@@ -1128,6 +1133,8 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
+    $('body').addClass('m-{currentModule}-{currentMethod}'.format(config));
+
     setModal();
     setTableBehavior();
     setForm();
