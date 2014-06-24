@@ -7,7 +7,7 @@
   <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProduct,'', "class='btn btn-primary'");?> &nbsp; &nbsp; <?php echo " <i class='icon-question-sign text-muted'></i> " . $lang->my->home->help; ?>
 </div>
 <?php else:?>
-<table class='table table-condensed table-hover table-striped table-borderless'>
+<table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
   <thead>
     <tr class='text-center'>
       <th class='w-150px text-left'><i class="icon icon-cube"></i> <?php echo $lang->product->name;?></th>
