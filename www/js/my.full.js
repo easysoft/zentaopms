@@ -1058,6 +1058,14 @@ function setModal()
     $.extend({modalTrigger: showIframeModal});
 
     $('[data-toggle=modal], a.iframe').modalTrigger();
+
+    jQuery.fn.colorbox = function(setting)
+    {
+        if((typeof setting == 'object') && setting.iframe)
+        {
+            $(this).modalTrigger({type: 'iframe', width: setting['width'], afterHide: setting['onCleanup'], url: setting['href']});
+        }
+    }
 }
 
 /**
@@ -1128,6 +1136,8 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
+    $('body').addClass('m-{currentModule}-{currentMethod}'.format(config));
+
     setModal();
     setTableBehavior();
     setForm();
