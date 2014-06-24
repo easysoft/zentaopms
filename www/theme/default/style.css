@@ -389,7 +389,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #wrap .outer {position: relative; text-align:left; background:#fff;border:1px solid #cfcfcf; -webkit-box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10);box-shadow: 0 0px 6px rgba(0, 0, 0, 0.10); padding: 20px}
 
 /* Footer. */
-#footer {position: relative; width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #e1e1e1; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);}
+#footer {position: relative; width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #e1e1e1; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); z-index: 10}
 #crumbs a i.icon-home{display: none;}
 #crumbs {float: left;margin-left: 20px;}
 #crumbs .icon-angle-right{margin-right: 6px;}

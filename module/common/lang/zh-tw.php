@@ -127,11 +127,12 @@ $lang->exportTypeList['selected'] = '選中記錄';
 $lang->lang = 'Language';
 
 /* 風格列表。*/
-$lang->theme               = '主題';
-$lang->themes['default']   = '預設';
-$lang->themes['green']     = '綠色';
-$lang->themes['red']       = '紅色';
-$lang->themes['lightblue'] = '亮藍';
+$lang->theme                = '主題';
+$lang->themes['default']    = '預設';
+$lang->themes['green']      = '綠色';
+$lang->themes['red']        = '紅色';
+$lang->themes['lightblue']  = '亮藍';
+$lang->themes['blackberry'] = '黑莓';
 
 /* 首頁菜單設置。*/
 $lang->index = new stdclass();
