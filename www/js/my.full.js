@@ -1101,11 +1101,11 @@ function setModal4List(colorboxClass, replaceID, callback, width)
                     setModal4List(colorboxClass, replaceID, callback, width);
 
                     $('#' + replaceID + ' tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
+                    $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                     try
                     {
                         $(".date").datetimepicker(datepickerOptions);
                     }
-                    $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                     catch(err){}
                     if(typeof(callback) == 'function') callback();
                     $.cookie('selfClose', 0);
