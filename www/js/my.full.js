@@ -796,11 +796,7 @@ function ajaxDelete(url, replaceID, notice)
                         {
                             sortTable(); 
                         }
-                        else
-                        {
-                            $('.colored').colorize();
-                            $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                        }
+                        $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                     });
                 }
             }
@@ -1109,6 +1105,7 @@ function setModal4List(colorboxClass, replaceID, callback, width)
                     {
                         $(".date").datetimepicker(datepickerOptions);
                     }
+                    $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                     catch(err){}
                     if(typeof(callback) == 'function') callback();
                     $.cookie('selfClose', 0);
