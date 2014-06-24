@@ -56,7 +56,6 @@ $lang->task->date              = '日期';
 $lang->task->deadline          = '截止日期';
 $lang->task->deadlineAB        = '截止';
 $lang->task->status            = '任務狀態';
-$lang->task->statusCustom      = '狀態排序';
 $lang->task->desc              = '任務描述';
 $lang->task->assign            = '指派';
 $lang->task->assignTo          = $lang->task->assign;

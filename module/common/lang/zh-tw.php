@@ -85,13 +85,12 @@ $lang->common->common = '公有模組';
 
 /* 主導航菜單。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<i class="icon-home"></i> <span>我的地盤</span>|my|index';
+$lang->menu->my       = '<i class="icon-home"></i><span> 我的地盤</span>|my|index';
 $lang->menu->product  = '產品|product|index';
 $lang->menu->project  = '項目|project|index';
 $lang->menu->qa       = '測試|qa|index';
 $lang->menu->doc      = '文檔|doc|index';
 $lang->menu->report   = '統計|report|index';
-$lang->menu->webapp   = '應用|webapp|index';
 $lang->menu->company  = '組織|company|index';
 $lang->menu->admin    = '後台|admin|index';
 
@@ -127,12 +126,12 @@ $lang->exportTypeList['selected'] = '選中記錄';
 $lang->lang = 'Language';
 
 /* 風格列表。*/
-$lang->theme                = '主題';
-$lang->themes['default']    = '預設';
-$lang->themes['green']      = '綠色';
-$lang->themes['red']        = '紅色';
-$lang->themes['lightblue']  = '亮藍';
-$lang->themes['blackberry'] = '黑莓';
+$lang->theme                 = '主題';
+$lang->themes['default']     = '預設';
+$lang->themes['green']       = '綠色';
+$lang->themes['red']         = '紅色';
+$lang->themes['lightblue']   = '亮藍';
+$lang->themes['blackberry']  = '黑莓';
 
 /* 首頁菜單設置。*/
 $lang->index = new stdclass();
@@ -171,8 +170,8 @@ $lang->product->menu->plan    = array('link' => '計劃|productplan|browse|produ
 $lang->product->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文檔|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = array('link' => '維護|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
+$lang->product->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = '項目|product|project|status=all&productID=%s';
 $lang->product->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加產品|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<i class="icon-th"></i>&nbsp;所有產品|product|index|locate=no&productID=%s', 'float' => 'right');
@@ -199,7 +198,7 @@ $lang->project->menu->testtask  = '測試|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '產品|project|manageproducts|projectID=%s';
-$lang->project->menu->view      = array('link' => '維護|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => '<i class="icon-plus"></i>&nbsp;添加項目|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<i class="icon-th-large"></i>&nbsp;所有項目|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 
@@ -248,13 +247,6 @@ $lang->report->menu->prj     = array('link' => '項目|report|projectdeviation')
 $lang->report->menu->test    = array('link' => '測試|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '組織|report|workload');
 
-/* 資源視圖菜單設置。*/
-$lang->webapp = new stdclass();
-$lang->webapp->menu = new stdclass();
-$lang->webapp->menu->obtain     = array('link' => '<span class="icon-shopping-cart">&nbsp;</span>應用商店|webapp|obtain', 'float' => 'right');
-$lang->webapp->menu->manageTree = array('link' => "<span class='icon-cogs'>&nbsp;</span>維護分類|tree|browse|rootID=0&view=webapp", 'float' => 'right');
-$lang->webapp->menu->create     = array('link' => "<span class='icon-plus'>&nbsp;</span>創建應用|webapp|create", 'float' => 'right');
-
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
@@ -283,7 +275,7 @@ $lang->admin->menu->index     = array('link' => '首頁|admin|index');
 $lang->admin->menu->extension = array('link' => '擴展|extension|browse', 'subModule' => 'extension,editor');
 $lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData = array('link' => '清除數據|admin|cleardata');
+$lang->admin->menu->clearData = array('link' => '重置禪道|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->sso       = array('link' => '單點登錄|sso|browse', 'subModule' => 'sso');
