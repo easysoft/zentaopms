@@ -26,7 +26,7 @@
       <?php echo $case->precondition;?>
     </fieldset>
     <?php foreach($results as $result):?>
-    <table class='table table-condensed table-hover table-striped table-fixed'>
+    <table class='table table-condensed table-hover table-striped'>
       <caption class='text-left bd-0'>
         <?php if(isset($build)):?><div class='pull-right'><?php echo $lang->testtask->build . $lang->colon . $build;?></div>
         <?php endif; ?>
