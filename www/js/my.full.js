@@ -1062,7 +1062,13 @@ function setModal()
         if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.bs.modal', setting.afterHidden);
     }
 
-    $.extend({modalTrigger: showIframeModal});
+    $.extend({modalTrigger: showIframeModal, colorbox: function(setting)
+    {
+        if((typeof setting == 'object') && setting.iframe)
+        {
+            $.modalTrigger({type: 'iframe', width: setting['width'], afterHide: setting['onCleanup'], url: setting['href']});
+        }
+    }});
 
     $('[data-toggle=modal], a.iframe').modalTrigger();
 
