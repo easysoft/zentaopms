@@ -1,4 +1,5 @@
   </div><?php /* end '.outer' in 'header.html.php'. */ ?>
+  <script>setTreeBox()</script>
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
   
   <div id='divider'></div>

@@ -341,6 +341,18 @@ function toggleTreeBox()
 }
 
 /**
+ * set tree menu.
+  
+ * @access public
+ * @return void
+ */
+function setTreeBox()
+{
+    if($('.outer > .side').length) $('.outer').addClass('with-side');
+    toggleTreeBox();
+}
+
+/**
  * Set language.
  * 
  * @access public
@@ -400,7 +412,6 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-    if($('.outer > .side').length) $('.outer').addClass('with-side');
     if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
 
     var side   = $('#wrap .outer > .side');
@@ -1150,7 +1161,6 @@ $(document).ready(function()
 
     autoCheck();
     toggleSearch();
-    toggleTreeBox();
 
     hideClearDataLink();
 
