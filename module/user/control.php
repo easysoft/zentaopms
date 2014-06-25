@@ -857,6 +857,7 @@ class user extends control
         $this->view->position[] = $this->lang->user->manageContacts;
         $this->view->lists      = $this->user->getContactLists($this->app->user->account);
         $this->view->users      = $users;
+        $this->view->listID     = $listID;
         $this->view->mode       = $mode;
         $this->display();
     }
