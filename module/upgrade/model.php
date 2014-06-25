@@ -103,6 +103,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('5.2.1'));
             case '5_3':
             case '6_0_beta1':
+                $this->execSQL($this->getUpgradeFile('6.0.beta1'));
+                $this->toLowerTable();
                 $this->fixBugOSInfo();
                 $this->fixTaskFinishedBy();
 
@@ -164,6 +166,7 @@ class upgradeModel extends model
         case '5_2':
         case '5_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('5.2.1'));
         case '5_3':
+        case '6_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('6.0.beta1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

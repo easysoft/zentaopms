@@ -96,36 +96,36 @@ define('TABLE_CONFIG',        '`' . $config->db->prefix . 'config`');
 define('TABLE_USER',          '`' . $config->db->prefix . 'user`');
 define('TABLE_TODO',          '`' . $config->db->prefix . 'todo`');
 define('TABLE_GROUP',         '`' . $config->db->prefix . 'group`');
-define('TABLE_GROUPPRIV',     '`' . $config->db->prefix . 'groupPriv`');
-define('TABLE_USERGROUP',     '`' . $config->db->prefix . 'userGroup`');
-define('TABLE_USERQUERY',     '`' . $config->db->prefix . 'userQuery`');
-define('TABLE_USERCONTACT',   '`' . $config->db->prefix . 'userContact`');
+define('TABLE_GROUPPRIV',     '`' . $config->db->prefix . 'grouppriv`');
+define('TABLE_USERGROUP',     '`' . $config->db->prefix . 'usergroup`');
+define('TABLE_USERQUERY',     '`' . $config->db->prefix . 'userquery`');
+define('TABLE_USERCONTACT',   '`' . $config->db->prefix . 'usercontact`');
 
 define('TABLE_BUG',           '`' . $config->db->prefix . 'bug`');
 define('TABLE_CASE',          '`' . $config->db->prefix . 'case`');
-define('TABLE_CASESTEP',      '`' . $config->db->prefix . 'caseStep`');
-define('TABLE_TESTTASK',      '`' . $config->db->prefix . 'testTask`');
-define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testRun`');
-define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testResult`');
-define('TABLE_USERTPL',       '`' . $config->db->prefix . 'userTPL`');
+define('TABLE_CASESTEP',      '`' . $config->db->prefix . 'casestep`');
+define('TABLE_TESTTASK',      '`' . $config->db->prefix . 'testtask`');
+define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
+define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
+define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
-define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storySpec`');
-define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productPlan`');
+define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
+define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');
 define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
 
 define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
-define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectProduct`');
-define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectStory`');
-define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskEstimate`');
+define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
+define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
+define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 
-define('TABLE_DOCLIB',        '`' . $config->db->prefix . 'docLib`');
+define('TABLE_DOCLIB',        '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',           '`' . $config->db->prefix . 'doc`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
