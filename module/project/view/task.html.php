@@ -127,7 +127,7 @@
             common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
         }
         common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe text-danger', true);
+        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
         common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
         ?>
         </td>
