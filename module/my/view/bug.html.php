@@ -60,7 +60,7 @@
         common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
         common::printIcon('bug', 'assignTo',   $params, '', 'list', 'hand-right', '', 'iframe', true);
         common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'ok-sign', '', 'iframe', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'list', 'off', '', 'iframe text-danger', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'list', 'off', '', 'iframe', true);
         common::printIcon('bug', 'edit',       $params, '', 'list', 'pencil');
         ?>
       </td>
