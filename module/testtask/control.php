@@ -205,7 +205,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function cases($taskID, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function cases($taskID, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->app->loadLang('testcase');
@@ -268,7 +268,7 @@ class testtask extends control
 
             $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
-            $this->view->runs = $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
+            $this->view->runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($taskID)
