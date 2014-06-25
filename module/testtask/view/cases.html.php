@@ -22,10 +22,9 @@ var moduleID   = '<?php echo $moduleID;?>';
   <div class='heading'><?php echo html::icon($lang->icons['usecase']);?></div>
   <nav class='nav'>
     <?php
-    echo "<li id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></li> ";
     echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
     echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
-    echo "<li id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
+    echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     ?>
   </nav>
   <div class='actions'>
@@ -42,7 +41,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <div class='side' id='casesbox'>
-  <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
+  <a class='side-handle' data-id='testtaskTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>

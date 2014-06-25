@@ -19,7 +19,7 @@
 <?php js::set('browseType', $browseType);?>
 
 <div class='side' id='taskTree'>
-  <a class='side-handle' data-id='storyTree'><i class='icon-caret-left'></i></a>
+  <a class='side-handle' data-id='projectTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'>

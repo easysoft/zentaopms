@@ -16,9 +16,6 @@
     <span class='prefix' title='COMPANY'><?php echo html::icon($lang->icons['company']);?></span>
     <strong><small class='text-muted'><?php echo html::icon('cogs');?></small> <?php echo $lang->user->contacts->manage;?></strong>
   </div>
-  <div class='actions'>
-    <?php if($mode != 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger'");?>
-  </div>
 </div>
 <div class='row'>
   <div class='col-md-3 col-lg-2'>
@@ -38,6 +35,9 @@
       <div class='panel panel-sm'>
         <div class='panel-heading'>
           <i class='icon-cogs'></i> <strong><?php echo $lang->user->contacts->manage;?></strong>
+          <div class='panel-actions pull-right'>
+            <?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger'");?>
+          </div>
         </div>
         <div class='panel-body'>
           <table class='table table-form table-fixed'> 
