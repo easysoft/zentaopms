@@ -9,7 +9,7 @@
  * @version     $Id: en.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '&nbsp;<span class="icon-angle-right"></span>';
+$lang->arrow        = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
 $lang->colon        = '::';
 $lang->comma        = ',';
 $lang->dot          = '.';
