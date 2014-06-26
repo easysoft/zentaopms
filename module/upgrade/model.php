@@ -211,7 +211,7 @@ class upgradeModel extends model
         $this->app->loadClass('ubb', true);
 
         $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
-        $userTemplates = $this->dao->select('id, content')->from(TABLE_USERTPL)->fetchAll();
+        $userTemplates = $this->dao->select('id, content')->from($this->config->db->prefix . 'userTPL')->fetchAll();
             
         foreach($bugs as $id => $bug)
         {
@@ -221,7 +221,7 @@ class upgradeModel extends model
         foreach($userTemplates as $template)
         {
             $template->content = ubb::parseUBB($template->content);
-            $this->dao->update(TABLE_USERTPL)->data($template)->where('id')->eq($template->id)->exec();
+            $this->dao->update($this->config->db->prefix . 'userTPL')->data($template)->where('id')->eq($template->id)->exec();
         }
     }
 
@@ -234,9 +234,9 @@ class upgradeModel extends model
     public function updateNL1_2()
     {
         $tasks     = $this->dao->select('id, `desc`')->from(TABLE_TASK)->fetchAll();
-        $stories   = $this->dao->select('story, version, spec')->from(TABLE_STORYSPEC)->fetchAll();
+        $stories   = $this->dao->select('story, version, spec')->from($this->config->db->prefix . 'storySpec')->fetchAll();
         $todos     = $this->dao->select('id, `desc`')->from(TABLE_TODO)->fetchAll();
-        $testTasks = $this->dao->select('id, `desc`')->from(TABLE_TESTTASK)->fetchAll();
+        $testTasks = $this->dao->select('id, `desc`')->from($this->config->db->prefix . 'testTask')->fetchAll();
 
         foreach($tasks as $task)
         {
@@ -246,7 +246,7 @@ class upgradeModel extends model
         foreach($stories as $story)
         {
             $story->spec = nl2br($story->spec);
-            $this->dao->update(TABLE_STORYSPEC)->data($story)->where('story')->eq($story->story)->andWhere('version')->eq($story->version)->exec();
+            $this->dao->update($this->config->db->prefix . 'storySpec')->data($story)->where('story')->eq($story->story)->andWhere('version')->eq($story->version)->exec();
         }
 
         foreach($todos as $todo)
@@ -258,7 +258,7 @@ class upgradeModel extends model
         foreach($testTasks as $testtask)
         {
             $testtask->desc = nl2br($testtask->desc);
-            $this->dao->update(TABLE_TESTTASK)->data($testtask)->where('id')->eq($testtask->id)->exec();
+            $this->dao->update($this->config->db->prefix . 'testTask')->data($testtask)->where('id')->eq($testtask->id)->exec();
         }
     }
 
@@ -271,7 +271,7 @@ class upgradeModel extends model
     public function updateNL1_3()
     {
         $products = $this->dao->select('id, `desc`')->from(TABLE_PRODUCT)->fetchAll();
-        $plans    = $this->dao->select('id, `desc`')->from(TABLE_PRODUCTPLAN)->fetchAll();
+        $plans    = $this->dao->select('id, `desc`')->from($this->config->db->prefix . 'productPlan')->fetchAll();
         $releases = $this->dao->select('id, `desc`')->from(TABLE_RELEASE)->fetchAll();
         $projects = $this->dao->select('id, `desc`, goal')->from(TABLE_PROJECT)->fetchAll();
         $builds   = $this->dao->select('id, `desc`')->from(TABLE_BUILD)->fetchAll();
@@ -285,7 +285,7 @@ class upgradeModel extends model
         foreach($plans as $plan)
         {
             $plan->desc = nl2br($plan->desc);
-            $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($plan->id)->exec();
+            $this->dao->update($this->config->db->prefix . 'productPlan')->data($plan)->where('id')->eq($plan->id)->exec();
         }
 
         foreach($releases as $release)
@@ -422,7 +422,7 @@ class upgradeModel extends model
      */
     public function updateCases()
     {
-        $results = $this->dao->select('`case`, date, caseResult')->from(TABLE_TESTRESULT)->orderBy('id desc')->fetchGroup('case');
+        $results = $this->dao->select('`case`, date, caseResult')->from($this->config->db->prefix . 'testResult')->orderBy('id desc')->fetchGroup('case');
         foreach($results as $result)
         {
             $this->dao->update(TABLE_CASE)
@@ -454,42 +454,43 @@ class upgradeModel extends model
      */
     public function updateEstimatePriv()
     {
-        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+        $privTable = $this->config->db->prefix . 'groupPriv';
+        $groups = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('task')
             ->andWhere('method')->eq('edit')
             ->fetchAll();
         foreach($groups as $group)
         {
-            $this->dao->delete()->from(TABLE_GROUPPRIV)
+            $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('recordEstimate')
                 ->exec();
-            $this->dao->insert(TABLE_GROUPPRIV)
+            $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('recordEstimate')
                 ->exec();
 
-            $this->dao->delete()->from(TABLE_GROUPPRIV)
+            $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('editEstimate')
                 ->exec();
-            $this->dao->insert(TABLE_GROUPPRIV)
+            $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('editEstimate')
                 ->exec();
 
-            $this->dao->delete()->from(TABLE_GROUPPRIV)
+            $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('deleteEstimate')
                 ->exec();
-            $this->dao->insert(TABLE_GROUPPRIV)
+            $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
@@ -512,7 +513,7 @@ class upgradeModel extends model
         $tasks    = $this->dao->select('id, project')->from(TABLE_TASK)->fetchPairs('id');
 
         /* Get products of projects and tasks. */
-        $projectProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($projects))->fetchGroup('project', 'product');
+        $projectProducts = $this->dao->select('project,product')->from($this->config->db->prefix . 'projectProduct')->where('project')->in(array_keys($projects))->fetchGroup('project', 'product');
         $taskProducts    = $this->dao->select('t1.id, t2.product')->from(TABLE_TASK)->alias('t1')
                                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                                 ->where('t1.id')->in(array_keys($tasks))
@@ -657,14 +658,15 @@ class upgradeModel extends model
      */
     public function addPriv4_0_1()
     {
-        $oldPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+        $privTable = $this->config->db->prefix . 'groupPriv';
+        $oldPriv = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('company')
             ->andWhere('method')->eq('edit')
             ->fetchAll();
 
         foreach($oldPriv as $item)
         {
-            $this->dao->insert(TABLE_GROUPPRIV)
+            $this->dao->insert($privTable)
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('company')
                 ->set('method')->eq('view')
@@ -672,14 +674,14 @@ class upgradeModel extends model
                 ->exec();
         }
 
-        $oldPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+        $oldPriv = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('todo')
             ->andWhere('method')->eq('finish')
             ->fetchAll();
 
         foreach($oldPriv as $item)
         {
-            $this->dao->insert(TABLE_GROUPPRIV)
+            $this->dao->insert($privTable)
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('todo')
                 ->set('method')->eq('batchFinish')
@@ -698,14 +700,15 @@ class upgradeModel extends model
      */
     public function addPriv4_1()
     {
-        $oldPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+        $privTable = $this->config->db->prefix . 'groupPriv';
+        $oldPriv = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('tree')
             ->andWhere('method')->eq('browse')
             ->fetchAll();
 
         foreach($oldPriv as $item)
         {
-            $this->dao->insert(TABLE_GROUPPRIV)
+            $this->dao->insert($privTable)
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('tree')
                 ->set('method')->eq('browseTask')
@@ -731,6 +734,7 @@ class upgradeModel extends model
         if($hasLowered) return true;
 
         if($build == 'basic') $tables2Rename = $this->config->upgrade->lowerTables;
+        if($build == 'pro') $tables2Rename = $this->config->upgrade->lowerProTables;
         if(!isset($tables2Rename)) return false;
 
         $tablesExists = $this->dbh->query('SHOW TABLES')->fetchAll();
@@ -779,9 +783,10 @@ class upgradeModel extends model
      */
     public function deleteCompany()
     {
+        $privTable = $this->config->db->prefix . 'groupPriv';
         /* Delete priv that is not in this company. Prevent conflict when delete company's field.*/
-        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('company')->ne($this->app->company->id)->exec();
-        $this->dbh->exec("ALTER TABLE " . TABLE_GROUPPRIV . " DROP `company`;");
+        $this->dao->delete()->from($privTable)->where('company')->ne($this->app->company->id)->exec();
+        $this->dbh->exec("ALTER TABLE " . $privTable . " DROP `company`;");
 
         /* Delete config that don't conform to the rules. Prevent conflict when delete company's field.*/
         $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');

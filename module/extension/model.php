@@ -751,6 +751,7 @@ class extensionModel extends model
         $backupTables = array();
         foreach($sqls as $sql)
         {
+            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
             $sql = preg_replace('/IF EXISTS /i', '', trim($sql));
             if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
             {
