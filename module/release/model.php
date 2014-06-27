@@ -148,7 +148,7 @@ class releaseModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->remove('files,labels')
+            ->remove('files,labels,allchecker')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
