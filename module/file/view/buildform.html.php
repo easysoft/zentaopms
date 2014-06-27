@@ -27,8 +27,14 @@ $(function()
 {
     var maxUploadInfo = maxFilesize();
     parentTag = $('#fileform').parent();
-    if(parentTag.attr('tagName') == 'TD') parentTag.parent().find('th').append(maxUploadInfo); 
-    if(parentTag.attr('tagName') == 'FIELDSET') parentTag.find('legend').append(maxUploadInfo);
+    if(parentTag.get(0).tagName == 'TD')
+    {
+        parentTag.parent().find('th').append(maxUploadInfo); 
+    }
+    if(parentTag.get(0).tagName == 'FIELDSET')
+    {
+        parentTag.find('legend').append(maxUploadInfo);
+    }
 });
 
 /**
