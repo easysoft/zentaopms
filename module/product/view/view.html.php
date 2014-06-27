@@ -148,8 +148,8 @@
             <td><?php echo $product->cases?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->product->bulids?></th>
-            <td><?php echo $product->bulids?></td>
+            <th><?php echo $lang->product->builds?></th>
+            <td><?php echo $product->builds?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->releases?></th>
