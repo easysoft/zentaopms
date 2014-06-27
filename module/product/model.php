@@ -437,7 +437,7 @@ class productModel extends model
         }
 
         $plans    = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('end')->gt(helper::now())->fetch();
-        $bulids   = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $builds   = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
         $cases    = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
         $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
         $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
@@ -451,7 +451,7 @@ class productModel extends model
         $product->stories  = $stories;
         $product->plans    = $plans    ? $plans->count : 0;
         $product->releases = $releases ? $releases->count : 0;
-        $product->bulids   = $bulids   ? $bulids->count : 0;
+        $product->builds   = $builds   ? $builds->count : 0;
         $product->cases    = $cases    ? $cases->count : 0;
         $product->projects = $projects ? $projects->count : 0;
         $product->bugs     = $bugs     ? $bugs->count : 0;
