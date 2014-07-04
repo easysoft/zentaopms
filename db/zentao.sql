@@ -404,8 +404,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `type` varchar(30) NOT NULL default '',
   `pri` tinyint(3) unsigned NOT NULL default '3',
   `estimate` float unsigned NOT NULL,
-  `status` varchar(30) NOT NULL default '',
-  `stage` varchar(30) NOT NULL,
+  `status` enum('','changed','active','draft','closed') NOT NULL default '',
+  `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released') NOT NULL DEFAULT 'wait',
   `mailto` varchar(255) NOT NULL default '',
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
@@ -453,7 +453,6 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `left` float unsigned NOT NULL,
   `deadline` date NOT NULL,
   `status` enum('wait','doing','done','cancel','closed') NOT NULL default 'wait',
-  `statusCustom` tinyint(3) unsigned NOT NULL,
   `mailto` varchar(255) NOT NULL default '',
   `desc` text NOT NULL,
   `openedBy` varchar(30) NOT NULL,
@@ -473,7 +472,6 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `statusOrder` (`statusCustom`),
   KEY `type` (`type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
@@ -495,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `role` char(30) NOT NULL default '',
   `join` date NOT NULL default '0000-00-00',
   `days` smallint(5) unsigned NOT NULL,
-  `hours` tinyint(3) unsigned NOT NULL default '0',
+  `hours` float(2,1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`project`,`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testresult`;
@@ -539,7 +537,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `end` date NOT NULL,
   `desc` text NOT NULL,
   `report` text NOT NULL,
-  `status` char(30) NOT NULL,
+  `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -555,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `pri` tinyint(3) unsigned NOT NULL,
   `name` char(150) NOT NULL,
   `desc` text NOT NULL,
-  `status` char(20) NOT NULL default '',
+  `status`  enum('wait','doing','done') NOT NULL DEFAULT 'wait',
   `private` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user` (`account`)
