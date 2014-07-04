@@ -44,7 +44,5 @@
     </tr>
   </table>
 </form>
-<div class='main'>
-  <?php include '../../common/view/action.html.php';?>
-</div>
+<div class='main'><?php include '../../common/view/action.html.php';?></div>
 <?php include '../../common/view/footer.html.php';?>
