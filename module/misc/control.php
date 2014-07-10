@@ -101,7 +101,7 @@ class misc extends control
         $userInfo  = new stdclass();
         $userInfo->Account        = $this->app->user->account;
         $userInfo->Url            = common::getSysURL() . $this->config->webRoot;
-        $userInfo->PassMd5        = $this->app->user->password;
+        $userInfo->PassMd5        = '';
         $userInfo->Role           = $this->app->user->role;
         $userInfo->AutoSignIn     = true;
         $userInfo->Lang           = $this->cookie->lang;
