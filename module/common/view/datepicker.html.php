@@ -15,12 +15,12 @@ $(function()
         return $(this).each(function()
         {
             var $this = $(this);
-            if($this.val() != '' && !$this.hasClass('form-time'))
+            if($this.val() == '0000-00-00')
             {
-                var date = new Date($this.val());
-                if(!date.valueOf()) $this.val('');
+                $this.focus(function(){if($this.val() == '0000-00-00') $this.val('')}).blur(function(){if($this.val() == '') $this.val('0000-00-00')});
             }
         });
+        
     };
 
     var options = 
@@ -33,7 +33,8 @@ $(function()
         startView: 2,
         forceParse: 0,
         showMeridian: 1,
-        format: 'yyyy-mm-dd hh:ii'
+        format: 'yyyy-mm-dd hh:ii',
+        startDate: '1970-1-1'
     }
 
     $('.form-datetime').fixedDate().datetimepicker(options);
