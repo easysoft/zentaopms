@@ -419,9 +419,9 @@ class testcaseModel extends model
             $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
         }
 
+        $cases = array();
         foreach($this->post->product as $key => $product)
         {
-            dao::getError();
             $caseData = new stdclass();
 
             $caseData->product      = $product;
@@ -439,15 +439,18 @@ class testcaseModel extends model
             if(isset($this->config->testcase->create->requiredFields))
             {
                 $requiredFields = explode(',', $this->config->testcase->create->requiredFields);
-                $invalid = false;
                 foreach($requiredFields as $requiredField)
                 {
                     $requiredField = trim($requiredField);
-                    if(empty($caseData->$requiredField)) $invalid = true;
+                    if(empty($caseData->$requiredField)) die(js::alert(sprintf($this->lang->testcase->noRequire, $key, $this->lang->testcase->$requiredField)));
                 }
-                if($invalid) continue;
             }
 
+            $cases[$key] =$caseData;
+        }
+
+        foreach($cases as $key => $caseData)
+        {
             if(!empty($_POST['id'][$key]))
             {
                 $caseID      = $this->post->id[$key];

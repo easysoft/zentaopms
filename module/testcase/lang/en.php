@@ -150,3 +150,4 @@ $lang->testcase->buttonToList = 'Back';
 
 $lang->testcase->errorEncode = 'No data, please select right encode and upload again!';
 $lang->testcase->noFunction  = 'Iconv and mb_convert_encoding does not exist, you can not turn the data into the desired coding!';
+$lang->testcase->noRequire   = "In the row of %s, the %s is a required field";

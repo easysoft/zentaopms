@@ -37,7 +37,7 @@ function closeWindow()
         ?>
       </div>
     </td>
-    <td class='w-80px'>
+    <td class='w-100px'>
       <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
     </td>
     <td>

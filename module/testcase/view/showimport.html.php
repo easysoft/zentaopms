@@ -76,7 +76,7 @@
 </table>
 </form>
 <script>
-$(function(){affix('.colhead')})
+$(function(){affix('thead')})
 function affix(obj)
 {
     var fixH = $(obj).offset().top;

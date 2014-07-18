@@ -272,4 +272,112 @@ class fileModel extends model
 
         return $data;
     }
+
+    /**
+     * Parse CSV.
+     * 
+     * @param  string    $fileName 
+     * @access public
+     * @return array
+     */
+    public function parseCSV($fileName)
+    {
+        $handle = fopen($this->session->importFile, 'r');
+        $col    = -1;
+        $row    = 0;
+        $data   = array();
+        while(($line = fgets($handle)) !== false)
+        {
+            $line = trim($line);
+            $line = preg_replace_callback('/(\"{2,})(\,+)/', array($this, 'removeInterference'), $line);
+            $line = str_replace('""', '"', $line);
+
+            /* if only one column then line is the data. */
+            if(strpos($line, ',') === false and $col == -1)
+            {
+                $data[$row][0] = trim($line, '"');
+            }
+            else
+            {
+                /* if col is not -1, then the data of column is not end. */
+                if($col != -1)
+                {
+                    $pos = strpos($line, '",');
+                    if($pos === false)
+                    {
+                        $data[$row][$col] .= "\n" . $line;
+                        $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                        continue;
+                    }
+                    else
+                    {
+                        $data[$row][$col] .= "\n" . substr($line, 0, $pos + 1);
+                        $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                        $line = substr($line, $pos + 2);
+                        $col++;
+                    }
+                }
+
+                if($col == -1) $col = 0;
+                /* explode cols with delimiter. */
+                while($line)
+                {
+                    /* the cell has '"', the delimiter is '",'. */
+                    if($line{0} == '"')
+                    {
+                        $pos = strpos($line, '",');
+                        if($pos === false)
+                        {
+                            $data[$row][$col] = $line;
+                            /* if end of cell is not '"', then the data of cell is not end. */
+                            if($line{strlen($line) - 1} != '"') continue 2;
+                            $line = '';
+                        }
+                        else
+                        {
+                            $data[$row][$col] = substr($line, 0, $pos + 1);
+                            $line = substr($line, $pos + 2);
+                        }
+                        $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                    }
+                    else
+                    {
+                        /* the delimiter default is ','. */
+                        $pos = strpos($line, ',');
+                        /* if line is not delimiter, then line is the data of cell. */
+                        if($pos === false)
+                        {
+                            $data[$row][$col] = $line;
+                            $line = '';
+                        }
+                        else
+                        {
+                            $data[$row][$col] = substr($line, 0, $pos);
+                            $line = substr($line, $pos + 1);
+                        }
+                    }
+
+                    $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                    $col++;
+                }
+            }
+            $row ++;
+            $col = -1;
+        }
+        fclose ($handle);
+
+        return $data;
+    }
+
+    /**
+     * Remove interference for parse csv.
+     * 
+     * @param  array    $matchs 
+     * @access private
+     * @return string
+     */
+    private function removeInterference($matchs)
+    {
+        return $matchs[1] . str_replace(',', '&comma;', $matchs[2]);
+    }
 }

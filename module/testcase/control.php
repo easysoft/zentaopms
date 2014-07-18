@@ -791,6 +791,7 @@ class testcase extends control
             $this->testcase->createFromImport($productID);
             die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
         }
+
         $this->testcase->setMenu($this->products, $productID);
 
         $file       = $this->session->importFile;
@@ -806,13 +807,13 @@ class testcase extends control
             unset($fields[$key]);
         }
 
-        $csv = file_get_contents($file);
-        $header = substr($csv, 0, strpos($csv, "\n"));
-        $csv    = substr($csv, strpos($csv, "\n") + 1);
+        $rows   = $this->loadModel('file')->parseCSV($file);
+        $header = $rows[0];
+        unset($rows[0]);
 
-        foreach(explode(',', $header) as $title)
+        foreach($header as $title)
         {
-            $field = array_search(trim(trim($title, '"')), $fields);
+            $field = array_search($title, $fields);
             if(!$field) continue;
             $columnKey[] = $field;
         }
@@ -822,45 +823,32 @@ class testcase extends control
             die(js::locate(inlink('browse', "productID=$productID")));
         }
 
-        $row = 1;
         $endField = $field;
         $caseData = array();
         $stepData = array();
-        while($csv)
+        foreach($rows as $row => $data)
         {
             $case = new stdclass();
-            foreach($columnKey as $field)
+            foreach($columnKey as $key => $field)
             {
-                $delimiter = $field == $endField ? "\n" : ',';
-                $delimiter = $csv[0] == '"' ? '"' . $delimiter : $delimiter;
-                $pos       = strpos($csv, $delimiter);
-                $cellValue = substr($csv, 0, $pos);
-
-                if($cellValue and $cellValue[0] == '"')$cellValue = substr($cellValue, 1);
-
+                $cellValue = $data[$key];
                 if($field == 'story')
                 {
+                    $case->$field = 0;
                     if(strrpos($cellValue, '(#') !== false)
                     {
                         $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                         $case->$field = $id;
                     }   
-                    else
-                    {
-                        $case->$field = 0;
-                    }
                 }
                 elseif($field == 'module')
                 {
+                    $case->$field = 0;
                     if(strrpos($cellValue, '(#') !== false)
                     {
                         $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                         $case->$field = $id;
                     }   
-                    else
-                    {
-                        $case->$field = 0;
-                    }
                 }
                 elseif(in_array($field, $caseConfig->export->listFields))
                 {
@@ -884,6 +872,7 @@ class testcase extends control
                     $steps    = explode("\n", $cellValue);
                     $stepKey  = str_replace('step', '', strtolower($field));
                     $caseStep = array();
+
                     foreach($steps as $step)
                     {
                         $step = trim($step);
@@ -896,21 +885,33 @@ class testcase extends control
                             $step    = trim(substr($step, strpos($step, $sign) + $signbit));
                             if(!empty($step)) $caseStep[$num] = $step;
                         }
+                        elseif(isset($num))
+                        {
+                            $caseStep[$num] .= "\n" . $step;
+                        }
                         else
                         {
-                            if(isset($num)) $caseStep[$num] .= "\n" . $step;
+                            if($field == 'stepDesc')
+                            {
+                                $num = 1;
+                                $caseStep[$num] = $step;
+                            }
+                            if($field == 'stepExpect' and isset($stepData[$row]['desc']))
+                            {
+                                end($stepData[$row]['desc']);
+                                $num = key($stepData[$row]['desc']);
+                                $caseStep[$num] = $step;
+                            }
                         }
                     }
                     unset($num);
                     unset($sign);
                     $stepData[$row][$stepKey] = $caseStep;
                 }
-                $csv = substr($csv, $pos + strlen($delimiter));
             }
 
             $caseData[$row] = $case;
             unset($case);
-            $row++;
         }
 
         if(empty($caseData))
