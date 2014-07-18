@@ -252,6 +252,8 @@ class bug extends control
         $buildID    = 0;
         $caseID     = 0;
         $runID      = 0;
+        $testtask   = 0;
+        $version    = 0;
         $title      = '';
         $steps      = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
         $os         = '';
@@ -321,6 +323,9 @@ class bug extends control
         $this->view->storyID          = $storyID;
         $this->view->buildID          = $buildID;
         $this->view->caseID           = $caseID;
+        $this->view->runID            = $runID;
+        $this->view->version          = $version;
+        $this->view->testtask         = $testtask;
         $this->view->bugTitle         = $title;
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
