@@ -15,14 +15,15 @@
 <div id='featurebar'>
   <nav class='nav'>
     <?php
-    echo "<li id='testtaskTab'>"   . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</li>";
+    echo "<li id='waitTesttask'>"  . html::a($this->createLink('my', 'testtask', 'type=wait'),  $lang->testtask->wait) . "</li>";
+    echo "<li id='doneTesttask'>"  . html::a($this->createLink('my', 'testtask', 'type=done'),  $lang->testtask->done) . "</li>";
     echo "<li id='assigntomeTab'>" . html::a($this->createLink('my', 'testcase', "type=assigntome"),  $lang->testcase->assignToMe) . "</li>";
     echo "<li id='closedbymeTab'>" . html::a($this->createLink('my', 'testcase', "type=openedbyme"),  $lang->testcase->openedByMe) . "</li>";
     ?>
   </nav>
 </div>
 <table class='table table-condensed table-hover table-striped tablesorter' id='taskList'>
-  <?php $vars = "orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+  <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='text-center'>
     <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
@@ -63,5 +64,5 @@
   </tbody>
   <tfoot><tr><td colspan='8'><?php $pager->show();?></td></tr></tfoot>
 </table>
-<script language="Javascript">$("#testtaskTab").addClass('active'); </script>
+<script language="Javascript">$("#<?php echo $type;?>Testtask").addClass('active'); </script>
 <?php include '../../common/view/footer.html.php';?>

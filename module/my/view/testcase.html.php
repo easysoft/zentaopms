@@ -16,7 +16,8 @@
 <div id='featurebar'>
   <nav class='nav'>
     <?php
-    echo "<li id='testtask'>"      . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</li>";
+    echo "<li id='waitTesttask'>"  . html::a($this->createLink('my', 'testtask', 'type=wait'),  $lang->testtask->wait) . "</li>";
+    echo "<li id='doneTesttask'>"  . html::a($this->createLink('my', 'testtask', 'type=done'),  $lang->testtask->done) . "</li>";
     echo "<li id='assigntomeTab'>" . html::a($this->createLink('my', 'testcase', "type=assigntome"),  $lang->testcase->assignToMe) . "</li>";
     echo "<li id='openedbymeTab'>" . html::a($this->createLink('my', 'testcase', "type=openedbyme"),  $lang->testcase->openedByMe) . "</li>";
     ?>

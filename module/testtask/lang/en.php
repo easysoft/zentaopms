@@ -30,6 +30,8 @@ $lang->testtask->pre            = 'Previous';
 $lang->testtask->next           = 'Next';
 $lang->testtask->start          = "Start";
 $lang->testtask->close          = "Close";
+$lang->testtask->wait           = "Testing task";
+$lang->testtask->done           = "Tested task";
 
 $lang->testtask->common         = 'Test task';
 $lang->testtask->id             = 'ID';

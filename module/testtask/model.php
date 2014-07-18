@@ -125,7 +125,7 @@ class testtaskModel extends model
      * @access  public
      * @return  array
      */
-    public function getByUser($account, $pager = null, $orderBy = 'id_desc')
+    public function getByUser($account, $pager = null, $orderBy = 'id_desc', $type = '')
     {
         return $this->dao->select('t1.*, t2.name AS projectName, t3.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -133,6 +133,8 @@ class testtaskModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.owner')->eq($account)
+            ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
+            ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
