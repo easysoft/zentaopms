@@ -30,10 +30,10 @@ $lang->testtask->pre            = 'Previous';
 $lang->testtask->next           = 'Next';
 $lang->testtask->start          = "Start";
 $lang->testtask->close          = "Close";
-$lang->testtask->wait           = "Testing task";
-$lang->testtask->done           = "Tested task";
+$lang->testtask->wait           = "Testing build";
+$lang->testtask->done           = "Tested build";
 
-$lang->testtask->common         = 'Test task';
+$lang->testtask->common         = 'Test build';
 $lang->testtask->id             = 'ID';
 $lang->testtask->product        = 'Product';
 $lang->testtask->project        = 'Project';
@@ -75,7 +75,7 @@ $lang->testtask->passAll       = 'Pass all';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Fail';
 
-$lang->testtask->confirmDelete     = 'Are you sure to delete this test task?';
+$lang->testtask->confirmDelete     = 'Are you sure to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Are you sure to unlink this case?';
 
 $lang->testtask->byModule      = 'By module';

@@ -41,6 +41,7 @@ class testtask extends control
      * Browse test tasks. 
      * 
      * @param  int    $productID 
+     * @param  string $type 
      * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
@@ -48,7 +49,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $type = 'wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -67,9 +68,10 @@ class testtask extends control
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProductTasks($productID, $orderBy, $pager);
+        $this->view->tasks       = $this->testtask->getProductTasks($productID, $orderBy, $pager, $type);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
+        $this->view->type        = $type;
 
         $this->display();
     }

@@ -63,7 +63,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $orderBy = 'id_desc', $pager = null)
+    public function getProductTasks($productID, $orderBy = 'id_desc', $pager = null, $type = '')
     {
         return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -72,6 +72,8 @@ class testtaskModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->where('t1.product')->eq((int)$productID)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
+            ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

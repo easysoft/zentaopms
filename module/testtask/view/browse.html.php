@@ -13,15 +13,16 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
-<div id='titlebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['testtask']);?> <?php echo $lang->testtask->browse;?></div>
-  <div class='actions'>
-    <?php common::printIcon('testtask', 'create', "product=$productID");?>
-  </div>
+<div id="featurebar">
+  <ul class="nav">
+    <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&type=wait"), $lang->testtask->wait);?></li>
+    <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&type=done"), $lang->testtask->done);?></li>
+  </ul>
+  <div class="actions"><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
 </div>
 <table class='table tablesorter table-fixed' id='taskList'>
   <thead>
-  <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+  <?php $vars = "productID=$productID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <tr>
       <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
       <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
@@ -63,4 +64,5 @@
   </tbody>
   <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
 </table>
+<script>$(function(){$('#<?php echo $type?>Tab').addClass('active')})</script>
 <?php include '../../common/view/footer.html.php';?>
