@@ -144,11 +144,12 @@ class testcaseModel extends model
      */
     public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_CASE)
-            ->where('product')->eq((int)$productID)
-            ->beginIF($moduleIds)->andWhere('module')->in($moduleIds)->fi()
-            ->andWhere('deleted')->eq('0')
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**

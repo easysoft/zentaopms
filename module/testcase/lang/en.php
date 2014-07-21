@@ -135,6 +135,9 @@ $lang->testcase->stageList['system']      = 'System testing';
 $lang->testcase->stageList['smoke']       = 'Smoking testing';
 $lang->testcase->stageList['bvt']         = 'BVT testing';
 
+$lang->testcase->groups['']      = 'Group view';
+$lang->testcase->groups['story'] = 'Group by story';
+
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';

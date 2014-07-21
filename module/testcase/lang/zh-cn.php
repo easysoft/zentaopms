@@ -135,6 +135,9 @@ $lang->testcase->stageList['system']     = '系统测试阶段';
 $lang->testcase->stageList['smoke']      = '冒烟测试阶段';
 $lang->testcase->stageList['bvt']        = '版本验证阶段';
 
+$lang->testcase->groups['']      = '分组查看';
+$lang->testcase->groups['story'] = '需求分组';
+
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';

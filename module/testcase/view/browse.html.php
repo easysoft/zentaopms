@@ -14,46 +14,11 @@
 include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';
 include '../../common/view/treeview.html.php';
+include './caseheader.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID'  , $moduleID);
 js::set('confirmDelete', $lang->testcase->confirmDelete);
 ?>
-<div id='featurebar'>
-  <ul class='nav'>
-    <?php
-    echo "<li id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</li>";
-    echo "<li id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->testcase->needConfirm) . "</li>";
-    echo "<li id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
-    ?>
-  </ul>
-  <div class='actions'>
-    <div class='btn-group'>
-      <div class='btn-group'>
-        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-          <i class='icon-download-alt'></i> <?php echo $lang->export ?>
-          <span class='caret'></span>
-        </button>
-        <ul class='dropdown-menu' id='exportActionMenu'>
-        <?php 
-        $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
-        echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
-
-        $misc = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-        echo "<li>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
-        ?>
-        </ul>
-      </div>
-      <?php 
-      common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');
-      common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");
-      common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID");
-      ?>
-    </div>
-  </div>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
-</div>
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>

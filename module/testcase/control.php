@@ -134,7 +134,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType == 'needconfirm' ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
 
         /* Build the search form. */
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
@@ -157,6 +157,51 @@ class testcase extends control
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
 
+        $this->display();
+    }
+
+    /**
+     * Group case.
+     * 
+     * @param  int    $productID 
+     * @param  string $groupBy 
+     * @access public
+     * @return void
+     */
+    public function groupCase($productID = 0, $groupBy = 'stroy')
+    {
+        $groupBy   = empty($groupBy) ? 'stroy' : $groupBy;
+        $productID = $this->product->saveState($productID, $this->products);
+
+        $this->app->loadLang('testtask');
+
+        $this->testcase->setMenu($this->products, $productID);
+        $this->session->set('caseList', $this->app->getURI(true));
+
+        $cases = $this->testcase->getModuleCases($productID, 0, $groupBy);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
+        $groupCases  = array();
+        $groupByList = array();
+        foreach($cases as $case)
+        {
+            if($groupBy == 'story')
+            {
+                $groupCases[$case->story][] = $case;
+                $groupByList[$case->story]  = $case->storyTitle;
+            }
+        }
+
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[]    = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->testcase->common;
+        $this->view->productID     = $productID;
+        $this->view->productName   = $this->products[$productID];
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->browseType    = 'group';
+        $this->view->groupBy       = $groupBy;
+        $this->view->groupByList   = $groupByList;
+        $this->view->cases         = $groupCases;
         $this->display();
     }
 

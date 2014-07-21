@@ -213,7 +213,7 @@ $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
 $lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
 
 $lang->testcase = new stdclass();
@@ -221,7 +221,7 @@ $lang->testcase->menu = new stdclass();
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport', 'subModule' => 'tree');
+$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun');
 
 $lang->testtask = new stdclass();
