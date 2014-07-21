@@ -42,5 +42,4 @@ if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) and version_compare($config->version
 
 /* Run it. */
 $app->parseRequest();
-$common->checkUpgradeStatus();
 $app->loadModule();
