@@ -13,33 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include './caseheader.html.php';?>
 <?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 </script>
-<div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['usecase']);?></div>
-  <nav class='nav'>
-    <?php
-    echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
-    echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
-    echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
-    ?>
-  </nav>
-  <div class='actions'>
-    <?php
-    echo "<div class='btn-group'>";
-    common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'button', 'link');
-    common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id", '', 'button', '', '', 'iframe');
-    echo '</div>';
-    echo "<div class='btn-group'>";
-    common::printRPN($this->session->testtaskList, '');
-    echo '</div>';
-    ?>
-  </div>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
-</div>
 <div class='side' id='casesbox'>
   <a class='side-handle' data-id='testtaskTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>

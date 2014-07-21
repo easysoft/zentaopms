@@ -222,7 +222,7 @@ $lang->testcase->menu = new stdclass();
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun');
+$lang->testcase->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;

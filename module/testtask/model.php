@@ -240,8 +240,9 @@ class testtaskModel extends model
     {
         $orderBy = strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
-        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
             ->orderBy($orderBy)

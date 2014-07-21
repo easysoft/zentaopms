@@ -313,6 +313,49 @@ class testtask extends control
         $this->display();
     }
 
+    public function groupCase($taskID, $groupBy = 'story')
+    {
+        /* Save the session. */
+        $this->app->loadLang('testcase');
+        $this->session->set('caseList', $this->app->getURI(true));
+
+        /* Get task and product info, set menu. */
+        $groupBy = empty($groupBy) ? 'story' : $groupBy;
+        $task    = $this->testtask->getById($taskID);
+        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        $productID = $task->product;
+        $this->testtask->setMenu($this->products, $productID);
+
+        $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
+        $groupCases  = array();
+        $groupByList = array();
+        foreach($runs as $run)
+        {
+            if($groupBy == 'story')
+            {
+                $groupCases[$run->story][] = $run;
+                $groupByList[$run->story]  = $run->storyTitle;
+            }
+        }
+
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testtask->common;
+        $this->view->position[] = $this->lang->testtask->cases;
+
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->productID     = $productID;
+        $this->view->task          = $task;
+        $this->view->taskID        = $taskID;
+        $this->view->browseType    = 'group';
+        $this->view->groupBy       = $groupBy;
+        $this->view->groupByList   = $groupByList;
+        $this->view->cases         = $groupCases;
+        $this->display();
+    }
+
     /**
      * Edit a test task.
      * 
