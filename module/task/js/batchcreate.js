@@ -40,3 +40,15 @@ function setStoryRelated(num)
         });
     }
 }
+
+$(document).on('click', '.chosen-with-drop', function()
+{
+    var select = $(this).prev('select');
+    if($(select).val() == 'ditto')
+    {
+        var index = $(select).parents('td').index();
+        var value = $(select).parents('tr').prev('tr').find('td').eq(index).find('select').val();
+        $(select).val(value);
+        $(select).trigger("chosen:updated");
+    }
+})

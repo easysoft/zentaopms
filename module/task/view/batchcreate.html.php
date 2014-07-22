@@ -20,12 +20,12 @@
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-fixed table-form'>
+  <table class='table table-form'>
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-150px'><?php echo $lang->task->module?></th>
-        <th><?php echo $lang->task->story;?></th>
+        <th class='w-150px'><?php echo $lang->task->story;?></th>
         <th><?php echo $lang->task->name;?> <span class='required'></span></th>
         <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
         <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
@@ -58,10 +58,10 @@
     <?php $pri = 3;?>
     <tr>
       <td class='text-center'><?php echo $i+1;?></td>
-      <td><?php echo html::select("module[$i]", $modules, $module, 'class=form-control')?></td>
+      <td><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen'")?></td>
       <td style='overflow: visible'>
         <div class='input-group'>
-        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated($i)'");?>
+        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
         <span class='input-group-btn'>
         <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
         </span>
@@ -69,7 +69,7 @@
       </td>
       <td><?php echo html::input("name[$i]", '', 'class=form-control');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
-      <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=form-control');?></td>
+      <td><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=form-control text-center');?></td>
       <td>
         <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control'");?>
