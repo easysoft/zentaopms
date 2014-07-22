@@ -18,7 +18,7 @@
   </div>
 </div>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
-  <table class='table table-fixed table-form'> 
+  <table class='table table-form'> 
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
@@ -26,8 +26,8 @@
         <th class='w-p15'><?php echo $lang->story->plan;?></th>
         <th><?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-p20'><?php echo $lang->story->spec;?></th>
-        <th class='w-60px'><?php echo $lang->story->pri;?></th>
-        <th class='w-60px'><?php echo $lang->story->estimate;?></th>
+        <th class='w-70px'><?php echo $lang->story->pri;?></th>
+        <th class='w-80px'><?php echo $lang->story->estimate;?></th>
         <th class='w-70px'><?php echo $lang->story->review;?></th>
       </tr>
     </thead>
@@ -36,8 +36,8 @@
     <?php $planID   = $i == 0 ? '' : 'same';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, 'class=form-control');?></td>
-      <td><?php echo html::select("plan[$i]", $plans, $planID, 'class=form-control');?></td>
+      <td class='text-left'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+      <td class='text-left'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
       <td>
         <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?>

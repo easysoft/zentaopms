@@ -53,7 +53,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
         <?php endif;?>
         <tr>
           <th><?php echo $lang->story->assignedTo;?></th>
-          <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, 'class=form-control');?></td><td></td>
+          <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, "class='form-control chosen'");?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->reviewedBy;?></th>

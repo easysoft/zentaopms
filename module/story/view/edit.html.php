@@ -55,13 +55,13 @@
         <table class='table table-form'>
           <tr>
             <th class='w-70px'><?php echo $lang->story->product;?></th>
-            <td><?php echo html::select('product', $products, $story->product, 'class="form-control" onchange="loadProduct(this.value)";');?></td>
+            <td><?php echo html::select('product', $products, $story->product, 'class="form-control chosen" onchange="loadProduct(this.value)";');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->module;?></th>
             <td id='moduleIdBox'>
             <?php
-            echo html::select('module', $moduleOptionMenu, $story->module, 'class="form-control"');
+            echo html::select('module', $moduleOptionMenu, $story->module, 'class="form-control chosen"');
             if(count($moduleOptionMenu) == 1)
             {
                 echo "<span class='help-block'>";
@@ -75,7 +75,7 @@
           <tr>
             <th><?php echo $lang->story->plan;?></th>
             <td id='planIdBox'>
-            <?php echo html::select('plan', $plans, $story->plan, 'class=form-control');
+            <?php echo html::select('plan', $plans, $story->plan, "class='form-control chosen'");
             if(count($plans) == 1) 
             {
                 echo "<span class='help-block'>";
@@ -132,13 +132,13 @@
           <?php if($story->reviewedBy):?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td><?php echo html::select('reviewedBy[]', $users, str_replace(' ', '', $story->reviewedBy), 'class="area-1" multiple');?></td>
+            <td><?php echo html::select('reviewedBy[]', $users, str_replace(' ', '', $story->reviewedBy), 'class="form-control chosen" multiple');?></td>
           </tr>
           <?php endif;?>
           <?php if($story->status == 'closed'):?>
           <tr>
             <th><?php echo $lang->story->closedBy;?></th>
-            <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="form-control"');?></td>
+            <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="form-control chosen"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->closedReason;?></th>

@@ -25,12 +25,12 @@
       <tr>
         <th class='w-80px'><?php echo $lang->story->product;?></th>
         <td class='w-p25-f'>
-          <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control'");?>
+          <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
         </td>
         <td class='w-p15-f'>
           <div class='input-group' id='moduleIdBox'>
           <?php 
-          echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control'");
+          echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
           {
               echo "<span class='input-group-addon'>";
@@ -48,7 +48,7 @@
         <td>
           <div class='input-group' id='planIdBox'>
           <?php 
-          echo html::select('plan', $plans, $planID, "class='form-control'");
+          echo html::select('plan', $plans, $planID, "class='form-control chosen'");
           if(count($plans) == 1) 
           {
               echo "<span class='input-group-addon'>";
