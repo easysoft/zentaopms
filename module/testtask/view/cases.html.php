@@ -105,9 +105,9 @@ var moduleID   = '<?php echo $moduleID;?>';
             {
                 $actionLink = inLink('batchAssign', "taskID=$task->id");
                 echo "<div class='input-group w-200px'>";
-                echo html::select('assignedTo', $users, '', 'class="form-control"');
-                echo "<span class='input-group-btn'>";
-                echo html::commonButton($lang->testtask->assign, "onclick=\"setFormAction('$actionLink')\" style='border-left:none'");
+                echo html::select('assignedTo', $users, '', 'class="form-control chosen"');
+                echo "<span class='input-group-addon'>";
+                echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->testtask->assign);
                 echo '</span></div>';
             }
             if($canBatchRun)

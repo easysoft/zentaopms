@@ -72,8 +72,8 @@
     <td><?php echo $users[$case->openedBy];?></td>
     <td><?php echo $lang->testcase->statusList[$case->status];?></td>
   </tr>
-  </tbody>
   <?php endforeach;?>
+  </tbody>
   <tfoot> 
   <tr>
     <td colspan='7'>

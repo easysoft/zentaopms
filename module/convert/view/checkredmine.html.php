@@ -1,5 +1,5 @@
 <tr>
-  <th><?php echo $lang->convert->checkDB;?></th>
+  <th class='w-100px'><?php echo $lang->convert->checkDB;?></th>
   <td><?php is_object($checkInfo['db']) ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
 </tr>
 <tr>
@@ -7,9 +7,12 @@
   <td><?php $checkInfo['path'] === true ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
 </tr>
 <tr>
-<td colspan='2'>
-<table class='table-1'>
-  <caption><?php echo $lang->convert->setParam; ?></caption>
+<td colspan='2' style='padding:0px'>
+<div class='panel'>
+<div class='panel-heading'>
+  <strong><?php echo $lang->convert->setParam; ?></strong>
+</div>
+<table class='table table-borderless table-data'>
 <tr>
   <td>
     <table>
@@ -136,6 +139,7 @@
   </tr>
 </tr>
 </table>
+</div>
 </td>
 </tr>
 <tr>

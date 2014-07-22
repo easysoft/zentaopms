@@ -303,17 +303,14 @@ class testtaskModel extends model
          * 
          * */
         $caseResult = $this->post->result ? $this->post->result : 'pass';
-        if(isset($_POST['passall']) and $this->post->passall == false)
+        if($this->post->steps)
         {
-            if($this->post->steps)
+            foreach($this->post->steps as $stepID => $stepResult)
             {
-                foreach($this->post->steps as $stepID => $stepResult)
+                if($stepResult != 'pass' and $stepResult != 'n/a')
                 {
-                    if($stepResult != 'pass' and $stepResult != 'n/a')
-                    {
-                        $caseResult = $stepResult;
-                        break;
-                    }
+                    $caseResult = $stepResult;
+                    break;
                 }
             }
         }
@@ -323,7 +320,7 @@ class testtaskModel extends model
         {
             foreach($this->post->steps as $stepID =>$stepResult)
             {
-                $step['result'] = $this->post->passall ? 'pass' : $stepResult;
+                $step['result'] = $stepResult;
                 $step['real']   = $this->post->reals[$stepID];
                 $stepResults[$stepID] = $step;
             }
@@ -341,7 +338,7 @@ class testtaskModel extends model
             ->setForce('stepResults', serialize($stepResults))
             ->add('lastRunner', $this->app->user->account)
             ->add('date', $now)
-            ->remove('steps,reals,passall,result')
+            ->remove('steps,reals,result')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
         $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($this->post->case)->exec();

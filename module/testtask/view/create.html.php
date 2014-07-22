@@ -25,7 +25,7 @@
       <?php if(isset($projectID)):?>
       <tr>
         <th class='w-90px'><?php echo $lang->testtask->product;?></th>
-        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control chosen'");?></td><td></td>
       </tr>  
       <?php else:?>
       <tr class='hide'>
@@ -35,11 +35,11 @@
       <?php endif;?>
       <tr>
         <th class='w-90px'><?php echo $lang->testtask->project;?></th>
-        <td class='w-p25-f'><?php echo html::select('project', $projects, '', 'class=form-control onchange=loadProjectRelated(this.value)');?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testtask->build;?></th>
-        <td><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control'");?></span></td>
+        <td><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></span></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testtask->owner;?></th>
