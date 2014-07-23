@@ -29,7 +29,7 @@ if(isset($error))
   <form class='form-condensed' method='post' target='resultWin'>
     <table class='table table-form'>
       <tr>
-        <td><?php echo html::select('to', $users, $app->user->account, "class='form-control'");?></td>
+        <td><?php echo html::select('to', $users, $app->user->account, "class='form-control chosen'");?></td>
         <td class='text-left'>
           <?php 
           echo html::submitButton($lang->mail->test);

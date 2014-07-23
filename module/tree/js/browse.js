@@ -37,6 +37,7 @@ function syncProductOrProject(obj, type)
         {  
             $('#' + type + 'Module').append('<option value=' + key + '>' + value + '</option')
         }); 
+        $('#' + type + 'Module').trigger("chosen:updated");
     })
     $('#copyModule').attr('onclick', null);
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});

@@ -33,12 +33,12 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td class='w-p25-f'>
-          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control' autocomplete='off'");?>
+          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control chosen' autocomplete='off'");?>
         </td>
         <td>
           <div class='input-group w-p25-f' id='moduleIdBox'>
           <?php
-          echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control'");
+          echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
           {
               echo "<span class='input-group-addon'>";
@@ -53,7 +53,7 @@ js::set('refresh', $lang->refresh);
       </tr>
       <tr>
         <th><?php echo $lang->bug->project;?></th>
-        <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value) autocomplete="off"');?></span></td>
+        <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->openedBuild;?></th>
@@ -82,12 +82,12 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th><?php echo $lang->bug->lblStory;?></th>
         <td colspan='2'>
-          <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID, "class='form-control'");?></span>
+          <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID, "class='form-control chosen'");?></span>
         </td>
       </tr>  
       <tr>
         <th><?php echo $lang->bug->task;?></th>
-        <td colspan='2'><span id='taskIdBox'><?php echo html::select('task', $tasks, $taskID, "class='form-control'");?></span></td>
+        <td colspan='2'><span id='taskIdBox'><?php echo html::select('task', '', $taskID, "class='form-control chosen'");?></span></td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->lblTypeAndSeverity;?></th>
@@ -116,7 +116,7 @@ js::set('refresh', $lang->refresh);
         </td>
         <td class='text-top'>
           <?php
-          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\"");
+          if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
           ?>
         </td>
       </tr>

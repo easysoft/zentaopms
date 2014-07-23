@@ -18,7 +18,7 @@
   </div>
 </div>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
-  <table class='table table-form'> 
+  <table class='table table-form table-fixed'> 
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
@@ -36,8 +36,8 @@
     <?php $planID   = $i == 0 ? '' : 'same';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td class='text-left'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-      <td class='text-left'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
       <td>
         <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?>

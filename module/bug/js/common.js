@@ -61,7 +61,7 @@ function loadAll(productID)
 function loadProductModules(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&rootModuleID=0&returnType=html&needManage=true');
-    $('#moduleIdBox').load(link);
+    $('#moduleIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
 }
 
 /**
@@ -87,7 +87,7 @@ function loadProductStories(productID)
 function loadProductProjects(productID)
 {
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID);
-    $('#projectIdBox').load(link);
+    $('#projectIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
 }
 
 /**
@@ -100,7 +100,7 @@ function loadProductProjects(productID)
 function loadProductplans(productID)
 {
     link = createLink('productplan', 'ajaxGetProductplans', 'productID=' + productID);
-    $('#planIdBox').load(link);
+    $('#planIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
 }
 
 /**
@@ -120,9 +120,9 @@ function loadProductBuilds(productID)
     }
     else
     {
-        $('#openedBuildBox').load(link);
+        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
-        $('#resolvedBuildBox').load(link);
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
     }
 }
 
@@ -196,10 +196,10 @@ function loadProjectBuilds(projectID)
     else
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
-        $('#openedBuildBox').load(link);
+        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
 
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
-        $('#resolvedBuildBox').load(link);
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
     }
 }
 
@@ -231,6 +231,7 @@ function setStories(moduleID, productID)
  */
 function notice()
 {
+    $('#buildBoxActions').empty();
     if($('#openedBuild').find('option').length <= 1) 
     {
         var html = '';

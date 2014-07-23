@@ -17,15 +17,15 @@
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
-  <table class='table table-fixed table-form'>
+  <table class='table table-form table-fixed'>
     <thead>
       <tr>
         <th class='w-id'>   <?php echo $lang->idAB;?></th>
         <th>    <?php echo $lang->product->name;?> <span class='required'></span></th>
         <th class='w-150px'><?php echo $lang->product->code;?> <span class='required'></span></th>
-        <th class='w-110px'><?php echo $lang->product->PO;?></th>
-        <th class='w-110px'><?php echo $lang->product->QD;?></th>
-        <th class='w-110px'><?php echo $lang->product->RD;?></th>
+        <th class='w-150px'><?php echo $lang->product->PO;?></th>
+        <th class='w-150px'><?php echo $lang->product->QD;?></th>
+        <th class='w-150px'><?php echo $lang->product->RD;?></th>
         <th class='w-100px'><?php echo $lang->product->status;?></th>
       </tr>
     </thead>
@@ -34,9 +34,9 @@
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
       <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
-      <td><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control'");?></td>
-      <td><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control'");?></td>
-      <td><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
       <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>

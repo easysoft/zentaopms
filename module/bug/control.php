@@ -316,7 +316,6 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->projects         = $this->product->getProjectPairs($productID, $params = 'nodeleted');
         $this->view->builds           = $builds;
-        $this->view->tasks            = $this->loadModel('task')->getProjectTaskPairs($projectID);
         $this->view->moduleID         = $moduleID;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;

@@ -60,7 +60,7 @@
         <legend><?php echo $lang->task->legendBasic;?></legend>
         <table class='table table-form'> 
           <tr>
-            <th class='w-70px'><?php echo $lang->task->project;?></th>
+            <th class='w-80px'><?php echo $lang->task->project;?></th>
             <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
           </tr>  
           <tr>

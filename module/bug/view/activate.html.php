@@ -25,7 +25,7 @@
   <table class='table table-form'>
     <tr>
       <th class='w-70px'><?php echo $lang->bug->assignedTo;?></th>
-      <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control'");?></td><td></td>
+      <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control chosen'");?></td><td></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->openedBuild;?></th>

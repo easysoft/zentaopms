@@ -62,7 +62,7 @@ function loadProjectStories(projectID)
 function loadProjectMembers(projectID)
 {
     link = createLink('project', 'ajaxGetMembers', 'projectID=' + projectID);
-    $('#assignedToIdBox').load(link);
+    $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen(defaultChosenOptions)});
 }
 
 /* empty function. */

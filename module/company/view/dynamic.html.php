@@ -26,9 +26,9 @@ var browseType = '<?php echo $browseType;?>';
     echo '<li id="thismonth">'   . html::a(inlink('dynamic', "browseType=thismonth"),  $lang->action->dynamic->thisMonth)  . '</li>';
     echo '<li id="lastmonth">'   . html::a(inlink('dynamic', "browseType=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</li>';
     echo '<li id="all">'         . html::a(inlink('dynamic', "browseType=all"),        $lang->action->dynamic->all)        . '</li>';
-    echo "<li id='account'>"     . html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control"') . '</li>';
-    echo "<li id='product'>"     . html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control"') . '</li>';
-    echo "<li id='project' style='margin-right: 10px;'>"     . html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control"') . '</li>';
+    echo "<li id='account' class='w-120px'>"     . html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control chosen"') . '</li>';
+    echo "<li id='product' class='w-180px'>"     . html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"') . '</li>';
+    echo "<li id='project' class='w-180px' style='margin-right: 10px;'>"     . html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"') . '</li>';
     echo "<li id='bysearchTab'>" . html::a('#', '<i class="icon-search icon"></i>&nbsp;' . $lang->action->dynamic->search) . "</li>";
     ?>
   </ul>

@@ -54,7 +54,7 @@
         <legend><?php echo $lang->story->legendBasicInfo;?></legend>
         <table class='table table-form'>
           <tr>
-            <th class='w-70px'><?php echo $lang->story->product;?></th>
+            <th class='w-80px'><?php echo $lang->story->product;?></th>
             <td><?php echo html::select('product', $products, $story->product, 'class="form-control chosen" onchange="loadProduct(this.value)";');?></td>
           </tr>
           <tr>

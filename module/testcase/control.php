@@ -359,6 +359,7 @@ class testcase extends control
         $this->view->position         = $position;
         $this->view->productID        = $productID;
         $this->view->story            = $storyID ? $this->story->getByID($storyID) : '';
+        $this->view->stories          = $this->story->getProductStoryPairs($productID);
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
@@ -876,6 +877,7 @@ class testcase extends control
             $case = new stdclass();
             foreach($columnKey as $key => $field)
             {
+                if(!isset($data[$key])) continue;
                 $cellValue = $data[$key];
                 if($field == 'story')
                 {

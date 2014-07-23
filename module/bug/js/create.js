@@ -8,9 +8,7 @@
 function loadAssignedTo(projectID)
 {
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){
-        $('#assignedTo').chosen(defaultChosenOptions);
-    });
+    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
 }
 
 /**

@@ -1,10 +1,12 @@
 $(document).ready(function()
 {
-    for(var i = 0; i < testcaseBatchCreateNum; i++) 
+    $(document).on('click', '.chosen-with-drop', function()
     {
-        $("#story" + i).chosen(defaultChosenOptions).bind('liszt:showing_dropdown', function()
+        var select = $(this).prev('select');
+        var id     = $(select).attr('id');
+        if(id.indexOf('story') != -1)
         {
-            index  = $(this).attr('id').substring(5);
+            index  = id.substring(5);
             module = $('#module' + index).val();
             if(module == 'same')
             {
@@ -18,10 +20,38 @@ $(document).ready(function()
                 }
             }
             link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + module + '&storyID='+ $(this).val() + '&onlyOption=true');
-            $(this).load(link, function()
+            $('#story' + index).load(link, function(){$(this).trigger("chosen:updated");});
+        }
+        if($(select).val() == 'same')
+        {
+            var index = $(select).parents('td').index();
+            var row   = $(select).parents('tr').index();
+            var table = $(select).parents('tr').parent();
+            var value = '';
+            for(i = row - 1; i >= 0; i--)
             {
-                $('#story' + index).trigger("liszt:updated");
-            });
-        });
-    }
+                value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
+                if(value != 'same') break;
+            }
+            $(select).val(value);
+            $(select).trigger("chosen:updated");
+        }
+    });
+
+    $(document).on('mousedown', 'select', function()
+    {
+        if($(this).val() == 'same')
+        {
+            var index = $(this).parents('td').index();
+            var row   = $(this).parents('tr').index();
+            var table = $(this).parents('tr').parent();
+            var value = '';
+            for(i = row - 1; i >= 0; i--)
+            {
+                value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
+                if(value != 'same') break;
+            }
+            $(this).val(value);
+        }
+    });
 });

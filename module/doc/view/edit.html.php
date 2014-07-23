@@ -31,7 +31,7 @@ $(document).ready(function()
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->doc->module;?></th>
-        <td class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->type;?></th>

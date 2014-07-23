@@ -21,7 +21,7 @@
 </div>
 
 <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-  <table class='table table-form'>
+  <table class='table table-form table-fixed'>
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
@@ -45,7 +45,7 @@
     ?>
     <tr class='text-center'>
       <td><?php echo $user->id;?></td>
-      <td class='text-left'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
       <td><?php echo html::input("account[$user->id]", $user->account, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
       <td><?php echo html::select("role[$user->id]", $lang->user->roleList, $role, "class='form-control'");?></td>

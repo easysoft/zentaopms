@@ -2,7 +2,7 @@
 function loadProducts(project)
 {
     link = createLink('project', 'ajaxGetProducts', 'projectID=' + project);
-    $('#productBox').load(link);
+    $('#productBox').load(link, function(){$('#productBox').find('select').chosen(defaultChosenOptions)});
 }
 
 /* Set doc type. */

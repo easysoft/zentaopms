@@ -16,10 +16,10 @@
   <div class='heading'>
     <span class='prefix pull-left'><?php echo html::icon($lang->icons['task']);?></span>
     <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->project->importTask;?></strong>
-    <div class='input-group pull-left'>
+    <div class='input-group pull-left' style='font-weight:normal;'>
       <?php $projects = array(0 => $lang->project->fromproject) + $projects;?>
       <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
-      <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control'");?>
+      <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control chosen'");?>
     </div>
   </div>
 </div>

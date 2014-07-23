@@ -23,7 +23,7 @@
   echo '<li id="thismonth">'  . html::a(inlink('dynamic', "productID=$productID&type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</li>';
   echo '<li id="lastmonth">'  . html::a(inlink('dynamic', "productID=$productID&type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</li>';
   echo '<li id="all">'        . html::a(inlink('dynamic', "productID=$productID&type=all"),        $lang->action->dynamic->all)        . '</li>';
-  echo "<li id='account'>"    . html::select('account', $users, $account, "onchange='changeUser(this.value,$productID)' class='form-control'") . '</li>';
+  echo "<li id='account' class='w-150px'>" . html::select('account', $users, $account, "onchange='changeUser(this.value,$productID)' class='form-control chosen'") . '</li>';
   ?>
   </nav>
 </div>

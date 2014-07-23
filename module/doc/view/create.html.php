@@ -25,21 +25,21 @@
       <?php if($libID == 'product'):?>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->product;?></th>
-        <td class='w-p25-f'><?php echo html::select('product', $products, $productID, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('product', $products, $productID, "class='form-control chosen'");?></td><td></td>
       </tr>  
       <?php elseif($libID == 'project'):?>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->project;?></th>
-        <td class='w-p25-f'><?php echo html::select('project', $projects, $projectID, "class='form-control' onchange=loadProducts(this.value);");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange=loadProducts(this.value)");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->product;?></th>
-        <td class='w-p25-f'><span id='productBox'><?php echo html::select('product', $products, '', "class='form-control'");?></span></td><td></td>
+        <td class='w-p25-f'><span id='productBox'><?php echo html::select('product', $products, '', "class='form-control chosen'");?></span></td><td></td>
       </tr>  
       <?php endif;?>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->module;?></th>
-        <td><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
+        <td><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->type;?></th>

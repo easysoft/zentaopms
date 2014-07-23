@@ -29,7 +29,7 @@
         <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), $lang->group->other);?>
       </li>
 
-      <li><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control'");?></li>
+      <li class='w-150px'><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?></li>
     </ul>
   </div>
   <table class='table table-hover table-striped table-bordered table-form'> 

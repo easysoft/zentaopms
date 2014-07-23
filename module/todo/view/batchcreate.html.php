@@ -28,11 +28,11 @@
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-100px'><?php echo $lang->todo->type;?></th>
+        <th class='w-120px'><?php echo $lang->todo->type;?></th>
         <th class='w-80px'><?php echo $lang->todo->pri;?></th>
-        <th class='w-p40 red'><?php echo $lang->todo->name;?></th>
+        <th class='w-p30 red'><?php echo $lang->todo->name;?></th>
         <th><?php echo $lang->todo->desc;?></th>
-        <th class='w-300ox'><?php echo $lang->todo->beginAndEnd;?></th>
+        <th class='w-300px'><?php echo $lang->todo->beginAndEnd;?></th>
       </tr>
     </thead>
     <?php $pri = 3;?>
@@ -41,7 +41,7 @@
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
       <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
-      <td>
+      <td class='text-left'>
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
       </td>

@@ -19,17 +19,17 @@
 </div>
 
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID");?>">
-  <table class='table table-fixed table-form'>
+  <table class='table table-form table-fixed'>
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-90px'><?php echo $lang->bug->type;?></th>
-        <th class='w-60px'><?php echo $lang->bug->severityAB;?></th>
-        <th class='w-60px'><?php echo $lang->bug->pri;?></th>
+        <th class='w-110px'><?php echo $lang->bug->type;?></th>
+        <th class='w-70px'><?php echo $lang->bug->severityAB;?></th>
+        <th class='w-70px'><?php echo $lang->bug->pri;?></th>
         <th><?php echo $lang->bug->title;?> <span class='required'></span></th>
-        <th class='w-100px'><?php echo $lang->bug->assignedTo;?></th>
-        <th class='w-80px'><?php echo $lang->bug->status;?></th>
-        <th class='w-100px'><?php echo $lang->bug->resolvedByAB;?></th>
+        <th class='w-150px'><?php echo $lang->bug->assignedTo;?></th>
+        <th class='w-90px'><?php echo $lang->bug->status;?></th>
+        <th class='w-150px'><?php echo $lang->bug->resolvedByAB;?></th>
         <th class='w-180px'><?php echo $lang->bug->resolutionAB;?></th>
       </tr>
     </thead>
@@ -49,9 +49,9 @@
       <td><?php echo html::select("severities[$bugID]",   (array)$lang->bug->severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
       <td><?php echo html::select("pris[$bugID]",         (array)$lang->bug->priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
       <td><?php echo html::input("titles[$bugID]",         $bugs[$bugID]->title, 'class=form-control');?></td>
-      <td><?php echo html::select("assignedTos[$bugID]",   $users, $bugs[$bugID]->assignedTo, 'class=form-control');?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]",   $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
       <td><?php echo html::select("statuses[$bugID]",     (array)$lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
-      <td><?php echo html::select("resolvedBys[$bugID]",   $users, $bugs[$bugID]->resolvedBy, 'class=form-control');?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]",   $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
       <td>
         <table class='w-p100'>
           <tr>

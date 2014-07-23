@@ -289,8 +289,8 @@ class fileModel extends model
         while(($line = fgets($handle)) !== false)
         {
             $line = trim($line);
-            $line = preg_replace_callback('/(\"{2,})(\,+)/', array($this, 'removeInterference'), $line);
-            $line = str_replace('""', '"', $line);
+            $line = str_replace(',"",', ',,', $line);
+            $line = preg_replace_callback('/(\"{2,})(\,+)/U', array($this, 'removeInterference'), $line);
 
             /* if only one column then line is the data. */
             if(strpos($line, ',') === false and $col == -1)
@@ -378,6 +378,6 @@ class fileModel extends model
      */
     private function removeInterference($matchs)
     {
-        return $matchs[1] . str_replace(',', '&comma;', $matchs[2]);
+        return str_replace('""', '"', $matchs[1]) . str_replace(',', '&comma;', $matchs[2]);
     }
 }

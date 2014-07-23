@@ -57,24 +57,13 @@
               </td>
               <td id='moduleBox'> 
                 <?php
-                if($viewType == 'task')
-                {
-                    if($allProject)
-                    {
-                        echo "<table class='copy w-p100'><tr>";
-                        echo "<td class='w-260px'>" . html::select('allProject', $allProject, '', "class='form-control' onchange=\"syncProductOrProject(this,'project')\"") . '</td>';
-                        echo "<td class='w-200px'>" . html::select('projectModule', $projectModules, '', "class='form-control'") . '</td>';
-                        echo "<td class=''>" . html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'") . '</td>';
-                        echo '</tr></table>';
-                    }
-                }
-                else if($viewType == 'story')
+                if($viewType == 'story')
                 {
                     if($allProduct)
                     {
                         echo "<table class='copy w-p100'><tr>";
-                        echo "<td class='w-260px'>" . html::select('allProduct', $allProduct, '', "class='form-control' onchange=\"syncProductOrProject(this,'product')\"") . '</td>';
-                        echo "<td class='w-200px'>" . html::select('productModule', $productModules, '', "class='form-control'") . '</td>';
+                        echo "<td class='w-260px'>" . html::select('allProduct', $allProduct, '', "class='form-control chosen' onchange=\"syncProductOrProject(this,'product')\"") . '</td>';
+                        echo "<td class='w-200px'>" . html::select('productModule', $productModules, '', "class='form-control chosen'") . '</td>';
                         echo "<td class=''>" . html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'") . '</td>';
                         echo '</tr></table>';
                     }

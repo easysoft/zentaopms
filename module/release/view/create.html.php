@@ -35,7 +35,7 @@
         <th><?php echo $lang->release->build;?></th>
         <td>
         <?php  
-            echo html::select('build', $builds, '', "class='form-control' onchange=loadStoriesAndBugs(this.value,$productID)");
+            echo html::select('build', $builds, '', "class='form-control chosen' onchange=loadStoriesAndBugs(this.value,$productID)");
         ?>
         </td>
         <td><?php if(empty($builds)) echo $lang->build->notice; ?></td>

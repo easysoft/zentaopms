@@ -21,7 +21,7 @@
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">
-  <table class='table table-form'>
+  <table class='table table-form table-fixed'>
     <thead>
       <tr class='text-center'>
         <th class='w-30px'> <?php echo $lang->idAB;?></th> 
@@ -33,15 +33,15 @@
         <th class='w-100px'> <?php echo $lang->story->source;?></th>
         <th class='w-80px'> <?php echo $lang->story->status;?></th>
         <th class='w-100px'> <?php echo $lang->story->stageAB;?></th>
-        <th class='w-120px'><?php echo $lang->story->closedBy;?></th>
+        <th class='w-130px'><?php echo $lang->story->closedBy;?></th>
         <th><?php echo $lang->story->closedReason;?></th>
       </tr>
     </thead>
     <?php foreach($storyIDList as $storyID):?>
     <tr class='text-center'>
       <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
-      <td class='text-left'><?php echo html::select("modules[$storyID]",       $moduleOptionMenus[$stories[$storyID]->product], $stories[$storyID]->module, "class='form-control chosen'");?></td>
-      <td class='text-left'><?php echo html::select("plans[$storyID]",         $productPlans[$stories[$storyID]->product], $stories[$storyID]->plan, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$storyID]",       $moduleOptionMenus[$stories[$storyID]->product], $stories[$storyID]->module, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("plans[$storyID]",         $productPlans[$stories[$storyID]->product], $stories[$storyID]->plan, "class='form-control chosen'");?></td>
       <td><?php echo html::input("titles[$storyID]",         $stories[$storyID]->title, 'class=form-control'); ?></td>
       <td><?php echo html::input("estimates[$storyID]",      $stories[$storyID]->estimate, 'class=form-control'); ?></td>
       <td><?php echo html::select("pris[$storyID]",          (array)$lang->story->priList, $stories[$storyID]->pri, 'class=form-control');?></td>
@@ -55,7 +55,7 @@
       <?php endif;?>
 
       <?php if($stories[$storyID]->status == 'closed'):?> 
-      <td class='text-left'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, "class='form-control chosen'");?></td>
       <?php else:?>  
       <td class='text-left'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, 'class="form-control" disabled="disabled"');?></td>
       <?php endif;?>

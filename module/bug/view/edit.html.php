@@ -73,19 +73,19 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
         <table class='table table-form'>
           <tr>
-            <th class='w-60px'><?php echo $lang->bug->product;?></th>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?></td>
+            <th class='w-80px'><?php echo $lang->bug->product;?></th>
+            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->module;?></th>
             <td>
-              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control'");?></span>
+              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");?></span>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->productplan;?></th>
             <td>
-              <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control'");?></span>
+              <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
             </td>
           </tr>
           <tr>
@@ -135,7 +135,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <legend><?php echo $lang->bug->legendPrjStoryTask;?></legend>
         <table class='table table-form'>
           <tr>
-            <th class='w-60px'><?php echo $lang->bug->project;?></th>
+            <th class='w-80px'><?php echo $lang->bug->project;?></th>
             <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, 'class=form-control onchange=loadProjectRelated(this.value)');?></span></td>
           </tr>
           <tr>
@@ -154,7 +154,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <legend><?php echo $lang->bug->legendLife;?></legend>
         <table class='table table-form'>
           <tr>
-            <th class='w-60px'><?php echo $lang->bug->openedBy;?></th>
+            <th class='w-80px'><?php echo $lang->bug->openedBy;?></th>
             <td><?php echo $users[$bug->openedBy];?></td>
           </tr>
           <tr>
@@ -195,7 +195,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <legend><?php echo $lang->bug->legendMisc;?></legend>
         <table class='table table-form'>
           <tr>
-            <th class='w-60px'><?php echo $lang->bug->linkBug;?></th>
+            <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
             <td><?php echo html::input('linkBug', $bug->linkBug, 'class="form-control"');?></td>
           </tr>
           <tr>

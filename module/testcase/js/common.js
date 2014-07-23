@@ -33,7 +33,8 @@ function loadModuleRelated()
 function loadProductModules(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&rootModuleID=0&returnType=html&needManage=true');
-    $('#moduleIdBox').load(link);
+    $('#moduleIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+    setStories();
 }
 
 /**
@@ -49,8 +50,10 @@ function setStories()
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
+        var value = $('#story').val();
         if(!stories) stories = '<select id="story" name="story"></select>';
         $('#story').replaceWith(stories);
+        $('#story').val(value);
         $('#story_chosen').remove();
         $("#story").chosen(defaultChosenOptions);
     });

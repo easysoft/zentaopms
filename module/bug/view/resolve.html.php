@@ -33,7 +33,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->bug->resolvedBuild;?></th>
-      <td><?php echo html::select('resolvedBuild', $builds, '', "class='form-control'");?></td>
+      <td><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->resolvedDate;?></th>

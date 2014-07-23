@@ -90,19 +90,19 @@
         <table class='table table-form' cellpadding='0' cellspacing='0'>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->product;?></th>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?></td>
+            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>
             <td>
               <div class='input-group' id='moduleIdBox'>
-                <?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control'");?>
+                <?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");?>
               </div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->story;?></th>
-            <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control');?></div>
+            <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control chosen');?></div>
             </td>
           </tr>
           <tr>

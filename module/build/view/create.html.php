@@ -24,7 +24,7 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->build->product;?></th>
-        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control chosen'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->name;?></th>
@@ -39,7 +39,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->build->builder;?></th>
-        <td><?php echo html::select('builder', $users, $app->user->account, 'class="form-control"');?></td>
+        <td><?php echo html::select('builder', $users, $app->user->account, 'class="form-control chosen"');?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->build->date;?></th>

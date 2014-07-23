@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
 <?php js::set('productID', $productID);?>
 <div id='titlebar'>
@@ -25,13 +24,13 @@
 </div>
 
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
-  <table align='center' class='table table-form'>
+  <table align='center' class='table table-form table-fixed'>
     <thead>
       <tr>
         <th class='w-20px'><?php echo $lang->idAB;?></th> 
         <th class='w-300px'><?php echo $lang->testcase->module;?></th>
         <th class='w-180px'><?php echo $lang->testcase->type;?></th>
-        <?php if(!$story) echo "<th>{$lang->testcase->story}</th>";?>
+        <th class='w-400px'><?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
       </tr>
     </thead>
@@ -42,14 +41,14 @@
     <?php $pri = 3;?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class=form-control");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-      <?php if(!$story):?><td class='text-left' style='overflow:visible'><?php echo html::select("story[$i]", '', '', 'class="form-control storySelect"');?></td><?php endif;?>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("story[$i]", '', '', 'class="form-control chosen"');?></td>
       <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
     </tr>
     <?php endfor;?>
     <tfoot>
-      <tr><td colspan='<?php $story ? print '4' : print '5'?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><td colspan='5' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </tfoot>
   </table>
 </form>

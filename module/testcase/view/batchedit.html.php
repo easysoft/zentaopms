@@ -18,15 +18,15 @@
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit');?>">
-  <table class='table table-fixed table-form'>
+  <table class='table table-form table-fixed'>
     <thead>
       <tr>
-        <th class='w-30px'><?php  echo $lang->idAB;?></th> 
-        <th class='w-60px'><?php  echo $lang->priAB;?></th>
-        <th class='w-80px'><?php  echo $lang->statusAB;?></th>
-        <th class='w-140px'><?php echo $lang->testcase->module;?></th> 
+        <th class='w-50px'><?php  echo $lang->idAB;?></th> 
+        <th class='w-70px'><?php  echo $lang->priAB;?></th>
+        <th class='w-100px'><?php  echo $lang->statusAB;?></th>
+        <th class='w-150px'><?php echo $lang->testcase->module;?></th> 
         <th><?php echo $lang->testcase->title;?></th>
-        <th class='w-100px'><?php echo $lang->testcase->type;?></th>
+        <th class='w-120px'><?php echo $lang->testcase->type;?></th>
         <th class='w-340px'><?php echo $lang->testcase->stage;?></th>
       </tr>
     </thead>
@@ -37,7 +37,7 @@
       <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
       <td><?php echo html::select("pris[$caseID]",      $lang->testcase->priList, $cases[$caseID]->pri, 'class=form-control');?></td>
       <td><?php echo html::select("statuses[$caseID]",  (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
-      <td><?php echo html::select("modules[$caseID]",   $moduleOptionMenu, $cases[$caseID]->module, "class='form-control'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$caseID]",   $moduleOptionMenu, $cases[$caseID]->module, "class='form-control chosen'");?></td>
       <td><?php echo html::input("titles[$caseID]",     $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::select("types[$caseID]",     $lang->testcase->typeList, $cases[$caseID]->type, 'class=form-control');?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("stages[$caseID][]",  $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>

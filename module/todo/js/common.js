@@ -49,7 +49,7 @@ function loadList(type, id)
 
     if(type == 'bug' || type == 'task')
     {
-        $(divClass).load(link);
+        $(divClass).load(link, function(){$(divClass).find('select').chosen(defaultChosenOptions)});
     }
     else if(type == 'custom')
     {

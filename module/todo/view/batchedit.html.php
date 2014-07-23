@@ -25,10 +25,10 @@
       <tr>
         <th class='w-40px'>   <?php echo $lang->idAB;?></th> 
         <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
-        <th class='w-90px'>  <?php echo $lang->todo->type;?></th>
+        <th class='w-120px'>  <?php echo $lang->todo->type;?></th>
         <th class='w-80px'>   <?php echo $lang->todo->pri;?></th>
-        <th class='w-p65 red'><?php echo $lang->todo->name;?></th>
-        <th class='w-140px'>  <?php echo $lang->todo->beginAndEnd;?></th>
+        <th class='red'><?php echo $lang->todo->name;?></th>
+        <th class='w-180px'>  <?php echo $lang->todo->beginAndEnd;?></th>
         <th class='w-100px'>   <?php echo $lang->todo->status;?></th>
       </tr>
     </thead>
@@ -38,21 +38,21 @@
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='form-control'");?></td>
       <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=form-control');?></td>
-      <td>
+      <td style='overflow:visible'>
         <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin'"); ?></div>
-        <div class='<?php echo "nameBox" . $todo->id;?>'>
+        <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
         <?php 
         if($todo->type == 'custom')
         {
-          echo html::input("names[$todo->id]", $todo->name, "class='text-left form-control'"); ;
+          echo html::input("names[$todo->id]", $todo->name, "class='form-control'"); ;
         }
         elseif($todo->type == 'task')
         {
-          echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control text-left"');
+          echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
         }
         elseif($todo->type == 'bug')
         {
-          echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control text-left"');
+          echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control chosen"');
         }
         ?>
         </div>

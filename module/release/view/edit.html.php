@@ -29,7 +29,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->release->build;?></th>
-        <td><?php echo html::select('build', $builds, $release->build, "class='form-control' onchange=loadStoriesAndBugs(this.value,$release->product)"); ?></td><td></td>
+        <td><?php echo html::select('build', $builds, $release->build, "class='form-control chosen' onchange=loadStoriesAndBugs(this.value,$release->product)"); ?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->release->date;?></th>

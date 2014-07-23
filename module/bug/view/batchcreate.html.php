@@ -23,9 +23,9 @@
   <table class='table table-fixed table-form'>
     <thead>
       <tr>
-        <th class='w-30px'>  <?php echo $lang->idAB;?></th> 
-        <th class='w-100px'> <?php echo $lang->bug->module;?></th>
-        <th class='w-100px'> <?php echo $lang->bug->project;?></th>
+        <th class='w-50px'>  <?php echo $lang->idAB;?></th> 
+        <th class='w-120px'> <?php echo $lang->bug->module;?></th>
+        <th class='w-130px'> <?php echo $lang->bug->project;?></th>
         <th class='w-150px'><?php echo $lang->bug->openedBuild;?> <span class='required'></span></th>
         <th><?php echo $lang->bug->title;?> <span class='required'></span></th>
         <th>                 <?php echo $lang->bug->steps;?></th>
@@ -38,8 +38,8 @@
     <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
-      <td><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
       <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
       <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
       <td>

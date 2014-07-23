@@ -28,12 +28,12 @@
       <tr>
         <th class='w-80px'><?php echo $lang->testcase->lblProductAndModule;?></th>
         <td class='w-p25-f'>
-          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control'");?>
+          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?>
         </td>
         <td class='w-p25-f'>
           <div class='input-group' id='moduleIdBox'>
           <?php 
-          echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control'");
+          echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
           {
               echo "<span class='input-group-addon'>";
@@ -62,7 +62,7 @@
         <th><?php echo $lang->testcase->lblStory;?></th>
         <td colspan='3'>
           <div class='input-group' id='storyIdBox'>
-            <?php echo html::select('story', $stories, $storyID, 'class="form-control" onchange=setPreview();');?>
+            <?php echo html::select('story', $stories, $storyID, 'class="form-control chosen" onchange=setPreview();');?>
             <span class='input-group-btn' style='width: 0.01%'>
             <?php if($storyID == 0): ?>
               <a href='' id='preview' class='btn iframe hidden'><?php echo $lang->preview;?></a>
