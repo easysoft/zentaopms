@@ -29,7 +29,7 @@
       </tr>
       <tr>
         <th class='w-90px'><?php echo $lang->user->dept;?></th>
-        <td class='w-p40'><?php echo html::select('dept', $depts, $user->dept, "class='form-control'");?></td>
+        <td class='w-p40'><?php echo html::select('dept', $depts, $user->dept, "class='form-control chosen'");?></td>
         <th><?php echo $lang->user->role;?></th>
         <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
       </tr>

@@ -26,7 +26,7 @@
   </div>
   <table class='table table-borderless table-data'>
     <tr>
-      <th classs='w-100px'><?php echo $lang->user->dept;?></th>
+      <th class='w-100px'><?php echo $lang->user->dept;?></th>
       <td>
       <?php
       if(empty($deptPath))

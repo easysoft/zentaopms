@@ -475,7 +475,7 @@ class product extends control
     public function ajaxGetPlans($productID, $planID = 0, $needCreate = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);
-        $output = html::select('plan', $plans, $planID, "class='form-control'");
+        $output = html::select('plan', $plans, $planID, "class='form-control chosen'");
         if(count($plans) == 1 and $needCreate) 
         {
             $output .= "<span class='input-group-addon'>";

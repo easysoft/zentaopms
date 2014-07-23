@@ -262,10 +262,6 @@ function setPlaceholder()
             {
                 $("#" + key).attr('placeholder', holders[key]);
             }
-            else
-            {
-                $("#" + key).parent().append("<span class='help-block'>" + holders[key] + '</span>');
-            }
         }
     }
 }

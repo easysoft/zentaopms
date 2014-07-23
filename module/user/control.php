@@ -72,7 +72,6 @@ class user extends control
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
@@ -112,7 +111,6 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Assign. */
@@ -149,7 +147,6 @@ class user extends control
 
         /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Assign. */
@@ -188,7 +185,6 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Load the lang of bug module. */
@@ -226,7 +222,6 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Save session. */
@@ -271,7 +266,6 @@ class user extends control
 
          /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
        
         $cases = array();
@@ -322,7 +316,6 @@ class user extends control
         /* Set the menus. */
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
@@ -345,7 +338,6 @@ class user extends control
     public function profile($account)
     {
         /* Set menu. */
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
 
         $user = $this->user->getById($account);
@@ -767,7 +759,6 @@ class user extends control
     {
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Save session. */

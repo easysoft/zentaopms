@@ -14,18 +14,18 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('holders', $lang->user->placeholder);?>
 <?php js::set('roleGroup', $roleGroup);?>
-<div class='container mw-600px'>
+<div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['user']);?></span>
       <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->user->create;?></strong>
     </div>
   </div>
-  <form class='form-condensed mw-500px' method='post' target='hiddenwin' id='dataform'>
+  <form class='form-condensed mw-700px' method='post' target='hiddenwin' id='dataform'>
     <table align='center' class='table table-form'> 
       <tr>
         <th class='w-100px'><?php echo $lang->user->dept;?></th>
-        <td><?php echo html::select('dept', $depts, $deptID, "class='form-control'");?></td>
+        <td class='w-p50'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->account;?></th>
@@ -46,10 +46,12 @@
       <tr>
         <th><?php echo $lang->user->role;?></th>
         <td><?php echo html::select('role', $lang->user->roleList, '', "class='form-control' onchange='changeGroup(this.value)'");?></td>
+        <td><?php echo $lang->user->placeholder->role?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->group;?></th>
-        <td><?php echo html::select('group', $groupList, '', "class='form-control'");?></td>
+        <td><?php echo html::select('group', $groupList, '', "class='form-control chosen'");?></td>
+        <td><?php echo $lang->user->placeholder->group?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->email;?></th>

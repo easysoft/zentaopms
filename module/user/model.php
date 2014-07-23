@@ -42,7 +42,7 @@ class userModel extends model
      */
     public function setUserList($users, $account)
     {
-        return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\" class='form-control'");
+        return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\" class='form-control chosen'");
     }
 
     /**
