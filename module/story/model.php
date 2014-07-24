@@ -208,9 +208,11 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0)
     {
-        $now   = helper::now();
-        $stories = fixer::input('post')->get();
-        for($i = 0; $i < $this->config->story->batchCreate; $i++)
+        $now      = helper::now();
+        $stories  = fixer::input('post')->get();
+        $batchNum = count(current($stories));
+
+        for($i = 0; $i < $batchNum; $i++)
         {
             if($stories->title[$i] != '')
             {

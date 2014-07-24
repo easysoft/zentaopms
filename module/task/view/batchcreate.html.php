@@ -17,6 +17,7 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . ' ' . $lang->task->common;?></strong>
+    <div class='actions'><?php echo html::commonButton($lang->parseText, "data-toggle='myModal'")?></div>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin'>
@@ -77,7 +78,33 @@
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='9' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
+<table class='hide' id='trTemp'>
+  <tbody>
+    <tr>
+      <td class='text-center'>%s</td>
+      <td style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control'")?></td>
+      <td style='overflow: visible'>
+        <div class='input-group'>
+        <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(%s)'");?>
+        <span class='input-group-btn'>
+        <a href='javascript:copyStoryTitle(%s)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
+        </span>
+        </div>
+      </td>
+      <td><?php echo html::input("name[%s]", '', 'class=form-control');?></td>
+      <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>
+      <td style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control'");?></td>
+      <td><?php echo html::input("estimate[%s]", '', 'class=form-control text-center');?></td>
+      <td>
+        <?php echo html::textarea("desc[%s]", '', "rows='1' class='form-control'");?>
+      </td>
+      <td><?php echo html::select("pri[%s]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
+    </tr>
+  </tbody>
+</table>
+<?php js::set('mainField', 'name');?>
+<?php include '../../common/view/parsetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

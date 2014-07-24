@@ -86,19 +86,21 @@ class taskModel extends model
     public function batchCreate($projectID)
     {
         $this->loadModel('action');
-        $now   = helper::now();
-        $tasks = fixer::input('post')->get();
-        $mails = array();
+        $now      = helper::now();
+        $mails    = array();
+        $tasks    = fixer::input('post')->get();
+        $batchNum = count(current($tasks));
 
         /* check estimate. */
-        for($i = 0; $i < $this->config->task->batchCreate; $i++)
+        for($i = 0; $i < $batchNum; $i++)
         {
             if(!empty($tasks->name[$i]) and $tasks->estimate[$i] and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $tasks->estimate[$i]))
             {
                 die(js::alert($this->lang->task->error->estimateNumber));
             }
+            if(!empty($tasks->name[$i]) and empty($tasks->type[$i]))die(js::alert(sprintf($this->lang->error->notempty, $this->lang->task->type)));
         }
-        for($i = 0; $i < $this->config->task->batchCreate; $i++)
+        for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($tasks->name[$i])) continue;
 

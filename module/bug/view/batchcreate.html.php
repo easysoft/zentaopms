@@ -16,6 +16,7 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->bug->common . $lang->colon . $lang->bug->batchCreate;?></strong>
+    <div class='actions'><?php echo html::commonButton($lang->parseText, "data-toggle='myModal'")?></div>
   </div>
 </div>
 
@@ -54,4 +55,23 @@
     <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
+<table class='hide' id='trTemp'>
+  <tbody>
+    <tr class='text-center'>
+      <td>%s</td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, %s)'");?></td>
+      <td class='text-left' style='overflow:visible' id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control' multiple");?></td>
+      <td><?php echo html::input("titles[%s]", '', 'class=form-control');?></td>
+      <td>
+        <?php echo html::textarea("stepses[%s]", '', "rows='1' class='form-control'");?>
+      </td>
+      <td><?php echo html::select("types[%s]", $lang->bug->typeList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("severities[%s]", $lang->bug->severityList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("oses[%s]", $lang->bug->osList, '', "class='form-control'");?></td>
+      <td><?php echo html::select("browsers[%s]", $lang->bug->browserList, '', "class='form-control'");?></td>
+    </tr>
+  </tbody>
+</table>
+<?php include '../../common/view/parsetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

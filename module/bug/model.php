@@ -75,15 +75,20 @@ class bugModel extends model
     {
         $this->loadModel('action');
         $now     = helper::now();
-        $data    = fixer::input('post')->get();
         $actions = array();
+        $data    = fixer::input('post')->get();
+        $batchNum = count(current($data));
+
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            if(!empty($data->titles[$i]) and empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
+        }
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
         $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0));
         $moduleOwners = array();
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
-
-        for($i = 0; $i < $this->config->bug->batchCreate; $i++)
+        for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($data->titles[$i])) continue;
             $bug = new stdClass();

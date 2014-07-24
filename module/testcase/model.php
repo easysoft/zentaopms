@@ -83,9 +83,15 @@ class testcaseModel extends model
      */
     function batchCreate($productID, $storyID)
     {
-        $now   = helper::now();
-        $cases = fixer::input('post')->get();
-        for($i = 0; $i < $this->config->testcase->batchCreate; $i++)
+        $now      = helper::now();
+        $cases    = fixer::input('post')->get();
+        $batchNum = count(current($cases));
+
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
+        }
+        for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
             {

@@ -20,6 +20,7 @@
     <?php if($story):?>
     <small class='text-muted'><?php echo html::icon($lang->icons['story']) . ' ' . $story->title ?></small>
     <?php endif;?>
+    <div class='actions'><?php echo html::commonButton($lang->parseText, "data-toggle='myModal'")?></div>
   </div>
 </div>
 
@@ -27,7 +28,7 @@
   <table align='center' class='table table-form table-fixed'>
     <thead>
       <tr>
-        <th class='w-20px'><?php echo $lang->idAB;?></th> 
+        <th class='w-50px'><?php echo $lang->idAB;?></th> 
         <th class='w-300px'><?php echo $lang->testcase->module;?></th>
         <th class='w-180px'><?php echo $lang->testcase->type;?></th>
         <th class='w-400px'><?php echo $lang->testcase->story;?></th>
@@ -52,4 +53,16 @@
     </tfoot>
   </table>
 </form>
+<table class='hide' id='trTemp'>
+  <tbody>
+    <tr class='text-center'>
+      <td>%s</td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
+      <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
+      <td><?php echo html::input("title[%s]", '', "class='form-control'");?></td>
+    </tr>
+  </tbody>
+</table>
+<?php include '../../common/view/parsetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
