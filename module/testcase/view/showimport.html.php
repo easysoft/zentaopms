@@ -3,7 +3,7 @@
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
 <form target='hiddenwin' method='post' class='form-condensed'>
-<table class='table active-disabled'>
+<table class='table table-fixed active-disabled'>
   <thead>
     <tr>
       <th class='w-80px'><?php echo $lang->testcase->id?></th>
@@ -11,12 +11,12 @@
       <th class='w-90px'><?php echo $lang->testcase->module?></th>
       <th class='w-100px'><?php echo $lang->testcase->story?></th>
       <th class='w-70px'><?php echo $lang->testcase->pri?></th>
-      <th><?php echo $lang->testcase->type?></th>
-      <th><?php echo $lang->testcase->status?></th>
-      <th><?php echo $lang->testcase->frequency?></th>
+      <th class='w-100px'><?php echo $lang->testcase->type?></th>
+      <th class='w-80px'><?php echo $lang->testcase->status?></th>
+      <th class='w-70px'><?php echo $lang->testcase->frequency?></th>
       <th><?php echo $lang->testcase->stage?></th>
       <th><?php echo $lang->testcase->precondition?></th>
-      <th class='pd-0'>
+      <th class='w-300px'>
         <table class='w-p100 table-borderless'>
           <tr>
             <th colspan='2'><?php echo $lang->testcase->steps?></th>
@@ -45,8 +45,8 @@
       ?>
     </td>
     <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
-    <td class='text-left'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control'")?></td>
-    <td class='text-left'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
     <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control'")?></td>
     <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : '', "class='form-control'")?></td>
@@ -86,9 +86,9 @@ function affix(obj)
         var scroH = $(this).scrollTop();
         if(scroH>=fixH && first)
         {
-            $(obj).parent().parent().before("<table id='headerClone'></table>");
+            $(obj).parent().parent().before("<table id='headerClone' class='table'></table>");
             $('#headerClone').append($(obj).clone()).addClass('affix');
-            $('.table-1 ' + obj + ' th').each(function(i){$('#headerClone ' + obj + ' th').eq(i).width($(this).width())});
+            $('.active-disabled ' + obj + ' th').each(function(i){$('#headerClone ' + obj + ' th').eq(i).width($(this).width())});
             first = false;     
         }
         else if(scroH<fixH)    

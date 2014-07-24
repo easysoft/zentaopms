@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
 <div class='container mw-500px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -23,7 +24,7 @@
       <?php $hidden = ($type != 'story' and $module->type == 'story');?>
       <tr <?php if($hidden) echo "style='display:none'";?>>
         <th class='w-80px'><?php echo $lang->tree->parent;?></th>
-        <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control'");?></td>
+        <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
       </tr>
       <tr <?php if($hidden) echo "style='display:none'";?>>
         <th class='w-80px'><?php echo $lang->tree->name;?></th>
@@ -32,7 +33,7 @@
       <?php if($type == 'bug'):?>
       <tr>
         <th class='w-80px'><?php echo $lang->tree->owner;?></th>
-        <td><?php echo html::select('owner', $users, $module->owner, "class='form-control'", true);?></td>
+        <td><?php echo html::select('owner', $users, $module->owner, "class='form-control chosen'", true);?></td>
       </tr>  
       <?php endif;?>
       <tr>

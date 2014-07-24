@@ -136,16 +136,16 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table table-form'>
           <tr>
             <th class='w-80px'><?php echo $lang->bug->project;?></th>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, 'class=form-control onchange=loadProjectRelated(this.value)');?></span></td>
+            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->story;?></th>
-            <td><div id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class='form-control'");?></div>
+            <td><div id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class='form-control chosen'");?></div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->task;?></th>
-            <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control'");?></div></td>
+            <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control chosen'");?></div></td>
           </tr>
         </table>
       </fieldset>
@@ -163,7 +163,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolvedBy;?></th>
-            <td><?php echo html::select('resolvedBy', $users, $bug->resolvedBy, "class='form-control'");?></td>
+            <td><?php echo html::select('resolvedBy', $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolvedDate;?></th>
@@ -171,7 +171,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolvedBuild;?></th>
-            <td><span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control'");?></span></td>
+            <td><span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control chosen'");?></span></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolution;?></th>
@@ -183,7 +183,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <th><?php echo $lang->bug->closedBy;?></th>
-            <td><?php echo html::select('closedBy', $users, $bug->closedBy, "class='form-control'");?></td>
+            <td><?php echo html::select('closedBy', $users, $bug->closedBy, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->closedDate;?></th>
