@@ -10,7 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php
+$webRoot      = $this->app->getWebRoot();
+$jsRoot       = $webRoot . "js/";
+?>
 <?php include '../../common/view/chosen.html.php';?>
 <div class='container mw-500px'>
   <div id='titlebar'>
@@ -44,4 +47,3 @@
     </table>
   </form>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
