@@ -276,23 +276,22 @@ class task extends control
             {
                 foreach($allChanges as $taskID => $changes)
                 {
-                    if(!empty($changes))
-                    {
-                        $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
-                        $this->action->logHistory($actionID, $changes);
-                        $this->sendmail($taskID, $actionID);
+                    if(empty($changes)) continue;
 
-                        $task = $this->task->getById($taskID);
-                        if($task->fromBug != 0)
+                    $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                    $this->sendmail($taskID, $actionID);
+
+                    $task = $this->task->getById($taskID);
+                    if($task->fromBug != 0)
+                    {
+                        foreach($changes as $change)
                         {
-                            foreach($changes as $change)
+                            if($change['field'] == 'status')
                             {
-                                if($change['field'] == 'status')
-                                {
-                                    $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                                    $cancelURL  = $this->server->HTTP_REFERER;
-                                    die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
-                                }
+                                $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                                $cancelURL  = $this->server->HTTP_REFERER;
+                                die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
                             }
                         }
                     }

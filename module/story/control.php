@@ -308,6 +308,8 @@ class story extends control
             {
                 foreach($allChanges as $storyID => $changes)
                 {
+                    if(empty($changes)) continue;
+
                     $actionID = $this->action->create('story', $storyID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                     $this->sendmail($storyID, $actionID);

@@ -210,11 +210,10 @@ class todo extends control
             $allChanges = $this->todo->batchUpdate();
             foreach($allChanges as $todoID => $changes)
             {
-                if(!empty($changes))
-                {
-                    $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-                    $this->action->logHistory($actionID, $changes);
-                }
+                if(empty($changes)) continue;
+
+                $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
 
             die(js::locate($this->session->todoList, 'parent'));

@@ -484,6 +484,8 @@ class testcase extends control
             {
                 foreach($allChanges as $caseID => $changes )
                 {
+                    if(empty($changes)) continue;
+
                     $actionID = $this->loadModel('action')->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }

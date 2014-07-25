@@ -548,6 +548,8 @@ class bug extends control
 
             foreach($allChanges as $bugID => $changes)
             {
+                if(empty($changes)) continue;
+
                 $actionID = $this->action->create('bug', $bugID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($bugID, $actionID);

@@ -931,11 +931,10 @@ class project extends control
             {
                 foreach($allChanges as $projectID => $changes)
                 {
-                    if(!empty($changes))
-                    {
-                        $actionID = $this->loadModel('action')->create('project', $projectID, 'Edited');
-                        $this->action->logHistory($actionID, $changes);
-                    }
+                    if(empty($changes)) continue;
+
+                    $actionID = $this->loadModel('action')->create('project', $projectID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
                 }
             }
             die(js::locate($this->session->projectList, 'parent'));
