@@ -278,7 +278,6 @@ $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule'
 $lang->admin->menu->clearData = array('link' => '重置禪道|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
-$lang->admin->menu->sso       = array('link' => '單點登錄|sso|browse', 'subModule' => 'sso');
 
 $lang->convert    = new stdclass();
 $lang->upgrade    = new stdclass();
@@ -287,7 +286,6 @@ $lang->extension  = new stdclass();
 $lang->custom     = new stdclass();
 $lang->editor     = new stdclass();
 $lang->mail       = new stdclass();
-$lang->sso        = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -296,7 +294,6 @@ $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
-$lang->sso->menu       = $lang->admin->menu;
 
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
@@ -320,7 +317,6 @@ $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
-$lang->menugroup->sso         = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();

@@ -52,7 +52,6 @@ $lang->moduleOrder[150] = 'tree';
 $lang->moduleOrder[155] = 'api';
 $lang->moduleOrder[160] = 'file';
 $lang->moduleOrder[165] = 'misc';
-$lang->moduleOrder[170] = 'sso';
 
 $lang->resource = new stdclass();
 
@@ -661,18 +660,6 @@ $lang->resource->admin->checkDB   = 'checkDB';
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
 
-/* SSO. */
-$lang->resource->sso = new stdclass();
-$lang->resource->sso->browse = 'browse';
-$lang->resource->sso->create = 'create';
-$lang->resource->sso->edit   = 'edit';
-$lang->resource->sso->delete = 'delete';
-
-$lang->sso->methodOrder[0]  = 'browse';
-$lang->sso->methodOrder[5]  = 'create';
-$lang->sso->methodOrder[10] = 'edit';
-$lang->sso->methodOrder[15] = 'delete';
-
 /* Extension. */
 $lang->resource->extension = new stdclass();
 $lang->resource->extension->browse     = 'browse';
@@ -916,10 +903,6 @@ $lang->changelog['4.3.beta'][] = 'testcase-import';
 $lang->changelog['4.3.beta'][] = 'testcase-showImport';
 $lang->changelog['4.3.beta'][] = 'testcase-confirmChange';
 $lang->changelog['4.3.beta'][] = 'mail-reset';
-$lang->changelog['4.3.beta'][] = 'sso-browse';
-$lang->changelog['4.3.beta'][] = 'sso-create';
-$lang->changelog['4.3.beta'][] = 'sso-edit';
-$lang->changelog['4.3.beta'][] = 'sso-delete';
 $lang->changelog['4.3.beta'][] = 'api-debug';
 $lang->changelog['4.3.beta'][] = 'action-editComment';
 
