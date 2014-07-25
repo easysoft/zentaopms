@@ -873,17 +873,25 @@ function setModal()
             }
             else
             {
-                $('#ajaxModal').load(url, function()
+                initModalFrame();
+                $.get(url, function(data)
                 {
+                    var ajaxModal = $('#ajaxModal');
+                    if(data.indexOf('modal-dialog') < 0)
+                    {
+                        data = "<div class='modal-dialog modal-ajax' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'>{content}</div></div></div>".format($.extend({content: data}, options));
+                    }
+                    ajaxModal.html(data);
+
                     /* Set the width of modal dialog. */
                     if($e.data('width'))
                     {
                         var modalWidth = parseInt($e.data('width'));
                         $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
+                        ajustModalPosition();
                     }
 
-                    /* show the modal dialog. */
-                    $('#ajaxModal').modal('show');
+                    ajaxModal.modal('show');
                 });
             }
 
@@ -988,7 +996,7 @@ function setModal()
                     var fbH = $framebody.addClass('body-modal').outerHeight();
                     if(typeof fbH == 'object') fbH = $framebody.height();
                     modalBody.css('height', fbH);
-                    if(options.center) dialog.css('margin-top', Math.max(0, (modal.height() - dialog.height())/3));
+                    ajustModalPosition();
                     modal.removeClass('modal-loading');
                     if(modal.data('first')) modal.data('first', false);
                 }, 100);
@@ -1000,6 +1008,7 @@ function setModal()
                         var fbH = $framebody.addClass('body-modal').outerHeight();
                         if(typeof fbH == 'object') fbH = $framebody.height();
                         modalBody.css('height', fbH);
+                        ajustModalPosition();
                     });
                 }
             }
@@ -1058,7 +1067,19 @@ function setModal()
         if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.bs.modal', setting.afterHidden);
     }
 
-    $.extend({modalTrigger: showIframeModal, colorbox: function(setting)
+    function ajustModalPosition(position)
+    {
+        position = position || 'fit';
+        var dialog = $('#ajaxModal .modal-dialog');
+        if(position)
+        {
+           var half = Math.max(0, ($(window).height() - dialog.outerHeight())/2);
+           var pos = position == 'fit' ? (half*2/3) : (position == 'center' ? half : position);
+           dialog.css('margin-top', pos);
+        }
+    }
+
+    $.extend({ajustModalPosition: ajustModalPosition, modalTrigger: showIframeModal, colorbox: function(setting)
     {
         if((typeof setting == 'object') && setting.iframe)
         {
