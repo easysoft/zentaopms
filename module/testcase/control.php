@@ -298,6 +298,17 @@ class testcase extends control
         $position[] = $this->lang->testcase->common;
         $position[] = $this->lang->testcase->create;
 
+        /* Get the status of stories are not closed. */
+        $storyStatus = $this->lang->story->statusList;
+        unset($storyStatus['closed']);
+        $modules = array();
+        if($currentModuleID)
+        {
+            $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
+            $modules = $this->tree->getAllChildID($modules);
+        }
+        $stories = $this->story->getProductStoryPairs($productID, $modules, array_keys($storyStatus));
+
         $this->view->title            = $title;
         $this->view->caseTitle        = $caseTitle;
         $this->view->position         = $position;
@@ -305,7 +316,7 @@ class testcase extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->stories          = $this->story->getProductStoryPairs($productID);
+        $this->view->stories          = $stories;
         $this->view->type             = $type;
         $this->view->stage            = $stage;
         $this->view->pri              = $pri;
@@ -359,7 +370,6 @@ class testcase extends control
         $this->view->position         = $position;
         $this->view->productID        = $productID;
         $this->view->story            = $storyID ? $this->story->getByID($storyID) : '';
-        $this->view->stories          = $this->story->getProductStoryPairs($productID);
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;

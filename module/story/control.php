@@ -806,14 +806,23 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0, $onlyOption = 'false')
+    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '')
     {
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getProductStoryPairs($productID, $moduleID);
+
+        $storyStatus = '';
+        if($status == 'noclosed')
+        {
+            $storyStatus = $this->lang->story->statusList;
+            unset($storyStatus['closed']);
+            $storyStatus = array_keys($storyStatus);
+        }
+
+        $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus);
         $select  = html::select('story', $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
