@@ -246,8 +246,19 @@ class treeModel extends model
     {
         $treeMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule));
+
+        /* Add for task #1945. check the module has case or no. */
+        if($type == 'case' and !empty($extra)) $this->loadModel('testtask');
         while($module = $stmt->fetch())
         {
+            /* Add for task #1945. check the module has case or no. */
+            if($type == 'case' and !empty($extra))
+            {
+                $modules = $this->getAllChildID($module->id);
+                $runs    = $this->testtask->getRuns($extra, $modules, 'id');
+                if(empty($runs)) continue;
+            }
+
             $linkHtml = call_user_func($userFunc, $type, $module, $extra);
 
             if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
