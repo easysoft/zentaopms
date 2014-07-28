@@ -136,6 +136,7 @@ class product extends control
         if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, 'draft', $orderBy, $pager);
         if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, 'active', $orderBy, $pager);
         if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $orderBy, $pager);
+        if($browseType == 'willclose')   $stories = $this->story->getWillClose($productID, $orderBy, $pager);
         if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, 'closed', $orderBy, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */

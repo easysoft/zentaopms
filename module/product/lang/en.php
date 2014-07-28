@@ -74,6 +74,7 @@ $lang->product->closedByMe   = 'My closed';
 $lang->product->draftStory   = 'Draft';
 $lang->product->activeStory  = 'Active';
 $lang->product->changedStory = 'Changed';
+$lang->product->willClose    = 'Will close';
 $lang->product->closedStory  = 'Closed';
 
 $lang->product->allStory    = 'All';

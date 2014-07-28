@@ -988,6 +988,29 @@ class storyModel extends model
     }
 
     /**
+     * Get will close stories.
+     * 
+     * @param  int    $productID 
+     * @param  string $orderBy 
+     * @param  string $pager 
+     * @access public
+     * @return array
+     */
+    public function getWillClose($productID, $orderBy, $pager)
+    {
+        return $this->dao->select('t1.*, t2.title as planTitle')
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->where('t1.product')->in($productID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('stage')->in('developed,released')
+            ->andWhere('status')->ne('closed')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * Get stories through search.
      * 
      * @access public
