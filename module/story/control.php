@@ -775,6 +775,36 @@ class story extends control
     }
 
     /**
+     * Show zero case story.
+     * 
+     * @param  int    $productID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function zeroCase($productID, $orderBy = 'id_desc')
+    {
+        $this->session->set('productList', $this->app->getURI(true));
+        $products = $this->loadModel('product')->getPairs();
+
+        $this->lang->set('menugroup.story', 'qa');
+        $this->lang->story->menu      = $this->lang->testcase->menu;
+        $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
+        $this->lang->story->menu->testcase['subModule'] = 'story';
+        $this->loadModel('testcase')->setMenu($products, $productID);
+
+        $this->view->title      = $this->lang->story->zeroCase;
+        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
+        $this->view->position[] = $this->lang->story->zeroCase;
+
+        $this->view->stories   = $this->story->getZeroCase($productID, $orderBy);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->productID = $productID;
+        $this->view->orderBy   = $orderBy;
+        $this->display();
+    }
+
+    /**
      * AJAX: get stories of a project in html select.
      * 
      * @param  int    $projectID 

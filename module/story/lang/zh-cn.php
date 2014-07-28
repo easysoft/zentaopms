@@ -30,6 +30,7 @@ $lang->story->taskCount   = '任务数';
 $lang->story->bugs        = "Bug";
 $lang->story->linkStory   = '关联需求';
 $lang->story->export      = "导出数据";
+$lang->story->zeroCase    = "零用例需求";
 $lang->story->reportChart = "统计报表";
 $lang->story->batchChangePlan  = "批量修改计划";
 $lang->story->batchChangeStage = "批量修改阶段";

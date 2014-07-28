@@ -44,6 +44,7 @@
       </div>
       <?php 
       common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');
+      common::printIcon('story', 'zeroCase', "productID=$productID", '', 'button', 'story');
 
       $initModule = isset($moduleID) ? (int)$moduleID : 0;
       common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$initModule");
