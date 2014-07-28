@@ -46,7 +46,7 @@
           <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
           <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?>
         </td>
-        <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td><?php echo $story->planTitle;?></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
         <td><?php echo $users[$story->openedBy];?></td>
@@ -93,7 +93,7 @@
           <?php endif;?>
           <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), sprintf("%03d", $story->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>

@@ -62,7 +62,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php endif;?>
             <?php printf('%03d', $run->case);?>
           </td>
-          <td><span class='<?php echo 'pri' . $run->pri?>'><?php echo $run->pri?></span></td>
+          <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $run->pri, $run->pri)?>'><?php echo zget($lang->testcase->priList, $run->pri, $run->pri)?></span></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask"), $run->title, '_blank');?>
           </td>
           <td><?php echo $lang->testcase->typeList[$run->type];?></td>

@@ -42,7 +42,7 @@
       <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
       <tr class='text-center'>
       <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
-      <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
       <td><?php echo $story->productTitle;?></td>
       <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>

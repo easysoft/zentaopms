@@ -44,14 +44,14 @@
     <?php foreach($cases as $case):?>
     <tr class='text-center'>
       <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
-      <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span</td>
+      <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span</td>
       <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), $case->title);?></td>
       <td><?php echo $lang->testcase->typeList[$case->type];?></td>
       <td><?php echo $users[$case->openedBy];?></td>
       <td><?php echo $users[$case->lastRunner];?></td>
       <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
       <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-      <td class='<?php echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
+      <td class='<?php echo $case->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
     </tr>
     <?php endforeach;?>
   </tbody> 

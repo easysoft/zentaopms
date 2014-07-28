@@ -64,7 +64,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
           <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
           <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
         <td class='text-left' title="<?php echo $case->title?>"><?php echo html::a($viewLink, $case->title);?></td>
         <?php if($browseType == 'needconfirm'):?>
         <td class='text-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>

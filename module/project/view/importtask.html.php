@@ -49,7 +49,7 @@
       </td>
 
       <td><?php echo substr($projects[$task->project], 2);?></td>
-      <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $task->left;?></td>

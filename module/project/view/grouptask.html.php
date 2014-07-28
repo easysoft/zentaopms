@@ -94,7 +94,7 @@
     <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
       <td class='<?php echo $groupClass;?>'></td>
       <td class='text-left'>&nbsp;<?php echo $task->id . $lang->colon; if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
-      <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $users[$task->finishedBy];?></td>
       <td><?php echo $task->estimate;?></td>

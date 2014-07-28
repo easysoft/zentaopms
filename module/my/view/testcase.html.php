@@ -54,7 +54,7 @@
           <?php if($canBatchEdit or $canBatchRun):?><input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/><?php endif;?>
           <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span</td>
+        <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span</td>
         <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), $case->title);?></td>
         <td><?php echo $lang->testcase->typeList[$case->type];?></td>
         <td><?php echo $users[$case->openedBy];?></td>

@@ -63,7 +63,7 @@
           <?php endif;?>
           <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
         <td class='text-left' title="<?php echo $story->title?>"><?php echo html::a($storyLink,$story->title);?></td>
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>

@@ -47,7 +47,7 @@
           <input class='ml-10px' type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
-        <td><span class='<?php echo 'pri' . $bug->pri;?>'><?php echo $bug->pri?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
@@ -89,7 +89,7 @@
           <?php endif;?>
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . $bug->pri;?>'><?php echo $bug->pri?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
