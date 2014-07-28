@@ -52,6 +52,9 @@ class upgrade extends control
         $this->view->confirm     = $this->upgrade->getConfirm($this->post->fromVersion);
         $this->view->fromVersion = $this->post->fromVersion;
 
+        /* When sql is empty then skip it. */
+        if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$this->post->fromVersion}"));
+
         $this->display();
     }
 
@@ -61,9 +64,10 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function execute()
+    public function execute($fromVersion = '')
     {
-        $this->upgrade->execute($this->post->fromVersion);
+        $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
+        $this->upgrade->execute($fromVersion);
 
         $this->view->title      = $this->lang->upgrade->result;
         $this->view->position[] = $this->lang->upgrade->common;
