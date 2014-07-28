@@ -133,8 +133,8 @@ js::set('refresh', $lang->refresh);
         <td colspan='2'>
           <?php
           echo html::submitButton() . html::backButton();
-          echo html::hidden('case', $caseID) . html::hidden('caseVersion', $version);
-          echo html::hidden('result', $runID) . html::hidden('testtask', $testtask);
+          echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);
+          echo html::hidden('result', (int)$runID) . html::hidden('testtask', (int)$testtask);
           ?>
         </td>
       </tr>

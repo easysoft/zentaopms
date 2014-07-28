@@ -1603,7 +1603,9 @@ class router
         }
 
         /* Save to log file. */
-        $errorFile = $this->getLogRoot() . 'php.' . date('Ymd') . '.log';
+        $errorFile = $this->getLogRoot() . 'php.' . date('Ymd') . '.log.php';
+        if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?>\n");
+
         $fh = @fopen($errorFile, 'a');
         if($fh) fwrite($fh, strip_tags($errorLog)) && fclose($fh);
 
@@ -1641,7 +1643,9 @@ class router
     {
         if(!class_exists('dao')) return;
 
-        $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log';
+        $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log.php';
+        if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?>\n");
+
         $fh = @fopen($sqlLog, 'a');
         if(!$fh) return false;
         fwrite($fh, date('Ymd H:i:s') . ": " . $this->getURI() . "\n");
