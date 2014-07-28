@@ -767,7 +767,7 @@ class bugModel extends model
                 $bugSteps .= $this->lang->bug->tplExpect;
             }
         }
-        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story);
+        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);
     }
 
     /**
