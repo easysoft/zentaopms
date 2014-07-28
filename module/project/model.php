@@ -1224,7 +1224,7 @@ class projectModel extends model
         $today = helper::today();
         $burns = array();
 
-        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
+        $projects = $this->dao->select('id, code')->from(TABLE_PROJECT)
             ->where("end >= '$today'")
             ->andWhere('status')->notin('done,suspended')
             ->fetchPairs();
