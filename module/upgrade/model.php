@@ -719,6 +719,13 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * To lower table.
+     * 
+     * @param  string $build 
+     * @access public
+     * @return bool
+     */
     public function toLowerTable($build = 'basic')
     {
         $results    = $this->dbh->query("show Variables like '%table_names'")->fetchAll();
@@ -870,6 +877,22 @@ class upgradeModel extends model
                 ->where('id')->eq($taskID)
                 ->exec();
         }
+    }
+
+    /**
+     * Touch index.html for upload when has not it.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixDataIndex()
+    {
+        $savePath = $this->loadModel('file')->savePath;
+        foreach(glob($savePath . '*') as $childDir)
+        {
+            if(is_dir($childDir) and !is_file($childDir . '/index.html')) @touch($childDir . '/index.html');
+        }
+        return true;
     }
 
     /**
