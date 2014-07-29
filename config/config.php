@@ -133,7 +133,6 @@ define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
 define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
-define('TABLE_WEBAPP',        '`' . $config->db->prefix . 'webapp`');
 define('TABLE_LANG',          '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
