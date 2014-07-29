@@ -26,6 +26,7 @@ class taskModel extends model
         $taskFile = '';
         foreach($this->post->assignedTo as $assignedTo)
         {
+            if($this->post->type == 'affair' and empty($assignedTo)) continue;
             $task = fixer::input('post')
                 ->striptags('name')
                 ->add('project', (int)$projectID)
