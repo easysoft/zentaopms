@@ -9,15 +9,15 @@ function switchChange(historyID)
     {
         $swbtn.closest('li').addClass('show-changes');
         $showTag.removeClass('change-show').addClass('change-hide');
-        $('#changeBox' + historyID).slideDown('fast');
-        $('#changeBox' + historyID).prev('.changeDiff').slideDown('fast');
+        $('#changeBox' + historyID).show();
+        $('#changeBox' + historyID).prev('.changeDiff').show();
     }
     else
     {
         $swbtn.closest('li').removeClass('show-changes');
         $swbtn.find('.change-hide').removeClass('change-hide').addClass('change-show');
-        $('#changeBox' + historyID).slideUp('fast');
-        $('#changeBox' + historyID).prev('.changeDiff').slideUp('fast');
+        $('#changeBox' + historyID).hide();
+        $('#changeBox' + historyID).prev('.changeDiff').hide();
     }
 }
 
@@ -77,8 +77,8 @@ function toggleOrder(obj)
 
 function toggleComment(actionID)
 {
-    $('.comment' + actionID).slideToggle('fast');
-    $('#lastCommentBox').slideToggle('fast');
+    $('.comment' + actionID).toggle();
+    $('#lastCommentBox').toggle();
     $('.ke-container').css('width', '100%');
 }
 
