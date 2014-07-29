@@ -81,6 +81,7 @@ class commonModel extends model
             $user->realname   = 'guest';
             $user->role       = 'guest';
             $user->rights     = $this->loadModel('user')->authorize('guest');
+            $user->groups     = array('group');
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
