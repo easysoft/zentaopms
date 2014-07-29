@@ -61,3 +61,6 @@ $lang->custom->currentLang = '适用当前语言';
 $lang->custom->allLang     = '适用所有语言';
 
 $lang->custom->confirmRestore = '是否要恢复默认语言配置？';
+
+$lang->custom->notice = new stdclass();
+$lang->custom->notice->userRole = '键的长度必须小于20个字符！';

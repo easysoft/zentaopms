@@ -46,6 +46,10 @@ class custom extends control
                 $value  = $_POST['values'][$index];
                 if(!$value or !$key) continue;
                 $system = $_POST['systems'][$index];
+
+                /* the length of role is 20, check it when save. */
+                if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
+
                 $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
             }
             if(dao::isError()) die(js::error(dao::getError()));

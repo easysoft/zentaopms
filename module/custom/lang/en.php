@@ -61,3 +61,6 @@ $lang->custom->currentLang = 'For current language';
 $lang->custom->allLang     = 'For all language';
 
 $lang->custom->confirmRestore = 'Are you sure to restore the default lang setting?';
+
+$lang->custom->notice = new stdclass();
+$lang->custom->notice->userRole = 'The length of key must be less than 20!';

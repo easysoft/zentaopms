@@ -55,7 +55,7 @@ EOT;
   </div>
 </div>
 <div class='main'>
-  <form method='post' class='form-condensed'>
+  <form method='post' class='form-condensed' target='hiddenwin'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <strong><?php echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></strong>
