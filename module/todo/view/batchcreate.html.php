@@ -41,7 +41,7 @@
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
       <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
-      <td class='text-left'>
+      <td class='text-left' style='overflow:visible'>
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
       </td>
