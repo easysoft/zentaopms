@@ -574,27 +574,34 @@ class testtask extends control
         if($param == 'bystory')
         {
             $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
-
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->andWhere('product')->eq($productID)
-                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->andWhere('story')->in($stories)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id desc')
-                ->page($pager)
-                ->fetchAll();
+            $cases   = array();
+            if($stories)
+            {
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                    ->andWhere('product')->eq($productID)
+                    ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                    ->andWhere('story')->in($stories)
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('id desc')
+                    ->page($pager)
+                    ->fetchAll();
+            }
         }
         if($param == 'bybug')
         {
             $bugs  = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->andWhere('product')->eq($productID)
-                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->andWhere('fromBug')->in($bugs)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('id desc')
-                ->page($pager)
-                ->fetchAll();
+            $cases = array();
+            if($bugs)
+            {
+                $cases = empty($bugs) ? array() : $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                    ->andWhere('product')->eq($productID)
+                    ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                    ->andWhere('fromBug')->in($bugs)
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('id desc')
+                    ->page($pager)
+                    ->fetchAll();
+            }
         }
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases   = $cases;
