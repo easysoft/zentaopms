@@ -190,12 +190,12 @@ js::set('moduleID', $moduleID);
                   $class = "class='disabled'";
 
                   $actionLink = $this->createLink('bug', 'batchConfirm');
-                  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
-                  echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
+                  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "";
+                  if($misc) echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
 
                   $actionLink = $this->createLink('bug', 'batchClose');
-                  $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
-                  echo "<li>" . html::a('#', $lang->bug->close, '', $misc) . "</li>";
+                  $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "";
+                  if($misc) echo "<li>" . html::a('#', $lang->bug->close, '', $misc) . "</li>";
 
                   $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : $class;
                   echo "<li class='dropdown-submenu'>" . html::a('#', $lang->bug->resolve,  '', $misc);
