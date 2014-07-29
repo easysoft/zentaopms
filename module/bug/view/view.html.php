@@ -244,7 +244,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->lblLastEdited;?></th>
-                <td><?php if($bug->lastEditedBy) echo $users[$bug->lastEditedBy] . $lang->at . $bug->lastEditedDate?></td>
+                <td><?php if($bug->lastEditedBy) echo zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . $lang->at . $bug->lastEditedDate?></td>
               </tr>
             </table>
           </div>

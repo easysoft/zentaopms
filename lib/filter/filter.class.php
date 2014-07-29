@@ -421,7 +421,7 @@ class fixer
     public function specialChars($fieldName)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = htmlspecialchars($this->data->$fieldName);
+        foreach($fields as $fieldName) $this->data->$fieldName = htmlspecialchars($this->data->$fieldName, ENT_QUOTES);
         return $this;
     }
 

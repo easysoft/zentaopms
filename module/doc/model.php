@@ -218,7 +218,7 @@ class docModel extends model
         $doc = fixer::input('post')
             ->cleanInt('module')
             ->setDefault('module', 0)
-            ->specialChars('title, digest, keywords')
+            ->specialChars('title,digest,keywords')
             ->encodeURL('url')
             ->remove('comment,files, labels')
             ->add('editedBy',   $this->app->user->account)
