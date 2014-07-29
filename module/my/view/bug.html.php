@@ -22,7 +22,7 @@
   </ul>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-  <table class='table table-condensed table-hover table-striped tablesorter' id='bugList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>

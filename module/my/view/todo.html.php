@@ -45,7 +45,7 @@
       <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
     </div>
   </div>
-  <table class='table table-condensed table-hover table-striped tablesorter' id='todoList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
       <tr class='text-center'>

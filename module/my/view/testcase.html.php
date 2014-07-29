@@ -24,7 +24,7 @@
   </nav>
 </div>
 <form method='post' id='myCaseForm'>
-  <table class='table table-condensed table-hover table-striped table-borderless tablesorter' id='caseList'>
+  <table class='table table-condensed table-fixed table-hover table-striped table-borderless tablesorter' id='caseList'>
     <?php 
       $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');

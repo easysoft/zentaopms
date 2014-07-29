@@ -24,7 +24,7 @@
   </ul>
 </div>
 <form method='post' id='myTaskForm'>
-  <table class='table table-condensed table-hover table-striped tablesorter' id='tasktable'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>
