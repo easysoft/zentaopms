@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <div id='titlebar'>
@@ -55,24 +54,25 @@
       <div class='actions'><?php if(!$product->deleted) echo $actionLinks;?></div>
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <li class='active'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?> <?php $count = count($planStories); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
-          <li><a href='#batchUnlinkBug' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?> <?php $count = count($planBugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
+          <li class='<?php if($type == 'story') echo 'active'?>'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?> <?php $count = count($planStories); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
+          <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#batchUnlinkBug' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?> <?php $count = count($planBugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
         </ul>
         <div class='tab-content'>
-          <div id='batchUnlinkStory' class='tab-pane active'>
+          <div id='batchUnlinkStory' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
             <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>">
               <table class='table tablesorter table-condensed table-hover table-striped table-borderless' id='storyList'>
+                <?php $vars = "planID={$plan->id}&type=story&orderBy=%s"; ?>
                 <thead>
                 <tr>
-                  <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
-                  <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-                  <th>                 <?php echo $lang->story->title;?></th>
-                  <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-                  <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
-                  <th class='w-60px'>  <?php echo $lang->story->estimateAB;?></th>
-                  <th class='w-status'><?php echo $lang->statusAB;?></th>
-                  <th class='w-80px'>  <?php echo $lang->story->stageAB;?></th>
-                  <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
+                  <th class='w-id' >   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                  <th>                 <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+                  <th class='w-user'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-user'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                  <th class='w-60px'>  <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+                  <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-80px'>  <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+                  <th class='w-50px'><?php echo $lang->actions?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -130,18 +130,19 @@
               </table>
             </form>
           </div>
-          <div id='batchUnlinkBug' class='tab-pane'>
+          <div id='batchUnlinkBug' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>">
               <table class='table tablesorter table-condensed table-hover table-striped table-borderless' id='bugList'>
+                <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s"; ?>
                 <thead>
                 <tr>
-                  <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
-                  <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-                  <th>                 <?php echo $lang->bug->title;?></th>
-                  <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-                  <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
-                  <th class='w-status'><?php echo $lang->statusAB;?></th>
-                  <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
+                  <th class='w-id'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                  <th>                 <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-user'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-user'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                  <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-50px'><?php echo $lang->actions?></th>
                 </tr>
                 </thead>
                 <tbody>

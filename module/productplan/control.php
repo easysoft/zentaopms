@@ -160,10 +160,12 @@ class productplan extends control
      * View plan.
      * 
      * @param  int    $planID 
+     * @param  string $type 
+     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function view($planID = 0)
+    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc')
     {
         $this->session->set('storyList', $this->app->getURI(true));
 
@@ -173,13 +175,15 @@ class productplan extends control
         $products                = $this->product->getPairs();
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
-        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID);
-        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID);
+        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $orderBy : 'id_desc');
+        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $orderBy : 'id_desc');
         $this->view->products    = $products;
         $this->view->summary     = $this->product->summary($this->view->planStories);
         $this->view->plan        = $plan;
         $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->type        = $type;
+        $this->view->orderBy     = $orderBy;
         $this->display();
     }
 
