@@ -40,13 +40,14 @@
         common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'button', '', 'hiddenwin');
         echo '</div>';
 
+        echo "<div class='btn-group'>";
+        common::printRPN($browseLink);
+        echo '</div>';
+
         $actionLinks = ob_get_contents();
         ob_clean();
         echo $actionLinks;
     }
-    echo "<div class='btn-group'>";
-    common::printRPN($browseLink);
-    echo '</div>';
     ?>
   </div>
 </div>
@@ -97,10 +98,6 @@
           <tr>
             <th><?php echo $lang->testtask->status;?></th>
             <td><?php echo $lang->testtask->statusList[$task->status];?></td>
-          </tr>  
-          <tr>
-            <th><?php echo $lang->testtask->report;?></th>
-            <td class='content'><?php echo $task->report;?></td>
           </tr>  
        </table>
       </fieldset>

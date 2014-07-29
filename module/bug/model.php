@@ -468,6 +468,11 @@ class bugModel extends model
             ->remove('comment')
             ->get();
 
+        if($bug->resolvedBuild != 'trunk')
+        {
+            $bug->testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+        }
+
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
