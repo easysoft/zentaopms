@@ -91,6 +91,8 @@ hr.small {margin: 10px 0}
 .tablesorter thead tr .header:after {font-family: ZenIcon; font-weight: normal;content: " \e6bd";font-size: 14px;}
 .tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \e6b9";font-size: 14px;color:#03C;}
 .tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \e6b8";font-size: 14px;color:#03C;}
+.tablesorter-header-inner {display: inline;}
+.tablesorter thead tr .header.sorter-false:after {display: none}
 
 .table tr.active td, .table-hover>tbody>tr.active:hover>td, .table-hover>tbody>tr.active:hover>th, .table-striped>tbody>tr.active:nth-child(odd).active>td, .table-striped>tbody>tr.active:nth-child(odd)>th {background-color: #FCE6A2}
 .table tr>td.active, .table tr>th.active, .table tr.active>td, .table tr.active>th {background-color: #FCE6A2}

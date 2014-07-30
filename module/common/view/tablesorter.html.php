@@ -12,7 +12,8 @@ function sortTable()
 {
     $('.tablesorter').tablesorter(
         {
-            widgets: ['zebra'], 
+            saveSort: true,
+            widgets: ['zebra', 'saveSort'], 
             widgetZebra: {css: ['odd', 'even'] }
         }
     ); 
