@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-heart"></i><?php echo $lang->parseText?></h4>
+        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->parseText?></h4>
       </div>
       <div class="modal-body"><?php echo html::textarea('parseText', '', "class='form-control' rows='10'")?></div>
       <div class="modal-footer"><?php echo html::submitButton()?></div>
