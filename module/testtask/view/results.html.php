@@ -27,14 +27,19 @@
     </fieldset>
     <div id='casesResults'>
       <table class='table table-condensed table-hover' style='border: 1px solid #ddd'>
+        <?php $count = count($results);?>
         <caption class='text-left' style='border: 1px solid #ddd; border-bottom: none;'>
         <?php if(isset($build)):?>
         <div class='pull-right'><strong class='text-important'><?php echo $lang->testtask->build . $lang->colon . $build;?></strong></div>
         <?php endif; ?>
-        <strong><span><?php echo count($results);?></span> <?php echo $lang->testcase->result?></strong>
+        <strong><span><?php echo $count;?></span> <?php echo $lang->testcase->result?> &nbsp;<span class='result-tip'></span></strong>
         </caption>
+        <?php $failCount = 0; ?>
         <?php foreach($results as $result):?>
-        <?php $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : ''))); ?>
+        <?php
+            $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
+            if($class != 'success') $failCount++;
+        ?>
         <tr class='result-item <?php echo $class?>' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; <i class='icon-circle<?php if($result->caseResult == 'n/a') echo '-empty';?> text-<?php echo $class;?>'></i> RESULT#<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
@@ -77,6 +82,7 @@
         </tr>
         <?php endforeach;?>
       </table>
+      <div id='resultTip' class='hide'><?php if($count > 0) echo $failCount > 0 ? "<span class='text-danger'>{$failCount} {$lang->testtask->fail}</span>":"<span class='text-success'>{$lang->testtask->passAll}</span>";?></div>
       <style>.table-hover tr.result-detail:hover td {background: #fff}</style>
     </div>
   </div>
