@@ -51,6 +51,8 @@ $lang->testtask->lastRunAccount = '执行人';
 $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
 $lang->testtask->report         = '测试总结';
+$lang->testtask->stories        = '相关需求';
+$lang->testtask->bugs           = '相关Bug';
 
 $lang->testtask->legendDesc      = '任务描述';
 $lang->testtask->legendReport    = '测试总结';
@@ -96,3 +98,5 @@ $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
 $lang->testtask->mail->create->title = "%s创建了测试任务 #%s:%s";
 $lang->testtask->mail->edit->title   = "%s编辑了测试任务 #%s:%s";
+
+$lang->testtask->testScope = '测试范畴';

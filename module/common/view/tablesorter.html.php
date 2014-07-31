@@ -11,12 +11,12 @@ $(function() { sortTable(); } );
 function sortTable()
 {
     $('.tablesorter').tablesorter(
-        {
-            saveSort: true,
-            widgets: ['zebra', 'saveSort'], 
-            widgetZebra: {css: ['odd', 'even'] }
-        }
-    ); 
+    {
+        saveSort: true,
+        widgets: ['zebra', 'saveSort'], 
+        widgetZebra: {css: ['odd', 'even'] }
+    });
+
     $('.tablesorter tbody tr').hover(
         function(){$(this).addClass('hoover')},
         function(){$(this).removeClass('hoover')}
