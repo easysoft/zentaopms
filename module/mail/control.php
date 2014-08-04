@@ -12,6 +12,24 @@
 class mail extends control
 {
     /**
+     * Construct.
+     * 
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        /* Task #1967. check the function of fsocket. */
+        if(!function_exists('fsockopen'))
+        {
+            echo js::alert($this->lang->mail->nofsocket);
+            die(js::locate('back'));
+        }
+    }
+
+    /**
      * The index page, goto edit page or detect page.
      * 
      * @access public

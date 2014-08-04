@@ -243,9 +243,6 @@ class mailModel extends model
     {
         if(!$this->config->mail->turnon) return;
 
-        /* Task #1967. check the function of fsocket. */
-        if(function_exists('fsockopen')) die(js::alert($this->lang->mail->nofsocket));
-
         ob_start();
         $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
         $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
