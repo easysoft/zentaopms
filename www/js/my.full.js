@@ -1031,7 +1031,7 @@ function setModal()
         if($('#ajaxModal').length)
         {
             /* unbind all events */
-            $('#ajaxModal').off('show.bs.modal shown.bs.modal hide.bs.modal hidden.bs.modal');
+            $('#ajaxModal').attr('class', 'modal fade').off('show.bs.modal shown.bs.modal hide.bs.modal hidden.bs.modal');
         }
         else
         {
