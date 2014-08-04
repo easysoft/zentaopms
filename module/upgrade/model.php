@@ -107,6 +107,9 @@ class upgradeModel extends model
                 $this->toLowerTable();
                 $this->fixBugOSInfo();
                 $this->fixTaskFinishedBy();
+            case '6_0':
+                $this->execSQL($this->getUpgradeFile('6.0'));
+                $this->fixDataIndex();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -167,6 +170,7 @@ class upgradeModel extends model
         case '5_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('5.2.1'));
         case '5_3':
         case '6_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('6.0.beta1'));
+        case '6_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('6.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

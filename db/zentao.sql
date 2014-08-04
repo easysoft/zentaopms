@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `case` mediumint(8) unsigned NOT NULL,
   `caseVersion` smallint(6) NOT NULL default '1',
   `result` mediumint(8) unsigned NOT NULL,
+  `testtask` mediumint(8) unsigned NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',

@@ -81,3 +81,4 @@ $lang->upgrade->fromVersions['5_2']       = '5.2';
 $lang->upgrade->fromVersions['5_2_1']     = '5.2.1';
 $lang->upgrade->fromVersions['5_3']       = '5.3';
 $lang->upgrade->fromVersions['6_0_beta1'] = '6.0.beta1';
+$lang->upgrade->fromVersions['6_0']       = '6.0';
