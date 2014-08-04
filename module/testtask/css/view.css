@@ -1,1 +1,3 @@
 #caseList tbody tr > td:first-child {padding-left: 10px;}
+.table > caption {border-bottom: 1px solid #ddd}
+.table > thead > tr > td {border-top: none}

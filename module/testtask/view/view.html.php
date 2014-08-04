@@ -60,7 +60,7 @@
           <li class='active'><a href='#desc' data-toggle='tab'><?php echo $lang->testtask->legendDesc;?></a></li>
           <li><a href='#testScope' data-toggle='tab'><?php echo $lang->testtask->testScope;?></a></li>
           <li><a href='#cases' data-toggle='tab'><?php echo $lang->testtask->cases;?></a></li>
-          <li><a href='#results' data-toggle='tab'><?php echo $lang->testtask->results;?></a></li>
+          <li class='hidden'><a href='#results' data-toggle='tab'><?php echo $lang->testtask->results;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='desc'>
@@ -97,8 +97,9 @@
               <?php endif;?>
             </table>
             <table class='table table-hover table-condensed tablesorter'>
-            <caption class='text-left'><i class='icon-bug'></i><strong><?php echo $lang->testtask->bugs;?></strong> <span class='text-muted'><?php echo $countBugs?></span></caption>
-                <thead>
+            <caption class='text-left'><i class='icon-bug'></i><strong><?php echo $lang->testtask->bugs;?></strong> <span class='text-muted'>(<?php echo $countBugs?>)</span></caption>
+              <?php if($countBugs > 0):?>
+              <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
                   <th><?php echo $lang->bug->title;?></th>
@@ -121,6 +122,7 @@
                 <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
               </tr>
               <?php endforeach;?>
+              <?php endif;?>
             </table>
           </div>
           <div class='tab-pane' id='cases'>
