@@ -14,8 +14,6 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
-    <strong><?php echo $title;?></strong>
-    <small class='text-muted'><?php echo $lang->extension->activate;?> <?php echo html::icon($lang->icons['activate']);?></small>
   </div>
 </div>
 <?php if(isset($error) and $error):?>
