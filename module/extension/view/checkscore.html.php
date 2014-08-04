@@ -18,7 +18,7 @@
   </div>
 </div>
 <?php if(isset($error) and $error):?>
-<div class='alert alert-success'>
+<div class='alert alert-success with-icon'>
   <i class='icon-ok-sign'></i>
   <div class='content'>
     <h3><?php echo $lang->extension->needSorce;?></h3>

@@ -1067,10 +1067,10 @@ function setModal()
         if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.bs.modal', setting.afterHidden);
     }
 
-    function ajustModalPosition(position)
+    function ajustModalPosition(position, dialog)
     {
         position = position || 'fit';
-        var dialog = $('#ajaxModal .modal-dialog');
+        if(!dialog) dialog = $('#ajaxModal .modal-dialog');
         if(position)
         {
            var half = Math.max(0, ($(window).height() - dialog.outerHeight())/2);

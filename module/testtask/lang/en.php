@@ -51,6 +51,8 @@ $lang->testtask->lastRunAccount = "Run";
 $lang->testtask->lastRunTime    = 'Time';
 $lang->testtask->lastRunResult  = 'Result';
 $lang->testtask->report         = 'Report';
+$lang->testtask->stories        = 'Stories';
+$lang->testtask->bugs           = 'Bugs';
 
 $lang->testtask->legendDesc      = 'Desc';
 $lang->testtask->legendReport    = 'Report';
@@ -96,3 +98,5 @@ $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
 $lang->testtask->mail->create->title = "%s created testtask #%s:%s";
 $lang->testtask->mail->edit->title   = "%s finished testtask #%s:%s";
+
+$lang->testtask->testScope = 'Test scope';

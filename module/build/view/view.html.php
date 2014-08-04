@@ -146,11 +146,11 @@
           </tr>  
           <tr>
             <th><?php echo $lang->build->scmPath;?></th>
-            <td><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
+            <td style='word-break:break-all;'><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->build->filePath;?></th>
-            <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
+            <td style='word-break:break-all;'><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
           </tr>
         </table>
       </fieldset>

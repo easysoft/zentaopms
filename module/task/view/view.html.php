@@ -67,7 +67,7 @@
     <div class='main'>
       <fieldset>
         <legend><?php echo $lang->task->legendDesc;?></legend>
-        <div class='content'><?php echo $task->desc;?></div>
+        <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>

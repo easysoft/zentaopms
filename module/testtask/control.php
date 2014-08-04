@@ -180,6 +180,16 @@ class testtask extends control
         $task = $this->testtask->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
+        $buildID   = $task->build;
+
+        $build     = $this->loadModel('build')->getByID($buildID);
+
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+
+        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+
         $this->testtask->setMenu($this->products, $productID);
 
         $this->view->title      = "TASK #$task->id $task->name/" . $this->products[$productID];
@@ -191,6 +201,9 @@ class testtask extends control
         $this->view->task      = $task;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions   = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->build     = $build;
+        $this->view->stories   = $stories;
+        $this->view->bugs      = $bugs;
 
         $this->display();
     }
@@ -703,6 +716,8 @@ class testtask extends control
         $this->view->nextCase = $nextCase;
         $this->view->results  = $this->testtask->getResults(0, $caseID);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed, noletter');
+        $this->view->caseID   = $caseID;
+        $this->view->version  = $version;
 
         die($this->display());
     }

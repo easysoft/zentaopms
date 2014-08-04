@@ -20,7 +20,7 @@
     <?php if($story):?>
     <small class='text-muted'><?php echo html::icon($lang->icons['story']) . ' ' . $story->title ?></small>
     <?php endif;?>
-    <div class='actions'><?php echo html::commonButton($lang->parseText, "data-toggle='myModal'")?></div>
+    <div class='actions'><?php echo html::commonButton($lang->parseText, "data-toggle='myModal' ")?></div>
   </div>
 </div>
 

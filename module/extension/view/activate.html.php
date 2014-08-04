@@ -15,19 +15,18 @@
   <div class='heading'>
     <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
     <strong><?php echo $title;?></strong>
-    <small class='text-success'><?php echo $lang->extension->activate;?> <?php echo html::icon($lang->icons['activate']);?></small>
+    <small class='text-muted'><?php echo $lang->extension->activate;?> <?php echo html::icon($lang->icons['activate']);?></small>
   </div>
 </div>
 <?php if(isset($error) and $error):?>
-<div class='alert alert-danger'>
-  <i class='icon-info-sign'></i>
-  <div class='content'><?php $error;?></div>
+<div class='text-center'>
+  <div class='text-danger'><?php $error;?></div>
 </div>
 <?php else:?>
-<div class='alert alert-success'>
-  <i class='icon-ok-sign'></i>
+<div class='text-center with-padding'>
   <div class='content'>
-    <h3><?php echo $title;?></h3>
+    <h3 class='text-success'><?php echo $title;?></h3>
+    <hr>
     <p class='text-center'><?php echo html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"');?></p>
   </div>
 </div>

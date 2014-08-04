@@ -66,11 +66,24 @@
     </table>
   </form>
 </div>
-<?php 
-ob_start();
-$case    = $run->case; include './results.html.php'; 
-$results = ob_get_contents();
-ob_clean();
-echo preg_replace("/<h1>[\s\S]*<\/h1>|<fieldset>[\s\S]*<\/fieldset>/", "", $results);
-?>
+<div class='main' id='resultsContainer'>
+</div>
+<script>
+$(function()
+{
+    $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID=0&caseID=$caseID&version=$version");?> #casesResults", function()
+    {
+        $('.result-item').click(function()
+        {
+            var $this = $(this);
+            $this.toggleClass('show-detail');
+            var show = $this.hasClass('show-detail');
+            $this.next('.result-detail').toggleClass('hide', !show);
+            $this.find('.collapse-handle').toggleClass('icon-chevron-down', !show).toggleClass('icon-chevron-up', show);;
+        });
+
+        $('#casesResults table caption .result-tip').html($('#resultTip').html());
+    });
+});
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -15,19 +15,17 @@
   <div class='heading'>
     <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
     <strong><?php echo $title;?></strong>
-    <small class='text-danger'><?php echo $lang->extension->deactivate;?> <?php echo html::icon($lang->icons['activate']);?></small>
+    <small class='text-muted'><?php echo $lang->extension->deactivate;?> <?php echo html::icon($lang->icons['activate']);?></small>
   </div>
 </div>
-<div class='alert alert-success'>
-  <i class='icon-ok-sign'></i>
-  <div class='content'>
-    <h3><?php echo $title;?></h3>
+<div class='text-center with-padding'>
+    <h3 class='mgb-20'><?php echo $title;?></h3>
     <?php if($removeCommands):?>
     <p><strong><?php echo $lang->extension->unremovedFiles;?></strong></p>
     <p><?php echo join($removeCommands, '<br />');?></p>
     <?php endif;?>
-    <p class='text-center'><?php echo html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"');?></p>
-  </div>
+    <hr>
+    <p><?php echo html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"');?></p>
 </div>
 </body>
 </html>

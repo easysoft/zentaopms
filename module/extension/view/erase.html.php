@@ -18,7 +18,7 @@
     <small class='text-danger'><?php echo $lang->extension->erase;?> <?php echo html::icon('trash');?></small>
   </div>
 </div>
-<div class='alert alert-success'>
+<div class='alert alert-success with-icon'>
   <i class='icon-ok-sign'></i>
   <div class='content'>
     <h3><?php echo $title;?></h3>
