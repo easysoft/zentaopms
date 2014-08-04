@@ -303,8 +303,8 @@ class todo extends control
      */
     public function finish($todoID)
     {
-        $this->todo->finish($todoID);
         $todo = $this->todo->getById($todoID);
+        if($todo->status != 'done') $this->todo->finish($todoID);
         if($todo->type == 'bug' or $todo->type == 'task')
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
