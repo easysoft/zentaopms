@@ -69,7 +69,7 @@
           <div class='tab-pane' id='testScope'>
             <?php $countStories = count($stories); $countBugs = count($bugs); ?>
             <table class='table table-hover table-condensed tablesorter mgb-20'>
-              <caption class='text-left'><i class='icon-lightbulb'></i> <strong><?php echo $lang->testtask->stories;?></strong> <span class='text-muted'><?php echo sprintf($lang->build->finishStories, $countStories);?></span></caption>
+              <caption class='text-left'><i class='icon-lightbulb'></i> <strong><?php echo $lang->testtask->stories;?></strong> <span class='text-muted'>(<?php echo $countStories?>)</span></caption>
               <?php if($countStories > 0):?>
               <thead>
                 <tr>
@@ -97,7 +97,7 @@
               <?php endif;?>
             </table>
             <table class='table table-hover table-condensed tablesorter'>
-            <caption class='text-left'><i class='icon-bug'></i><strong><?php echo $lang->testtask->bugs;?></strong> <span class='text-muted'><?php echo sprintf($lang->build->resolvedBugs, $countBugs)?></span></caption>
+            <caption class='text-left'><i class='icon-bug'></i><strong><?php echo $lang->testtask->bugs;?></strong> <span class='text-muted'><?php echo $countBugs?></span></caption>
                 <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>

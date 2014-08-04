@@ -17,7 +17,7 @@
         <strong><?php echo $lang->upgrade->confirm;?></strong>
       </div>
       <div class='modal-body'>
-        <textarea rows='20' class='form-control'><?php echo $confirm;?></textarea>
+        <textarea rows='20' class='form-control' readonly='readonly'><?php echo $confirm;?></textarea>
       </div>
       <div class='modal-footer'><?php echo html::submitButton($lang->upgrade->sureExecute) . html::hidden('fromVersion', $fromVersion);?></div>
     </div>

@@ -97,7 +97,7 @@ hr.small {margin: 10px 0}
 .table tr.active td, .table-hover>tbody>tr.active:hover>td, .table-hover>tbody>tr.active:hover>th, .table-striped>tbody>tr.active:nth-child(odd).active>td, .table-striped>tbody>tr.active:nth-child(odd)>th {background-color: #FCE6A2}
 .table tr>td.active, .table tr>th.active, .table tr.active>td, .table tr.active>th {background-color: #FCE6A2}
 
-.table caption {padding: 8px 20px; border-bottom: 1px solid #ddd; background: #fafafa;}
+.table caption {padding: 8px 20px; border: 1px solid #DDD; border-bottom: 0; background: #fafafa;}
 .table.table-condensed caption {padding: 6px 15px;}
 
 /* Datepicker */
