@@ -19,7 +19,7 @@
   </div>
 </div>
 <?php if(isset($confirm) and $confirm == 'no'):?>
-<div class='alert alert-warning'>
+<div class='alert alert-warning with-icon'>
   <i class='icon-info-sign'></i>
   <div class='content'>
   <?php
@@ -31,7 +31,7 @@
   </div>
 </div>
 <?php elseif(!empty($error)):?>
-<div class='alert alert-danger'>
+<div class='alert alert-danger with-icon'>
   <i class='icon-info-sign'></i>
   <div class='content'>
   <?php
@@ -41,7 +41,7 @@
   </div>
 </div>
 <?php else:?>
-<div class='alert alert-success'>
+<div class='alert alert-success with-icon'>
   <i class='icon-ok-sign'></i>
   <div class='content'>
     <?php

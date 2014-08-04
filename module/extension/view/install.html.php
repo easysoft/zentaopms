@@ -23,42 +23,40 @@
   </div>
 </div>
 <?php if($error):?>
-<div class='alert alert-danger'>
-  <i class='icon-remove-sign'></i>
-  <div class='content'>
-    <h4><?php sprintf($lang->extension->installFailed, $installType);?></h4>
-    <p><?php echo $error;?></p>
-    <hr>
-    <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
-  </div>
+<div class='panel panel-body text-center'>
+  <h4 class='text-danger'><?php sprintf($lang->extension->installFailed, $installType);?></h4>
+  <p class='text-danger'><?php echo $error;?></p>
+  <hr>
+  <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
 </div>
 <?php elseif(isset($license)):?>
-<div class='alert'>
-  <i class='icon-info-sign'></i>
-  <div class='content'>
+<div class='panel panel-body '>
+  <div class='content text-center'>
     <h4><?php echo $lang->extension->license;?></h4>
     <p><?php echo html::textarea('license', $license, "class='form-control' disabled rows='15'");?></p>
     <?php echo html::a($agreeLink, $lang->extension->agreeLicense, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php else:?>
-<div class='alert alert-success'>
-  <h4><i class='icon-ok-sign'></i> <?php echo $lang->extension->successDownloadedPackage;?></h4>
-  <h1 class='text-center'><?php echo sprintf($lang->extension->installFinished, $installType);?></h1>
+<div class='panel panel-body'>
+  <h1 class='text-center mgb-20'><?php echo sprintf($lang->extension->installFinished, $installType);?></h1>
   <div class='text-center'>
     <?php echo html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '" class="btn btn-success"');?>
   </div>
   <hr>
-  <?php
-  echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
-  echo '<ul>';
-  foreach($files as $fileName => $md5)
-  {
-      echo "<li>$fileName</li>";
-  }
-  echo '</ul>';
-  echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";
-  ?>
+  <div class='alert'>
+    <?php
+    echo "<h5 class='success'>{$lang->extension->successDownloadedPackage}</h5>";
+    echo "<h5 class='success'>{$lang->extension->successCopiedFiles}</h5>";
+    echo '<ul>';
+    foreach($files as $fileName => $md5)
+    {
+        echo "<li>$fileName</li>";
+    }
+    echo '</ul>';
+    echo "<h5 class='success'>{$lang->extension->successInstallDB}</h5>";
+    ?>
+  </div>
 </div>
 <?php endif;?>
 </body>
