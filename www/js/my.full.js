@@ -979,8 +979,8 @@ function setModal()
         modalBody.css('height', options.height - modal.find('.modal-header').outerHeight());
         try
         {
-            var $frame = $(window.frames[options.name].document);
-            if($frame.find('#titlebar').length)
+            var frame$ = window.frames[options.name].$;
+            if(frame$('#titlebar').length)
             {
                 modal.addClass('with-titlebar');
                 if(options.size == 'fullscreen')
@@ -990,7 +990,7 @@ function setModal()
             }
             if(options.height == 'auto')
             {
-                var $framebody = $frame.find('body');
+                var $framebody = frame$('body');
                 setTimeout(function()
                 {
                     var fbH = $framebody.addClass('body-modal').outerHeight();
@@ -1001,16 +1001,13 @@ function setModal()
                     if(modal.data('first')) modal.data('first', false);
                 }, 100);
 
-                if(navigator.userAgent.indexOf("MSIE 8.0") < 0)
+                $framebody.resize(function()
                 {
-                    $framebody.resize(function()
-                    {
-                        var fbH = $framebody.addClass('body-modal').outerHeight();
-                        if(typeof fbH == 'object') fbH = $framebody.height();
-                        modalBody.css('height', fbH);
-                        ajustModalPosition();
-                    });
-                }
+                    var fbH = $framebody.outerHeight();
+                    if(typeof fbH == 'object') fbH = $framebody.height();
+                    modalBody.css('height', fbH);
+                    ajustModalPosition();
+                });
             }
             else
             {
@@ -1034,7 +1031,7 @@ function setModal()
         if($('#ajaxModal').length)
         {
             /* unbind all events */
-            $('#ajaxModal').off('show.bs.modal shown.bs.modal hide.bs.modal hidden.bs.modal');
+            $('#ajaxModal').attr('class', 'modal fade').off('show.bs.modal shown.bs.modal hide.bs.modal hidden.bs.modal');
         }
         else
         {

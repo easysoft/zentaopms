@@ -93,7 +93,7 @@ $lang->extension->errorGetModules              = "Get extensions' categories dat
 $lang->extension->errorGetExtensions           = 'Get extensions from www.zentao.net failed. You can visit <a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a> to find your extensions, download it manually and then upload to zentaopms to install it.';
 $lang->extension->errorDownloadPathNotFound    = 'The save path of package file <strong>%s</strong>does not exists.<br />For linux users, can execute <strong>mkdir -p %s</strong> to fix it.';
 $lang->extension->errorDownloadPathNotWritable = 'The save path of package file <strong>%s</strong>is not writable.<br />For linux users, can execute <strong>sudo chmod 777 %s</strong> to fix it.';
-$lang->extension->errorPackageFileExists       = 'There is already a file with the same name <strong>%s</strong>.<h3> If you want to %s again, <a href="%s">please click this link</a>.</h3>';
+$lang->extension->errorPackageFileExists       = 'There is already a file with the same name <strong>%s</strong>.<h5> If you want to %s again, <a href="%s">please click this link</a>.</h5>';
 $lang->extension->errorDownloadFailed          = 'Download failed, please try again. Or you can download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'The downloawd files checking failed, Please download it manually and upload it to install';
 $lang->extension->errorExtracted               = 'The package file <strong> %s </strong> extracted failed. The error is:<br />%s';

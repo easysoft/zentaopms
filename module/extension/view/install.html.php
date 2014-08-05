@@ -24,7 +24,7 @@
 </div>
 <?php if($error):?>
 <div class='panel panel-body text-center'>
-  <h4 class='text-danger'><?php sprintf($lang->extension->installFailed, $installType);?></h4>
+  <h5 class='text-danger'><?php sprintf($lang->extension->installFailed, $installType);?></h5>
   <p class='text-danger'><?php echo $error;?></p>
   <hr>
   <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
@@ -32,14 +32,14 @@
 <?php elseif(isset($license)):?>
 <div class='panel panel-body '>
   <div class='content text-center'>
-    <h4><?php echo $lang->extension->license;?></h4>
-    <p><?php echo html::textarea('license', $license, "class='form-control' disabled rows='15'");?></p>
+    <h5><?php echo $lang->extension->license;?></h5>
+    <p><?php echo html::textarea('license', $license, "class='form-control' rows='15'");?></p>
     <?php echo html::a($agreeLink, $lang->extension->agreeLicense, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php else:?>
 <div class='panel panel-body'>
-  <h1 class='text-center mgb-20'><?php echo sprintf($lang->extension->installFinished, $installType);?></h1>
+  <h5 class='text-center mgb-20'><?php echo sprintf($lang->extension->installFinished, $installType);?></h5>
   <div class='text-center'>
     <?php echo html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '" class="btn btn-success"');?>
   </div>
