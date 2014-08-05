@@ -59,6 +59,7 @@ $lang->switchDisplay= 'Toggle Show';
 $lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
+$lang->pasteText    = 'Paste text';
 $lang->timeout      = 'Timed out, please check the network, or retry!';
 $lang->unfold       = '+';
 $lang->fold         = '-';
@@ -357,7 +358,8 @@ $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' ta
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> zentaoPRO!</a> &nbsp; ";
 $lang->downNotify     = "Down notify";
 
-$lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
+$lang->suhosinInfo   = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
+$lang->pasteTextInfo = "Paste the text into a text field, each line of text as a data header.";
 
 $lang->noResultsMatch    = "No results match";
 $lang->selectAnOption    = "Select an option";

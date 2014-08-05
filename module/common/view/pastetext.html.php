@@ -3,9 +3,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->parseText?></h4>
+        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->pasteText?></h4>
       </div>
-      <div class="modal-body"><?php echo html::textarea('parseText', '', "class='form-control' rows='10'")?></div>
+      <div class="modal-body"><?php echo html::textarea('pasteText', '', "class='form-control' rows='10' placeholder='$lang->pasteTextInfo'")?></div>
       <div class="modal-footer"><?php echo html::submitButton()?></div>
     </div>
   </div>
@@ -14,12 +14,12 @@
 $("button[data-toggle='myModal']").click(function(){$('#myModal').modal('show')})
 $("#myModal button[type='submit']").click(function()
 {
-    var parseText = $('#myModal #parseText').val();
+    var pasteText = $('#myModal #pasteText').val();
 
     $('#myModal').modal('hide')
-    $('#myModal #parseText').val('');
+    $('#myModal #pasteText').val('');
 
-    var dataList = parseText.split("\n");
+    var dataList = pasteText.split("\n");
 
     if(typeof(mainField) == 'undefined') mainField = 'title';
     var index = 0;

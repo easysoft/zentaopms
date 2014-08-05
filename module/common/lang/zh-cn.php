@@ -59,7 +59,7 @@ $lang->switchDisplay= '切换显示';
 $lang->switchHelp   = '切换帮助';
 $lang->addFiles     = '上传了附件 ';
 $lang->files        = '附件 ';
-$lang->parseText    = '粘贴文本 ';
+$lang->pasteText    = '粘贴文本 ';
 $lang->timeout      = '连接超时，请检查网络环境，或重试！';
 $lang->unfold       = '+';
 $lang->fold         = '-';
@@ -358,7 +358,8 @@ $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' ta
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 升至专业版！</a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
-$lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
+$lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
+$lang->pasteTextInfo = "粘贴文本到文本域中，每行文字作为一条数据的标题。";
 
 $lang->noResultsMatch     = "没有匹配结果";
 $lang->selectAnOption     = "选择一个选项";

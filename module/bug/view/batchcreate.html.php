@@ -16,7 +16,7 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->bug->common . $lang->colon . $lang->bug->batchCreate;?></strong>
-    <div class='actions'><?php echo html::commonButton($lang->parseText, "data-toggle='myModal'")?></div>
+    <div class='actions'><?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?></div>
   </div>
 </div>
 
@@ -73,5 +73,5 @@
     </tr>
   </tbody>
 </table>
-<?php include '../../common/view/parsetext.html.php';?>
+<?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
