@@ -42,4 +42,4 @@ $lang->mail->content        = '邮箱设置成功';
 $lang->mail->successSended  = '成功发送！';
 $lang->mail->sendmailTips   = '提示：系统不会为当前操作者发信。';
 $lang->mail->needConfigure  = '无法找到邮件配置信息，请先配置邮件发送参数。';
-$lang->mail->nofsocket      = 'fsocket相关函数被禁用，不能发信！';
+$lang->mail->nofsocket      = 'fsocket相关函数被禁用，不能发信！请在php.ini中修改allow_url_fopen为On，打开openssl扩展。 保存并重新启动apache。';
