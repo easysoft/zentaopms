@@ -76,6 +76,8 @@ $lang->testtask->linkByBug     = 'Link by bug';
 $lang->testtask->passAll       = 'Pass all';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Fail';
+$lang->testtask->showResult    = 'Executed %s times';
+$lang->testtask->showFail      = 'Failed %s times';
 
 $lang->testtask->confirmDelete     = 'Are you sure to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Are you sure to unlink this case?';
