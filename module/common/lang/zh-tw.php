@@ -59,6 +59,7 @@ $lang->switchDisplay= '切換顯示';
 $lang->switchHelp   = '切換幫助';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
+$lang->pasteText    = '粘貼文本 ';
 $lang->timeout      = '連接超時，請檢查網絡環境，或重試！';
 $lang->unfold       = '+';
 $lang->fold         = '-';
@@ -105,7 +106,7 @@ $lang->searchObjects['user']        = '用戶';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '發佈';
 $lang->searchObjects['productplan'] = '產品計劃';
-$lang->searchObjects['testtask']    = '測試任務';
+$lang->searchObjects['testtask']    = '測試版本';
 $lang->searchObjects['doc']         = '文檔';
 $lang->searchTips                   = '編號(ctrl+g)';
 
@@ -213,16 +214,16 @@ $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
-$lang->bug->menu->testtask = array('link' => '測試任務|testtask|browse|productID=%s');
+$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
+$lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => '測試任務|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun');
+$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
+$lang->testcase->menu->testtask = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
@@ -357,7 +358,8 @@ $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' ta
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 升至專業版！</a> &nbsp; ";
 $lang->downNotify     = "下載桌面提醒";
 
-$lang->suhosinInfo = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
+$lang->suhosinInfo   = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
+$lang->pasteTextInfo = "粘貼文本到文本域中，每行文字作為一條數據的標題。";
 
 $lang->noResultsMatch     = "沒有匹配結果";
 $lang->selectAnOption     = "選擇一個選項";

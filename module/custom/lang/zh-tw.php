@@ -61,3 +61,6 @@ $lang->custom->currentLang = '適用當前語言';
 $lang->custom->allLang     = '適用所有語言';
 
 $lang->custom->confirmRestore = '是否要恢復預設語言配置？';
+
+$lang->custom->notice = new stdclass();
+$lang->custom->notice->userRole = '鍵的長度必須小於20個字元！';

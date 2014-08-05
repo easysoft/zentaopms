@@ -97,8 +97,8 @@ $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
 
 /* 用來顯示動態信息。*/
 $lang->action->label = new stdclass();
-$lang->action->label->created             = '創建了';
-$lang->action->label->opened              = '創建了';
+$lang->action->label->created             = '創建';
+$lang->action->label->opened              = '創建';
 $lang->action->label->changed             = '變更了';
 $lang->action->label->edited              = '編輯了';
 $lang->action->label->assigned            = '指派了';
@@ -126,11 +126,11 @@ $lang->action->label->unlinkedfromplan    = '移除計劃';
 $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = '關聯項目';
 $lang->action->label->unlinkedfromproject = '移除項目';
-$lang->action->label->started             = '開始了';
+$lang->action->label->started             = '開始';
 $lang->action->label->recordestimate      = '記錄了工時';
 $lang->action->label->editestimate        = '編輯了工時';
 $lang->action->label->canceled            = '取消了';
-$lang->action->label->finished            = '完成了';
+$lang->action->label->finished            = '完成';
 $lang->action->label->login               = '登錄系統';
 $lang->action->label->logout              = "退出登錄";
 

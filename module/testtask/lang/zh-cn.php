@@ -26,6 +26,7 @@ $lang->testtask->results        = "结果";
 $lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';
 $lang->testtask->cases          = '用例';
+$lang->testtask->groupCase      = "分组浏览用例";
 $lang->testtask->pre            = '上一个';
 $lang->testtask->next           = '下一个';
 $lang->testtask->start          = "开始";

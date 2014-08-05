@@ -26,10 +26,13 @@ $lang->testtask->results        = "結果";
 $lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';
 $lang->testtask->cases          = '用例';
+$lang->testtask->groupCase      = "分組瀏覽用例";
 $lang->testtask->pre            = '上一個';
 $lang->testtask->next           = '下一個';
 $lang->testtask->start          = "開始";
 $lang->testtask->close          = "關閉";
+$lang->testtask->wait           = "待測版本";
+$lang->testtask->done           = "已測版本";
 
 $lang->testtask->common         = '測試任務';
 $lang->testtask->id             = '任務編號';
@@ -49,6 +52,8 @@ $lang->testtask->lastRunAccount = '執行人';
 $lang->testtask->lastRunTime    = '執行時間';
 $lang->testtask->lastRunResult  = '結果';
 $lang->testtask->report         = '測試總結';
+$lang->testtask->stories        = '相關需求';
+$lang->testtask->bugs           = '相關Bug';
 
 $lang->testtask->legendDesc      = '任務描述';
 $lang->testtask->legendReport    = '測試總結';
@@ -72,6 +77,8 @@ $lang->testtask->linkByBug     = '按Bug關聯';
 $lang->testtask->passAll       = '全部通過';
 $lang->testtask->pass          = '通過';
 $lang->testtask->fail          = '失敗';
+$lang->testtask->showResult    = '共執行%s次';
+$lang->testtask->showFail      = '失敗%s次';
 
 $lang->testtask->confirmDelete     = '您確認要刪除該測試任務嗎？';
 $lang->testtask->confirmUnlinkCase = '您確認要移除該用例嗎？';
@@ -94,3 +101,5 @@ $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
 $lang->testtask->mail->create->title = "%s創建了測試任務 #%s:%s";
 $lang->testtask->mail->edit->title   = "%s編輯了測試任務 #%s:%s";
+
+$lang->testtask->testScope = '測試範疇';

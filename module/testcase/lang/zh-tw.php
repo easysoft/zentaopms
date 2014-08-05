@@ -62,6 +62,7 @@ $lang->testcase->batchEdit          =  "批量編輯 ";
 $lang->testcase->delete             = "刪除";
 $lang->testcase->deleted            = "已刪除";
 $lang->testcase->browse             = "用例列表";
+$lang->testcase->groupCase          = "分組瀏覽用例";
 $lang->testcase->import             = "導入";
 $lang->testcase->importID           = "行號";
 $lang->testcase->showImport         = "顯示導入內容";
@@ -135,6 +136,9 @@ $lang->testcase->stageList['system']     = '系統測試階段';
 $lang->testcase->stageList['smoke']      = '冒煙測試階段';
 $lang->testcase->stageList['bvt']        = '版本驗證階段';
 
+$lang->testcase->groups['']      = '分組查看';
+$lang->testcase->groups['story'] = '需求分組';
+
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
@@ -150,3 +154,4 @@ $lang->testcase->buttonToList = '返回';
 
 $lang->testcase->errorEncode = '無數據，請選擇正確的編碼重新上傳！';
 $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding轉碼方法，不能將數據轉成想要的編碼！';
+$lang->testcase->noRequire   = "%s行的“%s”是必填欄位，不能為空";

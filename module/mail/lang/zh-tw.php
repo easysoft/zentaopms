@@ -42,3 +42,4 @@ $lang->mail->content        = '郵箱設置成功';
 $lang->mail->successSended  = '成功發送！';
 $lang->mail->sendmailTips   = '提示：系統不會為當前操作者發信。';
 $lang->mail->needConfigure  = '無法找到郵件配置信息，請先配置郵件發送參數。';
+$lang->mail->nofsocket      = 'fsocket相關函數被禁用，不能發信！請在php.ini中修改allow_url_fopen為On，打開openssl擴展。 保存並重新啟動apache。';

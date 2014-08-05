@@ -157,6 +157,7 @@ $lang->resource->story->close       = 'lblClose';
 $lang->resource->story->batchClose  = 'batchClose';
 $lang->resource->story->activate    = 'lblActivate';
 $lang->resource->story->tasks       = 'tasks';
+$lang->resource->story->zeroCase    = 'zeroCase';
 $lang->resource->story->report      = 'reportChart';
 $lang->resource->story->batchChangePlan  = 'batchChangePlan';
 $lang->resource->story->batchChangeStage = 'batchChangeStage';
@@ -174,7 +175,8 @@ $lang->story->methodOrder[50] = 'close';
 $lang->story->methodOrder[55] = 'batchClose';
 $lang->story->methodOrder[60] = 'activate';
 $lang->story->methodOrder[65] = 'tasks';
-$lang->story->methodOrder[70] = 'report';
+$lang->story->methodOrder[70] = 'zeroCase';
+$lang->story->methodOrder[75] = 'report';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -399,6 +401,7 @@ $lang->bug->methodOrder[105] = 'customFields';
 $lang->resource->testcase = new stdclass();
 $lang->resource->testcase->index              = 'index';
 $lang->resource->testcase->browse             = 'browse';
+$lang->resource->testcase->groupCase          = 'groupCase';
 $lang->resource->testcase->create             = 'create';
 $lang->resource->testcase->batchCreate        = 'batchCreate';
 $lang->resource->testcase->view               = 'view';
@@ -412,16 +415,17 @@ $lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 
-$lang->testcase->methodOrder[0] = 'index';
-$lang->testcase->methodOrder[5] = 'browse';
-$lang->testcase->methodOrder[10] = 'create';
-$lang->testcase->methodOrder[15] = 'batchCreate';
-$lang->testcase->methodOrder[20] = 'view';
-$lang->testcase->methodOrder[25] = 'edit';
-$lang->testcase->methodOrder[30] = 'delete';
-$lang->testcase->methodOrder[35] = 'export';
-$lang->testcase->methodOrder[40] = 'confirmChange';
-$lang->testcase->methodOrder[45] = 'confirmStoryChange';
+$lang->testcase->methodOrder[0]  = 'index';
+$lang->testcase->methodOrder[5]  = 'browse';
+$lang->testcase->methodOrder[10] = 'groupCase';
+$lang->testcase->methodOrder[15] = 'create';
+$lang->testcase->methodOrder[20] = 'batchCreate';
+$lang->testcase->methodOrder[25] = 'view';
+$lang->testcase->methodOrder[30] = 'edit';
+$lang->testcase->methodOrder[35] = 'delete';
+$lang->testcase->methodOrder[40] = 'export';
+$lang->testcase->methodOrder[45] = 'confirmChange';
+$lang->testcase->methodOrder[50] = 'confirmStoryChange';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -430,6 +434,7 @@ $lang->resource->testtask->create      = 'create';
 $lang->resource->testtask->browse      = 'browse';
 $lang->resource->testtask->view        = 'view';
 $lang->resource->testtask->cases       = 'lblCases';
+$lang->resource->testtask->groupCase   = 'groupCase';
 $lang->resource->testtask->edit        = 'edit';
 $lang->resource->testtask->start       = 'start';
 $lang->resource->testtask->close       = 'close';
@@ -447,15 +452,16 @@ $lang->testtask->methodOrder[5]  = 'create';
 $lang->testtask->methodOrder[10] = 'browse';
 $lang->testtask->methodOrder[15] = 'view';
 $lang->testtask->methodOrder[20] = 'cases';
-$lang->testtask->methodOrder[25] = 'edit';
-$lang->testtask->methodOrder[30] = 'start';
-$lang->testtask->methodOrder[35] = 'close';
-$lang->testtask->methodOrder[40] = 'delete';
-$lang->testtask->methodOrder[45] = 'batchAssign';
-$lang->testtask->methodOrder[50] = 'linkcase';
-$lang->testtask->methodOrder[55] = 'unlinkcase';
-$lang->testtask->methodOrder[60] = 'runcase';
-$lang->testtask->methodOrder[65] = 'results';
+$lang->testtask->methodOrder[25] = 'groupCase';
+$lang->testtask->methodOrder[30] = 'edit';
+$lang->testtask->methodOrder[35] = 'start';
+$lang->testtask->methodOrder[40] = 'close';
+$lang->testtask->methodOrder[45] = 'delete';
+$lang->testtask->methodOrder[50] = 'batchAssign';
+$lang->testtask->methodOrder[55] = 'linkcase';
+$lang->testtask->methodOrder[60] = 'unlinkcase';
+$lang->testtask->methodOrder[65] = 'runcase';
+$lang->testtask->methodOrder[70] = 'results';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -917,3 +923,7 @@ $lang->changelog['5.0.beta2'][] = 'git-cat';
 $lang->changelog['5.0.beta2'][] = 'git-apiSync';
 
 $lang->changelog['5.3'][] = 'bug-batchClose';
+
+$lang->changelog['6.1'][] = 'story-zeroCase';
+$lang->changelog['6.1'][] = 'testcase-groupCase';
+$lang->changelog['6.1'][] = 'testtask-groupCase';

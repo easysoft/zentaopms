@@ -74,6 +74,7 @@ $lang->product->closedByMe   = '由我關閉';
 $lang->product->draftStory   = '草稿';
 $lang->product->activeStory  = '激活';
 $lang->product->changedStory = '已變更';
+$lang->product->willClose    = '待關閉';
 $lang->product->closedStory  = '已關閉';
 
 $lang->product->allStory    = '全部需求';
