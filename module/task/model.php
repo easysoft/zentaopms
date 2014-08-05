@@ -259,9 +259,9 @@ class taskModel extends model
             $task->canceledBy     = $this->post->canceledBys[$taskID];
             $task->closedBy       = $this->post->closedBys[$taskID];
             $task->closedReason   = $this->post->closedReasons[$taskID];
-            $task->finishedDate   = "";
-            $task->canceledDate   = "";
-            $task->closedDate     = "";
+            $task->finishedDate   = $oldTask->finishedDate;
+            $task->canceledDate   = $oldTask->canceledDate;
+            $task->closedDate     = $oldTask->closedDate;
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
