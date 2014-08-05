@@ -312,7 +312,7 @@ class fileModel extends model
                     else
                     {
                         $data[$row][$col] .= "\n" . substr($line, 0, $pos + 1);
-                        $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                        $data[$row][$col] = trim(str_replace('&comma;', ',', trim($data[$row][$col], '"')));
                         $line = substr($line, $pos + 2);
                         $col++;
                     }
@@ -330,7 +330,7 @@ class fileModel extends model
                         {
                             $data[$row][$col] = $line;
                             /* if end of cell is not '"', then the data of cell is not end. */
-                            if($line{strlen($line) - 1} != '"') continue 2;
+                            if(strlen($line) == 1 or $line{strlen($line) - 1} != '"') continue 2;
                             $line = '';
                         }
                         else
@@ -357,7 +357,7 @@ class fileModel extends model
                         }
                     }
 
-                    $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                    $data[$row][$col] = trim(str_replace('&comma;', ',', trim($data[$row][$col], '"')));
                     $col++;
                 }
             }
