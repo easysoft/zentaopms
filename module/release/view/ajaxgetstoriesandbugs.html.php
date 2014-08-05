@@ -4,7 +4,7 @@
     <div class='col-md-6'>
       <div class='panel panel-sm contentDiv'>
         <div class='panel-heading'><?php echo html::icon($lang->icons['story']) . ' ' . $lang->release->linkStories;?></div>
-        <table class='table table table-borderless table-condensed table-hover'>
+        <table class='table table-borderless table-condensed table-hover table-fixed'>
           <thead>
             <th class='w-id text-left'><?php echo html::selectAll('story', 'checkbox') . $lang->idAB;?></th>
             <th><?php echo $lang->story->title;?></th>
@@ -28,7 +28,7 @@
     <div class='col-md-6'>
       <div class='panel panel-sm contentDiv'>
         <div class='panel-heading'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->release->linkBugs;?></div>
-        <table class='table table table-borderless table-condensed table-hover'>
+        <table class='table table-borderless table-condensed table-hover table-fixed'>
           <thead>
             <tr>
               <th class='w-id text-left'><?php echo html::selectAll('bug', 'checkbox') . $lang->idAB;?></th>

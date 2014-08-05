@@ -44,7 +44,7 @@
                 <div class='panel-heading'>
                   <?php echo html::icon($lang->icons['story'], 'icon') . ' ' . $lang->release->linkStories;?>
                 </div>
-                <table class='mainTable table table-condensed table-hover table-borderless'>
+                <table class='mainTable table table-condensed table-hover table-borderless table-fixed'>
                   <thead>
                     <tr>
                       <th class='w-id text-left'><?php echo html::selectAll('story', 'checkbox') . ' ' .  $lang->idAB;?></th>
@@ -72,7 +72,7 @@
                 <div class='panel-heading'>
                   <?php echo html::icon($lang->icons['bug'], 'icon') . ' ' . $lang->release->linkBugs;?>
                 </div>
-                <table class='mainTable table table-condensed table-hover table-borderless'>
+                <table class='mainTable table table-condensed table-hover table-borderless table-fixed'>
                   <thead>
                     <tr>
                       <th class='w-id text-left'><?php echo html::selectAll('bug', 'checkbox') . ' ' . $lang->idAB;?></th>
