@@ -211,11 +211,11 @@ class projectModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->stripTags('name, code, team')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
+            ->skipSpecial($this->config->project->editor->create['id'])
             ->remove('products, workDays, delta')
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
@@ -280,12 +280,12 @@ class projectModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $projectID = (int)$projectID;
         $project = fixer::input('post')
-            ->stripTags('name, code, team')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
+            ->skipSpecial($this->config->project->editor->create['id'])
             ->remove('products')
             ->get();
         $this->dao->update(TABLE_PROJECT)->data($project)

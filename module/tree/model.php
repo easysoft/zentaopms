@@ -967,7 +967,7 @@ class treeModel extends model
      */
     public function update($moduleID)
     {
-        $module = fixer::input('post')->specialChars('name')->get();
+        $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);

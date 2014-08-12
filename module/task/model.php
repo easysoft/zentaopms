@@ -28,7 +28,6 @@ class taskModel extends model
         {
             if($this->post->type == 'affair' and empty($assignedTo)) continue;
             $task = fixer::input('post')
-                ->striptags('name')
                 ->add('project', (int)$projectID)
                 ->setDefault('estimate, left, story', 0)
                 ->setDefault('estStarted', '0000-00-00')
@@ -39,6 +38,7 @@ class taskModel extends model
                 ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
                 ->setDefault('openedBy',   $this->app->user->account)
                 ->setDefault('openedDate', helper::now())
+                ->skipSpecial($this->config->task->editor->create['id'])
                 ->remove('after,files,labels')
                 ->join('mailto', ',')
                 ->get();
@@ -110,8 +110,8 @@ class taskModel extends model
             $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->type       : 0) : $tasks->type[$i];
             $data[$i]->module       = $tasks->module[$i]     == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->module     : 0) : $tasks->module[$i];
             $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
-            $data[$i]->name         = htmlspecialchars($tasks->name[$i]);
-            $data[$i]->desc         = nl2br(htmlspecialchars($tasks->desc[$i]));
+            $data[$i]->name         = $tasks->name[$i];
+            $data[$i]->desc         = nl2br($tasks->desc[$i]);
             $data[$i]->pri          = $tasks->pri[$i];
             $data[$i]->estimate     = $tasks->estimate[$i];
             $data[$i]->left         = $tasks->estimate[$i];
@@ -155,7 +155,6 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         $now     = helper::now();
         $task    = fixer::input('post')
-            ->striptags('name')
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('deadline', '0000-00-00')
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -180,6 +179,7 @@ class taskModel extends model
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->remove('comment,files,labels')
+            ->skipSpecial($this->config->task->editor->edit['id'])
             ->join('mailto', ',')
             ->get();
 
@@ -236,6 +236,7 @@ class taskModel extends model
         $allChanges = array();
         $now        = helper::now();
         $today      = date(DT_DATE1);
+        $data       = fixer::input('post')->get();
         $taskIDList = $this->post->taskIDList;
 
         /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
@@ -247,37 +248,37 @@ class taskModel extends model
             $oldTask = $this->getById($taskID);
 
             $task = new stdclass();
-            $task->name           = htmlspecialchars($this->post->names[$taskID]);
-            $task->module         = isset($this->post->modules[$taskID]) ? $this->post->modules[$taskID] : 0;
-            $task->type           = $this->post->types[$taskID];
-            $task->status         = $this->post->statuses[$taskID];
-            $task->assignedTo     = $task->status == 'closed' ? 'closed' : $this->post->assignedTos[$taskID];
-            $task->pri            = $this->post->pris[$taskID];
-            $task->estimate       = $this->post->estimates[$taskID];
-            $task->left           = $this->post->lefts[$taskID];
-            $task->finishedBy     = $this->post->finishedBys[$taskID];
-            $task->canceledBy     = $this->post->canceledBys[$taskID];
-            $task->closedBy       = $this->post->closedBys[$taskID];
-            $task->closedReason   = $this->post->closedReasons[$taskID];
+            $task->name           = $data->names[$taskID];
+            $task->module         = isset($data->modules[$taskID]) ? $data->modules[$taskID] : 0;
+            $task->type           = $data->types[$taskID];
+            $task->status         = $data->statuses[$taskID];
+            $task->assignedTo     = $task->status == 'closed' ? 'closed' : $data->assignedTos[$taskID];
+            $task->pri            = $data->pris[$taskID];
+            $task->estimate       = $data->estimates[$taskID];
+            $task->left           = $data->lefts[$taskID];
+            $task->finishedBy     = $data->finishedBys[$taskID];
+            $task->canceledBy     = $data->canceledBys[$taskID];
+            $task->closedBy       = $data->closedBys[$taskID];
+            $task->closedReason   = $data->closedReasons[$taskID];
             $task->finishedDate   = $oldTask->finishedDate;
             $task->canceledDate   = $oldTask->canceledDate;
             $task->closedDate     = $oldTask->closedDate;
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
-            if(isset($this->post->assignedTos[$taskID])) 
+            if(isset($data->assignedTos[$taskID])) 
             {
-                $task->assignedDate = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
+                $task->assignedDate = $data->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
             }
 
-            if($this->post->consumeds[$taskID])
+            if($data->consumeds[$taskID])
             {
                 $record = new stdclass();
                 $record->account  = $this->app->user->account;
                 $record->task     = $taskID;
                 $record->date     = $today;
                 $record->left     = $task->left;
-                $record->consumed = $this->post->consumeds[$taskID];
+                $record->consumed = $data->consumeds[$taskID];
                 $this->dao->insert(TABLE_TASKESTIMATE)->data($record)->autoCheck()->exec();
 
                 $task->consumed = $oldTask->consumed + $record->consumed;
@@ -467,7 +468,7 @@ class taskModel extends model
         {
             $consumed += $estimate->consumed;
             $left      = $estimate->left;
-            $work      = htmlspecialchars($estimate->work);
+            $work      = $estimate->work;
             $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate) 
                 ->autoCheck()
                 ->exec();

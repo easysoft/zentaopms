@@ -48,7 +48,7 @@ class bugModel extends model
             ->setDefault('openedBuild', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->specialChars('title,keyword')
+            ->skipSpecial($this->config->bug->editor->create['id'])
             ->cleanInt('product, module, severity')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
@@ -99,7 +99,7 @@ class bugModel extends model
             $bug->project     = $data->projects[$i] ? $data->projects[$i] : 0;
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->title       = $data->titles[$i];
-            $bug->steps       = nl2br(htmlspecialchars($data->stepses[$i]));
+            $bug->steps       = nl2br($data->stepses[$i]);
             $bug->type        = $data->types[$i];
             $bug->severity    = $data->severities[$i];
             $bug->os          = $data->oses[$i];
@@ -251,8 +251,7 @@ class bugModel extends model
         $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
-            ->specialChars('title,keyword')
-            ->remove('comment,files,labels')
+            ->skipSpecial($this->config->bug->editor->edit['id'])
             ->setDefault('project,module,project,story,task,duplicateBug', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
@@ -275,6 +274,7 @@ class bugModel extends model
             ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->remove('comment,files,labels')
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)
@@ -300,6 +300,7 @@ class bugModel extends model
         $bugs       = array();
         $allChanges = array();
         $now        = helper::now();
+        $data       = fixer::input('post')->get();
         $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
 
         /* Adjust whether the post data is complete, if not, remove the last element of $bugIDList. */
@@ -315,15 +316,15 @@ class bugModel extends model
                 $bug = new stdclass();
                 $bug->lastEditedBy   = $this->app->user->account;
                 $bug->lastEditedDate = $now;
-                $bug->type           = $this->post->types[$bugID];
-                $bug->severity       = $this->post->severities[$bugID];
-                $bug->pri            = $this->post->pris[$bugID];
-                $bug->status         = $this->post->statuses[$bugID];
-                $bug->title          = htmlspecialchars($this->post->titles[$bugID]);
-                $bug->assignedTo     = $this->post->assignedTos[$bugID];
-                $bug->resolvedBy     = $this->post->resolvedBys[$bugID];
-                $bug->resolution     = $this->post->resolutions[$bugID];
-                $bug->duplicateBug   = $this->post->duplicateBugs[$bugID] ? $this->post->duplicateBugs[$bugID] : $oldBug->duplicateBug;
+                $bug->type           = $data->types[$bugID];
+                $bug->severity       = $data->severities[$bugID];
+                $bug->pri            = $data->pris[$bugID];
+                $bug->status         = $data->statuses[$bugID];
+                $bug->title          = $data->titles[$bugID];
+                $bug->assignedTo     = $data->assignedTos[$bugID];
+                $bug->resolvedBy     = $data->resolvedBys[$bugID];
+                $bug->resolution     = $data->resolutions[$bugID];
+                $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
                 if($bug->assignedTo  != $oldBug->assignedTo)           $bug->assignedDate = $now;
                 if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'resolved') $bug->resolvedDate = $now;
@@ -1080,7 +1081,6 @@ class bugModel extends model
     public function saveUserBugTemplate()
     {
         $template = fixer::input('post')
-            ->specialChars('title')
             ->add('account', $this->app->user->account)
             ->add('type', 'bug')
             ->get();

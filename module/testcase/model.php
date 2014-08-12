@@ -51,7 +51,6 @@ class testcaseModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->remove('steps,expects,files,labels')
             ->setDefault('story', 0)
-            ->specialChars('title')
             ->join('stage', ',')
             ->get();
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
@@ -100,7 +99,7 @@ class testcaseModel extends model
                 $data[$i]->module     = $cases->module[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->module) : $cases->module[$i];
                 $data[$i]->type       = $cases->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $cases->type[$i]; 
                 $data[$i]->story      = $storyID ? $storyID : ($cases->story[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->story) : $cases->story[$i]); 
-                $data[$i]->title      = htmlspecialchars($cases->title[$i]);
+                $data[$i]->title      = $cases->title[$i];
                 $data[$i]->openedBy   = $this->app->user->account;
                 $data[$i]->openedDate = $now;
                 $data[$i]->status     = 'normal';
@@ -240,7 +239,6 @@ class testcaseModel extends model
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('story', 0)
-            ->specialChars('title')
             ->join('stage', ',')
             ->remove('comment,steps,expects,files,labels')
             ->get();
@@ -286,6 +284,7 @@ class testcaseModel extends model
         $cases      = array();
         $allChanges = array();
         $now        = helper::now();
+        $data       = fixer::input('post')->get();
         $caseIDList = $this->post->caseIDList;
 
         /* Adjust whether the post data is complete, if not, remove the last element of $caseIDList. */
@@ -297,12 +296,12 @@ class testcaseModel extends model
             $case = new stdclass();
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
-            $case->pri            = $this->post->pris[$caseID];
-            $case->status         = $this->post->statuses[$caseID];
-            $case->module         = $this->post->modules[$caseID];
-            $case->title          = htmlspecialchars($this->post->titles[$caseID]);
-            $case->type           = $this->post->types[$caseID];
-            $case->stage          = empty($this->post->stages[$caseID]) ? '' : implode(',', $this->post->stages[$caseID]);
+            $case->pri            = $data->pris[$caseID];
+            $case->status         = $data->statuses[$caseID];
+            $case->module         = $data->modules[$caseID];
+            $case->title          = $data->titles[$caseID];
+            $case->type           = $data->types[$caseID];
+            $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
 
             $cases[$caseID] = $case;
             unset($case);
@@ -412,7 +411,8 @@ class testcaseModel extends model
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('file');
-        $now = helper::now();
+        $now  = helper::now();
+        $data = fixer::input('post')->get();
 
         if(!empty($_POST['id']))
         {
@@ -427,21 +427,20 @@ class testcaseModel extends model
         }
 
         $cases = array();
-        foreach($this->post->product as $key => $product)
+        foreach($data->product as $key => $product)
         {
             $caseData = new stdclass();
 
             $caseData->product      = $product;
-            $caseData->module       = $this->post->module[$key];
-            $caseData->story        = (int)$this->post->story[$key];
-            $caseData->title        = $this->post->title[$key];
-            $caseData->pri          = (int)$this->post->pri[$key];
-            $caseData->type         = $this->post->type[$key];
-            $caseData->status       = $this->post->status[$key];
-            $caseData->stage        = join(',', $this->post->stage[$key]);
-            $caseData->frequency    = $this->post->frequency[$key];
-            $caseData->linkCase     = $this->post->linkCase[$key];
-            $caseData->precondition = $this->post->precondition[$key];
+            $caseData->module       = $data->module[$key];
+            $caseData->story        = (int)$data->story[$key];
+            $caseData->title        = $data->title[$key];
+            $caseData->pri          = (int)$data->pri[$key];
+            $caseData->type         = $data->type[$key];
+            $caseData->status       = $data->status[$key];
+            $caseData->stage        = join(',', $data->stage[$key]);
+            $caseData->frequency    = $data->frequency[$key];
+            $caseData->precondition = $data->precondition[$key];
 
             if(isset($this->config->testcase->create->requiredFields))
             {
@@ -460,7 +459,7 @@ class testcaseModel extends model
         {
             if(!empty($_POST['id'][$key]))
             {
-                $caseID      = $this->post->id[$key];
+                $caseID      = $data->id[$key];
                 $stepChanged = false;
                 $steps       = array();
                 $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();

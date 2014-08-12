@@ -289,6 +289,8 @@ class fileModel extends model
         while(($line = fgets($handle)) !== false)
         {
             $line = trim($line);
+            if(substr($line, -1) != ',') $line .= ',';
+            $line = str_replace(',"",', ',,', $line);
             $line = str_replace(',"",', ',,', $line);
             $line = preg_replace_callback('/(\"{2,})(\,+)/U', array($this, 'removeInterference'), $line);
 

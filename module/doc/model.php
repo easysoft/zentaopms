@@ -74,7 +74,7 @@ class docModel extends model
      */
     public function createLib()
     {
-        $lib = fixer::input('post')->stripTags('name')->get();
+        $lib = fixer::input('post')->get();
         $this->dao->insert(TABLE_DOCLIB)
             ->data($lib)
             ->autoCheck()
@@ -95,7 +95,7 @@ class docModel extends model
     {
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
-        $lib = fixer::input('post')->stripTags('name')->get();
+        $lib = fixer::input('post')->get();
         $this->dao->update(TABLE_DOCLIB)
             ->data($lib)
             ->autoCheck()
@@ -183,7 +183,7 @@ class docModel extends model
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->setDefault('product, project, module', 0)
-            ->specialChars('title, digest, keywords')
+            ->skipSpecial($this->config->doc->editor->create['id'])
             ->encodeURL('url')
             ->cleanInt('product, project, module')
             ->remove('files, labels')
@@ -218,11 +218,11 @@ class docModel extends model
         $doc = fixer::input('post')
             ->cleanInt('module')
             ->setDefault('module', 0)
-            ->specialChars('title,digest,keywords')
+            ->skipSpecial($this->config->doc->editor->edit['id'])
             ->encodeURL('url')
-            ->remove('comment,files, labels')
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
+            ->remove('comment,files, labels')
             ->get();
 
         $condition = "lib = '$doc->lib' AND module = $doc->module AND id != $docID";

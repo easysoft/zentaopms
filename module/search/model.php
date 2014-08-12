@@ -240,7 +240,6 @@ class searchModel extends model
         if(!$sql) $sql = ' 1 = 1 ';
 
         $query = fixer::input('post')
-            ->specialChars('title')
             ->add('account', $this->app->user->account)
             ->add('form', serialize($this->session->$formVar))
             ->add('sql',  $sql)

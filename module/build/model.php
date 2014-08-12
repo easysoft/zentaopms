@@ -152,11 +152,12 @@ class buildModel extends model
         $build->stories = '';
         $build->bugs    = '';
 
-        $build = fixer::input('post')->stripTags('name')
+        $build = fixer::input('post')
             ->setDefault('product', 0)
             ->join('stories', ',')
             ->join('bugs', ',')
             ->add('project', (int)$projectID)
+            ->skipSpecial($this->config->build->editor->create['id'])
             ->remove('resolvedBy,allchecker,files,labels')
             ->get();
 
@@ -181,11 +182,11 @@ class buildModel extends model
     {
         $oldBuild = $this->getByID($buildID);
         $build = fixer::input('post')
-            ->stripTags('name')
             ->setDefault('stories', '')
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->skipSpecial($this->config->build->editor->edit['id'])
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
 

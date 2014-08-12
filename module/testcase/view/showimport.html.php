@@ -51,7 +51,7 @@
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control'")?></td>
     <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : '', "class='form-control'")?></td>
     <td><?php echo html::input("frequency[$key]", isset($case->frequency) ? $case->frequency : 1, "class='form-control'")?></td>
-    <td><?php echo html::select("stage[$key][]", $lang->testcase->stageList, isset($case->stage) ? $case->stage : '', "multiple='multiple' class='form-control chosen'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, isset($case->stage) ? $case->stage : '', "multiple='multiple' class='form-control chosen'")?></td>
     <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? $case->precondition : "", "class='form-control'")?></td>
     <td>
       <?php if(isset($stepData[$key]['desc'])):?>

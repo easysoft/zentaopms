@@ -122,7 +122,6 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
-            ->stripTags('title')
             ->callFunc('title', 'trim')
             ->setDefault('plan', 0)
             ->add('openedBy', $this->app->user->account)
@@ -135,8 +134,9 @@ class storyModel extends model
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($projectID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
-            ->remove('files,labels,spec,verify,needNotReview,newStory')
             ->join('mailto', ',')
+            ->skipSpecial($this->config->story->editor->create['id'])
+            ->remove('files,labels,spec,verify,needNotReview,newStory')
             ->get();
 
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
@@ -219,7 +219,7 @@ class storyModel extends model
                 $data[$i] = new stdclass();
                 $data[$i]->module     = $stories->module[$i] != 'same' ? $stories->module[$i] : ($i == 0 ? 0 : $data[$i-1]->module);
                 $data[$i]->plan       = $stories->plan[$i] == 'same' ? ($i != 0 ? $data[$i-1]->plan : 0) : ($stories->plan[$i] != '' ?     $stories->plan[$i] : 0);
-                $data[$i]->title      = htmlspecialchars($stories->title[$i]);
+                $data[$i]->title      = $stories->title[$i];
                 $data[$i]->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
                 $data[$i]->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
                 $data[$i]->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
@@ -245,8 +245,8 @@ class storyModel extends model
                 $specData[$i] = new stdclass();
                 $specData[$i]->story   = $storyID;
                 $specData[$i]->version = 1;
-                $specData[$i]->title   = htmlspecialchars($stories->title[$i]);
-                if($stories->spec[$i] != '') $specData[$i]->spec = nl2br(htmlspecialchars($stories->spec[$i]));
+                $specData[$i]->title   = $stories->title[$i];
+                if($stories->spec[$i] != '') $specData[$i]->spec = nl2br($stories->spec[$i]);
                 $this->dao->insert(TABLE_STORYSPEC)->data($specData[$i])->exec();
 
                 $this->loadModel('action');
@@ -288,7 +288,6 @@ class storyModel extends model
 
         $now = helper::now();
         $story = fixer::input('post')
-            ->stripTags('title')
             ->callFunc('title', 'trim')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -301,6 +300,7 @@ class storyModel extends model
             ->setIF($specChanged, 'closedReason', '')
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
+            ->skipSpecial($this->config->story->editor->change['id'])
             ->remove('files,labels,spec,verify,comment,needNotReview')
             ->get();
         $this->dao->update(TABLE_STORY)
@@ -344,7 +344,6 @@ class storyModel extends model
 
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
-            ->stripTags('title')
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -355,9 +354,9 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
-            ->remove('files,labels,comment')
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
+            ->remove('files,labels,comment')
             ->get();
 
         $this->dao->update(TABLE_STORY)
@@ -385,6 +384,7 @@ class storyModel extends model
         $stories     = array();
         $allChanges  = array();
         $now         = helper::now();
+        $data        = fixer::input('post')->get();
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
 
         /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
@@ -402,17 +402,17 @@ class storyModel extends model
                 $story->lastEditedBy   = $this->app->user->account;
                 $story->lastEditedDate = $now;
                 $story->status         = $oldStory->status;
-                $story->title          = htmlspecialchars($this->post->titles[$storyID]);
-                $story->estimate       = $this->post->estimates[$storyID];
-                $story->pri            = $this->post->pris[$storyID];
-                $story->module         = $this->post->modules[$storyID];
-                $story->plan           = $this->post->plans[$storyID];
-                $story->source         = $this->post->sources[$storyID];
-                $story->stage          = isset($this->post->stages[$storyID])             ? $this->post->stages[$storyID]             : $oldStory->stage;
-                $story->closedBy       = isset($this->post->closedBys[$storyID])          ? $this->post->closedBys[$storyID]          : $oldStory->closedBy;
-                $story->closedReason   = isset($this->post->closedReasons[$storyID])      ? $this->post->closedReasons[$storyID]      : $oldStory->closedReason;
-                $story->duplicateStory = isset($this->post->duplicateStories[$storyID])   ? $this->post->duplicateStories[$storyID]   : $oldStory->duplicateStory;
-                $story->childStories   = isset($this->post->childStoriesIDList[$storyID]) ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
+                $story->title          = $data->titles[$storyID];
+                $story->estimate       = $data->estimates[$storyID];
+                $story->pri            = $data->pris[$storyID];
+                $story->module         = $data->modules[$storyID];
+                $story->plan           = $data->plans[$storyID];
+                $story->source         = $data->sources[$storyID];
+                $story->stage          = isset($data->stages[$storyID])             ? $data->stages[$storyID]             : $oldStory->stage;
+                $story->closedBy       = isset($data->closedBys[$storyID])          ? $data->closedBys[$storyID]          : $oldStory->closedBy;
+                $story->closedReason   = isset($data->closedReasons[$storyID])      ? $data->closedReasons[$storyID]      : $oldStory->closedReason;
+                $story->duplicateStory = isset($data->duplicateStories[$storyID])   ? $data->duplicateStories[$storyID]   : $oldStory->duplicateStory;
+                $story->childStories   = isset($data->childStoriesIDList[$storyID]) ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
                 $story->version        = $story->title == $oldStory->title ? $oldStory->version : $oldStory->version + 1;
 
                 if($story->title        != $oldStory->title)                         $story->status     = 'changed';

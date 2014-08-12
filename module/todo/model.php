@@ -26,13 +26,13 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->add('idvalue', 0)
-            ->specialChars('type,name')
             ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
+            ->skipSpecial($this->config->todo->editor->create['id'])
             ->remove('bug, task')
             ->get();
         $this->dao->insert(TABLE_TODO)->data($todo)
@@ -69,8 +69,8 @@ class todoModel extends model
                 }
                 $todo->type    = $todos->types[$i];
                 $todo->pri     = $todos->pris[$i];
-                $todo->name    = isset($todos->names[$i]) ? htmlspecialchars($todos->names[$i]) : '';
-                $todo->desc    = htmlspecialchars($todos->descs[$i]);
+                $todo->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
+                $todo->desc    = $todos->descs[$i];
                 $todo->begin   = isset($todos->begins[$i]) ? $todos->begins[$i] : 2400;
                 $todo->end     = isset($todos->ends[$i]) ? $todos->ends[$i] : 2400;
                 $todo->status  = "wait";
@@ -112,12 +112,12 @@ class todoModel extends model
         if($oldTodo->type != 'custom') $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
-            ->specialChars('type,name')
             ->setIF($this->post->type  != 'custom', 'name', '')
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
+            ->skipSpecial($this->config->todo->editor->edit['id'])
             ->get();
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
@@ -136,6 +136,7 @@ class todoModel extends model
     {
         $todos      = array();
         $allChanges = array();
+        $data       = fixer::input('post')->get();
         $todoIDList = $this->post->todoIDList ? $this->post->todoIDList : array();
 
         /* Adjust whether the post data is complete, if not, remove the last element of $todoIDList. */
@@ -147,15 +148,15 @@ class todoModel extends model
             foreach($todoIDList as $todoID)
             {
                 $todo = new stdclass();
-                $todo->date   = $this->post->dates[$todoID];
-                $todo->type   = $this->post->types[$todoID];
-                $todo->pri    = $this->post->pris[$todoID];
-                $todo->status = $this->post->status[$todoID];
-                $todo->name   = $todo->type == 'custom' ? htmlspecialchars($this->post->names[$todoID]) : '';
-                $todo->begin  = $this->post->begins[$todoID];
-                $todo->end    = $this->post->ends[$todoID];
-                if($todo->type == 'task') $todo->idvalue = isset($this->post->tasks[$todoID]) ? $this->post->tasks[$todoID] : 0;
-                if($todo->type == 'bug')  $todo->idvalue = isset($this->post->bugs[$todoID]) ? $this->post->bugs[$todoID] : 0;
+                $todo->date   = $data->dates[$todoID];
+                $todo->type   = $data->types[$todoID];
+                $todo->pri    = $data->pris[$todoID];
+                $todo->status = $data->status[$todoID];
+                $todo->name   = $todo->type == 'custom' ? $data->names[$todoID] : '';
+                $todo->begin  = $data->begins[$todoID];
+                $todo->end    = $data->ends[$todoID];
+                if($todo->type == 'task') $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
+                if($todo->type == 'bug')  $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
 
                 $todos[$todoID] = $todo;
             }

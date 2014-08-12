@@ -105,7 +105,7 @@ class productplanModel extends model
      */
     public function create()
     {
-        $plan = fixer::input('post')->stripTags('title')->remove('delta')->get();
+        $plan = fixer::input('post')->skipSpecial($this->config->productplan->editor->create['id'])->remove('delta')->get();
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
@@ -125,7 +125,7 @@ class productplanModel extends model
     public function update($planID)
     {
         $oldPlan = $this->getById($planID);
-        $plan = fixer::input('post')->stripTags('title')->get();
+        $plan = fixer::input('post')->skipSpecial($this->config->productplan->editor->edit['id'])->get();
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
