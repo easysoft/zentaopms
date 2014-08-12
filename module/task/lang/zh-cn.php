@@ -36,6 +36,7 @@ $lang->task->id                = '编号';
 $lang->task->project           = '所属项目';
 $lang->task->module            = '所属模块';
 $lang->task->story             = '相关需求';
+$lang->task->storySpec         = '需求描述';
 $lang->task->storyVersion      = '需求版本';
 $lang->task->name              = '任务名称';
 $lang->task->type              = '任务类型';

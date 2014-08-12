@@ -69,6 +69,10 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->task->storySpec;?></legend>
+        <div class='article-content'><?php echo $task->storySpec;?></div>
+      </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>

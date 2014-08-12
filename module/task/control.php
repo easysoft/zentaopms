@@ -387,7 +387,9 @@ class task extends control
      */
     public function view($taskID)
     {
-        $task = $this->task->getById($taskID, true);
+        $task            = $this->task->getById($taskID, true);
+        $story           = $this->story->getById($task->story);
+        $task->storySpec = ($story != null) ? $story->spec : '';
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Update action. */

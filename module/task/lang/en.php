@@ -36,6 +36,7 @@ $lang->task->id                = 'ID';
 $lang->task->project           = 'Project';
 $lang->task->module            = 'Module';
 $lang->task->story             = 'Story';
+$lang->task->storySpec         = 'Story desc';
 $lang->task->storyVersion      = 'Version';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';

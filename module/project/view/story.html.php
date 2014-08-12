@@ -81,13 +81,13 @@
           $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
           $lang->task->create = $lang->project->wbs;
-          common::printIcon('task', 'create', $param, '', 'list', 'sitemap');
+          common::printIcon('task', 'create', $param, '', 'list', 'smile');
 
           $lang->task->batchCreate = $lang->project->batchWBS;
           common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');
 
           $lang->testcase->batchCreate = $lang->testcase->create;
-          if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list', 'smile');
+          if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
           if(common::hasPriv('project', 'unlinkStory'))
           {

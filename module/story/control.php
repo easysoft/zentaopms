@@ -157,6 +157,7 @@ class story extends control
         $this->view->source           = $source;
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
+        $this->view->projectID        = $projectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
