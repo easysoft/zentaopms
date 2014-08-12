@@ -24,7 +24,7 @@ $jsRoot       = $webRoot . "js/";
         <strong><small class='text-muted'><?php echo html::icon($lang->icons['edit']);?></small> <?php echo $lang->tree->edit;?></strong>
       </div>
     </div>
-    <form class='form-condensed' method='post' class='mt-10px' id='dataform'>
+    <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" class='form-condensed' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'> 
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
