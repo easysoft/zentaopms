@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include '../../common/view/header.lite.html.php';?>
 <?php
 $webRoot      = $this->app->getWebRoot();
 $jsRoot       = $webRoot . "js/";
@@ -49,3 +50,4 @@ $jsRoot       = $webRoot . "js/";
     </form>
   </div>
 </div>
+<?php include '../../common/view/header.lite.html.php';?>
