@@ -1160,7 +1160,11 @@ class sql
     public function data($data)
     {
         $this->data = $data;
-        foreach($data as $field => $value) $this->sql .= "`$field` = " . $this->quote($value) . ',';
+        foreach($data as $field => $value)
+        {
+            $field = str_replace(array('`', ',', ' '), '', $field);
+            $this->sql .= "`$field` = " . $this->quote($value) . ',';
+        }
         $this->sql = rtrim($this->sql, ',');    // Remove the last ','.
         return $this;
     }
