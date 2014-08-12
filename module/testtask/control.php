@@ -182,13 +182,18 @@ class testtask extends control
         $productID = $task->product;
         $buildID   = $task->build;
 
-        $build     = $this->loadModel('build')->getByID($buildID);
+        $build   = $this->loadModel('build')->getByID($buildID);
+        $stories = array();
+        $bugs    = array();
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        if($build)
+        {
+            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
-        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+            $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        }
 
         $this->testtask->setMenu($this->products, $productID);
 
