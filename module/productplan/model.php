@@ -79,7 +79,7 @@ class productplanModel extends model
             ->beginIF($expired == 'unexpired')
             ->andWhere('end')->gt($date)
             ->fi()
-            ->orderBy('begin')->fetchPairs();
+            ->orderBy('begin desc')->fetchPairs();
     }
 
     /**
@@ -94,7 +94,7 @@ class productplanModel extends model
         return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin')->fetchPairs();
+            ->orderBy('begin desc')->fetchPairs();
     }
 
     /**

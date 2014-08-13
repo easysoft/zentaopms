@@ -91,6 +91,7 @@ $lang->action->desc->canceled       = '$date, 由 <strong>$actor</strong> 取消
 $lang->action->desc->svncommited    = '$date, 由 <strong>$actor</strong> 提交代码，版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->gitcommited    = '$date, 由 <strong>$actor</strong> 提交代码，版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->finished       = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
+$lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暂停。' . "\n";
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
@@ -131,6 +132,7 @@ $lang->action->label->recordestimate      = '记录了工时';
 $lang->action->label->editestimate        = '编辑了工时';
 $lang->action->label->canceled            = '取消了';
 $lang->action->label->finished            = '完成';
+$lang->action->label->paused              = '暂停';
 $lang->action->label->login               = '登录系统';
 $lang->action->label->logout              = "退出登录";
 
@@ -204,5 +206,6 @@ $lang->action->search->label['recordestimate']      = $lang->action->label->reco
 $lang->action->search->label['editestimate']        = $lang->action->label->editestimate;
 $lang->action->search->label['canceled']            = $lang->action->label->canceled;
 $lang->action->search->label['finished']            = $lang->action->label->finished;
+$lang->action->search->label['paused']              = $lang->action->label->paused;
 $lang->action->search->label['login']               = $lang->action->label->login;
 $lang->action->search->label['logout']              = $lang->action->label->logout;

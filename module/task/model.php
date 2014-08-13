@@ -499,6 +499,13 @@ class taskModel extends model
             $data->assignedDate = $now;
             $data->realStarted  = date('Y-m-d');
         }
+        else if($task->status == 'pause')
+        {
+            $task->status       = 'doing'; 
+            $data->status       = $task->status;
+            $data->assignedTo   = $this->app->user->account;
+            $data->assignedDate = $now;
+        }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
@@ -556,6 +563,28 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        if(!dao::isError()) return common::createChanges($oldTask, $task);
+    }
+
+    /**
+     * Pause task 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return array
+     */
+    public function pause($taskID)
+    {
+        $oldTask = $this->getById($taskID);
+        $now     = helper::now();
+        $task = fixer::input('post')
+            ->setDefault('status', 'pause')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now) 
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
@@ -726,7 +755,7 @@ class taskModel extends model
      */
     public function getProjectTasks($projectID, $type = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
-        $type    = strtolower($type);
+        if(is_string($type)) $type = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -1334,7 +1363,8 @@ class taskModel extends model
         if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
         if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status == 'cancel' ;
-        if($action == 'cancel')   return $task->status != 'done  ' and $task->status != 'closed' and $task->status != 'cancel';
+        if($action == 'cancel')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
+        if($action == 'pause')    return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel' and $task->status != 'wait' and $task->status != 'pause';
 
         return true;
     }

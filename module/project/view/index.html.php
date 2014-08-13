@@ -17,7 +17,8 @@
     <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
   </div>
   <ul class='nav'>
-  <?php echo "<li id='allTab'>" . html::a(inlink("index", "locate=no&status=all&projectID=$project->id"), $lang->project->all) . '</li>';?>
+    <?php echo "<li id='undoneTab'>" . html::a(inlink("index", "locate=no&status=undone&projectID=$project->id"), $lang->project->undone) . '</li>';?>
+    <?php echo "<li id='allTab'>" . html::a(inlink("index", "locate=no&status=all&projectID=$project->id"), $lang->project->all) . '</li>';?>
     <?php echo "<li id='waitTab'>" . html::a(inlink("index", "locate=no&status=wait&projectID=$project->id"), $lang->project->statusList['wait']) . '</li>';?>
     <?php echo "<li id='doingTab'>" . html::a(inlink("index", "locate=no&status=doing&projectID=$project->id"), $lang->project->statusList['doing']) . '</li>';?>
     <?php echo "<li id='suspendedTab'>" . html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']) . '</li>';?>

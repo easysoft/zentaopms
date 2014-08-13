@@ -37,7 +37,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'all', $projectID = 0)
+    public function index($locate = 'yes', $status = 'undone', $projectID = 0)
     {
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
@@ -112,7 +112,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($projectID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->loadModel('tree');
         $this->loadModel('search');
@@ -157,8 +157,14 @@ class project extends control
         }
         elseif($browseType != "bysearch")
         {
-            $status = $status == 'byProject' ? 'all' : $status;
-            $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager); 
+            $qureyStatus = $status == 'byProject' ? 'all' : $status;
+            if($qureyStatus == 'unclosed')
+            {
+                $qureyStatus = $this->lang->task->statusList;
+                unset($qureyStatus['closed']);
+                $qureyStatus = array_keys($qureyStatus);
+            }
+            $tasks = $this->loadModel('task')->getProjectTasks($projectID, $qureyStatus, $orderBy, $pager); 
         }
         else
         {   
