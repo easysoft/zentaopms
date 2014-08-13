@@ -93,7 +93,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'allStory', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -126,6 +126,12 @@ class product extends control
 
         /* Get stories. */
         $stories = array();
+        if($browseType == 'unclosed')
+        {
+            $unclosedStatus = $this->lang->story->statusList;
+            unset($unclosedStatus['closed']);
+            $stories = $this->story->getProductStories($productID, 0, array_keys($unclosedStatus), $orderBy, $pager);
+        }
         if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
         if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $orderBy, $pager);
         if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $orderBy, $pager);

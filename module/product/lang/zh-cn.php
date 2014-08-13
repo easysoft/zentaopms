@@ -76,6 +76,7 @@ $lang->product->activeStory  = '激活';
 $lang->product->changedStory = '已变更';
 $lang->product->willClose    = '待关闭';
 $lang->product->closedStory  = '已关闭';
+$lang->product->unclosed     = '未关闭';
 
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部产品';

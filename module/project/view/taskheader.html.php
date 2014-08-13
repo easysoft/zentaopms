@@ -2,6 +2,7 @@
 <div id='featurebar'>
   <ul class='nav'>
   <?php
+    echo "<li id='unclosedTab'>"; common::printLink('project', 'task', "project=$projectID&type=unclosed", $lang->project->unclosed); echo '</li>' ;
     echo "<li id='allTab'>"; common::printLink('project', 'task', "project=$projectID&type=all", $lang->project->allTasks); echo '</li>' ;
     if($project->type == 'sprint' or $project->type == 'waterfall') print "<li id='burnTab'>" and common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); print '</li>' ;
     echo "<li id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</li>' ;
