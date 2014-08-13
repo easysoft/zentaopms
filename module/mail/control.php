@@ -121,12 +121,12 @@ class mail extends control
 
             $mailConfig->turnon         = $this->post->turnon;
             $mailConfig->mta            = 'smtp';
-            $mailConfig->fromAddress    = $this->post->fromAddress; 
-            $mailConfig->fromName       = $this->post->fromName;
-            $mailConfig->smtp->host     = $this->post->host;
-            $mailConfig->smtp->port     = $this->post->port;
+            $mailConfig->fromAddress    = trim($this->post->fromAddress); 
+            $mailConfig->fromName       = trim($this->post->fromName);
+            $mailConfig->smtp->host     = trim($this->post->host);
+            $mailConfig->smtp->port     = trim($this->post->port);
             $mailConfig->smtp->auth     = $this->post->auth;
-            $mailConfig->smtp->username = $this->post->username;
+            $mailConfig->smtp->username = trim($this->post->username);
             $mailConfig->smtp->password = $this->post->password;
             $mailConfig->smtp->secure   = $this->post->secure;
             $mailConfig->smtp->debug    = $this->post->debug;
