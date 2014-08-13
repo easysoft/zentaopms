@@ -51,11 +51,11 @@ $(document).ready(function()
       </tr>  
       <tr id='contentBox' class='hide'>
         <th><?php echo $lang->doc->content;?></th>
-        <td colspan='2'><?php echo html::textarea('content', $doc->content, "class='form-control' rows='8' style='width:90%; height:200px'");?></td>
+        <td colspan='2'><?php echo html::textarea('content', htmlspecialchars($doc->content), "class='form-control' rows='8' style='width:90%; height:200px'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->digest;?></th>
-        <td colspan='2'><?php echo html::textarea('digest', $doc->digest, "class='form-control' rows=3");?></td>
+        <td colspan='2'><?php echo html::textarea('digest', htmlspecialchars($doc->digest), "class='form-control' rows=3");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->comment;?></th>

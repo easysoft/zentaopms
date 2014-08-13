@@ -41,7 +41,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->productplan->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', $plan->desc, "rows='10' class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($plan->desc), "rows='10' class='form-control'");?></td>
       </tr>  
       <tr>
         <td></td>

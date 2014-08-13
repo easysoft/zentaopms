@@ -106,7 +106,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->project->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', $project->desc, "rows='6' class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($project->desc), "rows='6' class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->project->acl;?></th>

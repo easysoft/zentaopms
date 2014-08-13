@@ -108,7 +108,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->build->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', $build->desc, "rows='10' class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='10' class='form-control'");?></td>
       </tr>
       <tr><td></td><td colspan='2'><?php echo html::submitButton() . html::backButton() .html::hidden('project', $build->project);?></td></tr>
     </table>

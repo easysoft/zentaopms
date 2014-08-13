@@ -98,7 +98,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->release->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', $release->desc, "rows=10 class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->files;?></th>
