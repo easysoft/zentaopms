@@ -460,6 +460,7 @@ $lang->icons['review']         = 'search';
 $lang->icons['confirm']        = 'search';
 $lang->icons['putoff']         = 'calendar';
 $lang->icons['suspend']        = 'pause';
+$lang->icons['pause']          = 'pause';
 $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';

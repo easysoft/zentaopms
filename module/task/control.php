@@ -596,6 +596,38 @@ class task extends control
     }
 
     /**
+     * Pause task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function pause($taskID)
+    {
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->pause($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('task', $taskID, 'Paused', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->pause;
+        $this->view->position[] = $this->lang->task->pause;
+        
+        $this->display();
+    }
+
+    /**
      * Close a task.
      * 
      * @param  int      $taskID 

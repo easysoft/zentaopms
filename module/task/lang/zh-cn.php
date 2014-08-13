@@ -22,6 +22,7 @@ $lang->task->logEfforts         = "记录工时";
 $lang->task->record             = "工时";
 $lang->task->start              = "开始";
 $lang->task->finish             = "完成";
+$lang->task->pause              = "暂停";
 $lang->task->close              = "关闭";
 $lang->task->batchClose         = "批量关闭";
 $lang->task->cancel             = "取消";
@@ -89,6 +90,7 @@ $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';
 $lang->task->statusList['doing']   = '进行中';
 $lang->task->statusList['done']    = '已完成';
+$lang->task->statusList['pause']   = '已暂停';
 $lang->task->statusList['cancel']  = '已取消';
 $lang->task->statusList['closed']  = '已关闭';
 

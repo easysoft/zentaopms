@@ -91,6 +91,7 @@ $lang->action->desc->canceled       = '$date, canceled by <strong>$actor</strong
 $lang->action->desc->svncommited    = '$date, <strong>$actor</strong> commited to svn，revision is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->gitcommited    = '$date, <strong>$actor</strong> commited to git，revision is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->finished       = '$date, finished by <strong>$actor</strong>.';
+$lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.';
 $lang->action->desc->diff1          = 'changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
 $lang->action->desc->diff2          = 'changed <strong><i>%s</i></strong>, the diff is:' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = "changed file's name %s to %s.";
@@ -131,6 +132,7 @@ $lang->action->label->recordestimate      = 'Hours';
 $lang->action->label->editestimate        = 'edit hour';
 $lang->action->label->canceled            = 'canceled';
 $lang->action->label->finished            = 'finished';
+$lang->action->label->paused              = 'paused';
 $lang->action->label->login               = 'login';
 $lang->action->label->logout              = "logout";
 
@@ -204,5 +206,6 @@ $lang->action->search->label['recordestimate']      = $lang->action->label->reco
 $lang->action->search->label['editestimate']        = $lang->action->label->editestimate;
 $lang->action->search->label['canceled']            = $lang->action->label->canceled;
 $lang->action->search->label['finished']            = $lang->action->label->finished;
+$lang->action->search->label['paused']              = $lang->action->label->paused;
 $lang->action->search->label['login']               = $lang->action->label->login;
 $lang->action->search->label['logout']              = $lang->action->label->logout;

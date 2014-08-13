@@ -1414,7 +1414,7 @@ class projectModel extends model
      */
     public function summary($tasks)
     {
-        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = 0;  
+        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;  
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
         foreach($tasks as $task)
         {
@@ -1425,7 +1425,7 @@ class projectModel extends model
             $$statusVar ++;
         }
 
-        return sprintf($this->lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, $totalConsumed, $totalLeft);
+        return sprintf($this->lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), $totalLeft);
     }
 
     /**

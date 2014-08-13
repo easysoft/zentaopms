@@ -22,6 +22,7 @@ $lang->task->logEfforts         = "Log working hours";
 $lang->task->record             = "Estimate";
 $lang->task->start              = "Start";
 $lang->task->finish             = "Finish";
+$lang->task->pause              = "Pause";
 $lang->task->close              = "Close";
 $lang->task->batchClose         = "Batch close";
 $lang->task->cancel             = "Cancel";
@@ -89,6 +90,7 @@ $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Pending';
 $lang->task->statusList['doing']   = 'Doing';
 $lang->task->statusList['done']    = 'Done';
+$lang->task->statusList['pause']   = 'Paused';
 $lang->task->statusList['cancel']  = 'Canceled';
 $lang->task->statusList['closed']  = 'Closed';
 
