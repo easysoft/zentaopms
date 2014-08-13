@@ -417,7 +417,7 @@ class project extends control
         $bugs = array();
         if($browseType != "bysearch")
         {
-            $bugs = $this->bug->getActiveBugs(array_keys($products), $projectID, $pager);
+            $bugs = $this->bug->getActiveAndPostponedBugs(array_keys($products), $projectID, $pager);
         }
         else
         {

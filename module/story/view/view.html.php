@@ -175,11 +175,11 @@
                     echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
                 }
             }
-            if(count($story->tasks, COUNT_NORMAL) == 0)
+            if(count($story->tasks) == 0)
             {
                 foreach($story->projects as $project)
                 {
-                    echo "<li title='$project->name'>" .html::a($this->createLink('project', 'story', "projectID=$project->project"), $project->name, '', "class='text-muted'") . '</li>';
+                    echo "<li title='$project->name'>" . $project->name . '</li>';
                 }
             }
             ?>
