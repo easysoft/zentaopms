@@ -97,6 +97,7 @@ $lang->action->desc->diff2          = 'changed <strong><i>%s</i></strong>, the d
 $lang->action->desc->diff3          = "changed file's name %s to %s.";
 $lang->action->desc->starttesttask  = '$date, <strong>$actor</strong> start testtask <strong>$extra</strong>.' . "\n";
 $lang->action->desc->stoptesttask   = '$date, <strong>$actor</strong> stop testtask <strong>$extra</strong>.' . "\n";
+$lang->action->desc->createbuild   = '$date, <strong>$actor</strong> create build <strong>$extra</strong>.' . "\n";
 
 /* The action labels. */
 $lang->action->label = new stdclass();

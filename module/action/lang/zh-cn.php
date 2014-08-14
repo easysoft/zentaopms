@@ -97,6 +97,7 @@ $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 $lang->action->desc->starttesttask  = '$date, 由 <strong>$actor</strong> 启动测试任务 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->stoptesttask   = '$date, 由 <strong>$actor</strong> 关闭测试任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->createbuild    = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
