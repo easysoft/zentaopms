@@ -1,6 +1,6 @@
 VERSION=$(shell head -n 1 VERSION)
 
-all: prepare pms
+all: pms
 clean:
 	rm -fr zentaopms
 	rm -fr zentaostory
@@ -11,7 +11,7 @@ clean:
 	rm -fr api*
 	rm -fr build/linux/lampp
 	rm -fr lampp
-prepare:
+pms:
 	mkdir zentaopms
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
@@ -37,7 +37,7 @@ prepare:
 	find zentaopms -name tests |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
-	wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
+	#wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
 	# change mode.
 	chmod 777 -R zentaopms/tmp/
 	chmod 777 -R zentaopms/www/data
@@ -45,42 +45,8 @@ prepare:
 	chmod 777 zentaopms/module
 	chmod a+rx zentaopms/bin/*
 	find zentaopms/ -name ext |xargs chmod -R 777
-pms:	
 	echo full > zentaopms/.flow
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
-zstory:
-	cp -frp zentaopms zentaostory
-	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/zentaostory storyext
-	cp -fr storyext/module/* zentaostory/module/
-	find zentaostory/ -name ext |xargs chmod -R 777
-	echo zentaostory > zentaostory/.flow
-	sed -e 's/zentao/story/g' zentaostory/www/.ztaccess > .ztaccess.bak
-	mv .ztaccess.bak zentaostory/www/.ztaccess
-	zip -r -9 ZenTaoStory.$(VERSION).zip zentaostory
-	rm -fr storyext
-	rm -fr zentaostory
-ztask:
-	cp -frp zentaopms zentaotask
-	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/zentaotask taskext
-	cp -fr taskext/module/* zentaotask/module/
-	find zentaotask/ -name ext |xargs chmod -R 777
-	echo zentaotask > zentaotask/.flow
-	sed -e 's/zentao/task/g' zentaotask/www/.ztaccess > .ztaccess.bak
-	mv .ztaccess.bak zentaotask/www/.ztaccess
-	zip -r -9 ZenTaoTask.$(VERSION).zip zentaotask
-	rm -fr taskext
-	rm -fr zentaotask
-ztest:
-	cp -frp zentaopms zentaotest
-	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/zentaotest testext
-	cp -fr testext/module/* zentaotest/module/
-	find zentaotest/ -name ext |xargs chmod -R 777
-	echo zentaotest > zentaotest/.flow
-	sed -e 's/zentao/test/g' zentaotest/www/.ztaccess > .ztaccess.bak
-	mv .ztaccess.bak zentaotest/www/.ztaccess
-	zip -r -9 ZenTaoTest.$(VERSION).zip zentaotest
-	rm -fr testext
-	rm -fr zentaotest
 	rm -fr zentaopms
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
