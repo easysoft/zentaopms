@@ -27,7 +27,10 @@
       </tr>
       <tr id='duplicateStoryBox' style='display:none'>
         <th><?php echo $lang->story->duplicateStory;?></th>
-        <td><?php echo html::input('duplicateStory', '', 'class=form-control');?></td><td></td>
+        <td>
+          <?php echo html::select('duplicateStory', $stories, '', "class='form-control chosen' ");?>
+        </td>
+        <td></td>
       </tr>
       <tr id='childStoriesBox' style='display:none'>
         <th><?php echo $lang->story->childStories;?></th>

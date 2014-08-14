@@ -621,6 +621,7 @@ class story extends control
         /* Get story and product. */
         $story   = $this->story->getById($storyID);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        $stories = $this->story->getProductStoryPairs($product->id);
 
         /* Set menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
@@ -635,6 +636,7 @@ class story extends control
 
         $this->view->product = $product;
         $this->view->story   = $story;
+        $this->view->stories = $stories;
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();

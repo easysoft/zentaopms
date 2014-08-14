@@ -179,7 +179,7 @@
             {
                 foreach($story->projects as $project)
                 {
-                    echo "<li title='$project->name'>" .html::a($this->createLink('project', 'story', "projectID=$project->project"), $project->name, '', "class='text-muted'") . '</li>';
+                    echo "<li title='$project->name'>" . $project->name . '</li>';
                 }
             }
             ?>

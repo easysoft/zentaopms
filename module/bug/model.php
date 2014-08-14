@@ -239,6 +239,29 @@ class bugModel extends model
     }
 
     /**
+     * get Active And Postponed Bugs 
+     * 
+     * @param  int    $products 
+     * @param  int    $projectID 
+     * @param  int    $pager 
+     * @access public
+     * @return void
+     */
+    public function getActiveAndPostponedBugs($products, $projectID, $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where("((status = 'resolved' AND resolution = 'postponed') OR (status = 'active'))")
+            ->andWhere('toTask')->eq(0)
+            ->andWhere('toStory')->eq(0)
+            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
+            ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * Update a bug.
      * 
      * @param  int    $bugID 
@@ -683,6 +706,28 @@ class bugModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
+        return $bugs;
+    }
+
+    /**
+     * get Product Bug Pairs 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function getProductBugPairs($productID)
+    {
+        $bugs = array('' => '');
+        $data = $this->dao->select('id, title')->from(TABLE_BUG)
+            ->where('product')->eq((int)$productID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')
+            ->fetchAll();
+        foreach($data as $bug)
+        {
+            $bugs[$bug->id] = $bug->id . ':' . $bug->title;
+        }
         return $bugs;
     }
 
