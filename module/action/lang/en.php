@@ -136,8 +136,14 @@ $lang->action->label->editestimate        = 'edit hour';
 $lang->action->label->canceled            = 'canceled';
 $lang->action->label->finished            = 'finished';
 $lang->action->label->paused              = 'paused';
+$lang->action->label->delayed             = 'delayed';
+$lang->action->label->suspended           = 'suspended';
 $lang->action->label->login               = 'login';
 $lang->action->label->logout              = "logout";
+$lang->action->label->deleteestimate      = "delete estimate";
+$lang->action->label->starttesttask       = "start testtask";
+$lang->action->label->stoptesttask        = "stop testtask";
+$lang->action->label->createbuild         = "create build";
 
 /* Link of every action. */
 $lang->action->label->product     = 'product|product|view|productID=%s';
