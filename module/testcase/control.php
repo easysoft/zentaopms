@@ -380,6 +380,42 @@ class testcase extends control
     }
 
     /**
+     * Create bug.
+     * 
+     * @param  int    $productID 
+     * @param  string $extras 
+     * @access public
+     * @return void
+     */
+    public function createBug($productID, $extras = '')
+    {
+        parse_str(str_replace(array(',', ' '), array('&', ''), $extras));
+
+        $this->loadModel('testtask');
+        $case = '';
+        if($runID)
+        {
+            $case    = $this->testtask->getRunById($runID)->case;
+            $results = $this->testtask->getResults($runID);
+        }
+        elseif($caseID)
+        {
+            $case    = $this->testcase->getById($caseID);
+            $results = $this->testtask->getResults(0, $caseID);
+        }
+
+        if(!$case) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+        if(empty($case->steps)) die(js::locate($this->createLink('bug', 'create', "product=$productID&extras=$extras")));
+
+        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
+        $this->view->case      = $case;
+        $this->view->result    = reset($results);
+        $this->view->extras    = $extras;
+        $this->view->productID = $productID;
+        $this->display();
+    }
+
+    /**
      * View a test case.
      * 
      * @param  int    $caseID 
