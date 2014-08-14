@@ -519,7 +519,7 @@ EOT;
     public function getSysURL()
     {
         /* Ger URL when run in shell. */
-        if(defined('IN_SHELL'))
+        if(PHP_SAPI == 'cli')
         {
             $url = parse_url(trim($this->server->argv[1]));
             $port = (empty($url['port']) or $url['port'] == 80) ? '' : $url['port'];

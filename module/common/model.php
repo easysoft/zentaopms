@@ -73,7 +73,7 @@ class commonModel extends model
         {
             $this->app->user = $this->session->user;
         }
-        elseif($this->app->company->guest or defined('IN_SHELL'))
+        elseif($this->app->company->guest or PHP_SAPI == 'cli')
         {
             $user             = new stdClass();
             $user->id         = 0;

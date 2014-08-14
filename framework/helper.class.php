@@ -583,7 +583,7 @@ function isLocalIP()
 function getWebRoot()
 {
     $path = $_SERVER['SCRIPT_NAME'];
-    if(defined('IN_SHELL'))
+    if(PHP_SAPI == 'cli')
     {
         $url  = parse_url($_SERVER['argv'][1]);
         $path = empty($url['path']) ? '/' : rtrim($url['path'], '/');
