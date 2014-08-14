@@ -730,6 +730,7 @@ class bug extends control
 
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
+        $bugs            = $this->bug->getProductBugPairs($productID);
         $this->bug->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
@@ -737,6 +738,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->resolve;
 
         $this->view->bug     = $bug;
+        $this->view->bugs    = $bugs;
         $this->view->users   = $this->user->getPairs('nodeleted', $bug->openedBy);
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);

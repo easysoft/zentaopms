@@ -710,6 +710,28 @@ class bugModel extends model
     }
 
     /**
+     * get Product Bug Pairs 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function getProductBugPairs($productID)
+    {
+        $bugs = array('' => '');
+        $data = $this->dao->select('id, title')->from(TABLE_BUG)
+            ->where('product')->eq((int)$productID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')
+            ->fetchAll();
+        foreach($data as $bug)
+        {
+            $bugs[$bug->id] = $bug->id . ':' . $bug->title;
+        }
+        return $bugs;
+    }
+
+    /**
      * Get bugs according to buildID and productID.
      * 
      * @param  int    $buildID 
