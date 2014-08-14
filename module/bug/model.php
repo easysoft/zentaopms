@@ -724,6 +724,7 @@ class bugModel extends model
     {
         $title    = '';
         $bugSteps = '';
+        $steps    = $this->post->stepIDList;
 
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
         if($caseID > 0)
@@ -749,13 +750,15 @@ class bugModel extends model
             {
                 foreach($caseSteps as $key => $step)
                 {
+                    if(!in_array($step->id, $steps)) continue;
                     $bugSteps .= ($key + 1) . '. '  . $step->desc . "<br />";
                 }
 
                 $bugSteps .= $this->lang->bug->tplResult;
                 foreach($caseSteps as $key => $step)
                 {
-                    if(!$stepResults[$step->id]['real']) continue;
+                    if(empty($stepResults[$step->id]['real'])) continue;
+                    if(!in_array($step->id, $steps)) continue;
                     $bugSteps .= ($key + 1) . '. ' . $stepResults[$step->id]['real'] . "<br />";
                 }
 
@@ -763,6 +766,7 @@ class bugModel extends model
                 foreach($caseSteps as $key => $step)
                 {
                     if(!$step->expect) continue;
+                    if(!in_array($step->id, $steps)) continue;
                     $bugSteps .= ($key + 1) . '. ' . $step->expect . "<br />";
                 }
 

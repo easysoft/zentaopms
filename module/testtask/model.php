@@ -337,6 +337,7 @@ class testtaskModel extends model
             ->setForce('stepResults', serialize($stepResults))
             ->add('lastRunner', $this->app->user->account)
             ->add('date', $now)
+            ->skipSpecial('stepResults')
             ->remove('steps,reals,result')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();

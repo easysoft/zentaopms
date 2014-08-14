@@ -45,6 +45,7 @@ $lang->testcase->allProduct       = 'All product';
 $lang->testcase->fromBug          = 'From bug';
 $lang->testcase->toBug            = 'To bug';
 $lang->testcase->changed          = 'Changed';
+$lang->testcase->createBug        = 'Create bug';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID     = 'ID';

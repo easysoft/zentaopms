@@ -214,7 +214,7 @@ class bug extends control
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->app->loadLang('release');
 
-        if(!empty($_POST))
+        if(!empty($_POST) and !isset($_POST['stepIDList']))
         {
             $response['result']  = 'success';
             $response['message'] = '';
