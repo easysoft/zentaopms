@@ -762,6 +762,7 @@ class bugModel extends model
             ->fetch();
         $bugs = $this->dao->select('*')->from(TABLE_BUG) 
             ->where('resolvedDate')->ge($project->begin)
+            ->andWhere('resolution')->ne('postponed')
             ->andWhere('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
