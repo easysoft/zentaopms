@@ -136,8 +136,14 @@ $lang->action->label->editestimate        = '编辑了工时';
 $lang->action->label->canceled            = '取消了';
 $lang->action->label->finished            = '完成';
 $lang->action->label->paused              = '暂停';
+$lang->action->label->delayed             = '延期';
+$lang->action->label->suspended           = '挂起';
 $lang->action->label->login               = '登录系统';
 $lang->action->label->logout              = "退出登录";
+$lang->action->label->deleteestimate      = "删除了工时";
+$lang->action->label->starttesttask       = "启动测试任务";
+$lang->action->label->stoptesttask        = "停止测试任务";
+$lang->action->label->createbuild         = "创建了版本";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = '产品|product|view|productID=%s';
