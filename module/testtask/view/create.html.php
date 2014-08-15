@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::import($jsRoot . 'misc/date.js');?>
 <div class='container'>
   <div id='titlebar'>
     <div class='heading'>
@@ -51,7 +52,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->testtask->begin;?></th>
-        <td><?php echo html::input('begin', '', "class='form-control form-date'");?></td>
+        <td><?php echo html::input('begin', '', "class='form-control form-date' onchange='suitEndDate()'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testtask->end;?></th>
