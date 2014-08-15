@@ -359,7 +359,10 @@ class doc extends control
 
         $this->view->doc              = $doc;
         $this->view->libID            = $libID;
+        $this->view->libs             = $this->libs;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->products         = $doc->project == 0 ? $this->product->getPairs() : $this->project->getProducts($doc->project);
+        $this->view->projects         = $this->loadModel('project')->getPairs('all');
         $this->display();
     }
 

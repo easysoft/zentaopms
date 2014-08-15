@@ -30,6 +30,18 @@ $(document).ready(function()
   <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <table class='table table-form'> 
       <tr>
+        <th class='w-80px'><?php echo $lang->doc->lib;?></th>
+        <td class='w-p25-f'><?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange='loadModule(this.value);changeByLib(this.value)'");?></td><td></td>
+      </tr>  
+      <tr>
+        <th class='w-80px'><?php echo $lang->doc->project;?></th>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, $doc->project, "class='form-control chosen' onchange=loadProducts(this.value)");?></td><td></td>
+      </tr>  
+      <tr>
+        <th class='w-80px'><?php echo $lang->doc->product;?></th>
+        <td class='w-p25-f'><?php echo html::select('product', $products, $doc->product, "class='form-control chosen'");?></td><td></td>
+      </tr>  
+      <tr>
         <th class='w-80px'><?php echo $lang->doc->module;?></th>
         <td class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></td><td></td>
       </tr>  
@@ -68,8 +80,7 @@ $(document).ready(function()
       <tr>
         <td></td>
         <td colspan='2'>
-          <?php echo html::submitButton() . html::backButton() . html::hidden('lib', $libID);?>
-          <?php echo html::hidden('product', $doc->product) . html::hidden('project', $doc->project);?>
+          <?php echo html::submitButton() . html::backButton();?>
         </td>
       </tr>
     </table>
