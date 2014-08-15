@@ -37,7 +37,8 @@ $config->sessionVar  = 'sid';             // requestType=GET: the session var na
 $config->views  = ',html,json,mhtml,'; 
 
 /* Set the wide window size. */
-$config->wideSize = 1400;
+$config->wideSize    = 1400;
+$config->formTimeout = 30000;
 
 /* Supported languages. */
 $config->langs['zh-cn'] = '简体';
