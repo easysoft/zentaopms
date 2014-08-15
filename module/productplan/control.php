@@ -216,18 +216,19 @@ class productplan extends control
         if(!empty($_POST['stories'])) $this->productplan->linkStory($planID);
 
         $this->loadModel('story');
+        $this->loadModel('tree');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
         $products = $this->product->getPairs();
 
         /* Build search form. */
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        unset($this->config->product->search['fields']['module']);
         unset($this->config->product->search['fields']['product']);
         $this->config->product->search['actionURL'] = $this->createLink('productplan', 'linkStory', "planID=$planID&browseType=bySearch&queryID=myQueryID");   
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+        $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($plan->product, $viewType = 'story', $startModuleID = 0);
         unset($this->lang->story->statusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
