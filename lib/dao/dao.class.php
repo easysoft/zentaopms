@@ -438,11 +438,11 @@ class dao
      * @access public
      * @return object   the PDOStatement object.
      */
-    public function query()
+    public function query($sql = '')
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        $sql = $this->processSQL();
+        if(empty($sql)) $sql = $this->processSQL();
         try
         {
             $method = $this->method;
@@ -516,11 +516,11 @@ class dao
      * @access public
      * @return int the modified or deleted records.
      */
-    public function exec()
+    public function exec($sql = '')
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        $sql = $this->processSQL();
+        if(empty($sql)) $sql = $this->processSQL();
         try
         {
             $this->reset();
