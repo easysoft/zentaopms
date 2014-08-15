@@ -12,7 +12,7 @@
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <div id='featurebar'>
-    <div class='heading'><i class='icon-lock'></i></div>
+    <div class='heading'><i class='icon-lock'> <?php echo $group->name;?></i></div>
     <ul class='nav'>
       <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
       <li <?php echo empty($menu) ? "class='active'" : ""?>>
