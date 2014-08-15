@@ -77,7 +77,7 @@ class bugModel extends model
         $now     = helper::now();
         $actions = array();
         $data    = fixer::input('post')->get();
-        $batchNum = count(current($data));
+        $batchNum = count(reset($data));
 
         for($i = 0; $i < $batchNum; $i++)
         {
@@ -88,22 +88,35 @@ class bugModel extends model
         $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0));
         $moduleOwners = array();
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
+
+        $module  = 0;
+        $project = 0;
+        $type    = '';
+        $os      = '';
+        $browser = '';
         for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($data->titles[$i])) continue;
+
+            if($data->modules[$i]  != 'ditto') $module  = (int)$data->modules[$i];
+            if($data->projects[$i] != 'ditto') $project = (int)$data->projects[$i];
+            if($data->types[$i]    != 'ditto') $type    = $data->types[$i];
+            if($data->oses[$i]     != 'ditto') $os      = $data->oses[$i];
+            if($data->browsers[$i] != 'ditto') $browser = $data->browsers[$i];
+
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = $now;
             $bug->product     = $productID;
-            $bug->module      = $data->modules[$i];
-            $bug->project     = $data->projects[$i] ? $data->projects[$i] : 0;
+            $bug->module      = $module;
+            $bug->project     = $project;
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->title       = $data->titles[$i];
             $bug->steps       = nl2br($data->stepses[$i]);
-            $bug->type        = $data->types[$i];
+            $bug->type        = $type;
             $bug->severity    = $data->severities[$i];
-            $bug->os          = $data->oses[$i];
-            $bug->browser     = $data->browsers[$i];
+            $bug->os          = $os;
+            $bug->browser     = $browser;
 
             if(!empty($moduleOwners[$bug->module]))
             {
@@ -111,11 +124,11 @@ class bugModel extends model
                 $bug->assignedDate = $now;
             }
 
-            $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
-            $bugID = $this->dao->lastInsertID();
+           $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
+           $bugID = $this->dao->lastInsertID();
 
-            if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
-            $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
+           if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
+           $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
         return $actions;
     }

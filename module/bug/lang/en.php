@@ -113,6 +113,7 @@ $lang->bug->moduleBugs     = 'ByModule';
 $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'StoryChanged';
 $lang->bug->allProduct     = 'All products';
+$lang->bug->ditto          = 'Ditto';
 
 /* Labels. */
 $lang->bug->lblProductAndModule         = 'Product&Module';

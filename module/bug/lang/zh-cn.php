@@ -113,6 +113,7 @@ $lang->bug->moduleBugs     = '按模块';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
 $lang->bug->allProduct     = '所有产品';
+$lang->bug->ditto          = '同上';
 
 /* 页面标签。*/
 $lang->bug->lblProductAndModule         = '产品模块';

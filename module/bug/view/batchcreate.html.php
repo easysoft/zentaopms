@@ -36,23 +36,41 @@
         <th class='w-100px'> <?php echo $lang->bug->browser;?></th>
       </tr>
     </thead>
-    <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
-    <tr class='text-center'>
-      <td><?php echo $i+1;?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
-      <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
-      <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
-      <td>
-        <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control'");?>
-      </td>
-      <td><?php echo html::select("types[$i]", $lang->bug->typeList, '', "class='form-control'");?></td>
-      <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
-      <td><?php echo html::select("oses[$i]", $lang->bug->osList, '', "class='form-control'");?></td>
-      <td><?php echo html::select("browsers[$i]", $lang->bug->browserList, '', "class='form-control'");?></td>
-    </tr>
-    <?php endfor;?>
-    <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tbody>
+      <?php
+      $moduleOptionMenu       += array('ditto' => $lang->bug->ditto);
+      $projects               += array('ditto' => $lang->bug->ditto);
+      $lang->bug->typeList    += array('ditto' => $lang->bug->ditto);
+      $lang->bug->osList      += array('ditto' => $lang->bug->ditto);
+      $lang->bug->browserList += array('ditto' => $lang->bug->ditto);
+      ?>
+      <?php for($i = 0; $i < $config->bug->batchCreate; $i++):?>
+      <?php
+      $moduleID  = $i == 0 ? 0  : 'ditto';
+      $projectID = $i == 0 ? 0  : 'ditto';
+      $type      = $i == 0 ? '' : 'ditto';
+      $os        = $i == 0 ? '' : 'ditto';
+      $browser   = $i == 0 ? '' : 'ditto';
+      ?>
+      <tr class='text-center'>
+        <td><?php echo $i+1;?></td>
+        <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+        <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
+        <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
+        <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
+        <td>
+          <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control'");?>
+        </td>
+        <td><?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control'");?></td>
+        <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
+        <td><?php echo html::select("oses[$i]", $lang->bug->osList, $os, "class='form-control'");?></td>
+        <td><?php echo html::select("browsers[$i]", $lang->bug->browserList, $browser, "class='form-control'");?></td>
+      </tr>
+      <?php endfor;?>
+    </tbody>
+    <tfoot>
+      <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    </tfoot>
   </table>
 </form>
 <table class='hide' id='trTemp'>
