@@ -93,7 +93,7 @@
       <tr>
         <th><?php echo $lang->story->reviewedBy;?></th>
         <td><?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?></td>
-        <td><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'" . ($projectID > 0 ? " checked='checked'" : ""));?></td>
+        <td><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></td>
       </tr>  
        <tr>
         <th><nobr><?php echo $lang->story->mailto;?></nobr></th>
