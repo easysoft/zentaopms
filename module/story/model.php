@@ -137,6 +137,10 @@ class storyModel extends model
             ->remove('files,labels,spec,verify,needNotReview,newStory')
             ->get();
 
+        /* Check repeat story. */
+        $storyID = $this->loadModel('common')->checkRepeat('story', 'check', $story->title, "product={$story->product}");
+        if($storyID) return array('status' => 'existed', 'id' => $storyID);
+
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
@@ -193,7 +197,7 @@ class storyModel extends model
                     }
                 }
             }
-            return $storyID;
+            return array('status' => 'created', 'id' => $storyID);
         }
         return false;
     }
@@ -206,9 +210,10 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0)
     {
-        $now      = helper::now();
-        $stories  = fixer::input('post')->get();
-        $batchNum = count(current($stories));
+        $now           = helper::now();
+        $stories       = fixer::input('post')->get();
+        $batchNum      = count(reset($stories));
+        $latestStories = $this->loadModel('common')->checkRepeat('story', 'get', '', "product={$productID}");
 
         for($i = 0; $i < $batchNum; $i++)
         {
@@ -226,6 +231,8 @@ class storyModel extends model
                 $data[$i]->openedDate = $now;
                 $data[$i]->version    = 1;
 
+                if($latestStories and in_array($data[$i]->title, $latestStories)) continue;
+
                 $this->dao->insert(TABLE_STORY)
                     ->data($data[$i])
                     ->autoCheck()
@@ -238,6 +245,7 @@ class storyModel extends model
                 }
 
                 $storyID = $this->dao->lastInsertID();
+                $latestStories[$storyID] = $data[$i]->title;
                 $this->setStage($storyID);
 
                 $specData[$i] = new stdclass();

@@ -53,6 +53,10 @@ class testcaseModel extends model
             ->setDefault('story', 0)
             ->join('stage', ',')
             ->get();
+
+        $caseID = $this->loadModel('common')->checkRepeat('case', 'check', $case->title, "product={$case->product}");
+        if($caseID) return array('status' => 'existed', 'id' => $caseID);
+
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
         if(!$this->dao->isError())
         {
@@ -68,7 +72,7 @@ class testcaseModel extends model
                 $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
             }
-            return $caseID;
+            return array('status' => 'created', 'id' => $caseID);
         }
     }
     
@@ -82,9 +86,10 @@ class testcaseModel extends model
      */
     function batchCreate($productID, $storyID)
     {
-        $now      = helper::now();
-        $cases    = fixer::input('post')->get();
-        $batchNum = count(current($cases));
+        $now         = helper::now();
+        $cases       = fixer::input('post')->get();
+        $batchNum    = count(reset($cases));
+        $latestCases = $this->loadModel('common')->checkRepeat('case', 'get', '', "product=$productID");
 
         for($i = 0; $i < $batchNum; $i++)
         {
@@ -113,6 +118,8 @@ class testcaseModel extends model
                     $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
                 }
 
+                if($latestCases and in_array($data[$i]->title, $latestCases)) continue;
+
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
                     ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
@@ -125,6 +132,7 @@ class testcaseModel extends model
                 }
 
                 $caseID = $this->dao->lastInsertID();
+                $latestCases[$caseID] = $data[$i]->title;
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
             }
             else
