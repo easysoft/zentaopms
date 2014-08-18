@@ -249,7 +249,10 @@ class doc extends control
         $projectID = (int)$projectID;
         if(!empty($_POST))
         {
-            $docID = $this->doc->create();
+            $docResult = $this->doc->create();
+            $docID     = $docResult['id'];
+
+            if($docResult['status'] == 'existed') die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
             if(dao::isError()) die(js::error(dao::getError()));
             $this->action->create('doc', $docID, 'Created');
 

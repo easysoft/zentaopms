@@ -37,6 +37,7 @@ function setStoryRelated(num)
         $.get(link, function(moduleID)
         {
             $('#module' + num).val(moduleID);
+            $('#module' + num).trigger("chosen:updated");
         });
     }
 }

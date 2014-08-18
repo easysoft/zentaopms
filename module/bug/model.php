@@ -54,12 +54,17 @@ class bugModel extends model
             ->join('mailto', ',')
             ->remove('files, labels')
             ->get();
+
+        /* Check repeat bug. */
+        $bugID = $this->loadModel('common')->checkRepeat('bug', 'check', $bug->title, "product={$bug->product}");
+        if($bugID) return array('status' => 'existed', 'id' => $bugID);
+
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('bug', $bugID);
-            return $bugID;
+            return array('status' => 'created', 'id' => $bugID);
         }
         return false;
     }
@@ -74,10 +79,11 @@ class bugModel extends model
     public function batchCreate($productID)
     {
         $this->loadModel('action');
-        $now     = helper::now();
-        $actions = array();
-        $data    = fixer::input('post')->get();
-        $batchNum = count(reset($data));
+        $now        = helper::now();
+        $actions    = array();
+        $data       = fixer::input('post')->get();
+        $batchNum   = count(reset($data));
+        $latestBugs = $this->loadModel('common')->checkRepeat('bug', 'get', '', "product=$productID");
 
         for($i = 0; $i < $batchNum; $i++)
         {
@@ -124,8 +130,11 @@ class bugModel extends model
                 $bug->assignedDate = $now;
             }
 
+            if($latestBugs and in_array($bug->title, $latestBugs)) continue;
+
            $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
            $bugID = $this->dao->lastInsertID();
+           $latestBugs[$bugID] = $bug->title;
 
            if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
            $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');

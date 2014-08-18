@@ -929,40 +929,43 @@ class projectModel extends model
     public function importBug($projectID)
     {
         $this->loadModel('bug');
-        $bugLang = $this->app->loadLang('bug');
         $this->loadModel('task');
         $this->loadModel('story');
 
-        $now = helper::now();
-        $BugToTasks = fixer::input('post')->get();
-        foreach($BugToTasks->import as $key => $value)
+        $now     = helper::now();
+        $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
+
+        $bugToTasks = fixer::input('post')->get();
+        $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));
+        foreach($bugToTasks->import as $key => $value)
         {
-            $bug  = $this->bug->getById($key);
+            $bug  = $bugs[$key];
             $task = new stdClass();
             $task->project      = $projectID;
             $task->story        = $bug->story;
-            $task->storyVersion = $bug->story;
+            $task->storyVersion = $bug->storyVersion;
+            $task->module       = isset($modules[$bug->module]) ? $bug->module : 0;
             $task->fromBug      = $key;
             $task->name         = $bug->title;
             $task->type         = 'devel';
-            $task->pri          = $BugToTasks->pri[$key];
+            $task->pri          = $bugToTasks->pri[$key];
             $task->consumed     = 0;
             $task->status       = 'wait';
-            $task->desc         = $bugLang->bug->resolve . ':' . '#' . html::a(helper::createLink('bug', 'view', "bugID=$key"), sprintf('%03d', $key));
+            $task->desc         = $this->lang->bug->resolve . ':' . '#' . html::a(helper::createLink('bug', 'view', "bugID=$key"), sprintf('%03d', $key));
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
-            if(!empty($BugToTasks->estimate[$key]))
+            if(!empty($bugToTasks->estimate[$key]))
             {
-                $task->estimate     = $BugToTasks->estimate[$key];
+                $task->estimate     = $bugToTasks->estimate[$key];
                 $task->left         = $task->estimate;
             }
-            if(!empty($BugToTasks->assignedTo[$key]))
+            if(!empty($bugToTasks->assignedTo[$key]))
             {
-                $task->assignedTo   = $BugToTasks->assignedTo[$key];
+                $task->assignedTo   = $bugToTasks->assignedTo[$key];
                 $task->assignedDate = $now;
             }
             if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
-            $this->dao->insert(TABLE_TASK)->data($task)->checkIF($BugToTasks->estimate[$key] != '', 'estimate', 'float')->exec();
+            $this->dao->insert(TABLE_TASK)->data($task)->checkIF($bugToTasks->estimate[$key] != '', 'estimate', 'float')->exec();
 
             if(dao::isError()) 
             {

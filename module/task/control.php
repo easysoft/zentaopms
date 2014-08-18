@@ -80,6 +80,10 @@ class task extends control
             $this->loadModel('action');
             foreach($tasksID as $taskID)
             {
+                /* if status is existed then this task has existed not new create. */
+                if($taskID['status'] == 'existed') continue;
+
+                $taskID   = $taskID['id'];
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
                 $this->sendmail($taskID, $actionID);
             }            

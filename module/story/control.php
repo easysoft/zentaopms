@@ -42,7 +42,21 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
-            $storyID = $this->story->create($projectID, $bugID);
+            $storyResult = $this->story->create($projectID, $bugID);
+            $storyID     = $storyResult['id'];
+            if($storyResult['status'] == 'existed')
+            {
+                if($projectID == 0)
+                {
+                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");
+                }
+                else
+                {
+                    $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+                }
+                $this->send($response);
+            }
+
             if(dao::isError())
             {
                 $response['result']  = 'fail';
