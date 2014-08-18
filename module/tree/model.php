@@ -439,8 +439,7 @@ class treeModel extends model
         if($linkStory)
         {
             /* Get story paths of this project. */
-            $paths = $this->dao->select('t3.' . $field)
-                ->from(TABLE_PROJECTSTORY)->alias('t1')
+            $paths = $this->dao->select('DISTINCT t3.' . $field)->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
                 ->where('t1.project')->eq($projectID)
@@ -459,6 +458,14 @@ class treeModel extends model
         $paths += $this->dao->select($field)->from(TABLE_MODULE)
             ->where('root')->eq($projectID)
             ->andWhere('type')->eq('task')
+            ->fetchPairs();
+
+        /* Add task paths of this project for has existed. */
+        $paths += $this->dao->select('DISTINCT t1.' . $field)->from(TABLE_MODULE)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.module')
+            ->where('t2.module')->ne(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
             ->fetchPairs();
 
         /* Get all modules from paths. */
