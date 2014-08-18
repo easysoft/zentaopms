@@ -188,14 +188,16 @@ fieldset.actionbox ol {padding-top: 8px\0/;}
 /* stars list */
 .stars-list {color: #E48600}
 
-/* status */
-.done, [class$="-done"]  {color:#078F0E;}
-.wait, [class$="-wait"]  {color:#888;}
-.doing, [class$="-doing"]  {color:#F30;}
-.delayed, [class$="-delayed"] {background:#e84e0f!important; color:white;}
-.pass, [class$="-pass"]  {color:#078F0E;}
-.blocked, [class$="-blocked"] {background:yellow!important;}
-.fail, [class$="-fail"]  {color:red}
+/* status in table */
+td.done, td[class$="-done"], td.pass, td[class$="-pass"], td.resolved, td[class$="-resolved"] {color:#229f24; background-color: #e5ffe6!important}
+td.wait, td[class$="-wait"] {color:#808080;}
+td.cancel, td[class$="-cancel"] {color:#999; background-color: #f1f1f1!important}
+td.doing, td[class$="-doing"]  {color:#d2322d;}
+td.delayed, td[class$="-delayed"] {background:#e84e0f!important; color:white;}
+td.blocked, td[class$="-blocked"] {background:yellow!important;}
+td.fail, td[class$="-fail"]  {color:#d2322d}
+td.active, td[class$="-active"] {color: #e48600; background: #fff4e5!important}
+td.draft, td[class$="-draft"]  {color:#8957a1}
 
 /* tabs */
 .nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px; max-height: 32px}

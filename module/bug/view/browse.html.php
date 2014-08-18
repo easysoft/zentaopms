@@ -130,7 +130,7 @@ js::set('moduleID', $moduleID);
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
 
         <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-        <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+        <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
         <?php endif;?>
 
         <?php if($browseType == 'needconfirm'):?>
