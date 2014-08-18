@@ -739,4 +739,47 @@ class commonModel extends model
             $this->session->set($objectType . 'OrderBy', '');
         }
     }
+
+    /**
+     * Check repeat for story,task,bug,case,doc.
+     * 
+     * @param  string $type 
+     * @param  string $mode 
+     * @param  string $title 
+     * @param  string $condition 
+     * @access public
+     * @return bool|array
+     */
+    public function checkRepeat($type, $mode = 'check', $title = '', $condition = '')
+    {
+        $table = $this->config->objectTables[$type];
+        $field = $type == 'task' ? 'name' : 'title';
+        $date  = date(DT_DATETIME1, time() - 1 * 60);
+
+        if($mode == 'check' and empty($title)) return false;
+        if($mode == 'check')
+        {
+            $repeatObject = $this->dao->select('*')->from($table)
+                ->where('deleted')->eq(0)
+                ->andWhere($field)->eq($title)
+                ->beginIF($type == 'doc')->andWhere('addedDate')->ge($date)->fi()
+                ->beginIF($type != 'doc')->andWhere('openedDate')->ge($date)->fi()
+                ->beginIF($condition)->andWhere($condition)->fi()
+                ->fetch();
+
+            if($repeatObject) return $repeatObject->id;
+            return false;
+        }
+        elseif($mode == 'get')
+        {
+            return $this->dao->select("id,$field")->from($table)
+                ->where('deleted')->eq(0)
+                ->beginIF($type == 'doc')->andWhere('addedDate')->ge($date)->fi()
+                ->beginIF($type != 'doc')->andWhere('openedDate')->ge($date)->fi()
+                ->beginIF($condition)->andWhere($condition)->fi()
+                ->fetchPairs();
+        }
+
+        return false;
+    }
 }

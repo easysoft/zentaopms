@@ -226,7 +226,14 @@ class testcase extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
-            $caseID = $this->testcase->create($bugID);
+            $caseResult = $this->testcase->create($bugID);
+            $caseID     = $caseResult['id'];
+            if($caseResult['status'] == 'existed')
+            {
+                $response['locate'] = $this->createLink('testcase', 'view', "caseID=$caseID");
+                $this->send($response);
+            }
+
             if(dao::isError())
             {
                 $response['result']  = 'fail';

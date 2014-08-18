@@ -241,6 +241,24 @@ class dao
     }
 
     /**
+     * The count method, call sql::select() and from().
+     * use as $this->dao->count(TABLE_BUG)->where('')->fetch('count');
+     *
+     * @param  int    $tabel 
+     * @access public
+     * @return void
+     */
+    public function count($table)
+    {
+        $this->setMode('raw');
+        $this->setMethod('select');
+        $this->sqlobj = sql::select('count(*) as count');
+        $this->setTable($table);
+        $this->sqlobj->from($table);
+        return $this;
+    }
+
+    /**
      * The select method, call sql::update().
      * 
      * @param  string $table 

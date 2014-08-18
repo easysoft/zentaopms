@@ -60,6 +60,15 @@ EOT;
       <div class='panel-heading'>
         <strong><?php echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></strong>
       </div>
+      <?php if($field == 'review'):?>
+      <table class='table table-borderless mw-600px'>
+        <tr>
+          <td><?php echo $lang->custom->storyReview;?></td>
+          <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+      <?php else:?>
       <table class='table table-borderless active-disabled table-condensed mw-600px'>
         <tr class='text-center'>
           <th class='w-120px'><?php echo $lang->custom->key;?></th>
@@ -92,6 +101,7 @@ EOT;
           </td>
         </tr>
       </table>
+      <?php endif;?>
     </div>
   </form>
 </div>

@@ -22,8 +22,9 @@ class taskModel extends model
      */
     public function create($projectID)
     {
-        $tasksID = array();
-        $taskFile = '';
+        $tasksID     = array();
+        $taskFile    = '';
+        $latestTasks = $this->loadModel('common')->checkRepeat('task', 'get', '', "project=$projectID");
         foreach($this->post->assignedTo as $assignedTo)
         {
             if($this->post->type == 'affair' and empty($assignedTo)) continue;
@@ -44,6 +45,13 @@ class taskModel extends model
                 ->get();
 
             if($assignedTo) $task->assignedDate = helper::now();
+
+            /* Check repeat story. */
+            if($latestTasks and $taskID = array_search($task->name, $latestTasks))
+            {
+                $tasksID[$assignedTo] = array('status' => 'existed', 'id' => $taskID);
+                continue;
+            }
 
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -67,7 +75,7 @@ class taskModel extends model
                     $taskFile = $this->dao->select('*')->from(TABLE_FILE)->where('id')->eq(key($taskFileTitle))->fetch();
                     unset($taskFile->id);
                 }
-                $tasksID[$assignedTo] = $taskID;
+                $tasksID[$assignedTo] = array('status' => 'created', 'id' => $taskID);
             }
             else
             {
@@ -87,10 +95,11 @@ class taskModel extends model
     public function batchCreate($projectID)
     {
         $this->loadModel('action');
-        $now      = helper::now();
-        $mails    = array();
-        $tasks    = fixer::input('post')->get();
-        $batchNum = count(current($tasks));
+        $now         = helper::now();
+        $mails       = array();
+        $tasks       = fixer::input('post')->get();
+        $batchNum    = count(reset($tasks));
+        $latestTasks = $this->loadModel('common')->checkRepeat('task', 'get', '', "project=$projectID");
 
         /* check estimate. */
         for($i = 0; $i < $batchNum; $i++)
@@ -123,6 +132,8 @@ class taskModel extends model
             if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
 
+            if($latestTasks and in_array($data[$i]->name, $latestTasks)) continue;
+
             $this->dao->insert(TABLE_TASK)->data($data[$i])
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
@@ -132,6 +143,7 @@ class taskModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $taskID = $this->dao->lastInsertID();
+            $latestTasks[$taskID] = $data[$i]->name;
             if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             

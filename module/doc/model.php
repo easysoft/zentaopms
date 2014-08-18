@@ -189,6 +189,10 @@ class docModel extends model
             ->remove('files, labels')
             ->get();
         $condition = "lib = '$doc->lib' AND module = $doc->module";
+
+        $docID = $this->loadModel('common')->checkRepeat('doc', 'check', $doc->title, $condition);
+        if($docID) return array('status' => 'existed', 'id' => $docID);
+
         $this->dao->insert(TABLE_DOC)
             ->data($doc)
             ->autoCheck()

@@ -39,18 +39,25 @@ class custom extends control
         $fieldList = $this->lang->$module->$field;
         if(!empty($_POST))
         {
-            $lang = $_POST['lang'];
-            $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
-            foreach($_POST['keys'] as $index => $key)
+            if($module == 'story' && $field == 'review')
             {
-                $value  = $_POST['values'][$index];
-                if(!$value or !$key) continue;
-                $system = $_POST['systems'][$index];
+                $this->loadModel('setting')->setItem('system.common.storyReview.needReview', $_POST['needReview']);
+            }
+            else
+            {
+                $lang = $_POST['lang'];
+                $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
+                foreach($_POST['keys'] as $index => $key)
+                {
+                    $value  = $_POST['values'][$index];
+                    if(!$value or !$key) continue;
+                    $system = $_POST['systems'][$index];
 
-                /* the length of role is 20, check it when save. */
-                if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
+                    /* the length of role is 20, check it when save. */
+                    if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
 
-                $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
+                    $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
+                }
             }
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::reload('parent'));
@@ -59,6 +66,7 @@ class custom extends control
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
         $this->view->position[]  = $this->lang->custom->common;
         $this->view->position[]  = $this->lang->$module->common;
+        $this->view->needReview  = isset($this->config->storyReview->needReview) ? $this->config->storyReview->needReview : 1;
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $this->custom->getItems("lang=$currentLang,all&module=$module&section=$field");
         $this->view->field       = $field;

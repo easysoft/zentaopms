@@ -140,7 +140,7 @@ class admin extends control
 
             if(!$result) die(js::alert($this->lang->admin->clearDataFailed));
 
-            js::alert($this->lang->admin->clearDataSuccessfully);
+            echo js::alert($this->lang->admin->clearDataSuccessfully);
             die(js::locate(inLink('index'), 'parent'));
         }
 
