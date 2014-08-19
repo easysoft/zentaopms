@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container mw-700px'>
+<div>
   <div id='titlebar'>
     <div class='heading'>
       <?php echo html::icon($lang->icons['product']);?> <?php echo $lang->project->manageProducts;?>

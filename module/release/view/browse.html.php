@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
-<div class='container mw-900px'>
+<div>
   <div id='titlebar'>
     <div class='heading'><i class='icon-tags'></i> <?php echo $lang->release->browse;?>  </div>
     <div class='actions'>
