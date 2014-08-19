@@ -994,6 +994,11 @@ function setModal()
                 setTimeout(function()
                 {
                     var fbH = $framebody.addClass('body-modal').outerHeight();
+                    frame$('#titlebar > .heading a').each(function()
+                    {
+                        var $a = frame$(this);
+                        $a.replaceWith("<strong class='heading-title'>" + $a.text() + "</strong>");
+                    });
                     if(typeof fbH == 'object') fbH = $framebody.height();
                     modalBody.css('height', fbH);
                     ajustModalPosition();

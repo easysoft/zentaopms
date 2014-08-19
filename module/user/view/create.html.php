@@ -70,7 +70,7 @@
         <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
       </tr>
 
-      <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><th></th><td><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>
   </form>
 </div>
