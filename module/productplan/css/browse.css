@@ -1,3 +1,4 @@
 #productplan tbody > tr > td{border-right:1px solid #E4E4E4;}
 .table td .article-content {padding: 0}
+.table td .article-content *{margin:0px;}
 .table td .article-content ol,.table td .article-content ul{padding-left:20px;}
