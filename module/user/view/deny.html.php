@@ -14,7 +14,7 @@ include '../../common/view/header.lite.html.php';
   <div class='modal-dialog'>
     <div class='modal-header'><strong><?php echo $app->user->account, ' ', $lang->user->deny;?></strong></div>
     <div class='modal-body'>
-      <div class='alert alert-warning'>
+      <div class='alert with-icon alert-pure'>
         <i class='icon-info-sign'></i>
         <div class='content'>
         <?php
