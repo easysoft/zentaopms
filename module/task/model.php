@@ -918,8 +918,7 @@ class taskModel extends model
      */
     public function getTaskEstimate($taskID)
     {
-        return $this->dao->select('*')
-          ->from(TABLE_TASKESTIMATE)  
+        return $this->dao->select('*')->from(TABLE_TASKESTIMATE)  
           ->where('task')->eq($taskID)
           ->orderBy('id')
           ->fetchAll();
@@ -934,14 +933,12 @@ class taskModel extends model
      */
     public function getEstimateById($estimateID)
     {
-        $estimate = $this->dao->select('*')
-          ->from(TABLE_TASKESTIMATE)  
+        $estimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)  
           ->where('id')->eq($estimateID)
           ->fetch();
 
         /* If the estimate is the last of its task, status of task will be checked. */
-        $lastID = $this->dao->select('id')
-            ->from(TABLE_TASKESTIMATE)
+        $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)
             ->where('task')->eq($estimate->task)
             ->andWhere('id')->gt($estimate->id)
             ->fetch('id');
@@ -967,16 +964,10 @@ class taskModel extends model
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$estimateID)
             ->exec();
+
         $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
-        if($lastEstimate and $estimateID == $lastEstimate->id)
-        {
-            $left = $estimate->left; 
-        }
-        else
-        {
-            $left = $task->left; 
-        }
+        $left         = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left; 
         if($left == 0) $task->status = 'done';
 
         $now  = helper::now();
