@@ -1,4 +1,4 @@
-.cards {margin: 5% auto;}
+.cards {margin: 2% auto;}
 .cards > .col-sm-6 {width: 25%; padding: 0 10px}
 .card {height: 250px; position: relative; padding-top: 50px; border-radius: 6px; margin: 0}
 .card > .media {position: absolute; left: 0; top: 0; width: 100%; background: #f1f1f1; height:50px; bottom: 0; overflow: hidden; z-index: 90; transition: all 0.4s;}
@@ -10,19 +10,9 @@
 .card-content > ul {padding-left: 20px;}
 .card-content > ul > li {margin-bottom: 5px;}
 
-.card-about.card:hover > .media {background: #E5F9FF}
-.card-about.card:hover > .media > .icon {color: #c8eef9}
-.card-about.card:hover > .media > h5 {color: #279bbd}
-.card-support.card:hover > .media {background: #E5FFE6}
-.card-support.card:hover > .media > .icon {color: #c2eac2}
-.card-support.card:hover > .media > h5 {color: #229F24}
-.card-cowin.card:hover > .media {background: #FFF4E5}
-.card-cowin.card:hover > .media > .icon {color: #f7dfbe}
-.card-cowin.card:hover > .media > h5 {color: #E48600}
-.card-service.card:hover > .media {background: #FFE6E5}
-.card-service.card:hover > .media > .icon {color: #f9d0ce}
-.card-service.card:hover > .media > h5 {color: #D2322D}
+.card a, .card:hover a {color: #444}
+.card a:hover {color: #000;}
 
-#notice {margin: -20px -20px 0}
-#titlebar {margin-top: 0; border-top: 1px solid #e5e5e5}
+#notice {margin: -20px -20px 0; border-bottom: 1px solid #e5e5e5}
+#heading {margin: 4% auto 1%}
 #proversion, #zentaotrain{color:#D2322D}
