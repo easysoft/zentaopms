@@ -10,18 +10,8 @@
 .card-content > ul {padding-left: 8px;}
 .card-content > ul > li {margin-bottom: 5px;}
 
-.card-about.card:hover > .media {background: #E5F9FF}
-.card-about.card:hover > .media > .icon {color: #c8eef9}
-.card-about.card:hover > .media > h5 {color: #279bbd}
-.card-support.card:hover > .media {background: #E5FFE6}
-.card-support.card:hover > .media > .icon {color: #c2eac2}
-.card-support.card:hover > .media > h5 {color: #229F24}
-.card-cowin.card:hover > .media {background: #FFF4E5}
-.card-cowin.card:hover > .media > .icon {color: #f7dfbe}
-.card-cowin.card:hover > .media > h5 {color: #E48600}
-.card-service.card:hover > .media {background: #FFE6E5}
-.card-service.card:hover > .media > .icon {color: #f9d0ce}
-.card-service.card:hover > .media > h5 {color: #D2322D}
+.card a, .card:hover a {color: #444}
+.card a:hover {color: #000;}
 
 body {padding: 20px; font-size: 12px}
 .modal-dialog.hide-header .modal-header .close {top: 5px; right: 20px}
