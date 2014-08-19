@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('roles', $roles);?>
-<div class='container mw-700px'>
+<div>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['team']);?></span>

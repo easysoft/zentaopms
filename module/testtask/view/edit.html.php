@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-800px'>
+<div class='container'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix' title='TESTTASK'><?php echo html::icon($lang->icons['testtask']);?></span>

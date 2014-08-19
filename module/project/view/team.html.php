@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkMember', $lang->project->confirmUnlinkMember)?>
-<div class='container mw-700px'>
+<div>
   <div id='titlebar'>
     <div class='heading'>
       <?php echo html::icon($lang->icons['team']);?> <?php echo $lang->project->team;?>
@@ -22,7 +22,7 @@
       <?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary'");?>
     </div>
   </div>
-  <table class='table tablesorter bd-0' id='memberList'>
+  <table class='table tablesorter' id='memberList'>
     <thead>
       <tr>
         <th><?php echo $lang->team->account;?></th>
