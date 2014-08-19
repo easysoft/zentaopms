@@ -188,14 +188,16 @@ fieldset.actionbox ol {padding-top: 8px\0/;}
 /* stars list */
 .stars-list {color: #E48600}
 
-/* status */
-.done, [class$="-done"]  {color:#078F0E;}
-.wait, [class$="-wait"]  {color:#888;}
-.doing, [class$="-doing"]  {color:#F30;}
-.delayed, [class$="-delayed"] {background:#e84e0f!important; color:white;}
-.pass, [class$="-pass"]  {color:#078F0E;}
-.blocked, [class$="-blocked"] {background:yellow!important;}
-.fail, [class$="-fail"]  {color:red}
+/* status in table */
+td.done, td[class$="-done"], td.pass, td[class$="-pass"], td.resolved, td[class$="-resolved"] {color:#229f24; background-color: #e5ffe6!important}
+td.wait, td[class$="-wait"] {color:#808080;}
+td.cancel, td[class$="-cancel"] {color:#999; background-color: #f1f1f1!important}
+td.doing, td[class$="-doing"]  {color:#d2322d;}
+td.delayed, td[class$="-delayed"] {background:#e84e0f!important; color:white;}
+td.blocked, td[class$="-blocked"] {background:yellow!important;}
+td.fail, td[class$="-fail"]  {color:#d2322d}
+td.active, td[class$="-active"] {color: #e48600; background: #fff4e5!important}
+td.draft, td[class$="-draft"]  {color:#8957a1}
 
 /* tabs */
 .nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px; max-height: 32px}
@@ -343,12 +345,13 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #mainmenu .nav > li > a:hover{background-color: #2e6dad;color: #fff;-webkit-box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
 #mainmenu .nav > li.active > a { background-color:#e5e5e5;color:#21841d; font-weight:bold;}
 
-#searchbox {position: absolute; right: 0; top: 1px; width: 200px; border-radius: 12px;}
+#searchbox {position: absolute; right: 0; top: 1px; width: 200px;}
 #searchbox .form-control, #searchbox .btn {padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}
-#typeSelector .btn{padding-left: 10px; border-radius: 12px 0 0 12px}
-#objectSwitcher .btn{padding-right: 10px; border-radius: 0 12px 12px 0; margin-left: -1px\0;}
+#typeSelector .btn{padding-left: 10px;}
+#objectSwitcher .btn{padding-right: 10px; margin-left: -1px\0;}
 #searchbox .dropdown-menu {margin-top: -1px; width: 212px; padding: 0;}
 #searchbox .dropdown-menu > li {float: left; width: 105px; border-bottom: 1px dotted #ddd; border-right: 1px dotted #ddd}
+
 /* Module menu. */
 #modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative; height: 40px;}
 #modulemenu .nav > li {line-height: 30px; padding:5px 0px 1px;display: block; float: left; color: #808080}

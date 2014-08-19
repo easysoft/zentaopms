@@ -38,6 +38,7 @@ var fullTools =
 $(document).ready(initKindeditor);
 function initKindeditor(afterInit)
 {
+    var nextFormControl = 'input:not([type="hidden"]), textarea';
     $.each(editor.id, function(key, editorID)
     {
         editorTool = simpleTools;
@@ -105,6 +106,13 @@ function initKindeditor(afterInit)
                     });
                 }
                 /* End */
+            },
+            afterTab: function(id)
+            {
+                var $next = $editor.next(nextFormControl);
+                if(!$next.length) $next = $editor.parent().next().find(nextFormControl);
+                if(!$next.length) $next = $editor.parent().parent().next().find(nextFormControl);
+                $next.first().focus();
             }
         };
         try {window.editor['#'] = window.editor[editorID] = K.create('#' + editorID, options);}
