@@ -24,13 +24,11 @@
   <form class='form-condensed' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='text-left'><?php echo $lang->comment;?></th>
-      </tr>
-      <tr>
+        <th class='w-60px'><?php echo $lang->comment;?></th>
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
       </tr>
       <tr>
-        <td class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+        <th></th><td class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
       </tr>
     </table>
   </form>

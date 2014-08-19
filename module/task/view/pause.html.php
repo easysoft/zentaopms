@@ -27,7 +27,7 @@
       <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
+      <th></th><td><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

@@ -40,7 +40,7 @@ js::set('page', 'assignedto');
       <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
     <tr>
-      <td colspan='3' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
+      <th></th><td colspan='2'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
     </tr>
   </table>
 </form>

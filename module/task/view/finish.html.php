@@ -40,7 +40,7 @@
       <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <td colspan='3' class='text-center'><?php echo html::submitButton();?></td>
+      <th></th><td colspan='2'><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>
