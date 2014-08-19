@@ -9,7 +9,6 @@
 .card .card-content {padding: 10px 20px}
 .card-content > ul {padding-left: 8px;}
 .card-content > ul > li {margin-bottom: 5px;}
-
 .card a, .card:hover a {color: #444}
 .card a:hover {color: #000;}
 

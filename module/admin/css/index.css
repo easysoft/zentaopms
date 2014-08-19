@@ -1,4 +1,4 @@
-.cards {margin: 2% auto;}
+.cards {margin: 5% auto;}
 .cards > .col-sm-6 {width: 25%; padding: 0 10px}
 .card {height: 250px; position: relative; padding-top: 50px; border-radius: 6px; margin: 0}
 .card > .media {position: absolute; left: 0; top: 0; width: 100%; background: #f1f1f1; height:50px; bottom: 0; overflow: hidden; z-index: 90; transition: all 0.4s;}
@@ -9,10 +9,9 @@
 .card .card-content {padding: 20px}
 .card-content > ul {padding-left: 20px;}
 .card-content > ul > li {margin-bottom: 5px;}
-
 .card a, .card:hover a {color: #444}
 .card a:hover {color: #000;}
 
-#notice {margin: -20px -20px 0; border-bottom: 1px solid #e5e5e5}
-#heading {margin: 4% auto 1%}
+#notice {margin: -20px -20px 0}
+#titlebar {margin-top: 0; border-top: 1px solid #e5e5e5}
 #proversion, #zentaotrain{color:#D2322D}
