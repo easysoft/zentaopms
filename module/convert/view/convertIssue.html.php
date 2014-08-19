@@ -1,5 +1,4 @@
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <form method='post'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->convert->direction;?></caption>
@@ -14,7 +13,7 @@
     </tr>
     <?php endforeach;?>
     <tr>
-      <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
+      <th></th><td><?php echo html::submitButton();?></td>
     </tr>
   </table>
 </form>

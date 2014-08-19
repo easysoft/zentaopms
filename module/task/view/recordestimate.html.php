@@ -43,7 +43,7 @@
         <td class="text-left"><?php echo $estimate->work;?></td>
         <td align='center'>
           <?php
-          if($task->status == 'wait' or $task->status == 'doing')
+          if($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing')
           {
               common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
               common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'remove', 'hiddenwin', 'showinonlybody');
@@ -53,7 +53,7 @@
       </tr>
       <?php endforeach;?>
       <?php endif;?>
-      <?php if($task->status == 'wait' or $task->status == 'doing'):?>
+      <?php if($task->status == 'wait' or $task->status =='pause' or $task->status == 'doing'):?>
       <thead>
         <tr class='text-center'>
           <th class="w-id"><?php echo $lang->idAB;?></th>

@@ -29,7 +29,7 @@
       <th><?php echo $lang->group->desc;?></th>
       <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='form-control'");?></td>
     </tr>  
-    <tr><td colspan='2' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><th></th><td><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

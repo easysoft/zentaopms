@@ -37,7 +37,7 @@ EOT;
       <strong><?php echo $lang->install->error;?></strong>
     </div>
     <div class='modal-body'>
-      <div class='alert alert-danger'>
+      <div class='alert alert-danger alert-pure with-icon'>
         <i class='icon-info-sign'></i>
         <div class='content'><?php echo $error;?></div>
       </div>

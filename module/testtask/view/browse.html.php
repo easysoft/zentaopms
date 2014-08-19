@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id="featurebar">
   <ul class="nav">

@@ -1,4 +1,3 @@
-<?php include $this->app->getModuleRoot() . 'common/view/dropmenu.html.php';?>
 <div id='featurebar'>
   <div class='heading'><?php echo html::icon($lang->icons['usecase']);?></div>
   <nav class='nav'>

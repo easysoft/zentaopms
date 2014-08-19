@@ -39,9 +39,12 @@
     ?>
     </ul>
  
+    <div>
+    <?php echo html::a($this->createLink('project', 'index', "locate=no&status=undone&projectID=$projectID"), $lang->project->allProject)?>
     <?php if($dones):?>
-      <div class='actions'><a id='more' href='javascript:switchMore()'><?php echo $lang->project->doneProjects . ' <i class="icon-angle-right"></i>';?></a></div>
+      <div class='pull-right actions'><a id='more' href='javascript:switchMore()'><?php echo $lang->project->doneProjects . ' <i class="icon-angle-right"></i>';?></a></div>
     <?php endif;?>
+    </div>
   </div>
   <div id='moreMenu'>
     <ul>

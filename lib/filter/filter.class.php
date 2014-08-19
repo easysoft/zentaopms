@@ -173,7 +173,8 @@ class validater
      */
     public static function checkLength($var, $max, $min = 0)
     {
-        return self::checkInt(strlen($var), $min, $max);
+        $length = function_exists('mb_strlen') ? mb_strlen($var, 'utf-8') : strlen($var);
+        return self::checkInt($length, $min, $max);
     }
 
     /**

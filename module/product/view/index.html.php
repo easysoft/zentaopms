@@ -11,7 +11,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
   <div class='heading'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->product->index;?>  </div>
   <div class='actions'>

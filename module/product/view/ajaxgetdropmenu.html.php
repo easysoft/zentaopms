@@ -40,7 +40,7 @@
     </ul>
  
     <?php if($closeds):?>
-    <div class='text-right'><a class='gray' id='more' onClick='switchMore()'><?php echo $lang->product->closed . ' <i class="icon-angle-right"></i>';?></a></div>
+    <div class='text-right actions'><a id='more' href='javascript:switchMore()'><?php echo $lang->product->closed;?></a></div>
     <?php endif;?>
  
   </div>
