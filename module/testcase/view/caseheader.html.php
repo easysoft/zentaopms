@@ -1,4 +1,3 @@
-<?php include $this->app->getModuleRoot() . 'common/view/dropmenu.html.php';?>
 <div id='featurebar'>
   <ul class='nav'>
     <?php

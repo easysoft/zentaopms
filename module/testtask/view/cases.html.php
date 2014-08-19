@@ -12,8 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<?php include './caseheader.html.php';?>
 <?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
