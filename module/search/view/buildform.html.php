@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <style>
 #bysearchTab {transition: all .3s cubic-bezier(.175, .885, .32, 1);}
