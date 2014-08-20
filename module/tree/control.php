@@ -180,21 +180,6 @@ class tree extends control
         }
 
         $module = $this->tree->getById($moduleID);
-        if($module->owner == null and $module->root != 0)
-        {
-           $module->owner = $this->loadModel('product')->getById($module->root)->QD;
-        }
-
-        if($type == 'task')
-        {
-            $optionMenu = $this->tree->getTaskOptionMenu($module->root);
-            unset($optionMenu[0]);
-            $this->view->optionMenu = $optionMenu;
-        }
-        else
-        {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type);
-        }
         $this->view->module = $module;
         $this->view->type   = $type;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
