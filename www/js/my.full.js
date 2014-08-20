@@ -957,7 +957,7 @@ function setModal()
         {
             options.waitingFuc = setTimeout(function(){showModal(options, modal, modalBody, dialog);}, options.waittime );
         }
-        
+
         var frame = document.getElementById(options.name);
         frame.onload = frame.onreadystatechange = function()
         {
@@ -993,6 +993,7 @@ function setModal()
                 var $framebody = frame$('body');
                 setTimeout(function()
                 {
+                    modal.removeClass('fade');
                     var fbH = $framebody.addClass('body-modal').outerHeight();
                     frame$('#titlebar > .heading a').each(function()
                     {
@@ -1002,8 +1003,8 @@ function setModal()
                     if(typeof fbH == 'object') fbH = $framebody.height();
                     modalBody.css('height', fbH);
                     ajustModalPosition();
-                    modal.removeClass('modal-loading');
                     if(modal.data('first')) modal.data('first', false);
+                    modal.removeClass('modal-loading').addClass('fade');
                 }, 100);
 
                 $framebody.resize(function()
@@ -1019,9 +1020,9 @@ function setModal()
                 modal.removeClass('modal-loading');
             }
 
-            if(iframe$)
+            if(frame$)
             {
-                // iframe$.extend({'closeModal': $.closeModal});
+                frame$.extend({'closeModal': $.closeModal});
             }
         }
         catch(e)
