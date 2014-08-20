@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
-<div class='container'>
+<div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>

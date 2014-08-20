@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<div class='container mw-800px'>
+<div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->id;?></strong></span>
@@ -26,7 +26,7 @@
     <table class='table table-form'>
       <tr>
         <th class='w-90px'><?php echo $lang->project->dateRange;?></th>
-        <td>
+        <td class='w-p50'>
           <div class='input-group'>
             <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
             <span class='input-group-addon'><?php echo $lang->project->to;?></span>
@@ -41,6 +41,7 @@
             </div>
           </div>
         </td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->project->days;?></th>
@@ -53,10 +54,10 @@
       </tr> 
       <tr>
         <th><?php echo $lang->comment;?></th>
-        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
       </tr>
       <tr>
-        <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+        <th></th><td><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
       </tr>
     </table>
   </form>

@@ -497,20 +497,15 @@ function setImageSize(image, maxWidth)
 }
 
 /**
- * Set the repo link.
+ * Set the modal trigger to link.
  * 
  * @access public
  * @return void
  */
-function setRepoLink()
+function setModalTriggerLink()
 {
     $('.repolink').modalTrigger({width:960, type:'iframe'});
-}
-
-/* Set the modal dialog of export. */
-function setExport()
-{
-   $(".export").modalTrigger({width:650, type:'iframe'});
+    $(".export").modalTrigger({width:650, type:'iframe'});
 }
 
 /**
@@ -1181,8 +1176,7 @@ $(document).ready(function()
     setRequiredFields();
     setPlaceholder();
 
-    setExport();
-    setRepoLink();
+    setModalTriggerLink();
 
     autoCheck();
     toggleSearch();
