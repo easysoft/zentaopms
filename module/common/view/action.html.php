@@ -134,7 +134,7 @@ $(function(){
         <?php if(!empty($action->history)) echo "<a id='switchButton$i' class='switch-btn btn-icon' onclick='switchChange($i)' href='javascript:;'><i class='change-show icon-'></i></a>";?>
       </span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
-      <?php if(!empty($action->comment)) echo "<div class='history alert'>";?>
+      <?php if(!empty($action->comment)) echo "<div class='history'>";?>
         <div class='changes hide alert' id='changeBox<?php echo $i;?>'>
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
@@ -144,7 +144,7 @@ $(function(){
         <?php 
         if($action->comment) 
         {
-            echo "<div class='comment$action->id'>";
+            echo "<div class='article-content comment$action->id'>";
             echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment; 
             echo "</div>";
         }

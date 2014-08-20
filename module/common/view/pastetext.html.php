@@ -1,12 +1,14 @@
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog w-800px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->pasteText?></h4>
       </div>
-      <div class="modal-body"><?php echo html::textarea('pasteText', '', "class='form-control' rows='10' placeholder='$lang->pasteTextInfo'")?></div>
-      <div class="modal-footer"><?php echo html::submitButton()?></div>
+      <div class="modal-body">
+        <?php echo html::textarea('pasteText', '', "class='form-control mgb-10' rows='10' placeholder='$lang->pasteTextInfo'")?>
+        <?php echo html::submitButton()?>
+      </div>
     </div>
   </div>
 </div>

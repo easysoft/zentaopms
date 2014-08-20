@@ -16,7 +16,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . ' ' . $lang->task->common;?></strong>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . $lang->task->common;?></strong>
     <div class='actions'><?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?></div>
   </div>
 </div>
