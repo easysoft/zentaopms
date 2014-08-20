@@ -195,14 +195,14 @@ fieldset.actionbox ol {padding-top: 8px\0/;}
 .stars-list {color: #E48600}
 
 /* status in table */
-td.done, td[class$="-done"], td.pass, td[class$="-pass"], td.resolved, td[class$="-resolved"] {color:#229f24; background-color: #e5ffe6!important}
+td.done, td[class$="-done"], td.pass, td[class$="-pass"], td.resolved, td[class$="-resolved"] {color:#229f24;}
 td.wait, td[class$="-wait"] {color:#808080;}
-td.cancel, td[class$="-cancel"] {color:#999; background-color: #f1f1f1!important}
+td.cancel, td[class$="-cancel"] {color:#999;}
 td.doing, td[class$="-doing"]  {color:#d2322d;}
 td.delayed, td[class$="-delayed"] {background:#e84e0f!important; color:white;}
 td.blocked, td[class$="-blocked"] {background:yellow!important;}
 td.fail, td[class$="-fail"]  {color:#d2322d}
-td.status-active, td[class$="-active"] {color: #e48600; background: #fff4e5!important}
+td.status-active, td[class$="-active"] {color: #e48600;}
 td.draft, td[class$="-draft"]  {color:#8957a1}
 
 /* tabs */
