@@ -21,7 +21,7 @@ js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
 ?>
-<div class='container'>
+<div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>

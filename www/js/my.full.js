@@ -497,20 +497,15 @@ function setImageSize(image, maxWidth)
 }
 
 /**
- * Set the repo link.
+ * Set the modal trigger to link.
  * 
  * @access public
  * @return void
  */
-function setRepoLink()
+function setModalTriggerLink()
 {
     $('.repolink').modalTrigger({width:960, type:'iframe'});
-}
-
-/* Set the modal dialog of export. */
-function setExport()
-{
-   $(".export").modalTrigger({width:650, type:'iframe'});
+    $(".export").modalTrigger({width:650, type:'iframe'});
 }
 
 /**
@@ -839,66 +834,72 @@ function setModal()
 {
     jQuery.fn.modalTrigger = function(setting)
     {
-        $(this).click(function(event)
+        return $(this).each(function()
         {
-            var $e   = $(this);
-            if($e.closest('.body-modal').length) return;
+            var $this = $(this);
+            $this.off('click.modalTrigger.zui');
 
-            if($e.hasClass('disabled')) return false;
-
-            var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
-            var type = (setting ? setting.type : false) || $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
-            if(type == 'iframe')
+            $this.on('click.modalTrigger.zui', function(event)
             {
-                var options = 
-                {
-                    url:        url,
-                    width:      $e.data('width') || 800,
-                    height:     $e.data('height') || 'auto',
-                    icon:       $e.data('icon') || '?',
-                    title:      $e.data('title') || $e.attr('title') || $e.text(),
-                    name:       $e.data('name') || 'modalIframe',
-                    cssClass:   $e.data('class'),
-                    headerless: $e.data('headerless') || false,
-                    center:     $e.data('center') || true
-                };
+                var $e   = $(this);
+                if($e.closest('.body-modal').length) return;
 
-                if(options.icon == '?')
+                if($e.hasClass('disabled')) return false;
+
+                var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
+                var type = (setting ? setting.type : false) || $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
+                if(type == 'iframe')
                 {
-                    var i = $e.find("[class^='icon-']");
-                    options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
+                    var options = 
+                    {
+                        url:        url,
+                        width:      $e.data('width') || 800,
+                        height:     $e.data('height') || 'auto',
+                        icon:       $e.data('icon') || '?',
+                        title:      $e.data('title') || $e.attr('title') || $e.text(),
+                        name:       $e.data('name') || 'modalIframe',
+                        cssClass:   $e.data('class'),
+                        headerless: $e.data('headerless') || false,
+                        center:     $e.data('center') || true
+                    };
+
+                    if(options.icon == '?')
+                    {
+                        var i = $e.find("[class^='icon-']");
+                        options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
+                    }
+
+                    showIframeModal($.extend(options, setting));
+                }
+                else
+                {
+                    initModalFrame();
+                    $.get(url, function(data)
+                    {
+                        var ajaxModal = $('#ajaxModal');
+                        if(data.indexOf('modal-dialog') < 0)
+                        {
+                            data = "<div class='modal-dialog modal-ajax' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'>{content}</div></div></div>".format($.extend({content: data}, options));
+                        }
+                        ajaxModal.html(data);
+
+                        /* Set the width of modal dialog. */
+                        if($e.data('width'))
+                        {
+                            var modalWidth = parseInt($e.data('width'));
+                            $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
+                            ajustModalPosition();
+                        }
+
+                        ajaxModal.modal('show');
+                    });
                 }
 
-                showIframeModal($.extend(options, setting));
-            }
-            else
-            {
-                initModalFrame();
-                $.get(url, function(data)
-                {
-                    var ajaxModal = $('#ajaxModal');
-                    if(data.indexOf('modal-dialog') < 0)
-                    {
-                        data = "<div class='modal-dialog modal-ajax' style='width: {width};'><div class='modal-content'><div class='modal-header'><button class='close' data-dismiss='modal'>×</button><h4 class='modal-title'><i class='icon-{icon}'></i> {title}</h4></div><div class='modal-body' style='height:{height}'>{content}</div></div></div>".format($.extend({content: data}, options));
-                    }
-                    ajaxModal.html(data);
+                /* Save the href to rel attribute thus we can save it. */
+                $('#ajaxModal').attr('rel', url);
 
-                    /* Set the width of modal dialog. */
-                    if($e.data('width'))
-                    {
-                        var modalWidth = parseInt($e.data('width'));
-                        $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
-                        ajustModalPosition();
-                    }
-
-                    ajaxModal.modal('show');
-                });
-            }
-
-            /* Save the href to rel attribute thus we can save it. */
-            $('#ajaxModal').attr('rel', url);
-
-            return false;
+                return false;
+            });
         });
     }
 
@@ -960,7 +961,6 @@ function setModal()
         var frame = document.getElementById(options.name);
         frame.onload = frame.onreadystatechange = function()
         {
-
             if(this.readyState && this.readyState != 'complete') return;
             if(modal.data('first') && (!modal.hasClass('modal-loading'))) return;
             if(!modal.data('first')) modal.addClass('modal-loading');
@@ -993,6 +993,7 @@ function setModal()
                 var $framebody = frame$('body');
                 setTimeout(function()
                 {
+                    modal.removeClass('fade');
                     var fbH = $framebody.addClass('body-modal').outerHeight();
                     frame$('#titlebar > .heading a').each(function()
                     {
@@ -1002,8 +1003,8 @@ function setModal()
                     if(typeof fbH == 'object') fbH = $framebody.height();
                     modalBody.css('height', fbH);
                     ajustModalPosition();
-                    modal.removeClass('modal-loading');
                     if(modal.data('first')) modal.data('first', false);
+                    modal.removeClass('modal-loading').addClass('fade');
                 }, 100);
 
                 $framebody.resize(function()
@@ -1019,10 +1020,9 @@ function setModal()
                 modal.removeClass('modal-loading');
             }
 
-            var iframe$ = window.frames[options.name].$;
-            if(iframe$)
+            if(frame$)
             {
-                iframe$.extend({'closeModal': $.closeModal});
+                frame$.extend({'closeModal': $.closeModal});
             }
         }
         catch(e)
@@ -1181,8 +1181,7 @@ $(document).ready(function()
     setRequiredFields();
     setPlaceholder();
 
-    setExport();
-    setRepoLink();
+    setModalTriggerLink();
 
     autoCheck();
     toggleSearch();

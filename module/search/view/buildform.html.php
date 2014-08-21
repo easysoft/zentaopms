@@ -10,11 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php 
-$webRoot    = $this->app->getWebRoot();
-$jsRoot     = $webRoot . "js/";
+<?php
+$jsRoot = $this->app->getWebRoot() . "js/";
+include '../../common/view/datepicker.html.php';
 ?>
-<?php include '../../common/view/datepicker.html.php';?>
 <style>
 #bysearchTab {transition: all .3s cubic-bezier(.175, .885, .32, 1);}
 #bysearchTab.active {background: #fff; padding: 2px 10px 3px; padding-bottom: 2px\0; border: 1px solid #ddd; border-bottom: none}

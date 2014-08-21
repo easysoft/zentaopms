@@ -16,7 +16,7 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
-<div class='container'>
+<div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
