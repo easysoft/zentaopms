@@ -179,7 +179,7 @@ class story extends control
         $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
-        $this->view->needReview       = ($projectID > 0 || (isset($this->config->storyReview->needReview) && $this->config->storyReview->needReview == 0 )) ? "checked='checked'" : "";
+        $this->view->needReview       = ($projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
 
         $this->display();
     }
@@ -438,7 +438,7 @@ class story extends control
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
-        $this->view->needReview = (isset($this->config->storyReview->needReview) && $this->config->storyReview->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview = $this->config->story->needReview == 0 ? "checked='checked'" : "";
         $this->display();
     }
 
@@ -638,7 +638,6 @@ class story extends control
         /* Get story and product. */
         $story   = $this->story->getById($storyID);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
-        $stories = $this->story->getProductStoryPairs($product->id);
 
         /* Set menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
@@ -653,7 +652,6 @@ class story extends control
 
         $this->view->product = $product;
         $this->view->story   = $story;
-        $this->view->stories = $stories;
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();

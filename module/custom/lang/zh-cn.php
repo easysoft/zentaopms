@@ -18,10 +18,10 @@ $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = '优先级';
 $lang->custom->story->fields['sourceList']       = '来源';
 $lang->custom->story->fields['reasonList']       = '关闭原因';
-$lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['stageList']        = '阶段';
 $lang->custom->story->fields['statusList']       = '状态';
-$lang->custom->story->fields['review']           = '评审';
+$lang->custom->story->fields['reviewResultList'] = '评审结果';
+$lang->custom->story->fields['review']           = '评审流程';
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['priList']    = '优先级';
@@ -66,6 +66,6 @@ $lang->custom->confirmRestore = '是否要恢复默认语言配置？';
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole = '键的长度必须小于20个字符！';
 
-$lang->custom->storyReview   = '需求评审';
+$lang->custom->storyReview   = '评审流程';
 $lang->custom->reviewList[1] = '开启';
 $lang->custom->reviewList[0] = '关闭';
