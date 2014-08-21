@@ -143,9 +143,6 @@ $lang->action->label->suspended           = '挂起';
 $lang->action->label->login               = '登录系统';
 $lang->action->label->logout              = "退出登录";
 $lang->action->label->deleteestimate      = "删除了工时";
-$lang->action->label->starttesttask       = "启动测试任务";
-$lang->action->label->stoptesttask        = "停止测试任务";
-$lang->action->label->createbuild         = "创建了版本";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = '产品|product|view|productID=%s';

@@ -29,7 +29,7 @@
     </tr>
     <tr id='duplicateBugBox' class='hide'>
       <th><?php echo $lang->bug->duplicateBug;?></th>
-      <td><?php echo html::select('duplicateBug', $bugs, '', "class='form-control chosen' ");?></td>
+      <td><?php echo html::input('duplicateBug', '', "class='form-control'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->resolvedBuild;?></th>
