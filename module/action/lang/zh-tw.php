@@ -91,9 +91,15 @@ $lang->action->desc->canceled       = '$date, 由 <strong>$actor</strong> 取消
 $lang->action->desc->svncommited    = '$date, 由 <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->gitcommited    = '$date, 由 <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->finished       = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
+$lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暫停。' . "\n";
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
+
+$lang->action->desc->project = new stdclass();
+$lang->action->desc->project->started  = '$date, 由 <strong>$actor</strong> 啟動測試任務 <strong>$objectID</strong>。' . "\n";
+$lang->action->desc->project->closed   = '$date, 由 <strong>$actor</strong> 完成測試任務 <strong>$objectID</strong>。' . "\n";
+$lang->action->desc->project->opened   = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$objectID</strong>。' . "\n";
 
 /* 用來顯示動態信息。*/
 $lang->action->label = new stdclass();
@@ -131,8 +137,12 @@ $lang->action->label->recordestimate      = '記錄了工時';
 $lang->action->label->editestimate        = '編輯了工時';
 $lang->action->label->canceled            = '取消了';
 $lang->action->label->finished            = '完成';
+$lang->action->label->paused              = '暫停';
+$lang->action->label->delayed             = '延期';
+$lang->action->label->suspended           = '掛起';
 $lang->action->label->login               = '登錄系統';
 $lang->action->label->logout              = "退出登錄";
+$lang->action->label->deleteestimate      = "刪除了工時";
 
 /* 用來生成相應對象的連結。*/
 $lang->action->label->product     = '產品|product|view|productID=%s';
@@ -204,5 +214,6 @@ $lang->action->search->label['recordestimate']      = $lang->action->label->reco
 $lang->action->search->label['editestimate']        = $lang->action->label->editestimate;
 $lang->action->search->label['canceled']            = $lang->action->label->canceled;
 $lang->action->search->label['finished']            = $lang->action->label->finished;
+$lang->action->search->label['paused']              = $lang->action->label->paused;
 $lang->action->search->label['login']               = $lang->action->label->login;
 $lang->action->search->label['logout']              = $lang->action->label->logout;

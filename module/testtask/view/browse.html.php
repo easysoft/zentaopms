@@ -44,7 +44,7 @@
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
-    <td><?php echo $lang->testtask->statusList[$task->status];?></td>
+    <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-center'>
       <?php
       common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list', 'smile');

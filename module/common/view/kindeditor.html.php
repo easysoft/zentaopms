@@ -38,7 +38,7 @@ var fullTools =
 $(document).ready(initKindeditor);
 function initKindeditor(afterInit)
 {
-    var nextFormControl = 'input:not([type="hidden"]), textarea';
+    var nextFormControl = 'input:not([type="hidden"]), textarea:not(.ke-edit-textarea), button[type="submit"], select';
     $.each(editor.id, function(key, editorID)
     {
         editorTool = simpleTools;
@@ -112,10 +112,17 @@ function initKindeditor(afterInit)
                 var $next = $editor.next(nextFormControl);
                 if(!$next.length) $next = $editor.parent().next().find(nextFormControl);
                 if(!$next.length) $next = $editor.parent().parent().next().find(nextFormControl);
-                $next.first().focus();
+                $next = $next.first().focus();
+                var keditor = $next.data('keditor');
+                if(keditor) keditor.focus();
             }
         };
-        try {window.editor['#'] = window.editor[editorID] = K.create('#' + editorID, options);}
+        try
+        {
+            var keditor = K.create('#' + editorID, options);
+            window.editor['#'] = window.editor[editorID] = keditor;
+            $editor.data('keditor', keditor);
+        }
         catch(e){}
     });
 
