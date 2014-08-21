@@ -196,7 +196,7 @@ class actionModel extends model
             if(strtolower($action->action) == 'svncommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             if(strtolower($action->action) == 'gitcommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
-            $action->comment = $this->file->setImgSize($action->comment, 870);
+            $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
         return $actions;
