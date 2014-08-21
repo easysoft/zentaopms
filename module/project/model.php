@@ -854,7 +854,7 @@ class projectModel extends model
     {
         $this->loadModel('task');
         $tasks        = array();
-        $projectTasks = $this->task->getProjectTasks($fromProject, 'wait,doing,cancel');
+        $projectTasks = $this->task->getProjectTasks($fromProject, 'wait,doing,pause,cancel');
         $tasks        = array_merge($tasks, $projectTasks); 
         return $tasks;
     }
