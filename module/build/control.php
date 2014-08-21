@@ -25,7 +25,7 @@ class build extends control
             $buildID = $this->build->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
-            $actionID = $this->action->create('project', $projectID, 'createbuild', '', $buildID);
+            $this->action->create('project', $projectID, 'createbuild', '', $buildID);
             die(js::locate($this->createLink('project', 'build', "project=$projectID"), 'parent'));
         }
 

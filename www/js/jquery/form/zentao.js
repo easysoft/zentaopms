@@ -6,7 +6,7 @@ $.extend(
         var options = 
         {
             target  : null,
-            timeout : formTimeout,
+            timeout : ajaxTimeout,
             dataType:'json',
 
             success:function(response)

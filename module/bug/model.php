@@ -132,12 +132,12 @@ class bugModel extends model
 
             if($latestBugs and in_array($bug->title, $latestBugs)) continue;
 
-           $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
-           $bugID = $this->dao->lastInsertID();
-           $latestBugs[$bugID] = $bug->title;
+            $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
+            $bugID = $this->dao->lastInsertID();
+            $latestBugs[$bugID] = $bug->title;
 
-           if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
-           $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
+            if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
+            $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
         return $actions;
     }
@@ -792,7 +792,7 @@ class bugModel extends model
     {
         $title    = '';
         $bugSteps = '';
-        $steps    = $this->post->stepIDList;
+        $steps    = zget($_POST, 'stepIDList', array());
 
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
         if($caseID > 0)
