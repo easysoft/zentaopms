@@ -188,6 +188,9 @@ class actionModel extends model
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($objectID)
+            ->beginIF($objectType == 'project')
+            ->orWhere("project = $objectID AND ((objectType = 'testtask' AND action IN('started','closed')) OR (objectType = 'build' AND action = 'opened'))")
+            ->fi()
             ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         $this->loadModel('file');
@@ -313,6 +316,12 @@ class actionModel extends model
         else
         {
             $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+        }
+        /* if module == 'project' and method == 'view', try to find special lang */
+        if($this->app->getModuleName() == 'project' && $this->app->getMethodName() == 'view')
+        {
+            if(isset($this->lang->action->desc->project->$actionType))
+                $desc = $this->lang->action->desc->project->$actionType;
         }
 
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));

@@ -438,9 +438,6 @@ class testtask extends control
             {
                 $actionID = $this->action->create('testtask', $taskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-
-                $testtask  = $this->testtask->getById($taskID);
-                $projectActionID = $this->action->create('project', $testtask->project, 'starttesttask', '', $taskID);
             }
             die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -480,9 +477,6 @@ class testtask extends control
             {
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-
-                $testtask  = $this->testtask->getById($taskID);
-                $projectActionID = $this->action->create('project', $testtask->project, 'stoptesttask', '', $taskID);
             }
             die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
         }
