@@ -317,10 +317,11 @@ class actionModel extends model
         {
             $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
         }
-        /* if module == 'project' and method == 'view', try to find special lang */
+
+        /* if module == 'project' and method == 'view' and objectType in  'testtask, build', try to find special lang */
         if($this->app->getModuleName() == 'project' && $this->app->getMethodName() == 'view')
         {
-            if(isset($this->lang->action->desc->project->$actionType))
+            if(($objectType == 'testtask' || $objectType == 'build') && isset($this->lang->action->desc->project->$actionType))
                 $desc = $this->lang->action->desc->project->$actionType;
         }
 

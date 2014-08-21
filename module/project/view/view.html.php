@@ -27,11 +27,11 @@
     {
         ob_start();
         echo "<div class='btn-group'>";
-        common::printIcon('project', 'start',    "projectID=$project->id", $project);
-        common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'text-success');
-        common::printIcon('project', 'putoff',   "projectID=$project->id", $project);
-        common::printIcon('project', 'suspend',  "projectID=$project->id", $project);
-        common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'text-danger');
+        common::printIcon('project', 'start',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+        common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+        common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+        common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+        common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
         echo '</div>';
 
         echo "<div class='btn-group'>";

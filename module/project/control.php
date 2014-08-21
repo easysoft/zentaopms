@@ -980,7 +980,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->start;
@@ -1012,7 +1012,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Delayed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->putoff;
@@ -1044,7 +1044,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
@@ -1076,7 +1076,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
@@ -1108,7 +1108,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->close;
