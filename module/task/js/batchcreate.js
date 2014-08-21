@@ -11,8 +11,9 @@ function setStories(moduleID, projectID, num)
         var storyID = $('#story' + num).val();
         if(!stories) stories = '<select id="story' + num + '" name="story' + num + '" class="select-1"></select>';
         $('#story' + num).replaceWith(stories);
+        if(moduleID == 0) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>")
         $('#story' + num).val(storyID);
-        $('#story' + num + '_chzn').remove();
+        $('#story' + num + '_chosen').remove();
         $("#story" + num).chosen(defaultChosenOptions);
     });
 }
@@ -58,6 +59,7 @@ $(document).on('click', '.chosen-with-drop', function()
         }
         $(select).val(value);
         $(select).trigger("chosen:updated");
+        $(select).trigger("change");
     }
 })
 $(document).on('mousedown', 'select', function()

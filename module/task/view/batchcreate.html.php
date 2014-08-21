@@ -37,7 +37,7 @@
     </thead>
 
     <?php
-    $stories['ditto'] = $this->lang->task->ditto; 
+    $stories['ditto'] = $lang->task->ditto; 
     $lang->task->typeList['ditto'] = $lang->task->ditto; 
     $members['ditto'] = $lang->task->ditto;
     $modules['ditto'] = $lang->task->ditto;
@@ -59,7 +59,7 @@
     <?php $pri = 3;?>
     <tr>
       <td class='text-center'><?php echo $i+1;?></td>
-      <td style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen'")?></td>
+      <td style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td style='overflow: visible'>
         <div class='input-group'>
         <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
@@ -85,7 +85,7 @@
   <tbody>
     <tr>
       <td class='text-center'>%s</td>
-      <td style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control'")?></td>
+      <td style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, %s)'")?></td>
       <td style='overflow: visible'>
         <div class='input-group'>
         <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(%s)'");?>
@@ -106,5 +106,6 @@
   </tbody>
 </table>
 <?php js::set('mainField', 'name');?>
+<?php js::set('ditto', $lang->task->ditto);?> 
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
