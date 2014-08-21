@@ -46,7 +46,7 @@ class taskModel extends model
 
             if($assignedTo) $task->assignedDate = helper::now();
 
-            /* Check repeat story. */
+            /* Check repeat task. */
             if($latestTasks and $taskID = array_search($task->name, $latestTasks))
             {
                 $tasksID[$assignedTo] = array('status' => 'existed', 'id' => $taskID);
