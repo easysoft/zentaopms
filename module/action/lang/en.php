@@ -95,9 +95,11 @@ $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.
 $lang->action->desc->diff1          = 'changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
 $lang->action->desc->diff2          = 'changed <strong><i>%s</i></strong>, the diff is:' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = "changed file's name %s to %s.";
-$lang->action->desc->starttesttask  = '$date, <strong>$actor</strong> start testtask <strong>$extra</strong>.' . "\n";
-$lang->action->desc->stoptesttask   = '$date, <strong>$actor</strong> stop testtask <strong>$extra</strong>.' . "\n";
-$lang->action->desc->createbuild   = '$date, <strong>$actor</strong> create build <strong>$extra</strong>.' . "\n";
+
+$lang->action->desc->project = new stdclass();
+$lang->action->desc->project->started  = '$date, <strong>$actor</strong> started test task. <strong>$objectID</strong>。' . "\n";
+$lang->action->desc->project->closed   = '$date, <strong>$actor</strong> closed test task. <strong>$objectID</strong>。' . "\n";
+$lang->action->desc->project->opened   = '$date, <strong>$actor</strong> created build. <strong>$objectID</strong>。' . "\n";
 
 /* The action labels. */
 $lang->action->label = new stdclass();
