@@ -45,6 +45,7 @@ $lang->testcase->allProduct       = '所有產品';
 $lang->testcase->fromBug          = '來源Bug';
 $lang->testcase->toBug            = '生成Bug';
 $lang->testcase->changed          = '用例變更';
+$lang->testcase->createBug        = '轉Bug';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
 $lang->testcase->stepID     = '編號';
