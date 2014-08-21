@@ -26,7 +26,7 @@
     if(!$product->deleted)
     {
         ob_start();
-        common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'text-danger');
+        common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe text-danger', true);
 
         echo "<div class='btn-group'>";
         common::printIcon('product', 'edit', $params);

@@ -296,7 +296,7 @@ class product extends control
                 $actionID = $this->action->create('product', $productID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('product', 'view', "productID=$productID"), 'parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->product->setMenu($this->products, $productID);
