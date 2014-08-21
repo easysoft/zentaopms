@@ -227,19 +227,20 @@ class testcase extends control
             $response['message'] = '';
 
             $caseResult = $this->testcase->create($bugID);
-            $caseID     = $caseResult['id'];
+            if(!$caseResult or dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $caseID = $caseResult['id'];
             if($caseResult['status'] == 'existed')
             {
                 $response['locate'] = $this->createLink('testcase', 'view', "caseID=$caseID");
                 $this->send($response);
             }
 
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                $this->send($response);
-            }
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
             $response['locate'] = $this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]");

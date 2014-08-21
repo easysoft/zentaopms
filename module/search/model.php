@@ -93,7 +93,7 @@ class searchModel extends model
                 if($this->post->$fieldName == 'module')
                 {
                     $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    $where .= helper::dbIN($allModules);
+                    if($allModules) $where .= helper::dbIN($allModules);
                 }
                 elseif($this->post->$fieldName == 'dept')
                 {

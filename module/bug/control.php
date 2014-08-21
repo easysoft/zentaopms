@@ -220,17 +220,17 @@ class bug extends control
             $response['message'] = '';
 
             $bugResult = $this->bug->create();
-            $bugID     = $bugResult['id'];
-            if($bugResult['status'] == 'existed')
-            {
-                $response['locate'] = $this->createLink('bug', 'view', "bugID=$bugID");
-                $this->send($response);
-            }
-
-            if(dao::isError())
+            if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $bugID = $bugResult['id'];
+            if($bugResult['status'] == 'existed')
+            {
+                $response['locate'] = $this->createLink('bug', 'view', "bugID=$bugID");
                 $this->send($response);
             }
 
