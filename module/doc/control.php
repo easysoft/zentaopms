@@ -250,10 +250,10 @@ class doc extends control
         if(!empty($_POST))
         {
             $docResult = $this->doc->create();
-            $docID     = $docResult['id'];
+            if(!$docResult or dao::isError()) die(js::error(dao::getError()));
 
+            $docID = $docResult['id'];
             if($docResult['status'] == 'existed') die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
-            if(dao::isError()) die(js::error(dao::getError()));
             $this->action->create('doc', $docID, 'Created');
 
             if($from == 'product') $link = $this->createLink('product', 'doc', "productID={$this->post->product}");

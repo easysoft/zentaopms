@@ -43,7 +43,14 @@ class story extends control
             $response['message'] = '';
 
             $storyResult = $this->story->create($projectID, $bugID);
-            $storyID     = $storyResult['id'];
+            if(!$storyResult or dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $storyID = $storyResult['id'];
             if($storyResult['status'] == 'existed')
             {
                 if($projectID == 0)
@@ -57,12 +64,6 @@ class story extends control
                 $this->send($response);
             }
 
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                $this->send($response);
-            }
             if($bugID == 0)
             {
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
