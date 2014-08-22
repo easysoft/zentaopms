@@ -82,11 +82,13 @@ function toggleComment(actionID)
     $('.ke-container').css('width', '100%');
 }
 
-$(function(){
+$(function()
+{
     var diffButton = "<a href='javascript:;' onclick='toggleStripTags(this)' class='hide changeDiff btn-icon' title='<?php echo $lang->action->original?>'><i class='icon- diff-all'></i></a>";
     var newBoxID = ''
     var oldBoxID = ''
-    $('blockquote').each(function(){
+    $('blockquote').each(function()
+    {
         newBoxID = $(this).parent().attr('id');
         if(newBoxID != oldBoxID) 
         {
