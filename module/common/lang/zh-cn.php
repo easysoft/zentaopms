@@ -17,7 +17,7 @@ $lang->at        = ' 于 ';
 $lang->downArrow = '↓';
 $lang->null      = '空';
 
-$lang->zentaoPMS      = '禅道项目';
+$lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";
 $lang->myControl      = "我的地盘";
 $lang->currentPos     = '当前位置：';
@@ -355,7 +355,7 @@ $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
 $lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
 $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠 </a>";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 升至专业版！</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 专业版！</a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
@@ -447,6 +447,7 @@ $lang->icons['import']         = 'upload-alt';
 $lang->icons['finish']         = 'ok-sign';
 $lang->icons['resolve']        = 'ok-sign';
 $lang->icons['start']          = 'play';
+$lang->icons['restart']        = 'play';
 $lang->icons['run']            = 'play';
 $lang->icons['runCase']        = 'play';
 $lang->icons['batchRun']       = 'play-sign';

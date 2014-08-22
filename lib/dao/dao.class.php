@@ -1197,13 +1197,20 @@ class sql
      */
     public function data($data)
     {
-        $this->data = $data;
+        $data = (object) $data;
+
         foreach($data as $field => $value)
-        {
-            $field = str_replace(array('`', ',', ' '), '', $field);
-            $this->sql .= "`$field` = " . $this->quote($value) . ',';
-        }
-        $this->sql = rtrim($this->sql, ',');    // Remove the last ','.
+        {    
+            if(!preg_match('|^\w+$|', $field)) 
+            {    
+                unset($data->$field);
+                continue;
+            }    
+            $this->sql .= "`$field` = " . $this->quote($value) . ','; 
+        }    
+
+        $this->data = $data;
+        $this->sql  = rtrim($this->sql, ',');    // Remove the last ','.
         return $this;
     }
 

@@ -632,6 +632,40 @@ class task extends control
     }
 
     /**
+     * Restart task 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function restart($taskID)
+    {
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->start($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
+                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->restart;
+        $this->view->position[] = $this->lang->task->restart;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->display();
+    }
+
+    /**
      * Close a task.
      * 
      * @param  int      $taskID 

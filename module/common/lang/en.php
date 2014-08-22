@@ -355,7 +355,7 @@ $lang->zentaoSite     = "Official Site";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum community</a> ";
 $lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>Training</a> ";
 $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>Donate</a> ";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> zentaoPRO!</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> PRO</a> &nbsp; ";
 $lang->downNotify     = "Down notify";
 
 $lang->suhosinInfo   = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
@@ -447,6 +447,7 @@ $lang->icons['import']         = 'upload-alt';
 $lang->icons['finish']         = 'ok-sign';
 $lang->icons['resolve']        = 'ok-sign';
 $lang->icons['start']          = 'play';
+$lang->icons['restart']        = 'play';
 $lang->icons['run']            = 'play';
 $lang->icons['runCase']        = 'play';
 $lang->icons['batchRun']       = 'play-sign';
@@ -465,6 +466,5 @@ $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';
 $lang->icons['manage']         = 'cog';
-
 
 include (dirname(__FILE__) . '/menuOrder.php');
