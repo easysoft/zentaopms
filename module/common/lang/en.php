@@ -447,6 +447,7 @@ $lang->icons['import']         = 'upload-alt';
 $lang->icons['finish']         = 'ok-sign';
 $lang->icons['resolve']        = 'ok-sign';
 $lang->icons['start']          = 'play';
+$lang->icons['restart']        = 'play';
 $lang->icons['run']            = 'play';
 $lang->icons['runCase']        = 'play';
 $lang->icons['batchRun']       = 'play-sign';
@@ -465,6 +466,5 @@ $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';
 $lang->icons['manage']         = 'cog';
-
 
 include (dirname(__FILE__) . '/menuOrder.php');
