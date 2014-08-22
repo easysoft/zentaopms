@@ -25,7 +25,7 @@
   <form class='form-condensed' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-90px'><?php echo $lang->project->dateRange;?></th>
+        <th class='w-80px'><?php echo $lang->project->dateRange;?></th>
         <td class='w-p50'>
           <div class='input-group'>
             <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
