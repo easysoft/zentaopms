@@ -463,8 +463,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #titlebar > .heading > strong a:hover {color: #1A53FF}
 #titlebar > .heading > strong > i, #titlebar > .heading > strong > small > i {display: none}
 #titlebar > .heading > small > i {position: relative; top: 1px; display: none}
-#titlebar > .heading > small {font-size: 14px; color: #333;}
-#titlebar > .heading > small:before {content: '::'}
+#titlebar > .heading > small {font-size: 14px; color: #333; font-weight: normal;}
+#titlebar > .heading > small:before {content: '\e6e1';  font-family: ZenIcon; font-weight: normal;}
 #titlebar .actions {position: absolute; right: 20px; top: 8px;}
 #titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
 #titlebar .actions > .text {display: inline-block; margin-left: 8px; line-height: 30px}
