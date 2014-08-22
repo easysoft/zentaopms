@@ -984,6 +984,30 @@ class projectModel extends model
             $this->action->create('bug', $key, 'Totask', '', $taskID);
             $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
 
+            /* activate bug if bug postponed. */
+            if($bug->status == 'resolved' && $bug->resolution == 'postponed')
+            {
+                $newBug = new stdclass();
+                $newBug->lastEditedBy   = $this->app->user->account;
+                $newBug->lastEditedDate = $now;
+                $newBug->assignedDate   = $now;
+                $newBug->status         = 'active';
+                $newBug->resolvedDate   = '0000-00-00';
+                $newBug->resolution     = '';
+                $newBug->resolvedBy     = '';
+                $newBug->resolvedBuild  = '';
+                $newBug->closedBy       = '';
+                $newBug->closedDate     = '0000-00-00';
+                $newBug->duplicateBug   = '0';
+
+                $this->dao->update(TABLE_BUG)->data($newBug)->autoCheck()->where('id')->eq($key)->exec();
+                $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($key)->exec();
+
+                $actionID = $this->action->create('bug', $key, 'Activated');
+                $changes  = common::createChanges($bug, $newBug);
+                $this->action->logHistory($actionID, $changes);
+            }
+
             if(isset($task->assignedTo) and $task->assignedTo and $task->assignedTo != $bug->assignedTo)
             {
                 $newBug = new stdClass();
