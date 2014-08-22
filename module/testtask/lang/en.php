@@ -103,3 +103,7 @@ $lang->testtask->mail->create->title = "%s created testtask #%s:%s";
 $lang->testtask->mail->edit->title   = "%s finished testtask #%s:%s";
 
 $lang->testtask->testScope = 'Test scope';
+
+$lang->testtask->action = new stdclass();
+$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> started test task. <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> finished test task. <strong>$objectID</strong>。' . "\n";

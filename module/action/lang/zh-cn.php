@@ -97,11 +97,6 @@ $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 
-$lang->action->desc->project = new stdclass();
-$lang->action->desc->project->started  = '$date, 由 <strong>$actor</strong> 启动测试任务 <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->closed   = '$date, 由 <strong>$actor</strong> 完成测试任务 <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->opened   = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$objectID</strong>。' . "\n";
-
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->created             = '创建';
