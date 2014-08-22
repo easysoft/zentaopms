@@ -21,6 +21,7 @@ $lang->task->view               = "Info";
 $lang->task->logEfforts         = "Log working hours";
 $lang->task->record             = "Estimate";
 $lang->task->start              = "Start";
+$lang->task->restart            = "Continue";
 $lang->task->finish             = "Finish";
 $lang->task->pause              = "Pause";
 $lang->task->close              = "Close";

@@ -249,10 +249,33 @@ class dao
      */
     public function count()
     {
-        $this->setMode('raw');
-        $this->setMethod('select');
-        $this->sqlobj = sql::select('count(*) as count');
-        return $this;
+        /* Get the SELECT, FROM position, thus get the fields, replace it by count(*). */
+        $sql = $this->processSQL();
+        $sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS ', $sql);
+
+        /* Remove the part after order and limit. */
+        $subLength = strlen($sql);
+        $orderPOS  = strripos($sql, DAO::ORDERBY);
+        $limitPOS  = strripos($sql , DAO::LIMIT);
+        if($limitPOS) $subLength = $limitPOS;
+        if($orderPOS) $subLength = $orderPOS;
+        $sql = substr($sql, 0, $subLength);
+        self::$querys[] = $sql;
+
+        /* Get the records count. */
+        try
+        {
+            $row = $this->dbh->query($sql)->fetch(PDO::FETCH_OBJ);
+        }
+        catch (PDOException $e) 
+        {
+            $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+        }
+
+        $sql  = 'SELECT FOUND_ROWS() as recTotal;';
+        $row = $this->dbh->query($sql)->fetch();
+ 
+        return $row->recTotal;
     }
 
     /**
@@ -1174,13 +1197,20 @@ class sql
      */
     public function data($data)
     {
-        $this->data = $data;
+        $data = (object) $data;
+
         foreach($data as $field => $value)
-        {
-            $field = str_replace(array('`', ',', ' '), '', $field);
-            $this->sql .= "`$field` = " . $this->quote($value) . ',';
-        }
-        $this->sql = rtrim($this->sql, ',');    // Remove the last ','.
+        {    
+            if(!preg_match('|^\w+$|', $field)) 
+            {    
+                unset($data->$field);
+                continue;
+            }    
+            $this->sql .= "`$field` = " . $this->quote($value) . ','; 
+        }    
+
+        $this->data = $data;
+        $this->sql  = rtrim($this->sql, ',');    // Remove the last ','.
         return $this;
     }
 

@@ -36,12 +36,13 @@ class custom extends control
         $currentLang = $this->app->getClientLang();
 
         $this->app->loadLang($module);
+        $this->app->loadConfig('story');
         $fieldList = $this->lang->$module->$field;
         if(!empty($_POST))
         {
             if($module == 'story' && $field == 'review')
             {
-                $this->loadModel('setting')->setItem('system.common.storyReview.needReview', $_POST['needReview']);
+                $this->loadModel('setting')->setItem('system.story.needReview', fixer::input('post')->get()->needReview);
             }
             else
             {
@@ -66,7 +67,7 @@ class custom extends control
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
         $this->view->position[]  = $this->lang->custom->common;
         $this->view->position[]  = $this->lang->$module->common;
-        $this->view->needReview  = isset($this->config->storyReview->needReview) ? $this->config->storyReview->needReview : 1;
+        $this->view->needReview  = $this->config->story->needReview;
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $this->custom->getItems("lang=$currentLang,all&module=$module&section=$field");
         $this->view->field       = $field;

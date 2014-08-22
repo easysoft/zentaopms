@@ -1362,12 +1362,13 @@ class taskModel extends model
         $action = strtolower($action);
 
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
-        if($action == 'start')    return $task->status != 'doing'  and $task->status != 'closed' and $task->status != 'cancel';
+        if($action == 'start')    return $task->status != 'doing'  and $task->status != 'closed' and $task->status != 'cancel' and $task->status != 'pause';
+        if($action == 'restart')  return $task->status == 'pause';
         if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
         if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status == 'cancel' ;
         if($action == 'cancel')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
-        if($action == 'pause')    return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel' and $task->status != 'wait' and $task->status != 'pause';
+        if($action == 'pause')    return $task->status == 'doing';
 
         return true;
     }

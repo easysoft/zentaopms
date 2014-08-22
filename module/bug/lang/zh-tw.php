@@ -113,6 +113,7 @@ $lang->bug->moduleBugs     = '按模組';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求變動';
 $lang->bug->allProduct     = '所有產品';
+$lang->bug->ditto          = '同上';
 
 /* 頁面標籤。*/
 $lang->bug->lblProductAndModule         = '產品模組';

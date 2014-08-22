@@ -18,10 +18,10 @@ $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
 $lang->custom->story->fields['sourceList']       = 'Source';
 $lang->custom->story->fields['reasonList']       = 'Closed reason';
-$lang->custom->story->fields['reviewResultList'] = 'Reviewed result';
 $lang->custom->story->fields['stageList']        = 'Stage';
 $lang->custom->story->fields['statusList']       = 'Status';
-$lang->custom->story->fields['review']           = 'Review';
+$lang->custom->story->fields['reviewResultList'] = 'Reviewed result';
+$lang->custom->story->fields['review']           = 'Reviewed procedure';
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['priList']    = 'Priority';
@@ -66,6 +66,6 @@ $lang->custom->confirmRestore = 'Are you sure to restore the default lang settin
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole = 'The length of key must be less than 20!';
 
-$lang->custom->storyReview   = 'Story review';
+$lang->custom->storyReview   = 'Reviewed procedure';
 $lang->custom->reviewList[1] = 'Open';
 $lang->custom->reviewList[0] = 'Close';

@@ -21,6 +21,7 @@ $lang->task->view               = "查看任务";
 $lang->task->logEfforts         = "记录工时";
 $lang->task->record             = "工时";
 $lang->task->start              = "开始";
+$lang->task->restart            = "继续";
 $lang->task->finish             = "完成";
 $lang->task->pause              = "暂停";
 $lang->task->close              = "关闭";
