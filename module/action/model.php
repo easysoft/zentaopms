@@ -216,6 +216,13 @@ class actionModel extends model
         return $actions;
     }
 
+    /**
+     * process Project Actions change actionStype
+     * 
+     * @param  array    $actions 
+     * @access public
+     * @return void
+     */
     public function processProjectActions($actions)
     {
         $newActions = array();
