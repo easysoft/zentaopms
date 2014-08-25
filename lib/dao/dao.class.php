@@ -473,6 +473,7 @@ class dao
     /**
      * Query the sql, return the statement object.
      * 
+     * @param  string $sql 
      * @access public
      * @return object   the PDOStatement object.
      */
@@ -480,7 +481,15 @@ class dao
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        if(empty($sql)) $sql = $this->processSQL();
+        if(empty($sql))
+        {
+            $sql = $this->processSQL();
+        }
+        else
+        {
+            $this->sqlobj->setSQL($sql);
+        }
+
         try
         {
             $method = $this->method;
@@ -551,6 +560,7 @@ class dao
     /**
     /* Execute the sql. It's different with query(), which return the stmt object. But this not.
      * 
+     * @param  string $sql 
      * @access public
      * @return int the modified or deleted records.
      */
@@ -558,7 +568,15 @@ class dao
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        if(empty($sql)) $sql = $this->processSQL();
+        if(empty($sql))
+        {
+            $sql = $this->processSQL();
+        }
+        else
+        {
+            $this->sqlobj->setSQL($sql);
+        }
+
         try
         {
             $this->reset();
@@ -1647,6 +1665,18 @@ class sql
     {
         $this->sql .= ' ' . DAO::HAVING . " $having";
         return $this;
+    }
+
+    /**
+     * Set SQL 
+     * 
+     * @param  string $sql 
+     * @access public
+     * @return object the sql object.
+     */
+    public function setSQL($sql = '')
+    {
+        $this->sql = $sql;
     }
 
     /**
