@@ -827,26 +827,32 @@ class bugModel extends model
             $bugSteps .= $this->lang->bug->tplStep;
             if(!empty($stepResults))
             {
+                $i = 0;
                 foreach($caseSteps as $key => $step)
                 {
                     if(!in_array($step->id, $steps)) continue;
-                    $bugSteps .= ($key + 1) . '. '  . $step->desc . "<br />";
+                    $i++;
+                    $bugSteps .= $i . '. '  . $step->desc . "<br />";
                 }
 
                 $bugSteps .= $this->lang->bug->tplResult;
+                $i = 0;
                 foreach($caseSteps as $key => $step)
                 {
-                    if(empty($stepResults[$step->id]['real'])) continue;
                     if(!in_array($step->id, $steps)) continue;
-                    $bugSteps .= ($key + 1) . '. ' . $stepResults[$step->id]['real'] . "<br />";
+                    $i++;
+                    if(empty($stepResults[$step->id]['real'])) continue;
+                    $bugSteps .= $i . '. ' . $stepResults[$step->id]['real'] . "<br />";
                 }
 
                 $bugSteps .= $this->lang->bug->tplExpect;
+                $i = 0;
                 foreach($caseSteps as $key => $step)
                 {
-                    if(!$step->expect) continue;
                     if(!in_array($step->id, $steps)) continue;
-                    $bugSteps .= ($key + 1) . '. ' . $step->expect . "<br />";
+                    $i++;
+                    if(!$step->expect) continue;
+                    $bugSteps .= $i . '. ' . $step->expect . "<br />";
                 }
 
             }
