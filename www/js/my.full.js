@@ -631,17 +631,6 @@ function ajaxGetSearchForm()
 }
 
 /**
- * Hide the link of clearData.
- * 
- * @access public
- * @return void
- */
-function hideClearDataLink()
-{
-    if(typeof showDemoUsers == 'undefined' || !showDemoUsers) $('#submenuclearData').addClass('hidden');
-}
-
-/**
  * add one option of a select to another select. 
  * 
  * @param  string $SelectID 
@@ -1185,8 +1174,6 @@ $(document).ready(function()
 
     autoCheck();
     toggleSearch();
-
-    hideClearDataLink();
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 

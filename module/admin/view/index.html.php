@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php $showDemoUsers = isset($this->config->global->showDemoUsers) ? true : false; js::set('showDemoUsers', $showDemoUsers);?>
 <?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
 <div id="notice" class='alert alert-success'>
   <?php echo html::a(inlink('ignore'), '<i class="icon-remove"></i> ' . $lang->admin->notice->ignore, 'hiddenwin', 'class="close" data-dismiss="alert" style="font-size: 12px"');?>

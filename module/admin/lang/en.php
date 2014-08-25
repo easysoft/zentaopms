@@ -19,16 +19,6 @@ $lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 
 $lang->admin->browseCompany = 'Browse Company';
 
-$lang->admin->clearData             = 'Reset';
-$lang->admin->pleaseInputYes        = "Input 'yes' to reset zentao:";
-$lang->admin->confirmClearData      = 'Are you sure to reset zentao?';
-$lang->admin->clearDataFailed       = 'Failed to reset zentao!';
-$lang->admin->clearDataSuccessfully = 'Successfully reset zentao';
-$lang->admin->clearDataDesc    = <<<EOT
-When you finish testing zentao, you can reset data inf zentao by using the reset feature. All data in database will be cleared except the data of company, department, user, group and priviledge. <br />
-<strong class='text-danger'>This action is very dangerous, think over before you do it!</strong>
-EOT;
-
 $lang->admin->info = new stdclass();
 $lang->admin->info->caption = 'zentao information';
 $lang->admin->info->version = 'The current version of the system is %s,';
