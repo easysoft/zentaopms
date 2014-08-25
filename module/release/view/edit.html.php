@@ -40,7 +40,7 @@
         <td colspan='2'>
           <div class='row pd-0' style='margin: 0 0 0 -15px'>
             <div class='col-md-6'>
-              <div class='panel panel-sm'>
+              <div class='panel panel-sm contentDiv'>
                 <div class='panel-heading'>
                   <?php echo html::icon($lang->icons['story'], 'icon') . ' ' . $lang->release->linkStories;?>
                 </div>
@@ -68,7 +68,7 @@
               </div>
             </div>
             <div class='col-md-6'>
-              <div class='panel panel-sm'>
+              <div class='panel panel-sm contentDiv'>
                 <div class='panel-heading'>
                   <?php echo html::icon($lang->icons['bug'], 'icon') . ' ' . $lang->release->linkBugs;?>
                 </div>
