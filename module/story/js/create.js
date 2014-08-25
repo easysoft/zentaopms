@@ -1,9 +1,25 @@
 $(function()
 {
-    $('#assignedTo').parents('tr').find('th').html($('#needNotReview').prop('checked') ? assignedTo : reviewedBy);
+    if($('#needNotReview').prop('checked'))
+    {
+        $('#assignedTo').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#assignedTo').removeAttr('disabled');
+    }
+    $('#assignedTo').trigger("chosen:updated");
 })
 
 $('#needNotReview').change(function()
 {
-    $('#assignedTo').parents('tr').find('th').html($('#needNotReview').prop('checked') ? assignedTo : reviewedBy);
+    if($('#needNotReview').prop('checked'))
+    {
+        $('#assignedTo').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#assignedTo').removeAttr('disabled');
+    }
+    $('#assignedTo').trigger("chosen:updated");
 })

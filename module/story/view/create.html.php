@@ -120,6 +120,4 @@
     <span id='responser'></span>
   </form>
 </div>
-<?php js::set('assignedTo', $lang->story->assignedTo)?>
-<?php js::set('reviewedBy', $lang->story->reviewedBy)?>
 <?php include '../../common/view/footer.html.php';?>
