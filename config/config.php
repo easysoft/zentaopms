@@ -63,7 +63,7 @@ $config->default->method = 'index';       // Default method.
 
 /* Upload settings. */
 $config->file = new stdclass();
-$config->file->dangers = 'php,jsp,py,rb,asp,'; // Dangerous files.
+$config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,asa,cer,cdx,aspl'; // Dangerous files.
 $config->file->maxSize = 1024 * 1024;          // Max size.
 
 /* Master database settings. */
