@@ -107,7 +107,7 @@ function setForm()
         {
             submitLabel = $(submitObj).attr('value');
             $(submitObj).attr('disabled', 'disabled');
-            $(submitObj).attr('value', config.submitting);
+            $(submitObj).attr('value', lang.submitting);
             $(submitObj).addClass('button-d');
             formClicked = true;
         }

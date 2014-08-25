@@ -6,7 +6,7 @@ $.extend(
         var options = 
         {
             target  : null,
-            timeout : ajaxTimeout,
+            timeout : config.timeout,
             dataType:'json',
 
             success:function(response)
@@ -85,7 +85,7 @@ $.extend(
             error:function(jqXHR, textStatus, errorThrown)
             {
                 $.enableForm(formID);
-                if(textStatus == 'timeout' || textStatus == 'error') return alert(config.timeout);
+                if(textStatus == 'timeout' || textStatus == 'error') return alert(lang.timeout);
                 alert(jqXHR.responseText + textStatus + errorThrown);
             }
         };

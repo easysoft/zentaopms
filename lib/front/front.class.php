@@ -859,13 +859,16 @@ EOT;
         $jsConfig->currentMethod  = $methodName;
         $jsConfig->clientLang     = $clientLang;
         $jsConfig->requiredFields = $requiredFields;
-        $jsConfig->submitting     = $lang->submitting;
-        $jsConfig->save           = $lang->save;
         $jsConfig->router         = $app->server->PHP_SELF;
-        $jsConfig->timeout        = $lang->timeout;
+        $jsConfig->timeout        = $config->timeout;
+
+        $jsLang->submitting = $lang->submitting;
+        $jsLang->save       = $lang->save;
+        $jsLang->timeout    = $lang->timeout;
 
         $js  = self::start(false);
-        $js .= 'var config=' . json_encode($jsConfig);
+        $js .= 'var config=' . json_encode($jsConfig) . ";\n";
+        $js .= 'var lang=' . json_encode($jsLang) . ";\n";
         $js .= self::end();
         echo $js;
     }
