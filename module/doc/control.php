@@ -253,7 +253,11 @@ class doc extends control
             if(!$docResult or dao::isError()) die(js::error(dao::getError()));
 
             $docID = $docResult['id'];
-            if($docResult['status'] == 'existed') die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+            if($docResult['status'] == 'exists')
+            {
+                echo js::alert(sprintf($this->lang->duplicate, $this->lang->doc->common));
+                die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+            }
             $this->action->create('doc', $docID, 'Created');
 
             if($from == 'product') $link = $this->createLink('product', 'doc', "productID={$this->post->product}");

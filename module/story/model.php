@@ -138,8 +138,8 @@ class storyModel extends model
             ->get();
 
         /* Check repeat story. */
-        $storyID = $this->loadModel('common')->checkRepeat('story', 'check', $story->title, "product={$story->product}");
-        if($storyID) return array('status' => 'existed', 'id' => $storyID);
+        $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
+        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -210,18 +210,30 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0)
     {
-        $now           = helper::now();
-        $stories       = fixer::input('post')->get();
-        $batchNum      = count(reset($stories));
-        $latestStories = $this->loadModel('common')->checkRepeat('story', 'get', '', "product={$productID}");
+        $now      = helper::now();
+        $stories  = fixer::input('post')->get();
+        $batchNum = count(reset($stories));
+
+        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}");
+        $stories = $result['data'];
+
+        $module = 0;
+        $plan   = 0;
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            $module = $stories->module[$i] == 'same' ? $module : $stories->module[$i];
+            $plan   = $stories->plan[$i]   == 'same' ? $plan   : $stories->plan[$i];
+            $stories->module[$i] = (int)$module;
+            $stories->plan[$i]   = (int)$plan;
+        }
 
         for($i = 0; $i < $batchNum; $i++)
         {
             if($stories->title[$i] != '')
             {
                 $data[$i] = new stdclass();
-                $data[$i]->module     = $stories->module[$i] != 'same' ? $stories->module[$i] : ($i == 0 ? 0 : $data[$i-1]->module);
-                $data[$i]->plan       = $stories->plan[$i] == 'same' ? ($i != 0 ? $data[$i-1]->plan : 0) : ($stories->plan[$i] != '' ?     $stories->plan[$i] : 0);
+                $data[$i]->module     = $stories->module[$i];
+                $data[$i]->plan       = $stories->plan[$i];
                 $data[$i]->title      = $stories->title[$i];
                 $data[$i]->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
                 $data[$i]->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;

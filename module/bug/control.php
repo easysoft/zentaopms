@@ -228,9 +228,10 @@ class bug extends control
             }
 
             $bugID = $bugResult['id'];
-            if($bugResult['status'] == 'existed')
+            if($bugResult['status'] == 'exists')
             {
-                $response['locate'] = $this->createLink('bug', 'view', "bugID=$bugID");
+                $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
+                $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
                 $this->send($response);
             }
 

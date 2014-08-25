@@ -61,6 +61,7 @@ $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
 $lang->pasteText    = 'Paste text';
 $lang->timeout      = 'Timed out, please check the network, or retry!';
+$lang->duplicate    = '%s has the same title';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 

@@ -22,9 +22,8 @@ class taskModel extends model
      */
     public function create($projectID)
     {
-        $tasksID     = array();
-        $taskFile    = '';
-        $latestTasks = $this->loadModel('common')->checkRepeat('task', 'get', '', "project=$projectID");
+        $tasksID  = array();
+        $taskFile = '';
         foreach($this->post->assignedTo as $assignedTo)
         {
             if($this->post->type == 'affair' and empty($assignedTo)) continue;
@@ -46,11 +45,15 @@ class taskModel extends model
 
             if($assignedTo) $task->assignedDate = helper::now();
 
-            /* Check repeat task. */
-            if($latestTasks and $taskID = array_search($task->name, $latestTasks))
+            /* Check duplicate task. */
+            if($task->type != 'affair')
             {
-                $tasksID[$assignedTo] = array('status' => 'existed', 'id' => $taskID);
-                continue;
+                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID");
+                if($result['stop'])
+                {
+                    $tasksID[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);
+                    continue;
+                }
             }
 
             $this->dao->insert(TABLE_TASK)->data($task)
@@ -95,11 +98,13 @@ class taskModel extends model
     public function batchCreate($projectID)
     {
         $this->loadModel('action');
-        $now         = helper::now();
-        $mails       = array();
-        $tasks       = fixer::input('post')->get();
-        $batchNum    = count(reset($tasks));
-        $latestTasks = $this->loadModel('common')->checkRepeat('task', 'get', '', "project=$projectID");
+        $now      = helper::now();
+        $mails    = array();
+        $tasks    = fixer::input('post')->get();
+        $batchNum = count(reset($tasks));
+
+        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "project=$projectID");
+        $tasks  = $result['data'];
 
         /* check estimate. */
         for($i = 0; $i < $batchNum; $i++)
@@ -110,15 +115,33 @@ class taskModel extends model
             }
             if(!empty($tasks->name[$i]) and empty($tasks->type[$i]))die(js::alert(sprintf($this->lang->error->notempty, $this->lang->task->type)));
         }
+
+        $story      = 0;
+        $module     = 0;
+        $type       = '';
+        $assignedTo = '';
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            $story      = $tasks->story[$i]      == 'ditto' ? $story     : $tasks->story[$i];
+            $module     = $tasks->module[$i]     == 'ditto' ? $module    : $tasks->module[$i];    
+            $type       = $tasks->type[$i]       == 'ditto' ? $type      : $tasks->type[$i];
+            $assignedTo = $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
+
+            $tasks->story[$i]      = (int)$story;
+            $tasks->module[$i]     = (int)$module;
+            $tasks->type[$i]       = $type;
+            $tasks->assignedTo[$i] = $assignedTo;
+        }
+
         for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($tasks->name[$i])) continue;
 
             $data[$i] = new stdclass();
-            $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->story      : 0) : ($tasks->story[$i] ? $tasks->story[$i] : 0);
-            $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->type       : 0) : $tasks->type[$i];
-            $data[$i]->module       = $tasks->module[$i]     == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->module     : 0) : $tasks->module[$i];
-            $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
+            $data[$i]->story        = $tasks->story[$i];
+            $data[$i]->type         = $tasks->type[$i];
+            $data[$i]->module       = $tasks->module[$i];
+            $data[$i]->assignedTo   = $tasks->assignedTo[$i];
             $data[$i]->name         = $tasks->name[$i];
             $data[$i]->desc         = nl2br($tasks->desc[$i]);
             $data[$i]->pri          = $tasks->pri[$i];

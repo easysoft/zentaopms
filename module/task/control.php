@@ -76,12 +76,24 @@ class task extends control
                 $this->send($response);
             }
 
+            /* if the count of tasksID is 1 then check exists. */
+            if(count($tasksID) == 1)
+            {
+                $taskID = current($tasksID);
+                if($taskID['status'] == 'exists')
+                {
+                    $response['locate']  = $this->createLink('task', 'view', "taskID={$taskID['id']}");
+                    $response['message'] = sprintf($this->lang->duplicate, $this->lang->task->common);
+                    $this->send($response);
+                }
+            }
+
             /* Create actions. */
             $this->loadModel('action');
             foreach($tasksID as $taskID)
             {
-                /* if status is existed then this task has existed not new create. */
-                if($taskID['status'] == 'existed') continue;
+                /* if status is exists then this task has exists not new create. */
+                if($taskID['status'] == 'exists') continue;
 
                 $taskID   = $taskID['id'];
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');

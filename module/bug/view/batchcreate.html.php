@@ -57,7 +57,7 @@
         <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
         <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
-        <td><?php echo html::input("titles[$i]", '', 'class=form-control');?></td>
+        <td><?php echo html::input("title[$i]", '', 'class=form-control');?></td>
         <td>
           <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control'");?>
         </td>
