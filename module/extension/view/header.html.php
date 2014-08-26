@@ -11,7 +11,7 @@
 ?>
   </ul>
   <div class='actions'>
-    <div class='btn-group'><?php common::printLink('extension', 'obtain', '', $lang->extension->obtain, '', "class='btn'");?></div>
+    <div class='btn-group'><?php common::printLink('extension', 'obtain', '', '<i class="icon-download-alt"></i> ' . $lang->extension->obtain, '', "class='btn'");?></div>
   </div>
 </div>
 <script>$('#<?php echo $tab;?>').addClass('active')</script>

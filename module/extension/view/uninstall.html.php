@@ -40,7 +40,7 @@
   </div>
 </div>
 <?php else:?>
-<div class='alert alert-success with-icon'>
+<div class='alert alert-pure with-icon'>
   <i class='icon-ok-sign'></i>
   <div class='content'>
     <?php
