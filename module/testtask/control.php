@@ -439,6 +439,8 @@ class testtask extends control
                 $actionID = $this->action->create('testtask', $taskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -478,6 +480,8 @@ class testtask extends control
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
         }
 

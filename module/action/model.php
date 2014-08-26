@@ -225,36 +225,21 @@ class actionModel extends model
      */
     public function processProjectActions($actions)
     {
-        $newActions = array();
-        foreach($actions as $action)
+        /* Define the action map table. */
+        $map = array();
+        $map['testtask']['opened']  = 'testtaskopened';
+        $map['testtask']['started'] = 'testtaskstarted';
+        $map['testtask']['closed']  = 'testtaskclosed';
+        $map['build']['opened']     = 'buildopened';
+
+        /* Process actions. */
+        foreach($actions as $key => $action)
         {
-            if($action->objectType == 'project')
-            {
-                $newActions[] = $action;
-            }
-            elseif($action->objectType == 'testtask')
-            {
-                if($action->action == 'started')
-                {
-                    $action->action = 'testtaskstarted';
-                    $newActions[] = $action;
-                }
-                elseif($action->action == 'closed')
-                {
-                    $action->action = 'testtaskclosed';
-                    $newActions[] = $action;
-                }
-            }
-            elseif($action->objectType == 'build')
-            {
-                if($action->action == 'opened')
-                {
-                    $action->action = 'buildopened';
-                    $newActions[] = $action;
-                }
-            }
+            if($action->objectType != 'project' and !isset($map[$action->objectType][$action->action])) unset($actions[$key]);
+            if(isset($map[$action->objectType][$action->action])) $action->action = $map[$action->objectType][$action->action];
         }
-        return $newActions;
+
+        return $actions;
     }
 
     /**
