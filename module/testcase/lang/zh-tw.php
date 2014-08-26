@@ -52,7 +52,7 @@ $lang->testcase->stepID     = '編號';
 $lang->testcase->stepDesc   = '步驟';
 $lang->testcase->stepExpect = '預期';
 
-$lang->testcase->common             = '用例管理';
+$lang->testcase->common             = '用例';
 $lang->testcase->index              = "用例管理首頁";
 $lang->testcase->create             = "建用例";
 $lang->testcase->batchCreate        = "批量添加";

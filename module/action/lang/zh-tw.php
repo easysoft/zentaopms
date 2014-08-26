@@ -82,6 +82,7 @@ $lang->action->desc->caseconfirmed  = '$date, 由 <strong>$actor</strong> 確認
 $lang->action->desc->bugconfirmed   = '$date, 由 <strong>$actor</strong> 確認Bug。' . "\n";
 $lang->action->desc->frombug        = '$date, 由 <strong>$actor</strong> Bug轉化而來，Bug編號為 <strong>$extra</strong>。';
 $lang->action->desc->started        = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
+$lang->action->desc->restarted      = '$date, 由 <strong>$actor</strong> 繼續。' . "\n";
 $lang->action->desc->delayed        = '$date, 由 <strong>$actor</strong> 延期。' . "\n";
 $lang->action->desc->suspended      = '$date, 由 <strong>$actor</strong> 掛起。' . "\n";
 $lang->action->desc->recordestimate = '$date, 由 <strong>$actor</strong> 記錄工時，消耗 <strong>$extra</strong> 小時。';
@@ -95,11 +96,6 @@ $lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暫停
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
-
-$lang->action->desc->project = new stdclass();
-$lang->action->desc->project->started  = '$date, 由 <strong>$actor</strong> 啟動測試任務 <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->closed   = '$date, 由 <strong>$actor</strong> 完成測試任務 <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->opened   = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$objectID</strong>。' . "\n";
 
 /* 用來顯示動態信息。*/
 $lang->action->label = new stdclass();
@@ -132,12 +128,13 @@ $lang->action->label->unlinkedfromplan    = '移除計劃';
 $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = '關聯項目';
 $lang->action->label->unlinkedfromproject = '移除項目';
-$lang->action->label->started             = '開始';
+$lang->action->label->started             = '開始了';
+$lang->action->label->restarted           = '繼續了';
 $lang->action->label->recordestimate      = '記錄了工時';
 $lang->action->label->editestimate        = '編輯了工時';
 $lang->action->label->canceled            = '取消了';
-$lang->action->label->finished            = '完成';
-$lang->action->label->paused              = '暫停';
+$lang->action->label->finished            = '完成了';
+$lang->action->label->paused              = '暫停了';
 $lang->action->label->delayed             = '延期';
 $lang->action->label->suspended           = '掛起';
 $lang->action->label->login               = '登錄系統';
@@ -210,6 +207,7 @@ $lang->action->search->label['marked']              = $lang->action->label->mark
 $lang->action->search->label['linked2project']      = $lang->action->label->linked2project;
 $lang->action->search->label['unlinkedfromproject'] = $lang->action->label->unlinkedfromproject;
 $lang->action->search->label['started']             = $lang->action->label->started;
+$lang->action->search->label['restarted']           = $lang->action->label->restarted;
 $lang->action->search->label['recordestimate']      = $lang->action->label->recordestimate;
 $lang->action->search->label['editestimate']        = $lang->action->label->editestimate;
 $lang->action->search->label['canceled']            = $lang->action->label->canceled;

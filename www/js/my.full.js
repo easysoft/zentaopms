@@ -436,12 +436,12 @@ function setForm()
     $('form').submit(function()
     {
         submitObj   = $(this).find(':submit');
-        if($(submitObj).size() == 1)
+        if($(submitObj).size() >= 1)
         {
             var isBtn = submitObj.prop('tagName') == "BUTTON";
             submitLabel = isBtn ? $(submitObj).text() : $(submitObj).attr('value');
             $(submitObj).attr('disabled', 'disabled');
-            var submitting = submitObj.attr('data-submitting') || config.submitting;
+            var submitting = submitObj.attr('data-submitting') || lang.submitting;
             if(isBtn) submitObj.text(submitting);
             else $(submitObj).attr('value', submitting);
             formClicked = true;
@@ -628,17 +628,6 @@ function ajaxGetSearchForm()
             $('#querybox').html(data);
         });
     }
-}
-
-/**
- * Hide the link of clearData.
- * 
- * @access public
- * @return void
- */
-function hideClearDataLink()
-{
-    if(typeof showDemoUsers == 'undefined' || !showDemoUsers) $('#submenuclearData').addClass('hidden');
 }
 
 /**
@@ -1185,8 +1174,6 @@ $(document).ready(function()
 
     autoCheck();
     toggleSearch();
-
-    hideClearDataLink();
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 

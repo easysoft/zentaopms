@@ -17,7 +17,7 @@ $lang->at        = ' 于 ';
 $lang->downArrow = '↓';
 $lang->null      = '空';
 
-$lang->zentaoPMS      = '禪道項目';
+$lang->zentaoPMS      = '禪道';
 $lang->welcome        = "%s項目管理系統";
 $lang->myControl      = "我的地盤";
 $lang->currentPos     = '當前位置：';
@@ -61,6 +61,7 @@ $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
 $lang->pasteText    = '粘貼文本 ';
 $lang->timeout      = '連接超時，請檢查網絡環境，或重試！';
+$lang->duplicate    = '已有相同標題的%s';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
@@ -276,7 +277,6 @@ $lang->admin->menu->index     = array('link' => '首頁|admin|index');
 $lang->admin->menu->extension = array('link' => '擴展|extension|browse', 'subModule' => 'extension,editor');
 $lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData = array('link' => '重置禪道|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 
@@ -355,7 +355,7 @@ $lang->zentaoSite     = "官方網站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a>&nbsp; ";
 $lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a> ";
 $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐贈 </a>";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 升至專業版！</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 專業版！</a> &nbsp; ";
 $lang->downNotify     = "下載桌面提醒";
 
 $lang->suhosinInfo   = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
@@ -447,6 +447,7 @@ $lang->icons['import']         = 'upload-alt';
 $lang->icons['finish']         = 'ok-sign';
 $lang->icons['resolve']        = 'ok-sign';
 $lang->icons['start']          = 'play';
+$lang->icons['restart']        = 'play';
 $lang->icons['run']            = 'play';
 $lang->icons['runCase']        = 'play';
 $lang->icons['batchRun']       = 'play-sign';

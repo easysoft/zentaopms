@@ -242,7 +242,7 @@ class dao
 
     /**
      * The count method, call sql::select() and from().
-     * use as $this->dao->count()->from(TABLE_BUG)->where('')->fetch('count');
+     * use as $this->dao->select()->from(TABLE_BUG)->where()->count();
      *
      * @access public
      * @return void
@@ -473,6 +473,7 @@ class dao
     /**
      * Query the sql, return the statement object.
      * 
+     * @param  string $sql 
      * @access public
      * @return object   the PDOStatement object.
      */
@@ -480,7 +481,9 @@ class dao
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        if(empty($sql)) $sql = $this->processSQL();
+        if($sql) $this->sqlobj->sql = $sql;
+        $sql = $this->processSQL();
+
         try
         {
             $method = $this->method;
@@ -549,8 +552,9 @@ class dao
     }
 
     /**
-    /* Execute the sql. It's different with query(), which return the stmt object. But this not.
+     * Execute the sql. It's different with query(), which return the stmt object. But this not.
      * 
+     * @param  string $sql 
      * @access public
      * @return int the modified or deleted records.
      */
@@ -558,7 +562,9 @@ class dao
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        if(empty($sql)) $sql = $this->processSQL();
+        if($sql) $this->sqlobj->sql = $sql;
+        $sql = $this->processSQL();
+
         try
         {
             $this->reset();
@@ -1041,9 +1047,9 @@ class sql
      * The sql string.
      * 
      * @var string
-     * @access private
+     * @access public
      */
-    private $sql = '';
+    public $sql = '';
 
     /**
      * The global $dbh.
@@ -1207,7 +1213,7 @@ class sql
                 continue;
             }    
             $this->sql .= "`$field` = " . $this->quote($value) . ','; 
-        }    
+        }
 
         $this->data = $data;
         $this->sql  = rtrim($this->sql, ',');    // Remove the last ','.

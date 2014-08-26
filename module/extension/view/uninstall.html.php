@@ -19,14 +19,13 @@
   </div>
 </div>
 <?php if(isset($confirm) and $confirm == 'no'):?>
-<div class='alert alert-warning with-icon'>
+<div class='alert alert-pure with-icon'>
   <i class='icon-info-sign'></i>
   <div class='content'>
   <?php
     echo "<p class='waring'>{$lang->extension->confirmUninstall}";
     echo html::a(inlink('uninstall', "extension=$code&confirm=yes"), $lang->extension->uninstall, '', "class='btn'");
     echo "</p>";
-    echo "<p>{$lang->extension->noticeBackupDB}</p>"
   ?>
   </div>
 </div>
@@ -46,7 +45,7 @@
   <div class='content'>
     <?php
     echo "<h3>{$title}</h3>";
-    if(!empty($backupFile)) echo '<p>' . sprintf($lang->extension->backDBFile, $backupFile) . '</p>';
+    if(!empty($backupFile)) echo "<p style='color:red'>" . sprintf($lang->extension->backDBFile, $backupFile) . '</p>';
     if($removeCommands)
     {
         echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";

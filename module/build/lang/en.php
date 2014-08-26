@@ -45,3 +45,6 @@ $lang->build->resolvedBugs  = 'The total solution of bug%s';
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = 'Software source code repository, such as Subversion or Git';
 $lang->build->placeholder->filePath = 'The path of this build package to download';
+
+$lang->build->action = new stdclass();
+$lang->build->action->buildopened = '$date, <strong>$actor</strong> created build. <strong>$objectID</strong>。' . "\n";

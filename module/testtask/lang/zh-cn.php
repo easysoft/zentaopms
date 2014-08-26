@@ -77,8 +77,8 @@ $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
-$lang->testtask->showResult    = '共执行%s次';
-$lang->testtask->showFail      = '失败%s次';
+$lang->testtask->showResult    = '共执行<span class="text-info">%s</span>次';
+$lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
 $lang->testtask->confirmDelete     = '您确认要删除该测试任务吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
@@ -103,3 +103,8 @@ $lang->testtask->mail->create->title = "%s创建了测试任务 #%s:%s";
 $lang->testtask->mail->edit->title   = "%s编辑了测试任务 #%s:%s";
 
 $lang->testtask->testScope = '测试范畴';
+
+$lang->testtask->action = new stdclass();
+$lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 创建测试任务 <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 启动测试任务 <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成测试任务 <strong>$objectID</strong>。' . "\n";

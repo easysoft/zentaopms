@@ -19,16 +19,6 @@ $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 
 $lang->admin->browseCompany = '浏览公司';
 
-$lang->admin->clearData             = '重置禅道';
-$lang->admin->pleaseInputYes        = '确认重置禅道数据请输入yes：';
-$lang->admin->confirmClearData      = '您确认要重置禅道数据吗?';
-$lang->admin->clearDataFailed       = '禅道重置失败！';
-$lang->admin->clearDataSuccessfully = '禅道重置成功！';
-$lang->admin->clearDataDesc    = <<<EOT
-当您测试禅道完毕之后，可以使用重置功能清除测试数据。该操作会保留公司、部门、用户和权限分组的数据，其他的数据会被清空。<br />
-<strong class='text-danger f-14px'>该功能存在极大的风险，执行之前务必三思!</strong>
-EOT;
-
 $lang->admin->info = new stdclass();
 $lang->admin->info->caption = '禅道系统信息';
 $lang->admin->info->version = '当前系统的版本是%s，';

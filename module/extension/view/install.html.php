@@ -23,9 +23,11 @@
   </div>
 </div>
 <?php if($error):?>
-<div class='panel panel-body text-center'>
-  <h5 class='text-danger'><?php sprintf($lang->extension->installFailed, $installType);?></h5>
-  <p class='text-danger'><?php echo $error;?></p>
+<div class='panel panel-body text-left'>
+  <div class='container mw-500px'>
+    <h5 class='text-danger'><?php sprintf($lang->extension->installFailed, $installType);?></h5>
+    <p class='text-danger'><?php echo $error;?></p>
+  </div>
   <hr>
   <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
 </div>

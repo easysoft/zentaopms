@@ -190,8 +190,8 @@ class docModel extends model
             ->get();
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
-        $docID = $this->loadModel('common')->checkRepeat('doc', 'check', $doc->title, $condition);
-        if($docID) return array('status' => 'existed', 'id' => $docID);
+        $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
+        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $this->dao->insert(TABLE_DOC)
             ->data($doc)

@@ -54,8 +54,8 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->get();
 
-        $caseID = $this->loadModel('common')->checkRepeat('case', 'check', $case->title, "product={$case->product}");
-        if($caseID) return array('status' => 'existed', 'id' => $caseID);
+        $result = $this->loadModel('common')->removeDuplicate('case', $case, "product={$case->product}");
+        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
         if(!$this->dao->isError())
@@ -89,21 +89,37 @@ class testcaseModel extends model
         $now         = helper::now();
         $cases       = fixer::input('post')->get();
         $batchNum    = count(reset($cases));
-        $latestCases = $this->loadModel('common')->checkRepeat('case', 'get', '', "product=$productID");
+
+        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product=$productID");
+        $cases  = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
         {
             if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
         }
+
+        $module = 0;
+        $story  = 0;
+        $type   = '';
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            $module = $cases->module[$i] == 'same' ? $module : $cases->module[$i];
+            $story  = $cases->story[$i] == 'same'  ? $story  : $cases->story[$i];
+            $type   = $cases->type[$i] == 'same'   ? $type   : $cases->type[$i];
+            $cases->module[$i] = (int)$module;
+            $cases->story[$i]  = (int)$story;        
+            $cases->type[$i]   = $type;
+        }
+
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
             {
                 $data[$i] = new stdclass();
                 $data[$i]->product    = $productID;
-                $data[$i]->module     = $cases->module[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->module) : $cases->module[$i];
-                $data[$i]->type       = $cases->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $cases->type[$i]; 
-                $data[$i]->story      = $storyID ? $storyID : ($cases->story[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->story) : $cases->story[$i]); 
+                $data[$i]->module     = $cases->module[$i];
+                $data[$i]->type       = $cases->type[$i];
+                $data[$i]->story      = $storyID ? $storyID : $cases->story[$i]; 
                 $data[$i]->title      = $cases->title[$i];
                 $data[$i]->openedBy   = $this->app->user->account;
                 $data[$i]->openedDate = $now;
@@ -118,8 +134,6 @@ class testcaseModel extends model
                     $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
                 }
 
-                if($latestCases and in_array($data[$i]->title, $latestCases)) continue;
-
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
                     ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
@@ -131,8 +145,7 @@ class testcaseModel extends model
                     die(js::reload('parent'));
                 }
 
-                $caseID = $this->dao->lastInsertID();
-                $latestCases[$caseID] = $data[$i]->title;
+                $caseID   = $this->dao->lastInsertID();
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
             }
             else

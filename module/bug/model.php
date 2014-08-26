@@ -56,8 +56,8 @@ class bugModel extends model
             ->get();
 
         /* Check repeat bug. */
-        $bugID = $this->loadModel('common')->checkRepeat('bug', 'check', $bug->title, "product={$bug->product}");
-        if($bugID) return array('status' => 'existed', 'id' => $bugID);
+        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
+        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -83,11 +83,13 @@ class bugModel extends model
         $actions    = array();
         $data       = fixer::input('post')->get();
         $batchNum   = count(reset($data));
-        $latestBugs = $this->loadModel('common')->checkRepeat('bug', 'get', '', "product=$productID");
+
+        $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product=$productID");
+        $data   = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
         {
-            if(!empty($data->titles[$i]) and empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
+            if(!empty($data->title[$i]) and empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
         }
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
@@ -102,27 +104,36 @@ class bugModel extends model
         $browser = '';
         for($i = 0; $i < $batchNum; $i++)
         {
-            if(empty($data->titles[$i])) continue;
-
             if($data->modules[$i]  != 'ditto') $module  = (int)$data->modules[$i];
             if($data->projects[$i] != 'ditto') $project = (int)$data->projects[$i];
             if($data->types[$i]    != 'ditto') $type    = $data->types[$i];
             if($data->oses[$i]     != 'ditto') $os      = $data->oses[$i];
             if($data->browsers[$i] != 'ditto') $browser = $data->browsers[$i];
 
+            $data->modules[$i]  = (int)$module;
+            $data->projects[$i] = (int)$project;
+            $data->types[$i]    = $type;
+            $data->oses[$i]     = $os;
+            $data->browsers[$i] = $browser;
+        }
+
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            if(empty($data->title[$i])) continue;
+
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = $now;
             $bug->product     = $productID;
-            $bug->module      = $module;
-            $bug->project     = $project;
+            $bug->module      = $data->modules[$i];
+            $bug->project     = $data->projects[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
-            $bug->title       = $data->titles[$i];
+            $bug->title       = $data->title[$i];
             $bug->steps       = nl2br($data->stepses[$i]);
-            $bug->type        = $type;
+            $bug->type        = $data->types[$i];
             $bug->severity    = $data->severities[$i];
-            $bug->os          = $os;
-            $bug->browser     = $browser;
+            $bug->os          = $data->oses[$i];
+            $bug->browser     = $data->browsers[$i];
 
             if(!empty($moduleOwners[$bug->module]))
             {
@@ -130,11 +141,8 @@ class bugModel extends model
                 $bug->assignedDate = $now;
             }
 
-            if($latestBugs and in_array($bug->title, $latestBugs)) continue;
-
             $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();
-            $latestBugs[$bugID] = $bug->title;
 
             if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
@@ -816,26 +824,32 @@ class bugModel extends model
             $bugSteps .= $this->lang->bug->tplStep;
             if(!empty($stepResults))
             {
+                $i = 0;
                 foreach($caseSteps as $key => $step)
                 {
                     if(!in_array($step->id, $steps)) continue;
-                    $bugSteps .= ($key + 1) . '. '  . $step->desc . "<br />";
+                    $i++;
+                    $bugSteps .= $i . '. '  . $step->desc . "<br />";
                 }
 
                 $bugSteps .= $this->lang->bug->tplResult;
+                $i = 0;
                 foreach($caseSteps as $key => $step)
                 {
-                    if(empty($stepResults[$step->id]['real'])) continue;
                     if(!in_array($step->id, $steps)) continue;
-                    $bugSteps .= ($key + 1) . '. ' . $stepResults[$step->id]['real'] . "<br />";
+                    $i++;
+                    if(empty($stepResults[$step->id]['real'])) continue;
+                    $bugSteps .= $i . '. ' . $stepResults[$step->id]['real'] . "<br />";
                 }
 
                 $bugSteps .= $this->lang->bug->tplExpect;
+                $i = 0;
                 foreach($caseSteps as $key => $step)
                 {
-                    if(!$step->expect) continue;
                     if(!in_array($step->id, $steps)) continue;
-                    $bugSteps .= ($key + 1) . '. ' . $step->expect . "<br />";
+                    $i++;
+                    if(!$step->expect) continue;
+                    $bugSteps .= $i . '. ' . $step->expect . "<br />";
                 }
 
             }

@@ -15,7 +15,6 @@ foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile)
 
 $whiteList[] = 'api-getsessionid';
 $whiteList[] = 'admin-setflow';
-$whiteList[] = 'admin-cleardata';
 $whiteList[] = 'bug-buildtemplates';
 $whiteList[] = 'bug-sendmail';
 $whiteList[] = 'board-managechild';

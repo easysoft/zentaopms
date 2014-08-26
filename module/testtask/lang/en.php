@@ -77,8 +77,8 @@ $lang->testtask->linkByBug     = 'Link by bug';
 $lang->testtask->passAll       = 'Pass all';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Fail';
-$lang->testtask->showResult    = 'Executed %s times';
-$lang->testtask->showFail      = 'Failed %s times';
+$lang->testtask->showResult    = 'Executed <span class="text-info">%s</span> times';
+$lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span times';
 
 $lang->testtask->confirmDelete     = 'Are you sure to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Are you sure to unlink this case?';
@@ -103,3 +103,8 @@ $lang->testtask->mail->create->title = "%s created testtask #%s:%s";
 $lang->testtask->mail->edit->title   = "%s finished testtask #%s:%s";
 
 $lang->testtask->testScope = 'Test scope';
+
+$lang->testtask->action = new stdclass();
+$lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> opened test task. <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> started test task. <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> finished test task. <strong>$objectID</strong>。' . "\n";

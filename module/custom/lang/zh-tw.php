@@ -18,10 +18,10 @@ $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = '優先順序';
 $lang->custom->story->fields['sourceList']       = '來源';
 $lang->custom->story->fields['reasonList']       = '關閉原因';
-$lang->custom->story->fields['reviewResultList'] = '評審結果';
 $lang->custom->story->fields['stageList']        = '階段';
 $lang->custom->story->fields['statusList']       = '狀態';
-$lang->custom->story->fields['review']           = '評審';
+$lang->custom->story->fields['reviewResultList'] = '評審結果';
+$lang->custom->story->fields['review']           = '評審流程';
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['priList']    = '優先順序';
@@ -66,6 +66,6 @@ $lang->custom->confirmRestore = '是否要恢復預設語言配置？';
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole = '鍵的長度必須小於20個字元！';
 
-$lang->custom->storyReview   = '需求評審';
+$lang->custom->storyReview   = '評審流程';
 $lang->custom->reviewList[1] = '開啟';
 $lang->custom->reviewList[0] = '關閉';

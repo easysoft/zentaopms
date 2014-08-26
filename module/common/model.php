@@ -446,9 +446,6 @@ class commonModel extends model
 
         if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
 
-        /* Unset clearData menu when the data of pms is demo. */
-        if(!isset($app->config->global->showDemoUsers) or !$app->config->global->showDemoUsers) unset($lang->admin->menu->clearData);
-
         /* Get the sub menus of the module, and get current module and method. */
         $submenus      = $lang->$moduleName->menu;  
         $currentModule = $app->getModuleName();
@@ -741,45 +738,39 @@ class commonModel extends model
     }
 
     /**
-     * Check repeat for story,task,bug,case,doc.
+     * Remove duplicate for story, task, bug, case, doc.
      * 
-     * @param  string $type 
-     * @param  string $mode 
-     * @param  string $title 
-     * @param  string $condition 
+     * @param  string       $type  e.g. story task bug case doc.
+     * @param  array|object $data 
+     * @param  string       $condition 
      * @access public
-     * @return bool|array
+     * @return array
      */
-    public function checkRepeat($type, $mode = 'check', $title = '', $condition = '')
+    public function removeDuplicate($type, $data = '', $condition = '')
     {
-        $table = $this->config->objectTables[$type];
-        $field = $type == 'task' ? 'name' : 'title';
-        $date  = date(DT_DATETIME1, time() - 1 * 60);
+        $table      = $this->config->objectTables[$type];
+        $titleField = $type == 'task' ? 'name' : 'title';
+        $date       = date(DT_DATETIME1, time() - $this->config->duplicateTime);
+        $dateField  = $type == 'doc' ? 'addedDate' : 'openedDate';
+        $titles     = $data->$titleField;
 
-        if($mode == 'check' and empty($title)) return false;
-        if($mode == 'check')
+        if(empty($titles)) return false;
+        $duplicate = $this->dao->select("id,$titleField")->from($table)
+            ->where('deleted')->eq(0)
+            ->andWhere($titleField)->in($titles)
+            ->andWhere($dateField)->ge($date)->fi()
+            ->beginIF($condition)->andWhere($condition)->fi()
+            ->fetchPairs();
+
+        if($duplicate and is_string($titles)) return array('stop' => true, 'duplicate' => key($duplicate));
+        if($duplicate and is_array($titles))
         {
-            $repeatObject = $this->dao->select('*')->from($table)
-                ->where('deleted')->eq(0)
-                ->andWhere($field)->eq($title)
-                ->beginIF($type == 'doc')->andWhere('addedDate')->ge($date)->fi()
-                ->beginIF($type != 'doc')->andWhere('openedDate')->ge($date)->fi()
-                ->beginIF($condition)->andWhere($condition)->fi()
-                ->fetch();
-
-            if($repeatObject) return $repeatObject->id;
-            return false;
+            foreach($titles as $i => $title)
+            {
+                if(in_array($title, $duplicate)) unset($titles[$i]);
+            }
+            $data->$titleField = $titles;
         }
-        elseif($mode == 'get')
-        {
-            return $this->dao->select("id,$field")->from($table)
-                ->where('deleted')->eq(0)
-                ->beginIF($type == 'doc')->andWhere('addedDate')->ge($date)->fi()
-                ->beginIF($type != 'doc')->andWhere('openedDate')->ge($date)->fi()
-                ->beginIF($condition)->andWhere($condition)->fi()
-                ->fetchPairs();
-        }
-
-        return false;
+        return array('stop' => false, 'data' => $data);
     }
 }

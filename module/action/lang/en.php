@@ -97,11 +97,6 @@ $lang->action->desc->diff1          = 'changed <strong><i>%s</i></strong>, old i
 $lang->action->desc->diff2          = 'changed <strong><i>%s</i></strong>, the diff is:' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = "changed file's name %s to %s.";
 
-$lang->action->desc->project = new stdclass();
-$lang->action->desc->project->started  = '$date, <strong>$actor</strong> started test task. <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->closed   = '$date, <strong>$actor</strong> closed test task. <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->opened   = '$date, <strong>$actor</strong> created build. <strong>$objectID</strong>。' . "\n";
-
 /* The action labels. */
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'created';
@@ -120,7 +115,7 @@ $lang->action->label->commented           = 'commented';
 $lang->action->label->activated           = 'activated';
 $lang->action->label->resolved            = 'resolved';
 $lang->action->label->reviewed            = 'reviewed';
-$lang->action->label->moved               = 'moded';
+$lang->action->label->moved               = 'moved';
 $lang->action->label->confirmed           = 'confirmed,';
 $lang->action->label->bugconfirmed        = 'confirmed';
 $lang->action->label->tostory             = 'converted to story';

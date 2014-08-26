@@ -186,10 +186,13 @@ class actionModel extends model
     {
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
+            ->beginIF($objectType == 'project')
+            ->where("objectType IN('project', 'testtask', 'build')")
+            ->andWhere('project')->eq($objectID)
+            ->fi()
+            ->beginIF($objectType != 'project')
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($objectID)
-            ->beginIF($objectType == 'project')
-            ->orWhere("project = $objectID AND ((objectType = 'testtask' AND action IN('started','closed')) OR (objectType = 'build' AND action = 'opened'))")
             ->fi()
             ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
@@ -202,6 +205,40 @@ class actionModel extends model
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
+
+        if($objectType == 'project')
+        {
+            $this->app->loadLang('build');
+            $this->app->loadLang('testtask');
+            return $this->processProjectActions($actions);
+        }
+
+        return $actions;
+    }
+
+    /**
+     * process Project Actions change actionStype
+     * 
+     * @param  array    $actions 
+     * @access public
+     * @return void
+     */
+    public function processProjectActions($actions)
+    {
+        /* Define the action map table. */
+        $map = array();
+        $map['testtask']['opened']  = 'testtaskopened';
+        $map['testtask']['started'] = 'testtaskstarted';
+        $map['testtask']['closed']  = 'testtaskclosed';
+        $map['build']['opened']     = 'buildopened';
+
+        /* Process actions. */
+        foreach($actions as $key => $action)
+        {
+            if($action->objectType != 'project' and !isset($map[$action->objectType][$action->action])) unset($actions[$key]);
+            if(isset($map[$action->objectType][$action->action])) $action->action = $map[$action->objectType][$action->action];
+        }
+
         return $actions;
     }
 
@@ -316,13 +353,6 @@ class actionModel extends model
         else
         {
             $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
-        }
-
-        /* if module == 'project' and method == 'view' and objectType in  'testtask, build', try to find special lang */
-        if($this->app->getModuleName() == 'project' && $this->app->getMethodName() == 'view')
-        {
-            if(($objectType == 'testtask' || $objectType == 'build') && isset($this->lang->action->desc->project->$actionType))
-                $desc = $this->lang->action->desc->project->$actionType;
         }
 
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));

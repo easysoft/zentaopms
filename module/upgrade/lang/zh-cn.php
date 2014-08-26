@@ -38,7 +38,7 @@ $lang->upgrade->toVersion     = '升级到';
 $lang->upgrade->confirm       = '确认要执行的SQL语句';
 $lang->upgrade->sureExecute   = '确认执行';
 $lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自动禁用：';
-$lang->upgrade->checkExtension = '正在检查插件的兼容性，请稍后 ...';
+$lang->upgrade->checkExtension = '正在检查插件的兼容性，请稍候 ...';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';

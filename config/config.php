@@ -36,9 +36,10 @@ $config->sessionVar  = 'sid';             // requestType=GET: the session var na
 /* Supported views. */
 $config->views  = ',html,json,mhtml,'; 
 
-/* Set the wide window size. */
-$config->wideSize = 1400;
-$config->timeout  = 30000;
+/* Set the wide window size and timeout(ms) and duplicate interval time(s). */
+$config->wideSize      = 1400;
+$config->timeout       = 30000;
+$config->duplicateTime = 60;
 
 /* Supported languages. */
 $config->langs['zh-cn'] = '简体';
@@ -62,7 +63,7 @@ $config->default->method = 'index';       // Default method.
 
 /* Upload settings. */
 $config->file = new stdclass();
-$config->file->dangers = 'php,jsp,py,rb,asp,'; // Dangerous files.
+$config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,asa,cer,cdx,aspl'; // Dangerous files.
 $config->file->maxSize = 1024 * 1024;          // Max size.
 
 /* Master database settings. */

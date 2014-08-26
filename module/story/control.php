@@ -51,8 +51,9 @@ class story extends control
             }
 
             $storyID = $storyResult['id'];
-            if($storyResult['status'] == 'existed')
+            if($storyResult['status'] == 'exists')
             {
+                $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
                 if($projectID == 0)
                 {
                     $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");

@@ -97,11 +97,6 @@ $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 
-$lang->action->desc->project = new stdclass();
-$lang->action->desc->project->started  = '$date, 由 <strong>$actor</strong> 启动测试任务 <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->closed   = '$date, 由 <strong>$actor</strong> 完成测试任务 <strong>$objectID</strong>。' . "\n";
-$lang->action->desc->project->opened   = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$objectID</strong>。' . "\n";
-
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->created             = '创建';
@@ -133,12 +128,12 @@ $lang->action->label->unlinkedfromplan    = '移除计划';
 $lang->action->label->marked              = '编辑了';
 $lang->action->label->linked2project      = '关联项目';
 $lang->action->label->unlinkedfromproject = '移除项目';
-$lang->action->label->started             = '开始';
-$lang->action->label->restarted           = '继续';
+$lang->action->label->started             = '开始了';
+$lang->action->label->restarted           = '继续了';
 $lang->action->label->recordestimate      = '记录了工时';
 $lang->action->label->editestimate        = '编辑了工时';
 $lang->action->label->canceled            = '取消了';
-$lang->action->label->finished            = '完成';
+$lang->action->label->finished            = '完成了';
 $lang->action->label->paused              = '暂停了';
 $lang->action->label->delayed             = '延期';
 $lang->action->label->suspended           = '挂起';

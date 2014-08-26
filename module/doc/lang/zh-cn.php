@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* 字段列表。*/
-$lang->doc->common         = '文档视图';
+$lang->doc->common         = '文档';
 $lang->doc->id             = '文档编号';
 $lang->doc->product        = '所属产品';
 $lang->doc->project        = '所属项目';
@@ -65,7 +65,7 @@ $lang->doc->types['url']  = '链接';
 $lang->doc->types['text'] = '网页';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
-$lang->doc->confirmDeleteLib   = " 您确定删除该文档库吗？";
+$lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
 $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";
 
 $lang->doc->placeholder = new stdclass();

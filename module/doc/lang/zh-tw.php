@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
-$lang->doc->common         = '文檔視圖';
+$lang->doc->common         = '文檔';
 $lang->doc->id             = '文檔編號';
 $lang->doc->product        = '所屬產品';
 $lang->doc->project        = '所屬項目';
@@ -65,7 +65,7 @@ $lang->doc->types['url']  = '連結';
 $lang->doc->types['text'] = '網頁';
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
-$lang->doc->confirmDeleteLib   = " 您確定刪除該文檔庫嗎？";
+$lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";
 $lang->doc->errorEditSystemDoc = "系統文檔庫無需修改。";
 
 $lang->doc->placeholder = new stdclass();

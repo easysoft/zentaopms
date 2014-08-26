@@ -235,9 +235,10 @@ class testcase extends control
             }
 
             $caseID = $caseResult['id'];
-            if($caseResult['status'] == 'existed')
+            if($caseResult['status'] == 'exists')
             {
-                $response['locate'] = $this->createLink('testcase', 'view', "caseID=$caseID");
+                $response['message'] = sprintf($this->lang->duplicate, $this->lang->testcase->common);
+                $response['locate']  = $this->createLink('testcase', 'view', "caseID=$caseID");
                 $this->send($response);
             }
 
