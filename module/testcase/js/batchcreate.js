@@ -19,7 +19,7 @@ $(document).ready(function()
                     }
                 }
             }
-            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + module + '&storyID='+ $(this).val() + '&onlyOption=true');
+            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + module + '&storyID='+ $(this).val() + '&onlyOption=true&status=noclosed');
             $('#story' + index).load(link, function(){$(this).trigger("chosen:updated");});
         }
         if($(select).val() == 'same')

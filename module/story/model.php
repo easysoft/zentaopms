@@ -872,7 +872,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi() 
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
@@ -894,7 +894,7 @@ class storyModel extends model
             ->where('1=1')
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
             ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
-            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($order)
             ->fetchAll();
@@ -1172,7 +1172,7 @@ class storyModel extends model
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('plan')->eq((int)$planID)
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
         
@@ -1195,7 +1195,7 @@ class storyModel extends model
     {
         return $this->dao->select('*')->from(TABLE_STORY)
             ->where('plan')->eq($planID)
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
     }
