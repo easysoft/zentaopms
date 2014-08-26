@@ -862,6 +862,7 @@ EOT;
         $jsConfig->router         = $app->server->PHP_SELF;
         $jsConfig->timeout        = $config->timeout;
 
+        $jsLang = new stdclass();
         $jsLang->submitting = $lang->submitting;
         $jsLang->save       = $lang->save;
         $jsLang->timeout    = $lang->timeout;
