@@ -37,7 +37,6 @@ pms:
 	find zentaopms -name tests |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
-	#wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
 	# change mode.
 	chmod 777 -R zentaopms/tmp/
 	chmod 777 -R zentaopms/www/data
