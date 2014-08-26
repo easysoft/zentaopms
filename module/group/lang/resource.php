@@ -376,7 +376,6 @@ $lang->resource->bug->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->bug->delete             = 'delete';
 $lang->resource->bug->saveTemplate       = 'saveTemplate';
 $lang->resource->bug->deleteTemplate     = 'deleteTemplate';
-$lang->resource->bug->customFields       = 'customFields';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -399,7 +398,6 @@ $lang->bug->methodOrder[85]  = 'confirmStoryChange';
 $lang->bug->methodOrder[90]  = 'delete';
 $lang->bug->methodOrder[95]  = 'saveTemplate';
 $lang->bug->methodOrder[100] = 'deleteTemplate';
-$lang->bug->methodOrder[105] = 'customFields';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -781,7 +779,6 @@ $lang->changelog['1.2'][]   = 'product-doc';
 $lang->changelog['1.2'][]   = 'project-doc';
 $lang->changelog['1.2'][]   = 'bug-saveTemplate';
 $lang->changelog['1.2'][]   = 'bug-deleteTemplate';
-$lang->changelog['1.2'][]   = 'bug-customFields';
 $lang->changelog['1.2'][]   = 'doc-index';
 $lang->changelog['1.2'][]   = 'doc-browse';
 $lang->changelog['1.2'][]   = 'doc-createLib';
