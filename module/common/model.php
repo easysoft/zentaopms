@@ -738,7 +738,7 @@ class commonModel extends model
     }
 
     /**
-     * Remove duplicate for story,task,bug,case,doc.
+     * Remove duplicate for story, task, bug, case, doc.
      * 
      * @param  string       $type  e.g. story task bug case doc.
      * @param  array|object $data 
@@ -750,7 +750,7 @@ class commonModel extends model
     {
         $table      = $this->config->objectTables[$type];
         $titleField = $type == 'task' ? 'name' : 'title';
-        $date       = date(DT_DATETIME1, time() - $this->config->duplicateTime * 60);
+        $date       = date(DT_DATETIME1, time() - $this->config->duplicateTime);
         $dateField  = $type == 'doc' ? 'addedDate' : 'openedDate';
         $titles     = $data->$titleField;
 

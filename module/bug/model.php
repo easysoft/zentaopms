@@ -141,11 +141,8 @@ class bugModel extends model
                 $bug->assignedDate = $now;
             }
 
-            if($latestBugs and in_array($bug->title, $latestBugs)) continue;
-
             $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();
-            $latestBugs[$bugID] = $bug->title;
 
             if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');

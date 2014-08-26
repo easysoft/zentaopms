@@ -155,8 +155,6 @@ class taskModel extends model
             if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
 
-            if($latestTasks and in_array($data[$i]->name, $latestTasks)) continue;
-
             $this->dao->insert(TABLE_TASK)->data($data[$i])
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
@@ -166,7 +164,6 @@ class taskModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $taskID = $this->dao->lastInsertID();
-            $latestTasks[$taskID] = $data[$i]->name;
             if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             

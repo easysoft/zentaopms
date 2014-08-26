@@ -134,8 +134,6 @@ class testcaseModel extends model
                     $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
                 }
 
-                if($latestCases and in_array($data[$i]->title, $latestCases)) continue;
-
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
                     ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
@@ -147,8 +145,7 @@ class testcaseModel extends model
                     die(js::reload('parent'));
                 }
 
-                $caseID = $this->dao->lastInsertID();
-                $latestCases[$caseID] = $data[$i]->title;
+                $caseID   = $this->dao->lastInsertID();
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
             }
             else

@@ -243,8 +243,6 @@ class storyModel extends model
                 $data[$i]->openedDate = $now;
                 $data[$i]->version    = 1;
 
-                if($latestStories and in_array($data[$i]->title, $latestStories)) continue;
-
                 $this->dao->insert(TABLE_STORY)
                     ->data($data[$i])
                     ->autoCheck()
@@ -257,7 +255,6 @@ class storyModel extends model
                 }
 
                 $storyID = $this->dao->lastInsertID();
-                $latestStories[$storyID] = $data[$i]->title;
                 $this->setStage($storyID);
 
                 $specData[$i] = new stdclass();

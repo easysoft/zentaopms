@@ -36,10 +36,10 @@ $config->sessionVar  = 'sid';             // requestType=GET: the session var na
 /* Supported views. */
 $config->views  = ',html,json,mhtml,'; 
 
-/* Set the wide window size and timeout(ms) and duplicate interval time(min). */
+/* Set the wide window size and timeout(ms) and duplicate interval time(s). */
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
-$config->duplicateTime = 1; // from 1 minute.
+$config->duplicateTime = 60;
 
 /* Supported languages. */
 $config->langs['zh-cn'] = '简体';
