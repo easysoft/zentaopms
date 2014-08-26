@@ -45,3 +45,6 @@ $lang->build->resolvedBugs  = '本次共解決Bug%s個';
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' 軟件原始碼庫，如Subversion、Git庫地址';
 $lang->build->placeholder->filePath = ' 該版本軟件包下載存儲地址';
+
+$lang->build->action = new stdclass();
+$lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$objectID</strong>。' . "\n";
