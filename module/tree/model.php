@@ -746,10 +746,11 @@ class treeModel extends model
         }
 
         /* else get modules of its type and story type. */
+        if(strpos('task|case|bug', $type) !== false) $type = "$type,story";
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
-            ->andWhere('type')->in("$type,story")
+            ->andWhere('type')->in($type)
             ->orderBy('type desc,`order`')
             ->fetchAll();
     }
