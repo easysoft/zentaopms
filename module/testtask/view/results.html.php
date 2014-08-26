@@ -29,26 +29,24 @@
       <table class='table table-condensed table-hover' style='border: 1px solid #ddd'>
         <?php $count = count($results);?>
         <caption class='text-left' style='border: 1px solid #ddd; border-bottom: none;'>
-        <?php if(isset($build)):?>
-        <div class='pull-right'><strong class='text-important'><?php echo $lang->testtask->build . $lang->colon . $build;?></strong></div>
-        <?php endif; ?>
-        <strong><?php echo $lang->testcase->result?> &nbsp;<span> <?php printf($lang->testtask->showResult, $count)?></span> <span class='result-tip'></span></strong>
+          <strong><?php echo $lang->testcase->result?> &nbsp;<span> <?php printf($lang->testtask->showResult, $count)?></span> <span class='result-tip'></span></strong>
         </caption>
         <?php $failCount = 0; ?>
         <?php foreach($results as $result):?>
         <?php
-            $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
-            if($class != 'success') $failCount++;
+        $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
+        if($class != 'success') $failCount++;
         ?>
         <tr class='result-item' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
-          <td class='text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
+          <td class='w-150px'><?php echo zget($builds, $result->build);?></td>
+          <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
         <tr class='result-detail hide'>
-          <td colspan='5' class='pd-0'>
+          <td colspan='6' class='pd-0'>
             <table class='table table-condensed borderless mg-0'>
               <thead>
                 <tr>

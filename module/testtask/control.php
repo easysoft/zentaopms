@@ -723,7 +723,7 @@ class testtask extends control
         $this->view->run      = $run;
         $this->view->preCase  = $preCase;
         $this->view->nextCase = $nextCase;
-        $this->view->results  = $this->testtask->getResults(0, $caseID);
+        $this->view->results  = $this->testtask->getResults($runID, $caseID);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed, noletter');
         $this->view->caseID   = $caseID;
         $this->view->version  = $version;
@@ -804,12 +804,12 @@ class testtask extends control
 
             $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
             $testtask   = $this->dao->select('build, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
-            $builds     = $this->loadModel('build')->getProductBuildPairs($testtask->product);
             $this->view->build = isset($builds[$testtask->build]) ? $builds[$testtask->build] : '';
         }
 
         $this->view->case    = $case;
         $this->view->results = $results;
+        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($case->product);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());

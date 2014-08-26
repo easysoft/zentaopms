@@ -448,23 +448,29 @@ class testtaskModel extends model
         if(!$results) return array();
 
         $relatedVersions = array();
+        $runIdList       = array();
         foreach($results as $result)
         {
-            $relatedVersions[] = $result->version;
-            $runCaseID         = $result->case;
+            $runIdList[$result->run] = $result->run;
+            $relatedVersions[]       = $result->version;
+            $runCaseID               = $result->case;
         }
         $relatedVersions = array_unique($relatedVersions);
 
-        $relatedSteps =  $this->dao->select('*')->from(TABLE_CASESTEP)
-            ->beginIF($caseID)->where('`case`')->eq($caseID)->fi()
-            ->beginIF($runID)->where('`case`')->eq($runCaseID)->fi()
+        $relatedSteps = $this->dao->select('*')->from(TABLE_CASESTEP)
+            ->where('`case`')->eq($runCaseID)
             ->andWhere('version')->in($relatedVersions)
             ->fetchAll();
+        $runs = $this->dao->select('t1.id,t2.build')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t1.id')->in($runIdList)
+            ->fetchPairs();
 
         foreach($results as $resultID => $result)
         {
             $result->stepResults = unserialize($result->stepResults);
-            $results[$resultID] = $result;
+            $result->build       = $result->run ? zget($runs, $result->run, 0) : 0;
+            $results[$resultID]  = $result;
 
             foreach($relatedSteps as $key => $step)
             {
