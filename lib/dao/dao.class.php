@@ -481,14 +481,8 @@ class dao
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        if(empty($sql))
-        {
-            $sql = $this->processSQL();
-        }
-        else
-        {
-            $this->sqlobj->setSQL($sql);
-        }
+        if($sql) $this->sqlobj->sql = $sql;
+        $sql = $this->processSQL();
 
         try
         {
@@ -558,7 +552,7 @@ class dao
     }
 
     /**
-    /* Execute the sql. It's different with query(), which return the stmt object. But this not.
+     * Execute the sql. It's different with query(), which return the stmt object. But this not.
      * 
      * @param  string $sql 
      * @access public
@@ -568,14 +562,8 @@ class dao
     {
         if(!empty(dao::$errors)) return new PDOStatement();   // If any error, return an empty statement object to make sure the remain method to execute.
 
-        if(empty($sql))
-        {
-            $sql = $this->processSQL();
-        }
-        else
-        {
-            $this->sqlobj->setSQL($sql);
-        }
+        if($sql) $this->sqlobj->sql = $sql;
+        $sql = $this->processSQL();
 
         try
         {
@@ -1059,9 +1047,9 @@ class sql
      * The sql string.
      * 
      * @var string
-     * @access private
+     * @access public
      */
-    private $sql = '';
+    public $sql = '';
 
     /**
      * The global $dbh.
@@ -1665,18 +1653,6 @@ class sql
     {
         $this->sql .= ' ' . DAO::HAVING . " $having";
         return $this;
-    }
-
-    /**
-     * Set SQL 
-     * 
-     * @param  string $sql 
-     * @access public
-     * @return object the sql object.
-     */
-    public function setSQL($sql = '')
-    {
-        $this->sql = $sql;
     }
 
     /**

@@ -40,7 +40,7 @@
     </ul>
  
     <div>
-    <?php echo html::a($this->createLink('project', 'index', "locate=no&status=undone&projectID=$projectID"), "<i class='icon-th-large'></i> " . $lang->project->allProject)?>
+    <?php echo html::a($this->createLink('project', 'index', "locate=no&status=undone&projectID=$projectID"), "<i class='icon-th-large mgr-5px'></i> " . $lang->project->allProject)?>
     <?php if($dones):?>
       <div class='pull-right actions'><a id='more' href='javascript:switchMore()'><?php echo $lang->project->doneProjects . ' <i class="icon-angle-right"></i>';?></a></div>
     <?php endif;?>
