@@ -77,8 +77,8 @@ $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
-$lang->testtask->showResult    = '共执行%s次';
-$lang->testtask->showFail      = '失败%s次';
+$lang->testtask->showResult    = '共执行<span class="text-info">%s</span>次';
+$lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
 $lang->testtask->confirmDelete     = '您确认要删除该测试任务吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
