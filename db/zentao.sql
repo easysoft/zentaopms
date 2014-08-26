@@ -453,7 +453,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `consumed` float unsigned NOT NULL,
   `left` float unsigned NOT NULL,
   `deadline` date NOT NULL,
-  `status` enum('wait','doing','done','cancel','closed') NOT NULL default 'wait',
+  `status` enum('wait','doing','done','pause','cancel','closed') NOT NULL default 'wait',
   `mailto` varchar(255) NOT NULL default '',
   `desc` text NOT NULL,
   `openedBy` varchar(30) NOT NULL,
