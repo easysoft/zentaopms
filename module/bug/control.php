@@ -953,30 +953,6 @@ class bug extends control
     }
 
     /**
-     * Custom fields.
-     * 
-     * @access public
-     * @return void
-     */
-    public function customFields()
-    {
-        if($_POST)
-        {
-            $customFields = $this->post->customFields;
-            $customFields = join(',', $customFields);
-            setcookie('bugFields', $customFields, $this->config->cookieLife, $this->config->webRoot);
-            die(js::reload('parent'));
-        }
-
-        $customFields = $this->cookie->bugFields ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
-
-        $this->view->allFields     = $this->bug->getFieldPairs($this->config->bug->list->allFields);
-        $this->view->customFields  = $this->bug->getFieldPairs($customFields);
-        $this->view->defaultFields = $this->bug->getFieldPairs($this->config->bug->list->defaultFields);
-        die($this->display());
-    }
-
-    /**
      * AJAX: get bugs of a user in html select.
      * 
      * @param  string $account 
