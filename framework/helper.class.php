@@ -200,7 +200,7 @@ class helper
         $modelLines .= "$replaceMark\n}";
         if(!@file_put_contents($mergedModelFile, $modelLines))
         {
-            die("ERROR: $mergedModelFile not writable, please make sur the " . dirname($mergedModelFile) . ' directory exists and writable');
+            die("ERROR: $mergedModelFile not writable, please make sure the " . dirname($mergedModelFile) . ' directory exists and writable');
         }
         if(!class_exists($extTmpModelClass))include $mergedModelFile;
 
