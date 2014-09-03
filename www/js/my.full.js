@@ -1038,7 +1038,6 @@ function setModal()
 
         $.extend({'closeModal':function(callback, location)
         {
-            $ajaxModal.modal('hide');
             $ajaxModal.on('hidden.bs.modal', function()
             {
                 if(location && (!$ajaxModal.data('cancel-reload')))
@@ -1048,6 +1047,7 @@ function setModal()
                 }
                 if(callback && $.isFunction(callback)) callback();
             });
+            $ajaxModal.modal('hide');
         }, 'cancelReloadCloseModal': function(){$ajaxModal.data('cancel-reload', true);}});
 
         /* rebind events */
