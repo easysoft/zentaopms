@@ -244,7 +244,7 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            $response['locate'] = $this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]");
+            $response['locate'] = $this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&args=$_POST[module]");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
