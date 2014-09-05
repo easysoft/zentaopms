@@ -1101,7 +1101,7 @@ function setModal()
  */
 function setModal4List(colorboxClass, replaceID, callback, width)
 {
-    if(typeof(width) == 'undefined') width = 900
+    if(typeof(width) == 'undefined') width = 900;
     $('.' + colorboxClass).modalTrigger(
     {
         width: width,
@@ -1117,13 +1117,12 @@ function setModal4List(colorboxClass, replaceID, callback, width)
             {
                 $.cancelReloadCloseModal();
 
-
                 var link = self.location.href;
                 $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
                 $('#tmpDiv').load(link + ' #' + replaceID, function()
                 {
                     $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                    setModal4List(colorboxClass, replaceID, callback, width);
+                    setTimeout(function(){setModal4List(colorboxClass, replaceID, callback, width);},150);
 
                     $('#' + replaceID + ' tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
                     $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
