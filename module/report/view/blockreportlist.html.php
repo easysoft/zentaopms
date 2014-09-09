@@ -6,9 +6,10 @@
         ksort($lang->reportList->$submenu->lists);
         foreach($lang->reportList->$submenu->lists as $list)
         {
-            list($label, $module, $method) = explode('|', $list);
+            $list .= '|';
+            list($label, $module, $method, $params) = explode('|', $list);
             $class = $label == $title ? ' active' : '';
-            echo html::a($this->createLink($module, $method), "<i class='icon-bar-chart'></i> " . $label, '', "class='list-group-item $class'");
+            echo html::a($this->createLink($module, $method, $params), "<i class='icon-bar-chart'></i> " . $label, '', "class='list-group-item $class'");
         }
     ?>
     </ul>
