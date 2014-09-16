@@ -232,6 +232,7 @@ class convert extends control
         helper::import('./converter/redmine.php');
         helper::import("./converter/redmine$version.php");
         $className = "redmine11ConvertModel";
+        $redmine = new stdclass();
         $redmine->aimTypes             = $this->post->aimTypes;
         $redmine->statusTypes['bug']   = $this->post->statusTypesOfBug;
         $redmine->statusTypes['story'] = $this->post->statusTypesOfStory;
