@@ -38,7 +38,7 @@ class redmine11ConvertModel extends redmineConvertModel
      * @access public
      * @return array
      */
-    public function execute()
+    public function execute($version)
     {
         $this->clear();
         $this->setTable();

@@ -1,6 +1,6 @@
 #tipsModal {margin-top: 10%;}
 #begin + .input-group-addon {border-left: none; border-right: none;}
-#begin,#end {max-width: 120px; width: auto}
+#begin,#end {max-width: 150px; width: auto}
 
 #copyProjectModal {padding: 0}
 #copyProjectModal {padding: 0 2px}

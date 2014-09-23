@@ -27,7 +27,7 @@
     <?php
     echo "<div class='btn-group'>";
     common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'button', 'link');
-    common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id", '', 'button', '', '', 'iframe');
+    common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id", '', 'button', '', '', 'iframe export');
     echo '</div>';
     echo "<div class='btn-group'>";
     common::printRPN($this->session->testtaskList, '');
