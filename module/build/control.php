@@ -140,10 +140,10 @@ class build extends control
         $build = $this->build->getById((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
-        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->andWhere('deleted')->eq(0)->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
