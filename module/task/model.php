@@ -853,7 +853,7 @@ class taskModel extends model
             ->leftjoin(TABLE_STORY)->alias('t3')
             ->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere("t1.$type")->eq($account)
+            ->beginIF($type != 'all')->andWhere("t1.$type")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
