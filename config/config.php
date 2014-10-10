@@ -66,6 +66,9 @@ $config->file = new stdclass();
 $config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,asa,cer,cdx,aspl'; // Dangerous files.
 $config->file->maxSize = 1024 * 1024;          // Max size.
 
+/* View type settings. */ 
+$config->viewPrefix['mhtml'] = 'm';
+
 /* Master database settings. */
 $config->db = new stdclass();
 $config->db->persistant     = false;     // Pconnect or not.
