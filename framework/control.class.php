@@ -269,7 +269,7 @@ class control
     public function setViewPrefix()
     {
         $this->viewPrefix = '';
-        if($this->viewType == 'mhtml') $this->viewPrefix = 'm.';
+        if(isset($this->config->viewPrefix[$this->viewType])) $this->viewPrefix = $this->config->viewPrefix[$this->viewType] . '.';
     }
 
     //-------------------- View related methods --------------------//
@@ -292,7 +292,7 @@ class control
 
         /* Set infix for view file in mobile or pc. */
         $viewType = $this->viewType;
-        if($this->viewType == 'mhtml') $viewType = 'html';
+        if(isset($this->config->viewPrefix[$this->viewType])) $viewType = 'html';
 
         /* The main view file, extension view file and hook file. */
         $mainViewFile = $modulePath . 'view' . $this->pathFix . $this->viewPrefix . $methodName . '.' . $viewType . '.php';
