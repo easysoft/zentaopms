@@ -23,11 +23,11 @@
   <table class='table table-fixed table-form'>
   <thead>
     <tr>
-      <th class='w-30px'> <?php echo $lang->idAB;?></th> 
+      <th class='w-50px'> <?php echo $lang->idAB;?></th> 
       <th>                <?php echo $lang->story->title;?></th>
       <th class='w-80px'> <?php echo $lang->story->status;?></th>
       <th class='w-120px'><?php echo $lang->story->closedReason;?></th>
-      <th class='w-p30 '> <?php echo $lang->story->comment;?></th>
+      <th class='w-p40 '> <?php echo $lang->story->comment;?></th>
     </tr>
   </thead>
     <?php foreach($storyIDList as $storyID):?>

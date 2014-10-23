@@ -1505,6 +1505,23 @@ class project extends control
     }
 
     /**
+     * batch unlink story.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkStory($projectID)
+    {
+        foreach($this->post->storyIDList as $storyID)
+        {
+            $this->project->unlinkStory($projectID, $storyID);
+        }
+        echo js::locate($this->createLink('project', 'story', "projectID=$projectID"));
+        exit;
+    }
+
+    /**
      * Project dynamic.
      * 
      * @param  string $type 

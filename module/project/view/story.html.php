@@ -47,9 +47,9 @@
     </thead>
     <tbody>
       <?php
-      $totalEstimate = 0;
-      $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-      $canBatchClose = common::hasPriv('story', 'batchClose');
+      $totalEstimate  = 0;
+      $canBatchEdit   = common::hasPriv('story', 'batchEdit');
+      $canBatchClose  = common::hasPriv('story', 'batchClose');
       ?>
       <?php foreach($stories as $key => $story):?>
       <?php
@@ -114,12 +114,21 @@
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");
                   echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
               }
+              echo "<button id='moreAction' type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+              echo "<ul class='dropdown-menu' id='moreActionMenu'>";
               if($canBatchClose)
               {
                   $actionLink = $this->createLink('story', 'batchClose', "productID=0&projectID=$project->id");
-                  echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
+                  $misc       = "onclick=\"setFormAction('$actionLink')\"";
+                  echo '<li>' . html::a('#', $lang->close, '', $misc) . '</li>';
               }
-              echo '</div>';
+              if(common::hasPriv('story', 'batchUnlinkStory'))
+              {
+                  $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
+                  $misc       = "onclick=\"setFormAction('$actionLink')\"";
+                  echo '<li>' . html::a('#', $lang->project->unlinkStory, '', $misc) . '</li>';
+              }
+              echo '</ul></div>';
           }
           echo "<div class='text'>" . $summary . '</div>';
           ?>
