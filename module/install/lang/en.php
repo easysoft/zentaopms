@@ -25,7 +25,8 @@ $lang->install->desc             = <<<EOT
 ZenTaoPMS is an opensource project management software licensed under LGPL. It has product manage, project mange, testing mange features, also with organization manage and affair manage.
 
 ZenTaoPMS is developped by PHH and mysql under the zentaophp framework developped by the same team. Through the framework, ZenTaoPMS can be customed and extended very easily.
-
+EOT;
+$lang->install->links = <<<EOT
 ZenTaoPMS is developped by <strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a></strong>。
 The official website of ZenTaoPMS is <a href='http://en.zentao.net' target='_blank'>http://en.zentao.net</a>
 twitter:zentaopms
@@ -97,7 +98,7 @@ $lang->install->setConfig  = 'Create config file';
 $lang->install->key        = 'Item';
 $lang->install->value      = 'Value';
 $lang->install->saveConfig = 'Save config';
-$lang->install->save2File  = '<div class="a-center"><span class="fail">Try to save the config auto, but failed.</span></div>Copy the text of the textareaand save to "<strong> %s </strong>".';
+$lang->install->save2File  = '<div class="alert alert-warning">Copy the text of the textareaand save to "<strong> %s </strong>".</div>';
 $lang->install->saved2File = 'The config file has saved to "<strong>%s</strong> ".';
 $lang->install->errorNotSaveConfig = "Hasn't save the config file. ";
 
