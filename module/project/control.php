@@ -207,6 +207,14 @@ class project extends control
         $this->config->project->search['params']['module']['values']  = $this->tree->getTaskOptionMenu($projectID, $startModuleID = 0);
         $this->search->setSearchParams($this->config->project->search);
 
+        /* team member paors. */
+        $memberPairs = array();
+        $memberPairs[] = ""; 
+        foreach($this->view->teamMembers as $key => $member)
+        {
+            $memberPairs[$key] = $member->realname;
+        }
+
         /* Assign. */
         $this->view->tasks       = $tasks;
         $this->view->summary     = $this->project->summary($tasks);
@@ -225,6 +233,7 @@ class project extends control
         $this->view->moduleID    = $moduleID;
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
         $this->view->projectTree = $this->project->tree();
+        $this->view->memberPairs = $memberPairs;
 
         $this->display();
     }
@@ -1513,12 +1522,14 @@ class project extends control
      */
     public function batchUnlinkStory($projectID)
     {
-        foreach($this->post->storyIDList as $storyID)
+        if(isset($_POST['storyIDList']))
         {
-            $this->project->unlinkStory($projectID, $storyID);
+            foreach($this->post->storyIDList as $storyID)
+            {
+                $this->project->unlinkStory($projectID, $storyID);
+            }
         }
-        echo js::locate($this->createLink('project', 'story', "projectID=$projectID"));
-        exit;
+        die(js::locate($this->createLink('project', 'story', "projectID=$projectID")));
     }
 
     /**

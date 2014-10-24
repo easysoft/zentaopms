@@ -395,6 +395,32 @@ class task extends control
     }
 
     /**
+     * Batch update assign of task. 
+     * 
+     * @param  int    $project 
+     * @access public
+     * @return void
+     */
+    public function batchAssignTo($project)
+    {
+        if(!empty($_POST))
+        {
+            $taskIDList = $this->post->taskIDList;
+            unset($_POST['taskIDList']);
+            foreach($taskIDList as $taskID)
+            {
+                $this->loadModel('action');
+                $changes = $this->task->assign($taskID);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
+        }
+    }
+
+    /**
      * View a task.
      * 
      * @param  int    $taskID 

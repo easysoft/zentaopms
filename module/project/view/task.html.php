@@ -140,8 +140,9 @@
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 
-            $canBatchEdit  = common::hasPriv('task', 'batchEdit');
-            $canBatchClose = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
+            $canBatchEdit     = common::hasPriv('task', 'batchEdit');
+            $canBatchClose    = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
+            $canBatchAssignTo = common::hasPriv('task', 'batchAssignTo');
             if(count($tasks))
             {
                 echo "<div class='btn-group'>" . html::selectButton() . '</div>';
@@ -157,6 +158,16 @@
                 $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
                 echo "</ul></div>";
+
+                if($canBatchAssignTo)
+                {
+                    $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
+                    echo "<div class='input-group w-150px'>";
+                    echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
+                    echo "<span class='input-group-addon'>";
+                    echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->task->assign);
+                    echo '</span></div>';
+                }
             }
             echo "<div class='text'>" . $summary . "</div>";
             ?>
