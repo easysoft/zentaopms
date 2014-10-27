@@ -1026,7 +1026,8 @@ class treeModel extends model
     public function fixModulePath($root, $type)
     {
         /* Get all modules grouped by parent. */
-        $groupModules = $this->dao->select('id, parent')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->fetchGroup('parent', 'id');
+        if($type == 'bug' or $type == 'case') $type = 'story,' . $type;
+        $groupModules = $this->dao->select('id, parent')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->in($type)->fetchGroup('parent', 'id');
         $modules = array();
 
         /* Cycle the groupModules until it has no item any more. */

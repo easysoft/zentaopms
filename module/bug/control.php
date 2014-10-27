@@ -659,6 +659,32 @@ class bug extends control
     }
 
     /**
+     * Batch update assign of bug. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function batchAssignTo($projectID)
+    {
+        if(!empty($_POST) && isset($_POST['bugIDList']))
+        {
+            $bugIDList = $this->post->bugIDList;
+            unset($_POST['bugIDList']);
+            foreach($bugIDList as $bugID)
+            {
+                $this->loadModel('action');
+                $changes = $this->bug->assign($bugID);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($bugID, $actionID);
+            }
+        }
+        die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
+    }
+
+    /**
      * confirm a bug.
      * 
      * @param  int    $bugID 

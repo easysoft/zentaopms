@@ -207,6 +207,14 @@ class project extends control
         $this->config->project->search['params']['module']['values']  = $this->tree->getTaskOptionMenu($projectID, $startModuleID = 0);
         $this->search->setSearchParams($this->config->project->search);
 
+        /* team member pairs. */
+        $memberPairs = array();
+        $memberPairs[] = ""; 
+        foreach($this->view->teamMembers as $key => $member)
+        {
+            $memberPairs[$key] = $member->realname;
+        }
+
         /* Assign. */
         $this->view->tasks       = $tasks;
         $this->view->summary     = $this->project->summary($tasks);
@@ -225,6 +233,7 @@ class project extends control
         $this->view->moduleID    = $moduleID;
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
         $this->view->projectTree = $this->project->tree();
+        $this->view->memberPairs = $memberPairs;
 
         $this->display();
     }
@@ -595,17 +604,25 @@ class project extends control
         $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager, $build);
         $users = $this->user->getPairs('noletter');
 
+        /* team member pairs. */
+        $memberPairs = array();
+        foreach($this->view->teamMembers as $key => $member)
+        {
+            $memberPairs[$key] = $member->realname;
+        }
+
         /* Assign. */
-        $this->view->title     = $title;
-        $this->view->position  = $position;
-        $this->view->bugs      = $bugs;
-        $this->view->tabID     = 'bug';
-        $this->view->build     = $this->loadModel('build')->getById($build);
-        $this->view->buildID   = $this->view->build ? $this->view->build->id : 0;
-        $this->view->pager     = $pager;
-        $this->view->orderBy   = $orderBy;
-        $this->view->users     = $users;
-        $this->view->productID = $productID;
+        $this->view->title       = $title;
+        $this->view->position    = $position;
+        $this->view->bugs        = $bugs;
+        $this->view->tabID       = 'bug';
+        $this->view->build       = $this->loadModel('build')->getById($build);
+        $this->view->buildID     = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
+        $this->view->users       = $users;
+        $this->view->productID   = $productID;
+        $this->view->memberPairs = $memberPairs;
 
         $this->display();
     }
@@ -1502,6 +1519,25 @@ class project extends control
             echo js::locate($this->app->session->storyList, 'parent');
             exit;
         }
+    }
+
+    /**
+     * batch unlink story.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkStory($projectID)
+    {
+        if(isset($_POST['storyIDList']))
+        {
+            foreach($this->post->storyIDList as $storyID)
+            {
+                $this->project->unlinkStory($projectID, $storyID);
+            }
+        }
+        die(js::locate($this->createLink('project', 'story', "projectID=$projectID")));
     }
 
     /**
