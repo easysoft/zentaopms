@@ -622,6 +622,7 @@ class upgradeModel extends model
     public function execSQL($sqlFile)
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+        $ignoreCode   = '|1050|1060|1062|1091|1169|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls = explode("\n", file_get_contents($sqlFile));
@@ -652,7 +653,9 @@ class upgradeModel extends model
             }
             catch (PDOException $e) 
             {
-                self::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
+                $errorInfo = $e->errorInfo;
+                $errorCode = $errorInfo[1];
+                if(strpos($ignoreCode, "|$errorCode|") === false) self::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
             }
         }
     }

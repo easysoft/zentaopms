@@ -115,6 +115,14 @@ class dao
     public $method;
 
     /**
+     * The sql code of need repair table.
+     * 
+     * @var string
+     * @access public
+     */
+    public $repairCode = '|1034|1035|1194|1195|1459|';
+
+    /**
      * The queries executed. Every query will be saved in this array.
      * 
      * @var array
@@ -269,7 +277,7 @@ class dao
         }
         catch (PDOException $e) 
         {
-            $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+            $this->sqlError($e);
         }
 
         $sql  = 'SELECT FOUND_ROWS() as recTotal;';
@@ -500,7 +508,7 @@ class dao
         }
         catch (PDOException $e) 
         {
-            $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+            $this->sqlError($e);
         }
     }
 
@@ -541,7 +549,7 @@ class dao
             }
             catch (PDOException $e) 
             {
-                $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+                $this->sqlError($e);
             }
 
             $pager->setRecTotal($row->recTotal);
@@ -572,7 +580,7 @@ class dao
         }
         catch (PDOException $e) 
         {
-            $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+            $this->sqlError($e);
         }
     }
 
@@ -768,7 +776,7 @@ class dao
             }
             catch (PDOException $e) 
             {
-                $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+                $this->sqlError($e);
             }
         }
         else
@@ -981,7 +989,7 @@ class dao
         }
         catch (PDOException $e) 
         {
-            $this->app->triggerError($e->getMessage() . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+            $this->sqlError($e);
         }
 
         foreach($rawFields as $rawField)
@@ -1027,6 +1035,28 @@ class dao
             $fields[$rawField->field] = $field;
         }
         return $fields;
+    }
+
+    /**
+     * Process SQL error by code.
+     * 
+     * @param  object    $exception 
+     * @access public
+     * @return void
+     */
+    public function sqlError($exception)
+    {
+        $errorInfo = $exception->errorInfo;
+        $errorCode = $errorInfo[1];
+        $errorMsg  = $errorInfo[2];
+        $message   = $exception->getMessage();
+        if(strpos($this->repairCode, "|$errorCode|") !== false or
+            ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false))
+        {
+            $message .=  ' ' . $this->lang->repairTable;
+        }
+        $sql = $this->sqlobj->get();
+        $this->app->triggerError($message . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
     }
 }
 
