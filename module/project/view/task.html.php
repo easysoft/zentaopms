@@ -39,32 +39,32 @@
 </div>
 <div class='main'>
   <form method='post' id='projectTaskForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList'>
+    <table class='table datatable' id='taskList'>
       <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
       <thead>
         <tr>
-          <th class='w-id'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='w-p30'>   <?php common::printOrderLink('name',         $orderBy, $vars, $lang->task->name);?></th>
-          <th class='w-status'><?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-70px'>  <?php common::printOrderLink('deadline',     $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th data-width='80px'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+          <th data-width='80px'>   <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+          <th data-width='auto'>   <?php common::printOrderLink('name',         $orderBy, $vars, $lang->task->name);?></th>
+          <th data-width='80px' data-flex='true'><?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('deadline',     $orderBy, $vars, $lang->task->deadlineAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-          <th class='w-id'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->task->openedDateAB);?></th>
+          <th data-width='80px' data-flex='true'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->task->openedDateAB);?></th>
           <?php endif;?>
 
-          <th class='w-user'>  <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->task->assignedToAB);?></th>
-          <th class='w-user'>  <?php common::printOrderLink('finishedBy',   $orderBy, $vars, $lang->task->finishedByAB);?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->task->assignedToAB);?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('finishedBy',   $orderBy, $vars, $lang->task->finishedByAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-          <th class='w-50px'>  <?php common::printOrderLink('finishedDate', $orderBy, $vars, $lang->task->finishedDateAB);?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('finishedDate', $orderBy, $vars, $lang->task->finishedDateAB);?></th>
           <?php endif;?>
 
-          <th class='w-35px'>  <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->task->estimateAB);?></th>
-          <th class='w-50px'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='w-40px nobr'>  <?php common::printOrderLink('left',         $orderBy, $vars, $lang->task->leftAB);?></th>
-          <?php if($project->type == 'sprint') print '<th>' and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
-          <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th data-width='80px' data-flex='true'>  <?php common::printOrderLink('left',         $orderBy, $vars, $lang->task->leftAB);?></th>
+          <?php if($project->type == 'sprint') print '<th data-width=\'80px\' data-flex=\'true\'>' and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
+          <th data-width='150px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
