@@ -411,7 +411,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #footer #poweredby {float: right; margin-right: 20px;}
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
-.icon-zentao, a .icon-zentao {background: url(images/main/icon.png) center no-repeat; display: inline-block; width: 14px; height: 14px; position: relative; top: 2px}
+.icon-zentao, a .icon-zentao {background: url(images/main/icon.png) center no-repeat; display: inline-block; width: 16px; height: 16px; position: relative; top: 2px}
 
 /* Feature bar. */
 #featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px; min-height: 30px\0;}
