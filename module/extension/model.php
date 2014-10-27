@@ -480,9 +480,9 @@ class extensionModel extends model
         }
 
         if($return->errors) $return->result = 'fail';
-        $return->mkdirCommands = '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $return->mkdirCommands) . '</code>';
+        $return->mkdirCommands = empty($return->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $return->mkdirCommands) . '</code>';
         $return->errors .= $this->lang->extension->executeCommands . $return->mkdirCommands;
-        if(PHP_OS == 'Linux') $return->errors .= '<code>' . $return->chmodCommands . '</code>';
+        if(PHP_OS == 'Linux') $return->errors .= empty($return->chmodCommands) ? '' : '<code>' . $return->chmodCommands . '</code>';
         return $return;
     }
 

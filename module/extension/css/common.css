@@ -1,3 +1,4 @@
 .alert-link:hover {text-decoration: underline;}
 .alert {width: 100%; display: table;}
 code{padding-left:0px;}
+.alert.with-icon .icon-ok-sign, .alert.with-icon .icon-info-sign{padding-top:18px;vertical-align:top;}
