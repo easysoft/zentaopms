@@ -105,6 +105,7 @@ hr.small {margin: 10px 0}
 .table-datatable tbody > tr td,
 .table-datatable thead > tr th {max-height: 34px; line-height: 21px;}
 .table-datatable tbody > tr td .btn-icon > i {line-height: 19px;}
+.table-datatable .checkbox-row {display: none}
 
 /* Datepicker */
 .datepicker-wrapper {position: relative; cursor: pointer;}
