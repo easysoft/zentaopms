@@ -371,7 +371,7 @@ EOT;
      * @param  string $scope  the scope of select reverse.
      * @return string
      */
-    static public function selectButton($scope = "")
+     static public function selectButton($scope = "")
     {
                 $string = <<<EOT
 <script>
@@ -388,8 +388,8 @@ function selectReverse(scope)
 </script>
 EOT;
         global $lang;
-        $string .= "<a id='allchecker' class='btn btn-select-all' href='javascript:selectAll(\"$scope\")' >{$lang->selectAll}</a>";
-        $string .= "<a id='reversechecker' class='btn btn-select-reverse' href='javascript:selectReverse(\"$scope\")'>{$lang->selectReverse}</a>";
+        $string .= "<a id='allchecker' class='btn btn-select-all check-all' href='javascript:selectAll(\"$scope\")' >{$lang->selectAll}</a>";
+        $string .= "<a id='reversechecker' class='btn btn-select-reverse check-inverse' href='javascript:selectReverse(\"$scope\")'>{$lang->selectReverse}</a>";
         return  $string;
     }
 

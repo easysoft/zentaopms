@@ -36,7 +36,8 @@ $(document).ready(function()
                 }
                 $box.prop('checked', check);
             });
-        }
+        },
+        footer: 'test'
     });
 });
 </script>
