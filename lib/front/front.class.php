@@ -376,14 +376,18 @@ EOT;
                 $string = <<<EOT
 <script>
 function selectAll(scope)
-{ 
-    if(scope) $('#' + scope + ' input').each(function() { $(this).attr("checked", true);});
-    else $('input:checkbox').each(function() { $(this).attr("checked", true);});
+{
+    var $this = $(this);
+    if($this.closest('.datatable').length) return;
+    if(scope) $('#' + scope + ' input').each(function() { $this.attr("checked", true);});
+    else $('input:checkbox').each(function() { $this.attr("checked", true);});
 }
 function selectReverse(scope)
-{ 
-    if(scope) $('#' + scope + ' input').each(function() { $(this).attr("checked", !$(this).attr("checked"));});
-    else $('input:checkbox').each(function(){ $(this).attr("checked", !$(this).attr("checked"));});
+{
+    var $this = $(this);
+    if($this.closest('.datatable').length) return;
+    if(scope) $('#' + scope + ' input').each(function() { $this.attr("checked", !$this.attr("checked"));});
+    else $('input:checkbox').each(function(){ $this.attr("checked", !$(this).attr("checked"));});
 }
 </script>
 EOT;

@@ -10,10 +10,13 @@ if($config->debug)
 .table-datatable tbody > tr td,
 .table-datatable thead > tr th {max-height: 34px; line-height: 21px;}
 .table-datatable tbody > tr td .btn-icon > i {line-height: 19px;}
+.hide-side .table-datatable thead > tr > th.check-btn i {visibility: hidden;}
+.hide-side .side-handle {line-height: 33px}
 .table-datatable .checkbox-row {display: none}
 .outer .datatable {border: 1px solid #ddd;}
 .outer .datatable .table, .outer .datatable .table tfoot td {border: none;}
 .datatable .table>tbody>tr>td.col-hover, .datatable .table>tbody>tr.hover>td {background-color: #ebf2f9 !important;}
+.datatable-span.flexarea .scroll-slide {bottom: -30px}
 </style>
 <script> 
 $(document).ready(function()
@@ -41,5 +44,6 @@ $(document).ready(function()
         },
         footer: 'test'
     });
+    $datatables.find('.checkbox-row').remove();
 });
 </script>
