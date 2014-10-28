@@ -10,7 +10,7 @@ $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
 $lang->custom->object['bug']      = 'Bug';
 $lang->custom->object['testcase'] = 'Test case';
-$lang->custom->object['testtask'] = 'Test task';
+$lang->custom->object['testtask'] = 'Build';
 $lang->custom->object['todo']     = 'Todo';
 $lang->custom->object['user']     = 'User';
 
