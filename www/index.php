@@ -44,7 +44,7 @@ if(!$mobile->isTablet() and $mobile->isMobile())
 $common = $app->loadCommon();
 
 /* Check the reqeust is getconfig or not. */
-if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die($app->exportConfig());  // 
+if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8Bom($app->exportConfig()));
 
 /* Check for need upgrade. */
 $config->installedVersion = $common->loadModel('setting')->getVersion();
