@@ -1425,6 +1425,12 @@ class router
         $view->methodVar   = $this->config->methodVar;
         $view->viewVar     = $this->config->viewVar;
         $view->sessionVar  = $this->config->sessionVar;
+
+        $this->session->set('rand', mt_rand(0, 10000));
+        $view->sessionName = session_name();
+        $view->sessionID   = session_id();
+        $view->rand        = $this->session->rand;
+        $view->expiredTime = ini_get('session.gc_maxlifetime');
         echo json_encode($view);
     }
     
