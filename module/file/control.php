@@ -48,6 +48,7 @@ class file extends control
         $file = $file[0];
         if($file)
         {
+            if($file['size'] == 0) die(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
             {
                 $url =  $this->file->webPath . $file['pathname'];

@@ -23,3 +23,5 @@ $lang->file->maxUploadSize = "<span class='red'>%s</span>";
 $lang->file->errorNotExists   = "<span class='red'>The directory '%s' is no exist</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>The directory '%s' is unwritable, please change it's permission. Command in linux:sudo -R chmod 777 '%s'</span>";
 $lang->file->confirmDelete    = " Are you sure to delete this file?";
+$lang->file->errorFileSize    = " The file size exceeds the limit, might not be able to upload!";
+$lang->file->errorFileUpload  = " Failed to upload files, file size may exceed the limit!";
