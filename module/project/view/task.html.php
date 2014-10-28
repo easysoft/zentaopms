@@ -73,7 +73,7 @@
       <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
       <tr class='text-center' data-id='<?php echo $task->id?>'>
         <td>
-          <input class='checkbox-row' type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
+          <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
           <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>

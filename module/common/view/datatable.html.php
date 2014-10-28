@@ -18,7 +18,9 @@ if($config->debug)
 <script> 
 $(document).ready(function()
 {
-    $('table.datatable').datatable(
+    var $datatables = $('table.datatable');
+    $datatables.find('tbody input:checkbox').addClass('checkbox-row');
+    $datatables.datatable(
     {
         customizable  : false, 
         sortable      : false,
