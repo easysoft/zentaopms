@@ -101,11 +101,6 @@ hr.small {margin: 10px 0}
 .table caption {padding: 8px 20px; border: 1px solid #DDD; border-bottom: 0; background: #fafafa;}
 .table.table-condensed caption {padding: 6px 15px;}
 
-/* Datatable */
-.table-datatable tbody > tr td,
-.table-datatable thead > tr th {max-height: 34px; line-height: 21px;}
-.table-datatable tbody > tr td .btn-icon > i {line-height: 19px;}
-
 /* Datepicker */
 .datepicker-wrapper {position: relative; cursor: pointer;}
 .datepicker-wrapper:before {font-family: ZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px;}
