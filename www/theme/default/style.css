@@ -82,9 +82,6 @@ hr.small {margin: 10px 0}
 
 /* Table */
 .table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 1px; position: relative; top: 2px}
-.table-fixed {table-layout: fixed;}
-.table-fixed th, .table-fixed td  {overflow:hidden; white-space:nowrap;}
-.table-fixed tfoot > tr > th, .table-fixed tfoot > tr > td, .table-fixed .nofixed{overflow: visible;}
 .table-borderless {border: none!important}
 
 /* Tables sorters */
@@ -103,6 +100,11 @@ hr.small {margin: 10px 0}
 
 .table caption {padding: 8px 20px; border: 1px solid #DDD; border-bottom: 0; background: #fafafa;}
 .table.table-condensed caption {padding: 6px 15px;}
+
+/* Datatable */
+.table-datatable tbody > tr td,
+.table-datatable thead > tr th {max-height: 34px; line-height: 21px;}
+.table-datatable tbody > tr td .btn-icon > i {line-height: 19px;}
 
 /* Datepicker */
 .datepicker-wrapper {position: relative; cursor: pointer;}
@@ -502,6 +504,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table tfoot .datepicker-wrapper:before {top: 5px}
 .outer .table tfoot .form-control.form-date {width: 110px}
 .outer .table tfoot .input-wrapper {display:  inline-block;}
+.outer .table tfoot .chosen-single {padding: 4px 6px; height: 30px; }
+.outer .table tfoot .chosen-container-single .chosen-single abbr {top: 4px;}
 .table-actions {float: left;}
 .table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group, .table-actions > .text {float: left; margin-right: 10px;}
 .table-actions > .text {line-height: 30px; color: #808080}

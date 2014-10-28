@@ -10,7 +10,7 @@ $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';
 $lang->custom->object['bug']      = 'Bug';
 $lang->custom->object['testcase'] = '测试用例';
-$lang->custom->object['testtask'] = '测试任务';
+$lang->custom->object['testtask'] = '版本';
 $lang->custom->object['todo']     = '待办';
 $lang->custom->object['user']     = '用户';
 

@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
+<?php include '../../common/view/datatable.html.php';?>
 <?php include './taskheader.html.php';?>
 <?php js::set('moduleID', $moduleID);?>
 <?php js::set('productID', $productID);?>
@@ -39,7 +40,7 @@
 </div>
 <div class='main'>
   <form method='post' id='projectTaskForm'>
-    <table class='table datatable' id='taskList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='taskList'>
       <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
       <thead>
         <tr>
@@ -72,7 +73,7 @@
       <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
       <tr class='text-center'>
         <td>
-          <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
+          <!-- <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/>  -->
           <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
@@ -164,8 +165,8 @@
                     $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
                     echo "<div class='input-group w-150px'>";
                     echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
-                    echo "<span class='input-group-addon'>";
-                    echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->task->assign);
+                    echo "<span class='input-group-btn'>";
+                    echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->task->assign, '', "class='btn'");
                     echo '</span></div>';
                 }
             }
