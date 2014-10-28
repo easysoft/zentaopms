@@ -808,6 +808,9 @@ class project extends control
      */
     public function doc($projectID)
     {
+        /* use first project if projectID does not exist. */
+        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
+
         $this->project->setMenu($this->projects, $projectID);
         $this->session->set('docList', $this->app->getURI(true));
 
@@ -1250,6 +1253,9 @@ class project extends control
      */
     public function manageProducts($projectID)
     {
+        /* use first project if projectID does not exist. */
+        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
+
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
@@ -1565,6 +1571,9 @@ class project extends control
         $this->session->set('bugList',         $uri);
         $this->session->set('caseList',        $uri);
         $this->session->set('testtaskList',    $uri);
+
+        /* use first project if projectID does not exist. */
+        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
 
         /* Set the menu. If the projectID = 0, use the indexMenu instead. */
         $this->project->setMenu($this->projects, $projectID);
