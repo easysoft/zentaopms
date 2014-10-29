@@ -588,9 +588,22 @@ class user extends control
         $loginLink = $this->createLink('user', 'login');
         $denyLink  = $this->createLink('user', 'deny');
 
+        /* Reload lang by lang of get when viewType is json. */
+        if($this->app->getViewType() == 'json' and $this->get->lang)
+        {
+            $this->app->setClientLang($this->get->lang);
+            $this->app->loadLang('user');
+        }
+
         /* If user is logon, back to the rerferer. */
         if($this->user->isLogon())
         {
+            if($this->app->getViewType() == 'json')
+            {
+                $data = $this->user->getDataInJSON($this->app->user);
+                die(json_encode(array('status' => 'success') + $data));
+            }
+
             if(strpos($this->referer, $loginLink) === false and 
                strpos($this->referer, $denyLink)  === false 
             )
@@ -613,7 +626,12 @@ class user extends control
             if($this->post->password) $password = $this->post->password;
             if($this->get->password)  $password = $this->get->password;
 
-            if($this->user->checkLocked($account)) die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes)));
+            if($this->user->checkLocked($account))
+            {
+                $failReason = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
+                if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed', 'reason' => $failReason)));
+                die(js::error($failReason));
+            }
             
             $user = $this->user->identify($account, $password);
 
@@ -636,7 +654,11 @@ class user extends control
                    strpos($this->post->referer, $denyLink)  === false 
                 )
                 {
-                    if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
+                    if($this->app->getViewType() == 'json')
+                    {
+                        $data = $this->user->getDataInJSON($user);
+                        die(json_encode(array('status' => 'success') + $data));
+                    }
 
                     /* Get the module and method of the referer. */
                     if($this->config->requestType == 'PATH_INFO')
@@ -666,14 +688,18 @@ class user extends control
                 }
                 else
                 {
-                    if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
+                    if($this->app->getViewType() == 'json')
+                    {
+                        $data = $this->user->getDataInJSON($user);
+                        die(json_encode(array('status' => 'success') + $data));
+                    }
                     die(js::locate($this->createLink($this->config->default->module), 'parent'));
                 }
             }
             else
             {
-                if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed')));
-                $fails       = $this->user->failPlus($account);
+                $fails = $this->user->failPlus($account);
+                if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed)));
                 $remainTimes = $this->config->user->failTimes - $fails;
                 if($remainTimes <= 0)
                 {
@@ -739,6 +765,8 @@ class user extends control
         session_destroy();
         setcookie('za', false);
         setcookie('zp', false);
+
+        if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';
         $this->locate($this->createLink('user', 'login', $vars));
     }

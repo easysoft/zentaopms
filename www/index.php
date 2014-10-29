@@ -29,8 +29,7 @@ $startTime = getTime();
 /* Instance the app. */
 $app = router::createApp('pms', dirname(dirname(__FILE__)));
 
-/* Check the reqeust is getconfig or not. Check installed or not. */
-if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die($app->exportConfig());  // 
+/* installed or not. */
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
 /* Detect mobile. */
@@ -43,6 +42,9 @@ if(!$mobile->isTablet() and $mobile->isMobile())
 
 /* Run the app. */
 $common = $app->loadCommon();
+
+/* Check the reqeust is getconfig or not. */
+if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8Bom($app->exportConfig()));
 
 /* Check for need upgrade. */
 $config->installedVersion = $common->loadModel('setting')->getVersion();

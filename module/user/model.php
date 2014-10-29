@@ -773,4 +773,35 @@ class userModel extends model
     {
         return $this->dao->delete()->from(TABLE_USERCONTACT)->where('id')->eq($listID)->exec();
     }
+
+    /**
+     * Get data in JSON.
+     * 
+     * @param  object    $user 
+     * @access public
+     * @return array
+     */
+    public function getDataInJSON($user)
+    {
+        $data = array();
+        $data['user'] = new stdclass();
+        $data['user']->id       = $user->id;
+        $data['user']->account  = $user->account;
+        $data['user']->email    = $user->email;
+        $data['user']->realname = $user->realname;
+        $data['user']->gender   = $user->gender;
+        $data['user']->dept     = $user->dept;
+        $data['user']->role     = $user->role;
+
+        $this->app->loadLang('todo');
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('story');
+        $data['todoStatus']  = $this->lang->todo->statusList;
+        $data['taskStatus']  = $this->lang->task->statusList;
+        $data['bugStatus']   = $this->lang->bug->statusList;
+        $data['storyStatus'] = $this->lang->story->statusList;
+
+        return $data;
+    }
 }
