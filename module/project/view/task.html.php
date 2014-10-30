@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/datatable.html.php';?>
 <?php include './taskheader.html.php';?>
 <?php js::set('moduleID', $moduleID);?>
 <?php js::set('productID', $productID);?>
