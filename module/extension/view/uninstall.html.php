@@ -30,7 +30,7 @@
   </div>
 </div>
 <?php elseif(!empty($error)):?>
-<div class='alert alert-danger with-icon'>
+<div class='alert alert-pure with-icon'>
   <i class='icon-info-sign'></i>
   <div class='content'>
   <?php
@@ -45,7 +45,7 @@
   <div class='content'>
     <?php
     echo "<h3>{$title}</h3>";
-    if(!empty($backupFile)) echo "<p style='color:red'>" . sprintf($lang->extension->backDBFile, $backupFile) . '</p>';
+    if(!empty($backupFile)) echo "<p>" . sprintf($lang->extension->backDBFile, $backupFile) . '</p>';
     if($removeCommands)
     {
         echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";

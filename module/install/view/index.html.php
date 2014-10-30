@@ -28,7 +28,15 @@
     </div>
     <div class='modal-body'>
       <h3><?php echo $lang->install->welcome;?></h3>
-      <div><?php echo nl2br(sprintf($lang->install->desc, $config->version));?></div>
+      <table>
+        <tr><td colspan='2'><?php echo nl2br($lang->install->desc);?></td></tr>
+        <tr>
+          <td class=''><?php echo nl2br(sprintf($lang->install->links, $config->version));?></td>
+          <td class='w-p25'>
+            <img src="<?php echo $this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'?>">
+          </td>
+        </tr> 
+      </table>
     </div>
     <div class='modal-footer'>
       <?php if(isset($latestRelease) and (version_compare($latestRelease->version, $config->version) > 0)):?>

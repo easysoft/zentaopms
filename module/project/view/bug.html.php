@@ -20,47 +20,76 @@
     <?php common::printIcon('bug', 'create', "productID=$productID&extra=projectID=$project->id");?>
   </div>
 </div>
-<table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
-  <thead>
-    <tr>
-      <?php $vars = "projectID={$project->id}&orderBy=%s&build=$buildID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <th class='w-id'>      <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
-      <th class='w-severity'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
-      <th class='w-pri'>     <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-      <th>                   <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
-      <th class='w-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-      <th class='w-user'>    <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
-      <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
-      <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-      <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+<form method='post' id='projectBugForm'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
+    <thead>
+      <tr>
+        <?php $vars = "projectID={$project->id}&orderBy=%s&build=$buildID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+        <th class='w-id'>      <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+        <th class='w-severity'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
+        <th class='w-pri'>     <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+        <th>                   <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+        <th class='w-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+        <th class='w-user'>    <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
+        <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+        <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+        <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php foreach($bugs as $bug):?>
+    <tr class='text-center'>
+      <td>
+        <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
+        <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '_blank');?>
+      </td>
+      <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+      <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+      <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
+      <td><?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?></td>
+      <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
+      <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+      <td class='text-right'>
+        <?php
+        $params = "bugID=$bug->id";
+        common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   $params, '',   'list', '', '', 'iframe', true);
+        common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+        common::printIcon('bug', 'edit',       $params, $bug, 'list');
+        common::printIcon('bug', 'create',     "product=$bug->product&extra=bugID=$bug->id", $bug, 'list', 'copy');
+        ?>
+      </td>
     </tr>
-  </thead>
-  <tbody>
-  <?php foreach($bugs as $bug):?>
-  <tr class='text-center'>
-    <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
-    <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
-    <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-    <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
-    <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
-    <td><?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?></td>
-    <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
-    <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
-    <td class='text-right'>
-      <?php
-      $params = "bugID=$bug->id";
-      common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
-      common::printIcon('bug', 'assignTo',   $params, '',   'list', '', '', 'iframe', true);
-      common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
-      common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-      common::printIcon('bug', 'edit',       $params, $bug, 'list');
-      common::printIcon('bug', 'create',     "product=$bug->product&extra=bugID=$bug->id", $bug, 'list', 'copy');
-      ?>
-    </td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
-</table>
+    <?php endforeach;?>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan='9'>
+          <div class='table-actions clearfix'>
+          <?php 
+          $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+          if(count($bugs))
+          {
+              echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+              if($canBatchAssignTo)
+              {
+                  $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID=$project->id");
+                  echo "<div class='input-group w-150px'>";
+                  echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
+                  echo "<span class='input-group-addon'>";
+                  echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->bug->assignTo);
+                  echo '</span></div>';
+              }
+          }
+          ?>
+          </div>
+          <?php $pager->show();?>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</form>
 <?php js::set('replaceID', 'bugList')?>
 <?php include '../../common/view/footer.html.php';?>

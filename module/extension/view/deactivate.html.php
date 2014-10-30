@@ -16,11 +16,13 @@
     <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
   </div>
 </div>
-<div class='text-center with-padding'>
-    <h3 class='mgb-20'><?php echo $title;?></h3>
+<div class='with-padding'>
+    <h3 class='mgb-20 text-center'><?php echo $title;?></h3>
     <?php if($removeCommands):?>
-    <p><strong><?php echo $lang->extension->unremovedFiles;?></strong></p>
-    <p><?php echo join($removeCommands, '<br />');?></p>
+    <div class='container mw-500px'>
+      <p><strong><?php echo $lang->extension->unremovedFiles;?></strong></p>
+      <code><?php echo join($removeCommands, '<br />');?></code>
+    </div>
     <?php endif;?>
     <hr>
     <p><?php echo html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"');?></p>

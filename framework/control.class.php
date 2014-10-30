@@ -269,7 +269,7 @@ class control
     public function setViewPrefix()
     {
         $this->viewPrefix = '';
-        if(isset($this->config->viewPrefix[$this->viewType])) $this->viewPrefix = $this->config->viewPrefix[$this->viewType] . '.';
+        if(isset($this->config->viewPrefix[$this->viewType])) $this->viewPrefix = $this->config->viewPrefix[$this->viewType];
     }
 
     //-------------------- View related methods --------------------//

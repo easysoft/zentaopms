@@ -76,6 +76,7 @@ class fileModel extends model
 
         foreach($files as $id => $file)
         {
+            if($file['size'] == 0) continue;
             move_uploaded_file($file['tmpname'], $this->savePath . $file['pathname']);
             $file['objectType'] = $objectType;
             $file['objectID']   = $objectID;

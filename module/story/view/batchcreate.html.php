@@ -27,7 +27,7 @@
         <th class='w-p15'><?php echo $lang->story->plan;?></th>
         <th><?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-p20'><?php echo $lang->story->spec;?></th>
-        <th class='w-70px'><?php echo $lang->story->pri;?></th>
+        <th class='w-80px'><?php echo $lang->story->pri;?></th>
         <th class='w-80px'><?php echo $lang->story->estimate;?></th>
         <th class='w-70px'><?php echo $lang->story->review;?></th>
       </tr>
@@ -35,6 +35,7 @@
     <?php for($i = 0; $i < $config->story->batchCreate; $i++):?>
     <?php $moduleID = $i == 0 ? $moduleID : 'same';?>
     <?php $planID   = $i == 0 ? '' : 'same';?>
+    <?php $pri      = $i == 0 ? '' : 'same';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
@@ -43,7 +44,7 @@
       <td>
         <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?>
       </td>
-      <td><?php echo html::select("pri[$i]", (array)$lang->story->priList, $pri, 'class=form-control');?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");?></td>
     </tr>  
@@ -61,7 +62,7 @@
       <td>
         <?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control'");?>
       </td>
-      <td><?php echo html::select("pri[%s]", (array)$lang->story->priList, $pri, 'class=form-control');?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("pri[%s]", $priList, $pri, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[%s]", $estimate, "class='form-control'");?></td>
       <td><?php echo html::select("needReview[%s]", $lang->story->reviewList, 0, "class='form-control'");?></td>
     </tr>

@@ -120,7 +120,7 @@
             <th><?php echo $lang->task->story;?></th>
             <td>
             <?php 
-            if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle)) echo $task->storyTitle;
+            if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class='iframe' data-width='80%'", true, true)) echo $task->storyTitle;
             if($task->needConfirm)
             {
                 echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -129,19 +129,19 @@
             }
             ?>
             </td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->type;?></th>
             <td><?php echo $lang->task->typeList[$task->type];?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->status;?></th>
             <td><?php $lang->show($lang->task->statusList, $task->status);?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
             <td><?php $lang->show($lang->task->priList, $task->pri);?></td>
@@ -158,7 +158,7 @@
           <tr>
             <th class='w-80px'><?php echo $lang->task->estStarted;?></th>
             <td><?php echo $task->estStarted;?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->realStarted;?></th>
             <td><?php echo $task->realStarted; ?> </td>

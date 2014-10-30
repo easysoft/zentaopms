@@ -123,7 +123,7 @@ class extension extends control
         $installType       = $upgrade == 'no' ? $this->lang->extension->installExt : $this->lang->extension->upgradeExt; 
         $this->view->installType = $installType;
         $this->view->upgrade     = $upgrade;
-        $this->view->title       = $installTitle . $this->lang->colon . $extension;
+        $this->view->title       = $installTitle . $extension;
 
         /* Get the package file name. */
         $packageFile = $this->extension->getPackageFile($extension);

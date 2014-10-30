@@ -11,7 +11,7 @@ table.fileBox td {padding: 0!important}
   $fileRow = <<<EOT
   <table class='fileBox' id='fileBox\$i'>
     <tr>
-    <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='files[]' class='fileControl'  tabindex='-1' /></div></td>
+    <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='files[]' class='fileControl'  tabindex='-1' onchange='checkSize(this)'/></div></td>
       <td class=''><input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' /></td>
       <td class='w-30px'><a href='javascript:void();' onclick='addFile(this)' class='btn btn-block'><i class='icon-plus'></i></a></td>
       <td class='w-30px'><a href='javascript:void();' onclick='delFile(this)' class='btn btn-block'><i class='icon-remove'></i></a></td>
@@ -36,6 +36,26 @@ $(function()
         parentTag.find('legend').append(maxUploadInfo);
     }
 });
+
+/**
+ * Check file size.
+ * 
+ * @param  obj $obj 
+ * @access public
+ * @return void
+ */
+function checkSize(obj)
+{
+    if(typeof($(obj)[0].files) != 'undefined')
+    {
+        var maxUploadInfo = '<?php echo strtoupper(ini_get('upload_max_filesize'));?>';
+        var sizeType = {'K': 1024, 'M': 1024 * 1024, 'G': 1024 * 1024 * 1024};
+        var unit = maxUploadInfo.replace(/\d+/, '');
+        var maxUploadSize = maxUploadInfo.replace(unit,'') * sizeType[unit];
+        var fileSize = $(obj)[0].files[0].size;
+        if(fileSize > maxUploadSize) alert('<?php echo $lang->file->errorFileSize?>');
+    }
+}
 
 /**
  * Show the upload max filesize of config.  

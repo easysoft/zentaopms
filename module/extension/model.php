@@ -480,9 +480,9 @@ class extensionModel extends model
         }
 
         if($return->errors) $return->result = 'fail';
-        $return->mkdirCommands = str_replace('/', DIRECTORY_SEPARATOR, $return->mkdirCommands);
+        $return->mkdirCommands = empty($return->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $return->mkdirCommands) . '</code>';
         $return->errors .= $this->lang->extension->executeCommands . $return->mkdirCommands;
-        if(PHP_OS == 'Linux') $return->errors .= $return->chmodCommands;
+        if(PHP_OS == 'Linux') $return->errors .= empty($return->chmodCommands) ? '' : '<code>' . $return->chmodCommands . '</code>';
         return $return;
     }
 
@@ -707,6 +707,7 @@ class extensionModel extends model
         $return = new stdclass();
         $return->result = 'ok';
         $return->error  = '';
+        $ignoreCode     = '|1050|1060|1062|1091|1169|';
 
         $dbFile = $this->getDBFile($extension, $method);
         if(!file_exists($dbFile)) return $return;
@@ -724,9 +725,11 @@ class extensionModel extends model
             {
                 $this->dbh->query($sql);
             }
-            catch (PDOException $e) 
+            catch(PDOException $e) 
             {
-                $return->error .= '<p>' . $e->getMessage() . "<br />THE SQL IS: $sql</p>";
+                $errorInfo = $e->errorInfo;
+                $errorCode = $errorInfo[1];
+                if(strpos($ignoreCode, "|$errorCode|") === false) $return->error .= '<p>' . $e->getMessage() . "<br />THE SQL IS: $sql</p>";
             }
         }
         if($return->error) $return->result = 'fail';
