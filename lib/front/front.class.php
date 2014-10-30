@@ -377,17 +377,17 @@ EOT;
 <script>
 function selectAll(scope)
 {
-    var $this = $(this);
-    if($this.closest('.datatable').length) return;
-    if(scope) $('#' + scope + ' input').each(function() { $this.attr("checked", true);});
-    else $('input:checkbox').each(function() { $this.attr("checked", true);});
+    var e = $(this);
+    if(e.closest('.datatable').length) return;
+    if(scope) $('#' + scope + ' input').each(function() { e.attr("checked", true);});
+    else $('input:checkbox').each(function() { e.attr("checked", true);});
 }
 function selectReverse(scope)
 {
-    var $this = $(this);
-    if($this.closest('.datatable').length) return;
-    if(scope) $('#' + scope + ' input').each(function() { $this.attr("checked", !$this.attr("checked"));});
-    else $('input:checkbox').each(function(){ $this.attr("checked", !$(this).attr("checked"));});
+    var e = $(this);
+    if(e.closest('.datatable').length) return;
+    if(scope) $('#' + scope + ' input').each(function() { e.attr("checked", !e.attr("checked"));});
+    else $('input:checkbox').each(function(){ e.attr("checked", !$(this).attr("checked"));});
 }
 </script>
 EOT;
