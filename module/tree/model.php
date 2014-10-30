@@ -875,7 +875,7 @@ class treeModel extends model
         $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch();
         if(empty($module)) return 0;
 
-        if($module->id and $module->type != 'story')
+        while(!empty($module) and $module->id and $module->type != 'story')
         {
             $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($module->parent)->fetch();
         }
