@@ -771,7 +771,9 @@ class bug extends control
             if($bug->toTask != 0) 
             {
                 $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                echo js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, '', 'parent');
+                unset($_GET['onlybody']);
+                $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+                die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
             } 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));

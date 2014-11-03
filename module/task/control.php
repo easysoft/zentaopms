@@ -621,7 +621,9 @@ class task extends control
                     if($change['field'] == 'status')
                     {
                         $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                        echo js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, '', 'parent');
+                        unset($_GET['onlybody']);
+                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                     }
                 }
             }
