@@ -468,5 +468,6 @@ $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';
 $lang->icons['manage']         = 'cog';
+$lang->icons['unlock']         = 'unlock-alt';
 
 include (dirname(__FILE__) . '/menuOrder.php');

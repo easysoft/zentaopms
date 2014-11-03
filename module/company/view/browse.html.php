@@ -49,7 +49,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <th><?php common::printOrderLink('join',     $orderBy, $vars, $lang->user->join);?></th>
       <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
       <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
-      <th class='w-60px'><?php echo $lang->actions;?></th>
+      <th class='w-80px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -76,7 +76,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <td><?php echo $user->join;?></td>
       <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
       <td><?php echo $user->visits;?></td>
-      <td class='a-left w-80px'>
+      <td class='text-left'>
         <?php 
         common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
         if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
