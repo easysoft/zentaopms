@@ -230,25 +230,24 @@ class storyModel extends model
             $stories->pri[$i]    = (int)$pri;
         }
 
+        if(isset($stories->uploadImage)) $this->loadModel('file');
         for($i = 0; $i < $batchNum; $i++)
         {
             if($stories->title[$i] != '')
             {
-                $data[$i] = new stdclass();
-                $data[$i]->module     = $stories->module[$i];
-                $data[$i]->plan       = $stories->plan[$i];
-                $data[$i]->title      = $stories->title[$i];
-                $data[$i]->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
-                $data[$i]->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
-                $data[$i]->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
-                $data[$i]->product    = $productID;
-                $data[$i]->openedBy   = $this->app->user->account;
-                $data[$i]->openedDate = $now;
-                $data[$i]->version    = 1;
+                $data = new stdclass();
+                $data->module     = $stories->module[$i];
+                $data->plan       = $stories->plan[$i];
+                $data->title      = $stories->title[$i];
+                $data->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
+                $data->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
+                $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
+                $data->product    = $productID;
+                $data->openedBy   = $this->app->user->account;
+                $data->openedDate = $now;
+                $data->version    = 1;
 
-                $this->dao->insert(TABLE_STORY)
-                    ->data($data[$i])
-                    ->autoCheck()
+                $this->dao->insert(TABLE_STORY)->data($data)->autoCheck()
                     ->batchCheck($this->config->story->create->requiredFields, 'notempty')
                     ->exec();
                 if(dao::isError()) 
@@ -260,12 +259,43 @@ class storyModel extends model
                 $storyID = $this->dao->lastInsertID();
                 $this->setStage($storyID);
 
-                $specData[$i] = new stdclass();
-                $specData[$i]->story   = $storyID;
-                $specData[$i]->version = 1;
-                $specData[$i]->title   = $stories->title[$i];
-                if($stories->spec[$i] != '') $specData[$i]->spec = nl2br($stories->spec[$i]);
-                $this->dao->insert(TABLE_STORYSPEC)->data($specData[$i])->exec();
+                $specData = new stdclass();
+                $specData->story   = $storyID;
+                $specData->version = 1;
+                $specData->title   = $stories->title[$i];
+                if($stories->spec[$i] != '') $specData->spec = nl2br($stories->spec[$i]);
+
+                if(!empty($stories->uploadImage[$i]))
+                {
+                    $fileName  = htmlspecialchars_decode($stories->uploadImage[$i]);
+                    $realPath  = $this->session->storyImagesFile . $fileName;
+
+                    $file = array();
+                    $file['extension'] = $this->file->getExtension($fileName);
+                    $file['pathname']  = $this->file->setPathName($i, $file['extension']);
+                    $file['title']     = str_replace(".{$file['extension']}", '', $fileName);
+                    $file['size']      = filesize($realPath);
+                    if(rename($realPath, $this->file->savePath . $file['pathname']))
+                    {
+                        $file['addedBy']    = $this->app->user->account;    
+                        $file['addedDate']  = $now;     
+                        if(in_array($file['extension'], $this->config->file->imageExtensions))
+                        {
+                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+                            $url = $this->file->webPath . $file['pathname'];
+                            $specData->spec .= '<img src="' . $url . '" alt="" />';
+                        }
+                        else
+                        {
+                            $file['objectType'] = 'story';
+                            $file['objectID']   = $storyID;
+                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                        }
+                    }
+                }
+
+                $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
                 $this->loadModel('action');
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
@@ -273,18 +303,16 @@ class storyModel extends model
                 $mails[$i]->storyID  = $storyID;
                 $mails[$i]->actionID = $actionID;
             }
-            else
-            {
-                unset($stories->use[$i]);
-                unset($stories->module[$i]);
-                unset($stories->plan[$i]);
-                unset($stories->title[$i]);
-                unset($stories->spec[$i]);
-                unset($stories->pri[$i]);
-                unset($stories->estimate[$i]);
-                unset($stories->needReview[$i]);
-            }
         }
+
+        /* Remove upload image file and session. */
+        if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
+        {
+            $classFile = $this->app->loadClass('zfile'); 
+            if(is_dir($this->session->storyImagesFile)) $classFile->removeDir($this->session->storyImagesFile);
+            unset($_SESSION['storyImagesFile']);
+        }
+
         return $mails;
     }
 

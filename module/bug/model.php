@@ -117,6 +117,7 @@ class bugModel extends model
             $data->browsers[$i] = $browser;
         }
 
+        if(isset($data->uploadImage)) $this->loadModel('file');
         for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($data->title[$i])) continue;
@@ -135,6 +136,35 @@ class bugModel extends model
             $bug->os          = $data->oses[$i];
             $bug->browser     = $data->browsers[$i];
 
+            if(!empty($data->uploadImage[$i]))
+            {
+                $fileName  = htmlspecialchars_decode($data->uploadImage[$i]);
+                $realPath  = $this->session->bugImagesFile . $fileName;
+
+                $file = array();
+                $file['extension'] = $this->file->getExtension($fileName);
+                $file['pathname']  = $this->file->setPathName($i, $file['extension']);
+                $file['title']     = str_replace(".{$file['extension']}", '', $fileName);
+                $file['size']      = filesize($realPath);
+                if(rename($realPath, $this->file->savePath . $file['pathname']))
+                {
+                    if(in_array($file['extension'], $this->config->file->imageExtensions))
+                    {
+                        $file['addedBy']    = $this->app->user->account;
+                        $file['addedDate']  = $now;
+                        $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+                        $url = $this->file->webPath . $file['pathname'];
+                        $bug->steps .= '<img src="' . $url . '" alt="" />';
+                        unset($file);
+                    }
+                }
+                else
+                {
+                    unset($file);
+                }
+            }
+
             if(!empty($moduleOwners[$bug->module]))
             {
                 $bug->assignedTo   = $moduleOwners[$bug->module];
@@ -144,9 +174,28 @@ class bugModel extends model
             $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();
 
+            if(!empty($data->uploadImage[$i]) and !empty($file))
+            {
+                $file['objectType'] = 'bug';
+                $file['objectID']   = $bugID;
+                $file['addedBy']    = $this->app->user->account;    
+                $file['addedDate']  = $now;     
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                unset($file);
+            }
+
             if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
+
+        /* Remove upload image file and session. */
+        if(!empty($data->uploadImage) and $this->session->bugImagesFile)
+        {
+            $classFile = $this->app->loadClass('zfile'); 
+            if(is_dir($this->session->bugImagesFile)) $classFile->removeDir($this->session->bugImagesFile);
+            unset($_SESSION['bugImagesFile']);
+        }
+
         return $actions;
     }
 

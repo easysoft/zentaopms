@@ -60,6 +60,7 @@ $lang->switchHelp   = '切换帮助';
 $lang->addFiles     = '上传了附件 ';
 $lang->files        = '附件 ';
 $lang->pasteText    = '粘贴文本 ';
+$lang->uploadImages = '多图上传 ';
 $lang->timeout      = '连接超时，请检查网络环境，或重试！';
 $lang->repairTable  = '数据库表可能损坏，需要修复，可以在命令行执行bin目录下的checkdb尝试修复！';
 $lang->duplicate    = '已有相同标题的%s';

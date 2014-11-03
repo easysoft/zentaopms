@@ -15,7 +15,10 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->story->batchCreate;?></strong>
-    <div class='actions'><?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?></div>
+    <div class='actions'>
+      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn' data-width='600px'")?>
+      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?>
+    </div>
   </div>
 </div>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -32,7 +35,9 @@
         <th class='w-70px'><?php echo $lang->story->review;?></th>
       </tr>
     </thead>
-    <?php for($i = 0; $i < $config->story->batchCreate; $i++):?>
+    <?php $i = 0; ?>
+    <?php if(!empty($titles)):?>
+    <?php foreach($titles as $fileName => $storyTitle):?>
     <?php $moduleID = $i == 0 ? $moduleID : 'same';?>
     <?php $planID   = $i == 0 ? '' : 'same';?>
     <?php $pri      = $i == 0 ? '' : 'same';?>
@@ -41,9 +46,30 @@
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
+      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
+      <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
       <td>
-        <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?>
+        <?php
+        echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");
+        echo html::hidden("uploadImage[$i]", $fileName);
+        ?>
       </td>
+    </tr>
+    <?php $i++;?>
+    <?php endforeach;?>
+    <?php endif;?>
+    <?php $nextStart = $i;?>
+    <?php for($i = $nextStart; $i < $config->story->batchCreate; $i++):?>
+    <?php $moduleID = $i - $nextStart == 0 ? $moduleID : 'same';?>
+    <?php $planID   = $i - $nextStart == 0 ? '' : 'same';?>
+    <?php $pri      = $i - $nextStart == 0 ? '' : 'same';?>
+    <tr class='text-center'>
+      <td><?php echo $i+1;?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
+      <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
+      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");?></td>

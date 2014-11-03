@@ -381,6 +381,21 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID);
         }
 
+        if($this->session->bugImagesFile)
+        {
+            $extractPath = $this->session->bugImagesFile;
+            if(is_dir($extractPath))
+            {
+                $titles = array();
+                foreach(glob($extractPath . '/*') as $fileName)
+                {
+                    $fileName = basename($fileName);
+                    $titles[$fileName] = preg_replace('/^\d+_/', '', pathinfo($fileName, PATHINFO_FILENAME));
+                }
+                $this->view->titles = $titles;
+            }
+        }
+
         /* Remove the unused types. */
         unset($this->lang->bug->typeList['designchange']);
         unset($this->lang->bug->typeList['newfeature']);

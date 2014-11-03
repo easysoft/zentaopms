@@ -60,6 +60,7 @@ $lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
 $lang->pasteText    = 'Paste text';
+$lang->uploadImages = 'Upload images ';
 $lang->timeout      = 'Timed out, please check the network, or retry!';
 $lang->repairTable  = 'The table may be damaged, you can perform bin/checkdb on the command line to try to repair!';
 $lang->duplicate    = '%s has the same title';

@@ -384,4 +384,27 @@ class fileModel extends model
     {
         return str_replace('""', '"', $matchs[1]) . str_replace(',', '&comma;', $matchs[2]);
     }
+
+    /**
+     * Extract zip.
+     * 
+     * @param  string    $zipFile 
+     * @access public
+     * @return string
+     */
+    public function extractZip($zipFile)
+    {
+        $classFile  = $this->app->loadClass('zfile');
+        $parentPath = $this->app->getCacheRoot() . 'uploadimages/';
+        if(!is_dir($parentPath)) mkdir($parentPath, 0777, true);
+
+        $filePath = $parentPath . str_replace('.zip', '', basename($zipFile)) . '/';
+        if(is_dir($filePath)) $classFile->removeDir($filePath);
+
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($zipFile);
+        $files = $zip->listContent();
+        if($zip->extract(PCLZIP_OPT_PATH, $filePath) == 0) return false;
+        return $filePath;
+    }
 }

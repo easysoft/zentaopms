@@ -25,3 +25,9 @@ $lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请�
 $lang->file->confirmDelete    = " 您确定删除该附件吗？";
 $lang->file->errorFileSize    = " 文件大小已经超过限制，可能不能成功上传！";
 $lang->file->errorFileUpload  = " 文件上传失败，文件大小可能超出限制";
+$lang->file->errorSuffix      = '压缩包格式错误，只能上传zip压缩包！';
+$lang->file->errorExtract     = '解压缩失败！可能文件已经损坏';
+$lang->file->uploadImagesExplain = <<<EOD
+<p>1、上传文件为包含图片的zip压缩包，程序会以文件名作为标题，以图片作为内容，生成一条记录。以方便创建。</p>
+<p>2、如果文件名开头含有 数字+下划线，生成的标题会将他们忽略，例如：01_测试，生成的标题名是“测试”。</p>
+EOD;

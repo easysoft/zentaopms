@@ -222,6 +222,22 @@ class story extends control
         $title      = '';
         $spec       = '';
 
+        /* Process upload images. */
+        if($this->session->storyImagesFile)
+        {
+            $extractPath = $this->session->storyImagesFile;
+            if(is_dir($extractPath))
+            {
+                $titles = array();
+                foreach(glob($extractPath . '/*') as $fileName)
+                {
+                    $fileName = basename($fileName);
+                    $titles[$fileName] = preg_replace('/^\d+_/', '', pathinfo($fileName, PATHINFO_FILENAME));
+                }
+                $this->view->titles = $titles;
+            }
+        }
+
         $moduleOptionMenu['same'] = $this->lang->story->same;
         $plans = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
         $plans['same']   = $this->lang->story->same;

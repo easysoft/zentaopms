@@ -25,3 +25,9 @@ $lang->file->errorCanNotWrite = "<span class='red'>The directory '%s' is unwrita
 $lang->file->confirmDelete    = " Are you sure to delete this file?";
 $lang->file->errorFileSize    = " The file size exceeds the limit, might not be able to upload!";
 $lang->file->errorFileUpload  = " Failed to upload files, file size may exceed the limit!";
+$lang->file->errorSuffix      = 'Compressed packet format error, can only upload zip!';
+$lang->file->errorExtract     = 'Decompression failure! The file may have been damaged';
+$lang->file->uploadImagesExplain = <<<EOD
+<p>1. Upload file to contain pictures of zip compressed package, the program will take the file name as a title, as content with pictures, generating a record.</p>
+<p>2. if the file name at the beginning contains 'digital+underline', generation of title will they ignore, for example: '01_test', the title is 'test'.</p>
+EOD;

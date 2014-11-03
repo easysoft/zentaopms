@@ -306,4 +306,39 @@ class file extends control
             echo $this->file->pasteImage($this->post->editor);
         }
     }
+
+    /**
+     * Upload zip of Images.
+     * 
+     * @param  string    $module 
+     * @param  string    $params 
+     * @access public
+     * @return void
+     */
+    public function uploadImages($module, $params)
+    {
+        if($_FILES)
+        {
+            $file = $this->file->getUpload('file');
+            $file = $file[0];
+
+            if(!$file) die(js::alert($this->lang->error->noData));
+            if($file['extension'] != 'zip') die(js::alert($this->lang->file->errorSuffix));
+            if($file['size'] == 0) die(js::alert($this->lang->file->errorFileUpload));
+
+            if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
+            {
+                $zipFile  = $this->file->savePath . $file['pathname'];
+                $filePath = $this->file->extractZip($zipFile);
+
+                unlink($zipFile);
+                if(!$filePath) die(js::alert($this->lang->file->errorExtract));
+
+                $this->session->set($module . 'ImagesFile', $filePath);
+                die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent.parent'));
+            }
+        }
+
+        $this->display();
+    }
 }
