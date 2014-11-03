@@ -39,7 +39,7 @@
 </div>
 <div class='main'>
   <form method='post' id='projectTaskForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='taskList' data-checkable='true' data-fixed-left-width='450' data-fixed-right-width='150'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList' data-checkable='true' data-fixed-left-width='450' data-fixed-right-width='150'>
       <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
       <thead>
         <tr>

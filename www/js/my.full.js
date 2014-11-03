@@ -1025,7 +1025,7 @@ function setModal()
         if($('#ajaxModal').length)
         {
             /* unbind all events */
-            $('#ajaxModal').attr('class', 'modal fade').off('show.bs.modal shown.bs.modal hide.bs.modal hidden.bs.modal');
+            $('#ajaxModal').attr('class', 'modal fade').off('show.zui.modal shown.zui.modal hide.zui.modal hidden.zui.modal');
         }
         else
         {
@@ -1038,7 +1038,7 @@ function setModal()
 
         $.extend({'closeModal':function(callback, location)
         {
-            $ajaxModal.on('hidden.bs.modal', function()
+            $ajaxModal.on('hidden.zui.modal', function()
             {
                 if(location && (!$ajaxModal.data('cancel-reload')))
                 {
@@ -1052,10 +1052,10 @@ function setModal()
 
         /* rebind events */
         if(!setting) return;
-        if(setting.afterShow && $.isFunction(setting.afterShow)) $ajaxModal.on('show.bs.modal', setting.afterShow);
-        if(setting.afterShown && $.isFunction(setting.afterShown)) $ajaxModal.on('shown.bs.modal', setting.afterShown);
-        if(setting.afterHide && $.isFunction(setting.afterHide)) $ajaxModal.on('hide.bs.modal', setting.afterHide);
-        if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.bs.modal', setting.afterHidden);
+        if(setting.afterShow && $.isFunction(setting.afterShow)) $ajaxModal.on('show.zui.modal', setting.afterShow);
+        if(setting.afterShown && $.isFunction(setting.afterShown)) $ajaxModal.on('shown.zui.modal', setting.afterShown);
+        if(setting.afterHide && $.isFunction(setting.afterHide)) $ajaxModal.on('hide.zui.modal', setting.afterHide);
+        if(setting.afterHidden && $.isFunction(setting.afterHidden)) $ajaxModal.on('hidden.zui.modal', setting.afterHidden);
     }
 
     function ajustModalPosition(position, dialog)
@@ -1094,15 +1094,15 @@ function setModal()
  *
  * Open operation pages in modal for list pages, after the modal window close, reload the list content and repace the replaceID.
  * 
- * @param string   colorboxClass   the class for colorbox binding.
+ * @param string   triggerClass   the class for colorbox binding.
  * @param string   replaceID       the html object to be replaced.
  * @access public
  * @return void
  */
-function setModal4List(colorboxClass, replaceID, callback, width)
+function setModal4List(triggerClass, replaceID, callback, width)
 {
     if(typeof(width) == 'undefined') width = 900;
-    $('.' + colorboxClass).modalTrigger(
+    $('.' + triggerClass).modalTrigger(
     {
         width: width,
         type: 'iframe',
@@ -1118,20 +1118,28 @@ function setModal4List(colorboxClass, replaceID, callback, width)
                 $.cancelReloadCloseModal();
 
                 var link = self.location.href;
-                $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
-                $('#tmpDiv').load(link + ' #' + replaceID, function()
+                var idQuery = '#' + replaceID;
+                $(idQuery).wrap("<div id='tmpDiv'></div>");
+                $('#tmpDiv').load(link + ' ' + idQuery, function()
                 {
                     $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                    setTimeout(function(){setModal4List(colorboxClass, replaceID, callback, width);},150);
+                    setTimeout(function(){setModal4List(triggerClass, replaceID, callback, width);},150);
 
-                    $('#' + replaceID + ' tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
-                    $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
+                    var $list = $(idQuery), $datatable = $('#datatable-' + $list.attr('id'));
+                    if($list.hasClass('datatable') && $datatable.length && $.fn.datatable)
+                    {
+                        $list.hide();
+                        $datatable.data('zui.datatable').load(idQuery);
+                    }
+
+                    $list.find('tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
+                    $list.find('[data-toggle=modal], a.iframe').modalTrigger();
                     try
                     {
                         $(".date").datetimepicker(datepickerOptions);
                     }
                     catch(err){}
-                    if(typeof(callback) == 'function') callback();
+                    if(typeof(e) == 'function') callback();
                     $.cookie('selfClose', 0);
                 });
             }
