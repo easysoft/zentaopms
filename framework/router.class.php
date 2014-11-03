@@ -705,6 +705,9 @@ class router
             {
                 $this->clientLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ','));
             }
+
+            /* the value of $_SERVER['HTTP_ACCEPT_LANGUAGE'] is like 'zh-Hans-CN,zh-Hans;' in ie10 and ie11. */
+            if(!empty($this->clientLang)) $this->clientLang = preg_replace('/^zh-\w+-(cn|tw)$/i', 'zh-$1', $this->clientLang);
         }
         if(!empty($this->clientLang))
         {
