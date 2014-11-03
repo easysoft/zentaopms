@@ -221,6 +221,10 @@ class searchModel extends model
     {
         $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
+        /* Decode html encode. */
+        $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
+        $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
+
         $query->form = unserialize($query->form);
         $query->sql  = $this->replaceDynamic($query->sql);
         return $query;
