@@ -589,7 +589,7 @@ class user extends control
         $denyLink  = $this->createLink('user', 'deny');
 
         /* Reload lang by lang of get when viewType is json. */
-        if($this->app->getViewType() == 'json' and $this->get->lang)
+        if($this->app->getViewType() == 'json' and $this->get->lang and $this->get->lang != $this->app->getClientLang())
         {
             $this->app->setClientLang($this->get->lang);
             $this->app->loadLang('user');
@@ -601,7 +601,7 @@ class user extends control
             if($this->app->getViewType() == 'json')
             {
                 $data = $this->user->getDataInJSON($this->app->user);
-                die(json_encode(array('status' => 'success') + $data));
+                die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
             }
 
             if(strpos($this->referer, $loginLink) === false and 
@@ -629,7 +629,7 @@ class user extends control
             if($this->user->checkLocked($account))
             {
                 $failReason = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed', 'reason' => $failReason)));
+                if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
                 die(js::error($failReason));
             }
             
@@ -657,7 +657,7 @@ class user extends control
                     if($this->app->getViewType() == 'json')
                     {
                         $data = $this->user->getDataInJSON($user);
-                        die(json_encode(array('status' => 'success') + $data));
+                        die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
 
                     /* Get the module and method of the referer. */
@@ -691,7 +691,7 @@ class user extends control
                     if($this->app->getViewType() == 'json')
                     {
                         $data = $this->user->getDataInJSON($user);
-                        die(json_encode(array('status' => 'success') + $data));
+                        die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
                     die(js::locate($this->createLink($this->config->default->module), 'parent'));
                 }
@@ -699,7 +699,7 @@ class user extends control
             else
             {
                 $fails = $this->user->failPlus($account);
-                if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed)));
+                if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed))));
                 $remainTimes = $this->config->user->failTimes - $fails;
                 if($remainTimes <= 0)
                 {
