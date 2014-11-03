@@ -376,7 +376,7 @@ class treeModel extends model
             }
 
             $tree     = isset($treeMenu[0]) ? $treeMenu[0] : '';
-            $lastMenu = "<ul class='tree'>" . $tree . "</ul>\n";
+            $lastMenu = "<ul>" . $tree . "</ul>\n";
             $menu    .= $lastMenu . '</li>';
         }
 
