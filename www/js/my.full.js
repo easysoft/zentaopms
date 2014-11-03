@@ -439,7 +439,7 @@ function setForm()
         if($(submitObj).size() >= 1)
         {
             var isBtn = submitObj.prop('tagName') == "BUTTON";
-            submitLabel = isBtn ? $(submitObj).text() : $(submitObj).attr('value');
+            submitLabel = isBtn ? $(submitObj).html() : $(submitObj).attr('value');
             $(submitObj).attr('disabled', 'disabled');
             var submitting = submitObj.attr('data-submitting') || lang.submitting;
             if(isBtn) submitObj.text(submitting);
@@ -453,8 +453,14 @@ function setForm()
         if(formClicked)
         {
             $(submitObj).removeAttr('disabled');
-            if(submitObj.prop('tagName') == "BUTTON") submitObj.text(submitLabel);
-            else $(submitObj).attr('value', submitLabel);
+            if(submitObj.prop('tagName') == "BUTTON")
+            {
+                submitObj.text(submitLabel);
+            }
+            else
+            {
+                $(submitObj).attr('value', submitLabel);
+            }
             $(submitObj).removeClass('button-d');
         }
         formClicked = false;
