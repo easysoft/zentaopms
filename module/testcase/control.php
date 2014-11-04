@@ -433,13 +433,15 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function view($caseID, $version = 0, $from = 'testcase')
+    public function view($caseID, $version = 0, $from = 'testcase', $taskID = 0)
     {
         $case = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+        if($from == 'testtask') $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
 
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
+
 
         $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -448,12 +450,14 @@ class testcase extends control
 
         $this->view->case           = $case;
         $this->view->from           = $from;
+        $this->view->taskID         = $taskID;
         $this->view->version        = $version ? $version : $case->version;
         $this->view->productName    = $this->products[$productID];
         $this->view->modulePath     = $this->tree->getParents($case->module);
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $this->view->runID          = $from == 'testcase' ? 0 : $run->id;
 
         $this->display();
     }

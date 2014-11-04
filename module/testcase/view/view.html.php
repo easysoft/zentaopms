@@ -43,10 +43,10 @@
         ob_start();
 
         echo "<div class='btn-group'>";
-        common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
-        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
+        common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
+        common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
 
-        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'bug', '', 'iframe');
+        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
         echo '</div>';
 
         echo "<div class='btn-group'>";
@@ -57,7 +57,7 @@
         echo '</div>';
         
         echo "<div class='btn-group'>";
-        common::printRPN($browseLink, $preAndNext);
+        common::printRPN($browseLink, $preAndNext, inlink('view', "caseID=%s&version=0&testtask=$from&taskID=$taskID"));
         echo '</div>';
 
         $actionLinks = ob_get_contents();

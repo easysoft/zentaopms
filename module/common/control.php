@@ -328,7 +328,7 @@ class common extends control
      * @access public
      * @return void
      */
-    static public function printRPN($backLink, $preAndNext = '')
+    static public function printRPN($backLink, $preAndNext = '', $linkTemplate = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
@@ -340,14 +340,16 @@ class common extends control
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title;
-            echo html::a(inLink('view', "ID={$preAndNext->pre->$id}"), '<i class="icon-pre icon-chevron-left"></i>', '', "id='pre' class='btn' title='{$title}'");
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : inLink('view', "ID={$preAndNext->pre->$id}");
+            echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='pre' class='btn' title='{$title}'");
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title;
-            echo html::a(inLink('view', "ID={$preAndNext->next->$id}"), '<i class="icon-pre icon-chevron-right"></i>', '', "id='next' class='btn' title='$title'");
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : inLink('view', "ID={$preAndNext->next->$id}");
+            echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='next' class='btn' title='$title'");
         }
     }
 

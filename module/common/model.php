@@ -658,40 +658,39 @@ class commonModel extends model
 
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
-            $objects = $this->dao->select('*')->from($table)
-                ->where('id')->eq($objectID)
+            $queryObjects = $this->dao->select('*')->from($table)->where('id')->eq($objectID)
                 ->beginIF($queryCondition != false)->orWhere($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
-                ->fetchPairs('id', 'id');
-            $tmpIDs = ',' . join(',', $objects) . ',';
+                ->query();
         }
         else
         {
-            $queryObjects = $this->dao->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
-            $objects = array();
-            $tmpIDs  = ',';
-            foreach($queryObjects as $key => $object)
-            {
-                $id = ($type == 'testcase' and isset($object->case)) ? $object->case : $object->id;
-                $objects[$id] = $object;
-                $tmpIDs .= $id . ',';
-            }
+            $queryObjects = $this->dao->query($queryCondition . " ORDER BY $orderBy");
         }
 
-        /* Get pre and next ID. */
-        $currentStart = strpos($tmpIDs, ',' . $objectID . ',');
-        $currentEnd   = $currentStart + strlen($objectID) + 1;
-        $preTag  = strrpos(substr($tmpIDs, 0, $currentStart), ',');
-        $nextTag = strpos($tmpIDs, ',', $currentEnd + 1);
-        $pre  = $preTag  === false ? '' : substr($tmpIDs, $preTag + 1, $currentStart - $preTag - 1);
-        $next = $nextTag === false ? '' : substr($tmpIDs, $currentEnd + 1, $nextTag - $currentEnd - 1);
-
-        /* Set pre and next object. */
+        $preObj  = false;
         $preAndNextObject->pre  = '';
         $preAndNextObject->next = '';
-        if(empty($queryCondition) or $this->session->$typeOnlyCondition) $objects = $this->dao->select('*')->from($table)->where('id')->in("$pre,$next")->fetchAll('id');
-        if(isset($objects[$pre]))  $preAndNextObject->pre = $objects[$pre];
-        if(isset($objects[$next])) $preAndNextObject->next = $objects[$next];
+        while($object = $queryObjects->fetch())
+        {
+            $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
+            $id  = $object->$key;
+
+            /* Get next object. */
+            if($preObj === true)
+            {
+                $preAndNextObject->next = $object;
+                break;
+            }
+
+            /* Get pre object. */
+            if($id == $objectID)
+            {
+                if($preObj) $preAndNextObject->pre = $preObj;
+                $preObj = true;
+            }
+            if($preObj !== true) $preObj = $object;
+        }
 
         return $preAndNextObject;
     }
