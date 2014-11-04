@@ -32,7 +32,9 @@ function closeWindow()
 }
 function switchEncode(fileType)
 {
-    $('#encode').toggleClass('hidden', fileType != 'csv');
+    $('#encode').toggleClass('hidden', fileType != 'csv' && fileType != 'xls' && fileType != 'xlsx');
+    $('#encode').removeAttr('disabled');
+    if(fileType != 'csv') $('#encode').attr('disabled', 'disabled');
 }
 </script>
 <div id='titlebar'>

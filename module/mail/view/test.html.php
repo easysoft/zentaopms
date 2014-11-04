@@ -9,14 +9,11 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-if(isset($error))
-{
-    include '../../common/view/header.lite.html.php';
-    die("<br />" . nl2br(join('', $error)));
-}
 ?>
-
 <?php include '../../common/view/header.html.php';?>
+<?php if(isset($error)):?>
+<div class='alert alert-warning with-icon'><i class='icon-frown'></i><div class='content'><?php echo str_replace('\n', '<br>', join('', $error));?></div></div>
+<?php else:?>
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -41,4 +38,5 @@ if(isset($error))
   </form>
   <table class='table table-form'><tr><td><iframe id='resultWin'></iframe></td></tr></table>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

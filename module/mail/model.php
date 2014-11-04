@@ -294,6 +294,9 @@ class mailModel extends model
             $this->errors[] = trim(strip_tags($e->getMessage()));
         }
 
+        /* save errors. */
+        if($this->isError()) $this->app->saveError('E_MAIL', join(' ', $this->errors), __FILE__, __LINE__, true);
+
         $message = ob_get_contents();
         ob_clean();
 
