@@ -167,7 +167,7 @@ class mail extends control
                 $this->view->error = $this->mail->getError();
                 die($this->display());
             }
-            die(js::alert($this->lang->mail->successSended));
+            die(js::alert($this->lang->mail->successSended) . js::locate(inlink('test')));
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
