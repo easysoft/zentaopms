@@ -460,7 +460,7 @@ class testcaseModel extends model
             $caseData->type         = $data->type[$key];
             $caseData->status       = $data->status[$key];
             $caseData->stage        = join(',', $data->stage[$key]);
-            $caseData->frequency    = $data->frequency[$key];
+            $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
 
             if(isset($this->config->testcase->create->requiredFields))

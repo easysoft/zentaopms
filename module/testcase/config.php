@@ -21,9 +21,8 @@ $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status'
 $config->testcase->exportFields = '
     id, product, module, story,
     title, precondition, stepDesc, stepExpect, keywords,
-    pri, type, stage, status, lastRunResult, frequency,
-    openedBy, openedDate, lastEditedBy, lastEditedDate, 
-    version,linkCase';
+    pri, type, stage, status, lastRunResult, openedBy, openedDate,
+    lastEditedBy, lastEditedDate, version,linkCase';
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
