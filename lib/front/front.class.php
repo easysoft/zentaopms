@@ -375,25 +375,23 @@ EOT;
     {
                 $string = <<<EOT
 <script>
-function selectAll(scope)
+$(function()
 {
-    var e = $(this);
-    if(e.closest('.datatable').length) return;
-    if(scope) $('#' + scope + ' input').each(function() { e.attr("checked", true);});
-    else $('input:checkbox').each(function() { e.attr("checked", true);});
-}
-function selectReverse(scope)
-{
-    var e = $(this);
-    if(e.closest('.datatable').length) return;
-    if(scope) $('#' + scope + ' input').each(function() { e.attr("checked", !e.attr("checked"));});
-    else $('input:checkbox').each(function(){ e.attr("checked", !$(this).attr("checked"));});
-}
+    $('#allchecker, #reversechecker').click(function()
+    {
+        console.log(this);
+        var e = $(this);
+        if(e.closest('.datatable').length) return;
+        scope = e.data('scope');
+        scope = scope ? $('#' + scope) : e.closest('.table');
+        scope.find('input:checkbox').each(e.hasClass('check-inverse') ? function() { $(this).attr("checked", !$(this).attr("checked"));} : function() { $(this).attr("checked", true);});
+    });
+});
 </script>
 EOT;
         global $lang;
-        $string .= "<a id='allchecker' class='btn btn-select-all check-all' href='javascript:selectAll(\"$scope\")' >{$lang->selectAll}</a>";
-        $string .= "<a id='reversechecker' class='btn btn-select-reverse check-inverse' href='javascript:selectReverse(\"$scope\")'>{$lang->selectReverse}</a>";
+        $string .= "<a id='allchecker' class='btn btn-select-all check-all' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
+        $string .= "<a id='reversechecker' class='btn btn-select-reverse check-inverse' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
         return  $string;
     }
 
