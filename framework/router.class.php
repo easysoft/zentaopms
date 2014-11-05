@@ -1390,22 +1390,24 @@ class router
         }
 
         /* Merge from the db configs. */
-        if($moduleName != 'common' and isset($config->system->$moduleName))
+        foreach(array('system', 'personal') as $type)
         {
-            foreach($config->system->$moduleName as $item)
+            if($moduleName != 'common' and isset($config->$type->$moduleName))
             {
-                if($item->section)
+                foreach($config->$type->$moduleName as $item)
                 {
-                    if(!isset($config->{$moduleName}->{$item->section})) $config->{$moduleName}->{$item->section} = new stdclass();
-                    $config->{$moduleName}->{$item->section}->{$item->key} = $item->value;
-                }
-                else
-                {
-                    if(!$item->section) $config->{$moduleName}->{$item->key} = $item->value;
+                    if($item->section)
+                    {
+                        if(!isset($config->{$moduleName}->{$item->section})) $config->{$moduleName}->{$item->section} = new stdclass();
+                        $config->{$moduleName}->{$item->section}->{$item->key} = $item->value;
+                    }
+                    else
+                    {
+                        if(!$item->section) $config->{$moduleName}->{$item->key} = $item->value;
+                    }
                 }
             }
         }
-
         $this->config = $config;
 
         return $config;
