@@ -2,7 +2,7 @@
 include '../config/config.php';
 session_name($config->sessionVar);
 session_start();
-if(!isset($_SESSION['user']) or $_SESSION['user']->account == 'guest') die(header('location:index.php'));
+if(!isset($_SESSION['user']) or $_SESSION['user']->account == 'guest' or $_SESSION['company']->supers != $_SESSION['user']->account) die(header('location:index.php'));
 
 /** 
  * ionCube Loader install Wizard
