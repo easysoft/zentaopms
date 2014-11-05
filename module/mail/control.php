@@ -132,6 +132,21 @@ class mail extends control
             $mailConfig->smtp->debug    = $this->post->debug;
             $mailConfig->smtp->charset  = $this->post->charset;
 
+            /* The mail need openssl and curl extension when secure is tls. */
+            if($mailConfig->smtp->secure == 'tls')
+            {
+                if(!extension_loaded('openssl'))
+                {
+                    echo js::alert($this->lang->mail->noOpenssl);
+                    die(js::locate('back'));
+                }
+                if(!extension_loaded('curl'))
+                {
+                    echo js::alert($this->lang->mail->noCurl);
+                    die(js::locate('back'));
+                }
+            }
+
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
             if(dao::isError()) die(js::error(dao::getError()));
 
