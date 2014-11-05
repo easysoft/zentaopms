@@ -55,7 +55,7 @@
     <td class='text-left'><?php echo $project->code;?></td>
     <td><?php echo $users[$project->PM];?></td>
     <td><?php echo $project->end;?></td>
-    <td><?php echo $lang->project->statusList[$project->status];?></td>
+    <td class='status-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
     <td><?php echo $project->hours->totalEstimate;?></td>
     <td><?php echo $project->hours->totalConsumed;?></td>
     <td><?php echo $project->hours->totalLeft;?></td>
