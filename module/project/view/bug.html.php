@@ -75,7 +75,7 @@
               echo "<div class='btn-group'>" . html::selectButton() . '</div>';
               if($canBatchAssignTo)
               {
-                  $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID=$project->id");
+                  $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
                   echo "<div class='input-group w-150px'>";
                   echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
                   echo "<span class='input-group-addon'>";

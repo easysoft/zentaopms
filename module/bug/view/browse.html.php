@@ -229,6 +229,21 @@ js::set('moduleID', $moduleID);
                   ?>
                 </ul>
               </div>
+              <?php 
+              $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+              if(count($bugs))
+              {
+                  if($canBatchAssignTo)
+                  {
+                      $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product");
+                      echo "<div class='input-group w-150px'>";
+                      echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
+                      echo "<span class='input-group-addon'>";
+                      echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->bug->assignTo);
+                      echo '</span></div>';
+                  }
+              }
+              ?>
             </div>
             <?php endif?>
             <div class='text-right'><?php $pager->show();?></div>

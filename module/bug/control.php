@@ -136,6 +136,8 @@ class bug extends control
             $bug->openedBuild   = rtrim($openedBuild, ',');
             $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
         }
+
+        $memberPairs = $this->user->getPairs('noletter');
        
         $title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -154,6 +156,7 @@ class bug extends control
         $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
         $this->view->moduleID     = $moduleID;
+        $this->view->memberPairs  = $memberPairs;
 
         $this->display();
     }
@@ -680,7 +683,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function batchAssignTo($projectID)
+    public function batchAssignTo($projectID, $type = 'project')
     {
         if(!empty($_POST) && isset($_POST['bugIDList']))
         {
@@ -696,6 +699,7 @@ class bug extends control
                 $this->sendmail($bugID, $actionID);
             }
         }
+        if($type == 'product') die(js::locate($this->createLink('bug', 'browse', "productID=$projectID")));
         die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
     }
 
