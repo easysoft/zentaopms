@@ -2,7 +2,12 @@
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
-<input type='text' class='form-control' id='search' value='' onkeyup='searchItems(this.value, "project", projectID, module, method, extra)' placeholder='<?php echo $this->app->loadLang('search')->search->common;?>'/>
+<input type='text' class='form-control' id='search' value='' placeholder='<?php echo $this->app->loadLang('search')->search->common;?>'/>
+<script>
+var bindName = 'keyup';
+if(navigator.userAgent.indexOf("MSIE") != -1) bindName = 'propertychange';
+$('#dropMenu #search').bind(bindName, function(){searchItems($(this).val(), "project", projectID, module, method, extra)})
+</script>
 
 <div id='searchResult'>
   <div id='defaultMenu'>

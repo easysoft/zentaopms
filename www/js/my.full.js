@@ -120,7 +120,7 @@ function showDropMenu(objectType, objectID, module, method, extra)
  */
 function showDropResult(objectType, objectID, module, method, extra)
 {
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data).find('#search').focus();});
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data); setTimeout(function(){$("#dropMenu #search").focus();}, 300);});
 }
 
 /**
