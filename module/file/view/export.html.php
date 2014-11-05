@@ -40,6 +40,7 @@ function switchEncode(fileType)
         $('#encode').attr('disabled', 'disabled');
     }
 }
+$(document).ready(function(){$('#fileType').change();});
 </script>
 <div id='titlebar'>
   <div class='heading'>
