@@ -4,3 +4,6 @@
 #hideButton{cursor:pointer;}
 #hideButton span{padding:2px 10px; background:url(theme/default/images/main/zt-icons.png) -100px  -161px;}
 #featurebar .f-right .icon-green-task-import {padding:2px 8px; background:url(theme/default/images/main/zt-icons.png) 0px   -82px;}
+table .dropdown-menu{width:auto; max-width:1000px;}
+table .dropdown-menu tr{border:0px;}
+table .dropdown-menu tr td{border:0px; border-right: 1px dotted #ddd; border-bottom: 1px dotted #ddd;}

@@ -157,17 +157,36 @@
                 $actionLink = $this->createLink('task', 'batchClose');
                 $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
-                echo "</ul></div>";
 
+                /* Batch assign. */
                 if($canBatchAssignTo)
                 {
+                    unset($memberPairs['0']);
                     $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
-                    echo "<div class='input-group w-150px'>";
-                    echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
-                    echo "<span class='input-group-btn'>";
-                    echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->task->assign, '', "class='btn'");
-                    echo '</span></div>';
+                    echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+                    echo "<li class='dropdown-submenu'>";
+                    echo html::a('javascript::', $lang->task->assignedTo, 'id="assignItem"');
+                    echo "<table class='dropdown-menu'>";
+                    $perNum   = 10;
+                    $tableNum = (count($memberPairs) / $perNum);
+                    for($i = 0; $i < $perNum; $i++)
+                    {
+                        echo "<tr>";
+                        for($j = 0; $j < $tableNum; $j++)
+                        {
+                            list($key, $val) = each($memberPairs);
+                            if($key === 0 || $key != '')
+                            {
+                                echo "<td>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $val, '', '') . '</td>';
+                            }
+                        }
+                        echo "</tr>";
+                    }
+                    echo "</table>";
+                    echo "</li>";
                 }
+                echo "</ul></div>";
+
             }
             echo "<div class='text'>" . $summary . "</div>";
             ?>
