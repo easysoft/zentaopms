@@ -64,7 +64,7 @@
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control chosen' multiple");?></td>
         <td><?php echo html::input("title[$i]", $bugTitle, 'class=form-control');?></td>
         <td>
-          <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control'");?>
+          <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?>
         </td>
         <td><?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control'");?></td>
         <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
@@ -95,7 +95,7 @@
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
         <td><?php echo html::input("title[$i]", '', 'class=form-control');?></td>
         <td>
-          <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control'");?>
+          <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?>
         </td>
         <td><?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control'");?></td>
         <td><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
@@ -118,7 +118,7 @@
       <td class='text-left' style='overflow:visible' id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control' multiple");?></td>
       <td><?php echo html::input("titles[%s]", '', 'class=form-control');?></td>
       <td>
-        <?php echo html::textarea("stepses[%s]", '', "rows='1' class='form-control'");?>
+        <?php echo html::textarea("stepses[%s]", '', "rows='1' class='form-control autosize'");?>
       </td>
       <td><?php echo html::select("types[%s]", $lang->bug->typeList, '', "class='form-control'");?></td>
       <td><?php echo html::select("severities[%s]", $lang->bug->severityList, '', "class='form-control'");?></td>
