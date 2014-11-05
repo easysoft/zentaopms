@@ -2,7 +2,7 @@
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
 ?>
-<style> .files-list {margin: 0; max-width: 300px;} .files-list > .list-group-item {padding-right: 5px;} .files-list > .list-group-item a {color: #666} .files-list > .list-group-item:hover a {color: #333} .files-list > .list-group-item > .pull-right {opacity: 0.2; transition: all 0.3s;} .files-list > .list-group-item:hover > .pull-right {opacity: 1}</style>
+<style> .files-list {margin: 0; max-width: 400px;} .files-list > .list-group-item {padding-right: 5px;} .files-list > .list-group-item a {color: #666} .files-list > .list-group-item:hover a {color: #333} .files-list > .list-group-item > .pull-right {opacity: 0.2; transition: all 0.3s;} .files-list > .list-group-item:hover > .pull-right {opacity: 1}</style>
 <script language='Javascript'>
 $(function(){
      $(".edit").modalTrigger({width:350, type:'iframe'});
