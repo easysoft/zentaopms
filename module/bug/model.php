@@ -1218,6 +1218,7 @@ class bugModel extends model
         $template = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->add('type', 'bug')
+            ->skipSpecial('content')
             ->get();
         $this->dao->insert(TABLE_USERTPL)->data($template)->autoCheck('title, content', 'notempty')->check('title', 'unique')->exec();
     }
