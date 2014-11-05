@@ -407,6 +407,7 @@ class task extends control
         {
             $taskIDList = $this->post->taskIDList;
             unset($_POST['taskIDList']);
+            if(!is_array($taskIDList)) die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
             foreach($taskIDList as $taskID)
             {
                 $this->loadModel('action');
