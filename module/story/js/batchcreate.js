@@ -16,6 +16,22 @@ $(document).on('click', '.chosen-with-drop', function()
         $(select).trigger("chosen:updated");
     }
 });
+$(document).on('mousedown', 'select', function()
+{
+    if($(this).val() == 'same')
+    {
+        var index = $(this).parents('td').index();
+        var row   = $(this).parents('tr').index();
+        var table = $(this).parents('tr').parent();
+        var value = '';
+        for(i = row - 1; i >= 0; i--)
+        {
+            value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
+            if(value != 'same') break;
+        }
+        $(this).val(value);
+    }
+})
 
 if(navigator.userAgent.indexOf("Firefox") < 0)
 {
