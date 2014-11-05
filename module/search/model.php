@@ -247,6 +247,7 @@ class searchModel extends model
             ->add('account', $this->app->user->account)
             ->add('form', serialize($this->session->$formVar))
             ->add('sql',  $sql)
+            ->skipSpecial('form,sql')
             ->get();
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
     }
