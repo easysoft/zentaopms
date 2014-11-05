@@ -46,7 +46,7 @@
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
-      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?></td>
+      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
       <td>
@@ -69,7 +69,7 @@
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
-      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control'");?></td>
+      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");?></td>
@@ -86,7 +86,7 @@
       <td class='text-left' style='overflow:visible'><?php echo html::select("plan[%s]", $plans, $planID, "class='form-control'");?></td>
       <td><?php echo html::input("title[%s]", $storyTitle, "class='form-control'");?></td>
       <td>
-        <?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control'");?>
+        <?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control autosize'");?>
       </td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[%s]", $priList, $pri, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[%s]", $estimate, "class='form-control'");?></td>

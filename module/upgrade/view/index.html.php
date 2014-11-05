@@ -16,8 +16,7 @@
       <strong><?php echo $lang->upgrade->warnning;?></strong>
     </div>
     <div class='modal-body'>
-      <div class='alert with-icon'>
-        <i class='icon-info-sign'></i>
+      <div class='alert alert-pure'>
         <div class='content'><?php echo $lang->upgrade->warnningContent;?></div>
       </div>
     </div>
