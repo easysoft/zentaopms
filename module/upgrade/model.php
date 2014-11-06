@@ -112,6 +112,7 @@ class upgradeModel extends model
                 $this->fixDataIndex();
             case '6_1':
                 $this->execSQL($this->getUpgradeFile('6.1'));
+            case '6_2':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -174,6 +175,7 @@ class upgradeModel extends model
         case '6_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('6.0.beta1'));
         case '6_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('6.0'));
         case '6_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('6.1'));
+        case '6_2':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
