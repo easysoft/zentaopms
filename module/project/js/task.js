@@ -4,7 +4,7 @@ $(function()
     if(browseType == 'bysearch') ajaxGetSearchForm();
 
 
-    $('.assign-menu').click(function(e)
+    $('.assign-search').click(function(e)
     {
         e.stopPropagation();
         return false;
