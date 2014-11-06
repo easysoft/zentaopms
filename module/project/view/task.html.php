@@ -161,17 +161,18 @@
                 /* Batch assign. */
                 if($canBatchAssignTo)
                 {
+                    $withSearch = count($memberPairs) > 10;
                     unset($memberPairs['0']);
                     $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript::', $lang->task->assignedTo, 'id="assignItem"');
-                    echo "<ul class='dropdown-menu assign-menu'>";
+                    echo "<ul class='dropdown-menu assign-menu'" . ($withSearch ? ' with-search':'') . ">";
                     foreach ($memberPairs as $key => $value)
                     {
                         echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                     }
-                    if(count($memberPairs) > 10) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                     echo "</ul>";
                     echo "</li>";
                 }
