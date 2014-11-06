@@ -161,13 +161,13 @@
                 /* Batch assign. */
                 if($canBatchAssignTo)
                 {
-                    $withSearch = count($memberPairs) > 10;
+                    $withSearch = count($memberPairs) > 4;
                     unset($memberPairs['0']);
                     $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript::', $lang->task->assignedTo, 'id="assignItem"');
-                    echo "<ul class='dropdown-menu assign-menu'" . ($withSearch ? ' with-search':'') . ">";
+                    echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
                     foreach ($memberPairs as $key => $value)
                     {
                         echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
