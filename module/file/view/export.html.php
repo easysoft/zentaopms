@@ -32,7 +32,6 @@ function closeWindow()
 }
 function switchEncode(fileType)
 {
-    $('#encode').toggleClass('hidden', fileType != 'csv' && fileType != 'xls' && fileType != 'xlsx');
     $('#encode').removeAttr('disabled');
     if(fileType != 'csv')
     {
