@@ -1050,8 +1050,7 @@ class dao
         $errorCode = $errorInfo[1];
         $errorMsg  = $errorInfo[2];
         $message   = $exception->getMessage();
-        if(strpos($this->repairCode, "|$errorCode|") !== false or
-            ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false))
+        if(strpos($this->repairCode, "|$errorCode|") !== false or ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false))
         {
             $message .=  ' ' . $this->lang->repairTable;
         }

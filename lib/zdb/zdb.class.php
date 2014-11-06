@@ -83,12 +83,29 @@ class zdb
             /* Create sql code. */
             $backupSql  = "DROP TABLE IF EXISTS `$table`;\n";
             $backupSql .= $this->getSchemaSQL($table);
-            $backupSql .= $this->getDataSQL($table);
-
-            /* Write sql code. */
             fwrite($fp, $backupSql);
+
+            $rows = $this->dbh->query("select * from `$table`");
+            while($row = $rows->fetch(PDO::FETCH_ASSOC))
+            {
+                /* Create key sql for insert. */
+                $keys = array_keys($row);
+                $keys = array_map('addslashes', $keys);
+                $keys = join('`,`', $keys);
+                $keys = "`" . $keys . "`";
+
+                /* Create a value sql. */
+                $value = array_values($row);
+                $value = array_map('addslashes', $value);
+                $value = join("','", $value);
+                $value = "'" . $value . "'";
+                $sql   = "INSERT INTO `$table`($keys) VALUES (" . $value . ");\n";
+
+                /* Write sql code. */
+                fwrite($fp, $sql);
+            }
         }
-        fclose ($fp);
+        fclose($fp);
         return $return;
     }
 
@@ -113,41 +130,5 @@ class zdb
     {
         $createSql = $this->dbh->query("show create table `$table`")->fetch(PDO::FETCH_ASSOC);
         return $createSql['Create Table'] . ";\n";
-    }
-
-    /**
-     * Get data SQL.
-     * 
-     * @param  string    $table 
-     * @access public
-     * @return string
-     */
-    public function getDataSQL($table)
-    {
-        $rows = $this->dbh->query("select * from `$table`")->fetchAll(PDO::FETCH_ASSOC);
-        $sql  = '';
-        if(!empty($rows))
-        {
-            /* Create key sql for insert. */
-            $keys = array_keys(current($rows));
-            $keys = array_map('addslashes', $keys);
-            $keys = join('`,`', $keys);
-            $keys = "`" . $keys . "`";
-
-            /* Create all value sql. */
-            $values = array();
-            foreach($rows as $row)
-            {
-                $value = array_values($row);
-                $value = array_map('addslashes', $value);
-                $value = join("','", $value);
-                $value = "'" . $value . "'";
-
-                $values[] = "($value)";
-            }
-
-            $sql .= "INSERT INTO `$table`($keys) VALUES" . join(',', $values) . ";\n";
-        }
-        return $sql;
     }
 }
