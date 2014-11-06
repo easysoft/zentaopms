@@ -75,7 +75,7 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
         <td><?php echo $users[$case->lastRunner];?></td>
         <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
         <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-        <td class='<?php if(isset($run)) echo $run->status;?> status-<?php echo $case->status?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
+        <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
         <td class='text-right'>
           <?php
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
