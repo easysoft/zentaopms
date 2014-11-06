@@ -166,23 +166,13 @@
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript::', $lang->task->assignedTo, 'id="assignItem"');
-                    echo "<table class='dropdown-menu'>";
-                    $perNum   = 10;
-                    $tableNum = (count($memberPairs) / $perNum);
-                    for($i = 0; $i < $perNum; $i++)
+                    echo "<ul class='dropdown-menu assign-menu'>";
+                    foreach ($memberPairs as $key => $value)
                     {
-                        echo "<tr>";
-                        for($j = 0; $j < $tableNum; $j++)
-                        {
-                            list($key, $val) = each($memberPairs);
-                            if($key === 0 || $key != '')
-                            {
-                                echo "<td>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $val, '', '') . '</td>';
-                            }
-                        }
-                        echo "</tr>";
+                        echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                     }
-                    echo "</table>";
+                    if(count($memberPairs) > 10) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    echo "</ul>";
                     echo "</li>";
                 }
                 echo "</ul></div>";

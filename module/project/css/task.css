@@ -7,3 +7,7 @@
 table .dropdown-menu{width:auto; max-width:1000px;}
 table .dropdown-menu tr{border:0px;}
 table .dropdown-menu tr td{border:0px; border-right: 1px dotted #ddd; border-bottom: 1px dotted #ddd;}
+
+.assign-menu {min-width: 150px; padding-bottom: 34px; overflow: hidden; max-height: 305px}
+.assign-menu > .assign-search {padding: 0; position: absolute; z-index: 0; bottom: 0; left: 0; right: 0}
+.assign-menu > .assign-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
