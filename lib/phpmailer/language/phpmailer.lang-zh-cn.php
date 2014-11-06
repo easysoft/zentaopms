@@ -5,8 +5,8 @@
 * @author liqwei <liqwei@liqwei.com>
 */
 
-$PHPMAILER_LANG['authenticate'] = 'SMTP 错误：登录失败。\n请检查您设置的用户名密码是否正确。\n有的系统登录用户名是完整的邮箱地址。';
-$PHPMAILER_LANG['connect_host'] = 'SMTP 错误：无法连接到 SMTP 主机，请确认禅道机器：\n1. 能ping通smtp服务器。如果不能ping通，请查看网络状态，或查看域名解析是否正确，或联系网管；\n2. 使用telnet 命令能够连接到smtp的发信端口;\n3. 如果上述步骤都是通的，windows请检查防火墙和杀毒软件设置，linux请关闭selnux或者执行"setsebool httpd_can_sendmail true"允许apache可以发信。';
+$PHPMAILER_LANG['authenticate'] = "SMTP 错误：登录失败。\n请检查您设置的用户名密码是否正确。\n有的系统登录用户名是完整的邮箱地址。";
+$PHPMAILER_LANG['connect_host'] = "SMTP 错误：无法连接到 SMTP 主机，请确认禅道机器：\n1. 能ping通smtp服务器。如果不能ping通，请查看网络状态，或查看域名解析是否正确，或联系网管；\n2. 使用telnet 命令能够连接到smtp的发信端口;\n3. 如果上述步骤都是通的，windows请检查防火墙和杀毒软件设置，linux请关闭selnux或者执行\"setsebool httpd_can_sendmail true\"允许apache可以发信。";
 $PHPMAILER_LANG['data_not_accepted'] = 'SMTP 错误：数据不被接受。';
 //$P$PHPMAILER_LANG['empty_message']        = 'Message body empty';
 $PHPMAILER_LANG['encoding'] = '未知编码: ';
