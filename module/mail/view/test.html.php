@@ -10,10 +10,12 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
 <?php if(isset($error)):?>
-<div class='alert alert-warning with-icon'><i class='icon-frown'></i><div class='content'><?php echo str_replace('\n', '<br>', join('', $error));?></div></div>
+<?php include '../../common/view/header.lite.html.php';?>
+<div class='alert alert-warning with-icon'><i class='icon-frown'></i><div class='content'><?php echo join('', $error);?></div></div>
+<?php include '../../common/view/footer.lite.html.php';?>
 <?php else:?>
+<?php include '../../common/view/header.html.php';?>
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -36,7 +38,7 @@
       </tr>
     </table>
   </form>
-  <table class='table table-form'><tr><td><iframe id='resultWin'></iframe></td></tr></table>
+  <table class='table table-form'><tr><td><iframe id='resultWin' name='resultWin'></iframe></td></tr></table>
 </div>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
+<?php endif;?>
