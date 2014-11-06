@@ -114,7 +114,7 @@
     <tr class='text-center'>
       <td>%s</td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, %s)'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, \"%s\")'");?></td>
       <td class='text-left' style='overflow:visible' id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control' multiple");?></td>
       <td><?php echo html::input("titles[%s]", '', 'class=form-control');?></td>
       <td>

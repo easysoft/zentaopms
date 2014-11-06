@@ -44,4 +44,4 @@ $lang->mail->sendmailTips   = 'Tips: system will not send mail to current user.'
 $lang->mail->needConfigure  = "I can not find the configuration, please configure it first.";
 $lang->mail->nofsocket      = 'The fsocket correlation function is disabled, not letter! Please enlarge the setting of allow_url_fopen to On in php.ini and open the extension of openssl. Restart apache.';
 $lang->mail->noOpenssl      = 'Please open the extension of openssl when use tls. Restart apache.';
-$lang->mail->noCurl         = 'Please open the extension of curl when use tls. Restart apache.';
+$lang->mail->noCurl         = 'Please open the extension of curl when use tls and ssl. Restart apache.';

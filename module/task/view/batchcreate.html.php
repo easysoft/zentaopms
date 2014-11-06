@@ -85,22 +85,20 @@
   <tbody>
     <tr>
       <td class='text-center'>%s</td>
-      <td style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, %s)'")?></td>
+      <td style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?></td>
       <td style='overflow: visible'>
         <div class='input-group'>
-        <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(%s)'");?>
-        <span class='input-group-btn'>
-        <a href='javascript:copyStoryTitle(%s)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
-        </span>
+          <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>
+          <span class='input-group-btn'>
+            <a href='javascript:copyStoryTitle("%s")' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
+          </span>
         </div>
       </td>
       <td><?php echo html::input("name[%s]", '', 'class=form-control');?></td>
       <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control'");?></td>
       <td><?php echo html::input("estimate[%s]", '', 'class=form-control text-center');?></td>
-      <td>
-        <?php echo html::textarea("desc[%s]", '', "rows='1' class='form-control autosize'");?>
-      </td>
+      <td><?php echo html::textarea("desc[%s]", '', "rows='1' class='form-control autosize'");?></td>
       <td><?php echo html::select("pri[%s]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>
   </tbody>

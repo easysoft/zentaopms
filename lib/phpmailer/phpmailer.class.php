@@ -1236,13 +1236,13 @@ class PHPMailer {
         $file = tempnam('', 'mail');
         file_put_contents($file, $body); //TODO check this worked
         $signed = tempnam("", "signed");
-        if (@openssl_pkcs7_sign($file, $signed, "file://".$this->sign_cert_file, array("file://".$this->sign_key_file, $this->sign_key_pass), NULL)) {
-          @unlink($file);
-          @unlink($signed);
+        if (openssl_pkcs7_sign($file, $signed, "file://".$this->sign_cert_file, array("file://".$this->sign_key_file, $this->sign_key_pass), NULL)) {
+          unlink($file);
+          unlink($signed);
           $body = file_get_contents($signed);
         } else {
-          @unlink($file);
-          @unlink($signed);
+          unlink($file);
+          unlink($signed);
           throw new phpmailerException($this->Lang("signing").openssl_error_string());
         }
       } catch (phpmailerException $e) {
@@ -1343,7 +1343,7 @@ class PHPMailer {
    */
   public function AddAttachment($path, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
     try {
-      if ( !@is_file($path) ) {
+      if ( !is_file($path) ) {
         throw new phpmailerException($this->Lang('file_access') . $path, self::STOP_CONTINUE);
       }
       $filename = basename($path);
@@ -1782,7 +1782,7 @@ class PHPMailer {
    */
   public function AddEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
 
-    if ( !@is_file($path) ) {
+    if ( !is_file($path) ) {
       $this->SetError($this->Lang('file_access') . $path);
       return false;
     }

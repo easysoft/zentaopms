@@ -706,8 +706,9 @@ class router
                 $this->clientLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ','));
             }
 
-            /* the value of $_SERVER['HTTP_ACCEPT_LANGUAGE'] is like 'zh-Hans-CN,zh-Hans;' in ie10 and ie11. */
-            if(!empty($this->clientLang)) $this->clientLang = preg_replace('/^zh-\w+-(cn|tw)$/i', 'zh-$1', $this->clientLang);
+            /* Fix clientLang for ie >= 10. https://www.drupal.org/node/365615. */
+            if(stripos($this->clientLang, 'hans')) $this->clientLang = 'zh-cn';
+            if(stripos($this->clientLang, 'hant')) $this->clientLang = 'zh-tw';
         }
         if(!empty($this->clientLang))
         {
