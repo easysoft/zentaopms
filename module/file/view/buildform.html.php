@@ -52,7 +52,11 @@ function checkSize(obj)
         var sizeType = {'K': 1024, 'M': 1024 * 1024, 'G': 1024 * 1024 * 1024};
         var unit = maxUploadInfo.replace(/\d+/, '');
         var maxUploadSize = maxUploadInfo.replace(unit,'') * sizeType[unit];
-        var fileSize = $(obj)[0].files[0].size;
+        var fileSize = 0;
+        $(obj).parents('#fileform').find(':file').each(function()
+        {
+            if($(this).val()) fileSize += $(this)[0].files[0].size;
+        })
         if(fileSize > maxUploadSize) alert('<?php echo $lang->file->errorFileSize?>');
     }
 }
