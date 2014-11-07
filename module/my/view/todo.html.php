@@ -25,7 +25,7 @@
       }
       echo "<li id='byDate' class='datepicker-wrapper datepicker-date'>" . html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)'") . '</li>';
 
-      if($type == 'bydate') 
+      if(is_numeric($type)) 
       {
           if($date == date('Y-m-d'))
           {

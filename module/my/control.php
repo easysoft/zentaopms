@@ -88,7 +88,7 @@ class my extends control
         /* Assign. */
         $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $orderBy);
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
-        $this->view->type         = is_numeric($type) ? 'byDate' : $type;
+        $this->view->type         = $type;
         $this->view->recTotal     = $recTotal;
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
