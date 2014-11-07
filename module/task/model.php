@@ -402,7 +402,7 @@ class taskModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
-            ->add('assignedDate', $now)
+            ->setDefault('assignedDate', $now)
             ->get();
 
         $this->dao->update(TABLE_TASK)

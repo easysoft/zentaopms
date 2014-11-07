@@ -47,9 +47,9 @@
     </thead>
     <tbody>
       <?php
-      $totalEstimate  = 0;
-      $canBatchEdit   = common::hasPriv('story', 'batchEdit');
-      $canBatchClose  = common::hasPriv('story', 'batchClose');
+      $totalEstimate = 0;
+      $canBatchEdit  = common::hasPriv('story', 'batchEdit');
+      $canBatchClose = common::hasPriv('story', 'batchClose');
       ?>
       <?php foreach($stories as $key => $story):?>
       <?php
@@ -108,7 +108,7 @@
           {
             if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
 
-              echo "<div class='btn-group'>";
+              echo "<div class='btn-group dropup'>";
               if($canBatchEdit)
               {
                   $actionLink = $this->createLink('story', 'batchEdit', "productID=0&projectID=$project->id");

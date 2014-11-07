@@ -39,7 +39,7 @@
 </div>
 <div class='main'>
   <form method='post' id='projectTaskForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList' data-checkable='true' data-fixed-left-width='450' data-fixed-right-width='150'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList'>
       <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
       <thead>
         <tr>
@@ -70,7 +70,7 @@
       <tbody>
       <?php foreach($tasks as $task):?>
       <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
-      <tr class='text-center' data-id='<?php echo $task->id?>'>
+      <tr class='text-center'>
         <td>
           <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
           <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
@@ -162,7 +162,6 @@
                 if($canBatchAssignTo)
                 {
                     $withSearch = count($memberPairs) > 4;
-                    unset($memberPairs['0']);
                     $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
