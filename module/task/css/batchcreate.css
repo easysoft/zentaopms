@@ -1,4 +1,4 @@
-.chosen-container-single .chosen-drop {min-width: 300px; border-top: 1px solid #ddd!important}
-.input-group {display: block; padding-right: 29px; max-width: 100%;}
-.input-group > .chosen-container {display: block!important; width: 100%;}
-.input-group-btn {display: block; position: absolute; right: 0; width: 29px; top: 0}
+.main .chosen-container-single .chosen-drop {min-width: 300px; border-top: 1px solid #ddd!important}
+.main .input-group {display: block; padding-right: 29px; max-width: 100%;}
+.main .input-group > .chosen-container {display: block!important; width: 100%;}
+.main .input-group-btn {display: block; position: absolute; right: 0; width: 29px; top: 0}
