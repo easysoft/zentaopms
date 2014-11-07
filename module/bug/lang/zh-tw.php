@@ -78,6 +78,7 @@ $lang->bug->edit               = '編輯';
 $lang->bug->batchEdit          = '批量編輯';
 $lang->bug->batchClose         = '批量關閉';
 $lang->bug->assignTo           = '指派';
+$lang->bug->batchAssignTo      = '批量指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug詳情';
 $lang->bug->resolve            = '解決';

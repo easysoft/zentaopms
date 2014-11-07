@@ -11,6 +11,7 @@
  */
 $lang->file = new stdclass();
 $lang->file->common        = '附件';
+$lang->file->uploadImages  = '多图上传';
 $lang->file->download      = '下载附件';
 $lang->file->edit          = '重命名';
 $lang->file->inputFileName = '请输入附件名称';

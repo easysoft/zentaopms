@@ -16,13 +16,14 @@ $lang->upgrade->success = '升級成功';
 $lang->upgrade->tohome  = '返迴首頁';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
-警告！升級有危險，請先備份資料庫，以防萬一。<br />
-備份方法：<br />
-1. 可以通過phpMyAdmin進行備份。<br />
-2. 使用mysql命令行的工具。<br />
-   # mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> <br />
-   要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。<br />
+<p>升級有危險，請先備份資料庫，以防萬一。</p>
+<pre>
+1. 可以通過phpMyAdmin進行備份。
+2. 使用mysql命令行的工具。
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。
    比如： mysqldump -u root -p zentao >zentao.bak
+</pre>
 EOT;
 $lang->upgrade->setStatusFile = '<h4>升級之前請先執行下面的命令：</h4>
                                  <ul>
@@ -83,3 +84,4 @@ $lang->upgrade->fromVersions['5_3']       = '5.3';
 $lang->upgrade->fromVersions['6_0_beta1'] = '6.0.beta1';
 $lang->upgrade->fromVersions['6_0']       = '6.0';
 $lang->upgrade->fromVersions['6_1']       = '6.1';
+$lang->upgrade->fromVersions['6_2']       = '6.2';

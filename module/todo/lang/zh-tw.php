@@ -25,6 +25,7 @@ $lang->todo->browse       = "瀏覽待辦";
 $lang->todo->import2Today = "導入到今天";
 $lang->todo->import       = "導入";
 $lang->todo->changeStatus = "更改";
+$lang->todo->legendBasic  = "基本信息";
 
 $lang->todo->id          = '編號';
 $lang->todo->account     = '所有者';

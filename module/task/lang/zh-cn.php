@@ -62,6 +62,7 @@ $lang->task->status            = '任务状态';
 $lang->task->desc              = '任务描述';
 $lang->task->assign            = '指派';
 $lang->task->assignTo          = $lang->task->assign;
+$lang->task->batchAssignTo     = '批量指派';
 $lang->task->assignedTo        = '指派给';
 $lang->task->assignedToAB      = '指派给';
 $lang->task->assignedDate      = '指派日期';

@@ -62,6 +62,7 @@ $lang->task->status            = 'Status';
 $lang->task->desc              = 'Desc';
 $lang->task->assign            = 'Assign';
 $lang->task->assignTo          = $lang->task->assign;
+$lang->task->batchAssignTo     = 'Batch assign';
 $lang->task->assignedTo        = 'Assigned To';
 $lang->task->assignedToAB      = 'Assign';
 $lang->task->assignedDate      = 'Assigned Date';

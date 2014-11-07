@@ -35,7 +35,6 @@ The version of current release is <strong class='red'>%s</strong>。
 EOT;
 
 
-
 $lang->install->newReleased= "<strong class='red'>Notice</strong>：There is a new version <strong class='red'>%s</strong>, released on %s。";
 $lang->install->choice     = 'You can ';
 $lang->install->or         = 'or';
