@@ -379,7 +379,6 @@ $(function()
 {
     $('#allchecker, #reversechecker').click(function()
     {
-        console.log(this);
         var e = $(this);
         if(e.closest('.datatable').length) return;
         scope = e.data('scope');

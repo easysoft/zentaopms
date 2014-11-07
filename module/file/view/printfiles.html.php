@@ -2,7 +2,7 @@
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
 ?>
-<style> .files-list {margin: 0; max-width: 400px;} .files-list > .list-group-item {padding-right: 5px;} .files-list > .list-group-item a {color: #666} .files-list > .list-group-item:hover a {color: #333} .files-list > .list-group-item > .pull-right {opacity: 0.2; transition: all 0.3s;} .files-list > .list-group-item:hover > .pull-right {opacity: 1}</style>
+<style> .files-list {margin: 0;} .files-list > .list-group-item {padding: 5px; border:0px;} .files-list > .list-group-item a {color: #666} .files-list > .list-group-item:hover a {color: #333} .files-list > .list-group-item > .right-icon {opacity: 0.01; transition: all 0.3s;} .files-list > .list-group-item:hover > .right-icon {opacity: 1}</style>
 <script language='Javascript'>
 $(function(){
      $(".edit").modalTrigger({width:350, type:'iframe'});
@@ -35,11 +35,11 @@ function downloadFile(fileID)
       if(common::hasPriv('file', 'download'))
       {
           echo "<li class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;";
-          echo "<span class='pull-right'>";
+          echo '<strong>' . html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'") . '</strong>';
+          echo "<span class='right-icon'>";
           common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit btn-icon' title='{$lang->file->edit}'");
           if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
           echo '</span>';
-          echo '<strong>' . html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'") . '</strong>';
           echo '</li>';
       }
   }
