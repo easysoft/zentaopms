@@ -73,7 +73,7 @@
             <?php echo html::input('estimate', $task->estimate, "class='form-control'")?>
             <span class="input-group-addon"><?php echo $lang->task->hour;?></span>
           </div>
-        </td><td></td>
+        </td><td><div class='help-block'><?php echo $lang->task->estimateTip?></div></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->estStarted;?></th>
