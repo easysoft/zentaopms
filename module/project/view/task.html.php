@@ -169,6 +169,7 @@
                     echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
                     foreach ($memberPairs as $key => $value)
                     {
+                        if(empty($key)) continue;
                         echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                     }
                     if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
@@ -176,7 +177,6 @@
                     echo "</li>";
                 }
                 echo "</ul></div>";
-
             }
             echo "<div class='text'>" . $summary . "</div>";
             ?>
