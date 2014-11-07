@@ -254,5 +254,4 @@ $lang->task->report->finishedTasksPerDay->height             = 400;
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
-$lang->task->placeholder = new stdclass();
-$lang->task->placeholder->estimate = '对该任务最初的预计';
+$lang->task->estimateTip = '对该任务最初的预计';

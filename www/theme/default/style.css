@@ -398,6 +398,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #defaultMenu > .actions > a > i, #defaultMenu > ul > li > a > i, #moreMenu > ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
 #searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}
 
+#defaultMenu > div {padding-top: 6px;}
+
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
 /* Wrapper */
