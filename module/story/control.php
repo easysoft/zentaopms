@@ -229,7 +229,9 @@ class story extends control
             if(is_dir($extractPath))
             {
                 $titles = array();
-                foreach(glob($extractPath . '/*') as $fileName)
+                $files  = glob($extractPath . '/*');
+                sort($files);
+                foreach($files as $fileName)
                 {
                     $fileName = basename($fileName);
                     $titles[$fileName] = preg_replace('/^\d+_/', '', pathinfo($fileName, PATHINFO_FILENAME));

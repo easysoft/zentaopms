@@ -221,6 +221,7 @@ class searchModel extends model
     {
         $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
+
         /* Decode html encode. */
         $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
         $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
@@ -247,7 +248,6 @@ class searchModel extends model
             ->add('account', $this->app->user->account)
             ->add('form', serialize($this->session->$formVar))
             ->add('sql',  $sql)
-            ->skipSpecial('form,sql')
             ->get();
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
     }

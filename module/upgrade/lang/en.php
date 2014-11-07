@@ -24,6 +24,7 @@ EOT;
 
 
 
+
 $lang->upgrade->setStatusFile = "<p>For security reason, we will check file <strong>%s</strong><br />
                                  But this file doesn't exist or out of date. You can use the flowing command to create(update)it <br />
                                  For linux:<strong>touch %s;</strong> <br />

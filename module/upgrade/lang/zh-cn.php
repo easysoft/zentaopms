@@ -16,13 +16,14 @@ $lang->upgrade->success = '升级成功';
 $lang->upgrade->tohome  = '返回首页';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
-警告！升级有危险，请先备份数据库，以防万一。<br />
-备份方法：<br />
-1. 可以通过phpMyAdmin进行备份。<br />
-2. 使用mysql命令行的工具。<br />
-   # mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> <br />
-   要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。<br />
+<p>升级有危险，请先备份数据库，以防万一。</p>
+<pre>
+1. 可以通过phpMyAdmin进行备份。
+2. 使用mysql命令行的工具。
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。
    比如： mysqldump -u root -p zentao >zentao.bak
+</pre>
 EOT;
 $lang->upgrade->setStatusFile = '<h4>升级之前请先执行下面的命令：</h4>
                                  <ul>
