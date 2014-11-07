@@ -106,7 +106,7 @@
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $story->estimate;?></td>
-        <td class='status-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+        <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
         <td><?php echo $lang->story->stageList[$story->stage];?></td>
         <td class='text-right'>
           <?php 
