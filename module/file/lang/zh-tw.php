@@ -11,6 +11,7 @@
  */
 $lang->file = new stdclass();
 $lang->file->common        = '附件';
+$lang->file->uploadImages  = '多圖上傳';
 $lang->file->download      = '下載附件';
 $lang->file->edit          = '重命名';
 $lang->file->inputFileName = '請輸入附件名稱';
@@ -23,3 +24,11 @@ $lang->file->maxUploadSize = "<span class='red'>%s</span>";
 $lang->file->errorNotExists   = "<span class='red'>檔案夾 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令:sudo chmod -R 777 '%s'</span>";
 $lang->file->confirmDelete    = " 您確定刪除該附件嗎？";
+$lang->file->errorFileSize    = " 檔案大小已經超過限制，可能不能成功上傳！";
+$lang->file->errorFileUpload  = " 檔案上傳失敗，檔案大小可能超出限制";
+$lang->file->errorSuffix      = '壓縮包格式錯誤，只能上傳zip壓縮包！';
+$lang->file->errorExtract     = '解壓縮失敗！可能檔案已經損壞';
+$lang->file->uploadImagesExplain = <<<EOD
+<p>1、上傳檔案為包含圖片的zip壓縮包，程序會以檔案名作為標題，以圖片作為內容。</p>
+<p>2、如果檔案名可以開頭含有 數字+下劃線，以方便排序，程序會將他們忽略。</p>
+EOD;

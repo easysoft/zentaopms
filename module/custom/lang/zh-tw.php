@@ -9,8 +9,8 @@ $lang->custom->value     = '值';
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
 $lang->custom->object['bug']      = 'Bug';
-$lang->custom->object['testcase'] = '測試用例';
-$lang->custom->object['testtask'] = '測試任務';
+$lang->custom->object['testcase'] = '用例';
+$lang->custom->object['testtask'] = '版本';
 $lang->custom->object['todo']     = '待辦';
 $lang->custom->object['user']     = '用戶';
 

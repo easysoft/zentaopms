@@ -60,7 +60,9 @@ $lang->switchHelp   = '切換幫助';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
 $lang->pasteText    = '粘貼文本 ';
+$lang->uploadImages = '多圖上傳 ';
 $lang->timeout      = '連接超時，請檢查網絡環境，或重試！';
+$lang->repairTable  = '資料庫表可能損壞，請用phpmyadmin或myisamchk檢查修復。';
 $lang->duplicate    = '已有相同標題的%s';
 $lang->unfold       = '+';
 $lang->fold         = '-';
@@ -466,5 +468,6 @@ $lang->icons['cancel']         = 'ban-circle';
 $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';
 $lang->icons['manage']         = 'cog';
+$lang->icons['unlock']         = 'unlock-alt';
 
 include (dirname(__FILE__) . '/menuOrder.php');

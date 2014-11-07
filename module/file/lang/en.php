@@ -11,6 +11,7 @@
  */
 $lang->file = new stdclass();
 $lang->file->common        = 'File';
+$lang->file->uploadImages  = 'Upload images';
 $lang->file->download      = 'Download';
 $lang->file->edit          = 'Edit file name';
 $lang->file->inputFileName = 'Input file name';
