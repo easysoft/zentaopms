@@ -148,7 +148,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->mailto;?></th>
-            <td><?php $mailto = explode(',', str_replace(' ', '', $task->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+            <td><?php $mailto = explode(',', str_replace(' ', '', $task->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account, $account); ?></td>
           </tr>
         </table>
       </fieldset>
@@ -191,19 +191,19 @@
         <table class='table table-data table-condensed table-borderless'> 
           <tr>
             <th class='w-80px'><?php echo $lang->task->openedBy;?></th>
-            <td><?php if($task->openedBy) echo $users[$task->openedBy] . $lang->at . $task->openedDate;?></td>
+            <td><?php if($task->openedBy) echo zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->finishedBy;?></th>
-            <td><?php if($task->finishedBy) echo $users[$task->finishedBy] . $lang->at . $task->finishedDate;?></td>
+            <td><?php if($task->finishedBy) echo zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledBy;?></th>
-            <td><?php if($task->canceledBy) echo $users[$task->canceledBy] . $lang->at . $task->canceledDate;?></td>
+            <td><?php if($task->canceledBy) echo zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedBy;?></th>
-            <td><?php if($task->closedBy) echo $users[$task->closedBy] . $lang->at . $task->closedDate;?></td>
+            <td><?php if($task->closedBy) echo zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedReason;?></th>
@@ -211,7 +211,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->lastEdited;?></th>
-            <td><?php if($task->lastEditedBy) echo $users[$task->lastEditedBy] . $lang->at . $task->lastEditedDate;?></td>
+            <td><?php if($task->lastEditedBy) echo zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate;?></td>
           </tr>
         </table>
       </fieldset>

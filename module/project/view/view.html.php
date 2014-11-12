@@ -93,19 +93,19 @@
           </tr>
           <tr>
             <th><?php echo $lang->project->PM;?></th>
-            <td><?php echo $users[$project->PM];?></td>
+            <td><?php echo zget($users, $project->PM, $project->PM);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->project->PO;?></th>
-            <td><?php echo $users[$project->PO];?></td>
+            <td><?php echo zget($users, $project->PO, $project->PO);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->project->QD;?></th>
-            <td><?php echo $users[$project->QD];?></td>
+            <td><?php echo zget($users, $project->QD, $project->QD);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->project->RD;?></th>
-            <td><?php echo $users[$project->RD];?></td>
+            <td><?php echo zget($users, $project->RD, $project->RD);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->project->products;?></th>
