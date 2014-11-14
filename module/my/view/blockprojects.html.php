@@ -30,7 +30,7 @@
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>
       <td class='text-left w-150px'>
-        <img class='progressbar' src='/theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress;?>'>
+        <img class='progressbar' src='/theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress);?>'>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
       <td class='projectline text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
