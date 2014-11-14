@@ -209,7 +209,6 @@ class project extends control
 
         /* team member pairs. */
         $memberPairs = array();
-        $memberPairs[] = ""; 
         foreach($this->view->teamMembers as $key => $member)
         {
             $memberPairs[$key] = $member->realname;
@@ -606,6 +605,7 @@ class project extends control
 
         /* team member pairs. */
         $memberPairs = array();
+        $memberPairs[] = ""; 
         foreach($this->view->teamMembers as $key => $member)
         {
             $memberPairs[$key] = $member->realname;

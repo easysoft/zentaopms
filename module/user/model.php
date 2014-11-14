@@ -619,6 +619,8 @@ class userModel extends model
     public function failPlus($account)
     {
         $user  = $this->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+        if(empty($user)) return 0;
+
         $fails = $user->fails;
         $fails ++; 
         if($fails < $this->config->user->failTimes) 
@@ -645,6 +647,8 @@ class userModel extends model
     public function checkLocked($account)
     {
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch(); 
+        if(empty($user)) return false;
+
         if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
         return true;
     }
