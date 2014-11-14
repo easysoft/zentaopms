@@ -60,7 +60,7 @@
         <div class='tab-content'>
           <div id='batchUnlinkStory' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
             <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-borderless' id='storyList'>
+              <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='storyList'>
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s"; ?>
                 <thead>
                 <tr>

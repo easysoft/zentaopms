@@ -161,7 +161,7 @@
                 /* Batch assign. */
                 if($canBatchAssignTo)
                 {
-                    $withSearch = count($memberPairs) > 4;
+                    $withSearch = count($memberPairs) > 10;
                     $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
