@@ -62,7 +62,7 @@
       <td style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td style='overflow: visible'>
         <div class='input-group'>
-        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
+        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated($i)'");?>
         <span class='input-group-btn'>
         <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
         </span>

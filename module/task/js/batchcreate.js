@@ -1,5 +1,7 @@
+var storyChosenOptions = $.extend({}, defaultChosenOptions, {drop_width: 400, width: '200px'});
+
 $(function() {
-    for(i = 0; i < batchCreateNum; i++) $("#story" + i).chosen(defaultChosenOptions);
+    for(i = 0; i < batchCreateNum; i++) $("#story" + i).chosen(storyChosenOptions);
 });
 
 /* Get select of stories.*/
@@ -14,7 +16,7 @@ function setStories(moduleID, projectID, num)
         if(moduleID == 0) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>")
         $('#story' + num).val(storyID);
         $('#story' + num + '_chosen').remove();
-        $("#story" + num).chosen(defaultChosenOptions);
+        $("#story" + num).chosen(storyChosenOptions);
     });
 }
 
