@@ -119,6 +119,7 @@ function initKindeditor(afterInit)
         };
         try
         {
+            if(!window.editor) window.editor = {};
             var keditor = K.create('#' + editorID, options);
             window.editor['#'] = window.editor[editorID] = keditor;
             $editor.data('keditor', keditor);
