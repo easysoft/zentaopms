@@ -21,6 +21,17 @@ include '../../common/view/header.lite.html.php';
         $moduleName = isset($lang->$module->common)  ? $lang->$module->common:  $module;
         $methodName = isset($lang->$module->$method) ? $lang->$module->$method: $method;
 
+        /* find method name if method is lowercase letter. */
+        if(!isset($lang->$module->$method))
+        {
+            $tmpLang = array();
+            foreach($lang->$module as $key => $value)
+            {
+                $tmpLang[strtolower($key)] = $value;
+            }    
+            $methodName = isset($tmpLang[$method]) ? $tmpLang[$method] : $method;
+        }
+
         printf($lang->user->errorDeny, $moduleName, $methodName);
         ?>
         </div>
