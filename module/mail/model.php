@@ -273,7 +273,7 @@ class mailModel extends model
         $this->clear();
 
         /* Replace full webPath image for mail. */
-        if(strpos($body, 'src="data/upload')) $body = preg_replace('/<img (.*)src="data/upload', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot . 'data/upload', $body);
+        if(strpos($body, 'src="data/upload')) $body = preg_replace('/<img (.*)src="data\/upload/', '<img $1 src="http://' . $this->server->http_host . $this->config->webRoot . 'data/upload', $body);
 
         try 
         {
