@@ -375,7 +375,7 @@ class mailModel extends model
      */
     public function convertCharset($string)
     {
-        if($this->config->mail->smtp->charset != strtolower($this->config->charset)) return iconv($this->config->charset, $this->config->mail->smtp->charset, $string);
+        if($this->config->mail->smtp->charset != strtolower($this->config->charset)) return iconv($this->config->charset, $this->config->mail->smtp->charset . '//IGNORE', $string);
         return $string;
     }
 
