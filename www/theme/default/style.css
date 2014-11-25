@@ -443,6 +443,13 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer > .alert {border: none; margin: 0}
 .outer > .alert + #featurebar {border-top: 1px solid #ddd;}
 
+#featurebar .nav > li > .chosen-container-single {top: -2px;}
+#featurebar .nav > li > .chosen-container-single .chosen-single {height: 30px; padding: 3px 10px;}
+#featurebar .nav > li > .chosen-container-single .chosen-single abbr {top: 4px;}
+#featurebar .nav > li > .chosen-container-single .chosen-single div {top: -2px;}
+#featurebar .nav > li.active > .chosen-container-single .chosen-single {border-color: #009900}
+#featurebar .nav > li.active > .chosen-container-single.chosen-with-drop .chosen-single {border-color: #ddd}
+
 /* sub featurebar */
 .sub-featurebar {border-bottom: 1px solid #ddd; padding: 5px 10px; margin: -20px -20px 20px;}
 .sub-featurebar > .nav > li {float: left;}
