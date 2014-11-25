@@ -226,24 +226,27 @@ js::set('moduleID', $moduleID);
                       }
                   }
                   echo '</ul></li>';
+                  $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+                  if($canBatchAssignTo && count($bugs))
+                  {   
+                      $withSearch = count($memberPairs) > 10;
+                      $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product");
+                      echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
+                      echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      foreach ($memberPairs as $key => $value)
+                      {
+                          if(empty($key)) continue;
+                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                      }
+                      if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                      echo "</ul>";
+                      echo "</li>";
+                  }
                   ?>
                 </ul>
               </div>
-              <?php 
-              $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
-              if(count($bugs))
-              {
-                  if($canBatchAssignTo)
-                  {
-                      $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product");
-                      echo "<div class='input-group w-150px'>";
-                      echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
-                      echo "<span class='input-group-addon'>";
-                      echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->bug->assignTo);
-                      echo '</span></div>';
-                  }
-              }
-              ?>
             </div>
             <?php endif?>
             <div class='text-right'><?php $pager->show();?></div>
