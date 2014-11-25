@@ -28,15 +28,37 @@ table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}
   ?>
   </tr>
 <?php
+$rowspans = $this->post->rowspan ? $this->post->rowspan : array();
+$colspans = $this->post->colspan ? $this->post->colspan : array();
+$i = 0;
 foreach($rows as $row)
 {
     echo "<tr valign='top'>\n";
+    $col        = 0;
+    $endColspan = 0;
     foreach($fields as $fieldName => $fieldLabel)
     {
+        $col ++;
+        if(!empty($endColspan) and $col < $endColspan) continue;
+        if(isset($endRowspan[$fieldName]) and $i < $endRowspan[$fieldName]) continue;
         $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-        echo "<td><nobr>$fieldValue</nobr></td>\n";
+        $rowspan = '';
+        if(isset($rowspans[$i]) and strpos($rowspans[$i]['rows'], $fieldName) !== false)
+        {
+            $rowspan = "rowspan='{$rowspans[$i]['num']}'";
+            $endRowspan[$fieldName] = $i + $rowspans[$i]['num'];
+        }
+        $colspan = '';
+        if(isset($colspans[$i]) and strpos($colspans[$i]['cols'], $fieldName) !== false)
+        {
+            $colspan = "colspan='{$colspans[$i]['num']}'";
+            $endColspan = $col + $colspans[$i]['num'];
+        }
+        echo "<td $rowspan $colspan><nobr>$fieldValue</nobr></td>\n";
+
     }
     echo "</tr>\n";
+    $i++;
 }
 ?>
 </table>
