@@ -25,7 +25,7 @@
     <tr class='text-center'>
       <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title=$project->name");?></td>
       <td><?php echo $project->end;?></td>
-      <td><?php echo $lang->project->statusList[$project->status];?></td>
+      <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
       <td><?php echo $project->hours->totalEstimate;?></td>
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>

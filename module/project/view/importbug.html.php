@@ -49,7 +49,7 @@ var browseType = '<?php echo $browseType;?>';
       <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
       <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
       <td class='text-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
-      <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+      <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
       <td><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='input-sm form-control'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='input-sm form-control chosen'");?></td>
       <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control"');?></td>

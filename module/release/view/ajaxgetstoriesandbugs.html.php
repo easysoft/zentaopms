@@ -18,7 +18,7 @@
               <input type='checkbox' name='stories[]' value="<?php echo $storyID;?>" <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?>
             </td>
             <td id='preview<?php echo $story->id;?>' class='text-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='preview'");?></td>
-            <td class='<?php echo $story->status;?> w-50px'><?php echo $lang->story->statusList[$story->status];?></td>
+            <td class='story-<?php echo $story->status;?> w-50px'><?php echo $lang->story->statusList[$story->status];?></td>
             <td class='w-80px'><?php echo $lang->story->stageList[$story->stage];?></td>
           </tr>
           <?php endforeach;?>
@@ -43,7 +43,7 @@
               <input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if($bug->status == 'closed' or $bug->status == 'resolved') echo "checked"; ?>> <?php echo sprintf('%03d', $bug->id);?>
             </td>
             <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-            <td class='w-80px'><?php echo $lang->bug->statusList[$bug->status];?></td>
+            <td class='w-80px bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
           </tr>
           <?php endforeach;?>
         </table>

@@ -46,7 +46,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->todo->status;?></th>
-              <td><?php echo $lang->todo->statusList[$todo->status];?></td>
+              <td class='todo-<?php echo $todo->status?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->type;?></th>

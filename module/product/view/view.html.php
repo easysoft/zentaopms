@@ -83,7 +83,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->product->status;?></th>
-            <td><?php echo $lang->product->statusList[$product->status];?></td>
+            <td class='product-<?php echo $product->status?>'><?php echo $lang->product->statusList[$product->status];?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->acl;?></th>

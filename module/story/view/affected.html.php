@@ -26,7 +26,7 @@
                 <td><?php echo $task->id;?></td>
                 <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
                 <td><?php echo $users[$task->assignedTo];?></td>
-                <td><?php echo $lang->task->statusList[$task->status];?></td>
+                <td class='task-<?php echo $task->status?>'><?php echo $lang->task->statusList[$task->status];?></td>
                 <td><?php echo $task->consumed;?></td>
                 <td><?php echo $task->left;?></td>
               </tr>
@@ -54,7 +54,7 @@
           <tr class='text-center'>
             <td><?php echo $bug->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
-            <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+            <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
             <td><?php echo $users[$bug->openedBy];?></td>
             <td><?php echo $users[$bug->resolvedBy];?></td>
             <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
@@ -80,7 +80,7 @@
           <tr class='text-center'>
             <td><?php echo $case->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '_blank');?></td>
-            <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+            <td class='case-<?php echo $case->status?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
             <td><?php echo $users[$case->openedBy];?></td>
             <td><?php echo $users[$case->lastEditedBy];?></td>
           </tr>

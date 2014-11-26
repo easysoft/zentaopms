@@ -138,7 +138,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
-                <td><?php echo $lang->story->statusList[$story->status];?></td>
+                <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
