@@ -250,11 +250,6 @@ class bug extends control
         $productID = $this->product->saveState($productID, $this->products);
         $this->bug->setMenu($this->products, $productID);
 
-        /* Remove the unused types. */
-        unset($this->lang->bug->typeList['designchange']);
-        unset($this->lang->bug->typeList['newfeature']);
-        unset($this->lang->bug->typeList['trackthings']);
-
         /* Init vars. */
         $moduleID   = 0;
         $projectID  = 0;
@@ -401,11 +396,6 @@ class bug extends control
             }
         }
 
-        /* Remove the unused types. */
-        unset($this->lang->bug->typeList['designchange']);
-        unset($this->lang->bug->typeList['newfeature']);
-        unset($this->lang->bug->typeList['trackthings']);
-
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
@@ -518,14 +508,6 @@ class bug extends control
         $productID       = $bug->product;
         $projectID       = $bug->project;
         $currentModuleID = $bug->module;
-
-        /**
-         * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
-         * These thress types if upgrade from bugfree2.x.
-         */
-        if($bug->type != 'designchange') unset($this->lang->bug->typeList['designchange']);
-        if($bug->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
-        if($bug->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
 
         /* Set the menu. */
         $this->bug->setMenu($this->products, $productID);

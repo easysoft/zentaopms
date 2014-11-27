@@ -39,13 +39,14 @@
      * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
      * These thress types if upgrade from bugfree2.x.
      */
-    if($bugs[$bugID]->type != 'designchange') unset($this->lang->bug->typeList['designchange']);
-    if($bugs[$bugID]->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
-    if($bugs[$bugID]->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
+    $typeList = $lang->bug->typeList;
+    if($bugs[$bugID]->type != 'designchange') unset($typeList['designchange']);
+    if($bugs[$bugID]->type != 'newfeature')   unset($typeList['newfeature']);
+    if($bugs[$bugID]->type != 'trackthings')  unset($typeList['trackthings']);
     ?>
     <tr class='text-center'>
       <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
-      <td><?php echo html::select("types[$bugID]",         $lang->bug->typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
+      <td><?php echo html::select("types[$bugID]",         $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
       <td><?php echo html::select("severities[$bugID]",   (array)$lang->bug->severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
       <td><?php echo html::select("pris[$bugID]",         (array)$lang->bug->priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
       <td><?php echo html::input("titles[$bugID]",         $bugs[$bugID]->title, 'class=form-control');?></td>

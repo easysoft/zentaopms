@@ -93,7 +93,13 @@ js::set('refresh', $lang->refresh);
         <th><?php echo $lang->bug->lblTypeAndSeverity;?></th>
         <td>
           <div class='input-group'>
-            <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control' style='width: 50%'");?> 
+            <?php
+            /* Remove the unused types. */
+            unset($lang->bug->typeList['designchange']);
+            unset($lang->bug->typeList['newfeature']);
+            unset($lang->bug->typeList['trackthings']);
+            echo html::select('type', $lang->bug->typeList, $type, "class='form-control' style='width: 50%'");
+            ?>
             <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control' style='width: 50%'");?>
           </div>
         </td>
