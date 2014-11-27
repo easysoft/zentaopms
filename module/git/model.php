@@ -421,7 +421,11 @@ class gitModel extends model
      */
     public function getRepoByURL($url)
     {
-        foreach($this->config->git->repos as $repo) if(strpos($url, $repo['path']) !== false) return (object)$repo;
+        foreach($this->config->git->repos as $repo)
+        {
+            if(empty($repo['path'])) continue;
+            if(strpos($url, $repo['path']) !== false) return (object)$repo;
+        }
         return false;
     }
 

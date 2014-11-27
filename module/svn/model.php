@@ -413,7 +413,11 @@ class svnModel extends model
      */
     public function getRepoByURL($url)
     {
-        foreach($this->config->svn->repos as $repo) if(strpos($url, $repo['path']) !== false) return (object)$repo;
+        foreach($this->config->svn->repos as $repo)
+        {
+            if(empty($repo['path'])) continue;
+            if(strpos($url, $repo['path']) !== false) return (object)$repo;
+        }
         return false;
     }
 
