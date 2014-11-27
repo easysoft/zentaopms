@@ -36,7 +36,7 @@
     <td><?php echo html::a($projectLink, $project->name);?></td>
     <td><?php echo $project->begin;?></td>
     <td><?php echo $project->end;?></td>
-    <td><?php echo $lang->project->statusList[$project->status];?></td>
+    <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
     <td><?php echo $project->role;?></td>
     <td><?php echo $project->join;?></td>
     <td><?php echo $project->hours;?></td>

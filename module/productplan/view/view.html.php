@@ -97,7 +97,7 @@
                     <td><?php echo $users[$story->openedBy];?></td>
                     <td><?php echo $users[$story->assignedTo];?></td>
                     <td><?php echo $story->estimate;?></td>
-                    <td><?php echo $lang->story->statusList[$story->status];?></td>
+                    <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td>
                       <?php
@@ -159,7 +159,7 @@
                     <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
                     <td><?php echo $users[$bug->openedBy];?></td>
                     <td><?php echo $users[$bug->assignedTo];?></td>
-                    <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+                    <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
                     <td>
                       <?php
                       if(common::hasPriv('productplan', 'unlinkBug'))

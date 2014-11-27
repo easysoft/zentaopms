@@ -97,7 +97,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->testtask->status;?></th>
-            <td><?php echo $lang->testtask->statusList[$task->status];?></td>
+            <td class='task-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
           </tr>  
        </table>
       </fieldset>

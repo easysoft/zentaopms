@@ -51,7 +51,7 @@
         <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
-        <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+        <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
       </tr>
       <?php endforeach;?>
       </tbody>
@@ -93,7 +93,7 @@
         <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
-        <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+        <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
         <td class='text-center'>
           <?php
           if(common::hasPriv('productplan', 'unlinkBug'))

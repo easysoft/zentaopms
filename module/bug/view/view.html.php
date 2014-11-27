@@ -133,7 +133,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->status;?></th>
-                <td><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
+                <td class='bug-<?php echo $bug->status?>'><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->activatedCount;?></th>
