@@ -102,7 +102,7 @@ class releaseModel extends model
             $build = fixer::input('post')
                 ->add('product', (int)$productID)
                 ->add('builder', $this->app->user->account)
-                ->skipSpecial($this->config->release->editor->create['id'])
+                ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
                 ->remove('build,files,labels')
                 ->get();
             $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->check('name','unique')->exec();
@@ -115,7 +115,7 @@ class releaseModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
-            ->skipSpecial($this->config->release->editor->create['id'])
+            ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels')
             ->get();
 
@@ -147,7 +147,7 @@ class releaseModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->skipSpecial($this->config->release->editor->edit['id'])
+            ->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->remove('files,labels,allchecker')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)

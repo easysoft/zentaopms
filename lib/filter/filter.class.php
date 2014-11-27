@@ -504,17 +504,23 @@ class fixer
     }
 
     /**
-     * Strip tags 
-     * 
-     * @param  string $fieldName 
-     * @param  string $allowableTags 
+     * Strip tags
+     *
+     * @param  string $fieldName
+     * @param  string $allowedTags
      * @access public
      * @return object fixer object
      */
-    public function stripTags($fieldName)
+    public function stripTags($fieldName, $allowedTags)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = filter_var($this->data->$fieldName, FILTER_SANITIZE_STRING);
+        foreach($fields as $fieldName)
+        {
+            if(version_compare(phpversion(), '5.4', '<') and get_magic_quotes_gpc()) $this->data->$fieldName = stripslashes($this->data->$fieldName);
+
+            if(!in_array($fieldName, $this->stripedFields)) $this->data->$fieldName = strip_tags($this->data->$fieldName, $allowedTags);
+            $this->stripedFields[] = $fieldName;
+        }
         return $this;
     }
 

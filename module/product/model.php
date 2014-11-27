@@ -213,7 +213,7 @@ class productModel extends model
              ->setDefault('createdDate', helper::now())
              ->setDefault('createdVersion', $this->config->version)
             ->join('whitelist', ',')
-            ->skipSpecial($this->config->product->editor->create['id'])
+            ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->get();
         $this->dao->insert(TABLE_PRODUCT)
             ->data($product)
@@ -239,7 +239,7 @@ class productModel extends model
         $product = fixer::input('post')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
-            ->skipSpecial($this->config->product->editor->edit['id'])
+            ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->get();
         $this->dao->update(TABLE_PRODUCT)
             ->data($product)

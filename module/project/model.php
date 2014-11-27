@@ -215,7 +215,7 @@ class projectModel extends model
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
-            ->skipSpecial($this->config->project->editor->create['id'])
+            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta')
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
@@ -285,7 +285,7 @@ class projectModel extends model
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
-            ->skipSpecial($this->config->project->editor->create['id'])
+            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products')
             ->get();
         $this->dao->update(TABLE_PROJECT)->data($project)

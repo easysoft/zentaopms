@@ -157,7 +157,7 @@ class buildModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->add('project', (int)$projectID)
-            ->skipSpecial($this->config->build->editor->create['id'])
+            ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->remove('resolvedBy,allchecker,files,labels')
             ->get();
 
@@ -186,7 +186,7 @@ class buildModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
-            ->skipSpecial($this->config->build->editor->edit['id'])
+            ->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
 

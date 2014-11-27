@@ -133,7 +133,7 @@ class storyModel extends model
             ->setIF($projectID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
-            ->skipSpecial($this->config->story->editor->create['id'])
+            ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
             ->remove('files,labels,spec,verify,needNotReview,newStory')
             ->get();
 
@@ -346,7 +346,7 @@ class storyModel extends model
             ->setIF($specChanged, 'closedReason', '')
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
-            ->skipSpecial($this->config->story->editor->change['id'])
+            ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,spec,verify,comment,needNotReview')
             ->get();
         $this->dao->update(TABLE_STORY)

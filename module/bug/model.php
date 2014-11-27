@@ -48,7 +48,7 @@ class bugModel extends model
             ->setDefault('openedBuild', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->skipSpecial($this->config->bug->editor->create['id'])
+            ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product, module, severity')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
@@ -353,7 +353,7 @@ class bugModel extends model
         $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
-            ->skipSpecial($this->config->bug->editor->edit['id'])
+            ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('project,module,project,story,task,duplicateBug', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
@@ -1218,7 +1218,7 @@ class bugModel extends model
         $template = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->add('type', 'bug')
-            ->skipSpecial('content')
+            ->stripTags('content', $this->config->allowedTags)
             ->get();
         $this->dao->insert(TABLE_USERTPL)->data($template)->autoCheck('title, content', 'notempty')->check('title', 'unique')->exec();
     }

@@ -38,7 +38,7 @@ class taskModel extends model
                 ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
                 ->setDefault('openedBy',   $this->app->user->account)
                 ->setDefault('openedDate', helper::now())
-                ->skipSpecial($this->config->task->editor->create['id'])
+                ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
                 ->remove('after,files,labels')
                 ->join('mailto', ',')
                 ->get();
@@ -211,7 +211,7 @@ class taskModel extends model
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->remove('comment,files,labels')
-            ->skipSpecial($this->config->task->editor->edit['id'])
+            ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
 

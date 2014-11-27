@@ -32,7 +32,7 @@ class todoModel extends model
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
-            ->skipSpecial($this->config->todo->editor->create['id'])
+            ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task')
             ->get();
         $this->dao->insert(TABLE_TODO)->data($todo)
@@ -117,7 +117,7 @@ class todoModel extends model
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
-            ->skipSpecial($this->config->todo->editor->edit['id'])
+            ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->get();
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()

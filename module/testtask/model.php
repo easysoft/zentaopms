@@ -41,7 +41,7 @@ class testtaskModel extends model
      */
     function create()
     {
-        $task = fixer::input('post')->skipSpecial($this->config->testtask->editor->create['id'])->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->get();
         $this->dao->insert(TABLE_TESTTASK)->data($task)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
@@ -163,7 +163,7 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $task = fixer::input('post')->skipSpecial($this->config->testtask->editor->edit['id'])->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->get();
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
@@ -206,7 +206,7 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->setDefault('status', 'done')
-            ->skipSpecial($this->config->testtask->editor->close['id'])
+            ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
