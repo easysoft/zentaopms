@@ -383,6 +383,7 @@ $(function()
         if(e.closest('.datatable').length) return;
         scope = e.data('scope');
         scope = scope ? $('#' + scope) : e.closest('.table');
+        if(!scope.length) scope = e.closest('form');
         scope.find('input:checkbox').each(e.hasClass('check-inverse') ? function() { $(this).attr("checked", !$(this).attr("checked"));} : function() { $(this).attr("checked", true);});
     });
 });
