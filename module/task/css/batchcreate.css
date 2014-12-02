@@ -1,5 +1,6 @@
 .outer .chosen-container-single .chosen-drop {border-top: 1px solid #ddd!important}
 .outer .chosen-container-single {max-width: 160px; border-radius: 0}
-.outer .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right: 0}
+.outer .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px;}
+.outer .chosen-container-single + .input-group-btn > .btn {border-left: 0}
 .outer .input-group {display: block; padding-right: 29px; max-width: 100%;}
 .outer .input-group-btn {display: block; position: absolute; right: 0; width: 29px; top: 0}
