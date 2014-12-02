@@ -658,6 +658,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
   #searchbox {width: 120px;}
   #featurebar .nav {float: none}
   #featurebar .nav > li > a {padding: 0 2px; font-size: 13px}
+  #titlebar .actions {position: static;}
+  #titlebar > .heading {padding-right: 0!important;}
 }
 @media (max-width: 600px) /* small phone */
 {

@@ -1165,6 +1165,18 @@ function setTableBehavior()
     $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
 }
 
+/**
+ * Fix style
+ * 
+ * @access public
+ * @return void
+ */
+function fixStyle()
+{
+    var $actions = $('#titlebar > .actions');
+    if($actions.length) $('#titlebar > .heading').css('padding-right', $actions.width());
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1187,6 +1199,8 @@ $(document).ready(function()
 
     autoCheck();
     toggleSearch();
+
+    fixStyle();
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 
