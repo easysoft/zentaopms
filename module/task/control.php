@@ -753,6 +753,7 @@ class task extends control
         {
             $taskIDList = $this->post->taskIDList;
             unset($_POST['taskIDList']);
+            unset($_POST['assignedTo']);
             $this->loadModel('action');
 
             $tasks = $this->task->getByList($taskIDList);
