@@ -11,7 +11,10 @@ js::import($jsRoot . 'chartjs/excanvas.min.js');
 <script>
 jQuery.fn.projectLine = function(setting)
 {
-    $(this).each(function()
+    var $lines = $(this);
+    if(window.browser.isIE && window.browser.ie < 9 && $lines.length > 10) return;
+    
+    $lines.each(function()
     {
         var $e = $(this);
         var options = $.extend({values: $e.attr('values')}, $e.data(), setting),
