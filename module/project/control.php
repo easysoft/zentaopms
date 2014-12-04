@@ -135,6 +135,9 @@ class project extends control
         if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
         setcookie('projectTaskOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Header and position. */
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->task;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -149,11 +152,11 @@ class project extends control
         if($status == 'byProduct')
         {
             $modules = $this->tree->getProjectModule($projectID, $productID);
-            $tasks   = $this->loadModel('task')->getTasksByModule($projectID, $modules, $orderBy, $pager);
+            $tasks   = $this->loadModel('task')->getTasksByModule($projectID, $modules, $sort, $pager);
         }
         elseif($status == 'byModule') 
         {
-            $tasks = $this->loadModel('task')->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $orderBy, $pager);
+            $tasks = $this->loadModel('task')->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $sort, $pager);
         }
         elseif($browseType != "bysearch")
         {
@@ -164,7 +167,7 @@ class project extends control
                 unset($qureyStatus['closed']);
                 $qureyStatus = array_keys($qureyStatus);
             }
-            $tasks = $this->loadModel('task')->getProjectTasks($projectID, $qureyStatus, $orderBy, $pager); 
+            $tasks = $this->loadModel('task')->getProjectTasks($projectID, $qureyStatus, $sort, $pager); 
         }
         else
         {   
@@ -195,9 +198,9 @@ class project extends control
             $taskQuery    = $this->search->replaceDynamic($taskQuery);
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
-            $this->session->set('taskOrderBy', $orderBy);
+            $this->session->set('taskOrderBy', $allProject);
 
-            $tasks = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
+            $tasks = $this->project->getSearchTasks($taskQuery, $pager, $allProject);
         }
 
        /* Build the search form. */
@@ -531,6 +534,9 @@ class project extends control
         if(!$orderBy) $orderBy = $this->cookie->projectStoryOrder ? $this->cookie->projectStoryOrder : 'pri';
         setcookie('projectStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $project = $this->commonAction($projectID);
 
         /* Header and position. */
@@ -539,7 +545,7 @@ class project extends control
         $position[] = $this->lang->project->story;
 
         /* The pager. */
-        $stories    = $this->story->getProjectStories($projectID, $orderBy);
+        $stories    = $this->story->getProjectStories($projectID, $sort);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
@@ -600,7 +606,8 @@ class project extends control
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager, $build);
+        $sort  = $this->loadModel('common')->appendOrder($orderBy);
+        $bugs  = $this->bug->getProjectBugs($projectID, $sort, $pager, $build);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -1575,6 +1582,9 @@ class project extends control
         /* use first project if projectID does not exist. */
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Set the menu. If the projectID = 0, use the indexMenu instead. */
         $this->project->setMenu($this->projects, $projectID);
         if($projectID == 0)
@@ -1588,8 +1598,6 @@ class project extends control
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
@@ -1606,7 +1614,10 @@ class project extends control
         $this->view->type      = $type;
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $this->view->account   = $account;
-        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID);
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
+        $this->view->param     = $param;
+        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID);
         $this->display();
     }
 

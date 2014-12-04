@@ -74,12 +74,13 @@ class testcase extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* By module or all cases. */
         if($browseType == 'bymodule' or $browseType == 'all')
         {
             $childModuleIds    = $this->tree->getAllChildId($moduleID);
-            $this->view->cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
+            $this->view->cases = $this->testcase->getModuleCases($productID, $childModuleIds, $sort, $pager);
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
@@ -88,7 +89,7 @@ class testcase extends control
                 ->where("t2.status = 'active'")
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
-                ->orderBy($orderBy)
+                ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
         }
@@ -130,7 +131,7 @@ class testcase extends control
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
                 ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($sort)->page($pager)->fetchAll();
         }
 
         /* save session .*/

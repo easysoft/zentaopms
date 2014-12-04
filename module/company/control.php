@@ -61,6 +61,9 @@ class company extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Build the search form. */
         $queryID = $type == 'bydept' ? 0 : (int)$param;
         $this->config->company->browse->search['actionURL'] = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
@@ -70,7 +73,7 @@ class company extends control
         if($type == 'bydept')
         {
             $childDeptIds = $this->dept->getAllChildID($deptID);
-            $users        = $this->dept->getUsers($childDeptIds, $pager, $orderBy);
+            $users        = $this->dept->getUsers($childDeptIds, $pager, $sort);
         }
         else
         {
@@ -87,7 +90,7 @@ class company extends control
                     $this->session->set('userQuery', ' 1 = 1');
                 }
             }
-            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $orderBy);
+            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $sort);
         }
 
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
@@ -183,8 +186,9 @@ class company extends control
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Set the user and type. */
         $account = $browseType == 'account' ? $param : 'all';
@@ -215,11 +219,11 @@ class company extends control
         /* Get actions. */
         if($browseType != 'bysearch') 
         {
-            $actions = $this->action->getDynamic($account, $period, $orderBy, $pager, $product, $project);
+            $actions = $this->action->getDynamic($account, $period, $sort, $pager, $product, $project);
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $projects, $queryID, $orderBy, $pager); 
+            $actions = $this->action->getDynamicBySearch($products, $projects, $queryID, $sort, $pager); 
         }
 
         /* Build search form. */
@@ -244,6 +248,9 @@ class company extends control
         $this->view->project    = $project;
         $this->view->queryID    = $queryID; 
         $this->view->actions    = $actions;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
         $this->display();
     }
 }

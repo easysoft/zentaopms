@@ -114,6 +114,9 @@ class product extends control
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
         setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Set header and position. */
         $this->view->title      = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
         $this->view->position[] = $this->products[$productID];
@@ -130,20 +133,20 @@ class product extends control
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, 0, array_keys($unclosedStatus), $orderBy, $pager);
+            $stories = $this->story->getProductStories($productID, 0, array_keys($unclosedStatus), $sort, $pager);
         }
-        if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
-        if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $orderBy, $pager);
-        if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $orderBy, $pager);
-        if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $this->app->user->account, $orderBy, $pager);
-        if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $this->app->user->account, $orderBy, $pager);
-        if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $this->app->user->account, $orderBy, $pager);
-        if($browseType == 'closedbyme')  $stories = $this->story->getByClosedBy($productID, $this->app->user->account, $orderBy, $pager);
-        if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, 'draft', $orderBy, $pager);
-        if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, 'active', $orderBy, $pager);
-        if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $orderBy, $pager);
-        if($browseType == 'willclose')   $stories = $this->story->getWillClose($productID, $orderBy, $pager);
-        if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, 'closed', $orderBy, $pager);
+        if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, 0, 'all', $sort, $pager);
+        if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $sort, $pager);
+        if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager);
+        if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $this->app->user->account, $sort, $pager);
+        if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $this->app->user->account, $sort, $pager);
+        if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $this->app->user->account, $sort, $pager);
+        if($browseType == 'closedbyme')  $stories = $this->story->getByClosedBy($productID, $this->app->user->account, $sort, $pager);
+        if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, 'draft', $sort, $pager);
+        if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, 'active', $sort, $pager);
+        if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $sort, $pager);
+        if($browseType == 'willclose')   $stories = $this->story->getWillClose($productID, $sort, $pager);
+        if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, 'closed', $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
@@ -431,11 +434,12 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
@@ -451,7 +455,10 @@ class product extends control
         $this->view->type      = $type;
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $this->view->account   = $account;
-        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID);
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
+        $this->view->param     = $param;
+        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
         $this->display();
     }
 

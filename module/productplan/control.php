@@ -146,6 +146,9 @@ class productplan extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($productID);
         $products               = $this->product->getPairs();
@@ -153,7 +156,7 @@ class productplan extends control
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
         $this->view->orderBy    = $orderBy;
-        $this->view->plans      = $this->productplan->getList($productID, $pager, $orderBy);
+        $this->view->plans      = $this->productplan->getList($productID, $pager, $sort);
         $this->view->pager      = $pager;
         $this->display();
     }
@@ -171,14 +174,17 @@ class productplan extends control
     {
         $this->session->set('storyList', $this->app->getURI(true));
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product);
         $products                = $this->product->getPairs();
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
-        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $orderBy : 'id_desc');
-        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $orderBy : 'id_desc');
+        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
+        $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc');
         $this->view->products    = $products;
         $this->view->summary     = $this->product->summary($this->view->planStories);
         $this->view->plan        = $plan;

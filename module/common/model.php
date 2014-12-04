@@ -774,4 +774,20 @@ class commonModel extends model
         }
         return array('stop' => false, 'data' => $data);
     }
+
+    /**
+     * Append order by.
+     * 
+     * @param  string $orderBy 
+     * @param  string $append 
+     * @access public
+     * @return string
+     */
+    public function appendOrder($orderBy, $append = 'id')
+    {
+
+        list($firstOrder) = explode(',', $orderBy);
+        $sort = strpos($firstOrder, '_') === false ? '_asc' : strstr($firstOrder, '_');
+        return strpos($orderBy, $append) === false ? $orderBy . ',' . $append . $sort : $orderBy;
+    }
 }

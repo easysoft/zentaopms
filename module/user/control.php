@@ -64,10 +64,13 @@ class user extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Get user, totos. */
         $user    = $this->user->getById($account);
         $account = $user->account;
-        $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $orderBy);
+        $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
 
         /* set menus. */
@@ -229,9 +232,12 @@ class user extends control
 
         $this->app->loadLang('testcase');
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
-        $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $orderBy);
+        $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->account    = $account;
         $this->view->recTotal   = $recTotal;
@@ -264,6 +270,9 @@ class user extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
          /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
@@ -277,13 +286,13 @@ class user extends control
                 ->Where('t1.assignedTo')->eq($account)
                 ->andWhere('t1.status')->ne('done')
                 ->andWhere('t3.status')->ne('done')
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($sort)->page($pager)->fetchAll();
         }
         elseif($type == 'caseByHim')
         {
             $cases = $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($sort)->page($pager)->fetchAll();
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         

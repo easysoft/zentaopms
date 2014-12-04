@@ -833,11 +833,14 @@ class story extends control
         $this->lang->story->menu->testcase['subModule'] = 'story';
         $this->loadModel('testcase')->setMenu($products, $productID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $this->view->title      = $this->lang->story->zeroCase;
         $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
         $this->view->position[] = $this->lang->story->zeroCase;
 
-        $this->view->stories   = $this->story->getZeroCase($productID, $orderBy);
+        $this->view->stories   = $this->story->getZeroCase($productID, $sort);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->productID = $productID;
         $this->view->orderBy   = $orderBy;

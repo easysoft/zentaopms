@@ -85,8 +85,11 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->position[] = $this->lang->my->todo;
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Assign. */
-        $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $orderBy);
+        $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
         $this->view->recTotal     = $recTotal;
@@ -94,7 +97,7 @@ class my extends control
         $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->account      = $this->app->user->account;
-        $this->view->orderBy      = $orderBy == 'date_desc,status,begin' ? '' : $orderBy;
+        $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
         $this->view->pager        = $pager;
         $this->view->importFuture = ($type != 'today');
 
@@ -121,10 +124,13 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $pager);
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
@@ -157,11 +163,14 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[] = $this->lang->my->task;
         $this->view->tabID      = 'task';
-        $this->view->tasks      = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $orderBy);
+        $this->view->tasks      = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -194,7 +203,9 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $orderBy, 0, $pager);
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
 
         /* Save bugIDs session for get the pre and next bug. */
         $bugIDs = '';
@@ -234,9 +245,12 @@ class my extends control
 
         $this->app->loadLang('testcase');
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
         $this->view->position[] = $this->lang->my->testTask;
-        $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $orderBy, $type);
+        $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
         
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -269,7 +283,10 @@ class my extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $cases = array();
         if($type == 'assigntome')
         {
@@ -281,7 +298,7 @@ class my extends control
                 ->andWhere('t3.status')->ne('done')
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($sort)->page($pager)->fetchAll();
         }
         elseif($type == 'donebyme')
         {
@@ -290,13 +307,13 @@ class my extends control
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.status')->eq('done')
                 ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($sort)->page($pager)->fetchAll();
         }
         elseif($type == 'openedbyme')
         {
             $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($sort)->page($pager)->fetchAll();
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         
@@ -429,8 +446,9 @@ class my extends control
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* The header and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
@@ -442,7 +460,8 @@ class my extends control
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
-        $this->view->actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager);
+        $this->view->pager      = $pager;
+        $this->view->actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager);
         $this->display();
     }
 

@@ -72,6 +72,9 @@ class doc extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
  
         /* Get docs. */
         $modules = 0;
@@ -79,7 +82,7 @@ class doc extends control
         if($browseType == "bymodule")
         {
             if($moduleID) $modules = $this->tree->getAllChildID($moduleID);
-            $docs = $this->doc->getDocs($libID, $productID, $projectID, $modules, $orderBy, $pager);
+            $docs = $this->doc->getDocs($libID, $productID, $projectID, $modules, $sort, $pager);
         }
         elseif($browseType == "bysearch")
         {
@@ -105,7 +108,7 @@ class doc extends control
             $docQuery = $this->search->replaceDynamic($docQuery);
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
             ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+            ->orderBy($sort)->page($pager)->fetchAll();
         }
 
         /* Get the tree menu. */

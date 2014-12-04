@@ -62,13 +62,16 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testtask->common;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProductTasks($productID, $orderBy, $pager, $type);
+        $this->view->tasks       = $this->testtask->getProductTasks($productID, $sort, $pager, $type);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->type        = $type;
@@ -239,6 +242,9 @@ class testtask extends control
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -248,11 +254,11 @@ class testtask extends control
         {
             $modules = '';
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
-            $this->view->runs      = $this->testtask->getRuns($taskID, $modules, $orderBy, $pager);
+            $this->view->runs      = $this->testtask->getRuns($taskID, $modules, $sort, $pager);
         }
         elseif($browseType == 'assignedtome')
         {
-            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $orderBy, $pager);
+            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $sort, $pager);
         }
         /* By search. */
         elseif($browseType == 'bysearch')
@@ -292,7 +298,7 @@ class testtask extends control
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($taskID)
-                ->orderBy(strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy))
+                ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
                 ->page($pager)
                 ->fetchAll();
         }

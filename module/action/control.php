@@ -40,8 +40,11 @@ class action extends control
 
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = pager::init($recTotal, $recPerPage, $pageID);
-        $trashes = $this->action->getTrashes($type, $orderBy, $pager);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $trashes = $this->action->getTrashes($type, $sort, $pager);
 
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;

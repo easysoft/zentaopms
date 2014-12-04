@@ -77,6 +77,9 @@ class bug extends control
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
         setcookie('qaBugOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
@@ -87,22 +90,22 @@ class bug extends control
 
         /* Get bugs. */
         $bugs = array();
-        if($browseType == 'all') $bugs = $this->bug->getAllBugs($productID, $projects, $orderBy, $pager);
+        if($browseType == 'all') $bugs = $this->bug->getAllBugs($productID, $projects, $sort, $pager);
         elseif($browseType == "bymodule")
         {
             $childModuleIds = $this->tree->getAllChildId($moduleID);
-            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $projects, $orderBy, $pager);
+            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $projects, $sort, $pager);
         }
-        elseif($browseType == 'assigntome')    $bugs = $this->bug->getByAssigntome($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'openedbyme')    $bugs = $this->bug->getByOpenedbyme($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'resolvedbyme')  $bugs = $this->bug->getByResolvedbyme($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'assigntonull')  $bugs = $this->bug->getByAssigntonull($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'unresolved')    $bugs = $this->bug->getByStatus($productID, $projects, 'unresolved', $orderBy, $pager);
-        elseif($browseType == 'unclosed')      $bugs = $this->bug->getByStatus($productID, $projects, 'unclosed', $orderBy, $pager);
-        elseif($browseType == 'longlifebugs')  $bugs = $this->bug->getByLonglifebugs($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'postponedbugs') $bugs = $this->bug->getByPostponedbugs($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $projects, $queryID, $orderBy, $pager);
+        elseif($browseType == 'assigntome')    $bugs = $this->bug->getByAssigntome($productID, $projects, $sort, $pager);
+        elseif($browseType == 'openedbyme')    $bugs = $this->bug->getByOpenedbyme($productID, $projects, $sort, $pager);
+        elseif($browseType == 'resolvedbyme')  $bugs = $this->bug->getByResolvedbyme($productID, $projects, $sort, $pager);
+        elseif($browseType == 'assigntonull')  $bugs = $this->bug->getByAssigntonull($productID, $projects, $sort, $pager);
+        elseif($browseType == 'unresolved')    $bugs = $this->bug->getByStatus($productID, $projects, 'unresolved', $sort, $pager);
+        elseif($browseType == 'unclosed')      $bugs = $this->bug->getByStatus($productID, $projects, 'unclosed', $sort, $pager);
+        elseif($browseType == 'longlifebugs')  $bugs = $this->bug->getByLonglifebugs($productID, $projects, $sort, $pager);
+        elseif($browseType == 'postponedbugs') $bugs = $this->bug->getByPostponedbugs($productID, $projects, $sort, $pager);
+        elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $projects, $sort, $pager);
+        elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $projects, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
