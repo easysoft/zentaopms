@@ -11,7 +11,7 @@ function setStories(moduleID, projectID, num)
     $.get(link, function(stories)
     {
         var storyID = $('#story' + num).val();
-        if(!stories) stories = '<select id="story' + num + '" name="story' + num + '" class="select-1"></select>';
+        if(!stories) stories = '<select id="story[' + num + ']" name="story' + num + '" class="select-1"></select>';
         $('#story' + num).replaceWith(stories);
         if(moduleID == 0) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>")
         $('#story' + num).val(storyID);
