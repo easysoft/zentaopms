@@ -290,8 +290,9 @@ class fileModel extends model
         $data   = array();
         while(($line = fgets($handle)) !== false)
         {
-            $line = trim($line);
-            if(substr($line, -1) != ',') $line .= ',';
+            $line    = trim($line);
+            $markNum = substr_count($line, '"') - substr_count($line, '\"');
+            if(substr($line, -1) != ',' and (($markNum % 2 == 1 and $col != -1) or ($markNum % 2 == 0 and substr($line, -2) != ',"' and $col == -1))) $line .= ',';
             $line = str_replace(',"",', ',,', $line);
             $line = str_replace(',"",', ',,', $line);
             $line = preg_replace_callback('/(\"{2,})(\,+)/U', array($this, 'removeInterference'), $line);
