@@ -198,9 +198,9 @@ class project extends control
             $taskQuery    = $this->search->replaceDynamic($taskQuery);
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
-            $this->session->set('taskOrderBy', $allProject);
+            $this->session->set('taskOrderBy', $sort);
 
-            $tasks = $this->project->getSearchTasks($taskQuery, $pager, $allProject);
+            $tasks = $this->project->getSearchTasks($taskQuery, $pager, $sort);
         }
 
        /* Build the search form. */
