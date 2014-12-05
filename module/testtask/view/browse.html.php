@@ -38,7 +38,7 @@
   <?php foreach($tasks as $task):?>
   <tr class='text-center'>
     <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-    <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
+    <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
     <td class='text-left' title="<?php echo $task->projectName?>"><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
     <td class='text-left' title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
@@ -47,7 +47,7 @@
     <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-center'>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list', 'smile');
+      common::printIcon('testtask', 'view',    "taskID=$task->id", '', 'list', 'file');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
 
