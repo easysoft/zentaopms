@@ -33,10 +33,43 @@
         <img class='progressbar' src='<?php echo $webRoot;?>theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress);?>'>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
-      <td class='projectline text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
+      <td class='spark text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
    </tr>
    <?php endforeach;?>
   </tbody>
 </table>
 <?php endif;?>
 </div>
+<script>
+$(function()
+{
+    var $projectbox = $('#projectbox');
+    var $sparks = $projectbox.find('.spark').each(function(idx){$(this).attr('id', 'spark-' + idx);});
+    $sparks.filter(':lt(6)').data('spark', true).projectLine();
+    $sparks = $sparks.not(':lt(6)');
+
+    var scrollFn = false, scrollStart, i, id, $spark;
+    $projectbox.on('scroll.spark', function(e)
+    {
+        if(!$sparks.length)
+        {
+            $projectbox.off('scroll.spark');
+            return;
+        }
+        if(scrollFn) clearTimeout(scrollFn);
+
+        scrollFn = setTimeout(function()
+        {
+            scrollStart = Math.floor(($projectbox.scrollTop() - 30) / 29);
+            for(i = scrollStart; i <= scrollStart + 7; i++)
+            {
+                id = '#spark-' + i;
+                $spark = $(id);
+                if($spark.data('spark')) continue;
+                $spark.data('spark', true).projectLine();
+                $sparks = $sparks.not(id);
+            }
+        },100);
+    });
+});
+</script>
