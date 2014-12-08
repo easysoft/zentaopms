@@ -12,6 +12,8 @@
 $lang->build->common    = "Build";
 $lang->build->create    = "创建版本";
 $lang->build->edit      = "编辑版本";
+$lang->build->linkStory = "关联需求";
+$lang->build->linkBug   = "关联Bug";
 $lang->build->delete    = "删除版本";
 $lang->build->deleted   = "已删除";
 $lang->build->view      = "版本详情";
@@ -38,9 +40,11 @@ $lang->build->linkStories        = '相关需求';
 $lang->build->linkBugs           = '相关Bug';
 $lang->build->stories            = '已关联需求';
 $lang->build->bugs               = '已关联Bug';
+$lang->build->generatedBugs      = '产生的Bug';
 
 $lang->build->finishStories = '本次共完成需求%s个';
 $lang->build->resolvedBugs  = '本次共解决Bug%s个';
+$lang->build->createdBugs   = '本次共产生Bug%s个';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' 软件源代码库，如Subversion、Git库地址';

@@ -1442,7 +1442,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $projects, $queryID, $orderBy, $pager)
+    public function getBySearch($productID, $projects, $queryID, $orderBy, $pager = null)
     {
         if($queryID)
         {

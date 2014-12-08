@@ -25,13 +25,10 @@ class build extends control
             $buildID = $this->build->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
-            die(js::locate($this->createLink('project', 'build', "project=$projectID"), 'parent'));
+            die(js::locate($this->createLink('build', 'view', "buildID=$buildID"), 'parent'));
         }
 
         /* Load these models. */
-        $this->loadModel('story');
-        $this->loadModel('bug');
-        $this->loadModel('task');
         $this->loadModel('project');
         $this->loadModel('user');
 
@@ -39,23 +36,7 @@ class build extends control
         $this->project->setMenu($this->project->getPairs(), $projectID);
 
         /* Get stories and bugs. */
-        $orderBy     = 'status_asc, stage_asc, id_desc';
-        $stories     = $this->story->getProjectStories($projectID, $orderBy);
-        $projectBugs = $this->bug->getProjectBugs($projectID); 
-        $bugs        = array();
-        foreach($projectBugs as $key => $bug)
-        {
-            if($bug->status == 'resolved')
-            {
-                $bugs[$key] = $bug;
-                unset($projectBugs[$key]);
-            }
-            else if($bug->status == 'closed') 
-            {
-                unset($projectBugs[$key]);
-            }
-        }
-        $bugs += $projectBugs;
+        $orderBy  = 'status_asc, stage_asc, id_desc';
 
         /* Assign. */
         $project = $this->loadModel('project')->getById($projectID);
@@ -66,8 +47,6 @@ class build extends control
         $this->view->projectID  = $projectID;
         $this->view->lastBuild  = $this->build->getLast($projectID);
         $this->view->users      = $this->user->getPairs('nodeleted');
-        $this->view->stories    = $stories;
-        $this->view->bugs       = $bugs;
         $this->view->orderBy    = $orderBy;
         $this->display();
     }
@@ -97,8 +76,6 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }
 
-        $this->loadModel('story');
-        $this->loadModel('bug');
         $this->loadModel('project');
 
         /* Set menu. */
@@ -107,8 +84,6 @@ class build extends control
 
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
-        $stories = $this->story->getProjectStories($build->project, $orderBy);
-        $bugs    = $this->bug->getProjectBugs($build->project); 
 
         /* Assign. */
         $project = $this->loadModel('project')->getById($build->project);
@@ -118,8 +93,6 @@ class build extends control
         $this->view->products   = $this->project->getProducts($build->project);
         $this->view->build      = $build;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
-        $this->view->stories    = $stories;
-        $this->view->bugs       = $bugs;
         $this->view->orderBy    = $orderBy;
         $this->display();
     }
@@ -150,15 +123,16 @@ class build extends control
 
         /* Assign. */
         $projects = $this->project->getPairs();
-        $this->view->title      = "BUILD #$build->id $build->name - " . $projects[$build->project];
-        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
-        $this->view->position[] = $this->lang->build->view;
-        $this->view->products   = $this->project->getProducts($build->project);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->build      = $build;
-        $this->view->stories    = $stories;
-        $this->view->bugs       = $bugs;
-        $this->view->actions    = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
+        $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
+        $this->view->position[]    = $this->lang->build->view;
+        $this->view->products      = $this->project->getProducts($build->project);
+        $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, 'id_desc', null, $build->id);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->build         = $build;
+        $this->view->stories       = $stories;
+        $this->view->bugs          = $bugs;
+        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->display();
     }
  
@@ -244,5 +218,207 @@ class build extends control
         if($varName == 'openedBuilds')  die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=form-control multiple'));
         if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, "class='form-control'"));
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, "class='form-control'"));
+    }
+
+    /**
+     * Link stories
+     * 
+     * @param  int    $buildID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @access public
+     * @return void
+     */
+    public function linkStory($buildID = 0, $browseType = '', $param = 0)
+    {
+        $this->session->set('storyList', $this->app->getURI(true));
+
+        if(!empty($_POST['stories'])) $this->build->linkStory($buildID);
+
+        $build = $this->build->getById($buildID);
+        $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+        $this->loadModel('story');
+        $this->loadModel('tree');
+        $this->loadModel('product');
+
+        /* Build search form. */
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['fields']['project']);
+        $this->config->product->search['actionURL'] = $this->createLink('build', 'linkStory', "planID=$buildID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
+        $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($build->product, $viewType = 'story', $startModuleID = 0);
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', null, $build->project);
+        }
+        else
+        {
+            $allStories = $this->story->getProjectStories($build->project);
+        }
+
+        $this->view->title        = $build->name . $this->lang->colon . $this->lang->build->linkStory;
+        $this->view->position[]   = html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name);
+        $this->view->position[]   = $this->lang->build->linkStory;
+        $this->view->allStories   = $allStories;
+        $this->view->build        = $build;
+        $this->view->buildStories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Unlink story 
+     * 
+     * @param  int    $storyID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
+    public function unlinkStory($buildID, $storyID)
+    {
+        $this->build->unlinkStory($buildID, $storyID);
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            $this->send($response);
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Batch unlink story. 
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkStory($buildID)
+    {
+        $this->build->batchUnlinkStory($buildID);
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Link bugs.
+     * 
+     * @param  int    $buildID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @access public
+     * @return void
+     */
+    public function linkBug($buildID = 0, $browseType = '', $param = 0)
+    {
+        $this->session->set('bugList', $this->app->getURI(true));
+
+        if(!empty($_POST['bugs'])) $this->build->linkBug($buildID);
+
+        /* Set menu. */
+        $build = $this->build->getByID($buildID);
+        $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Build the search form. */
+        $this->loadModel('bug');
+        $this->config->bug->search['actionURL'] = $this->createLink('build', 'linkBug', "planID=$buildID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($build->product);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($build->product);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($build->product);
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->bug->getBySearch($build->product, array($build->project), $queryID, 'id_desc');
+        }
+        else
+        {
+            $projectBugs = $this->bug->getProjectBugs($build->project); 
+            $allBugs     = array();
+            foreach($projectBugs as $key => $bug)
+            {
+                if($bug->status == 'resolved')
+                {
+                    $allBugs[$key] = $bug;
+                    unset($projectBugs[$key]);
+                }
+                elseif($bug->status == 'closed') 
+                {
+                    unset($projectBugs[$key]);
+                }
+            }
+            $allBugs += $projectBugs;
+        }
+
+        $this->view->title      = $build->name . $this->lang->colon . $this->lang->productplan->linkBug;
+        $this->view->position[] = html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name);
+        $this->view->position[] = $this->lang->build->linkBug;
+        $this->view->allBugs    = $allBugs;
+        $this->view->buildBugs  = empty($build->bugs) ? array() : $this->bug->getByList($build->bugs);
+        $this->view->build      = $build;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Unlink story 
+     * 
+     * @param  int    $buildID
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
+    public function unlinkBug($buildID, $bugID)
+    {
+        $this->build->unlinkBug($buildID, $bugID);
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            $this->send($response);
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Batch unlink story. 
+     * 
+     * @param  int $buildID 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkBug($buildID)
+    {
+        $this->build->batchUnlinkBug($buildID);
+        die(js::reload('parent'));
     }
 }

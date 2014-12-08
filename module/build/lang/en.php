@@ -12,6 +12,8 @@
 $lang->build->common    = 'Build';
 $lang->build->create    = "Create";
 $lang->build->edit      = "Edit";
+$lang->build->linkStory = "Link story";
+$lang->build->linkBug   = "Link Bug";
 $lang->build->delete    = "Delete";
 $lang->build->deleted   = "Deleted";
 $lang->build->view      = "Info";
@@ -38,9 +40,11 @@ $lang->build->linkStories        = 'Stories';
 $lang->build->linkBugs           = 'Bugs';
 $lang->build->stories            = 'Linked stories';
 $lang->build->bugs               = 'Linked bugs';
+$lang->build->generatedBugs      = 'Generated bug';
 
 $lang->build->finishStories = 'The total demand for a complete %s';
-$lang->build->resolvedBugs  = 'The total solution of bug%s';
+$lang->build->resolvedBugs  = 'The total solution of bug %s';
+$lang->build->createdBugs   = 'The total generated of bug %s';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = 'Software source code repository, such as Subversion or Git';
