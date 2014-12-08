@@ -21,7 +21,8 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach($projectStats as $project):?>
+   <?php $id = 0; ?>
+   <?php foreach($projectStats as $project):?>
     <tr class='text-center'>
       <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title=$project->name");?></td>
       <td><?php echo $project->end;?></td>
@@ -33,7 +34,7 @@
         <img class='progressbar' src='<?php echo $webRoot;?>theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress);?>'>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
-      <td class='spark text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
+      <td id='spark-<?php echo $id++?>' class='spark text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
    </tr>
    <?php endforeach;?>
   </tbody>
@@ -44,9 +45,10 @@
 $(function()
 {
     var $projectbox = $('#projectbox');
-    var $sparks = $projectbox.find('.spark').each(function(idx){$(this).attr('id', 'spark-' + idx);});
-    $sparks.filter(':lt(6)').data('spark', true).projectLine();
+    var $sparks = $projectbox.find('.spark');
+    $sparks.filter(':lt(6)').addClass('sparked').projectLine();
     $sparks = $sparks.not(':lt(6)');
+    var rowHeight = $sparks.first().closest('tr').outerHeight() - (window.browser.ie === 8 ? 0.3 : 0);
 
     var scrollFn = false, scrollStart, i, id, $spark;
     $projectbox.on('scroll.spark', function(e)
@@ -60,13 +62,13 @@ $(function()
 
         scrollFn = setTimeout(function()
         {
-            scrollStart = Math.floor(($projectbox.scrollTop() - 30) / 29);
+            scrollStart = Math.floor(($projectbox.scrollTop() - 30) / (rowHeight)) + 1;
             for(i = scrollStart; i <= scrollStart + 7; i++)
             {
                 id = '#spark-' + i;
                 $spark = $(id);
-                if($spark.data('spark')) continue;
-                $spark.data('spark', true).projectLine();
+                if($spark.hasClass('sparked')) continue;
+                $spark.addClass('sparked').projectLine();
                 $sparks = $sparks.not(id);
             }
         },100);
