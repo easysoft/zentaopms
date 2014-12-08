@@ -12,7 +12,7 @@ js::import($jsRoot . 'chartjs/excanvas.min.js');
 jQuery.fn.projectLine = function(setting)
 {
     var $lines = $(this);
-    if(window.browser.isIE && window.browser.ie < 9 && $lines.length > 10) return;
+    if(window.browser.isIE() && window.browser.ie < 9 && $lines.length > 10) return;
     
     $lines.each(function()
     {
