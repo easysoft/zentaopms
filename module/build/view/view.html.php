@@ -19,32 +19,33 @@
     <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
     <?php endif; ?>
   </div>
+  <div class='actions'>
+  <?php
+  $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
+  if(!$build->deleted)
+  {
+      echo "<div class='btn-group'>";
+      common::printIcon('build', 'linkStory',"buildID=$build->id", '', 'button', $lang->icons['link']);
+      common::printIcon('build', 'linkBug',  "buildID=$build->id", '', 'button', $lang->icons['bug']);
+      echo '</div>';
+      echo "<div class='btn-group'>";
+      common::printIcon('build', 'edit',   "buildID=$build->id");
+      common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
+      echo '</div>';
+  }
+  echo common::printRPN($browseLink);
+  ?>
+  </div>
 </div>
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
-      <fieldset>
-        <legend><?php echo $lang->build->desc;?></legend>
-        <div class='article-content'><?php echo $build->desc;?></div>
-      </fieldset>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
-      <?php include '../../common/view/action.html.php';?>
-      <div class='actions'>
-      <?php
-      $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
-      if(!$build->deleted)
-      { 
-        common::printIcon('build', 'edit',   "buildID=$build->id");
-        common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
-      }
-      echo common::printRPN($browseLink);
-      ?>
-      </div>
       <div class='tabs'>
-      <?php $countStories = count($stories); $countBugs = count($bugs); ?>
+      <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story']) . ' ' . $lang->build->stories; if($countStories > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countStories . "</span>";?></a></li>
           <li><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->bugs; if($countBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countBugs . "</span>";?></a></li>
+          <li><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->generatedBugs; if($countBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countNewBugs . "</span>";?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='stories'>
@@ -119,12 +120,55 @@
               </tfoot>
             </table>
           </div>
+          <div class='tab-pane' id='newBugs'>
+            <table class='table table-hover table-condensed table-borderless'>
+              <thead>
+                <tr>
+                  <th class='w-id'><?php echo $lang->idAB;?></th>
+                  <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
+                  <th><?php echo $lang->bug->title;?></th>
+                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
+                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
+                  <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
+                  <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
+                  <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
+                </tr>
+              </thead>
+              <?php foreach($generatedBugs as $bug):?>
+              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <tr class='text-center'>
+                <td><?php echo sprintf('%03d', $bug->id);?></td>
+                <td><span class='severity<?php echo $bug->severity?>'><?php echo $bug->severity;?></span></td>
+                <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+                <td><?php echo $users[$bug->openedBy];?></td>
+                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo $users[$bug->resolvedBy];?></td>
+                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+              </tr>
+              <?php endforeach;?>
+              <tfoot>
+                <tr>
+                  <td colspan='8'>
+                    <div class='table-actions clearfix'>
+                      <div class='text'><?php echo sprintf($lang->build->createdBugs, $countNewBugs);?></div>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class='col-side'>
     <div class='main-side main'>
+      <fieldset>
+        <legend><?php echo $lang->build->desc;?></legend>
+        <div class='article-content'><?php echo $build->desc;?></div>
+      </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
       <fieldset>
         <legend><?php echo $lang->build->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
@@ -154,6 +198,7 @@
           </tr>
         </table>
       </fieldset>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

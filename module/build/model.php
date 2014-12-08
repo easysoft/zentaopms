@@ -154,8 +154,6 @@ class buildModel extends model
 
         $build = fixer::input('post')
             ->setDefault('product', 0)
-            ->join('stories', ',')
-            ->join('bugs', ',')
             ->add('project', (int)$projectID)
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->remove('resolvedBy,allchecker,files,labels')
@@ -166,7 +164,6 @@ class buildModel extends model
         {
             $buildID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('build', $buildID);
-            $this->updateLinkedBug($build);
             return $buildID;
         }
     }
@@ -182,10 +179,6 @@ class buildModel extends model
     {
         $oldBuild = $this->getByID($buildID);
         $build = fixer::input('post')
-            ->setDefault('stories', '')
-            ->setDefault('bugs', '')
-            ->join('stories', ',')
-            ->join('bugs', ',')
             ->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
@@ -196,11 +189,7 @@ class buildModel extends model
             ->where('id')->eq((int)$buildID)
             ->check('name','unique', "id != $buildID AND product = {$build->product}")
             ->exec();
-        if(!dao::isError())
-        {
-            $this->updateLinkedBug($build);
-            return common::createChanges($oldBuild, $build);
-        }
+        if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }
 
     /**
@@ -243,5 +232,105 @@ class buildModel extends model
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
             $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed', $bug->resolvedBy);
         }
+    }
+
+    /**
+     * Link stories
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
+    public function linkStory($buildID)
+    {
+        $build = $this->getByID($buildID);
+
+        $build->stories .= ',' . join(',', $this->post->stories);
+        $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
+    }
+
+    /**
+     * Unlink story 
+     * 
+     * @param  int    $buildID 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
+    public function unlinkStory($buildID, $storyID)
+    {
+        $build = $this->getByID($buildID);
+        $build->stories = trim(str_replace(",$storyID,", ',', ",$build->stories,"), ',');
+        $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
+    }
+
+    /**
+     * Batch unlink story.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkStory($buildID)
+    {
+        $storyList = $this->post->unlinkStories;
+        if(empty($storyList)) return true;
+
+        $build = $this->getByID($buildID);
+        $build->stories = ",$build->stories,";
+        foreach($storyList as $storyID) $build->stories = str_replace(",$storyID,", ',', $build->stories);
+        $build->stories = trim($build->stories, ',');
+        $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
+    }
+
+    /**
+     * Link bugs.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
+    public function linkBug($buildID)
+    {
+        $build = $this->getByID($buildID);
+
+        $build->bugs .= ',' . join(',', $this->post->bugs);
+        $this->updateLinkedBug($build);
+        $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
+    }
+
+    /**
+     * Unlink bug. 
+     * 
+     * @param  int    $buildID 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
+    public function unlinkBug($buildID, $bugID)
+    {
+        $build = $this->getByID($buildID);
+        $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
+        $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
+    }
+
+    /**
+     * Batch unlink bug.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkBug($buildID)
+    {
+
+        $bugList = $this->post->unlinkBugs;
+        if(empty($bugList)) return true;
+
+        $build = $this->getByID($buildID);
+        $build->bugs = ",$build->bugs,";
+        foreach($bugList as $bugID) $build->bugs = str_replace(",$bugID,", ',', $build->bugs);
+        $build->bugs = trim($build->bugs, ',');
+        $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
     }
 }
