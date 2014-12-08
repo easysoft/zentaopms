@@ -593,6 +593,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 /* modal */
 .modal .modal-dialog {border: 8px solid #666; border-color: rgba(0,0,0,.25)}
 .modal-title {font-size: 14px;}
+.modal-body > #titlebar {margin: -15px -15px 20px}
 
 /* modal with iframe */
 .modal-iframe .modal-body {padding: 0;}
