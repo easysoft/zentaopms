@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
 <?php js::set('batchCreateNum', $config->task->batchCreate);?>
 <div id='titlebar'>
   <div class='heading'>

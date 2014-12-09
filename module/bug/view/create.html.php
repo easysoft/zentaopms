@@ -13,7 +13,6 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
-include '../../common/view/chosen.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
