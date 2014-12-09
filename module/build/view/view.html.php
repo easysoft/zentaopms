@@ -45,7 +45,7 @@
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story']) . ' ' . $lang->build->stories; if($countStories > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countStories . "</span>";?></a></li>
           <li><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->bugs; if($countBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countBugs . "</span>";?></a></li>
-          <li><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->generatedBugs; if($countBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countNewBugs . "</span>";?></a></li>
+          <li><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->generatedBugs; if($countNewBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countNewBugs . "</span>";?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='stories'>

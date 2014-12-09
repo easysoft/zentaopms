@@ -12,6 +12,8 @@
 $lang->release->common    = 'Release';
 $lang->release->create    = "Create";
 $lang->release->edit      = "Edit";
+$lang->release->linkStory = "Link story";
+$lang->release->linkBug   = "Link bug";
 $lang->release->delete    = "Delete";
 $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
@@ -33,9 +35,11 @@ $lang->release->linkStories           = 'Stories';
 $lang->release->linkBugs              = 'Bugs';
 $lang->release->stories               = 'Linked stories';
 $lang->release->bugs                  = 'Linked bugs';
+$lang->release->generatedBugs         = 'Generated bug';
 $lang->release->ajaxGetStoriesAndBugs = 'API: Get storeis and bugs';
 $lang->release->finishStories         = 'The total demand for a complete %s';
-$lang->release->resolvedBugs          = 'The total solution of bug%s';
+$lang->release->resolvedBugs          = 'The total solution of bug %s';
+$lang->release->createdBugs           = 'The total generated of bug %s';
 $lang->release->export                = 'Export as HTML';
 
 $lang->release->filePath = 'Download : ';

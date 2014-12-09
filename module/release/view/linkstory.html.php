@@ -1,11 +1,11 @@
 <?php
 /**
- * The link story view of build module of ZenTaoPMS.
+ * The link story view of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     build
+ * @package     release
  * @version     $Id: linkstory.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -15,9 +15,9 @@
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name);?></strong>
-    <small class='text-muted'> <?php echo $lang->build->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
+    <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
+    <strong><?php echo html::a($this->createLink('release', 'view', 'release=' . $release->id), $release->name);?></strong>
+    <small class='text-muted'> <?php echo $lang->release->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
   <div id='querybox' class='show'></div>
 </div>
@@ -39,7 +39,7 @@
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
-      <?php if(strpos(",{$build->stories},", ",{$story->id},") !== false) continue; ?>
+      <?php if(strpos(",{$release->stories},", ",{$story->id},") !== false) continue; ?>
       <tr>
         <td class='text-left'>
           <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
@@ -65,9 +65,9 @@
     </table>
   </form>
   <hr class='mg-0'>
-  <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "buildID=$build->id");?>" id='linkedStoriesForm'>
+  <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
-      <caption class='text-left text-important'><?php echo html::icon('link');?> &nbsp;<strong><?php echo $lang->productplan->linkedStories;?></strong> (<?php echo count($buildStories);?>)</caption>
+      <caption class='text-left text-important'><?php echo html::icon('link');?> &nbsp;<strong><?php echo $lang->productplan->linkedStories;?></strong> (<?php echo count($releaseStories);?>)</caption>
       <thead>
       <tr class='colhead'>
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
@@ -83,7 +83,7 @@
       </thead>
       <tbody>
       <?php $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkStory');?>
-      <?php foreach($buildStories as $story):?>
+      <?php foreach($releaseStories as $story):?>
       <tr>
         <td class='text-center'>
           <?php if($canBatchUnlink):?>
@@ -100,16 +100,16 @@
         <td><?php echo $lang->story->stageList[$story->stage];?></td>
         <td class='text-center'>
           <?php
-          if(common::hasPriv('build', 'unlinkStory'))
+          if(common::hasPriv('release', 'unlinkStory'))
           {
-              $unlinkURL = $this->createLink('build', 'unlinkStory', "build=$build->id&storyID=$story->id");
+              $unlinkURL = $this->createLink('release', 'unlinkStory', "release=$release->id&storyID=$story->id");
               echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "title='{$lang->productplan->unlinkStory}' class='btn-icon'");
           }
           ?>
         </td>
       </tr>
       <?php endforeach;?>
-      <?php if(count($buildStories) and $canBatchUnlink):?>
+      <?php if(count($releaseStories) and $canBatchUnlink):?>
       <tfoot>
       <tr>
         <td colspan='9' class='text-left'>

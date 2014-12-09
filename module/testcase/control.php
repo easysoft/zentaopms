@@ -415,7 +415,7 @@ class testcase extends control
         }
 
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
-        if(empty($case->steps)) die(js::locate($this->createLink('bug', 'create', "product=$productID&extras=$extras")));
+        if(empty($case->steps)) die(js::locate($this->createLink('bug', 'create', "product=$productID&extras=$extras"), 'parent'));
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
         $this->view->case      = $case;

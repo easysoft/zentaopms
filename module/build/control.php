@@ -342,8 +342,8 @@ class build extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($build->product);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($build->product);
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($build->product);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         if($browseType == 'bySearch')

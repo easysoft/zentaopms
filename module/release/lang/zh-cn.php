@@ -12,6 +12,8 @@
 $lang->release->common    = '发布';
 $lang->release->create    = "创建发布";
 $lang->release->edit      = "编辑发布";
+$lang->release->linkStory = "关联需求";
+$lang->release->linkBug   = "关联Bug";
 $lang->release->delete    = "删除发布";
 $lang->release->deleted   = '已删除';
 $lang->release->view      = "发布详情";
@@ -33,9 +35,11 @@ $lang->release->linkStories           = '相关需求';
 $lang->release->linkBugs              = '相关Bug';
 $lang->release->stories               = '已关联需求';
 $lang->release->bugs                  = '已关联Bug';
+$lang->release->generatedBugs         = '产生的Bug';
 $lang->release->ajaxGetStoriesAndBugs = '接口：获得需求和Bug';
 $lang->release->finishStories         = '本次共完成需求%s个';
 $lang->release->resolvedBugs          = '本次共解决Bug%s个';
+$lang->release->createdBugs           = '本次共产生Bug%s个';
 $lang->release->export                = '导出HTML';
 
 $lang->release->filePath = '下载地址：';
