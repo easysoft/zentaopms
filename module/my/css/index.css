@@ -12,3 +12,5 @@
 
 .outer .row {padding: 0 !important; margin: 0 -10px}
 .outer .row > .col-md-8, .outer .row > .col-md-4 {padding: 0 10px}
+
+.projectline-canvas {position: relative;}
