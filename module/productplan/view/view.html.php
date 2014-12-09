@@ -46,12 +46,6 @@
 <div class='row'>
   <div class='col-sm-8 col-lg-9'>
     <div class='main'>
-      <fieldset>
-        <legend><?php echo $lang->productplan->desc;?></legend>
-        <div class='article-content'><?php echo $plan->desc;?></div>
-      </fieldset>
-      <?php include '../../common/view/action.html.php';?>
-      <div class='actions'><?php if(!$product->deleted) echo $actionLinks;?></div>
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='<?php if($type == 'story') echo 'active'?>'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?> <?php $count = count($planStories); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
@@ -195,6 +189,10 @@
   <div class='col-sm-4 col-lg-3'>
     <div class='main main-side'>
       <fieldset>
+        <legend><?php echo $lang->productplan->desc;?></legend>
+        <div class='article-content'><?php echo $plan->desc;?></div>
+      </fieldset>
+      <fieldset>
         <legend><?php echo $lang->productplan->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
@@ -211,6 +209,7 @@
           </tr>
         </table>
       </fieldset>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

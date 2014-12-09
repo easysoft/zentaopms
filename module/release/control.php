@@ -212,33 +212,6 @@ class release extends control
     }
 
     /**
-     * Ajax get stories and bugs 
-     * 
-     * @param  int    $buildID 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetStoriesAndBugs($buildID, $productID)
-    {
-        $orderBy = 'status_asc,stage_asc,id_desc';
-        $stories = array();
-        $bugs    = array();
-        $this->loadModel('bug');
-        $this->loadModel('story');
-        $build = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch(); 
-        if(!empty($build))
-        {
-            $stories = $this->story->getProjectStories($build->project, $orderBy);
-            $bugs    = $this->bug->getReleaseBugs($buildID, $productID);
-        }
-        $this->view->productID = $productID;
-        $this->view->stories   = $stories;
-        $this->view->bugs      = $bugs;
-        $this->view->orderBy   = $orderBy;
-        die($this->display());
-    }
-
-    /**
      * Export the stories of release to HTML.
      * 
      * @param  string $type story | bug

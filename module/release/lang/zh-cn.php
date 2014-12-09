@@ -36,7 +36,6 @@ $lang->release->linkBugs              = '相关Bug';
 $lang->release->stories               = '已关联需求';
 $lang->release->bugs                  = '已关联Bug';
 $lang->release->generatedBugs         = '产生的Bug';
-$lang->release->ajaxGetStoriesAndBugs = '接口：获得需求和Bug';
 $lang->release->finishStories         = '本次共完成需求%s个';
 $lang->release->resolvedBugs          = '本次共解决Bug%s个';
 $lang->release->createdBugs           = '本次共产生Bug%s个';

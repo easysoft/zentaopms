@@ -27,7 +27,7 @@
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
       <th class='w-100px'><?php echo $lang->release->date;?></th>
-      <th class='w-70px'><?php echo $lang->actions;?></th>
+      <th class='w-100px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -39,6 +39,8 @@
       <td class='text-center'><?php echo $release->date;?></td>
       <td class='text-center'>
         <?php
+        common::printIcon('release', 'linkStory', "releaseID=$release->id", '', 'list', 'link');
+        common::printIcon('release', 'linkBug', "releaseID=$release->id", '', 'list', 'bug');
         common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
         if(common::hasPriv('release', 'delete'))
         {

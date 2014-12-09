@@ -84,7 +84,7 @@ function toggleComment(actionID)
 
 $(function()
 {
-    var diffButton = "<a href='javascript:;' onclick='toggleStripTags(this)' class='hide changeDiff btn-icon' title='<?php echo $lang->action->original?>'><i class='icon- diff-all'></i></a>";
+    var diffButton = "<a href='javascript:;' onclick='toggleStripTags(this)' class='changeDiff btn-icon' style='display:none;' title='<?php echo $lang->action->original?>'><i class='icon- diff-all'></i></a>";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function()

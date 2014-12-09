@@ -36,7 +36,6 @@ $lang->release->linkBugs              = 'Bugs';
 $lang->release->stories               = 'Linked stories';
 $lang->release->bugs                  = 'Linked bugs';
 $lang->release->generatedBugs         = 'Generated bug';
-$lang->release->ajaxGetStoriesAndBugs = 'API: Get storeis and bugs';
 $lang->release->finishStories         = 'The total demand for a complete %s';
 $lang->release->resolvedBugs          = 'The total solution of bug %s';
 $lang->release->createdBugs           = 'The total generated of bug %s';

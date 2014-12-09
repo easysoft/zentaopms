@@ -33,19 +33,13 @@
       </tr>
       <tr>
         <th><?php echo $lang->release->build;?></th>
-        <td>
-        <?php  
-            echo html::select('build', $builds, '', "class='form-control chosen' onchange=loadStoriesAndBugs(this.value,$productID)");
-        ?>
-        </td>
+        <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td>
         <td><?php if(empty($builds)) echo $lang->build->notice; ?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->release->date;?></th>
         <td><?php echo html::input('date', helper::today(), "class='form-control form-date'");?></td><td></td>
       </tr>  
-      <tr id='linkStoriesAndBugs'>
-      </tr>
       <tr>
         <th><?php echo $lang->release->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control'");?></td>
@@ -58,5 +52,4 @@
     </table>
   </form>  
 </div>
-
 <?php include '../../common/view/footer.html.php';?>
