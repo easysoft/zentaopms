@@ -1,0 +1,4 @@
+.assign-menu {min-width: 150px; overflow: hidden; max-height: 305px}
+.assign-menu.with-search {padding-bottom: 34px;}
+.assign-menu > .assign-search {padding: 0; position: absolute; z-index: 0; bottom: 0; left: 0; right: 0}
+.assign-menu > .assign-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}

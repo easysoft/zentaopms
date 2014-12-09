@@ -220,6 +220,28 @@
                 {
                     echo '<li>' . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
                 }
+
+                if(common::hasPriv('story', 'batchAssignTo'))
+                {
+                      $withSearch = count($users) > 10;
+                      $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
+                      echo html::select('assignedTo', $users, '', 'class="hidden"');
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript::', $lang->story->assignedTo, 'id="assignItem"');
+                      echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      foreach ($users as $key => $value)
+                      {
+                          if(empty($key)) continue;
+                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                      }
+                      if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                      echo "</ul>";
+                      echo "</li>";
+                }
+                else
+                {
+                    echo '<li>' . html::a('javascript:;', $lang->story->assignedTo, '', $class) . '</li>';
+                }
                 ?>
               </ul>
             </div>

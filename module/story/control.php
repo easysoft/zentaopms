@@ -800,6 +800,28 @@ class story extends control
     }
 
     /**
+     * Batch assign to.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchAssignTo()
+    {
+        if(!empty($_POST) && isset($_POST['storyIDList']))
+        {
+            $allChanges  = $this->story->batchAssignTo();
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $storyID => $changes)
+            {
+                $actionID = $this->action->create('story', $storyID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($storyID, $actionID);
+            }
+        }
+        die(js::locate($this->session->storyList));
+    }
+
+    /**
      * Tasks of a story.
      * 
      * @param  int    $storyID 

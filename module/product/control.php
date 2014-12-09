@@ -168,7 +168,7 @@ class product extends control
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', 'createStoryLink'));
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->users         = $this->user->getPairs('nodeleted|noletter|pofirst');
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;

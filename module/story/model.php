@@ -769,6 +769,36 @@ class storyModel extends model
     }
 
     /**
+     * Batch assign to.
+     * 
+     * @access public
+     * @return array
+     */
+    public function batchAssignTo()
+    {
+        $now         = helper::now();
+        $allChanges  = array();
+        $storyIDList = $this->post->storyIDList;
+        $assignedTo  = $this->post->assignedTo;
+        $oldStories  = $this->getByList($storyIDList);
+        foreach($storyIDList as $storyID)
+        {
+            $oldStory = $oldStories[$storyID];
+            if($assignedTo == $oldStory->assignedTo) continue;
+
+            $story = new stdclass();
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            $story->assignedTo     = $assignedTo;
+            $story->assignedDate   = $now;
+
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Activate a story.
      * 
      * @param  int    $storyID 
