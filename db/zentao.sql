@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `user` char(30) NOT NULL default '',
   `todo` enum('1','0') NOT NULL default '1',
-  `date` date NOT NULL default '0000-00-00',
+  `date` date NOT NULL,
   `begin` datetime NOT NULL default '0000-00-00 00:00:00',
   `end` datetime NOT NULL default '0000-00-00 00:00:00',
   `type` enum('1','2','3') NOT NULL default '1',
@@ -546,7 +546,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
 CREATE TABLE IF NOT EXISTS `zt_todo` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `account` char(30) NOT NULL,
-  `date` date NOT NULL default '0000-00-00',
+  `date` date NOT NULL,
   `begin` smallint(4) unsigned zerofill NOT NULL,
   `end` smallint(4) unsigned zerofill NOT NULL,
   `type` char(10) NOT NULL,
