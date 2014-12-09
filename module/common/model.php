@@ -646,6 +646,7 @@ class commonModel extends model
         $preAndNextObject = new stdClass();
 
         if(strpos('story, task, bug, testcase, doc', $type) === false) return $preAndNextObject;
+        if($this->session->{$type . 'PreAndNext'} and $this->session->{$type . 'PreAndNext'}['objectID'] == $objectID) return $this->session->{$type . 'PreAndNext'}['preAndNextObject'];
         $table = $this->config->objectTables[$type];
 
         /* Get objectIDs. */
@@ -692,6 +693,7 @@ class commonModel extends model
             if($preObj !== true) $preObj = $object;
         }
 
+        $this->session->set($type . 'PreAndNext', array('objectID' => $objectID, 'preAndNextObject' => $preAndNextObject));
         return $preAndNextObject;
     }
 
