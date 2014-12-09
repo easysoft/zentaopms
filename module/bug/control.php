@@ -140,7 +140,7 @@ class bug extends control
             $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
         }
 
-        $memberPairs = $this->user->getPairs('noletter');
+        $memberPairs = $this->user->getPairs('noletter|nodeleted');
        
         $title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
