@@ -338,7 +338,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->importTask($toProject,$fromProject);
-            die(js::locate(inlink('task', "projectID=$toProject"), 'parent'));
+            die(js::locate(inlink('importTask', "toProject=$toProject&fromProject=$fromProject"), 'parent'));
         }
 
         $project   = $this->commonAction($toProject);
