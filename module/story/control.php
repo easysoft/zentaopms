@@ -898,10 +898,48 @@ class story extends control
      * @param  int    $moduleID 
      * @param  int    $storyID 
      * @param  string $onlyOption 
+     * @param  string $status 
+     * @param  int    $limit 
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '')
+    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0)
+    {
+        if($moduleID)
+        {
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $moduleID = $this->tree->getAllChildID($moduleID);
+        }
+
+        $storyStatus = '';
+        if($status == 'noclosed')
+        {
+            $storyStatus = $this->lang->story->statusList;
+            unset($storyStatus['closed']);
+            $storyStatus = array_keys($storyStatus);
+        }
+
+        $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus, 'id_desc', $limit);
+        $select  = html::select('story', $stories, $storyID, "class='form-control'");
+
+        /* If only need options, remove select wrap. */
+        if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));
+        die($select);
+    }
+
+    /**
+     * AJAX: search stories of a product as json
+     * 
+     * @param  string $key 
+     * @param  int    $productID 
+     * @param  int    $moduleID 
+     * @param  int    $storyID 
+     * @param  string $status 
+     * @param  int    $limit 
+     * @access public
+     * @return void
+     */
+    public function ajaxSearchProductStories($key, $productID, $moduleID = 0, $storyID = 0, $status = 'noclosed', $limit = 50)
     {
         if($moduleID)
         {
@@ -918,11 +956,23 @@ class story extends control
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus);
-        $select  = html::select('story', $stories, $storyID, "class='form-control'");
+        $result = array();
+        $i = 0;
+        foreach ($stories as $id => $story)
+        {
+            if($limit > 0 && $i > $limit) break;
+            if(('#' . $id) === $key || stripos($story,  $key) !== false)
+            {
+                $result[$id] = $story;
+                $i++;
+            }
+        }
+        if($i < 1)
+        {
+            $result['info'] = $this->lang->noResultsMatch;
+        }
 
-        /* If only need options, remove select wrap. */
-        if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));
-        die($select);
+        die(json_encode($result));
     }
 
     /**

@@ -125,4 +125,20 @@
     </table>
   </form>
 </div>
+<div class='modal fade' id='searchStories'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+        <div class='searchInput w-p90'>
+          <input id='storySearchInput' type='text' class='form-control' placeholder='<?php echo $lang->testcase->searchStories?>'>
+          <i class='icon icon-search'></i>
+        </div>
+      </div>
+      <div class='modal-body'>
+        <ul id='searchResult'></ul>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
