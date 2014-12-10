@@ -41,28 +41,45 @@ function setAssignedTo(moduleID, productID)
     });
 }
 
-/* Save template. */
-KindEditor.plugin('savetemplate', function(K) 
+$(function()
 {
-    var self = this, name = 'savetemplate';
-    self.plugin.savetemplate = 
+    $('#saveTplBtn').on('click', function()
     {
-        click: function(id) 
+        var content = $('#steps').val();
+        bootbox.prompt(setTemplateTitle, function(r)
         {
-            content = self.html();
-            bootbox.prompt(setTemplateTitle, function(r)
+            if(!r || !content) return;
+            saveTemplateLink = createLink('bug', 'saveTemplate');
+            $.post(saveTemplateLink, {title:r, content:content}, function(data)
             {
-                if(!r || !content) return;
-                saveTemplateLink = createLink('bug', 'saveTemplate');
-                $.post(saveTemplateLink, {title:r, content:content}, function(data)
-                {
-                    $('#tplBox').html(data);
-                });
+                $('#tplBox').html(data);
             });
-        }
-    };
-    self.clickToolbar(name, self.plugin.savetemplate.click);
+        });
+    });
 });
+
+// /* Save template. */
+// KindEditor.plugin('savetemplate', function(K) 
+// {
+//     var self = this, name = 'savetemplate';
+//     self.plugin.savetemplate = 
+//     {
+//         click: function(id) 
+//         {
+//             content = self.html();
+//             bootbox.prompt(setTemplateTitle, function(r)
+//             {
+//                 if(!r || !content) return;
+//                 saveTemplateLink = createLink('bug', 'saveTemplate');
+//                 $.post(saveTemplateLink, {title:r, content:content}, function(data)
+//                 {
+//                     $('#tplBox').html(data);
+//                 });
+//             });
+//         }
+//     };
+//     self.clickToolbar(name, self.plugin.savetemplate.click);
+// });
 
 /* Set template. */
 function setTemplate(templateID)

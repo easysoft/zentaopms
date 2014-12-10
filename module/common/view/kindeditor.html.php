@@ -18,7 +18,7 @@ var editor = <?php echo json_encode($editor);?>;
 var bugTools =
 [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
-'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'savetemplate', 'about'];
+'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
 
 var simpleTools = 
 [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
@@ -115,6 +115,7 @@ function initKindeditor(afterInit)
                 $next = $next.first().focus();
                 var keditor = $next.data('keditor');
                 if(keditor) keditor.focus();
+                else if($next.hasClass('chosen')) $next.trigger('chosen:activate');
             }
         };
         try
