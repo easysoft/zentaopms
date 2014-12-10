@@ -945,10 +945,11 @@ class storyModel extends model
      * @param  array|string  $moduleIds 
      * @param  string        $status 
      * @param  string        $order 
+     * @param  int           $limit 
      * @access public
      * @return array
      */
-    public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc')
+    public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc', $limit = 0)
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -960,7 +961,7 @@ class storyModel extends model
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
-        return $this->formatStories($stories);
+        return $this->formatStories($stories, 'full', $limit);
     }
 
     /**
@@ -1379,10 +1380,11 @@ class storyModel extends model
      * 
      * @param  array    $stories 
      * @param  string   $type
+     * @param  int      $limit
      * @access public
      * @return void
      */
-    public function formatStories($stories, $type = 'full')
+    public function formatStories($stories, $type = 'full', $limit = 0)
     {
         /* Get module names of stories. */
         /*$modules = array();
@@ -1391,6 +1393,7 @@ class storyModel extends model
 
         /* Format these stories. */
         $storyPairs = array('' => '');
+        $i = 0;
         foreach($stories as $story)
         {
             if($type == 'short')
@@ -1402,6 +1405,12 @@ class storyModel extends model
                 $property = '(' . $this->lang->story->pri . ':' . $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
             }
             $storyPairs[$story->id] = $story->id . ':' . $story->title . $property;
+
+            if($limit > 0 && ++$i > $limit)
+            {
+                $storyPairs['showmore'] = $this->lang->more . $this->lang->ellipsis;
+                break;
+            }
         }
         return $storyPairs;
     }

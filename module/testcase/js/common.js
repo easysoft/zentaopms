@@ -47,7 +47,7 @@ function setStories()
 {
     moduleID  = $('#module').val();
     productID = $('#product').val();
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed');
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=20');
     $.get(link, function(stories)
     {
         var value = $('#story').val();
@@ -113,7 +113,7 @@ function createRow()
     newRow += "<td class='stepID strong'></td>";
     newRow += "<td class='w-p50'><textarea name='steps[]' rows=3 class='form-control'></textarea></td>";
     newRow += "<td><textarea name='expects[]' rows=3 class='form-control'></textarea></td>";
-    newRow += "<td class='a-left w-100px'><div class='btn-group-vertical'>";
+    newRow += "<td class='text-left w-100px'><div class='btn-group-vertical'>";
     newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' />";
     newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' />";
     newRow += "<input type='button' tabindex='-1' class='delbutton btn' value='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' />";

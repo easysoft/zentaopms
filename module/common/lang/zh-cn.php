@@ -16,6 +16,7 @@ $lang->dot       = '。';
 $lang->at        = ' 于 ';
 $lang->downArrow = '↓';
 $lang->null      = '空';
+$lang->ellipsis  = '…';
 
 $lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";

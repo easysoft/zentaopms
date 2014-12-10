@@ -14,7 +14,6 @@
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 ?>
-<?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
   <div class='modal-body'>
     <div id='titlebar'>

@@ -12,7 +12,6 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
-include '../../common/view/chosen.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);

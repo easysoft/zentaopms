@@ -16,6 +16,7 @@ $lang->dot          = '.';
 $lang->at           = ' at ';
 $lang->downArrow    = '↓';
 $lang->null         = '空';
+$lang->ellipsis     = '...';
 
 $lang->zentaoPMS      = 'zentao';
 $lang->welcome        = "%s PMS";
