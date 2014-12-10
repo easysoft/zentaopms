@@ -115,6 +115,7 @@ function initKindeditor(afterInit)
                 $next = $next.first().focus();
                 var keditor = $next.data('keditor');
                 if(keditor) keditor.focus();
+                else if($next.hasClass('chosen')) $next.trigger('chosen:activate');
             }
         };
         try
