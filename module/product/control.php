@@ -40,6 +40,10 @@ class product extends control
      *
      * @param  string $locate     locate to browse page or not. If not, display all products.
      * @param  int    $productID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
