@@ -22,7 +22,6 @@ $(function()
     var $searchInput = $('#storySearchInput');
     var $searchResult = $('#searchResult');
     var $selectedItem;
-    var $story = $('#story');
     $(document).on('change', '#story', function()
     {
        if($(this).val() === 'showmore')
@@ -34,6 +33,7 @@ $(function()
     $searchStories.on('hide.zui.modal', function()
     {
         var key = '';
+        var $story = $('#story');
         if($selectedItem && $selectedItem.length)
         {
             key = $selectedItem.data('key');

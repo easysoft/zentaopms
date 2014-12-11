@@ -48,7 +48,7 @@ class testcaseModel extends model
             ->add('status', 'normal')
             ->add('version', 1)
             ->add('fromBug', $bugID)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels')
             ->setDefault('story', 0)
             ->join('stage', ',')
@@ -57,6 +57,8 @@ class testcaseModel extends model
         $result = $this->loadModel('common')->removeDuplicate('case', $case, "product={$case->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        /* value of story may be showmore. */
+        $case->story = (int)$case->story;
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
         if(!$this->dao->isError())
         {
