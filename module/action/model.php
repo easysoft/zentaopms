@@ -208,6 +208,11 @@ class actionModel extends model
             {
                 $action->actor = $commiters[$action->actor];
             }
+            elseif($actionName == 'linked2project')
+            {
+                $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('project', 'story', "projectID=$action->extra"), $name);
+            }
             elseif($actionName == 'linked2plan')
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
