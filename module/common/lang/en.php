@@ -281,10 +281,12 @@ $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModul
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
+$lang->admin->menu->backup    = array('link' => 'Backup and restore|backup|index', 'subModule' => 'backup');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
 $lang->action    = new stdclass();
+$lang->backup    = new stdclass();
 $lang->extension = new stdclass();
 $lang->custom    = new stdclass();
 $lang->editor    = new stdclass();
@@ -293,6 +295,7 @@ $lang->mail      = new stdclass();
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
 $lang->action->menu    = $lang->admin->menu;
+$lang->backup->menu    = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;

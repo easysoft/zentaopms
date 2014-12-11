@@ -281,18 +281,21 @@ $lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subMo
 $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
+$lang->admin->menu->backup    = array('link' => '备份还原|backup|index', 'subModule' => 'backup');
 
-$lang->convert    = new stdclass();
-$lang->upgrade    = new stdclass();
-$lang->action     = new stdclass();
-$lang->extension  = new stdclass();
-$lang->custom     = new stdclass();
-$lang->editor     = new stdclass();
-$lang->mail       = new stdclass();
+$lang->convert   = new stdclass();
+$lang->upgrade   = new stdclass();
+$lang->action    = new stdclass();
+$lang->backup    = new stdclass();
+$lang->extension = new stdclass();
+$lang->custom    = new stdclass();
+$lang->editor    = new stdclass();
+$lang->mail      = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
 $lang->action->menu    = $lang->admin->menu;
+$lang->backup->menu    = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
@@ -316,6 +319,7 @@ $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
+$lang->menugroup->backup      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
