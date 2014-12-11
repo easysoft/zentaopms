@@ -37,18 +37,26 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'undone', $projectID = 0)
+    public function index($locate = 'yes', $status = 'undone', $projectID = 0, $orderBy = 'code_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         if($this->projects) $this->commonAction($projectID);
         $this->session->set('projectList', $this->app->getURI(true));
 
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $this->app->loadLang('my');
         $this->view->title         = $this->lang->project->allProject;
         $this->view->position[]    = $this->lang->project->allProject;
-        $this->view->projectStats  = $this->project->getProjectStats($status);
+        $this->view->projectStats  = $this->project->getProjectStats($status, 0, 30, $orderBy, $pager);
         $this->view->projectID     = $projectID;
+        $this->view->pager         = $pager;
+        $this->view->recTotal      = $pager->recTotal;
+        $this->view->recPerPage    = $pager->recPerPage;
+        $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->status        = $status;
 
@@ -338,7 +346,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->importTask($toProject,$fromProject);
-            die(js::locate(inlink('task', "projectID=$toProject"), 'parent'));
+            die(js::locate(inlink('importTask', "toProject=$toProject&fromProject=$fromProject"), 'parent'));
         }
 
         $project   = $this->commonAction($toProject);

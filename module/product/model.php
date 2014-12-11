@@ -463,18 +463,29 @@ class productModel extends model
     /**
      * Get product stats.
      * 
+     * @param  string $orderBy 
+     * @param  int    $pager 
      * @access public
-     * @return array
+     * @return array 
      */
-    public function getStats()
+    public function getStats($orderBy = 'code_asc', $pager = null)
     {
         $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
         $products = $this->getList(',normal');
-        $stats    = array();
+        foreach($products as $productID => $product)
+        {
+            if(!$this->checkPriv($product)) unset($products[$productID]);
+        }
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('id')->in(array_keys($products))
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
 
+        $stats = array();
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
@@ -536,23 +547,16 @@ class productModel extends model
             ->fetchPairs();
         foreach($products as $key => $product)
         {
-            if($this->checkPriv($product))
+            if($product->status != 'closed')
             {
-                if($product->status != 'closed')
-                {
-                    $product->stories = $stories[$product->id];
-                    $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
-                    $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
+                $product->stories = $stories[$product->id];
+                $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
+                $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
-                    $product->bugs = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
-                    $product->unResolved = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
-                    $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
-                    $stats[] = $product;
-                }
-            }
-            else
-            {
-                unset($products[$key]);
+                $product->bugs = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
+                $product->unResolved = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
+                $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
+                $stats[] = $product;
             }
         }
 

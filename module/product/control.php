@@ -40,21 +40,33 @@ class product extends control
      *
      * @param  string $locate     locate to browse page or not. If not, display all products.
      * @param  int    $productID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $productID = 0)
+    public function index($locate = 'yes', $productID = 0, $orderBy = 'code_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
         $this->session->set('productList', $this->app->getURI(true));
         if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
 
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
         $this->view->position[]   = $this->lang->product->allProduct;
-        $this->view->productStats = $this->product->getStats();
+        $this->view->productStats = $this->product->getStats($orderBy, $pager);
         $this->view->productID    = $productID;
+        $this->view->pager        = $pager;
+        $this->view->recTotal     = $pager->recTotal;
+        $this->view->recPerPage   = $pager->recPerPage;
+        $this->view->orderBy      = $orderBy;
         $this->display();
     }
 

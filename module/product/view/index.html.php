@@ -31,11 +31,12 @@
 </div>
 <?php else:?>
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
-  <table class='table table-condensed table-hover table-striped'>
+  <table class='table table-condensed table-hover table-striped tablesorter'>
+    <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
-        <th class='w-id'>   <?php echo $lang->idAB;?></th>
-        <th class='w-150px'><?php echo $lang->product->name;?></th>
+        <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+        <th class='w-200px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
         <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
         <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
         <th><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
@@ -76,6 +77,7 @@
             <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
           </div>
+          <div class='text-right'><?php $pager->show();?></div>
         </td>
       </tr>
     </tfoot>

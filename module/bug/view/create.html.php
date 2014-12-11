@@ -13,7 +13,6 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
-include '../../common/view/chosen.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
@@ -32,11 +31,11 @@ js::set('refresh', $lang->refresh);
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
-        <td class='w-p25-f'>
+        <td class='w-p35-f'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control chosen' autocomplete='off'");?>
         </td>
         <td>
-          <div class='input-group w-p25-f' id='moduleIdBox'>
+          <div class='input-group w-p35-f' id='moduleIdBox'>
           <?php
           echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
@@ -49,7 +48,7 @@ js::set('refresh', $lang->refresh);
           }
           ?>
           </div>
-        </td><td class='w-150px'></td>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->project;?></th>
@@ -74,17 +73,27 @@ js::set('refresh', $lang->refresh);
       </tr>  
       <tr>
         <th><?php echo $lang->bug->steps;?></th>
-        <td colspan='2'><?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?></td>
-        <td style='vertical-align: top;'>
-          <ul id='tplBox' class='list-group'><?php echo $this->fetch('bug', 'buildTemplates');?></ul>
+        <td colspan='2'>
+          <div id='tplBoxWrapper'>
+            <div class='btn-toolbar'>
+              <div class='btn-group'><button id='saveTplBtn' type='button' class='btn btn-mini'><?php echo $lang->bug->saveTemplate?></button></div>
+              <div class="btn-group">
+                <button type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->bug->applyTemplate?> <span class='caret'></span></button>
+                <ul id='tplBox' class='dropdown-menu pull-right'>
+                  <?php echo $this->fetch('bug', 'buildTemplates');?>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->bug->lblStory;?></th>
         <td colspan='2'>
           <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID, "class='form-control chosen'");?></span>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->bug->task;?></th>
         <td colspan='2'><span id='taskIdBox'><?php echo html::select('task', '', $taskID, "class='form-control chosen'");?></span></td>

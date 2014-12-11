@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('oldStoryID', $task->story); ?>
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject); ?>

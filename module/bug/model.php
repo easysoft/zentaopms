@@ -1346,6 +1346,26 @@ class bugModel extends model
     }
 
     /**
+     * Get unconfirmed bugs.
+     * 
+     * @param  int    $productID 
+     * @param  int    $projects 
+     * @param  int    $orderBy 
+     * @param  int    $pager 
+     * @access public
+     * @return void
+     */
+    public function getUnconfirmed($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('confirmed')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
      * Get bugs the status is active or unclosed. 
      * 
      * @param  int    $productID 

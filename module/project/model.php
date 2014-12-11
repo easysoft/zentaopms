@@ -610,13 +610,27 @@ class projectModel extends model
      * Get project stats.
      * 
      * @param  string $status 
+     * @param  int    $productID 
+     * @param  int    $itemCounts 
+     * @param  string $orderBy 
+     * @param  int    $pager 
      * @access public
-     * @return array
+     * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30)
+    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'code', $pager = null)
     {
         /* Init vars. */
         $projects    = $this->getList($status, 0, $productID);
+        foreach($projects as $projectID => $project)
+        {
+            if(!$this->checkPriv($project)) unset($projects[$projectID]);
+        }
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('id')->in(array_keys($projects))
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
         $projectKeys = array_keys($projects);
         $stats       = array();
         $hours       = array();
@@ -681,12 +695,6 @@ class projectModel extends model
         /* Process projects. */
         foreach($projects as $key => $project)
         {
-            if(!$this->checkPriv($project))
-            {
-                unset($projects[$key]);
-                continue;
-            }
-
             // Process the end time.
             $project->end = date("Y-m-d", strtotime($project->end));
 

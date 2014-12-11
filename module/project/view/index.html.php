@@ -11,7 +11,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
   <div class='actions'>
     <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
@@ -26,15 +25,16 @@
   </ul>
 </div>
 <form class='form-condensed' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
-<table class='table table-fixed'>
+<table class='table table-fixed tablesorter'>
+  <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
-      <th class='w-id'>   <?php echo $lang->idAB;?></th>
-      <th class='w-150px'><?php echo $lang->project->name;?></th>
-      <th><?php echo $lang->project->code;?></th>
-      <th><?php echo $lang->project->PM;?></th>
-      <th><?php echo $lang->project->end;?></th>
-      <th><?php echo $lang->project->status;?></th>
+      <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-200px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
+      <th><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
+      <th><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
+      <th><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
+      <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
       <th><?php echo $lang->project->totalEstimate;?></th>
       <th><?php echo $lang->project->totalConsumed;?></th>
       <th><?php echo $lang->project->totalLeft;?></th>
@@ -74,6 +74,7 @@
         <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
         <?php echo html::submitButton($lang->project->batchEdit);?>
         </div>
+        <div class='text-right'><?php $pager->show();?></div>
       </td>
     </tr>
   </tfoot>

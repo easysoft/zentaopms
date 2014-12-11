@@ -1,0 +1,12 @@
+#searchStories .searchInput {position: relative;}
+#searchStories .searchInput .icon {position: absolute; display: block; left: 9px; top: 9px; z-index: 5; color: #808080;}
+#storySearchInput {padding-left: 30px;}
+
+#searchStories .modal-body {height: 300px; overflow-y: auto; padding: 0;}
+#searchResult {padding-left: 0; list-style: none; width: 100%}
+#searchResult > li {display: block}
+#searchResult > li.tip {padding: 6px 15px; color: #808080}
+#searchResult > li.loading {text-align: center; padding: 50px}
+#searchResult > li.loading > .icon-spinner:before {font-size: 28px;}
+#searchResult > li > a {display: block; padding: 6px 15px; color: #333; border-bottom: 1px solid #e5e5e5}
+#searchResult > li > a:hover, #searchResult > li > a.selected {color: #1a4f85; background-color: #ddd;}
