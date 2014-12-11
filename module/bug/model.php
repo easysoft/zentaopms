@@ -568,7 +568,7 @@ class bugModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('duplicateBug', 0)
             ->setDefault('assignedTo', $oldBug->openedBy)
-            ->remove('comment')
+            ->remove('comment,files,labels')
             ->get();
 
         if($bug->resolvedBuild != 'trunk')

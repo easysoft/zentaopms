@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<form class='form-condensed' method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->bug->resolution;?></th>
@@ -42,6 +42,10 @@
     <tr>
       <th><?php echo $lang->bug->assignedTo;?></th>
       <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='form-control chosen'");?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->bug->files;?></th>
+      <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=2&percent=0.85');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->comment;?></th>
