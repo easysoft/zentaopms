@@ -199,8 +199,29 @@ class actionModel extends model
         $this->loadModel('file');
         foreach($actions as $actionID => $action)
         {
-            if(strtolower($action->action) == 'svncommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
-            if(strtolower($action->action) == 'gitcommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
+            $actionName = strtolower($action->action);
+            if($actionName == 'svncommited' and isset($commiters[$action->actor]))
+            {
+                $action->actor = $commiters[$action->actor];
+            }
+            elseif($actionName == 'gitcommited' and isset($commiters[$action->actor]))
+            {
+                $action->actor = $commiters[$action->actor];
+            }
+            elseif($actionName == 'linked2plan')
+            {
+                $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
+                if($title) $action->extra = html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title);
+            }
+            elseif($actionName == 'moved')
+            {
+                $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('project', 'task', "projectID=$action->extra"), "#$action->extra " . $name);
+            }
+            elseif($actionName == 'frombug')
+            {
+                $action->extra = html::a(helper::createLink('bug', 'view', "bugID=$action->extra"), $action->extra);
+            }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
