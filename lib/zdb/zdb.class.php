@@ -113,10 +113,70 @@ class zdb
      * Import DB 
      * 
      * @access public
-     * @return void
+     * @return object;
      */
-    public function import()
+    public function import($fileName)
     {
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+
+        if(!file_exists($fileName))
+        {
+            $return->result = false;
+            $return->error  = "File is not exists";
+            return $return;
+        }
+
+        $fp     = fopen($fileName, 'r');
+        $sqlEnd = 0;
+        while(($buffer = fgets($fp)) !== false)
+        {
+            $line = trim($buffer);
+            if(empty($line)) continue;
+
+            if($sqlEnd == 0) $sql = '';
+            $quotNum = substr_count($line, "'") - substr_count($line, "\'");
+            if(substr($line, -1) == ';' and $quotNum % 2 == 0 and $sqlEnd == 0)
+            {
+                $sql .= $buffer;
+            }
+            elseif($quotNum % 2 == 1 and $sqlEnd == 0)
+            {
+                $sql   .= $buffer;
+                $sqlEnd = 1;
+            }
+            elseif(substr($line, -1) == ';' and $quotNum % 2 == 1 and $sqlEnd == 1)
+            {
+                $sql   .= $buffer;
+                $sqlEnd = 0;
+            }
+            elseif(substr($line, -1) == ';' and $quotNum % 2 == 0 and $sqlEnd == 2)
+            {
+                $sql   .= $buffer;
+                $sqlEnd = 0;
+            }
+            else
+            {
+                $sql .= $buffer;
+                $sqlEnd = $sqlEnd == 0 ? 2 : $sqlEnd;
+            }
+
+            if($sqlEnd == 0)
+            {
+                try
+                {
+                    $this->dbh->query($sql);
+                }
+                catch(PDOException $e)
+                {
+                    $return->result = false;
+                    $return->error  = $e->getMessage();
+                    return $return;
+                }
+            }
+        }
+        return $return;
     }
 
     /**
