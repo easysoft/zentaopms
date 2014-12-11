@@ -20,7 +20,7 @@
     <small class='text-success'> <?php echo $lang->task->finish;?> <?php echo html::icon($lang->icons['finish']);?></small>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->task->consumed;?></th>
@@ -34,7 +34,10 @@
       <th><?php echo $lang->task->finishedDate;?></th>
       <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-date'");?></div></td><td></td>
     </tr>
-
+    <tr>
+      <th><?php echo $lang->files;?></th>
+      <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+    </tr>
     <tr>
       <th><?php echo $lang->comment;?></th>
       <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
