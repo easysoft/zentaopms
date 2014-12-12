@@ -376,10 +376,15 @@ class testcase extends control
         $position[] = $this->lang->testcase->common;
         $position[] = $this->lang->testcase->batchCreate;
 
+        $story     = $storyID ? $this->story->getByID($storyID) : '';
+        $storyList = $storyID ? array($storyID => $story->id . ':' . $story->title . '(' . $this->lang->story->pri . ':' .
+                     $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')') : array();
+
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->productID        = $productID;
-        $this->view->story            = $storyID ? $this->story->getByID($storyID) : '';
+        $this->view->story            = $story;
+        $this->view->storyList        = $storyList;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;

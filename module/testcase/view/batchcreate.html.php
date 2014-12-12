@@ -44,7 +44,7 @@
       <td><?php echo $i+1;?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("story[$i]", '', '', 'class="form-control chosen"');?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("story[$i]", $storyList, $story->id, 'class="form-control chosen"');?></td>
       <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
     </tr>
     <?php endfor;?>
