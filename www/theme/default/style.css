@@ -660,6 +660,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
   #featurebar .nav {float: none}
   #featurebar .nav > li > a {padding: 0 2px; font-size: 13px}
   #titlebar .actions {position: static;}
+  .body-modal #titlebar .actions {position: absolute;}
   #titlebar > .heading {padding-right: 0!important;}
 }
 @media (max-width: 600px) /* small phone */
