@@ -64,6 +64,27 @@ function initKindeditor(afterInit)
             {
                 var doc = this.edit.doc; 
                 var cmd = this.edit.cmd; 
+                if(!K.WEBKIT && !K.GECKO)
+                {
+                    var pasted = false;
+                    $(doc.body).bind('paste', function(ev)
+                    {
+                        pasted = true;
+                        return true;
+                    });
+                    setTimeout(function()
+                    {
+                        $(doc.body).bind('keyup', function(ev)
+                        {
+                            if(pasted)
+                            {
+                                pasted = false;
+                                return true;
+                            }
+                            if(ev.keyCode == 86 && ev.ctrlKey) alert('<?php echo $this->lang->error->pasteImg;?>');
+                        })
+                    }, 10);
+                }
                 /* Paste in chrome.*/
                 /* Code reference from http://www.foliotek.com/devblog/copy-images-from-clipboard-in-javascript/. */
                 if(K.WEBKIT)

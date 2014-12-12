@@ -320,6 +320,7 @@ $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
+$lang->menugroup->backup      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
@@ -344,6 +345,7 @@ $lang->error->account         = "『%s』should be a valid account.";
 $lang->error->passwordsame    = "Two passwords must be the same";
 $lang->error->passwordrule    = "Password should more than six letters.";
 $lang->error->accessDenied    = 'No purview';
+$lang->error->pasteImg        = 'Your browser does not support the paste image!';
 $lang->error->noData          = 'No data';
 
 /* Pager. */
