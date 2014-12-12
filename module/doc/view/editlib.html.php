@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php if($libID == 'product' or $libID == 'project'):?>
 <div class='main'>
-  <div class='alert alert-info'>
+  <div class='alert alert-pure'>
     <i class='icon-info-sign'></i>
     <div class='content'><h5><?php echo $lang->doc->errorEditSystemDoc;?></h5></div>
   </div>
