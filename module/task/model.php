@@ -575,7 +575,9 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now) 
-            ->remove('comment')->get();
+            ->remove('comment,files,labels')
+            ->get();
+        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 
@@ -586,7 +588,8 @@ class taskModel extends model
             ->setDefault('task', $taskID) 
             ->setDefault('date', date(DT_DATE1)) 
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo')->get();
+            ->remove('finishedDate,comment,assignedTo,files,labels')
+            ->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 

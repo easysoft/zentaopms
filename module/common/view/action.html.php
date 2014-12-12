@@ -1,3 +1,4 @@
+<style>#actionbox a{font-weight:normal}</style>
 <script language='Javascript'>
 var fold   = '<?php echo $lang->fold;?>';
 var unfold = '<?php echo $lang->unfold;?>';

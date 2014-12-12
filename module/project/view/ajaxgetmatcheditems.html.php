@@ -3,7 +3,7 @@
 <?php
 foreach($projects as $project)
 {
-    echo "<li>" . html::a(sprintf($link, $project->id), $project->name). "</li>";
+    echo "<li>" . html::a(sprintf($link, $project->id), "<i class='icon-cube'></i> " . $project->name, '', "class='$project->status'"). "</li>";
 }
 ?>
 </ul>

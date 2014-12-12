@@ -239,8 +239,7 @@ class task extends control
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
@@ -606,11 +605,13 @@ class task extends control
             $this->loadModel('action');
             $changes = $this->task->finish($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
+            $files = $this->loadModel('file')->saveUpload('task', $taskID);
 
             $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('task', $taskID, 'Finished', $this->post->comment);
+                $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+                $actionID = $this->action->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
