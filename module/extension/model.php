@@ -77,7 +77,7 @@ class extensionModel extends model
      */
     public function fetchAPI($url)
     {
-        $url .= '?lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $this->config->version;
+        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $this->config->version;
         $this->agent->fetch($url);
         $result = json_decode($this->agent->results);
 
@@ -152,7 +152,7 @@ class extensionModel extends model
      */
     public function checkIncompatible($versions)
     {
-        $apiURL = $this->apiRoot . 'apiCheckIncompatible-' . helper::safe64Encode(json_encode($versions)) . '.json';
+        $apiURL = $this->apiRoot . 'apiCheckIncompatible' . '.json?versions=' . helper::safe64Encode(json_encode($versions));
         $data = $this->fetchAPI($apiURL);
         if(isset($data->incompatibleExts)) return (array)$data->incompatibleExts;
         return array();

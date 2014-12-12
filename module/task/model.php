@@ -577,6 +577,7 @@ class taskModel extends model
             ->setDefault('finishedDate, lastEditedDate', $now) 
             ->remove('comment,files,labels')
             ->get();
+        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 

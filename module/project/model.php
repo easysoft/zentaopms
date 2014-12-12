@@ -1510,9 +1510,18 @@ class projectModel extends model
         }   
 
         if($module == 'project' && $method == 'create') return;
-
-        $link = helper::createLink($module, $method, "projectID=%s");
-        if($extra != '') $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
+        if($extra != '')
+        {
+            $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
+        }
+        elseif($module == 'project' && $method == 'index')
+        {
+            $link = helper::createLink($module, $method, "locate=no&status=undone&projectID=%s");
+        }
+        else
+        {
+            $link = helper::createLink($module, $method, "projectID=%s");
+        }
         return $link;
     }
 

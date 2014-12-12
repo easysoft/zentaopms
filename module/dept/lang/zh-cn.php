@@ -13,7 +13,11 @@ $lang->dept->common      = '部门结构';
 $lang->dept->add         = "添加";
 $lang->dept->addChild    = "添加下级部门";
 $lang->dept->manageChild = "下级部门";
+$lang->dept->edit        = "编辑部门";
 $lang->dept->delete      = "删除部门";
+$lang->dept->parent      = "上级部门";
+$lang->dept->manager     = "负责人";
+$lang->dept->name        = "部门名称";
 $lang->dept->browse      = "部门维护";
 $lang->dept->manage      = "维护部门结构";
 $lang->dept->updateOrder = "更新排序";
@@ -21,6 +25,7 @@ $lang->dept->users       = "成员列表";
 
 $lang->dept->saveButton    = " 保存 (S) ";
 $lang->dept->confirmDelete = " 您确定删除该部门吗？";
+$lang->dept->successSave   = " 修改成功。";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = '该部门有子部门，不能删除！';

@@ -397,6 +397,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #searchResult.show-more #defaultMenu > ul > li, #defaultMenu > .actions > a {border-right: 1px solid #ddd}
 #defaultMenu > .actions > a > i, #defaultMenu > ul > li > a > i, #moreMenu > ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
 #searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}
+#searchResult > ul > li > a.closed, #searchResult > ul > li > a.done{color:#808080}
 
 #defaultMenu > div {padding-top: 6px;}
 
@@ -439,6 +440,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #featurebar .btn {padding: 4px 12px}
 #featurebar .btn > i {display: inline-block; margin-right: 2px; opacity: 0.8}
 #featurebar .actions {float: right; margin-top: -2px;}
+#featurebar > .heading > .prefix {display: inline-block; margin-right: 5px; color: #666;}
 
 .outer > .alert {border: none; margin: 0}
 .outer > .alert + #featurebar {border-top: 1px solid #ddd;}
