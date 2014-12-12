@@ -323,7 +323,7 @@ class helper
         $len  = strlen($string);
         for($i=0; $i<$len; $i++)
         {
-            $c = ord($str[$i]);
+            $c = ord($string[$i]);
             if($c > 128)
             {
                 if(($c >= 254)) return false;
@@ -337,7 +337,7 @@ class helper
                 while($bits > 1)
                 {
                     $i++;
-                    $b=ord($str[$i]);
+                    $b=ord($string[$i]);
                     if($b < 128 || $b > 191) return false;
                     $bits--;
                 }
