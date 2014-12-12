@@ -663,6 +663,10 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "status=all&productID=%s");
             }
+            elseif($module == 'product' && $method == 'index')
+            {
+                $link = helper::createLink($module, $method, "locate=no&productID=%s");
+            }
             else
             {
                 $link = helper::createLink($module, $method, "productID=%s");
