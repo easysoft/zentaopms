@@ -1,6 +1,8 @@
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['usecase']);?></div>
-  <nav class='nav'>
+  <div class='heading'>
+    <?php echo "<span class='prefix'>" . html::icon($lang->icons['usecase']) . '</span><strong>' . $task->name . '</strong>';?>
+  </div>
+  <div class='nav'>
     <?php
     echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
     echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
@@ -23,7 +25,7 @@
     if($this->methodName == 'cases') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     echo '<li>' . html::a(inlink('view', "taskID=$taskID"), $lang->testtask->view) . '</li>';
     ?>
-  </nav>
+  </div>
   <div class='actions'>
     <?php
     echo "<div class='btn-group'>";
