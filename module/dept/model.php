@@ -1,6 +1,6 @@
 <?php
 /**
- * The model file of dept dept of ZenTaoPMS.
+ * The model file of dept module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -151,6 +151,29 @@ class deptModel extends model
     }
 
     /**
+     * Update dept.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
+    public function update($deptID)
+    {
+        $dept   = fixer::input('post')->get();
+        $self   = $this->getById($deptID);
+        $parent = $this->getById($this->post->parent);
+        $childs = $this->getAllChildId($deptID);
+        $dept->grade = $parent ? $parent->grade + 1 : 1;
+        $dept->path  = $parent ? $parent->path . $deptID . ',' : ',' . $deptID . ',';
+        $this->dao->update(TABLE_DEPT)->data($dept)->autoCheck()->check('name', 'notempty')->where('id')->eq($deptID)->exec();
+        $this->dao->update(TABLE_DEPT)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($deptID)->exec();
+        $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq('')->exec();
+        $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq($self->manager)->exec();
+        $this->dao->update(TABLE_USER)->set('dept')->eq($deptID)->where('dept')->eq(0)->andWhere('account')->eq($this->post->manager)->exec();
+        $this->fixDeptPath();
+    }
+
+    /**
      * Create the manage link.
      * 
      * @param  int    $dept 
@@ -160,8 +183,9 @@ class deptModel extends model
     public function createManageLink($dept)
     {
         $linkHtml  = $dept->name;
+        $linkHtml .= ' ' . html::a(helper::createLink('dept', 'edit', "deptid={$dept->id}"), $this->lang->edit, '', 'data-toggle="modal" data-type="ajax"');
         $linkHtml .= ' ' . html::a(helper::createLink('dept', 'browse', "deptid={$dept->id}"), $this->lang->dept->manageChild);
-        $linkHtml .= ' ' . html::a(helper::createLink('dept', 'delete', "deptid={$dept->id}"), $this->lang->dept->delete, 'hiddenwin');
+        $linkHtml .= ' ' . html::a(helper::createLink('dept', 'delete', "deptid={$dept->id}"), $this->lang->delete, 'hiddenwin');
         $linkHtml .= ' ' . html::input("orders[$dept->id]", $dept->order, 'style="width:30px;text-align:center"');
         return $linkHtml;
     }
@@ -308,5 +332,55 @@ class deptModel extends model
     public function delete($deptID, $null = null)
     {
         $this->dao->delete()->from(TABLE_DEPT)->where('id')->eq($deptID)->exec();
+    }
+
+    /**
+     * Fix dept path.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixDeptPath()
+    {
+        /* Get all depts grouped by parent. */
+        $groupDepts = $this->dao->select('id, parent')->from(TABLE_DEPT)->fetchGroup('parent', 'id');
+        $depts      = array();
+
+        /* Cycle the groupDepts until it has no item any more. */
+        while(count($groupDepts) > 0)
+        {
+            $oldCounts = count($groupDepts);    // Record the counts before processing.
+            foreach($groupDepts as $parentDeptID => $childDepts)
+            {
+                /* If the parentDept doesn't exsit in the depts, skip it. If exists, compute it's child depts. */
+                if(!isset($depts[$parentDeptID]) and $parentDeptID != 0) continue;
+                if($parentDeptID == 0)
+                {
+                    $parentDept = new stdclass();
+                    $parentDept->grade = 0;
+                    $parentDept->path  = ',';
+                }
+                else
+                {
+                    $parentDept = $depts[$parentDeptID];
+                }
+
+                /* Compute it's child depts. */
+                foreach($childDepts as $childDeptID => $childDept)
+                {
+                    $childDept->grade = $parentDept->grade + 1;
+                    $childDept->path  = $parentDept->path . $childDept->id . ',';
+                    $depts[$childDeptID] = $childDept;    // Save child dept to depts, thus the child of child can compute it's grade and path.
+                }
+                unset($groupDepts[$parentDeptID]);    // Remove it from the groupDepts.
+            }
+            if(count($groupDepts) == $oldCounts) break;   // If after processing, no dept processed, break the cycle.
+        }
+
+        /* Save depts to database. */
+        foreach($depts as $dept)
+        {
+            $this->dao->update(TABLE_DEPT)->data($dept)->where('id')->eq($dept->id)->exec();
+        }
     }
 }

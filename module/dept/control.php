@@ -75,6 +75,40 @@ class dept extends control
     }
 
     /**
+     * Edit dept. 
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
+    public function edit($deptID)
+    {
+        if(!empty($_POST))
+        {
+            $this->dept->update($deptID);
+            echo js::alert($this->lang->dept->successSave);
+            die(js::reload('parent'));
+        }
+
+        $dept  = $this->dept->getById($deptID);
+        $users = $this->dept->getUsers('0' . $dept->path);
+
+        $userPairs = array();
+        foreach($users as $user) $userPairs[$user->account] = empty($user->realname) ? $user->account : $user->realname;
+
+        $this->view->optionMenu = $this->dept->getOptionMenu();
+
+        $this->view->dept  = $dept;
+        $this->view->users = $userPairs;
+
+        /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
+        $childs = $this->dept->getAllChildId($deptID);
+        foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
+
+        die($this->display());
+    }
+
+    /**
      * Delete a department.
      * 
      * @param  int    $deptID 
