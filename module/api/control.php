@@ -87,4 +87,18 @@ class api extends control
         $this->view->filePath = $filePath;
         $this->display();
     }
+
+    /**
+     * Query sql; 
+     * 
+     * @param  string    $sql this sql is base64 encode. 
+     * @access public
+     * @return void
+     */
+    public function query($sql)
+    {
+        $sql = base64_decode($sql);
+        $this->view->results = $this->api->query($sql);
+        die($this->display());
+    }
 }

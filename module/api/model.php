@@ -83,4 +83,45 @@ class apiModel extends model
 
         return array('url' => $url, 'content' => $content);
     }
+
+    /**
+     * Query sql. 
+     * 
+     * @param  string    $sql 
+     * @access public
+     * @return array
+     */
+    public function query($sql)
+    {
+        $sql  = trim($sql);
+        $sqls = explode(';', $sql);
+
+        $results = array();
+        foreach($sqls as $sql)
+        {
+            $sql = trim($sql);
+            if(empty($sql)) continue;
+
+            $result = new stdclass();
+            $result->sql    = $sql;
+            $result->result = '';
+            if(stripos($sql, 'select ') !== 0)
+            {
+                $result->result = $this->lang->api->error->onlySelect;
+            }
+            else
+            {
+                try
+                {
+                    $result->result = $this->dao->query($sql)->fetchAll();
+                }
+                catch(PDOException $e)
+                {
+                    $result->result = $e->getMessage();
+                }
+            }
+            $results[] = $result;
+        }
+        return $results;
+    }
 }
