@@ -12,16 +12,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
+<?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('build', 'view', 'buildID=' . $build->id), $build->name);?></strong>
-    <small class='text-muted'> <?php echo $lang->productplan->linkBug;?> <?php echo html::icon($lang->icons['link']);?></small>
+    <small class='text-muted'> <?php echo $lang->build->linkBug;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
-  <div id='querybox' class='show'></div>
+  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
 </div>
-<div id='querybox'></div>
+<div id='querybox' class='show'></div>
 <div id='bugList'>
   <form method='post' id='unlinkedBugsForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
@@ -55,7 +55,7 @@
       <tfoot>
       <tr>
         <td colspan='6' class='text-left'>
-          <?php if(count($allBugs)) echo "<div class='table-actions clearfix'><div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>' . html::submitButton($lang->productplan->linkBug) . '</div>';?>
+          <?php if(count($allBugs)) echo "<div class='table-actions clearfix'><div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>' . html::submitButton($lang->build->linkBug) . '</div>';?>
         </td>
       </tr>
       </tfoot>
@@ -98,7 +98,7 @@
           if(common::hasPriv('build', 'unlinkBug'))
           {
               $unlinkURL = $this->createLink('build', 'unlinkBug', "buildID=$build->id&bugID=$bug->id");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", "<i class='icon-remove'></i>", '', "title='{$lang->productplan->unlinkBug}' class='btn-icon'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", "<i class='icon-remove'></i>", '', "title='{$lang->build->unlinkBug}' class='btn-icon'");
           }
           ?>
         </td>

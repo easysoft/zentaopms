@@ -12,15 +12,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
+<?php js::set('confirmUnlinkStory', $lang->build->confirmUnlinkStory)?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name);?></strong>
     <small class='text-muted'> <?php echo $lang->build->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
-  <div id='querybox' class='show'></div>
+  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
 </div>
+<div id='querybox' class='show'></div>
 <div id='storyList'>
   <form method='post' id='unlinkedStoriesForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
@@ -103,7 +104,7 @@
           if(common::hasPriv('build', 'unlinkStory'))
           {
               $unlinkURL = $this->createLink('build', 'unlinkStory', "build=$build->id&storyID=$story->id");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "title='{$lang->productplan->unlinkStory}' class='btn-icon'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "title='{$lang->build->unlinkStory}' class='btn-icon'");
           }
           ?>
         </td>

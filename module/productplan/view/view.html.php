@@ -46,13 +46,20 @@
 <div class='row'>
   <div class='col-sm-8 col-lg-9'>
     <div class='main'>
+      <fieldset>
+        <legend><?php echo $lang->productplan->desc;?></legend>
+        <div class='article-content'><?php echo $plan->desc;?></div>
+      </fieldset>
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <li class='<?php if($type == 'story') echo 'active'?>'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?> <?php $count = count($planStories); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
-          <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#batchUnlinkBug' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?> <?php $count = count($planBugs); if($count > 0) echo "<span class='label label-danger label-badge label-circle'>" . $count . "</span>" ?></a></li>
+          <li class='<?php if($type == 'story') echo 'active'?>'><a href='#batchUnlinkStory' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?></a></li>
+          <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#batchUnlinkBug' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?></a></li>
         </ul>
         <div class='tab-content'>
           <div id='batchUnlinkStory' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
+            <?php if(common::hasPriv('productplan', 'linkStory')):?>
+            <div class='action'><?php echo html::a(inlink('linkStory',"planID=$plan->id"), '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm'");?></div>
+            <?php endif;?>
             <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory');?>">
               <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='storyList'>
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s"; ?>
@@ -125,6 +132,9 @@
             </form>
           </div>
           <div id='batchUnlinkBug' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
+            <?php if(common::hasPriv('productplan', 'linkBug')):?>
+            <div class='action'><?php echo html::a(inlink('linkBug',"planID=$plan->id"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm'");?></div>
+            <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>">
               <table class='table tablesorter table-condensed table-hover table-striped table-borderless' id='bugList'>
                 <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s"; ?>
@@ -171,8 +181,11 @@
                   <td colspan='7'>
                     <div class='table-actions clearfix'>
                       <?php 
-                      echo "<div class='btn-group'>" . html::selectButton('linkedBugsForm') . '</div>';
-                      echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
+                      if(count($planBugs) and $canBatchUnlink)
+                      {
+                          echo "<div class='btn-group'>" . html::selectButton('linkedBugsForm') . '</div>';
+                          echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
+                      }
                       ?>
                       <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?> </div>
                     </div>
@@ -188,10 +201,6 @@
   </div>
   <div class='col-sm-4 col-lg-3'>
     <div class='main main-side'>
-      <fieldset>
-        <legend><?php echo $lang->productplan->desc;?></legend>
-        <div class='article-content'><?php echo $plan->desc;?></div>
-      </fieldset>
       <fieldset>
         <legend><?php echo $lang->productplan->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>

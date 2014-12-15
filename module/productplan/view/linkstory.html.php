@@ -19,8 +19,9 @@
     <strong><?php echo html::a($this->createLink('productplan', 'view', 'planID=' . $plan->id), $plan->title);?></strong>
     <small class='text-muted'> <?php echo $lang->productplan->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
-  <div id='querybox' class='show'></div>
+  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
 </div>
+<div id='querybox' class='show'></div>
 <div id='storyList'>
   <form method='post' id='unlinkedStoriesForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 

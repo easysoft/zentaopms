@@ -155,7 +155,13 @@ class release extends control
         $generatedBugs = array();
         if($build->project)
         {
-            $generatedBugs = $this->bug->getProjectBugs($build->project, 'id_desc', null, $build->id);
+            $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('project')->eq((int)$build->project)
+                ->beginIF($build->id != 0)->andWhere('openedBuild')->eq($build->id)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->eq('active')
+                ->orderBy('id_desc')
+                ->fetchAll();
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'newBugs');
         }
         

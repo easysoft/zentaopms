@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('confirmUnlinkStory', $lang->build->confirmUnlinkStory)?>
+<?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>
@@ -40,16 +42,24 @@
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
+      <fieldset>
+        <legend><?php echo $lang->build->desc;?></legend>
+        <div class='article-content'><?php echo $build->desc;?></div>
+      </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
       <div class='tabs'>
       <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
         <ul class='nav nav-tabs'>
-          <li class='active'><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story']) . ' ' . $lang->build->stories; if($countStories > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countStories . "</span>";?></a></li>
-          <li><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->bugs; if($countBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countBugs . "</span>";?></a></li>
-          <li><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->generatedBugs; if($countNewBugs > 0) echo "<span class='label label-danger label-badge label-circle'>" . $countNewBugs . "</span>";?></a></li>
+          <li class='active'><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story']) . ' ' . $lang->build->stories;?></a></li>
+          <li><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->bugs;?></a></li>
+          <li><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug']) . ' ' . $lang->build->generatedBugs;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='stories'>
-            <table class='table table-hover table-condensed table-borderless'>
+            <?php if(common::hasPriv('build', 'linkStory')):?>
+            <div class='action'><?php echo html::a(inlink('linkStory',"buildID=$build->id"), '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-sm'");?></div>
+            <?php endif;?>
+            <table class='table table-hover table-condensed table-borderless table-fixed' id='storyList'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -59,6 +69,7 @@
                   <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
                   <th class='w-hour'><?php echo $lang->statusAB;?></th>
                   <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
+                  <th class='w-50px'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <?php foreach($stories as $storyID => $story):?>
@@ -71,11 +82,20 @@
                 <td><?php echo $story->estimate;?></td>
                 <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
+                <td>
+                  <?php
+                  if(common::hasPriv('build', 'unlinkStory'))
+                  {
+                      $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->build->unlinkStory}'");
+                  }
+                  ?>
+                </td>
               </tr>
               <?php endforeach;?>
               <tfoot>
                 <tr>
-                  <td colspan='7'>
+                  <td colspan='8'>
                     <div class='table-actions clearfix'>
                       <div class='text'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
                     </div>
@@ -85,7 +105,10 @@
             </table>
           </div>
           <div class='tab-pane' id='bugs'>
-            <table class='table table-hover table-condensed table-borderless'>
+            <?php if(common::hasPriv('build', 'linkBug')):?>
+            <div class='action'><?php echo html::a(inlink('linkBug',"buildID=$build->id"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-sm'");?></div>
+            <?php endif;?>
+            <table class='table table-hover table-condensed table-borderless table-fixed' id='bugList'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -95,6 +118,7 @@
                   <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
                   <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
                   <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
+                  <th class='w-50px'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <?php foreach($bugs as $bug):?>
@@ -107,11 +131,20 @@
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>
                 <td><?php echo $users[$bug->resolvedBy];?></td>
                 <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                <td>
+                  <?php
+                  if(common::hasPriv('build', 'unlinkBug'))
+                  {
+                      $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->build->unlinkBug}'");
+                  }
+                  ?>
+                </td>
               </tr>
               <?php endforeach;?>
               <tfoot>
                 <tr>
-                  <td colspan='7'>
+                  <td colspan='8'>
                     <div class='table-actions clearfix'>
                       <div class='text'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
                     </div>
@@ -121,7 +154,7 @@
             </table>
           </div>
           <div class='tab-pane' id='newBugs'>
-            <table class='table table-hover table-condensed table-borderless'>
+            <table class='table table-hover table-condensed table-borderless table-fixed'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -165,13 +198,8 @@
   <div class='col-side'>
     <div class='main-side main'>
       <fieldset>
-        <legend><?php echo $lang->build->desc;?></legend>
-        <div class='article-content'><?php echo $build->desc;?></div>
-      </fieldset>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
-      <fieldset>
         <legend><?php echo $lang->build->basicInfo?></legend>
-        <table class='table table-data table-condensed table-borderless'>
+        <table class='table table-data table-condensed table-borderless table-fixed'>
           <tr>
             <th class='w-80px'><?php echo $lang->build->product;?></th>
             <td><?php echo $build->productName;?></td>

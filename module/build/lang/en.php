@@ -20,9 +20,11 @@ $lang->build->view      = "Info";
 $lang->build->ajaxGetProductBuilds = 'API:Product builds';
 $lang->build->ajaxGetProjectBuilds = 'API:Project builds';
 
-$lang->build->confirmDelete = "Are sure to delete this build?";
+$lang->build->confirmDelete      = "Are sure to delete this build?";
+$lang->build->confirmUnlinkStory = "Are you sure to remove this story?";
+$lang->build->confirmUnlinkBug   = "Are you sure to remove this bug?";
 
-$lang->build->basicInfo='Basic Info';
+$lang->build->basicInfo = 'Basic Info';
 
 $lang->build->id         = 'ID';
 $lang->build->product    = 'Product';
@@ -37,7 +39,9 @@ $lang->build->files      = 'Upload package';
 $lang->build->last       = 'Last build';
 $lang->build->linkStoriesAndBugs = 'stories and bugs';
 $lang->build->linkStories        = 'Stories';
+$lang->build->unlinkStory        = 'Remove story';
 $lang->build->linkBugs           = 'Bugs';
+$lang->build->unlinkBug          = 'Remove bug';
 $lang->build->stories            = 'Linked stories';
 $lang->build->bugs               = 'Linked bugs';
 $lang->build->generatedBugs      = 'Generated bug';

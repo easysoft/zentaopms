@@ -19,9 +19,11 @@ $lang->release->deleted   = '已删除';
 $lang->release->view      = "发布详情";
 $lang->release->browse    = "浏览发布";
 
-$lang->release->confirmDelete = "您确认删除该release吗？";
+$lang->release->confirmDelete      = "您确认删除该release吗？";
+$lang->release->confirmUnlinkStory = "您确认移除该需求吗？";
+$lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 
-$lang->release->basicInfo ='基本信息';
+$lang->release->basicInfo = '基本信息';
 
 $lang->release->id                    = 'ID';
 $lang->release->product               = '产品';
@@ -32,13 +34,15 @@ $lang->release->desc                  = '描述';
 $lang->release->last                  = '上次发布';
 $lang->release->linkStoriesAndBugs    = '需求和Bug';
 $lang->release->linkStories           = '相关需求';
+$lang->release->unlinkStory           = '移除需求';
 $lang->release->linkBugs              = '相关Bug';
-$lang->release->stories               = '已关联需求';
-$lang->release->bugs                  = '已关联Bug';
-$lang->release->generatedBugs         = '产生的Bug';
-$lang->release->finishStories         = '本次共完成需求%s个';
-$lang->release->resolvedBugs          = '本次共解决Bug%s个';
-$lang->release->createdBugs           = '本次共产生Bug%s个';
+$lang->release->unlinkBug             = '移除Bug';
+$lang->release->stories               = '已完成的需求';
+$lang->release->bugs                  = '已解决的Bug';
+$lang->release->generatedBugs         = '遗留的Bug';
+$lang->release->finishStories         = '本次共完成 %s 个需求';
+$lang->release->resolvedBugs          = '本次共解决 %s 个Bug';
+$lang->release->createdBugs           = '本次共遗留 %s 个Bug';
 $lang->release->export                = '导出HTML';
 
 $lang->release->filePath = '下载地址：';

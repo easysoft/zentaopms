@@ -20,9 +20,11 @@ $lang->build->view      = "版本详情";
 $lang->build->ajaxGetProductBuilds = '接口:产品版本列表';
 $lang->build->ajaxGetProjectBuilds = '接口:项目版本列表';
 
-$lang->build->confirmDelete = "您确认删除该版本吗？";
+$lang->build->confirmDelete      = "您确认删除该版本吗？";
+$lang->build->confirmUnlinkStory = "您确认移除该需求吗？";
+$lang->build->confirmUnlinkBug   = "您确认移除该Bug吗？";
 
-$lang->build->basicInfo ='基本信息';
+$lang->build->basicInfo = '基本信息';
 
 $lang->build->id        = 'ID';
 $lang->build->product   = '产品';
@@ -37,14 +39,16 @@ $lang->build->files     = '上传发行包';
 $lang->build->last      = '上个版本';
 $lang->build->linkStoriesAndBugs = '关联需求和Bug';
 $lang->build->linkStories        = '相关需求';
+$lang->build->unlinkStory        = '移除需求';
 $lang->build->linkBugs           = '相关Bug';
+$lang->build->unlinkBug          = '移除Bug';
 $lang->build->stories            = '已关联需求';
 $lang->build->bugs               = '已关联Bug';
 $lang->build->generatedBugs      = '产生的Bug';
 
-$lang->build->finishStories = '本次共完成需求%s个';
-$lang->build->resolvedBugs  = '本次共解决Bug%s个';
-$lang->build->createdBugs   = '本次共产生Bug%s个';
+$lang->build->finishStories = ' 本次共完成 %s 个需求';
+$lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
+$lang->build->createdBugs   = ' 本次共产生 %s 个Bug';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' 软件源代码库，如Subversion、Git库地址';

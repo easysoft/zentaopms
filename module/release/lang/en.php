@@ -19,9 +19,11 @@ $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
 
-$lang->release->confirmDelete = "Are sure to delete this release?";
+$lang->release->confirmDelete      = "Are sure to delete this release?";
+$lang->release->confirmUnlinkStory = "Are you sure to remove this story?";
+$lang->release->confirmUnlinkBug   = "Are you sure to remove this bug?";
 
-$lang->release->basicInfo ='Basic Info';
+$lang->release->basicInfo = 'Basic Info';
 
 $lang->release->id                    = 'ID';
 $lang->release->product               = 'Product';
@@ -32,7 +34,9 @@ $lang->release->desc                  = 'Desc';
 $lang->release->last                  = 'Last release';
 $lang->release->linkStoriesAndBugs    = 'Stories and bugs';
 $lang->release->linkStories           = 'Stories';
+$lang->release->unlinkStory           = 'Remove story';
 $lang->release->linkBugs              = 'Bugs';
+$lang->release->unlinkBug             = 'Remove bug';
 $lang->release->stories               = 'Linked stories';
 $lang->release->bugs                  = 'Linked bugs';
 $lang->release->generatedBugs         = 'Generated bug';

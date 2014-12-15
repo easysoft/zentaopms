@@ -12,16 +12,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
+<?php js::set('confirmUnlinkBug', $lang->release->confirmUnlinkBug)?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('release', 'view', 'releaseID=' . $release->id), $release->name);?></strong>
-    <small class='text-muted'> <?php echo $lang->productplan->linkBug;?> <?php echo html::icon($lang->icons['link']);?></small>
+    <small class='text-muted'> <?php echo $lang->release->linkBug;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
-  <div id='querybox' class='show'></div>
+  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
 </div>
-<div id='querybox'></div>
+<div id='querybox' class='show'></div>
 <div id='bugList'>
   <form method='post' id='unlinkedBugsForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
@@ -55,7 +55,7 @@
       <tfoot>
       <tr>
         <td colspan='6' class='text-left'>
-          <?php if(count($allBugs)) echo "<div class='table-actions clearfix'><div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>' . html::submitButton($lang->productplan->linkBug) . '</div>';?>
+          <?php if(count($allBugs)) echo "<div class='table-actions clearfix'><div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>' . html::submitButton($lang->release->linkBug) . '</div>';?>
         </td>
       </tr>
       </tfoot>
@@ -98,7 +98,7 @@
           if(common::hasPriv('release', 'unlinkBug'))
           {
               $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bugID=$bug->id");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", "<i class='icon-remove'></i>", '', "title='{$lang->productplan->unlinkBug}' class='btn-icon'");
+              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", "<i class='icon-remove'></i>", '', "title='{$lang->release->unlinkBug}' class='btn-icon'");
           }
           ?>
         </td>
