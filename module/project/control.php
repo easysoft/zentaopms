@@ -1462,7 +1462,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->linkStory($projectID);
-            die(js::locate($browseLink, 'parent'));
+            die(js::locate($browseLink));
         }
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
