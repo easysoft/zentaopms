@@ -120,7 +120,7 @@
                       if(count($planStories) and $canBatchUnlink)
                       {
                           echo "<div class='btn-group'>" . html::selectButton() . '</div>';
-                          echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
+                          echo html::submitButton($lang->productplan->batchUnlink);
                       }
                       ?>
                       <div class='text'><?php echo $summary;?></div>
@@ -136,7 +136,7 @@
             <div class='action'><?php echo html::a(inlink('linkBug',"planID=$plan->id"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm'");?></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug');?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-borderless' id='bugList'>
+              <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='bugList'>
                 <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s"; ?>
                 <thead>
                 <tr>
@@ -183,8 +183,8 @@
                       <?php 
                       if(count($planBugs) and $canBatchUnlink)
                       {
-                          echo "<div class='btn-group'>" . html::selectButton('linkedBugsForm') . '</div>';
-                          echo html::submitButton("<i class='icon-remove-sign'></i> " . $lang->productplan->batchUnlink);
+                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+                          echo html::submitButton($lang->productplan->batchUnlink);
                       }
                       ?>
                       <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?> </div>
