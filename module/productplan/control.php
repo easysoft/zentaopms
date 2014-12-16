@@ -235,8 +235,9 @@ class productplan extends control
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($plan->product, $viewType = 'story', $startModuleID = 0);
-        unset($this->lang->story->statusList['closed']);
-        $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
+        $storyStatusList = $this->lang->story->statusList;
+        unset($storyStatusList['closed']);
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')

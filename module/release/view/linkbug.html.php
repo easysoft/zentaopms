@@ -19,7 +19,7 @@
     <strong><?php echo html::a($this->createLink('release', 'view', 'releaseID=' . $release->id), $release->name);?></strong>
     <small class='text-muted'> <?php echo $lang->release->linkBug;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
-  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
+  <div class='actions'><?php echo html::a(inlink('view', "releaseID=$release->id"), '<i class="icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
 </div>
 <div id='querybox' class='show'></div>
 <div id='bugList'>
@@ -32,7 +32,7 @@
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
         <th>                 <?php echo $lang->bug->title;?></th>
         <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-        <th class='w-150px'> <?php echo $lang->bug->resolvedBy;?></th>
+        <th class='w-user'> <?php echo $lang->bug->resolvedBy;?></th>
         <th class='w-80px'>  <?php echo $lang->statusAB;?></th>
       </tr>
       </thead>
@@ -47,7 +47,7 @@
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
-        <td><?php echo substr($users[$bug->resolvedBy], 2);?></td>
+        <td><?php echo $users[$bug->resolvedBy];?></td>
         <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
       </tr>
       <?php endforeach;?>

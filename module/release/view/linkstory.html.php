@@ -19,7 +19,7 @@
     <strong><?php echo html::a($this->createLink('release', 'view', 'release=' . $release->id), $release->name);?></strong>
     <small class='text-muted'> <?php echo $lang->release->linkStory;?> <?php echo html::icon($lang->icons['link']);?></small>
   </div>
-  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
+  <div class='actions'><?php echo html::a(inlink('view', "releaseID=$release->id"), '<i class="icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
 </div>
 <div id='querybox' class='show'></div>
 <div id='storyList'>

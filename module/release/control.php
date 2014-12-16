@@ -402,7 +402,7 @@ class release extends control
         /* Build the search form. */
         $this->loadModel('bug');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        unset($this->config->product->search['fields']['product']);
+        unset($this->config->bug->search['fields']['product']);
         $this->config->bug->search['actionURL'] = $this->createLink('release', 'linkBug', "planID=$releaseID&browseType=bySearch&queryID=myQueryID");   
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
@@ -418,10 +418,10 @@ class release extends control
         }
         else
         {
-            $allBugs = empty($build->project) ? array() : $this->bug->getReleaseBugs($build->id, $release->product); 
+            $allBugs = empty($build->project) ? array() : $this->bug->getReleaseBugs($build->id, $release->product);
         }
 
-        $this->view->title       = $release->name . $this->lang->colon . $this->lang->productplan->linkBug;
+        $this->view->title       = $release->name . $this->lang->colon . $this->lang->release->linkBug;
         $this->view->position[]  = html::a($this->createLink('release', 'view', "releaseID=$release->id"), $release->name);
         $this->view->position[]  = $this->lang->release->linkBug;
         $this->view->allBugs     = $allBugs;
