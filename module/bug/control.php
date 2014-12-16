@@ -756,7 +756,7 @@ class bug extends control
         {
             $this->bug->resolve($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('task', $taskID);
+            $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
             $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution);
