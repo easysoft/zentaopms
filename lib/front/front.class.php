@@ -377,7 +377,9 @@ EOT;
 <script>
 $(function()
 {
-    $('#allchecker, #reversechecker').click(function()
+    if($('body').data('bindSelectBtn')) return;
+    $('body').data('bindSelectBtn', true);
+    $(document).on('click', '.check-all, .check-inverse', function()
     {
         var e = $(this);
         if(e.closest('.datatable').length) return;
@@ -390,8 +392,8 @@ $(function()
 </script>
 EOT;
         global $lang;
-        $string .= "<a id='allchecker' class='btn btn-select-all check-all' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
-        $string .= "<a id='reversechecker' class='btn btn-select-reverse check-inverse' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
+        $string .= "<a class='btn btn-select-all check-all' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
+        $string .= "<a class='btn btn-select-reverse check-inverse' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
         return  $string;
     }
 
