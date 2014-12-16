@@ -156,3 +156,5 @@ $lang->testcase->buttonToList = '返回';
 $lang->testcase->errorEncode = '無數據，請選擇正確的編碼重新上傳！';
 $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding轉碼方法，不能將數據轉成想要的編碼！';
 $lang->testcase->noRequire   = "%s行的“%s”是必填欄位，不能為空";
+
+$lang->testcase->searchStories = '鍵入來搜索需求';

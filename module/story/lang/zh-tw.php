@@ -34,6 +34,7 @@ $lang->story->zeroCase    = "零用例需求";
 $lang->story->reportChart = "統計報表";
 $lang->story->batchChangePlan  = "批量修改計劃";
 $lang->story->batchChangeStage = "批量修改階段";
+$lang->story->batchAssignTo    = "批量指派";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';

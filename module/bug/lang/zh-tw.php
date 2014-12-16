@@ -160,6 +160,7 @@ $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
 $lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
 $lang->bug->remindTask           = '該Bug已經轉化為任務，是否更新任務(編號:%s)狀態 ?';
 $lang->bug->skipClose            = 'Bug %s 不是已解決狀態，不能關閉。';
+$lang->bug->applyTemplate        = '應用模版';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p>\n";

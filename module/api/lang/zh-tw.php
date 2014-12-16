@@ -12,6 +12,7 @@
 $lang->api = new stdclass();
 $lang->api->common   = 'API介面';
 $lang->api->getModel = '超級model調用介面';
+$lang->api->query    = 'SQL查詢介面';
 
 $lang->api->position  = '位置';
 $lang->api->startLine = "%s,%s行";
@@ -24,3 +25,6 @@ $lang->api->status    = '狀態';
 $lang->api->data      = '內容';
 $lang->api->noParam   = 'GET方式調試不需要輸入參數，';
 $lang->api->post      = 'POST方式調試請參照頁面表單';
+
+$lang->api->error = new stdclass();
+$lang->api->error->onlySelect = 'SQL查詢介面只允許SELECT查詢';

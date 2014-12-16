@@ -282,18 +282,21 @@ $lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subMo
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
+$lang->admin->menu->backup    = array('link' => '備份還原|backup|index', 'subModule' => 'backup');
 
-$lang->convert    = new stdclass();
-$lang->upgrade    = new stdclass();
-$lang->action     = new stdclass();
-$lang->extension  = new stdclass();
-$lang->custom     = new stdclass();
-$lang->editor     = new stdclass();
-$lang->mail       = new stdclass();
+$lang->convert   = new stdclass();
+$lang->upgrade   = new stdclass();
+$lang->action    = new stdclass();
+$lang->backup    = new stdclass();
+$lang->extension = new stdclass();
+$lang->custom    = new stdclass();
+$lang->editor    = new stdclass();
+$lang->mail      = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
 $lang->action->menu    = $lang->admin->menu;
+$lang->backup->menu    = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
@@ -317,6 +320,7 @@ $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
+$lang->menugroup->backup      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
@@ -341,6 +345,7 @@ $lang->error->account         = "『%s』應當為合法的用戶名。";
 $lang->error->passwordsame    = "兩次密碼應當相等。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
+$lang->error->pasteImg        = '您的瀏覽器不支持粘貼圖片！';
 $lang->error->noData          = '沒有數據';
 
 /* 分頁信息。*/
@@ -470,5 +475,6 @@ $lang->icons['recordEstimate'] = 'time';
 $lang->icons['customFields']   = 'cogs';
 $lang->icons['manage']         = 'cog';
 $lang->icons['unlock']         = 'unlock-alt';
+$lang->icons['confirmStoryChange'] = 'search';
 
 include (dirname(__FILE__) . '/menuOrder.php');
