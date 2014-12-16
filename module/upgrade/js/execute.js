@@ -2,10 +2,12 @@ $(function()
 {
     if(result == 'success')
     {
-        $.get(createLink('upgrade', 'ajaxCheckExtension'), function(data)
+        $.ajax(
         {
-            $('#checkExtension').html(data);
-            $('#tohome').html(tohome);
+            type: "get",
+            url: createLink('upgrade', 'ajaxCheckExtension'),
+            success: function(data){$('#checkExtension').html(data);},
+            complete: function(){$('#tohome').html(tohome);}
         });
     }
 });
