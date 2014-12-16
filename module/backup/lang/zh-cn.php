@@ -1,7 +1,7 @@
 <?php
 $lang->backup->common   = '备份还原';
+$lang->backup->index    = '备份还原首页';
 $lang->backup->history  = '备份历史';
-$lang->backup->download = '下载备份';
 $lang->backup->delete   = '删除备份';
 $lang->backup->backup   = '备份';
 $lang->backup->restore  = '还原';

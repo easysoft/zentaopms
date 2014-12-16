@@ -18,6 +18,8 @@ $lang->release->delete    = "Delete";
 $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
+$lang->release->batchUnlinkStory = "Batch unlink story";
+$lang->release->batchUnlinkBug   = "Batch unlink bug";
 
 $lang->release->confirmDelete      = "Are sure to delete this release?";
 $lang->release->confirmUnlinkStory = "Are you sure to remove this story?";

@@ -18,6 +18,8 @@ $lang->release->delete    = "删除发布";
 $lang->release->deleted   = '已删除';
 $lang->release->view      = "发布详情";
 $lang->release->browse    = "浏览发布";
+$lang->release->batchUnlinkStory = "批量移除需求";
+$lang->release->batchUnlinkBug   = "批量移除Bug";
 
 $lang->release->confirmDelete      = "您确认删除该release吗？";
 $lang->release->confirmUnlinkStory = "您确认移除该需求吗？";

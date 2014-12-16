@@ -52,6 +52,7 @@ $lang->moduleOrder[150] = 'tree';
 $lang->moduleOrder[155] = 'api';
 $lang->moduleOrder[160] = 'file';
 $lang->moduleOrder[165] = 'misc';
+$lang->moduleOrder[170] = 'backup';
 
 $lang->resource = new stdclass();
 
@@ -161,6 +162,7 @@ $lang->resource->story->zeroCase    = 'zeroCase';
 $lang->resource->story->report      = 'reportChart';
 $lang->resource->story->batchChangePlan  = 'batchChangePlan';
 $lang->resource->story->batchChangeStage = 'batchChangeStage';
+$lang->resource->story->batchAssignTo    = 'batchAssignTo';
 
 $lang->story->methodOrder[5]  = 'create';
 $lang->story->methodOrder[10] = 'batchCreate';
@@ -173,10 +175,13 @@ $lang->story->methodOrder[40] = 'review';
 $lang->story->methodOrder[45] = 'batchReview';
 $lang->story->methodOrder[50] = 'close';
 $lang->story->methodOrder[55] = 'batchClose';
-$lang->story->methodOrder[60] = 'activate';
-$lang->story->methodOrder[65] = 'tasks';
-$lang->story->methodOrder[70] = 'zeroCase';
-$lang->story->methodOrder[75] = 'report';
+$lang->story->methodOrder[60] = 'batchChangePlan';
+$lang->story->methodOrder[65] = 'batchChangeStage';
+$lang->story->methodOrder[70] = 'batchAssignTo';
+$lang->story->methodOrder[75] = 'activate';
+$lang->story->methodOrder[80] = 'tasks';
+$lang->story->methodOrder[85] = 'zeroCase';
+$lang->story->methodOrder[90] = 'report';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -206,12 +211,18 @@ $lang->productplan->methodOrder[55] = 'batchUnlinkBug';
 
 /* Release. */
 $lang->resource->release = new stdclass();
-$lang->resource->release->browse = 'browse';
-$lang->resource->release->create = 'create';
-$lang->resource->release->edit   = 'edit';
-$lang->resource->release->delete = 'delete';
-$lang->resource->release->view   = 'view';
-$lang->resource->release->export = 'export';
+$lang->resource->release->browse           = 'browse';
+$lang->resource->release->create           = 'create';
+$lang->resource->release->edit             = 'edit';
+$lang->resource->release->delete           = 'delete';
+$lang->resource->release->view             = 'view';
+$lang->resource->release->export           = 'export';
+$lang->resource->release->linkStory        = 'linkStory';
+$lang->resource->release->unlinkStory      = 'unlinkStory';
+$lang->resource->release->batchUnlinkStory = 'batchUnlinkStory';
+$lang->resource->release->linkBug          = 'linkBug';
+$lang->resource->release->unlinkBug        = 'unlinkBug';
+$lang->resource->release->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->release->methodOrder[5]  = 'browse';
 $lang->release->methodOrder[10] = 'create';
@@ -219,6 +230,12 @@ $lang->release->methodOrder[15] = 'edit';
 $lang->release->methodOrder[20] = 'delete';
 $lang->release->methodOrder[25] = 'view';
 $lang->release->methodOrder[35] = 'export';
+$lang->release->methodOrder[40] = 'linkStory';
+$lang->release->methodOrder[45] = 'unlinkStory';
+$lang->release->methodOrder[50] = 'batchUnlinkStory';
+$lang->release->methodOrder[55] = 'linkBug';
+$lang->release->methodOrder[60] = 'unlinkBug';
+$lang->release->methodOrder[65] = 'batchUnlinkBug';
 
 /* Project. */
 $lang->resource->project = new stdclass();
@@ -341,15 +358,27 @@ $lang->task->methodOrder[110] = 'report';
 
 /* Build. */
 $lang->resource->build = new stdclass();
-$lang->resource->build->create = 'create';
-$lang->resource->build->edit   = 'edit';
-$lang->resource->build->delete = 'delete';
-$lang->resource->build->view   = 'view';
+$lang->resource->build->create           = 'create';
+$lang->resource->build->edit             = 'edit';
+$lang->resource->build->delete           = 'delete';
+$lang->resource->build->view             = 'view';
+$lang->resource->build->linkStory        = 'linkStory';
+$lang->resource->build->unlinkStory      = 'unlinkStory';
+$lang->resource->build->batchUnlinkStory = 'batchUnlinkStory';
+$lang->resource->build->linkBug          = 'linkBug';
+$lang->resource->build->unlinkBug        = 'unlinkBug';
+$lang->resource->build->batchUnlinkBug   = 'batchUnlinkBug';
 
 $lang->build->methodOrder[5]  = 'create';
 $lang->build->methodOrder[10] = 'edit';
 $lang->build->methodOrder[15] = 'delete';
 $lang->build->methodOrder[20] = 'view';
+$lang->build->methodOrder[25] = 'linkStory';
+$lang->build->methodOrder[30] = 'unlinkStory';
+$lang->build->methodOrder[35] = 'batchUnlinkStory';
+$lang->build->methodOrder[40] = 'linkBug';
+$lang->build->methodOrder[45] = 'unlinkBug';
+$lang->build->methodOrder[50] = 'batchUnlinkBug';
 
 /* QA. */
 $lang->resource->qa = new stdclass();
@@ -559,12 +588,14 @@ $lang->resource->dept = new stdclass();
 $lang->resource->dept->browse      = 'browse';
 $lang->resource->dept->updateOrder = 'updateOrder';
 $lang->resource->dept->manageChild = 'manageChild';
+$lang->resource->dept->edit        = 'edit';
 $lang->resource->dept->delete      = 'delete';
 
 $lang->dept->methodOrder[5]  = 'browse';
 $lang->dept->methodOrder[10] = 'updateOrder';
 $lang->dept->methodOrder[15] = 'manageChild';
-$lang->dept->methodOrder[20] = 'delete';
+$lang->dept->methodOrder[20] = 'edit';
+$lang->dept->methodOrder[25] = 'delete';
 
 /* Group. */
 $lang->resource->group = new stdclass();
@@ -746,8 +777,11 @@ $lang->convert->methodOrder[55] = 'convertRedmine';
 $lang->resource->api = new stdclass();
 $lang->resource->api->getModel    = 'getModel';
 $lang->resource->api->debug       = 'debug';
+$lang->resource->api->query       = 'query';
 
-$lang->api->methodOrder[5] = 'getModel';
+$lang->api->methodOrder[5]  = 'getModel';
+$lang->api->methodOrder[10] = 'debug';
+$lang->api->methodOrder[15] = 'query';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';
@@ -776,6 +810,17 @@ $lang->action->methodOrder[5]  = 'trash';
 $lang->action->methodOrder[10] = 'undelete';
 $lang->action->methodOrder[15] = 'hideOne';
 $lang->action->methodOrder[20] = 'hideAll';
+
+$lang->resource->backup = new stdclass();
+$lang->resource->backup->index   = 'index';
+$lang->resource->backup->backup  = 'backup';
+$lang->resource->backup->restore = 'restore';
+$lang->resource->backup->delete  = 'delete';
+
+$lang->backup->methodOrder[5]  = 'index';
+$lang->backup->methodOrder[10] = 'backup';
+$lang->backup->methodOrder[15] = 'restore';
+$lang->backup->methodOrder[20] = 'delete';
 
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';
@@ -947,3 +992,23 @@ $lang->changelog['6.3'][] = 'bug-batchAssignTo';
 $lang->changelog['6.3'][] = 'task-batchAssignTo';
 $lang->changelog['6.3'][] = 'file-uploadImages';
 $lang->changelog['6.3'][] = 'project-batchUnlinkStory';
+
+$lang->changelog['6.4'][] = 'api-query';
+$lang->changelog['6.4'][] = 'backup-index';
+$lang->changelog['6.4'][] = 'backup-backup';
+$lang->changelog['6.4'][] = 'backup-restore';
+$lang->changelog['6.4'][] = 'backup-delete';
+$lang->changelog['6.4'][] = 'build-linkStory';
+$lang->changelog['6.4'][] = 'build-unlinkStory';
+$lang->changelog['6.4'][] = 'build-batchUnlinkStory';
+$lang->changelog['6.4'][] = 'build-linkBug';
+$lang->changelog['6.4'][] = 'build-unlinkBug';
+$lang->changelog['6.4'][] = 'build-batchUnlinkBug';
+$lang->changelog['6.4'][] = 'dept-edit';
+$lang->changelog['6.4'][] = 'release-linkStory';
+$lang->changelog['6.4'][] = 'release-unlinkStory';
+$lang->changelog['6.4'][] = 'release-batchUnlinkStory';
+$lang->changelog['6.4'][] = 'release-linkBug';
+$lang->changelog['6.4'][] = 'release-unlinkBug';
+$lang->changelog['6.4'][] = 'release-batchUnlinkBug';
+$lang->changelog['6.4'][] = 'story-batchAssignTo';
