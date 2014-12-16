@@ -17,6 +17,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong><small><?php echo html::icon($lang->icons['link']);?></small> <?php echo $lang->project->linkStory;?></strong>
   </div>
+  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
   <div id='querybox' class='show'></div>
 </div>
 <form method='post' class='form-condensed'>

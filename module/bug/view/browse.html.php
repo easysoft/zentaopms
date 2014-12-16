@@ -185,11 +185,11 @@ js::set('moduleID', $moduleID);
                 $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
                 echo html::commonButton($lang->edit, $misc);
                 ?>
+                <?php $dropdown = (common::hasPriv('bug', 'batchConfirm') and common::hasPriv('bug', 'batchClose') and common::hasPriv('bug', 'batchResolve') and common::hasPriv('bug', 'batchAssignTo'));?>
+                <?php if($dropdown):?>
                 <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
                 <ul class='dropdown-menu'>
                   <?php 
-                  $class = "class='disabled'";
-
                   $actionLink = $this->createLink('bug', 'batchConfirm');
                   $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "";
                   if($misc) echo "<li>" . html::a('#', $lang->bug->confirmBug, '', $misc) . "</li>";
@@ -198,35 +198,39 @@ js::set('moduleID', $moduleID);
                   $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "";
                   if($misc) echo "<li>" . html::a('#', $lang->bug->close, '', $misc) . "</li>";
 
-                  $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : $class;
-                  echo "<li class='dropdown-submenu'>" . html::a('#', $lang->bug->resolve,  '', $misc);
-                  echo "<ul class='dropdown-menu'>";
-                  unset($lang->bug->resolutionList['']);
-                  unset($lang->bug->resolutionList['duplicate']);
-                  foreach($lang->bug->resolutionList as $key => $resolution)
+                  $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : '';
+                  if($misc)
                   {
-                      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
-                      if($key == 'fixed')
+                      echo "<li class='dropdown-submenu'>" . html::a('#', $lang->bug->resolve,  '', $misc);
+                      echo "<ul class='dropdown-menu'>";
+                      unset($lang->bug->resolutionList['']);
+                      unset($lang->bug->resolutionList['duplicate']);
+                      unset($lang->bug->resolutionList['tostory']);
+                      foreach($lang->bug->resolutionList as $key => $resolution)
                       {
-                          echo "<li class='dropdown-submenu'>";
-                          echo html::a('#', $resolution, '', "id='fixedItem'");
-                          echo "<ul class='dropdown-menu'>";
-                          unset($builds['']);
-                          foreach($builds as $key => $build)
+                          $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
+                          if($key == 'fixed')
                           {
-                              $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
-                              echo "<li>";
-                              echo html::a('#', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
-                              echo "</li>";
+                              echo "<li class='dropdown-submenu'>";
+                              echo html::a('#', $resolution, '', "id='fixedItem'");
+                              echo "<ul class='dropdown-menu'>";
+                              unset($builds['']);
+                              foreach($builds as $key => $build)
+                              {
+                                  $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
+                                  echo "<li>";
+                                  echo html::a('#', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+                                  echo "</li>";
+                              }
+                              echo '</ul></li>';
                           }
-                          echo '</ul></li>';
+                          else
+                          {
+                              echo '<li>' . html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                          }
                       }
-                      else
-                      {
-                        echo '<li>' . html::a('#', $resolution, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
-                      }
+                      echo '</ul></li>';
                   }
-                  echo '</ul></li>';
                   $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
                   if($canBatchAssignTo && count($bugs))
                   {   
@@ -247,9 +251,10 @@ js::set('moduleID', $moduleID);
                   }
                   ?>
                 </ul>
+                <?php endif;?>
               </div>
             </div>
-            <?php endif?>
+            <?php endif;?>
             <div class='text-right'><?php $pager->show();?></div>
           </td>
         </tr>
