@@ -169,7 +169,6 @@ class deptModel extends model
         $this->dao->update(TABLE_DEPT)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($deptID)->exec();
         $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq('')->exec();
         $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq($self->manager)->exec();
-        $this->dao->update(TABLE_USER)->set('dept')->eq($deptID)->where('dept')->eq(0)->andWhere('account')->eq($this->post->manager)->exec();
         $this->fixDeptPath();
     }
 
