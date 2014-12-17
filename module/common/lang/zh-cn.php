@@ -370,6 +370,7 @@ $lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font colo
 $lang->pasteTextInfo = "粘贴文本到文本域中，每行文字作为一条数据的标题。";
 
 $lang->noResultsMatch     = "没有匹配结果";
+$lang->searchMore         = "搜索此关键字的更多结果：";
 $lang->selectAnOption     = "选择一个选项";
 $lang->selectSomeOptions  = "选择一些选项";
 $lang->chooseUsersToMail  = "选择要发信通知的用户...";

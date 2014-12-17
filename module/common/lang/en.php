@@ -370,6 +370,7 @@ $lang->suhosinInfo   = "Warming:data is too large! Please enlarge the setting of
 $lang->pasteTextInfo = "Paste the text into a text field, each line of text as a data header.";
 
 $lang->noResultsMatch    = "No results match";
+$lang->searchMore        = "Search more results with the key:";
 $lang->selectAnOption    = "Select an option";
 $lang->selectSomeOptions = "Select some options";
 $lang->chooseUsersToMail = "Choose users to mail...";

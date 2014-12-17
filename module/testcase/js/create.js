@@ -22,13 +22,24 @@ $(function()
     var $searchInput = $('#storySearchInput');
     var $searchResult = $('#searchResult');
     var $selectedItem;
+    var showSearchModal = function()
+    {
+        $searchStories.modal('show').on('shown.zui.modal', function()
+        {
+            var key = $('#story_chosen .chosen-results > li.no-results > span').text();
+            if(key) $searchInput.val(key).trigger('change');
+            $searchInput.focus();
+        });
+    };
     $(document).on('change', '#story', function()
     {
        if($(this).val() === 'showmore')
        {
-           $searchStories.modal('show').on('shown.zui.modal', function(){$searchInput.focus();});
+            showSearchModal();
        }
     });
+
+    $(document).on('click', '#story_chosen .chosen-results > li.no-results', showSearchModal);
 
     $searchStories.on('hide.zui.modal', function()
     {

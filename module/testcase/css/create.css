@@ -10,3 +10,7 @@
 #searchResult > li.loading > .icon-spinner:before {font-size: 28px;}
 #searchResult > li > a {display: block; padding: 6px 15px; color: #333; border-bottom: 1px solid #e5e5e5}
 #searchResult > li > a:hover, #searchResult > li > a.selected {color: #1a4f85; background-color: #ddd;}
+
+#story_chosen .chosen-results > li.no-results {cursor: pointer;}
+#story_chosen .chosen-results > li.no-results:hover {color: #1a4f85; background-color: #ddd;}
+#story_chosen .chosen-results > li.no-results > span {font-weight: bold;}
