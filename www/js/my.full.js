@@ -554,9 +554,9 @@ function setComment()
  */
 function autoCheck()
 {
-    $('.tablesorter tr :checkbox').click(function(){clickInCheckbox = 1;});
+    $(document).on('click', '.tablesorter tr :checkbox', function(){clickInCheckbox = 1;});
 
-    $('.tablesorter tr').click(function()
+    $(document).on('click', '.tablesorter tr', function()
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
