@@ -75,12 +75,22 @@
               echo "<div class='btn-group'>" . html::selectButton() . '</div>';
               if($canBatchAssignTo)
               {
+                  $withSearch = count($memberPairs) > 10;
                   $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
-                  echo "<div class='input-group w-150px'>";
-                  echo html::select('assignedTo', $memberPairs, '', 'class="form-control chosen"');
-                  echo "<span class='input-group-addon'>";
-                  echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->bug->assignTo);
-                  echo '</span></div>';
+                  echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+                  echo '<div class="dropup btn-group">';
+                  echo '<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">';
+                  echo $lang->bug->assignedTo;
+                  echo '<span class="caret"></span></button>';
+                  echo '<ul class="dropdown-menu assign-menu' . ($withSearch ? ' with-search':'') . '" role="menu">';
+                  foreach ($memberPairs as $key => $value)
+                  {
+                      if(empty($key)) continue;
+                      echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                  }
+                  if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                  echo '</ul>';
+                  echo '</div>';
               }
           }
           ?>

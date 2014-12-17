@@ -13,7 +13,7 @@ $(function()
         $('.assign-menu > .option').each(function()
         {
             var $option = $(this);
-            $option.toggleClass('hide', $option.text().toLowerCase().indexOf(val) < 0 || $option.data('key').toLowerCase().indexOf(val) < 0);
+            $option.toggleClass('hide', $option.text().toString().toLowerCase().indexOf(val) < 0 && $option.data('key').toString().toLowerCase().indexOf(val) < 0);
         });
     });
 })
