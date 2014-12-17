@@ -377,7 +377,7 @@ class testcase extends control
         $position[] = $this->lang->testcase->batchCreate;
 
         $story     = $storyID ? $this->story->getByID($storyID) : '';
-        $storyList = $storyID ? array($storyID => $story->id . ':' . $story->title . '(' . $this->lang->story->pri . ':' . $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')') : array();
+        $storyList = $storyID ? array($storyID => $story->id . ':' . $story->title . '(' . $this->lang->story->pri . ':' . $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')') : array('');
 
         $this->view->title            = $title;
         $this->view->position         = $position;
