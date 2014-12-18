@@ -955,7 +955,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus);
+        $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus, 'id_desc');
         $result = array();
         $i = 0;
         foreach ($stories as $id => $story)
