@@ -203,7 +203,7 @@ class docModel extends model
         {
             $docID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('doc', $docID);
-            return $docID;
+            return array('status' => 'new', 'id' => $docID);
         }
         return false;
     }

@@ -317,7 +317,7 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
-        $stories = $this->story->getProductStoryPairs($productID, $modules, array_keys($storyStatus), 'id_desc', 20);
+        $stories = $this->story->getProductStoryPairs($productID, $modules, array_keys($storyStatus), 'id_desc', 50);
 
         $this->view->title            = $title;
         $this->view->caseTitle        = $caseTitle;

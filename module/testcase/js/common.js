@@ -47,7 +47,7 @@ function setStories()
 {
     moduleID  = $('#module').val();
     productID = $('#product').val();
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=20');
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50');
     $.get(link, function(stories)
     {
         var value = $('#story').val();
