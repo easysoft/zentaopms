@@ -937,6 +937,7 @@ function setModal()
         {
             options.cssClass += ' hide-header';
         }
+        if(typeof(options.url) == 'undefined' || !options.url) return false;
 
         var modal = $('#ajaxModal').addClass('modal-loading').data('first', true);
 
