@@ -127,7 +127,7 @@ class build extends control
         $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
         $this->view->position[]    = $this->lang->build->view;
         $this->view->products      = $this->project->getProducts($build->project);
-        $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, 'id_desc', null, $build->id);
+        $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, 'status_desc,id_desc', null, $build->id);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
         $this->view->stories       = $stories;

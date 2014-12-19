@@ -44,8 +44,8 @@ $lang->build->linkStories        = '相关需求';
 $lang->build->unlinkStory        = '移除需求';
 $lang->build->linkBugs           = '相关Bug';
 $lang->build->unlinkBug          = '移除Bug';
-$lang->build->stories            = '已关联需求';
-$lang->build->bugs               = '已关联Bug';
+$lang->build->stories            = '已解决需求';
+$lang->build->bugs               = '已解决Bug';
 $lang->build->generatedBugs      = '产生的Bug';
 
 $lang->build->finishStories = ' 本次共完成 %s 个需求';

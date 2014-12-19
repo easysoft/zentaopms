@@ -646,10 +646,13 @@ class commonModel extends model
         $preAndNextObject = new stdClass();
 
         if(strpos('story, task, bug, testcase, doc', $type) === false) return $preAndNextObject;
-        if($this->session->{$type . 'PreAndNext'} and $this->session->{$type . 'PreAndNext'}['objectID'] == $objectID) return $this->session->{$type . 'PreAndNext'}['preAndNextObject'];
-        $table = $this->config->objectTables[$type];
+
+        /* Use existObject when the preAndNextObject of this objectID has exist in session. */
+        $existObject = $type . 'PreAndNext';
+        if(isset($_SESSION[$existObject]) and $_SESSION[$existObject]['objectID'] == $objectID) return $_SESSION[$existObject]['preAndNextObject'];
 
         /* Get objectIDs. */
+        $table             = $this->config->objectTables[$type];
         $queryCondition    = $type . 'QueryCondition';
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition = $this->session->$queryCondition;
@@ -693,7 +696,7 @@ class commonModel extends model
             if($preObj !== true) $preObj = $object;
         }
 
-        $this->session->set($type . 'PreAndNext', array('objectID' => $objectID, 'preAndNextObject' => $preAndNextObject));
+        $this->session->set($existObject, array('objectID' => $objectID, 'preAndNextObject' => $preAndNextObject));
         return $preAndNextObject;
     }
 
@@ -787,7 +790,6 @@ class commonModel extends model
      */
     public function appendOrder($orderBy, $append = 'id')
     {
-
         list($firstOrder) = explode(',', $orderBy);
         $sort = strpos($firstOrder, '_') === false ? '_asc' : strstr($firstOrder, '_');
         return strpos($orderBy, $append) === false ? $orderBy . ',' . $append . $sort : $orderBy;

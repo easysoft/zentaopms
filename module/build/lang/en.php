@@ -44,8 +44,8 @@ $lang->build->linkStories        = 'Stories';
 $lang->build->unlinkStory        = 'Remove story';
 $lang->build->linkBugs           = 'Bugs';
 $lang->build->unlinkBug          = 'Remove bug';
-$lang->build->stories            = 'Linked stories';
-$lang->build->bugs               = 'Linked bugs';
+$lang->build->stories            = 'Resolved stories';
+$lang->build->bugs               = 'Resolved bugs';
 $lang->build->generatedBugs      = 'Generated bug';
 
 $lang->build->finishStories = 'The total demand for a complete %s';
