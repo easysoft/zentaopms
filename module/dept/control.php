@@ -86,20 +86,16 @@ class dept extends control
         if(!empty($_POST))
         {
             $this->dept->update($deptID);
-            echo js::alert($this->lang->dept->successSave);
-            die(js::reload('parent'));
+            die(js::alert($this->lang->dept->successSave) . js::reload('parent'));
         }
 
         $dept  = $this->dept->getById($deptID);
-        $users = $this->dept->getUsers('0' . $dept->path);
-
-        $userPairs = array();
-        foreach($users as $user) $userPairs[$user->account] = empty($user->realname) ? $user->account : $user->realname;
+        $users = $this->loadModel('user')->getPairs('nodeleted|noletter|noclosed');
 
         $this->view->optionMenu = $this->dept->getOptionMenu();
 
         $this->view->dept  = $dept;
-        $this->view->users = $userPairs;
+        $this->view->users = $users;
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->dept->getAllChildId($deptID);

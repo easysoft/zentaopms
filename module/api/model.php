@@ -88,40 +88,35 @@ class apiModel extends model
      * Query sql. 
      * 
      * @param  string    $sql 
+     * @param  string    $keyField 
      * @access public
      * @return array
      */
-    public function query($sql)
+    public function sql($sql, $keyField = '')
     {
         $sql  = trim($sql);
-        $sqls = explode(';', $sql);
+        if(strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
+        a($sql);
+        if(empty($sql)) return '';
 
-        $results = array();
-        foreach($sqls as $sql)
+        if(stripos($sql, 'select ') !== 0)
         {
-            $sql = trim($sql);
-            if(empty($sql)) continue;
-
-            $result = new stdclass();
-            $result->sql    = $sql;
-            $result->result = '';
-            if(stripos($sql, 'select ') !== 0)
-            {
-                $result->result = $this->lang->api->error->onlySelect;
-            }
-            else
-            {
-                try
-                {
-                    $result->result = $this->dao->query($sql)->fetchAll();
-                }
-                catch(PDOException $e)
-                {
-                    $result->result = $e->getMessage();
-                }
-            }
-            $results[] = $result;
+            return $this->lang->api->error->onlySelect;
         }
-        return $results;
+        else
+        {
+            try
+            {
+                $stmt = $this->dao->query($sql);
+                if(empty($keyField)) return $stmt->fetchAll();
+                $rows = array();
+                while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
+                return $rows;
+            }
+            catch(PDOException $e)
+            {
+                return $e->getMessage();
+            }
+        }
     }
 }

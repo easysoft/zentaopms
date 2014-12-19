@@ -281,8 +281,8 @@ $lang->admin->menu->extension = array('link' => '扩展|extension|browse', 'subM
 $lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->backup    = array('link' => '备份|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->admin->menu->backup    = array('link' => '备份还原|backup|index', 'subModule' => 'backup');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

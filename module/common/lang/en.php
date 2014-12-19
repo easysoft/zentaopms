@@ -281,8 +281,8 @@ $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 's
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->admin->menu->backup    = array('link' => 'Backup and restore|backup|index', 'subModule' => 'backup');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

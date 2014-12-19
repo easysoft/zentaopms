@@ -12,7 +12,7 @@
 $lang->api = new stdclass();
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
-$lang->api->query    = 'SQL查询接口';
+$lang->api->sql      = 'SQL查询接口';
 
 $lang->api->position  = '位置';
 $lang->api->startLine = "%s,%s行";

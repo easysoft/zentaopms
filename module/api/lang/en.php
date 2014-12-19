@@ -12,7 +12,7 @@
 $lang->api = new stdclass();
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
-$lang->api->query    = 'SQL Query API';
+$lang->api->sql    = 'SQL Query API';
 
 $lang->api->position  = 'Position';
 $lang->api->startLine = "%s, line %s";

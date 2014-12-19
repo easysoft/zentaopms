@@ -91,14 +91,14 @@ class api extends control
     /**
      * Query sql; 
      * 
-     * @param  string    $sql this sql is base64 encode. 
+     * @param  string $keyField 
      * @access public
      * @return void
      */
-    public function query($sql)
+    public function sql($keyField = '')
     {
-        $sql = base64_decode($sql);
-        $this->view->results = $this->api->query($sql);
+        $sql = isset($_POST['sql']) ? $this->post->sql : '';
+        $this->view->results = $this->api->sql($sql, $keyField);
         die($this->display());
     }
 }

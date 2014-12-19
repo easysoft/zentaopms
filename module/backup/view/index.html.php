@@ -28,7 +28,6 @@
     <thead>
       <tr>
         <th class='w-150px'><?php echo $lang->backup->time?></th>
-        <th class='w-200px'><?php echo $lang->backup->name?></th>
         <th><?php echo $lang->backup->files?></th>
         <th class='w-150px'><?php echo $lang->backup->size?></th>
         <th class='w-80px'><?php echo $lang->actions?></th>
@@ -42,7 +41,6 @@
       <tr>
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>><?php echo date(DT_DATETIME1, $backupFile->time);?></td>
-        <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>><?php echo $backupFile->name;?></td>
         <?php endif;?>
         <td class='text-left'><?php echo $file;?></td>
         <td><?php echo $size / 1024 >= 1024 ? round($size / 1024 / 1024, 2) . 'MB' : round($size / 1024, 2) . 'KB';?></td>

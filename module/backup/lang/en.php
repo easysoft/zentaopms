@@ -1,5 +1,5 @@
 <?php
-$lang->backup->common   = 'Backup and restore';
+$lang->backup->common   = 'Backup';
 $lang->backup->index    = 'Index';
 $lang->backup->history  = 'History';
 $lang->backup->delete   = 'Delete';

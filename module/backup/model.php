@@ -11,12 +11,26 @@
  */
 class backupModel extends model
 {
+    /**
+     * Backup SQL 
+     * 
+     * @param  string    $backupFile 
+     * @access public
+     * @return object
+     */
     public function backSQL($backupFile)
     {
         $zdb = $this->app->loadClass('zdb');
         return $zdb->dump($backupFile);
     }
 
+    /**
+     * Backup file.
+     * 
+     * @param  string    $backupFile 
+     * @access public
+     * @return object
+     */
     public function backFile($backupFile)
     {
         $return = new stdclass();
@@ -35,12 +49,26 @@ class backupModel extends model
         return $return;
     }
 
+    /**
+     * Restore SQL 
+     * 
+     * @param  string    $backupFile 
+     * @access public
+     * @return object
+     */
     public function restoreSQL($backupFile)
     {
         $zdb = $this->app->loadClass('zdb');
         return $zdb->import($backupFile);
     }
 
+    /**
+     * Restore File 
+     * 
+     * @param  string    $backupFile 
+     * @access public
+     * @return object
+     */
     public function restoreFile($backupFile)
     {
         $return = new stdclass();
