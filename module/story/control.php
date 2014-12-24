@@ -887,7 +887,7 @@ class story extends control
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID, $type);
+        $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID, $type);
         $storyName = $number === '' ? 'story' : "story[$number]";
         die(html::select($storyName, $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
     }
