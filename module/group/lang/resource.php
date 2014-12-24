@@ -777,11 +777,11 @@ $lang->convert->methodOrder[55] = 'convertRedmine';
 $lang->resource->api = new stdclass();
 $lang->resource->api->getModel    = 'getModel';
 $lang->resource->api->debug       = 'debug';
-$lang->resource->api->query       = 'query';
+$lang->resource->api->sql         = 'sql';
 
 $lang->api->methodOrder[5]  = 'getModel';
 $lang->api->methodOrder[10] = 'debug';
-$lang->api->methodOrder[15] = 'query';
+$lang->api->methodOrder[15] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';
@@ -993,7 +993,7 @@ $lang->changelog['6.3'][] = 'task-batchAssignTo';
 $lang->changelog['6.3'][] = 'file-uploadImages';
 $lang->changelog['6.3'][] = 'project-batchUnlinkStory';
 
-$lang->changelog['6.4'][] = 'api-query';
+$lang->changelog['6.4'][] = 'api-sql';
 $lang->changelog['6.4'][] = 'backup-index';
 $lang->changelog['6.4'][] = 'backup-backup';
 $lang->changelog['6.4'][] = 'backup-restore';
