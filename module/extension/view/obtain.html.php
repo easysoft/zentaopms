@@ -67,7 +67,7 @@
           echo " {$lang->extension->depends}: ";
           if(!empty($currentRelease->depends))
           {
-              foreach(json_decode($currentRelease->depends) as $code => $limit)
+              foreach(json_decode($currentRelease->depends, true) as $code => $limit)
               {
                   echo $code;
                   if($limit != 'all')
