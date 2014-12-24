@@ -43,6 +43,7 @@ function setAssignedTo(moduleID, productID)
 
 $(function()
 {
+    if($('#project').val()) loadProjectRelated($('#project').val());
     $('#saveTplBtn').on('click', function()
     {
         var content = $('#steps').val();
