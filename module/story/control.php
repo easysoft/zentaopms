@@ -888,7 +888,8 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID, $type);
-        die(html::select("story[$number]", $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
+        $storyName = $number === '' ? 'story' : "story[$number]";
+        die(html::select($storyName, $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
     }
 
     /**
