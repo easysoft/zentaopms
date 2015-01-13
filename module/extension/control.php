@@ -147,7 +147,7 @@ class extension extends control
             }
 
             /* Download the package file. */
-            $this->extension->downloadPackage($extension, helper::safe64Decode($downLink));
+            if(!file_exists($packageFile) or ($md5 != '' and md5_file($packageFile) != $md5)) $this->extension->downloadPackage($extension, helper::safe64Decode($downLink));
             if(!file_exists($packageFile))
             {
                 $this->view->error = sprintf($this->lang->extension->errorDownloadFailed, $packageFile);
