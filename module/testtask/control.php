@@ -243,7 +243,7 @@ class testtask extends control
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = $this->loadModel('common')->appendOrder($orderBy, 't2.id');
 
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
