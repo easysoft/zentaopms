@@ -125,7 +125,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->severity;?></th>
-                <td><strong><?php echo $lang->bug->severityList[$bug->severity];?></strong></td>
+                <td><strong><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></strong></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->pri;?></th>

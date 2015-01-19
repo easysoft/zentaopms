@@ -88,6 +88,7 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->errorConnectDB      = 'Database connect failed.';
+$lang->install->errorDBName         = 'The database name cannot contain "."';
 $lang->install->errorCreateDB       = 'Database create failed.';
 $lang->install->errorTableExists    = 'The same tables alread exists, to continue install, go back and check the clear db box.';
 $lang->install->errorCreateTable    = 'Table create failed.';

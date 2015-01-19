@@ -1254,6 +1254,7 @@ class story extends control
                 }
 
                 /* Set related files. */
+                $story->files = '';
                 if(isset($relatedFiles[$story->id]))
                 {
                     foreach($relatedFiles[$story->id] as $file)
