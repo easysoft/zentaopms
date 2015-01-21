@@ -255,7 +255,7 @@ class pager
         {
             if(strtolower($key) == 'rectotal')   $this->params[$key] = $this->recTotal;
             if(strtolower($key) == 'recperpage') $this->params[$key] = $this->recPerPage;
-            if(strtolower($key) == 'pageID')     $this->params[$key] = $this->pageID;
+            if(strtolower($key) == 'pageid')     $this->params[$key] = $this->pageID;
         }
     }
 
