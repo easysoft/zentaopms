@@ -176,13 +176,28 @@ class mail extends control
 
         if($_POST)
         {
+            /* The mail need openssl and curl extension when secure is tls. */
+            if($this->config->mail->smtp->secure == 'tls')
+            {
+                if(!extension_loaded('openssl'))
+                {
+                    $this->view->error = array($this->lang->mail->noOpenssl);
+                    die($this->display());
+                }
+                if(!extension_loaded('curl'))
+                {
+                    $this->view->error = array($this->lang->mail->noCurl);
+                    die($this->display());
+                }
+            }
+
             $this->mail->send($this->post->to, $this->lang->mail->subject, $this->lang->mail->content, "", true);
             if($this->mail->isError())
             {
                 $this->view->error = $this->mail->getError();
                 die($this->display());
             }
-            die(js::alert($this->lang->mail->successSended) . js::locate(inlink('test')));
+            die(js::alert($this->lang->mail->successSended) . js::locate(inlink('test'), 'parent'));
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
