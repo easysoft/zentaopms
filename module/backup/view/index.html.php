@@ -47,8 +47,8 @@
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>>
           <?php
-          common::printIcon('backup', 'restore', "file=$backupFile->name", '', 'list', 'repeat', 'hiddenwin', 'restore');
-          common::printIcon('backup', 'delete', "file=$backupFile->name", '', 'list', '', 'hiddenwin');
+          if(common::hasPriv('backup', 'restore')) echo html::a(inlink('restore', "file=$backupFile->name"), $lang->backup->backup, 'hiddenwin', "class='restore'");
+          if(common::hasPriv('backup', 'delete')) echo html::a(inlink('delete', "file=$backupFile->name"), $lang->delete, 'hiddenwin');
           ?>
         </td>
         <?php endif;?>
