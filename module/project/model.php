@@ -213,7 +213,7 @@ class projectModel extends model
             ->setDefault('status', 'wait')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedVersion', $this->config->version)
-            ->setDefault('team', $this->post->name)
+            ->setDefault('team', substr($this->post->name,0, 30))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta')

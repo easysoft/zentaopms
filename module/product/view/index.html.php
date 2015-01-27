@@ -36,16 +36,16 @@
     <thead>
       <tr>
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-        <th class='w-200px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-        <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
-        <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
-        <th><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
-        <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
-        <th><?php echo $lang->product->plans;?></th>
-        <th><?php echo $lang->product->releases;?></th>
-        <th><?php echo $lang->product->bugs;?></th>
-        <th><?php echo $lang->bug->unResolved;?></th>
-        <th><?php echo $lang->bug->assignToNull;?></th>
+        <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
+        <th class='w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
+        <th class='w-80px'><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
+        <th class='w-80px'><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
+        <th class='w-80px'><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+        <th class='w-80px'><?php echo $lang->product->plans;?></th>
+        <th class='w-80px'><?php echo $lang->product->releases;?></th>
+        <th class='w-80px'><?php echo $lang->product->bugs;?></th>
+        <th class='w-80px'><?php echo $lang->bug->unResolved;?></th>
+        <th class='w-80px'><?php echo $lang->bug->assignToNull;?></th>
       </tr>
     </thead>
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
@@ -57,7 +57,7 @@
         <?php endif;?>
         <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
       </td>
-      <td class='text-left'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+      <td class='text-left' title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
       <td><?php echo $product->stories['active']?></td>
       <td><?php echo $product->stories['changed']?></td>
       <td><?php echo $product->stories['draft']?></td>

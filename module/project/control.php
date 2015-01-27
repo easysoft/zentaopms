@@ -850,6 +850,7 @@ class project extends control
     {
         if($projectID)
         {
+            $this->view->title     = $this->lang->project->tips;
             $this->view->tips      = $this->fetch('project', 'tips', "projectID=$projectID");
             $this->view->projectID = $projectID;
             $this->display();

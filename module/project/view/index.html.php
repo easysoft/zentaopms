@@ -30,14 +30,14 @@
   <thead>
     <tr>
       <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-      <th class='w-200px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
-      <th><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
-      <th><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
-      <th><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
-      <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
-      <th><?php echo $lang->project->totalEstimate;?></th>
-      <th><?php echo $lang->project->totalConsumed;?></th>
-      <th><?php echo $lang->project->totalLeft;?></th>
+      <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
+      <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
+      <th class='w-90px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
+      <th class='w-80px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
+      <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
+      <th class='w-70px'><?php echo $lang->project->totalEstimate;?></th>
+      <th class='w-70px'><?php echo $lang->project->totalConsumed;?></th>
+      <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
       <th class='w-150px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
@@ -51,7 +51,7 @@
       <?php endif;?>
       <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), sprintf('%03d', $project->id));?>
     </td>
-    <td class='text-left'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
+    <td class='text-left' title='<?php echo $project->name?>'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
     <td class='text-left'><?php echo $project->code;?></td>
     <td><?php echo $users[$project->PM];?></td>
     <td><?php echo $project->end;?></td>
