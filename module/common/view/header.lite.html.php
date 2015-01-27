@@ -12,6 +12,7 @@ $clientTheme  = $this->app->getClientTheme();
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name="renderer" content="webkit"> 
   <?php
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
