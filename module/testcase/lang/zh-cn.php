@@ -61,6 +61,7 @@ $lang->testcase->view               = "用例详情";
 $lang->testcase->edit               = "编辑";
 $lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->delete             = "删除";
+$lang->testcase->batchDelete        = "批量删除 ";
 $lang->testcase->deleted            = "已删除";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->groupCase          = "分组浏览用例";
@@ -111,8 +112,9 @@ $lang->testcase->legendHistory      = '历史记录';
 $lang->testcase->legendComment      = '备注';
 $lang->testcase->legendProduct      = '产品模块';
 
-$lang->testcase->confirmDelete = '您确认要删除该测试用例吗？';
-$lang->testcase->same          = '同上';
+$lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
+$lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
+$lang->testcase->same               = '同上';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

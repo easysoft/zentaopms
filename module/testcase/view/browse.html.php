@@ -18,6 +18,7 @@ include './caseheader.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID'  , $moduleID);
 js::set('confirmDelete', $lang->testcase->confirmDelete);
+js::set('batchDelete', $lang->testcase->confirmBatchDelete);
 ?>
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>
@@ -113,6 +114,10 @@ js::set('confirmDelete', $lang->testcase->confirmDelete);
                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
                <ul class='dropdown-menu' id='moreActionMenu'>
                 <?php 
+                $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
+                $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : "class='disabled'";
+                echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+
                 $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
                 $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";

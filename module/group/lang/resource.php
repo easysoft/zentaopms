@@ -446,6 +446,7 @@ $lang->resource->testcase->view               = 'view';
 $lang->resource->testcase->edit               = 'edit';
 $lang->resource->testcase->batchEdit          = 'batchEdit';
 $lang->resource->testcase->delete             = 'delete';
+$lang->resource->testcase->batchDelete        = 'batchDelete';
 $lang->resource->testcase->export             = 'export';
 $lang->resource->testcase->exportTemplet      = 'exportTemplet';
 $lang->resource->testcase->import             = 'import';
@@ -465,6 +466,8 @@ $lang->testcase->methodOrder[40] = 'delete';
 $lang->testcase->methodOrder[45] = 'export';
 $lang->testcase->methodOrder[50] = 'confirmChange';
 $lang->testcase->methodOrder[55] = 'confirmStoryChange';
+$lang->testcase->methodOrder[60] = 'batchEdit';
+$lang->testcase->methodOrder[65] = 'batchDelete';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();

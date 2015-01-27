@@ -61,6 +61,7 @@ $lang->testcase->view               = "Info";
 $lang->testcase->edit               = "Edit";
 $lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
+$lang->testcase->batchDelete        = "Batch delete ";
 $lang->testcase->deleted            = "Deleted";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->groupCase          = "View case by group";
@@ -111,8 +112,9 @@ $lang->testcase->legendHistory      = 'History';
 $lang->testcase->legendComment      = 'Comment';
 $lang->testcase->legendProduct      = 'Product & module';
 
-$lang->testcase->confirmDelete = 'Are you sure to delete this case?';
-$lang->testcase->same          = 'Ditto';
+$lang->testcase->confirmDelete      = 'Are you sure to delete this case?';
+$lang->testcase->confirmBatchDelete = 'Are you sure to batch delete there cases?';
+$lang->testcase->same               = 'Ditto';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

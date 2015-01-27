@@ -558,7 +558,7 @@ class testcase extends control
             die(js::locate($this->session->caseList, 'parent'));
         }
 
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
 
         /* Get the edited cases. */
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
@@ -634,6 +634,21 @@ class testcase extends control
             }
             die(js::locate($this->session->caseList, 'parent'));
         }
+    }
+
+    /**
+     * Batch delete cases.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchDelete($productID = 0)
+    {
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+
+        foreach($caseIDList as $caseID) $this->testcase->delete(TABLE_CASE, $caseID);
+        die(js::locate($this->session->caseList));
     }
 
     /**
