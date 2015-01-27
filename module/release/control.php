@@ -125,8 +125,7 @@ class release extends control
         $this->view->build      = $build;
         $this->view->stories    = $stories;
         $this->view->bugs       = $bugs;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product);
-        unset($this->view->builds['trunk']);
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, 'notrunk');
         $this->display();
     }
                                                           

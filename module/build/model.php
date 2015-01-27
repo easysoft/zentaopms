@@ -111,7 +111,7 @@ class buildModel extends model
         {
             if($build->project) 
             {
-                $builds[$key] = isset($releases[$key]) ? $releases[$key]->name : $build->name;
+                $builds[$key] = $build->name;
             }
             else if(isset($releases[$key]) and !$releases[$key]->deleted)
             {
