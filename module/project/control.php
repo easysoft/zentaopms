@@ -890,7 +890,7 @@ class project extends control
         $this->view->position[]    = $this->view->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->allProducts   = $this->loadModel('product')->getPairs();
+        $this->view->allProducts   = $this->loadModel('product')->getPairs('noclosed|nocode');
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
@@ -938,7 +938,9 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->edit;
 
+        $allProducts    = $this->loadModel('product')->getPairs('noclosed|nocode');
         $linkedProducts = $this->project->getProducts($project->id);
+        $allProducts   += $linkedProducts;
         $linkedProducts = join(',', array_keys($linkedProducts));
         
         $this->view->title          = $title;
@@ -950,7 +952,7 @@ class project extends control
         $this->view->qdUsers        = $this->user->getPairs('noclosed,nodeleted,qdfirst',  $project->QD);
         $this->view->rdUsers        = $this->user->getPairs('noclosed,nodeleted,devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
-        $this->view->allProducts    = $this->loadModel('product')->getPairs();
+        $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
 
         $this->display();
@@ -1290,8 +1292,10 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->manageProducts;
 
-        $allProducts     = $this->product->getPairs();
+        $allProducts     = $this->product->getPairs('noclosed|nocode');
         $linkedProducts  = $this->project->getProducts($project->id);
+        // Merge allProducts and linkedProducts for closed product.
+        $allProducts    += $linkedProducts;
         $linkedProducts  = join(',', array_keys($linkedProducts));
 
         /* Assign. */
