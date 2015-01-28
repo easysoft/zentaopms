@@ -28,6 +28,7 @@ $lang->aboutZenTao    = 'About';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
+$lang->agreement      = "I Agree to the <a href='http://zpl.pub/page/zplv11.html' target='_blank'>Z PUBLIC LICENSE 1.1</a>, <span class='text-danger'>and promise to keep the logo, link of Zentao.</span>";
 
 $lang->reset        = 'Reset';
 $lang->refresh      = 'Refresh';

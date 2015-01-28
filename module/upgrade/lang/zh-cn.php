@@ -14,6 +14,7 @@ $lang->upgrade->result  = '升级结果';
 $lang->upgrade->fail    = '升级失败';
 $lang->upgrade->success = '升级成功';
 $lang->upgrade->tohome  = '返回首页';
+$lang->upgrade->license = '禅道项目管理软件已更换授权协议至 Z PUBLIC LICENSE(ZPL) 1.1';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
 <p>升级有危险，请先备份数据库，以防万一。</p>

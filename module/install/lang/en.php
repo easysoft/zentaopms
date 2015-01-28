@@ -21,6 +21,7 @@ $lang->install->start            = 'Start install';
 $lang->install->keepInstalling   = 'Keep install this version';
 $lang->install->seeLatestRelease = 'See the latest release.';
 $lang->install->welcome          = 'Welcome to use ZenTaoPMS.';
+$lang->install->license          = 'ZentaoPMS use license of Z PUBLIC LICENSE(ZPL) 1.1';
 $lang->install->desc             = <<<EOT
 ZenTaoPMS is an opensource project management software licensed under LGPL. It has product manage, project mange, testing mange features, also with organization manage and affair manage.
 
@@ -31,9 +32,9 @@ ZenTaoPMS is developped by <strong class='red'><a href='http://www.cnezsoft.com'
 The official website of ZenTaoPMS is <a href='http://en.zentao.net' target='_blank'>http://en.zentao.net</a>
 twitter:zentaopms
 
+
 The version of current release is <strong class='red'>%s</strong>。
 EOT;
-
 
 $lang->install->newReleased= "<strong class='red'>Notice</strong>：There is a new version <strong class='red'>%s</strong>, released on %s。";
 $lang->install->choice     = 'You can ';

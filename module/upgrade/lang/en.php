@@ -14,6 +14,7 @@ $lang->upgrade->result  = 'Result';
 $lang->upgrade->fail    = 'Fail';
 $lang->upgrade->success = 'Success';
 $lang->upgrade->tohome  = 'Go to index';
+$lang->upgrade->license = 'The license of ZentaoPMS has changed to Z PUBLIC LICENSE(ZPL) 1.1.';
 $lang->upgrade->warnning= 'Warning';
 $lang->upgrade->warnningContent = <<<EOT
 Warning! Upgradinng is dangeous, backup your database first.<br />

@@ -50,7 +50,7 @@
       </div>
       <?php else:?>
       <div class='form-group'>
-        <?php echo html::a($this->createLink('install', 'step1'), $lang->install->start, '', "class='btn btn-primary'");?>
+        <?php echo html::a(inlink('license'), $lang->install->start, '', "class='btn btn-primary'");?>
       </div>
       <?php endif;?>
     </div>
