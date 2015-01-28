@@ -1366,7 +1366,7 @@ class storyModel extends model
     public function getZeroCase($productID, $orderBy = 'id_desc')
     {
         $allStories   = $this->getProductStories($productID, 0, 'all', $orderBy);
-        $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->fetchAll('story');
+        $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
 
         foreach($allStories as $key => $story)
         {
