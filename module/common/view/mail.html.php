@@ -5,7 +5,7 @@
 <?php if(!empty($action->comment) or !empty($action->history)):?>
 <div class='history'>
 <div><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
-<?php if($action->comment and $action->history) echo '<br />'; echo nl2br($action->comment);?>
+<?php if($action->comment and $action->history) echo '<br />'; echo $action->comment;?>
 </div>
 <?php endif;?>
 <style>
@@ -15,4 +15,5 @@ table, tr, th, td {border:1px solid gray; font-size:12px; border-collapse:collap
 tr, th, td {padding:5px}
 .history {border:1px solid gray; padding:10px; margin-top:10px; margin-bottom:10px}
 .header  {background:#efefef}
+p{margin:0px}
 </style>
