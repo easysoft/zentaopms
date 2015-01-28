@@ -509,15 +509,7 @@ class projectModel extends model
         foreach($projects as $project)
         {
             if(strpos($mode, 'noclosed') !== false and $project->status == 'done') continue;
-            if($this->checkPriv($project))
-            {
-                if(strpos($mode, 'nocode') === false and $project->code)
-                {
-                    $firstChar = strtoupper(substr($project->code, 0, 1));
-                    if(ord($firstChar) < 127) $project->name =  $firstChar . ':' . $project->name;
-                }
-                $pairs[$project->id] = $project->name;
-            }
+            if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
         }
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */

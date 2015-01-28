@@ -155,17 +155,7 @@ class productModel extends model
         $pairs = array();
         foreach($products as $product)
         {
-            if($this->checkPriv($product))
-            {
-
-                if(strpos($mode, 'nocode') === false and $product->code)
-                {
-                    $firstChar = strtoupper(substr($product->code, 0, 1));
-                    if(ord($firstChar) < 127) $product->name =  $firstChar . ':' . $product->name;
-                }
-
-                $pairs[$product->id] = $product->name;
-            }
+            if($this->checkPriv($product)) $pairs[$product->id] = $product->name;
         }
         return $pairs;
     }
