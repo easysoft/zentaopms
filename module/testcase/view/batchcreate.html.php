@@ -30,16 +30,23 @@
       <tr>
         <th class='w-50px'><?php echo $lang->idAB;?></th> 
         <th class='w-300px'><?php echo $lang->testcase->module;?></th>
-        <th class='w-180px'><?php echo $lang->testcase->type;?></th>
+        <th class='w-180px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
         <th class='w-400px'><?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
       </tr>
     </thead>
 
+    <?php
+    unset($lang->testcase->typeList['']);
+    $moduleOptionMenu['same'] = $lang->testcase->same;
+    ?>
     <?php for($i = 0; $i < $config->testcase->batchCreate; $i++):?>
-    <?php $moduleOptionMenu['same'] = $lang->testcase->same; if($i != 0) $currentModuleID = 'same';?>
-    <?php $lang->testcase->typeList['same'] = $lang->testcase->same; $type = ($i == 0 ? 'feature' : 'same');?>
-    <?php $pri = 3;?>
+    <?php
+    if($i != 0) $currentModuleID = 'same';
+    if($i != 0) $lang->testcase->typeList['same'] = $lang->testcase->same;
+    $type = $i == 0 ? 'feature' : 'same';
+    $pri  = 3;
+    ?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
