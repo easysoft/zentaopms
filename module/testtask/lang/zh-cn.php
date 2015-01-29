@@ -2,20 +2,20 @@
 /**
  * The testtask module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testtask->index          = "测试任务首页";
+$lang->testtask->index          = "版本首页";
 $lang->testtask->create         = "提交测试";
-$lang->testtask->delete         = "删除测试任务";
+$lang->testtask->delete         = "删除版本";
 $lang->testtask->deleted        = "已删除";
 $lang->testtask->view           = "概况";
-$lang->testtask->edit           = "编辑测试任务";
-$lang->testtask->browse         = "待测列表";
+$lang->testtask->edit           = "编辑版本";
+$lang->testtask->browse         = "版本列表";
 $lang->testtask->linkCase       = "关联用例";
 $lang->testtask->linkCaseAB     = "关联";
 $lang->testtask->unlinkCase     = "移除";
@@ -34,17 +34,17 @@ $lang->testtask->close          = "关闭";
 $lang->testtask->wait           = "待测版本";
 $lang->testtask->done           = "已测版本";
 
-$lang->testtask->common         = '测试任务';
-$lang->testtask->id             = '任务编号';
+$lang->testtask->common         = '版本';
+$lang->testtask->id             = '版本编号';
 $lang->testtask->product        = '所属产品';
 $lang->testtask->project        = '所属项目';
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '负责人';
 $lang->testtask->pri            = '优先级';
-$lang->testtask->name           = '任务名称';
+$lang->testtask->name           = '版本名称';
 $lang->testtask->begin          = '开始日期';
 $lang->testtask->end            = '结束日期';
-$lang->testtask->desc           = '任务描述';
+$lang->testtask->desc           = '版本描述';
 $lang->testtask->status         = '当前状态';
 $lang->testtask->assignedTo     = '指派给';
 $lang->testtask->linkVersion    = '版本';
@@ -55,7 +55,7 @@ $lang->testtask->report         = '测试总结';
 $lang->testtask->stories        = '相关需求';
 $lang->testtask->bugs           = '相关Bug';
 
-$lang->testtask->legendDesc      = '任务描述';
+$lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '测试总结';
 $lang->testtask->legendBasicInfo = '基本信息';
 
@@ -80,7 +80,7 @@ $lang->testtask->fail          = '失败';
 $lang->testtask->showResult    = '共执行<span class="text-info">%s</span>次';
 $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
-$lang->testtask->confirmDelete     = '您确认要删除该测试任务吗？';
+$lang->testtask->confirmDelete     = '您确认要删除该版本吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 
 $lang->testtask->byModule      = '按模块';
@@ -99,12 +99,12 @@ $lang->testtask->placeholder->end   = '结束日期';
 $lang->testtask->mail = new stdclass();
 $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
-$lang->testtask->mail->create->title = "%s创建了测试任务 #%s:%s";
-$lang->testtask->mail->edit->title   = "%s编辑了测试任务 #%s:%s";
+$lang->testtask->mail->create->title = "%s创建了版本 #%s:%s";
+$lang->testtask->mail->edit->title   = "%s编辑了版本 #%s:%s";
 
 $lang->testtask->testScope = '测试范畴';
 
 $lang->testtask->action = new stdclass();
-$lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 创建测试任务 <strong>$objectID</strong>。' . "\n";
-$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 启动测试任务 <strong>$objectID</strong>。' . "\n";
-$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成测试任务 <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 启动版本 <strong>$objectID</strong>。' . "\n";
+$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成版本 <strong>$objectID</strong>。' . "\n";

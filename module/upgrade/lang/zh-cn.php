@@ -2,8 +2,8 @@
 /**
  * The upgrade module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: zh-cn.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -14,6 +14,7 @@ $lang->upgrade->result  = '升级结果';
 $lang->upgrade->fail    = '升级失败';
 $lang->upgrade->success = '升级成功';
 $lang->upgrade->tohome  = '返回首页';
+$lang->upgrade->license = '禅道项目管理软件已更换授权协议至 Z PUBLIC LICENSE(ZPL) 1.1';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
 <p>升级有危险，请先备份数据库，以防万一。</p>

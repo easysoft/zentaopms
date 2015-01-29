@@ -2,8 +2,8 @@
 /**
  * The control file of upgrade module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: control.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -18,6 +18,32 @@ class upgrade extends control
      * @return void
      */
     public function index()
+    {
+        $this->locate(inlink('license'));
+    }
+
+    /**
+     * Check agree license.
+     * 
+     * @access public
+     * @return void
+     */
+    public function license()
+    {   
+        if($this->get->agree == true) $this->locate(inlink('backup'));
+
+        $this->view->title   = $this->lang->upgrade->common;
+        $this->view->license = file_get_contents($this->app->getBasePath() . 'doc/LICENSE');
+        $this->display();
+    }   
+
+    /**
+     * Backup.
+     * 
+     * @access public
+     * @return void
+     */
+    public function backup()
     {
         $this->view->title = $this->lang->upgrade->common;
         $this->display();

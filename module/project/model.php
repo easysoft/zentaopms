@@ -2,8 +2,8 @@
 /**
  * The model file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
@@ -509,15 +509,7 @@ class projectModel extends model
         foreach($projects as $project)
         {
             if(strpos($mode, 'noclosed') !== false and $project->status == 'done') continue;
-            if($this->checkPriv($project))
-            {
-                if(strpos($mode, 'nocode') === false and $project->code)
-                {
-                    $firstChar = strtoupper(substr($project->code, 0, 1));
-                    if(ord($firstChar) < 127) $project->name =  $firstChar . ':' . $project->name;
-                }
-                $pairs[$project->id] = $project->name;
-            }
+            if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
         }
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */

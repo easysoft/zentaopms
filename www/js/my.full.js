@@ -1205,7 +1205,7 @@ $(document).ready(function()
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 
-    if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
+    if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.
 
     $('.export').bind('click', function()
     {

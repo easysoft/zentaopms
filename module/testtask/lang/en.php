@@ -2,8 +2,8 @@
 /**
  * The testtask module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: en.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -15,7 +15,7 @@ $lang->testtask->delete         = "Delete";
 $lang->testtask->deleted        = "Deleted";
 $lang->testtask->view           = "Info";
 $lang->testtask->edit           = "Edit";
-$lang->testtask->browse         = "Testtask browse";
+$lang->testtask->browse         = "Browse";
 $lang->testtask->linkCase       = "Link case";
 $lang->testtask->linkCaseAB     = "Link";
 $lang->testtask->unlinkCase     = "Del";

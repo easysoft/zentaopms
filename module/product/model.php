@@ -2,8 +2,8 @@
 /**
  * The model file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
@@ -155,17 +155,7 @@ class productModel extends model
         $pairs = array();
         foreach($products as $product)
         {
-            if($this->checkPriv($product))
-            {
-
-                if(strpos($mode, 'nocode') === false and $product->code)
-                {
-                    $firstChar = strtoupper(substr($product->code, 0, 1));
-                    if(ord($firstChar) < 127) $product->name =  $firstChar . ':' . $product->name;
-                }
-
-                $pairs[$product->id] = $product->name;
-            }
+            if($this->checkPriv($product)) $pairs[$product->id] = $product->name;
         }
         return $pairs;
     }
