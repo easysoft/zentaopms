@@ -191,7 +191,7 @@ function loadProjectBuilds(projectID)
     if(page == 'create')
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&index=0&needCreate=true");
-        $('#buildBox').load(link, function(){$('#openedBuild').chosen(defaultChosenOptions);});
+        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
     }
     else
     {
@@ -201,7 +201,6 @@ function loadProjectBuilds(projectID)
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
     }
-    notice();
 }
 
 /**
