@@ -44,6 +44,6 @@ $config->doc->search['params']['digest']        = array('operator' => 'include',
 $config->doc->search['params']['content']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['url']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['addedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->doc->search['params']['addedDate']     = array('operator' => '>=',      'control' => 'input',  'values' => '');
+$config->doc->search['params']['addedDate']     = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->doc->search['params']['editedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->doc->search['params']['editedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '');
+$config->doc->search['params']['editedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
