@@ -546,6 +546,9 @@ class storyModel extends model
             ->join('reviewedBy', ',')
             ->get();
 
+        /* fix bug #671. */
+        $this->lang->story->closedReason = $this->lang->story->rejectedReason;
+
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')
