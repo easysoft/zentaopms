@@ -14,3 +14,4 @@
 #story_chosen .chosen-results > li.no-results {cursor: pointer;}
 #story_chosen .chosen-results > li.no-results:hover {color: #1a4f85; background-color: #ddd;}
 #story_chosen .chosen-results > li.no-results > span {font-weight: bold;}
+#module_chosen .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}

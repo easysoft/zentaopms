@@ -1,17 +1,16 @@
 <?php
 /**
- * The batch create view of story module of ZenTaoPMS.
+ * The batch create view of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
- * @package     story
+ * @package     task
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('batchCreateNum', $config->task->batchCreate);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
@@ -61,7 +60,7 @@
       <td style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td style='overflow: visible'>
         <div class='input-group'>
-        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated($i)'");?>
+        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
         <span class='input-group-btn'>
         <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
         </span>
