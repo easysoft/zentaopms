@@ -39,7 +39,7 @@
           <?php echo html::textarea('comment', '', "rows='5' class='form-control'");?>
         </div>
       </fieldset>
-      <div class='actions'>
+      <div class='actions actions-form'>
         <?php 
         echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
