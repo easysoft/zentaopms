@@ -1,3 +1,6 @@
+/* Remove width in defaultChosenOptions. */
+delete defaultChosenOptions.width;
+
 /* Get select of stories.*/
 function setStories(moduleID, projectID, num)
 {
