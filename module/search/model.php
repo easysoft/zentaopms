@@ -112,6 +112,7 @@ class searchModel extends model
         }
 
         $where .=" ))";
+        $where  = $this->replaceDynamic($where);
 
         /* Save to session. */
         $querySessionName = $this->post->module . 'Query';

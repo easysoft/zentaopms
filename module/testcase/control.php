@@ -127,7 +127,6 @@ class testcase extends control
             }
             $caseQuery .= ')';
 
-            $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
                 ->andWhere('deleted')->eq(0)

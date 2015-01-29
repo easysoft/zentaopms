@@ -203,7 +203,6 @@ class project extends control
 
             $projectQuery = "`project`" . helper::dbIN(array_keys($this->projects));  
             $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
-            $taskQuery    = $this->search->replaceDynamic($taskQuery);
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $sort);

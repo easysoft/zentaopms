@@ -1502,7 +1502,6 @@ class bugModel extends model
             $bugQuery = str_replace($allProduct, '1', $this->session->bugQuery);
             $bugQuery = $bugQuery . ' AND `product`' . helper::dbIN($products);
         }
-        $bugQuery = $this->loadModel('search')->replaceDynamic($bugQuery);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();

@@ -292,7 +292,6 @@ class testtask extends control
                 $queryProductID = 'all';
             }
 
-            $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $this->view->runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
