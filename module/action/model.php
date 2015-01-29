@@ -197,6 +197,14 @@ class actionModel extends model
             ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         $this->loadModel('file');
+
+        if($objectType == 'project')
+        {
+            $this->app->loadLang('build');
+            $this->app->loadLang('testtask');
+            $actions = $this->processProjectActions($actions);
+        }
+
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
@@ -227,16 +235,39 @@ class actionModel extends model
             {
                 $action->extra = html::a(helper::createLink('bug', 'view', "bugID=$action->extra"), $action->extra);
             }
+            elseif($actionName == 'unlinkedfromproject')
+            {
+                $name = $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('product', 'browse', "productID=$action->extra"), "#$action->extra " . $name);
+            }
+            elseif($actionName == 'unlinkedfromplan')
+            {
+                $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
+                if($title) $action->extra = html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title);
+            }
+            elseif($actionName == 'tostory')
+            {
+                $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
+                if($title) $action->extra = html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title);
+            }
+            elseif($actionName == 'totask')
+            {
+                $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name);
+            }
+            elseif($actionName == 'buildopened')
+            {
+                $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->objectID)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('build', 'view', "buildID=$action->objectID"), "#$action->objectID " . $name);
+            }
+            elseif($actionName == 'testtaskopened' or $actionName == 'testtaskstarted' or $actionName == 'testtaskclosed')
+            {
+                $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->objectID)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('testtask', 'view', "testtaskID=$action->objectID"), "#$action->objectID " . $name);
+            }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
-        }
-
-        if($objectType == 'project')
-        {
-            $this->app->loadLang('build');
-            $this->app->loadLang('testtask');
-            return $this->processProjectActions($actions);
         }
 
         return $actions;

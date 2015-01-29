@@ -57,4 +57,4 @@ $lang->build->placeholder->scmPath  = 'Software source code repository, such as 
 $lang->build->placeholder->filePath = 'The path of this build package to download';
 
 $lang->build->action = new stdclass();
-$lang->build->action->buildopened = '$date, <strong>$actor</strong> created build. <strong>$objectID</strong>。' . "\n";
+$lang->build->action->buildopened = '$date, <strong>$actor</strong> created build. <strong>$extra</strong>。' . "\n";
