@@ -58,14 +58,6 @@ class router
     private $appRoot;
 
     /**
-     * The root directory of the app library($this->appRoot/lib).
-     * 
-     * @var string
-     * @access private
-     */
-    private $appLibRoot;
-
-    /**
      * The root directory of temp.
      * 
      * @var string
@@ -293,7 +285,6 @@ class router
         $this->setFrameRoot();
         $this->setCoreLibRoot();
         $this->setAppRoot($appName, $appRoot);
-        $this->setAppLibRoot();
         $this->setTmpRoot();
         $this->setCacheRoot();
         $this->setLogRoot();
@@ -409,17 +400,6 @@ class router
             $this->appRoot = realpath($appRoot) . $this->pathFix;
         }
         if(!is_dir($this->appRoot)) $this->triggerError("The app you call not found in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
-    }
-
-    /**
-     * Set the app lib root.
-     * 
-     * @access protected
-     * @return void
-     */
-    protected function setAppLibRoot()
-    {
-        $this->appLibRoot = $this->appRoot . 'lib' . $this->pathFix;
     }
 
     /**
@@ -591,17 +571,6 @@ class router
     public function getAppRoot()
     {
         return $this->appRoot;
-    }
-    
-    /**
-     * Get the $appLibRoot var
-     * 
-     * @access public
-     * @return string
-     */
-    public function getAppLibRoot()
-    {
-        return $this->appLibRoot;
     }
 
     /**
@@ -1305,7 +1274,7 @@ class router
     /**
      * Load a class file.
      * 
-     * First search in $appLibRoot, then $coreLibRoot.
+     * Search in $coreLibRoot.
      *
      * @param   string $className  the class name
      * @param   bool   $static     statis class or not
@@ -1316,19 +1285,11 @@ class router
     {
         $className = strtolower($className);
 
-        /* Search in $appLibRoot. */
-        $classFile = $this->appLibRoot . $className;
+        /* Search in $coreLibRoot. */
+        $classFile = $this->coreLibRoot . $className;
         if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
         $classFile .= '.class.php';
-
-        if(!helper::import($classFile))
-        {
-            /* Search in $coreLibRoot. */
-            $classFile = $this->coreLibRoot . $className;
-            if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
-            $classFile .= '.class.php';
-            if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, $exit = true);
-        }
+        if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, $exit = true);
 
         /* If staitc, return. */
         if($static) return true;
