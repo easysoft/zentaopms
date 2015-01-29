@@ -20,8 +20,8 @@
     <?php echo html::a($this->createLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID"), $lang->goback, '', "class='btn'");?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-md-3 col-lg-2'>
+<div class='row-table row-table-side-left'>
+  <div class='col-side'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <strong><?php echo $lang->bug->report->select;?></strong>
@@ -37,7 +37,7 @@
       </div>
     </div>
   </div>
-  <div class='col-md-9 col-lg-10'>
+  <div class='col-main'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <strong><?php echo $lang->bug->report->common;?></strong>

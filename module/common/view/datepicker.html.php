@@ -22,7 +22,7 @@ $(function()
 
             if($this.val() == '0000-00-00')
             {
-                $this.focus(function(){if($this.val() == '0000-00-00') $this.val('')}).blur(function(){if($this.val() == '') $this.val('0000-00-00')});
+                $this.focus(function(){if($this.val() == '0000-00-00') $this.val('').datetimepicker('update');}).blur(function(){if($this.val() == '') $this.val('0000-00-00')});
             }
         });
     };

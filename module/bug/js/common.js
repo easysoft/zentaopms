@@ -191,7 +191,7 @@ function loadProjectBuilds(projectID)
     if(page == 'create')
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&index=0&needCreate=true");
-        $('#buildBox').load(link, function(){$('#openedBuild').chosen(defaultChosenOptions);});
+        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
     }
     else
     {

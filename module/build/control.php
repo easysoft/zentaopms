@@ -208,11 +208,6 @@ class build extends control
         {
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, 'noempty,release');
             $output = html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple');
-            if(count($builds) == 1 and $needCreate)
-            {
-                $output .= html::a($this->createLink('build', 'create', "projectID=$projectID"), $this->lang->build->create, '_blank');
-                $output .= html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
-            }
             die($output);
         }
         if($varName == 'openedBuilds')  die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=form-control multiple'));
