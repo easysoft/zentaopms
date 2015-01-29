@@ -735,7 +735,7 @@ class router
     }
 
     /**
-     * Set the them the client user usering. The logic is same as the clientLang.
+     * Set the them client user using. The logic is same as the clientLang.
      *
      * The css and images files of an theme should saved at www/theme/$themeName
      *
