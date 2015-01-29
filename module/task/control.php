@@ -104,7 +104,7 @@ class task extends control
             if($this->post->after == 'continueAdding')
             {
                 $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
-                $response['locate']  = $this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}");
+                $response['locate']  = $this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}&moduleID=$moduleID");
                 $this->send($response);
             }
             elseif($this->post->after == 'toTaskList')
