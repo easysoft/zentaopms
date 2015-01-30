@@ -16,7 +16,7 @@
  *
  */
 $config->svn = new stdClass();
-$config->svn->encodings = 'utf-8, gbk';  
+$config->svn->encodings = 'utf-8';
 $config->svn->client    = '';
 
 $i = 1;

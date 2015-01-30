@@ -348,12 +348,11 @@ class gitModel extends model
     public function iconvComment($comment)
     {
         /* Get encodings. */
-        $encodings = str_replace(' ', '', trim($comment));
-        if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
+        $encoding = str_replace(' ', '', $this->config->git->encodings);
+        if($encoding == '') return $comment;
 
         /* Try convert. */
-        foreach($encodings as $encoding)
+        if($encoding != 'utf-8')
         {
             $result = @iconv($encoding, 'utf-8', $comment);
             if($result) return $result;
