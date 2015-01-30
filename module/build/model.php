@@ -178,8 +178,7 @@ class buildModel extends model
     public function update($buildID)
     {
         $oldBuild = $this->getByID($buildID);
-        $build = fixer::input('post')
-            ->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+        $build = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
 

@@ -142,12 +142,7 @@ class releaseModel extends model
     public function update($releaseID)
     {
         $oldRelease = $this->getByID($releaseID);
-        $release = fixer::input('post')
-            ->setDefault('stories', '')
-            ->setDefault('bugs', '')
-            ->join('stories', ',')
-            ->join('bugs', ',')
-            ->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
+        $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->remove('files,labels,allchecker')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)
