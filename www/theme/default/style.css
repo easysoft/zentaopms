@@ -261,6 +261,9 @@ fieldset > .form-group {margin-bottom: 0;}
 /* chosen container in input group */
 .input-group > .chosen-container {display: table-cell;}
 
+/* chosen up */
+.chosen-up.chosen-container .chosen-drop {bottom: 100%; top: inherit; border-radius: 2px 2px 0 0; box-shadow: 0 -3px 5px rgba(0,0,0,.15); margin-top: auto; margin-bottom: -1px;}
+
 /* Condensed form */
 .form-condensed .table-form {margin-bottom: 0;}
 .form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}
