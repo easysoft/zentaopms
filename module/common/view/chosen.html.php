@@ -13,6 +13,13 @@ defaultChosenOptions = {no_results_text: noResultsMatch, width:'100%', allow_sin
 $(document).ready(function()
 {
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
-    $(".chosen, #productID").chosen(defaultChosenOptions);
+    $("#mailto, .chosen, #productID").each(function()
+    {
+        var $this = $(this);
+        if($this.offset().top + 240 > $(document.body).height())
+        {
+            $this.attr('data-css-class', 'chosen-up');
+        }
+    }).chosen(defaultChosenOptions);
 });
 </script>
