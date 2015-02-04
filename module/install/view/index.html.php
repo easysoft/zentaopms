@@ -33,7 +33,7 @@
         <tr>
           <td class=''><?php echo nl2br(sprintf($lang->install->links, $config->version));?></td>
           <td class='w-p25'>
-            <img src="<?php echo $this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'?>">
+            <img src="<?php echo $this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'?>" width='200' height='200'>
           </td>
         </tr> 
       </table>

@@ -19,7 +19,8 @@ class upgrade extends control
      */
     public function index()
     {
-        $this->locate(inlink('license'));
+        if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
+        $this->locate(inlink('backup'));
     }
 
     /**

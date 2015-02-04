@@ -34,7 +34,7 @@ $lang->testtask->close          = "关闭";
 $lang->testtask->wait           = "待测版本";
 $lang->testtask->done           = "已测版本";
 
-$lang->testtask->common         = '版本';
+$lang->testtask->common         = '测试视图版本';
 $lang->testtask->id             = '版本编号';
 $lang->testtask->product        = '所属产品';
 $lang->testtask->project        = '所属项目';

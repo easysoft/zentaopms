@@ -8,10 +8,11 @@ function setStories(moduleID, projectID, num)
     $.get(link, function(stories)
     {
         var storyID = $('#story' + num).val();
-        if(!stories) stories = '<select id="story[' + num + ']" name="story' + num + '" class="select-1"></select>';
+        if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
         $('#story' + num).replaceWith(stories);
         if(moduleID == 0) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>")
         $('#story' + num).val(storyID);
+        $("#story" + num + "_chosen").remove();
         $("#story" + num).chosen(defaultChosenOptions);
     });
 }
@@ -85,3 +86,10 @@ if(navigator.userAgent.indexOf("Firefox") < 0)
         this.style.height = (this.scrollHeight + 2) + "px"; 
     });
 }
+
+$(function()
+{
+    /* Adjust width for ie chosen width. */
+    $('#module0_chosen').width($('#module1_chosen').width());
+    $('#story0_chosen').width($('#story1_chosen').width());
+})
