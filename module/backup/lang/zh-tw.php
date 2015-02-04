@@ -1,6 +1,6 @@
 <?php
-$lang->backup->common   = '備份還原';
-$lang->backup->index    = '備份還原首頁';
+$lang->backup->common   = '備份';
+$lang->backup->index    = '備份首頁';
 $lang->backup->history  = '備份歷史';
 $lang->backup->delete   = '刪除備份';
 $lang->backup->backup   = '備份';

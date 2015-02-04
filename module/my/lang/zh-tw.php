@@ -6,14 +6,14 @@ $lang->my->index          = '首頁';
 $lang->my->todo           = '我的待辦';
 $lang->my->task           = '我的任務';
 $lang->my->bug            = '我的Bug';
-$lang->my->testTask       = '我的測試任務';
-$lang->my->testCase       = '我的測試用例';
+$lang->my->testTask       = '我的版本';
+$lang->my->testCase       = '我的用例';
 $lang->my->story          = '我的需求';
 $lang->my->myProject      = '我的項目';
 $lang->my->team           = '我的團隊';
 $lang->my->profile        = '我的檔案';
 $lang->my->dynamic        = '我的動態';
-$lang->my->editProfile    = '更新信息';
+$lang->my->editProfile    = '修改檔案';
 $lang->my->changePassword = '修改密碼';
 
 $lang->my->taskMenu = new stdclass();

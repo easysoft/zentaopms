@@ -2,7 +2,7 @@
 /**
  * The release module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -39,9 +39,9 @@ $lang->release->linkStories           = '相關需求';
 $lang->release->unlinkStory           = '移除需求';
 $lang->release->linkBugs              = '相關Bug';
 $lang->release->unlinkBug             = '移除Bug';
-$lang->release->stories               = '已完成的需求';
-$lang->release->bugs                  = '已解決的Bug';
-$lang->release->generatedBugs         = '遺留的Bug';
+$lang->release->stories               = '已完成需求';
+$lang->release->bugs                  = '已解決Bug';
+$lang->release->generatedBugs         = '遺留Bug';
 $lang->release->finishStories         = '本次共完成 %s 個需求';
 $lang->release->resolvedBugs          = '本次共解決 %s 個Bug';
 $lang->release->createdBugs           = '本次共遺留 %s 個Bug';

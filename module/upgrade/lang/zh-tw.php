@@ -2,7 +2,7 @@
 /**
  * The upgrade module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
@@ -14,6 +14,7 @@ $lang->upgrade->result  = '升級結果';
 $lang->upgrade->fail    = '升級失敗';
 $lang->upgrade->success = '升級成功';
 $lang->upgrade->tohome  = '返迴首頁';
+$lang->upgrade->license = '禪道項目管理軟件已更換授權協議至 Z PUBLIC LICENSE(ZPL) 1.1';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
 <p>升級有危險，請先備份資料庫，以防萬一。</p>
@@ -86,3 +87,4 @@ $lang->upgrade->fromVersions['6_0']       = '6.0';
 $lang->upgrade->fromVersions['6_1']       = '6.1';
 $lang->upgrade->fromVersions['6_2']       = '6.2';
 $lang->upgrade->fromVersions['6_3']       = '6.3';
+$lang->upgrade->fromVersions['6_4']       = '6.4';

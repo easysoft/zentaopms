@@ -2,7 +2,7 @@
 /**
  * The testcase module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
@@ -59,8 +59,9 @@ $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "刪除用例";
 $lang->testcase->view               = "用例詳情";
 $lang->testcase->edit               = "編輯";
-$lang->testcase->batchEdit          =  "批量編輯 ";
+$lang->testcase->batchEdit          = "批量編輯 ";
 $lang->testcase->delete             = "刪除";
+$lang->testcase->batchDelete        = "批量刪除 ";
 $lang->testcase->deleted            = "已刪除";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->groupCase          = "分組瀏覽用例";
@@ -111,8 +112,9 @@ $lang->testcase->legendHistory      = '歷史記錄';
 $lang->testcase->legendComment      = '備註';
 $lang->testcase->legendProduct      = '產品模組';
 
-$lang->testcase->confirmDelete = '您確認要刪除該測試用例嗎？';
-$lang->testcase->same          = '同上';
+$lang->testcase->confirmDelete      = '您確認要刪除該測試用例嗎？';
+$lang->testcase->confirmBatchDelete = '您確認要批量刪除這些測試用例嗎？';
+$lang->testcase->same               = '同上';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

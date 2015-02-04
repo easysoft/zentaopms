@@ -2,7 +2,7 @@
 /**
  * The api module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
@@ -12,7 +12,7 @@
 $lang->api = new stdclass();
 $lang->api->common   = 'API介面';
 $lang->api->getModel = '超級model調用介面';
-$lang->api->query    = 'SQL查詢介面';
+$lang->api->sql      = 'SQL查詢介面';
 
 $lang->api->position  = '位置';
 $lang->api->startLine = "%s,%s行";

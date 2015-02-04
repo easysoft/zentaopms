@@ -2,7 +2,7 @@
 /**
  * The bug module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -157,7 +157,7 @@ $lang->bug->buttonCreateTestcase = '轉用例';
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改產品會導致相應的項目、需求和任務發生變化，確定嗎？';
 $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
-$lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
+$lang->bug->setTemplateTitle     = '請輸入bug模板標題';
 $lang->bug->remindTask           = '該Bug已經轉化為任務，是否更新任務(編號:%s)狀態 ?';
 $lang->bug->skipClose            = 'Bug %s 不是已解決狀態，不能關閉。';
 $lang->bug->applyTemplate        = '應用模版';

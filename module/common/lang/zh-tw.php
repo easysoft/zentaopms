@@ -2,7 +2,7 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -28,6 +28,7 @@ $lang->aboutZenTao    = '關於';
 $lang->profile        = '個人檔案';
 $lang->changePassword = '更改密碼';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
+$lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv11.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.1》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
 
 $lang->reset        = '重填';
 $lang->refresh      = '刷新';
@@ -281,8 +282,8 @@ $lang->admin->menu->extension = array('link' => '擴展|extension|browse', 'subM
 $lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->backup    = array('link' => '備份|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
-$lang->admin->menu->backup    = array('link' => '備份還原|backup|index', 'subModule' => 'backup');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -370,6 +371,7 @@ $lang->suhosinInfo   = "警告：數據太多，請在php.ini中修改<font colo
 $lang->pasteTextInfo = "粘貼文本到文本域中，每行文字作為一條數據的標題。";
 
 $lang->noResultsMatch     = "沒有匹配結果";
+$lang->searchMore         = "搜索此關鍵字的更多結果：";
 $lang->selectAnOption     = "選擇一個選項";
 $lang->selectSomeOptions  = "選擇一些選項";
 $lang->chooseUsersToMail  = "選擇要發信通知的用戶...";

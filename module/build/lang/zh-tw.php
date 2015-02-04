@@ -2,7 +2,7 @@
 /**
  * The build module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv11.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -44,8 +44,8 @@ $lang->build->linkStories        = '相關需求';
 $lang->build->unlinkStory        = '移除需求';
 $lang->build->linkBugs           = '相關Bug';
 $lang->build->unlinkBug          = '移除Bug';
-$lang->build->stories            = '已關聯需求';
-$lang->build->bugs               = '已關聯Bug';
+$lang->build->stories            = '已解決需求';
+$lang->build->bugs               = '已解決Bug';
 $lang->build->generatedBugs      = '產生的Bug';
 
 $lang->build->finishStories = ' 本次共完成 %s 個需求';
@@ -57,4 +57,4 @@ $lang->build->placeholder->scmPath  = ' 軟件原始碼庫，如Subversion、Git
 $lang->build->placeholder->filePath = ' 該版本軟件包下載存儲地址';
 
 $lang->build->action = new stdclass();
-$lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$objectID</strong>。' . "\n";
+$lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$extra</strong>。' . "\n";
