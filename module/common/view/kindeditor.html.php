@@ -110,9 +110,8 @@ function initKindeditor(afterInit)
                         reader.readAsDataURL(file);
                     });
                 }
-
-                /* Paste in firfox.*/
-                if(K.GECKO)
+                /* Paste in firfox and other firfox.*/
+                else
                 {
                     K(doc.body).bind('paste', function(ev)
                     {
