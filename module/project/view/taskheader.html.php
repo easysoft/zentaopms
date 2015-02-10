@@ -87,5 +87,10 @@
   </div>
   <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
-
-<?php foreach(glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php") as $fileName) include_once $fileName; ?>
+<?php
+$headerHooks = glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php");
+if(!empty($headerHooks))
+{
+    foreach($headerHooks as $fileName) helper::import($fileName);
+}
+?>

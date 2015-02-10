@@ -60,7 +60,11 @@ class editorModel extends model
             elseif(is_dir($moduleFullFile)) 
             {
                 $ext = ($moduleFile == 'js' or $moduleFile == 'css') ? $moduleFile : 'php';
-                foreach(glob($moduleFullFile . $this->pathFix . "*.$ext") as $fileName) $allModules[$moduleFullDir][$moduleFullFile][$fileName] = basename($fileName);
+                $extFiles = glob($moduleFullFile . $this->pathFix . "*.$ext");
+                if(!empty($extFiles))
+                {
+                    foreach($extFiles as $fileName) $allModules[$moduleFullDir][$moduleFullFile][$fileName] = basename($fileName);
+                }
             }
             else
             {

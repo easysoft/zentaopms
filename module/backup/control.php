@@ -43,18 +43,22 @@ class backup extends control
         $backups = array();
         if(empty($this->view->error))
         {
-            foreach(glob("{$this->backupPath}*.sql.php") as $file)
+            $sqlFiles = glob("{$this->backupPath}*.sql.php");
+            if(!empty($sqlFiles))
             {
-                $backupFile = new stdclass();
-                $backupFile->time  = filemtime($file);
-                $backupFile->name  = str_replace('.sql.php', '', basename($file));
-                $backupFile->files[$file] = filesize($file);
-                if(file_exists($this->backupPath . $backupFile->name . '.file.zip.php'))
+                foreach($sqlFiles as $file)
                 {
-                    $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip.php'] = filesize($this->backupPath . $backupFile->name . '.file.zip.php');
-                }
+                    $backupFile = new stdclass();
+                    $backupFile->time  = filemtime($file);
+                    $backupFile->name  = str_replace('.sql.php', '', basename($file));
+                    $backupFile->files[$file] = filesize($file);
+                    if(file_exists($this->backupPath . $backupFile->name . '.file.zip.php'))
+                    {
+                        $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip.php'] = filesize($this->backupPath . $backupFile->name . '.file.zip.php');
+                    }
 
-                $backups[$backupFile->name] = $backupFile;
+                    $backups[$backupFile->name] = $backupFile;
+                }
             }
         }
         krsort($backups);
