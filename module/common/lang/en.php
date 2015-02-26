@@ -278,12 +278,13 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Index|admin|index');
-$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension,editor');
+$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
+$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -293,6 +294,7 @@ $lang->extension = new stdclass();
 $lang->custom    = new stdclass();
 $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
+$lang->dev       = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -302,6 +304,7 @@ $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
+$lang->dev->menu       = $lang->admin->menu;
 
 /* Groups. */
 $lang->menugroup = new stdclass();
@@ -326,6 +329,7 @@ $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->dev         = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();
