@@ -82,6 +82,8 @@ class svnModel extends model
     public function run()
     {
         $this->setRepos();
+        if(empty($this->repos)) return false;
+
         $this->setLogRoot();
         $this->setRestartFile();
 
@@ -90,11 +92,13 @@ class svnModel extends model
             $this->printLog("begin repo $name");
             $repo = (object)$repo;
             $repo->name = $name;
-            $this->setRepo($repo);
+            if(!$this->setRepo($repo)) return false;
 
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
+            if(empty($logs)) return false;
+
             $this->printLog("get " . count($logs) . " logs");
 
             $this->printLog('begin parsing logs');
@@ -169,12 +173,18 @@ class svnModel extends model
      * Set the repos.
      * 
      * @access public
-     * @return void
+     * @return bool
      */
     public function setRepos()
     {
-        if(!$this->config->svn->repos) die("You must set one svn repo.\n");
+        if(!$this->config->svn->repos)
+        {
+            echo "You must set one svn repo.\n";
+            return false;
+        }
+
         $this->repos = $this->config->svn->repos;
+        return true;
     }
 
     /**
@@ -182,13 +192,16 @@ class svnModel extends model
      * 
      * @param  object    $repo 
      * @access public
-     * @return void
+     * @return bool
      */
     public function setRepo($repo)
     {
         $this->setClient($repo);
+        if(empty($this->client)) return false;
+
         $this->setLogFile($repo->name);
         $this->setRepoRoot($repo);
+        return true;
     }
 
     /**
@@ -196,11 +209,16 @@ class svnModel extends model
      * 
      * @param  object    $repo 
      * @access public
-     * @return void
+     * @return bool
      */
     public function setClient($repo)
     {
-        if($this->config->svn->client == '') die("You must set the svn client file.\n");
+        if($this->config->svn->client == '') 
+        {
+            echo "You must set the svn client file.\n";
+            return false;
+        }
+
         $this->client = $this->config->svn->client . " --non-interactive";
         if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
         {
@@ -212,6 +230,7 @@ class svnModel extends model
             }
         }
         if(isset($repo->username)) $this->client .= " --username $repo->username --password $repo->password --no-auth-cache";
+        return true;
     }
 
     /**
@@ -258,7 +277,11 @@ class svnModel extends model
         $cmd     = $this->client . " log -r $fromRevision:HEAD -v --xml $repo->path";
         $rawLogs = `$cmd`;
         $logs    = @simplexml_load_string($rawLogs);    // Convert it to object.
-        if(!$logs) die("Some error occers: \nThe command is $cmd\n the svn logs is $rawLogs\n");
+        if(!$logs)
+        {
+            echo "Some error occers: \nThe command is $cmd\n the svn logs is $rawLogs\n";
+            return false;
+        }
 
         /* Process logs. */
         foreach($logs->logentry as $entry) $parsedLogs[] = $this->convertLog($entry);
@@ -367,6 +390,7 @@ class svnModel extends model
         if(!$repo) return false;
 
         $this->setClient($repo);
+        if(empty($this->client)) return false;
         putenv('LC_CTYPE=en_US.UTF-8');
 
         $oldRevision = $revision - 1;
@@ -393,6 +417,7 @@ class svnModel extends model
         if(!$repo) return false;
 
         $this->setClient($repo);
+        if(empty($this->client)) return false;
 
         putenv('LC_CTYPE=en_US.UTF-8');
 

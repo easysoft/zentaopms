@@ -18,9 +18,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($moduleName = '', $methodName = '')
     {
-        parent::__construct();
+        parent::__construct($moduleName, $methodName);
         if($this->methodName != 'computeburn')
         {
             $this->projects = $this->project->getPairs('nocode');
@@ -789,7 +789,7 @@ class project extends control
     {
         $this->view->burns = $this->project->computeBurn();
         if($reload == 'yes') die(js::reload('parent'));
-        die($this->display());
+        $this->display();
     }
 
     /**

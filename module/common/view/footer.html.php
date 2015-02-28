@@ -21,6 +21,7 @@
 <?php endif;?>
 <?php 
 js::set('onlybody', $onlybody);           // set the onlybody var.
+if($this->loadModel('cron')->runable()) js::execute('startCron()');
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
 
 /* Load hook files for current page. */
