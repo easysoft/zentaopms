@@ -242,6 +242,7 @@ class mailModel extends model
     public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false)
     {
         if(!$this->config->mail->turnon) return;
+        if(isset($this->config->mail->async) and $this->config->mail->async) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
         $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
@@ -435,5 +436,59 @@ class mailModel extends model
         $errors = $this->errors;
         $this->errors = array();
         return $errors;
+    }
+
+    /**
+     * Add queue.
+     * 
+     * @param  string $toList 
+     * @param  string $subject 
+     * @param  string $body 
+     * @param  string $ccList 
+     * @param  bool   $includeMe 
+     * @access public
+     * @return void
+     */
+    public function addQueue($toList, $subject, $body = '', $ccList = '', $includeMe = false)
+    {
+        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
+        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
+
+        /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
+        if($includeMe == false)
+        {
+            $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+            foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
+            foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+        }
+        $toList = join(',', $toList);
+        $ccList = join(',', $ccList);
+        
+        $data = new stdclass();
+        $data->toList    = $toList;
+        $data->ccList    = $ccList;
+        $data->subject   = $subject;
+        $data->body      = $body;
+        $data->addedBy   = $this->app->user->account;
+        $data->addedDate = helper::now();
+        $this->dao->insert(TABLE_MAILQUEUE)->data($data)->autocheck()->batchCheck('toList,subject', 'notempty')->exec();
+    }
+
+    /**
+     * Get queue.
+     * 
+     * @param  string $status 
+     * @access public
+     * @return array
+     */
+    public function getQueue($status = '', $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_MAILQUEUE)
+            ->where('1=1')
+            ->beginIF($status)->andWhere('status')->eq($status)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 }
