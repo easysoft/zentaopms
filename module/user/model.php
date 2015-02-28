@@ -786,8 +786,8 @@ class userModel extends model
      */
     public function getDataInJSON($user)
     {
-        $data = array();
-        $data['user'] = new stdclass();
+        $data                   = array();
+        $data['user']           = new stdclass();
         $data['user']->id       = $user->id;
         $data['user']->account  = $user->account;
         $data['user']->email    = $user->email;
@@ -795,15 +795,7 @@ class userModel extends model
         $data['user']->gender   = $user->gender;
         $data['user']->dept     = $user->dept;
         $data['user']->role     = $user->role;
-
-        $this->app->loadLang('todo');
-        $this->app->loadLang('task');
-        $this->app->loadLang('bug');
-        $this->app->loadLang('story');
-        $data['todoStatus']  = $this->lang->todo->statusList;
-        $data['taskStatus']  = $this->lang->task->statusList;
-        $data['bugStatus']   = $this->lang->bug->statusList;
-        $data['storyStatus'] = $this->lang->story->statusList;
+        $data['user']->company  = $this->app->company->name;
 
         return $data;
     }

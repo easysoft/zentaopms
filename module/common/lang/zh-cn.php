@@ -278,13 +278,14 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index');
-$lang->admin->menu->extension = array('link' => '扩展|extension|browse', 'subModule' => 'extension,editor');
+$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => '备份|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
+$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -295,6 +296,7 @@ $lang->custom    = new stdclass();
 $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
 $lang->cron      = new stdclass();
+$lang->dev       = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -305,6 +307,7 @@ $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
+$lang->dev->menu       = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -330,6 +333,7 @@ $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->dev         = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
