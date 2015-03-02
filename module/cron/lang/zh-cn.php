@@ -1,5 +1,6 @@
 <?php
-$lang->cron->common  = '计划任务';
+$lang->cron->common  = '定时任务';
+$lang->cron->index   = '首页';
 $lang->cron->list    = '任务列表';
 $lang->cron->create  = '添加';
 $lang->cron->edit    = '编辑';
@@ -39,7 +40,7 @@ $lang->cron->introduction  = <<<EOD
 EOD;
 
 $lang->cron->notice = new stdclass();
-$lang->cron->notice->m   = '取值范围:0-59，"*"代表取值范围内的数字，"/"代表"每"， "-"代表从数字范围。';
+$lang->cron->notice->m   = '取值范围:0-59，"*"代表取值范围内的数字，"/"代表"每"， "-"代表数字范围。';
 $lang->cron->notice->h   = '取值范围:0-23';
 $lang->cron->notice->dom = '取值范围:1-31';
 $lang->cron->notice->mon = '取值范围:1-12';

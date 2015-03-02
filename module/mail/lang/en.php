@@ -7,6 +7,8 @@ $lang->mail->save   = 'Successfully saved';
 $lang->mail->test   = 'Testing';
 $lang->mail->reset  = 'Reset';
 $lang->mail->browse = 'Mail list';
+$lang->mail->delete = 'Delete mail';
+$lang->mail->batchDelete = 'Batch delete';
 
 $lang->mail->turnon      = 'Turnon';
 $lang->mail->async       = 'Asynchronous';

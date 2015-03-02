@@ -7,6 +7,8 @@ $lang->mail->save   = '成功保存';
 $lang->mail->test   = '测试发信';
 $lang->mail->reset  = '重置';
 $lang->mail->browse = '邮件列表';
+$lang->mail->delete = '删除邮件';
+$lang->mail->batchDelete = '批量删除';
 
 $lang->mail->turnon      = '是否打开';
 $lang->mail->async       = '异步发送';

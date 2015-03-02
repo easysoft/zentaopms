@@ -60,6 +60,6 @@
 $headerHooks = glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php");
 if(!empty($headerHooks))
 {
-    foreach($headerHooks as $fileName) helper::import($fileName);
+    foreach($headerHooks as $fileName) include($fileName);
 }
 ?>
