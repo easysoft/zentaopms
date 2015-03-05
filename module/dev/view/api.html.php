@@ -13,13 +13,8 @@
 </div>
 <div class='main'>
   <?php if($selectedModule):?>
-  <div class="panel panel-sm">
-    <div class="panel-heading">
-      <strong><?php echo $selectedModule;?></strong>
-    </div>
-    <div>
     <?php foreach($apis as $api):?>
-    <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled'>
+    <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id="api">
       <?php 
       $params = array();
       if(isset($api['param']))
@@ -32,7 +27,7 @@
         <th colspan="3">
         <?php 
         echo $api['post'] ? 'GET/POST' : 'GET';
-        echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $api['name'], $params);
+        echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $api['name'], $params, 'json');
         ?>
         </th>
       </tr>
@@ -55,8 +50,6 @@
       <?php endif;?>
     </table>
     <?php endforeach;?>
-    </div>
-  </div>
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
