@@ -17,9 +17,9 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($moduleName = '', $methodName = '')
     {
-        parent::__construct();
+        parent::__construct($moduleName, $methodName);
 
         $this->backupPath = $this->app->getTmpRoot() . 'backup/';
         if(!is_dir($this->backupPath))
@@ -75,31 +75,52 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function backup()
+    public function backup($reload = 'no')
     {
         set_time_limit(0);
         $fileName = date('YmdHis') . mt_rand(0, 9);
         $result = $this->backup->backSQL($this->backupPath . $fileName . '.sql.php');
         if(!$result->result)
         {
-            echo js::alert(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
-            die(js::reload('parent'));
+            if($reload == 'yes')
+            {
+                echo js::alert(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
+                die(js::reload('parent'));
+            }
+            else
+            {
+                printf($this->lang->backup->error->noWritable, $this->backupPath);
+            }
         }
         $this->backup->addFileHeader($this->backupPath . $fileName . '.sql.php');
 
-       if(extension_loaded('zlib'))
-       {
-           $result = $this->backup->backFile($this->backupPath . $fileName . '.file.zip.php');
-           if(!$result->result)
-           {
-               echo js::alert(sprintf($this->lang->backup->error->backupFile, $result->error));
-               die(js::reload('parent'));
-           }
-           $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
-       }
+        if(extension_loaded('zlib'))
+        {
+            $result = $this->backup->backFile($this->backupPath . $fileName . '.file.zip.php');
+            if(!$result->result)
+            {
+                if($reload == 'yes')
+                {
+                    echo js::alert(sprintf($this->lang->backup->error->backupFile, $result->error));
+                    die(js::reload('parent'));
+                }
+                else
+                {
+                    printf($this->lang->backup->error->backupFile, $result->error);
+                }
+            }
+            $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
+        }
 
-        echo js::alert($this->lang->backup->success->backup);
-        die(js::reload('parent'));
+        if($reload == 'yes')
+        {
+            echo js::alert($this->lang->backup->success->backup);
+            die(js::reload('parent'));
+        }
+        else
+        {
+            echo $this->lang->backup->success->backup . "\n";
+        }
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 $lang->dev->common     = 'Develop';
 $lang->dev->api        = 'API';
 $lang->dev->db         = 'Database';
@@ -79,3 +80,18 @@ $lang->dev->tableList['svn']            = 'SVN';
 $lang->dev->tableList['testcase']       = 'Testcase';
 $lang->dev->tableList['tree']           = 'Tree';
 $lang->dev->tableList['upgrade']        = 'Upgrade';
+=======
+$lang->dev->common = 'Dev';
+$lang->dev->api    = 'API';
+$lang->dev->db     = 'Database';
+$lang->dev->editor = 'Editor';
+$lang->dev->dbList = 'Datebases';
+
+$lang->dev->fields = array();
+$lang->dev->fields['id']     = 'ID';
+$lang->dev->fields['name']   = 'Field';
+$lang->dev->fields['desc']   = 'Desc';
+$lang->dev->fields['type']   = 'Type';
+$lang->dev->fields['length'] = 'Length';
+$lang->dev->fields['null']   = 'Empty';
+>>>>>>> fdc283afd74c3cf379fd24153ece79fe519c0b20

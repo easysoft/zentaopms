@@ -1100,6 +1100,7 @@ class task extends control
                 /* Set related files. */
                 if(isset($relatedFiles[$task->id]))
                 {
+                    $task->files = '';
                     foreach($relatedFiles[$task->id] as $file)
                     {
                         $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;

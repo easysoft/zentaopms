@@ -53,6 +53,8 @@ $lang->moduleOrder[155] = 'api';
 $lang->moduleOrder[160] = 'file';
 $lang->moduleOrder[165] = 'misc';
 $lang->moduleOrder[170] = 'backup';
+$lang->moduleOrder[175] = 'cron';
+$lang->moduleOrder[180] = 'dev';
 
 $lang->resource = new stdclass();
 
@@ -535,6 +537,9 @@ $lang->resource->mail->edit   = 'edit';
 $lang->resource->mail->save   = 'save';
 $lang->resource->mail->test   = 'test';
 $lang->resource->mail->reset  = 'reset';
+$lang->resource->mail->browse = 'browse';
+$lang->resource->mail->delete = 'delete';
+$lang->resource->mail->batchDelete = 'batchDelete';
 
 $lang->mail->methodOrder[5]  = 'index';
 $lang->mail->methodOrder[10] = 'detect';
@@ -542,6 +547,9 @@ $lang->mail->methodOrder[15] = 'edit';
 $lang->mail->methodOrder[20] = 'save';
 $lang->mail->methodOrder[25] = 'test';
 $lang->mail->methodOrder[30] = 'reset';
+$lang->mail->methodOrder[35] = 'browse';
+$lang->mail->methodOrder[40] = 'delete';
+$lang->mail->methodOrder[45] = 'batchDelete';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
@@ -825,6 +833,28 @@ $lang->backup->methodOrder[10] = 'backup';
 $lang->backup->methodOrder[15] = 'restore';
 $lang->backup->methodOrder[20] = 'delete';
 
+$lang->resource->cron = new stdclass();
+$lang->resource->cron->index   = 'index';
+$lang->resource->cron->turnon  = 'turnon';
+$lang->resource->cron->create  = 'create';
+$lang->resource->cron->edit    = 'edit';
+$lang->resource->cron->toggle  = 'toggle';
+$lang->resource->cron->delete  = 'delete';
+
+$lang->cron->methodOrder[5]  = 'index';
+$lang->cron->methodOrder[10] = 'turnon';
+$lang->cron->methodOrder[15] = 'create';
+$lang->cron->methodOrder[20] = 'edit';
+$lang->cron->methodOrder[25] = 'toggle';
+$lang->cron->methodOrder[30] = 'delete';
+
+$lang->resource->dev = new stdclass();
+$lang->resource->dev->api = 'api';
+$lang->resource->dev->db  = 'db';
+
+$lang->dev->methodOrder[5]  = 'api';
+$lang->dev->methodOrder[10] = 'db';
+
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';
 
@@ -1015,3 +1045,13 @@ $lang->changelog['6.4'][] = 'release-linkBug';
 $lang->changelog['6.4'][] = 'release-unlinkBug';
 $lang->changelog['6.4'][] = 'release-batchUnlinkBug';
 $lang->changelog['6.4'][] = 'story-batchAssignTo';
+
+$lang->changelog['7.1'][] = 'cron-index';
+$lang->changelog['7.1'][] = 'cron-turnon';
+$lang->changelog['7.1'][] = 'cron-create';
+$lang->changelog['7.1'][] = 'cron-edit';
+$lang->changelog['7.1'][] = 'cron-toggle';
+$lang->changelog['7.1'][] = 'cron-delete';
+$lang->changelog['7.1'][] = 'mail-browse';
+$lang->changelog['7.1'][] = 'mail-delete';
+$lang->changelog['7.1'][] = 'mail-batchDelete';

@@ -19,7 +19,7 @@
 
 <div id='titlebar'>
   <div class='heading'><?php echo $lang->backup->common;?></div>
-  <div class='actions'><?php common::printIcon('backup', 'backup', '', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
+  <div class='actions'><?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
 </div>
 
 <div class='panel'>
@@ -47,7 +47,7 @@
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>>
           <?php
-          if(common::hasPriv('backup', 'restore')) echo html::a(inlink('restore', "file=$backupFile->name"), $lang->backup->backup, 'hiddenwin', "class='restore'");
+          if(common::hasPriv('backup', 'restore')) echo html::a(inlink('restore', "file=$backupFile->name"), $lang->backup->restore, 'hiddenwin', "class='restore'");
           if(common::hasPriv('backup', 'delete')) echo html::a(inlink('delete', "file=$backupFile->name"), $lang->delete, 'hiddenwin');
           ?>
         </td>

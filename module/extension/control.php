@@ -424,8 +424,19 @@ class extension extends control
         {
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
-            $extension = basename($fileName, '.zip');
             move_uploaded_file($tmpName, $this->app->getTmpRoot() . "/extension/$fileName");
+            $extension = basename($fileName, '.zip');
+            $return    = $this->extension->extractPackage($extension);
+            if($return->result != 'ok') die(js::alert(sprintf($this->lang->extension->errorExtracted, $packageFile, $return->error)));
+
+            $info = $this->extension->parseExtensionCFG($extension);
+            if(isset($info->code) and $info->code != $extension)
+            {
+                $classFile = $this->app->loadClass('zfile');
+                $classFile->removeDir("ext/$extension");
+                $extension = $info->code;
+            }
+
             $info = $this->extension->getInfoFromDB($extension);
             $type = $info->status == 'installed' ? 'upgrade' : 'install';
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");

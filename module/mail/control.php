@@ -17,9 +17,9 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($moduleName = '', $methodName = '')
     {
-        parent::__construct();
+        parent::__construct($moduleName, $methodName);
 
         /* Task #1967. check the function of fsocket. */
         if(!function_exists('fsockopen'))
@@ -121,6 +121,7 @@ class mail extends control
 
             $mailConfig->turnon         = $this->post->turnon;
             $mailConfig->mta            = 'smtp';
+            $mailConfig->async          = $this->post->async;
             $mailConfig->fromAddress    = trim($this->post->fromAddress); 
             $mailConfig->fromName       = trim($this->post->fromName);
             $mailConfig->smtp->host     = trim($this->post->host);
@@ -217,5 +218,101 @@ class mail extends control
     {
         $this->dao->delete('*')->from(TABLE_CONFIG)->where('module')->eq('mail')->exec(); 
         $this->locate(inlink('detect'));
+    }
+
+    /**
+     * Async send mail.
+     * 
+     * @access public
+     * @return void
+     */
+    public function asyncSend()
+    {
+        $queueList = $this->mail->getQueue('wait', 'id_asc');
+        $now       = helper::now();
+        if(isset($this->config->mail->async))$this->config->mail->async = 0;
+        foreach($queueList as $queue)
+        {
+            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+
+            $data = new stdclass();
+            $data->sendTime = $now;
+            $data->status   = 'send';
+            if($this->mail->isError())
+            {
+                $data->status = 'fail';
+                $data->failReason = join("\n", $this->mail->getError());
+            }
+            $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->eq($queue->id)->exec();
+
+            $log = "Send #$query->id  result is $data->status\n";
+            if($data->status == 'fail') $log .= "reason is $data->failReason\n";
+            echo $log;
+        }
+        echo "OK\n";
+    }
+
+    /**
+     * Browse mail queue. 
+     * 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->mail->browse;
+        $this->view->position[] = html::a(inlink('edit'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->browse;
+
+        $this->view->queueList = $this->mail->getQueue(null, $orderBy, $pager);
+        $this->view->pager     = $pager;
+        $this->view->orderBy   = $orderBy;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Delete mail queue. 
+     * 
+     * @param  int    $id 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function delete($id, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->mail->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+
+        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('id')->eq($id)->exec();
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Batch delete mail queue.
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function batchDelete($confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            if(empty($_POST)) die(js::reload('parent'));
+            $idList = join('|', $this->post->mailIDList);
+            die(js::confirm($this->lang->mail->confirmDelete, inlink('batchDelete', "confirm=yes") . ($this->config->requestType == 'GET' ? '&' : '?') . "idList=$idList"));
+        }
+        $idList = array();
+        if(isset($_GET['idList'])) $idList = explode(',', $_GET['idList']);
+
+        if($idList) $this->dao->delete()->from(TABLE_MAILQUEUE)->where('id')->in($idList)->exec();
+        die(js::reload('parent'));
     }
 }
