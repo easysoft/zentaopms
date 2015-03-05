@@ -3,14 +3,18 @@
   <div class="panel panel-sm with-list">
     <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->dbList?></strong></div>
     <?php foreach($tables as $table):?>
-    <?php $active = ($table == $selectedTable) ? 'active' : '';?>
-    <?php echo html::a(inlink('db', "table=$table"), $table, '', "class='list-group-item $active'");?>
+    <?php
+    $active    = ($table == $selectedTable) ? 'active' : '';
+    $subTable  = substr($table, strpos($table, '_') + 1);
+    $tableName = isset($lang->dev->tableList[$subTable]) ? $lang->dev->tableList[$subTable] : $table;
+    ?>
+    <?php echo html::a(inlink('db', "table=$table"), $tableName, '', "class='list-group-item $active'");?>
     <?php endforeach;?>
   </div>
 </div>
 <div class='main'>
   <?php if($selectedTable):?>
-  <table class="table table-condensed table-hover table-striped tablesorter table-fixed">
+  <table class="table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled">
     <thead>
       <tr>
         <th class='text-left' colspan='6'><?php echo $selectedTable?></th>
