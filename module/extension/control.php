@@ -434,6 +434,7 @@ class extension extends control
             {
                 $classFile = $this->app->loadClass('zfile');
                 $classFile->removeDir("ext/$extension");
+                rename($this->app->getTmpRoot() . "/extension/$fileName", $this->app->getTmpRoot() . "/extension/{$info->code}.zip");
                 $extension = $info->code;
             }
 
