@@ -1,6 +1,12 @@
 <?php
 class devModel extends model
 {
+    /**
+     * Get All tables.
+     * 
+     * @access public
+     * @return array
+     */
     public function getTables()
     {
         $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
@@ -14,7 +20,14 @@ class devModel extends model
         return $tables;
     }
 
-    public function descTable($table)
+    /**
+     * Get fields of table.
+     * 
+     * @param  string $table 
+     * @access public
+     * @return void
+     */
+    public function getFields($table)
     {
         $module = substr($table, strpos($table, '_') + 1);
         try
@@ -97,5 +110,133 @@ class devModel extends model
             $fields[$rawField->field] = $field;
         }
         return $fields;
+    }
+
+    /**
+     * Get APIs of a module.
+     * 
+     * @param  string $module 
+     * @access public
+     * @return void
+     */
+    public function getAPIs($module)
+    {
+        $fileName = $this->app->getModuleRoot() . $module . $this->app->getPathFix() . 'control.php';
+        if($module != 'common' and $module != 'dev')
+        {
+            include $fileName;
+        }
+        $classReflect = new ReflectionClass($module);
+        $methods = $classReflect->getMethods();
+        $apis = array();
+        foreach($methods as $method)
+        {
+            if($method->class == 'control' or $method->name == '__construct') continue;
+
+            $api = array('name' => $method->name, 'post' => false, 'default' => array());
+            $methodReflect = new ReflectionMethod($module, $method->name);
+            foreach($methodReflect->getParameters() as $key => $param)
+            {
+                if($param->isOptional())
+                {
+                    $api['default'][$param->getName()] = $param->getDefaultValue();
+                }
+            }
+            $startLine = $methodReflect->getStartLine();
+            $endLine   = $methodReflect->getEndLine();
+            $comment   = $methodReflect->getDocComment();
+
+            $file = file($fileName);
+            for($i = $startLine - 1; $i <= $endLine; $i++)
+            {
+                if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
+                {
+                    $api['post'] = true;
+                }
+            }
+
+            // Strip the opening and closing tags of the docblock.
+            $comment = substr($comment, 3, -2);
+
+            // Split into arrays of lines.
+            $comment = preg_split('/\r?\n\r?/', $comment);
+
+            // Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
+            $comment = array_map(function($line)
+            {
+                return ltrim(rtrim($line), "* \t\n\r\0\x0B");
+            }, $comment);
+
+            // Group the lines together by @tags
+            $blocks = array();
+            $b = -1;
+            foreach ($comment as $line)
+            {
+                if (isset($line[1]) && $line[0] == '@' && ctype_alpha($line[1]))
+                {
+                    $b++;
+                    $blocks[] = array();
+                } else if($b == -1) {
+                    $b = 0;
+                    $blocks[] = array();
+                }
+                $blocks[$b][] = $line;
+            }
+
+            // Parse the blocks
+            foreach ($blocks as $block => $body)
+            {
+                $body = trim(implode("\n", $body));
+                if($block == 0 && !(isset($body[1]) && $body[0] == '@' && ctype_alpha($body[1])))
+                {
+                    // This is the description block
+                    $api['desc'] = $body;
+                    continue;
+                }
+                else
+                {
+                    // This block is tagged
+                    if(preg_match('/^@[a-z0-9_]+/', $body, $matches))
+                    {
+                        $tag  = substr($matches[0], 1);
+                        $body = substr($body, strlen($tag)+2);
+                        if($tag == 'param')
+                        {
+                            $parts          = preg_split('/\s+/', trim($body), 3);
+                            $parts          = array_pad($parts, 3, null);
+                            $property       = array('type', 'var', 'desc');
+                            $param          = array_combine($property, $parts);
+                            $param['var']   = substr($param['var'], 1);
+                            $api['param'][] = $param;
+                        }
+                        else
+                        {
+                            $api[$tag][] = $body;
+                        }
+                    }
+                }
+            }
+            $apis[] = $api;
+        }
+        return $apis;
+    }
+
+    /**
+     * Get all modules.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getModules()
+    {   
+        $moduleList = glob($this->app->getModuleRoot() . '*');
+        $modules = array();
+        foreach($moduleList as $module)
+        {   
+            $module = basename($module);
+            if($module == 'editor' or $module == 'help' or $module == 'setting') continue;
+            $modules[] = $module;
+        }   
+        return $modules;
     }
 }
