@@ -18,7 +18,7 @@
     <div class='modal-body'>
       <?php if($result == 'fail'):?>
       <div class='alert alert-danger mgb-10'><strong><?php echo $lang->upgrade->fail?></strong></div>
-      <pre><?php echo nl2br(join('\n', $errors));?></pre>
+      <pre><?php echo join('<br />', $errors);?></pre>
       <?php else:?>
       <div class='alert alert-success mgb-10'><strong><?php echo $lang->upgrade->success?></strong></div>
       <div id='tohome' class='mt-10px'></div>
