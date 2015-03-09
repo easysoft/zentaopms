@@ -34,7 +34,7 @@ class cron extends control
      */
     public function turnon()
     {
-        $turnon = $this->config->global->cron ? 0 : 1;
+        $turnon = empty($this->config->global->cron) ? 1 : 0;
         $this->loadModel('setting')->setItem('system.common.global.cron', $turnon);
         die(js::reload('parent'));
     }
@@ -125,7 +125,7 @@ class cron extends control
         set_time_limit(0);
         session_write_close();
         /* Check cron turnon. */
-        if(!$this->config->global->cron) die();
+        if(empty($this->config->global->cron)) die();
 
         /* make cron status to running. */
         $configID = $this->cron->getConfigID();

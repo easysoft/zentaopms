@@ -36,6 +36,8 @@ $lang->cron->confirmDelete = 'Do you want to delete the task?';
 $lang->cron->introduction  = <<<EOD
 <p>Timing tasks such as compute burn , backup. Absolve themselves of layout timing task.</p>
 <p>This function has yet to be perfect, so the function is turned off by default</p>
+EOD;
+$lang->cron->confirmOpen = <<<EOD
 <p>Whether to open the function? <a href="%s" target='hiddenwin'>Open timing task</a></p>
 EOD;
 

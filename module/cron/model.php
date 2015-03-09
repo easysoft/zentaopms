@@ -132,7 +132,7 @@ class cronModel extends model
      */
     public function runable()
     {
-        if(!$this->config->global->cron) return false;
+        if(empty($this->config->global->cron)) return false;
 
         $lastTime = $this->getLastTime();
         if($lastTime == '0000-00-00 00:00:00' or ((time() - strtotime($lastTime)) / 3600 > 1)) return true;

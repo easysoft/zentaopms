@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'><?php echo $lang->cron->common;?></div>
-  <div class='actions'><?php if(common::hasPriv('cron', 'turnon') and $config->global->cron) echo html::a(inlink('turnon'), $lang->cron->turnonList[0] . $lang->cron->common, 'hiddenwin', "class='btn'");?></div>
+  <div class='actions'><?php if(common::hasPriv('cron', 'turnon') and !empty($config->global->cron)) echo html::a(inlink('turnon'), $lang->cron->turnonList[0] . $lang->cron->common, 'hiddenwin', "class='btn'");?></div>
 </div>
 
-<?php if($config->global->cron):?>
+<?php if(!empty($config->global->cron)):?>
 <div class='panel'>
   <div class='panel-heading'>
     <strong><?php echo $lang->cron->list?></strong>
@@ -63,7 +63,12 @@
 </div>
 <?php else:?>
 <div class='container mw-700px'>
-  <div class='panel-body'><?php printf($lang->cron->introduction, inlink('turnon'))?></div>
+  <div class='panel-body'>
+    <?php
+    echo $lang->cron->introduction;
+    if(common::hasPriv('cron', 'turnon')) printf($lang->cron->confirmOpen, inlink('turnon'));
+    ?>
+  </div>
 </div>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
