@@ -156,7 +156,7 @@ $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文檔庫|doc|browse|libID=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
 $lang->action->label->user        = '用戶|user|view|account=%s';
-$lang->action->label->space       = '　';
+$lang->action->label->space       = ' ';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    

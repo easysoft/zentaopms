@@ -278,12 +278,14 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首頁|admin|index');
-$lang->admin->menu->extension = array('link' => '擴展|extension|browse', 'subModule' => 'extension,editor');
+$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => '備份|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->cron      = array('link' => '計劃任務|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
+$lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -293,15 +295,19 @@ $lang->extension = new stdclass();
 $lang->custom    = new stdclass();
 $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
+$lang->cron      = new stdclass();
+$lang->dev       = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
 $lang->action->menu    = $lang->admin->menu;
 $lang->backup->menu    = $lang->admin->menu;
+$lang->cron->menu      = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
+$lang->dev->menu       = $lang->admin->menu;
 
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
@@ -322,10 +328,12 @@ $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->backup      = 'admin';
+$lang->menugroup->cron        = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
+$lang->menugroup->dev         = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
