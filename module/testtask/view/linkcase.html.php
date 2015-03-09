@@ -36,7 +36,7 @@
 <form method='post'>
 <table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
   <caption class='text-left text-special'>
-    <?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo count($cases);?>)
+    <?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
   </caption>
   <thead>
     <tr>
