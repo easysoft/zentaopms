@@ -80,6 +80,7 @@ $lang->dev->tableList['testcase']       = 'Testcase';
 $lang->dev->tableList['tree']           = 'Tree';
 $lang->dev->tableList['upgrade']        = 'Upgrade';
 $lang->dev->tableList['cron']           = 'Cron';
+$lang->dev->tableList['mailqueue']      = 'Mail queue';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = 'Product';

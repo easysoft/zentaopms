@@ -80,6 +80,7 @@ $lang->dev->tableList['testcase']       = '测试用例';
 $lang->dev->tableList['tree']           = '模块关系';
 $lang->dev->tableList['upgrade']        = '更新';
 $lang->dev->tableList['cron']           = '定时任务';
+$lang->dev->tableList['mailqueue']      = '邮件队列';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = '产品';

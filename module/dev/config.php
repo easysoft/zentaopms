@@ -16,6 +16,7 @@ $config->dev->group['build']          = 'project';
 $config->dev->group['burn']           = 'project';
 $config->dev->group['bug']            = 'qa';
 $config->dev->group['case']           = 'qa';
+$config->dev->group['testcase']       = 'qa';
 $config->dev->group['casestep']       = 'qa';
 $config->dev->group['testtask']       = 'qa';
 $config->dev->group['testresult']     = 'qa';

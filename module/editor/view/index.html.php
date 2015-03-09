@@ -19,11 +19,8 @@
           <?php foreach($lang->dev->groupList as $group => $groupName):?>
           <div class='modulegroup'><?php echo $groupName?></div>
           <?php foreach($modules[$group] as $module):?>
-          <?php 
-          $active     = ($module == $selectedModule) ? 'active' : '';
-          $moduleName = zget($lang->dev->tableList, $module, $module);
-          ?>
-          <?php echo html::a(inlink('extend', "moduleDir=$module"), $moduleName, 'extendWin', "class='$active'");?>
+          <?php $moduleName = zget($lang->dev->tableList, $module, $module);?>
+          <?php echo html::a(inlink('extend', "moduleDir=$module"), $moduleName, 'extendWin');?>
           <?php endforeach;?>
           <?php endforeach;?>
         </div>
