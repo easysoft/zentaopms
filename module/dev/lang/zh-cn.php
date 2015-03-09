@@ -79,3 +79,14 @@ $lang->dev->tableList['svn']            = 'SVN';
 $lang->dev->tableList['testcase']       = '测试用例';
 $lang->dev->tableList['tree']           = '模块关系';
 $lang->dev->tableList['upgrade']        = '更新';
+$lang->dev->tableList['cron']           = '定时任务';
+
+$lang->dev->groupList['my']      = '我的地盘';
+$lang->dev->groupList['product'] = '产品';
+$lang->dev->groupList['project'] = '项目';
+$lang->dev->groupList['qa']      = '测试';
+$lang->dev->groupList['doc']     = '文档';
+$lang->dev->groupList['report']  = '统计';
+$lang->dev->groupList['company'] = '组织';
+$lang->dev->groupList['admin']   = '后台';
+$lang->dev->groupList['other']   = '其他模块';

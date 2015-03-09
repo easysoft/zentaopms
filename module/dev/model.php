@@ -14,8 +14,11 @@ class devModel extends model
         $tables = array();
         $datatables = $this->dbh->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         foreach($datatables as $table)
-        {   
-            $tables[current($table)] = current($table);
+        {
+            $table = current($table);
+            $subTable = substr($table, strpos($table, '_') + 1);
+            $group    = zget($this->config->dev->group, $subTable, 'other');
+            $tables[$group][$subTable] = $table;
         }
         return $tables;
     }
@@ -232,11 +235,12 @@ class devModel extends model
         $moduleList = glob($this->app->getModuleRoot() . '*');
         $modules = array();
         foreach($moduleList as $module)
-        {   
+        {
             $module = basename($module);
             if($module == 'editor' or $module == 'help' or $module == 'setting') continue;
-            $modules[] = $module;
-        }   
+            $group  = zget($this->config->dev->group, $module, 'other');
+            $modules[$group][] = $module;
+        }
         return $modules;
     }
 }

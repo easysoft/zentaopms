@@ -2,12 +2,15 @@
 <div class='side'>
   <div class="panel panel-sm with-list">
     <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->moduleList?></strong></div>
-    <?php foreach($modules as $module):?>
+    <?php foreach($lang->dev->groupList as $group => $groupName):?>
+    <div class='modulegroup'><?php echo $groupName?></div>
+    <?php foreach($modules[$group] as $module):?>
     <?php 
     $active     = ($module == $selectedModule) ? 'active' : '';
-    $moduleName = isset($lang->dev->tableList[$module]) ? $lang->dev->tableList[$module] : $module;
+    $moduleName = zget($lang->dev->tableList, $module, $module);
     ?>
-    <?php echo html::a(inlink('api', "module=$module"), $moduleName, '', "class='list-group-item $active'");?>
+    <?php echo html::a(inlink('api', "module=$module"), $moduleName, '', "class='$active'");?>
+    <?php endforeach;?>
     <?php endforeach;?>
   </div>
 </div>

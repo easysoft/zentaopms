@@ -16,7 +16,16 @@
       <td class='w-200px'>
         <div class='panel panel-sm with-list'>
           <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->editor->moduleList?></strong></div>
-          <?php echo $moduleList?>
+          <?php foreach($lang->dev->groupList as $group => $groupName):?>
+          <div class='modulegroup'><?php echo $groupName?></div>
+          <?php foreach($modules[$group] as $module):?>
+          <?php 
+          $active     = ($module == $selectedModule) ? 'active' : '';
+          $moduleName = zget($lang->dev->tableList, $module, $module);
+          ?>
+          <?php echo html::a(inlink('extend', "moduleDir=$module"), $moduleName, 'extendWin', "class='$active'");?>
+          <?php endforeach;?>
+          <?php endforeach;?>
         </div>
       </td>
       <td class='w-300px'><iframe frameborder='0' name='extendWin' id='extendWin' width='100%'></iframe></td>

@@ -2,13 +2,15 @@
 <div class='side'>
   <div class="panel panel-sm with-list">
     <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->dbList?></strong></div>
-    <?php foreach($tables as $table):?>
+    <?php foreach($lang->dev->groupList as $group => $groupName):?>
+    <div class='modulegroup'><?php echo $groupName?></div>
+    <?php foreach($tables[$group] as $subTable => $table):?>
     <?php
     $active    = ($table == $selectedTable) ? 'active' : '';
-    $subTable  = substr($table, strpos($table, '_') + 1);
-    $tableName = isset($lang->dev->tableList[$subTable]) ? $lang->dev->tableList[$subTable] : $table;
+    $tableName = zget($lang->dev->tableList, $subTable, $table);
     ?>
-    <?php echo html::a(inlink('db', "table=$table"), $tableName, '', "class='list-group-item $active'");?>
+    <?php echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
+    <?php endforeach;?>
     <?php endforeach;?>
   </div>
 </div>

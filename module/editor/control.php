@@ -22,7 +22,7 @@ class editor extends control
         $this->app->loadLang('dev');
         $this->view->title      = $this->lang->editor->common;
         $this->view->position[] = $this->lang->editor->common;
-        $this->view->moduleList = $this->editor->getModules();
+        $this->view->modules    = $this->loadModel('dev')->getModules();
         $this->view->tab        = $type;
         $this->display();
     }

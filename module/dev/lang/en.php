@@ -79,3 +79,14 @@ $lang->dev->tableList['svn']            = 'SVN';
 $lang->dev->tableList['testcase']       = 'Testcase';
 $lang->dev->tableList['tree']           = 'Tree';
 $lang->dev->tableList['upgrade']        = 'Upgrade';
+$lang->dev->tableList['cron']           = 'Cron';
+
+$lang->dev->groupList['my']      = 'Dashboard';
+$lang->dev->groupList['product'] = 'Product';
+$lang->dev->groupList['project'] = 'Project';
+$lang->dev->groupList['qa']      = 'QA';
+$lang->dev->groupList['doc']     = 'Document';
+$lang->dev->groupList['report']  = 'Report';
+$lang->dev->groupList['company'] = 'Company';
+$lang->dev->groupList['admin']   = 'Admin';
+$lang->dev->groupList['other']   = 'Others';
