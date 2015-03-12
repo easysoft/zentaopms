@@ -25,11 +25,12 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->testtask->project;?></th>
-        <td class='w-p25-f'><?php echo html::select('project', $projects, $task->project, "class='form-control chosen'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td>
+        <td><?php echo html::hidden('product', $task->product)?></td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->build;?></th>
-        <td><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></td>
+        <td><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->owner;?></th>
