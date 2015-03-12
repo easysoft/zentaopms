@@ -151,6 +151,7 @@ class cron extends control
                 /* Skip stop and running cron.*/
                 $cronInfo = $this->cron->getById($id);
                 if(empty($cronInfo) or $cronInfo->status == 'stop' or $cronInfo->status == 'running') continue;
+                if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) continue;
 
                 if($now > $cron['time'])
                 {
