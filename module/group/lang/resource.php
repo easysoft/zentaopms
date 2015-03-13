@@ -1055,3 +1055,5 @@ $lang->changelog['7.1'][] = 'cron-delete';
 $lang->changelog['7.1'][] = 'mail-browse';
 $lang->changelog['7.1'][] = 'mail-delete';
 $lang->changelog['7.1'][] = 'mail-batchDelete';
+$lang->changelog['7.1'][] = 'dev-api';
+$lang->changelog['7.1'][] = 'dev-db';

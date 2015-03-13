@@ -78,7 +78,7 @@ include '../../common/view/header.html.php';
            echo html::submitButton();
            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
            echo html::linkButton($lang->mail->reset, inlink('reset'));
-           if(common::hasPriv('mail', 'browse') and empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'));
+           if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'));
            ?>
          </td>
        </tr>
