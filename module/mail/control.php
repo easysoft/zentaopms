@@ -310,7 +310,7 @@ class mail extends control
             die(js::confirm($this->lang->mail->confirmDelete, inlink('batchDelete', "confirm=yes") . ($this->config->requestType == 'GET' ? '&' : '?') . "idList=$idList"));
         }
         $idList = array();
-        if(isset($_GET['idList'])) $idList = explode(',', $_GET['idList']);
+        if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);
 
         if($idList) $this->dao->delete()->from(TABLE_MAILQUEUE)->where('id')->in($idList)->exec();
         die(js::reload('parent'));

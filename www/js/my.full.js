@@ -1178,13 +1178,15 @@ function fixStyle()
     if($actions.length) $('#titlebar > .heading').css('padding-right', $actions.width());
 }
 
+/**
+ * Start cron.
+ * 
+ * @access public
+ * @return void
+ */
 function startCron()
 {
-  $.ajax({
-  type: "GET",
-  timeout: 100,
-  url: createLink('cron', 'ajaxExec')
-  });
+    $.ajax({type:"GET", timeout:100, url:createLink('cron', 'ajaxExec')});
 }
 
 /* Ping the server every some minutes to keep the session. */
