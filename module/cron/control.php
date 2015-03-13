@@ -148,10 +148,15 @@ class cron extends control
             $now = new datetime('now');
             foreach($parsedCrons as $id => $cron)
             {
-                /* Skip stop and running cron.*/
                 $cronInfo = $this->cron->getById($id);
-                if(empty($cronInfo) or $cronInfo->status == 'stop' or $cronInfo->status == 'running') continue;
+                /* Skip empty and stop cron.*/
+                if(empty($cronInfo) or $cronInfo->status == 'stop') continue;
+                /* Skip cron that status is running and run time is less than max. */
+                var_dump($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime);
+                if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
+                /* Skip cron that last time is more than this cron time. */
                 if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) continue;
+                exit;
 
                 if($now > $cron['time'])
                 {
@@ -179,7 +184,7 @@ class cron extends control
                     }
 
                     /* Save log. */
-                    if($output and $this->config->debug)
+                    if($output)
                     {
                         $log  = '';
                         $time = $now->format('G:i:s');
