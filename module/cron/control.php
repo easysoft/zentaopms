@@ -179,11 +179,8 @@ class cron extends control
                             exec($cron['command'], $output, $return);
                             if($output) $output = join("\n", $output);
                         }
-                    }
 
-                    /* Save log. */
-                    if($output)
-                    {
+                        /* Save log. */
                         $log  = '';
                         $time = $now->format('G:i:s');
                         $log  = "$time task " .  $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
