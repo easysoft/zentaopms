@@ -237,15 +237,31 @@ function notice()
         var html = '';
         if($('#project').val() == '')
         {
-            html += '<a href="' + createLink('release', 'create', 'productID=' + $('#product').val()) + '" target="_blank">' + createRelease + ' </a>';
+            html += '<a href="' + createLink('release', 'create', 'productID=' + $('#product').val()) + '" target="_blank">' + createRelease + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
         {
-            html += '<a href="' + createLink('build', 'create','projectID=' + $('#project').val()) + '" target="_blank">' + createBuild + '</a>';
-            html += '<a href="javascript:loadProjectBuilds(' + $('project').val() + ')">' + refresh + '</a>';
+            html += '<a href="' + createLink('build', 'create','projectID=' + $('#project').val()) + '" target="_blank">' + createBuild + '</a> ';
+            html += '<a href="javascript:loadProjectBuilds(' + $('#project').val() + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');
-        if($bba.length) $bba.html(html); else $('#buildBox').append(html);
+        if($bba.length)
+        {
+            $bba.html(html);
+        }
+        else
+        {
+            if($('#buildBox').parents('tr').find('td').size() > 1)
+            {
+                $('#buildBox').parents('td').next().attr('id', 'buildBoxActions');
+                $('#buildBox').parents('td').next().html(html);
+            }
+            else
+            {
+                html = "<td id='buildBoxActions'>" + html + '</td>';
+                $('#buildBox').parents('td').after(html);
+            }
+        }
     }
 }
