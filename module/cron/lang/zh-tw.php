@@ -33,6 +33,7 @@ $lang->cron->toggleList['start'] = '激活';
 $lang->cron->toggleList['stop']  = '禁用';
 
 $lang->cron->confirmDelete = '是否刪除該計劃任務？';
+$lang->cron->confirmTurnon = '是否關閉計劃任務？';
 $lang->cron->introduction  = <<<EOD
 <p>計劃任務功能可以定時執行諸如更新燃盡圖、備份等操作，免除自己佈置定時任務。</p>
 <p>該功能還有待完善，所以預設關閉該功能</p>
