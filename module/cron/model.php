@@ -135,7 +135,7 @@ class cronModel extends model
         if(empty($this->config->global->cron)) return false;
 
         $lastTime = $this->getLastTime();
-        if($lastTime == '0000-00-00 00:00:00' or ((time() - strtotime($lastTime)) / 3600 > 1)) return true;
+        if($lastTime == '0000-00-00 00:00:00' or ((time() - strtotime($lastTime)) > $this->config->cron->maxRunTime)) return true;
         if(!isset($this->config->cron->run->status)) return true;
         if($this->config->cron->run->status == 'stop') return true;
 
@@ -224,5 +224,21 @@ class cronModel extends model
             ->andWhere('section')->eq('run')
             ->andWhere('`key`')->eq('status')
             ->fetch('id');
+    }
+
+    /**
+     * Get current cron status.
+     * 
+     * @access public
+     * @return int
+     */
+    public function getTurnon()
+    {
+        return $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('common')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('cron')
+            ->fetch('value');
     }
 }

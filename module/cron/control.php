@@ -32,9 +32,10 @@ class cron extends control
      * @access public
      * @return void
      */
-    public function turnon()
+    public function turnon($confirm = 'no')
     {
         $turnon = empty($this->config->global->cron) ? 1 : 0;
+        if(!$turnon and $confirm == 'no') die(js::confirm($this->lang->cron->confirmTurnon, inlink('turnon', "confirm=yes")));
         $this->loadModel('setting')->setItem('system.common.global.cron', $turnon);
         die(js::reload('parent'));
     }
@@ -141,8 +142,9 @@ class cron extends control
         while(true)
         {
             /* When cron is null then die. */
-            if(empty($crons)) die();
-            if(empty($parsedCrons)) die();
+            if(empty($crons)) break;
+            if(empty($parsedCrons)) break;
+            if(!$this->cron->getTurnon()) break;
 
             /* Run crons. */
             $now = new datetime('now');

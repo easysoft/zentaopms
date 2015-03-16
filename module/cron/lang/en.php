@@ -33,6 +33,7 @@ $lang->cron->toggleList['start'] = 'Activation';
 $lang->cron->toggleList['stop']  = 'Disable';
 
 $lang->cron->confirmDelete = 'Do you want to delete the task?';
+$lang->cron->confirmTurnon = 'Do you want to trunoff cron?';
 $lang->cron->introduction  = <<<EOD
 <p>Timing tasks such as compute burn , backup. Absolve themselves of layout timing task.</p>
 <p>This function has yet to be perfect, so the function is turned off by default</p>
