@@ -47,6 +47,33 @@ pms:
 	echo full > zentaopms/.flow
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
+deb:
+	mkdir buildroot
+	cp -r build/debian/DEBIAN buildroot
+	sed -i '/^Version/cVersion: ${VERSION}' buildroot/DEBIAN/control
+	mkdir buildroot/opt
+	mkdir buildroot/etc/apache2/sites-enabled/ -p
+	cp build/debian/zentaopms.conf buildroot/etc/apache2/sites-enabled/
+	cp ZenTaoPMS.${VERSION}.zip buildroot/opt
+	cd buildroot/opt; unzip ZenTaoPMS.${VERSION}.zip; mv zentaopms zentao; rm ZenTaoPMS.${VERSION}.zip
+	sed -i 's/index.php/\/zentao\/index.php/' buildroot/opt/zentao/www/.htaccess
+	sudo dpkg -b buildroot/ ZenTaoPMS_${VERSION}_1_all.deb
+	rm -rf buildroot
+rpm:
+	mkdir ~/rpmbuild/SPECS -p
+	cp build/rpm/zentaopms.spec ~/rpmbuild/SPECS
+	sed -i '/^Version/cVersion:${VERSION}' ~/rpmbuild/SPECS/zentaopms.spec
+	mkdir ~/rpmbuild/SOURCES
+	cp ZenTaoPMS.${VERSION}.zip ~/rpmbuild/SOURCES
+	mkdir ~/rpmbuild/SOURCES/etc/httpd/conf.d/ -p
+	cp build/rpm/zentaopms.conf ~/rpmbuild/SOURCES/etc/httpd/conf.d/
+	mkdir ~/rpmbuild/SOURCES/var/www/ -p
+	cd ~/rpmbuild/SOURCES; unzip ZenTaoPMS.${VERSION}.zip; mv zentaopms var/www/zentao;
+	sed -i 's/index.php/\/zentao\/index.php/' ~/rpmbuild/SOURCES/var/www/zentao/www/.htaccess
+	cd ~/rpmbuild/SOURCES; tar -czvf zentaopms-${VERSION}.tar.gz etc var; rm -rf ZenTaoPMS.${VERSION}.zip etc var;
+	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
+	cp ~/rpmbuild/RPMS/noarch/zentaopms-${VERSION}-1.noarch.rpm ./
+	rm -rf ~/rpmbuild
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
 phpdoc:

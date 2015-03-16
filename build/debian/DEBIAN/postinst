@@ -1,0 +1,1 @@
+echo "zentaopms has been successfully installed. Please run sudo apache2ctl restart and visit http://localhost/zentao."

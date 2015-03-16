@@ -1,0 +1,10 @@
+Package: zentaopms
+Version: 6.1
+Section: utils
+Priority: optional
+Architecture: all
+Depends: apache2, libapache2-mod-php5 | libapache2-mod-php5filter | php5-cgi | php5-fpm | php5, php5-cli, php5-common, php5-mysql, php5-json, php5-ldap, mysql-server 
+Recommends: php5-gd
+Installed-Size: 512
+Maintainer: [url=www.zentao.net]
+Description: zentaopms
