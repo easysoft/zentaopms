@@ -66,7 +66,7 @@ rpm:
 	mkdir ~/rpmbuild/SOURCES
 	cp ZenTaoPMS.${VERSION}.zip ~/rpmbuild/SOURCES
 	mkdir ~/rpmbuild/SOURCES/etc/httpd/conf.d/ -p
-	cp build/rpm/zentaopms.conf ~/rpmbuild/SOURCES/etc/httpd/conf.d/
+	cp build/debian/zentaopms.conf ~/rpmbuild/SOURCES/etc/httpd/conf.d/
 	mkdir ~/rpmbuild/SOURCES/var/www/ -p
 	cd ~/rpmbuild/SOURCES; unzip ZenTaoPMS.${VERSION}.zip; mv zentaopms var/www/zentao;
 	sed -i 's/index.php/\/zentao\/index.php/' ~/rpmbuild/SOURCES/var/www/zentao/www/.htaccess

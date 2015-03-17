@@ -1,1 +1,7 @@
-echo "zentaopms has been successfully installed. Please run sudo apache2ctl restart and visit http://localhost/zentao."
+lowVersion=`apache2 -v|awk '$3~/Apache/{print $3}'|awk -F '/' '{print ($2<2.4) ? 1 : 0}'`;
+if [ $lowVersion == 1 ]; then
+sed -i '/Require all granted/d' /etc/apache2/sites-enabled/zentaopms.conf
+fi
+
+echo "zentaopms has been successfully installed."
+echo "Please run sudo apache2ctl restart and visit http://localhost/zentao."

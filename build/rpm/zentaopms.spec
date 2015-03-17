@@ -33,5 +33,10 @@ rm -rf $RPM_BUILD_ROOT
 /
 
 %post
+lowVersion=`httpd -v|awk '$3~/Apache/{print $3}'|awk -F '/' '{print ($2<2.4) ? 1 : 0}'`
+if [ $lowVersion == 1 ]; then
+sed -i '/Require all granted/d' /etc/httpd/conf.d/zentaopms.conf
+fi
+
 echo "zentaopms has been successfully installed."
 echo "Please restart httpd and visit http://localhost/zentao."
