@@ -18,12 +18,12 @@ Requires:httpd,php-cli, php-common,php-pdo,php-mysql,php-json,php-ldap,mysql
 
 %install
 mkdir -p $RPM_BUILD_ROOT
-chmod 777 -R %{_builddir}/%{name}-%{version}/var/www/zentao/tmp/
-chmod 777 -R %{_builddir}/%{name}-%{version}/var/www/zentao/www/data
-chmod 777 -R %{_builddir}/%{name}-%{version}/var/www/zentao/config
-chmod 777 %{_builddir}/%{name}-%{version}/var/www/zentao/module
-chmod a+rx %{_builddir}/%{name}-%{version}/var/www/zentao/bin/*
-find %{_builddir}/%{name}-%{version}/var/www/zentao/ -name ext |xargs chmod -R 777
+chmod 777 -R %{_builddir}/%{name}-%{version}/opt/zentao/tmp/
+chmod 777 -R %{_builddir}/%{name}-%{version}/opt/zentao/www/data
+chmod 777 -R %{_builddir}/%{name}-%{version}/opt/zentao/config
+chmod 777 %{_builddir}/%{name}-%{version}/opt/zentao/module
+chmod a+rx %{_builddir}/%{name}-%{version}/opt/zentao/bin/*
+find %{_builddir}/%{name}-%{version}/opt/zentao/ -name ext |xargs chmod -R 777
 cp -a %{_builddir}/%{name}-%{version}/* $RPM_BUILD_ROOT 
 
 %clean
@@ -33,6 +33,7 @@ rm -rf $RPM_BUILD_ROOT
 /
 
 %post
+chcon -R --reference=/var/www/html/ /opt/zentao/
 lowVersion=`httpd -v|awk '$3~/Apache/{print $3}'|awk -F '/' '{print ($2<2.4) ? 1 : 0}'`
 if [ $lowVersion == 1 ]; then
 sed -i '/Require all granted/d' /etc/httpd/conf.d/zentaopms.conf
