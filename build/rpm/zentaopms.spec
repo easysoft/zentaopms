@@ -35,7 +35,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 chcon -R --reference=/var/www/html/ /opt/zentao/
 lowVersion=`httpd -v|awk '$3~/Apache/{print $3}'|awk -F '/' '{print ($2<2.4) ? 1 : 0}'`
-if [ $lowVersion == 1 ]; then
+if [ $lowVersion -eq 1 ]; then
 sed -i '/Require all granted/d' /etc/httpd/conf.d/zentaopms.conf
 fi
 
