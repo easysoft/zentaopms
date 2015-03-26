@@ -178,6 +178,7 @@ class mail extends control
         if($_POST)
         {
             /* The mail need openssl and curl extension when secure is tls. */
+            if(isset($this->config->mail->async))$this->config->mail->async = 0;
             if($this->config->mail->smtp->secure == 'tls')
             {
                 if(!extension_loaded('openssl'))
@@ -231,6 +232,7 @@ class mail extends control
         $queueList = $this->mail->getQueue('wait', 'id_asc');
         $now       = helper::now();
         if(isset($this->config->mail->async))$this->config->mail->async = 0;
+        $log = '';
         foreach($queueList as $queue)
         {
             $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
@@ -245,10 +247,10 @@ class mail extends control
             }
             $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->eq($queue->id)->exec();
 
-            $log = "Send #$query->id  result is $data->status\n";
+            $log .= "Send #$queue->id  result is $data->status\n";
             if($data->status == 'fail') $log .= "reason is $data->failReason\n";
-            echo $log;
         }
+        echo $log;
         echo "OK\n";
     }
 

@@ -285,6 +285,7 @@ class mailModel extends model
             $this->setBody($this->convertCharset($body));
             $this->setErrorLang();
             $this->mta->send();
+            if($this->config->mail->mta == 'smtp') $this->mta->smtpClose();
         }
         catch (phpmailerException $e) 
         {
@@ -399,7 +400,7 @@ class mailModel extends model
      */
     public function clear()
     {
-        $this->mta->clearAddresses();
+        $this->mta->clearAllRecipients();
         $this->mta->clearAttachments();
     }
 
