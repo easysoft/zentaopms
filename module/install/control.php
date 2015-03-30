@@ -170,8 +170,8 @@ class install extends control
         $this->view->title = $this->lang->install->success;
         $this->display();
 
-        unlink($this->app->getAppRoot . 'www/install.php');
-        unlink($this->app->getAppRoot . 'www/upgrade.php');
+        unlink($this->app->getAppRoot() . 'www/install.php');
+        unlink($this->app->getAppRoot() . 'www/upgrade.php');
         unset($_SESSION['installing']);
         session_destroy();
     }
