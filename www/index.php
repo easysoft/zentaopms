@@ -49,6 +49,15 @@ if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8
 /* Check for need upgrade. */
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(!(!is_numeric($config->version{0}) and $config->version{0} != $config->installedVersion{0}) and version_compare($config->version, $config->installedVersion, '>')) die(header('location: upgrade.php'));
+if(file_exists('install.php') or file_exists('upgrade.php'))
+{
+    $wwwDir = dirname(__FILE__);
+    echo "<html><head><meta charset='utf-8'></head><body>";
+    echo "目录 {$wwwDir} 下存在 install.php 和 upgrade.php 文件，为了系统的安全，请您删掉这两个文件。<br />";
+    echo "The presence of install.php and upgrade.php file in directory {$wwwDir}, in order to software security, please delete these two files.";
+    echo '</body></html>';
+    exit;
+}
 
 $app->parseRequest();
 $common->checkPriv();

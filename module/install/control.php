@@ -144,7 +144,7 @@ class install extends control
 
             $this->loadModel('setting')->updateVersion($this->config->version);
             $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
-			die(js::locate(inlink('step5'), 'parent'));
+            die(js::locate(inlink('step5'), 'parent'));
         }
 
         $this->view->title = $this->lang->install->getPriv;
@@ -159,17 +159,20 @@ class install extends control
         }
     }
 
-	/**
-	 * Join zentao community or login pms.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function step5()
-	{
+    /**
+     * Join zentao community or login pms.
+     * 
+     * @access public
+     * @return void
+     */
+    public function step5()
+    {
         $this->view->title = $this->lang->install->success;
-		$this->display();
-		unset($_SESSION['installing']);
-		session_destroy();
-	}
+        $this->display();
+
+        unlink($this->app->getAppRoot . 'www/install.php');
+        unlink($this->app->getAppRoot . 'www/upgrade.php');
+        unset($_SESSION['installing']);
+        session_destroy();
+    }
 }

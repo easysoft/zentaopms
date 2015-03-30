@@ -109,15 +109,18 @@ class upgrade extends control
             $this->view->errors = $this->upgrade->getError();
         }
         $this->display();
+
+        unlink($this->app->getAppRoot . 'www/install.php');
+        unlink($this->app->getAppRoot . 'www/upgrade.php');
     }
 
     /**
-     * Ajax check extension.
+     * Check extension.
      * 
      * @access public
      * @return void
      */
-    public function ajaxCheckExtension()
+    public function checkExtension()
     {
             $this->loadModel('extension');
             $extensions = $this->extension->getLocalExtensions('installed');
@@ -127,6 +130,7 @@ class upgrade extends control
 
             $incompatibleExts = $this->extension->checkIncompatible($versions);
             $extensionsName   = array();
+            if(empty($incompatibleExts)) $this->locate(inlink('selectVersion'));
 
             $removeCommands = array();
             foreach($incompatibleExts as $extension)
@@ -150,6 +154,8 @@ class upgrade extends control
                 $data .= '</ul>';
             }
 
-            die($data);
+            $this->view->title = $this->lang->upgrade->checkExtension;
+            $this->view->data  = $data;
+            $this->display();
     }
 }

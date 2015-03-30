@@ -16,6 +16,7 @@ $lang->upgrade->success = '升级成功';
 $lang->upgrade->tohome  = '返回首页';
 $lang->upgrade->license = '禅道项目管理软件已更换授权协议至 Z PUBLIC LICENSE(ZPL) 1.1';
 $lang->upgrade->warnning= '警告';
+$lang->upgrade->checkExtension  = '检查插件';
 $lang->upgrade->warnningContent = <<<EOT
 <p>升级有危险，请先备份数据库，以防万一。</p>
 <pre>
@@ -30,17 +31,17 @@ $lang->upgrade->setStatusFile = '<h4>升级之前请先执行下面的命令：<
                                  <ul>
                                  <li>windows: 打开命令行，执行<strong>echo ok > %s</strong></li>
                                  <li>linux: <strong>touch %s;</strong></li>
-                                 <li>或者删掉"%s" 这个文件 ，重新创建一个ok文件，不需要扩展名，不需要内容。</li>
+                                 <li>或者删掉"%s" 这个文件 ，重新创建一个ok.txt文件，不需要内容。</li>
                                  </ul>
                                  <strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="upgrade.php">继续更新</a></strong>';
 $lang->upgrade->selectVersion = '选择版本';
+$lang->upgrade->continue      = '继续';
 $lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
 $lang->upgrade->fromVersion   = '原来的版本';
 $lang->upgrade->toVersion     = '升级到';
 $lang->upgrade->confirm       = '确认要执行的SQL语句';
 $lang->upgrade->sureExecute   = '确认执行';
 $lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自动禁用：';
-$lang->upgrade->checkExtension = '正在检查插件的兼容性，请稍候 ...';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';

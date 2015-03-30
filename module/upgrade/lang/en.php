@@ -16,6 +16,7 @@ $lang->upgrade->success = 'Success';
 $lang->upgrade->tohome  = 'Go to index';
 $lang->upgrade->license = 'The license of ZentaoPMS has changed to Z PUBLIC LICENSE(ZPL) 1.1.';
 $lang->upgrade->warnning= 'Warning';
+$lang->upgrade->checkExtension  = 'Check extension';
 $lang->upgrade->warnningContent = <<<EOT
 Warning! Upgradinng is dangeous, backup your database first.<br />
 EOT;
@@ -34,13 +35,13 @@ $lang->upgrade->setStatusFile = "<p>For security reason, we will check file <str
 
 
 $lang->upgrade->selectVersion = 'Select version';
+$lang->upgrade->continue      = 'Continue';
 $lang->upgrade->noteVersion   = "Must select the correct version";
 $lang->upgrade->fromVersion   = 'From version';
 $lang->upgrade->toVersion     = 'To version';
 $lang->upgrade->confirm       = 'Confirm the sql to executed.';
 $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->forbiddenExt  = 'Because it is incompatible with this version, the following extension automatically disabled, ：';
-$lang->upgrade->checkExtension = 'Checking plugin compatibility, please wait ...';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';
