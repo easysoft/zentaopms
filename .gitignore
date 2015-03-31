@@ -1,5 +1,7 @@
 config/my.php
 www/data/
+www/install.php
+www/upgrade.php
 tools/*
 release/*
 tmp/*
