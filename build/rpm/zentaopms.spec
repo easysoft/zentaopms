@@ -22,6 +22,7 @@ chmod 777 -R %{_builddir}/%{name}-%{version}/opt/zentao/tmp/
 chmod 777 -R %{_builddir}/%{name}-%{version}/opt/zentao/www/data
 chmod 777 -R %{_builddir}/%{name}-%{version}/opt/zentao/config
 chmod 777 %{_builddir}/%{name}-%{version}/opt/zentao/module
+chmod 777 %{_builddir}/%{name}-%{version}/opt/zentao/www
 chmod a+rx %{_builddir}/%{name}-%{version}/opt/zentao/bin/*
 find %{_builddir}/%{name}-%{version}/opt/zentao/ -name ext |xargs chmod -R 777
 cp -a %{_builddir}/%{name}-%{version}/* $RPM_BUILD_ROOT 

@@ -42,6 +42,7 @@ pms:
 	chmod 777 -R zentaopms/www/data
 	chmod 777 -R zentaopms/config
 	chmod 777 zentaopms/module
+	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
 	find zentaopms/ -name ext |xargs chmod -R 777
 	echo full > zentaopms/.flow
