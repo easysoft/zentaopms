@@ -114,6 +114,7 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('6.1'));
             case '6_2':
             case '6_3':
+            case '6_4':
             case '7_0':
                 $this->execSQL($this->getUpgradeFile('7.0'));
 
@@ -180,6 +181,7 @@ class upgradeModel extends model
         case '6_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('6.1'));
         case '6_2':
         case '6_3':
+        case '6_4':
         case '7_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
