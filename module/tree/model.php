@@ -488,33 +488,29 @@ class treeModel extends model
      */
     public function getProductDocTreeMenu()
     {
-        $menu = "<ul class='tree'>";
+        $menu     = "<ul class='tree'>";
         $products = $this->loadModel('product')->getPairs('nocode');
-        $modules  = $this->dao->findByType('productdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
-        $projectModules = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+
+        $productModules = $this->getTreeMenu(0, 'productdoc', 0, array('treeModel', 'createDocLink'), 'product');
+        $productModules = substr($productModules, 17, strlen($productModules) - 23);
+        $projectModules = $this->getTreeMenu(0, 'projectdoc', 0, array('treeModel', 'createDocLink'), 'product');
+        $projectModules = substr($projectModules, 17, strlen($projectModules) - 23);
 
         foreach($products as $productID =>$productName)
         {
             $menu .= '<li>';
             $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID"), $productName);
-            if($modules)
+            if(!empty($productModules))
             {
                 $menu .= '<ul>';
-                foreach($modules as $module)
-                {
-                    $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
-                }
+                $menu .= str_replace('%productID%', $productID, $productModules);
 
-                /* If $projectModules not emtpy, append the project modules. */
-                if($projectModules)
+                if(!empty($projectModules))
                 {
                     $menu .= '<li>';
                     $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID&projectID=int"), $this->lang->tree->projectDoc);
                     $menu .= '<ul>';
-                    foreach($projectModules as $module)
-                    {
-                        $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
-                    }
+                    $menu .= str_replace('%productID%', $productID, $projectModules);
                     $menu .= '</ul></li>';
                 }
                 $menu .= '</ul>';
@@ -536,7 +532,9 @@ class treeModel extends model
         $menu     = "<ul class='tree'>";
         $products = $this->loadModel('product')->getPairs('nocode');
         $projects = $this->loadModel('project')->getProductGroupList();
-        $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+
+        $projectModules = $this->getTreeMenu(0, 'projectdoc', 0, array('treeModel', 'createDocLink'), 'project');
+        $projectModules = substr($projectModules, 17, strlen($projectModules) - 23);
 
         foreach($projects as $id => $project)
         {
@@ -560,13 +558,10 @@ class treeModel extends model
                 foreach($projects[$productID] as $project)
                 {
                     $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=0&productID=0&projectID=$project->id"), $project->name);
-                    if($modules)
+                    if(!empty($projectModules))
                     {
                         $menu .= '<ul>';
-                        foreach($modules as $module)
-                        {
-                            $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=$module->id&productID=0&projectID=$project->id"), $module->name) . '</li>';
-                        }
+                        $menu .= str_replace('%projectID%', $project->id, $projectModules);
                         $menu .= '</ul>';
                     }
                     $menu .= '</li>';
@@ -615,9 +610,22 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createDocLink($type, $module)
+    public function createDocLink($type, $module, $extra = '')
     {
-        $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$module->root}&&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        $libID  = $module->root;
+        $append = '';
+        if($extra == 'product')
+        {
+            $libID  = 'product';
+            $append = '&productID=%productID%';
+        }
+        elseif($extra == 'project')
+        {
+            $libID  = 'project';
+            $append = '&productID=0&projectID=%projectID%';
+        }
+
+        $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$libID}&module={$module->id}{$append}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
