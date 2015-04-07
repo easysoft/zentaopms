@@ -58,6 +58,7 @@
     </tr>
     <?php $i++;?>
     <?php endforeach;?>
+    <?php $storyTitle = '';?>
     <?php endif;?>
     <?php $nextStart = $i;?>
     <?php for($i = $nextStart; $i < $config->story->batchCreate; $i++):?>
