@@ -1033,11 +1033,11 @@ class taskModel extends model
         $estimate = $this->getEstimateById($estimateID);
         $task     = $this->getById($estimate->task);
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
-        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('id desc')->fetch();
+        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc')->fetch();
         $consumed  = $task->consumed - $estimate->consumed;
-        $left      = $lastEstimate->left;
+        $left      = $lastEstimate ? $lastEstimate->left : 0;
         $oldStatus = $task->status;
-        if($left == 0) $task->status = 'done'; 
+        if($left == 0 and $consumed != 0) $task->status = 'done'; 
         $this->dao->update(TABLE_TASK)
             ->set("consumed")->eq($consumed)
             ->set('`left`')->eq($left)
