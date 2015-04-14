@@ -1327,6 +1327,7 @@ class projectModel extends model
         $burnData = array();
         foreach($sets as $date => $set) 
         {
+            if($date < $project->begin) continue;
             if($date > $project->end) continue;
 
             $burnData[$date] = $set;
