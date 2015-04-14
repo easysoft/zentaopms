@@ -17,7 +17,7 @@
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->project->common . $lang->colon . $lang->project->batchEdit;?></strong>
   </div>
 </div>
-<form class='form-condensed' method='post' action='<?php echo inLink('batchEdit');?>'>
+<form class='form-condensed' method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
 <table class='table table-form table-fixed'>
   <thead>
     <tr class='text-center'>

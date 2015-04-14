@@ -69,19 +69,19 @@
       <td><?php echo $product->assignToNull;?></td>
     </tr>
     <?php endforeach;?>
-    <?php if($canBatchEdit):?>
     <tfoot>
       <tr>
         <td colspan='11'>
+          <?php if($canBatchEdit and !empty($productStats)):?>
           <div class='table-actions clearfix'>
             <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
           </div>
+          <?php endif;?>
           <div class='text-right'><?php $pager->show();?></div>
         </td>
       </tr>
     </tfoot>
-    <?php endif;?>
   </table>
 </form>
 <?php endif;?>
