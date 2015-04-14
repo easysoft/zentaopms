@@ -177,7 +177,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->pri;?></th>
-            <td><?php echo $case->pri;?></td>
+            <td><?php echo zget($lang->testcase->priList, $case->pri);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->status;?></th>
