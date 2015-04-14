@@ -299,7 +299,9 @@ class tree extends control
         }
         if($returnType == 'html')
         {
-            $output = html::select("module", $optionMenu, '', "onchange='loadModuleRelated()' class='form-control'");
+            $changeFunc = '';
+            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'testcase') $changeFunc = "onchange='loadModuleRelated()'";
+            $output = html::select("module", $optionMenu, '', "class='form-control' $changeFunc");
             if(count($optionMenu) == 1 and $needManage)
             {
                 $output .=  "<span class='input-group-addon'>";

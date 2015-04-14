@@ -10,13 +10,13 @@ function loadProduct(productID)
 function loadProductModules(productID)
 {
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&rootModuleID=0&returnType=html&needManage=true');
-    $('#moduleIdBox').load(moduleLink);
+    $('#moduleIdBox').load(moduleLink, function(){$('#moduleIdBox #module').chosen(defaultChosenOptions);});
 }
 
 function loadProductPlans(productID)
 {
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&planID=' + $('#plan').val() + '&needCreate=true');
-    $('#planIdBox').load(planLink);
+    $('#planIdBox').load(planLink, function(){$('#planIdBox #plan').chosen(defaultChosenOptions);});
 }
 
 $(function() 
