@@ -418,7 +418,7 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            $this->setStage($storyID);
+            if($story->stage != 'verified') $this->setStage($storyID);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -472,6 +472,11 @@ class storyModel extends model
                 if($story->closedReason != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
                 if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
                 if($story->closedReason != false  and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
+                if($story->stage != $oldStory->story and $story->stage != 'verified')
+                {
+                    $this->setStage($storyID);
+                    unset($story->stage);
+                }
 
                 $stories[$storyID] = $story;
                 unset($story);
