@@ -1033,7 +1033,7 @@ class taskModel extends model
         $estimate = $this->getEstimateById($estimateID);
         $task     = $this->getById($estimate->task);
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
-        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc')->fetch();
+        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->fetch();
         $consumed  = $task->consumed - $estimate->consumed;
         $left      = $lastEstimate ? $lastEstimate->left : 0;
         $oldStatus = $task->status;
@@ -1386,7 +1386,7 @@ class taskModel extends model
         $action = strtolower($action);
 
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
-        if($action == 'start')    return $task->status != 'doing'  and $task->status != 'closed' and $task->status != 'cancel' and $task->status != 'pause';
+        if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
         if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
