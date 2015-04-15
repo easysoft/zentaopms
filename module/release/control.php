@@ -413,7 +413,7 @@ class release extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($release->product, $build->project ? array($build->project) : array(), $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($release->product, $build->project ? array($build->project => $build->project) : array(), $queryID, 'id_desc');
         }
         else
         {

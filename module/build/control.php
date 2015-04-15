@@ -343,7 +343,7 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, array($build->project), $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($build->product, array($build->project => $build->project), $queryID, 'id_desc');
         }
         else
         {
