@@ -9,27 +9,32 @@ set sysCron=%cronDir%sys.cron
 SET phpcli=%1
 SET pmsRoot=%2
 :input_php
-IF "%1"=="" SET /P phpcli="Please input your php path:(example: c:\windows\php.exe)"
+IF "%phpcli%"=="" SET /P phpcli="Please input your php path:(example: c:\windows\php.exe)"
+if "%phpcli%"=="" (
+    echo php path is error
+    goto input_php 
+)
 if not exist %phpcli% (
   echo php path is error
   goto input_php 
 )
 :input_url
-IF "%2"=="" SET /P pmsRoot="Please input zentao url:(example: http://localhost or http://127.0.0.1:88)"
-if %pmsRoot% == '' (
+IF "%pmsRoot%"=="" SET /P pmsRoot="Please input zentao url:(example: http://localhost or http://127.0.0.1:88)"
+IF "%pmsRoot%"=="" (
   echo zentao url is error
   goto input_url 
 )
 
 :: get pmsRoot
-if %pmsRoot:~-1% == / SET pmsRoot=%pmsRoot:~0,-1%
+if "%pmsRoot:~-1%" == "/" SET pmsRoot=%pmsRoot:~0,-1%
 :: get requestType
 SET requestType= 'PATH_INFO' 
 for /f "tokens=3" %%f in ('find /c "'PATH_INFO'" "%baseDir%..\config\my.php"') do set count=%%f
+if not defined count set count=1
 if %count% == 0 SET requestType='GET'
 
 :: create ztcli
-SET ztcli= %phpcli% %baseDir%ztcli %*
+SET ztcli= %phpcli% %baseDir%ztcli %%*
 echo %ztcli% > %baseDir%ztcli.bat
 echo ztcli.bat ok
 
