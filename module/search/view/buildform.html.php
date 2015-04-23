@@ -80,7 +80,7 @@ $(function()
     setDateField('.date');
 });
 
-var params        = <?php echo json_encode($fieldParams);?>;
+var params        = <?php echo empty($fieldParams) ? '{}' : json_encode($fieldParams);?>;
 var groupItems    = <?php echo $config->search->groupItems;?>;
 var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
 var module        = '<?php echo $module;?>';

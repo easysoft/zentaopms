@@ -427,7 +427,7 @@ class extension extends control
             move_uploaded_file($tmpName, $this->app->getTmpRoot() . "/extension/$fileName");
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);
-            if($return->result != 'ok') die(js::alert(sprintf($this->lang->extension->errorExtracted, $packageFile, $return->error)));
+            if($return->result != 'ok') die(js::alert(sprintf($this->lang->extension->errorExtracted, $fileName, $return->error)));
 
             $info = $this->extension->parseExtensionCFG($extension);
             if(isset($info->code) and $info->code != $extension)
