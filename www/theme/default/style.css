@@ -334,7 +334,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .list-group-item.active > a {color: #333}
 
 /* progressbar */
-.progressbar {display: inline-block; height: 16px; background: #229F24; position: relative; top: 1px}
+.progressbar {display: inline-block; height: 16px; background: #229F24; position: relative; top: -1px}
 
 /* === Layout === */
 /* Background */
