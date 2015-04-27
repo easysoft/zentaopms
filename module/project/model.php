@@ -1255,6 +1255,7 @@ class projectModel extends model
 
         $projects = $this->dao->select('id, code')->from(TABLE_PROJECT)
             ->where("end >= '$today'")
+            ->andWhere('type')->ne('ops')
             ->andWhere('status')->notin('done,suspended')
             ->fetchPairs();
         if(!$projects) return $burns;

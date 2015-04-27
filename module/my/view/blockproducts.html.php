@@ -24,7 +24,7 @@
   <tbody>
     <?php foreach($productStats as $product):?>
     <tr class='text-center'>
-      <td class='text-left'><?php echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name, '', "title=$product->name");?></td>
+      <td class='text-left'><?php echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name, '', "title='$product->name'");?></td>
       <td><?php echo $product->stories['active']?></td>
       <td><?php echo $product->stories['changed']?></td>
       <td><?php echo $product->stories['draft']?></td>
