@@ -42,6 +42,7 @@ function setStoryModule()
         $.get(link, function(moduleID)
         {
             $('#module').val(moduleID);
+            $("#module").trigger("chosen:updated");
         });
     }
 }
