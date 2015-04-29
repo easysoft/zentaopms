@@ -147,14 +147,10 @@ class treeModel extends model
     public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0)
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
-        $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
-            ->where('id')->eq($rootID)
-            ->fetch('openedVersion');
-        $products = $this->loadModel('product')->getProductsByProject($rootID);
-        if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products)
-        {
-            return $this->getOptionMenu($rootID, 'task', $startModule); 
-        }
+        $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT)->where('id')->eq($rootID)->fetch('openedVersion');
+        $products       = $this->loadModel('product')->getProductsByProject($rootID);
+
+        if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products) return $this->getOptionMenu($rootID, 'task', $startModule); 
 
         /* createdVersion > 4.1. */
         $startModulePath = '';
@@ -171,61 +167,80 @@ class treeModel extends model
         }
         $treeMenu   = array();
         $lastMenu[] = '/';
-        $projectModules = $this->getTaskTreeModules($rootID, false, false);
-        foreach($products as $id => $product)
-        {
-            $modules  = $this->dao->select('*')->from(TABLE_MODULE)
-                ->where("((root = $rootID and type = 'task') OR (root = $id and type = 'story'))")
-                ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                ->orderBy('grade desc, type, `order`')
-                ->fetchAll('id');
-            foreach($modules as $module)
-            {
-                $parentModules = explode(',', $module->path);
-                $moduleName = '/' . $product;
-                foreach($parentModules as $parentModuleID)
-                {
-                    if(empty($parentModuleID) or !isset($modules[$parentModuleID])) continue;
-                    $moduleName .= '/' . $modules[$parentModuleID]->name;
-                }
-                $moduleName = rtrim($moduleName, '/');
-                $moduleName .= "|$module->id\n";
+        $projectModules   = $this->getTaskTreeModules($rootID, false, false);
+        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task' and parent = 0")->fetchPairs('id', 'name');
 
-                if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
+        foreach(array('product' => $products, 'noProduct' => $noProductModules) as $type => $rootModules)
+        {
+            foreach($rootModules as $id => $rootModule)
+            {
+                if($type == 'product')
                 {
-                    if(isset($treeMenu[$module->parent]))
-                    {
-                        $treeMenu[$module->parent] .= $moduleName;
-                    }
-                    else
-                    {
-                        $treeMenu[$module->parent] = $moduleName;;
-                    }
-                    $treeMenu[$module->parent] .= $treeMenu[$module->id];
+                    $modules = $this->dao->select('*')->from(TABLE_MODULE)
+                        ->where("((root = $rootID and type = 'task') OR (root = $id and type = 'story'))")
+                        ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                        ->orderBy('grade desc, type, `order`')
+                        ->fetchAll('id');
                 }
                 else
                 {
-                    if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
+                    $modules = $this->dao->select('*')->from(TABLE_MODULE)
+                        ->where("root = $rootID and type = 'task' and path like '%,$id,%'")
+                        ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                        ->orderBy('grade desc, type, `order`')
+                        ->fetchAll('id');
+                }
+
+                foreach($modules as $module)
+                {
+                    $parentModules = explode(',', trim($module->path, ','));
+                    if($type == 'product' and isset($noProductModules[$parentModules[0]])) continue;
+
+                    $moduleName = $type == 'product' ? '/' . $rootModule : '';
+                    foreach($parentModules as $parentModuleID)
                     {
-                        $treeMenu[$module->parent] .= $moduleName;
+                        if(empty($parentModuleID) or !isset($modules[$parentModuleID])) continue;
+                        $moduleName .= '/' . $modules[$parentModuleID]->name;
+                    }
+                    $moduleName = rtrim($moduleName, '/');
+                    $moduleName .= "|$module->id\n";
+
+                    if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
+                    {
+                        if(isset($treeMenu[$module->parent]))
+                        {
+                            $treeMenu[$module->parent] .= $moduleName;
+                        }
+                        else
+                        {
+                            $treeMenu[$module->parent] = $moduleName;;
+                        }
+                        $treeMenu[$module->parent] .= $treeMenu[$module->id];
                     }
                     else
                     {
-                        $treeMenu[$module->parent] = $moduleName;
-                    }    
+                        if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
+                        {
+                            $treeMenu[$module->parent] .= $moduleName;
+                        }
+                        else
+                        {
+                            $treeMenu[$module->parent] = $moduleName;
+                        }    
+                    }
                 }
-            }
-            $topMenu = @array_pop($treeMenu);
-            $topMenu = explode("\n", trim($topMenu));
-            foreach($topMenu as $menu)
-            {
-                if(!strpos($menu, '|')) continue;
-                list($label, $moduleID) = explode('|', $menu);
-                if(isset($projectModules[$moduleID])) $lastMenu[$moduleID] = $label;
-            }
-            foreach($topMenu as $moduleID => $moduleName)
-            {
-                if(!isset($projectModules[$moduleID])) unset($treeMenu[$moduleID]); 
+                $topMenu = @array_pop($treeMenu);
+                $topMenu = explode("\n", trim($topMenu));
+                foreach($topMenu as $menu)
+                {
+                    if(!strpos($menu, '|')) continue;
+                    list($label, $moduleID) = explode('|', $menu);
+                    if(isset($projectModules[$moduleID])) $lastMenu[$moduleID] = $label;
+                }
+                foreach($topMenu as $moduleID => $moduleName)
+                {
+                    if(!isset($projectModules[$moduleID])) unset($treeMenu[$moduleID]); 
+                }
             }
         }
         return $lastMenu;
