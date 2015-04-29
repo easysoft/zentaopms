@@ -420,7 +420,7 @@ class userModel extends model
      */
     public function checkPassword()
     {
-        if(empty($this->post->password1)) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+        if(empty($_POST['password1'])) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
         if($this->post->password1 != false)
         {
             if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
