@@ -41,7 +41,7 @@
     </ul>  
     <div class='actions'>
       <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn export'") ?>
-      <?php echo html::a(helper::createLink('todo', 'batchCreate'), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
+      <?php echo html::a(helper::createLink('todo', 'batchCreate', "date=" . str_replace('-', '', $date)), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
       <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
     </div>
   </div>

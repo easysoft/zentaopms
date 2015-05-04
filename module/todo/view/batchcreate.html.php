@@ -36,6 +36,7 @@
       </tr>
     </thead>
     <?php $pri = 3;?>
+    <?php $time = $date != date('Y-m-d') ? key($times) : $time;?>
     <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>

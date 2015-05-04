@@ -57,7 +57,7 @@
         <th><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <div class='input-group'>
-            <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class="form-control" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control" style="width: 50%; margin-left:-1px"');?>
+            <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control" style="width: 50%; margin-left:-1px"');?>
           </div>
         </td>
         <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);'> <?php echo $lang->todo->lblDisableDate;?></td>
@@ -76,5 +76,9 @@
   </form>
 </div>
 
+<script language='Javascript'>
+var nowTime = '<?php echo $time?>';
+var today   = '<?php echo date('Y-m-d')?>';
+var start   = '<?php echo key($times)?>';
+</script>
 <?php include './footer.html.php';?>
-<script language='Javascript'>selectNext();</script>
