@@ -279,11 +279,11 @@ class bug extends control
         parse_str($extras);
 
         /* If set runID, get the last result info as the template. */
-        if($runID > 0) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
+        if(!empty($runID)) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
         if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID));
 
         /* If set caseID and runID='', get the last result info as the template. */
-        if($caseID > 0 && $runID == '') 
+        if($caseID && empty($runID))
         { 
             $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('date desc')->limit(1)->fetch('id'); 
             if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));
