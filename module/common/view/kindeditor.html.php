@@ -91,23 +91,25 @@ function initKindeditor(afterInit)
                 {
                     $(doc.body).bind('paste', function(ev)
                     {
-                        var $this = $(this);
-                        var original =  ev.originalEvent;
-                        var file =  original.clipboardData.items[0].getAsFile();
-                        var reader = new FileReader();
-                        reader.onload = function (evt) 
+                        var $this    = $(this);
+                        var original = ev.originalEvent;
+                        var file     = original.clipboardData.items[0].getAsFile();
+                        if(file)
                         {
-                            var result = evt.target.result; 
-                            var result = evt.target.result;
-                            var arr = result.split(",");
-                            var data = arr[1]; // raw base64
-                            var contentType = arr[0].split(";")[0].split(":")[1];
+                            var reader = new FileReader();
+                            reader.onload = function(evt) 
+                            {
+                                var result = evt.target.result; 
+                                var result = evt.target.result;
+                                var arr    = result.split(",");
+                                var data   = arr[1]; // raw base64
+                                var contentType = arr[0].split(";")[0].split(":")[1];
 
-                            html = '<img src="' + result + '" alt="" />';
-                            $.post(createLink('file', 'ajaxPasteImage'), {editor: html}, function(data){cmd.inserthtml(data);});
-                        };
-
-                        reader.readAsDataURL(file);
+                                html = '<img src="' + result + '" alt="" />';
+                                $.post(createLink('file', 'ajaxPasteImage'), {editor: html}, function(data){cmd.inserthtml(data);});
+                            };
+                            reader.readAsDataURL(file);
+                        }
                     });
                 }
                 /* Paste in firfox and other firfox.*/
