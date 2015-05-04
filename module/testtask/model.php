@@ -227,12 +227,13 @@ class testtaskModel extends model
     public function linkCase($taskID)
     {
         if($this->post->cases == false) return;
-        foreach($this->post->cases as $caseID)
+        $postData = fixer::input('post')->get();
+        foreach($postData->cases as $caseID)
         {
             $row = new stdclass();
             $row->task       = $taskID;
             $row->case       = $caseID;
-            $row->version    = $this->post->versions[$caseID];
+            $row->version    = $postData->versions[$caseID];
             $row->assignedTo = '';
             $row->status     = 'wait';
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
@@ -314,10 +315,11 @@ class testtaskModel extends model
          * 3. then check the steps to compute result.
          * 
          * */
-        $caseResult = $this->post->result ? $this->post->result : 'pass';
-        if($this->post->steps)
+        $postData   = fixer::input('post')->get();
+        $caseResult = $postData->result ? $postData->result : 'pass';
+        if($postData->steps)
         {
-            foreach($this->post->steps as $stepID => $stepResult)
+            foreach($postData->steps as $stepID => $stepResult)
             {
                 if($stepResult != 'pass' and $stepResult != 'n/a')
                 {
@@ -328,12 +330,12 @@ class testtaskModel extends model
         }
 
         /* Create result of every step. */
-        if($this->post->steps)
+        if($postData->steps)
         {
-            foreach($this->post->steps as $stepID =>$stepResult)
+            foreach($postData->steps as $stepID =>$stepResult)
             {
                 $step['result'] = $stepResult;
-                $step['real']   = $this->post->reals[$stepID];
+                $step['real']   = $postData->reals[$stepID];
                 $stepResults[$stepID] = $step;
             }
         }
@@ -354,7 +356,7 @@ class testtaskModel extends model
             ->remove('steps,reals,result')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
-        $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($this->post->case)->exec();
+        $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($postData->case)->exec();
 
         if($runID)
         {
@@ -383,7 +385,8 @@ class testtaskModel extends model
     public function batchRun($runCaseType = 'testcase')
     {
         $runs = array();
-        $caseIdList = array_keys($this->post->results);
+        $postData   = fixer::input('post')->get();
+        $caseIdList = array_keys($postData->results);
         if($runCaseType == 'testtask') $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs('case', 'id');
 
         $stepGroups = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
@@ -393,12 +396,12 @@ class testtaskModel extends model
             ->fetchGroup('case', 'id');
 
         $now = helper::now();
-        foreach($this->post->results as $caseID => $result)
+        foreach($postData->results as $caseID => $result)
         {
             $runID       = isset($runs[$caseID]) ? $runs[$caseID] : 0;
             $dbSteps     = $stepGroups[$caseID];
-            $postSteps   = $this->post->steps[$caseID];
-            $postReals   = $this->post->reals[$caseID];
+            $postSteps   = $postData->steps[$caseID];
+            $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
             $stepResults = array();
@@ -413,7 +416,7 @@ class testtaskModel extends model
             $result              = new stdClass();
             $result->run         = $runID;
             $result->case        = $caseID;
-            $result->version     = $this->post->version[$caseID];
+            $result->version     = $postData->version[$caseID];
             $result->caseResult  = $caseResult;
             $result->stepResults = serialize($stepResults);
             $result->lastRunner  = $this->app->user->account;
