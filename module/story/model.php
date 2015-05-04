@@ -134,14 +134,14 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,spec,verify,needNotReview,newStory')
+            ->remove('files,labels,needNotReview,newStory')
             ->get();
 
         /* Check repeat story. */
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -151,8 +151,8 @@ class storyModel extends model
             $data->story   = $storyID;
             $data->version = 1;
             $data->title   = $story->title;
-            $data->spec    = $this->post->spec;
-            $data->verify  = $this->post->verify;
+            $data->spec    = $story->spec;
+            $data->verify  = $story->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
             if($projectID != 0) 
@@ -328,12 +328,10 @@ class storyModel extends model
     {
         $specChanged = false;
         $oldStory    = $this->getById($storyID);
-        $newTitle    = stripslashes($this->post->title);
-        $newSpec     = stripslashes($this->post->spec);
-        $newVerify   = stripslashes($this->post->verify);
-        if($newSpec != $oldStory->spec or $newVerify != $oldStory->verify or $newTitle != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
+        $story       = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
 
-        $now = helper::now();
+        $now   = helper::now();
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->add('lastEditedBy', $this->app->user->account)
@@ -348,10 +346,10 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,spec,verify,comment,needNotReview')
+            ->remove('files,labels,comment,needNotReview')
             ->get();
         $this->dao->update(TABLE_STORY)
-            ->data($story)
+            ->data($story, 'spec,verify')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
@@ -363,14 +361,13 @@ class storyModel extends model
                 $data->story   = $storyID;
                 $data->version = $oldStory->version + 1;
                 $data->title   = $story->title;
-                $data->spec    = $this->post->spec;
-                $data->verify  = $this->post->verify;
+                $data->spec    = $story->spec;
+                $data->verify  = $story->verify;
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-                $story->spec   = $this->post->spec;
-                $story->verify = $this->post->verify;
             }
             else
             {
+                unset($story->spec);
                 unset($oldStory->spec);
             }
             return common::createChanges($oldStory, $story);

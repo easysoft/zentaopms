@@ -396,10 +396,10 @@ class dao
      * @access public
      * @return object the dao object self.
      */
-    public function data($data)
+    public function data($data, $skipFields = '')
     {
         if(!is_object($data)) $data = (object)$data;
-        $this->sqlobj->data($data);
+        $this->sqlobj->data($data, $skipFields);
         return $this;
     }
 
@@ -1230,9 +1230,10 @@ class sql
      * @access public
      * @return object the sql object.
      */
-    public function data($data)
+    public function data($data, $skipFields = '')
     {
         $data = (object) $data;
+        if($skipFields) $skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
 
         foreach($data as $field => $value)
         {    
@@ -1241,6 +1242,7 @@ class sql
                 unset($data->$field);
                 continue;
             }    
+            if(strpos($skipFields, ",$field,") !== false) continue;
             $this->sql .= "`$field` = " . $this->quote($value) . ','; 
         }
 
