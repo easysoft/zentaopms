@@ -21,7 +21,7 @@ $config->company->dynamic->search['params']['actor']      = array('operator' => 
 $config->company->dynamic->search['params']['objectID']   = array('operator' => '=',  'control' => 'input',  'values' => '');
 $config->company->dynamic->search['params']['project']    = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['objectType'] = array('operator' => '=',  'control' => 'select', 'values' => $lang->action->search->objectTypeList);
-$config->company->dynamic->search['params']['date']       = array('operator' => '>=', 'control' => 'input',  'values' => '');
+$config->company->dynamic->search['params']['date']       = array('operator' => '>=', 'control' => 'input',  'values' => '', 'class' => 'date');
 $config->company->dynamic->search['params']['action']     = array('operator' => '=',  'control' => 'select', 'values' => $lang->action->search->label);
 
 $config->company->browse = new stdClass();
