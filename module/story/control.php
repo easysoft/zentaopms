@@ -168,7 +168,7 @@ class story extends control
         $this->view->contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->pri              = $pri;
