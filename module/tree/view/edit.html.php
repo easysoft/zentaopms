@@ -14,6 +14,7 @@
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 ?>
+<?php include '../../common/view/chosen.html.php'?>
 <div class='modal-dialog w-500px'>
   <div class='modal-body'>
     <div id='titlebar'>
@@ -24,6 +25,12 @@ $jsRoot  = $webRoot . "js/";
     </div>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' class='form-condensed' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'> 
+        <?php if($type == 'story'):?>
+        <tr>
+          <th class='w-80px'><?php echo $lang->tree->product;?></th>
+          <td><?php echo html::select('root', $products, $module->root, "class='form-control chosen' onchange='getProductModules(this.value)'");?></td>
+        </tr>
+        <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='w-80px'><?php echo $lang->tree->parent;?></th>
@@ -48,3 +55,18 @@ $jsRoot  = $webRoot . "js/";
     </form>
   </div>
 </div>
+<script>
+var currentRoot   = <?php echo $module->root;?>;
+var currentParent = <?php echo $module->parent;?>;
+function getProductModules(productID)
+{
+    $.get(createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + productID + '&viewType=story&rootModuleID=0&returnType=json'), function(data)
+    {
+        var newOption = '';
+        for(i in data) newOption += '<option value="' + i + '">' + data[i] + '</option>';
+        $('#parent').html(newOption);
+        if(productID == currentRoot) $('#parent').val(currentParent);
+        $('#parent').trigger('chosen:updated')
+    }, 'json');
+}
+</script>

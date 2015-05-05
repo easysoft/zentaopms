@@ -44,3 +44,4 @@ $lang->tree->child      = 'Child';
 $lang->tree->owner      = 'Owner';
 $lang->tree->order      = 'Order';
 $lang->tree->projectDoc = 'Project doc';
+$lang->tree->product    = 'Product';
