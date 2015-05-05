@@ -81,7 +81,7 @@
     <div class='btn-group'>
     <?php
     common::printIcon('task', 'batchCreate', "projectID=$projectID");
-    common::printIcon('task', 'create', "project=$projectID", '', 'button', 'sitemap');
+    common::printIcon('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''), '', 'button', 'sitemap');
     ?>
     </div>
   </div>
