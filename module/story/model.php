@@ -1191,11 +1191,14 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc')
+    public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc', $type = 'byModule', $param = 0)
     {
+        if($type == 'byModule' and $param) $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$param,%")->andWhere('type')->eq('story')->fetchPairs('id', 'id');
         $stories = $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq((int)$projectID)
+            ->beginIF($type == 'byProduct')->andWhere('t1.product')->eq($param)->fi()
+            ->beginIF($type == 'byModule' and $param)->andWhere('t2.module')->in($modules)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');

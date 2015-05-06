@@ -353,7 +353,8 @@ class treeModel extends model
             }
             else
             {
-                $menu .= "<li>" . html::a(helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id"), $product, '_self', "id='product$id'");
+                $link  = $userFunc[1] == 'createProjectStoryLink' ? helper::createLink('project', 'story', "root=$rootID&orderBy=&status=byProduct&praram=$id") : helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id");
+                $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
             }
 
             /* tree menu. */
@@ -617,6 +618,23 @@ class treeModel extends model
         $projectID = $extra['projectID'];
         $productID = $extra['productID'];
         $linkHtml = html::a(helper::createLink('project', 'task', "root={$projectID}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
+    /**
+     * Create link of project story. 
+     * 
+     * @param  string $type 
+     * @param  object $module 
+     * @param  array  $extra 
+     * @access public
+     * @return string
+     */
+    public function createProjectStoryLink($type, $module, $extra)
+    {
+        $projectID = $extra['projectID'];
+        $productID = $extra['productID'];
+        $linkHtml = html::a(helper::createLink('project', 'story', "root={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
@@ -1035,8 +1053,7 @@ class treeModel extends model
         {
             $linkedStories = $this->dao->select('DISTINCT t1.id,t1.version,t2.project')->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
-                ->where('t1.version=t2.version')
-                ->andWhere('t1.module')->in($childIds)
+                ->where('t1.module')->in($childIds)
                 ->andWhere('t2.product')->eq($before)
                 ->fetchAll('id');
             $projects = array();
@@ -1052,8 +1069,8 @@ class treeModel extends model
                 $linkedProduct  = $this->dao->select('DISTINCT project,product')->from(TABLE_PROJECTSTORY)->where('project')->in($projects)->fetchGroup('project', 'product');
                 foreach($projects as $project)
                 {
-                    if(!isset($projectProduct[$project]) or !in_array($after, $projectProduct[$project])) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq($project)->set('product')->eq($after)->exec();
-                    if(isset($linkedProduct[$project])  and !in_array($before, $linkedProduct[$project]))
+                    if(!isset($projectProduct[$project]) or !in_array($after, array_keys($projectProduct[$project]))) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq($project)->set('product')->eq($after)->exec();
+                    if(isset($linkedProduct[$project])  and !in_array($before, array_keys($linkedProduct[$project])))
                     {
                         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project)->andWhere('product')->eq($before)->exec();
                         $this->dao->update(TABLE_BUILD)->set('product')->eq($after)->where('product')->eq($before)->andWhere('project')->eq($project)->exec();

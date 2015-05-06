@@ -526,7 +526,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = '')
+    public function story($projectID = 0, $orderBy = '', $type = 'byModule', $param = 0)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -552,7 +552,7 @@ class project extends control
         $position[] = $this->lang->project->story;
 
         /* The pager. */
-        $stories    = $this->story->getProjectStories($projectID, $sort);
+        $stories    = $this->story->getProjectStories($projectID, $sort, $type, $param);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
@@ -574,7 +574,10 @@ class project extends control
         $this->view->stories    = $stories;
         $this->view->summary    = $this->product->summary($stories);
         $this->view->orderBy    = $orderBy;
+        $this->view->type       = $type;
+        $this->view->param      = $param;
         $this->view->storyTasks = $storyTasks;
+        $this->view->moduleTree = $this->loadModel('tree')->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
         $this->view->tabID      = 'story';
         $this->view->users      = $users;
 
