@@ -1010,9 +1010,9 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
-        if(isset($module->root)) $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
+        if(isset($module->root) and $module->root != $self->root) $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
-        if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root);
+        if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);
     }
    
     /**
@@ -1024,37 +1024,40 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function changeRoot($moduleID, $before, $after)
+    public function changeRoot($moduleID, $before, $after, $type)
     {
         $childIds = $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleID,%")->fetchPairs('id', 'id');
         $this->dao->update(TABLE_STORY)->set('product')->eq($after)->where('module')->in($childIds)->exec();
         $this->dao->update(TABLE_BUG)->set('product')->eq($after)->where('module')->in($childIds)->exec();
         $this->dao->update(TABLE_CASE)->set('product')->eq($after)->where('module')->in($childIds)->exec();
 
-        $linkedStories = $this->dao->select('DISTINCT t1.id,t1.version,t2.project')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
-            ->where('t1.version=t2.version')
-            ->andWhere('t1.module')->in($childIds)
-            ->andWhere('t2.product')->eq($before)
-            ->fetchAll('id');
-        $projects = array();
-        foreach($linkedStories as $story)
+        if($type == 'story')
         {
-            $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($after)->where('project')->eq($story->project)->andWhere('story')->eq($story->id)->andWhere('version')->eq($story->version)->exec();
-            $projects[$story->project] = $story->project;
-        }
-
-        if($projects)
-        {
-            $projectProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in($projects)->fetchGroup('project', 'product');
-            $linkedProduct  = $this->dao->select('DISTINCT project,product')->from(TABLE_PROJECTSTORY)->where('project')->in($projects)->fetchGroup('project', 'product');
-            foreach($projects as $project)
+            $linkedStories = $this->dao->select('DISTINCT t1.id,t1.version,t2.project')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+                ->where('t1.version=t2.version')
+                ->andWhere('t1.module')->in($childIds)
+                ->andWhere('t2.product')->eq($before)
+                ->fetchAll('id');
+            $projects = array();
+            foreach($linkedStories as $story)
             {
-                if(!isset($projectProduct[$project]) or !in_array($after, $projectProduct[$project])) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq($project)->set('product')->eq($after)->exec();
-                if(isset($linkedProduct[$project])  and !in_array($before, $linkedProduct[$project]))
+                $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($after)->where('project')->eq($story->project)->andWhere('story')->eq($story->id)->andWhere('version')->eq($story->version)->exec();
+                $projects[$story->project] = $story->project;
+            }
+
+            if($projects)
+            {
+                $projectProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in($projects)->fetchGroup('project', 'product');
+                $linkedProduct  = $this->dao->select('DISTINCT project,product')->from(TABLE_PROJECTSTORY)->where('project')->in($projects)->fetchGroup('project', 'product');
+                foreach($projects as $project)
                 {
-                    $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project)->andWhere('product')->eq($before)->exec();
-                    $this->dao->update(TABLE_BUILD)->set('product')->eq($after)->where('product')->eq($before)->andWhere('project')->eq($project)->exec();
+                    if(!isset($projectProduct[$project]) or !in_array($after, $projectProduct[$project])) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq($project)->set('product')->eq($after)->exec();
+                    if(isset($linkedProduct[$project])  and !in_array($before, $linkedProduct[$project]))
+                    {
+                        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($project)->andWhere('product')->eq($before)->exec();
+                        $this->dao->update(TABLE_BUILD)->set('product')->eq($after)->where('product')->eq($before)->andWhere('project')->eq($project)->exec();
+                    }
                 }
             }
         }

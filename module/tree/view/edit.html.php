@@ -25,7 +25,7 @@ $jsRoot  = $webRoot . "js/";
     </div>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' class='form-condensed' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'> 
-        <?php if($type == 'story'):?>
+        <?php if($showProduct):?>
         <tr>
           <th class='w-80px'><?php echo $lang->tree->product;?></th>
           <td><?php echo html::select('root', $products, $module->root, "class='form-control chosen' onchange='getProductModules(this.value)'");?></td>
