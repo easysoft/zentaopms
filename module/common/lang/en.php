@@ -180,7 +180,7 @@ $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => 'Info|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = 'Projects|product|project|status=all&productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-th">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-cubes">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
