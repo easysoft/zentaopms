@@ -280,7 +280,7 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .table-fixed select.form-control {padding: 5px}
 .form-condensed .chosen-container {font-size: 13px}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
-.form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
+.form-condensed .chosen-container-single .chosen-single abbr {top: 3px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
 
 @-moz-document url-prefix(){.form-condensed textarea.form-control {height: 30px;min-height: 30px;}}
