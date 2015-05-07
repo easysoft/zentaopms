@@ -83,7 +83,7 @@ hr.small {margin: 10px 0}
 .btn.text-special {color: #8957A1}
 
 /* Table */
-.table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 1px; position: relative; top: 2px}
+.table td .input[type="radio"], .table td input[type="checkbox"] {vertical-align: middle; position: relative; top: -3px}
 .table-borderless {border: none!important}
 
 /* Tables sorters */
@@ -254,7 +254,7 @@ fieldset > .form-group {margin-bottom: 0;}
 .table-data th {text-align: right;}
 
 /* Table condensed */
-.table-condensed th, .table-condensed td {padding: 6px 5px;}
+.table-condensed th, .table-condensed td {padding: 6px 5px; line-height: 18px}
 
  .input-group > select.form-control {float:left; margin-left: -1px;} 
 
