@@ -9,11 +9,11 @@ js::import($jsRoot . 'chartjs/excanvas.min.js');
 <![endif]-->
 <?php js::import($jsRoot . 'chartjs/chart.line.min.js');?>
 <script>
-var isIE = window.browser.isIE();
+var isIE = $.zui.browser.isIE();
 jQuery.fn.projectLine = function(setting)
 {
     var $lines = $(this);
-    if(isIE && window.browser.ie < 9 && $lines.length > 10) return;
+    if(isIE && $.zui.browser.ie < 9 && $lines.length > 10) return;
     
     $lines.each(function()
     {

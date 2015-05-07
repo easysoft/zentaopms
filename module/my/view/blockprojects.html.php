@@ -48,7 +48,7 @@ $(function()
     var $sparks = $projectbox.find('.spark');
     $sparks.filter(':lt(6)').addClass('sparked').projectLine();
     $sparks = $sparks.not(':lt(6)');
-    var rowHeight = $sparks.first().closest('tr').outerHeight() - (window.browser.ie === 8 ? 0.3 : 0);
+    var rowHeight = $sparks.first().closest('tr').outerHeight() - ($.zui.browser.ie === 8 ? 0.3 : 0);
 
     var scrollFn = false, scrollStart, i, id, $spark;
     $projectbox.on('scroll.spark', function(e)
