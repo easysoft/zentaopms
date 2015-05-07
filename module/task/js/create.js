@@ -16,12 +16,14 @@ function setOwners(result)
         $('#assignedTo').attr('multiple', 'multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('#selectAllUser').removeClass('hidden');
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
     {
         $('#assignedTo').removeAttr('multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('#selectAllUser').addClass('hidden');
     }
 }
 
@@ -124,4 +126,14 @@ $(document).ready(function()
 {
     setPreview();
     $("#story, #mailto").chosen(defaultChosenOptions);
+
+    $('#selectAllUser').on('click', function()
+    {
+        var $assignedTo = $('#assignedTo');
+        if($assignedTo.attr('multiple')) 
+        {
+            $assignedTo.children('option').attr('selected', 'selected');
+            $assignedTo.trigger('chosen:updated');
+        }
+    });
 });

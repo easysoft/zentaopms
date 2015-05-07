@@ -32,12 +32,15 @@
         <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value,$project->id)'");?></td><td></td><td class='w-150px'></td>
       </tr>
       <tr>
-        <th><?php echo $lang->task->assignedTo;?></th>
-        <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?></td><td></td>
-      </tr>
-      <tr>
         <th><?php echo $lang->task->type;?></th>
         <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control onchange="setOwners(this.value)"');?></td><td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->task->assignedTo;?></th>
+        <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?></td>
+        <td>
+          <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->task->story;?></th>
