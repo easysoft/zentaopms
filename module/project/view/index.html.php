@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
   <div class='actions'>
     <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
@@ -29,6 +30,7 @@
   <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
+      <th class='w-20px sort-default'><?php common::printOrderLink('default', $orderBy, $vars, '<i></i>');?></th>
       <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
       <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
       <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
@@ -43,8 +45,10 @@
     </tr>
   </thead>
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
+  <tbody class='sortable' id='projectTableList'>
   <?php foreach($projectStats as $project):?>
   <tr class='text-center'>
+    <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
     <td>
       <?php if($canBatchEdit):?>
       <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
@@ -66,9 +70,10 @@
     <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
   </tr>
   <?php endforeach;?>
+  </tbody>
   <tfoot>
     <tr>
-      <td colspan='11'>
+      <td colspan='12'>
         <?php if($canBatchEdit and !empty($projectStats)):?>
         <div class='table-actions clearfix'>
         <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>

@@ -89,7 +89,7 @@ hr.small {margin: 10px 0}
 /* Tables sorters */
 .tablesorter thead tr div {padding:0; margin:0}
 .tablesorter thead tr .header {cursor:pointer;}
-.tablesorter thead tr .header a,.tablesorter thead tr .headerSortUp a,.tablesorter thead tr .headerSortDown a{display: inline-block; text-decoration:none}
+.tablesorter thead tr .header a,.tablesorter thead tr .headerSortUp a,.tablesorter thead tr .headerSortDown a{display: block; text-decoration:none}
 .tablesorter thead tr .header a {color:#333;}
 .tablesorter thead tr .header > a:after {font-family: ZenIcon; font-weight: normal;content: " \e6bd";font-size: 14px;}
 .tablesorter thead tr .headerSortUp > a:after {font-family: ZenIcon; font-weight: normal;content: " \e6b9";font-size: 14px;color:#03C;}
