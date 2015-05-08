@@ -30,9 +30,13 @@
   <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
+<<<<<<< Updated upstream
       <?php if(strpos($orderBy, 'order') !== false):?>
       <th class='w-20px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
       <?php endif;?>
+=======
+      <th class='w-20px sort-default'><?php common::printOrderLink('custom', $orderBy, $vars, '<i></i>');?></th>
+>>>>>>> Stashed changes
       <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
       <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
       <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
@@ -49,8 +53,12 @@
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <tbody class='sortable' id='projectTableList'>
   <?php foreach($projectStats as $project):?>
+<<<<<<< Updated upstream
   <tr class='text-center'>
     <?php if(strpos($orderBy, 'order') !== false):?>
+=======
+  <tr class='text-center' data-id='<?php echo $project->id ?>' data-order='<?php echo $project->id ?>'>
+>>>>>>> Stashed changes
     <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
     <?php endif;?>
     <td>
