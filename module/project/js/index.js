@@ -8,3 +8,8 @@ $(function()
         $.post(createLink('project', 'ajaxOrder'), {'projects' : list, 'orderBy' : orderBy});
     });
 });
+
+function byProduct(productID, projectID)
+{
+    location.href = createLink('project', 'index', "locate=no&status=byproduct&project=" + projectID + "&orderBy=" + orderBy + '&productID=' + productID);
+}

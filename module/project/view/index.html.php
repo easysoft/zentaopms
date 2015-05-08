@@ -23,11 +23,12 @@
     <?php echo "<li id='doingTab'>" . html::a(inlink("index", "locate=no&status=doing&projectID=$project->id"), $lang->project->statusList['doing']) . '</li>';?>
     <?php echo "<li id='suspendedTab'>" . html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']) . '</li>';?>
     <?php echo "<li id='doneTab'>" . html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->statusList['done']) . '</li>';?>
+    <?php echo "<li>" . html::select('product', $products, $productID, "class='chosen' onchange='byProduct(this.value, $projectID)'") . '</li>';?>
   </ul>
 </div>
 <form class='form-condensed' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
 <table class='table table-fixed tablesorter'>
-  <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+  <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
       <?php if(strpos($orderBy, 'order') !== false):?>

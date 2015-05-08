@@ -37,7 +37,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'undone', $projectID = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index($locate = 'yes', $status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
@@ -51,8 +51,9 @@ class project extends control
         $this->app->loadLang('my');
         $this->view->title         = $this->lang->project->allProject;
         $this->view->position[]    = $this->lang->project->allProject;
-        $this->view->projectStats  = $this->project->getProjectStats($status, 0, 30, $orderBy, $pager);
+        $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 30, $orderBy, $pager);
         $this->view->products      = $this->loadModel('product')->getPairs();
+        $this->view->productID     = $productID;
         $this->view->projectID     = $projectID;
         $this->view->pager         = $pager;
         $this->view->recTotal      = $pager->recTotal;
