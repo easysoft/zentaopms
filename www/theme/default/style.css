@@ -83,17 +83,17 @@ hr.small {margin: 10px 0}
 .btn.text-special {color: #8957A1}
 
 /* Table */
-.table td .input[type="radio"], .table td input[type="checkbox"] {margin-top: 1px; position: relative; top: 2px}
+.table td .input[type="radio"], .table td input[type="checkbox"] {vertical-align: middle; position: relative; top: -3px}
 .table-borderless {border: none!important}
 
 /* Tables sorters */
 .tablesorter thead tr div {padding:0; margin:0}
 .tablesorter thead tr .header {cursor:pointer;}
-.tablesorter thead tr .header a,.tablesorter thead tr .headerSortUp a,.tablesorter thead tr .headerSortDown a{display: inline-block; text-decoration:none}
+.tablesorter thead tr .header a,.tablesorter thead tr .headerSortUp a,.tablesorter thead tr .headerSortDown a{display: block; text-decoration:none}
 .tablesorter thead tr .header a {color:#333;}
-.tablesorter thead tr .header:after {font-family: ZenIcon; font-weight: normal;content: " \e6bd";font-size: 14px;}
-.tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \e6b9";font-size: 14px;color:#03C;}
-.tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \e6b8";font-size: 14px;color:#03C;}
+.tablesorter thead tr .header > a:after {font-family: ZenIcon; font-weight: normal;content: " \e6bd";font-size: 14px;}
+.tablesorter thead tr .headerSortUp > a:after {font-family: ZenIcon; font-weight: normal;content: " \e6b9";font-size: 14px;color:#03C;}
+.tablesorter thead tr .headerSortDown > a:after{font-family: ZenIcon; font-weight: normal;content: " \e6b8";font-size: 14px;color:#03C;}
 .tablesorter-header-inner {display: inline;}
 .tablesorter thead tr .header.sorter-false:after {display: none}
 
@@ -254,7 +254,7 @@ fieldset > .form-group {margin-bottom: 0;}
 .table-data th {text-align: right;}
 
 /* Table condensed */
-.table-condensed th, .table-condensed td {padding: 6px 5px;}
+.table-condensed th, .table-condensed td {padding: 6px 5px; line-height: 18px}
 
  .input-group > select.form-control {float:left; margin-left: -1px;} 
 
@@ -280,7 +280,7 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .table-fixed select.form-control {padding: 5px}
 .form-condensed .chosen-container {font-size: 13px}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
-.form-condensed .chosen-container-single .chosen-single abbr {top: 5px; right: 18px}
+.form-condensed .chosen-container-single .chosen-single abbr {top: 3px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
 
 @-moz-document url-prefix(){.form-condensed textarea.form-control {height: 30px;min-height: 30px;}}
@@ -382,27 +382,31 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* Drop menu. */
 #dropMenu {background: #fff; position:absolute; display:none; font-size:12px; z-index:9999; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);border: 1px solid #CBCBCB; border: 1px solid rgba(0, 0, 0, 0.15); top: 36px; border-top: none; min-width: 250px; min-width: 218px\0; padding: 10px 15px;}
+#dropMenu > .icon-spin {display: block; text-align: center; padding: 10px;}
 #currentItem {border: 1px solid transparent; padding: 1px 6px;}
 .show > #dropMenu {display: block;}
 .show > #currentItem, .show > #currentItem:hover, #modulemenu .nav > li > .dropdown.open > a {background: #fff; border: 1px solid #CBCBCB; -moz-box-shadow: 0 6px 12px rgba(0,0,0,0.175); -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);}
 #search {padding: 2px 8px; height: 28px}
 #searchResult {display: table; line-height: 20px; color: #808080}
-#defaultMenu, #moreMenu {display: table-cell; vertical-align: top; min-width: 218px}
+#searchResult > .search-list, #defaultMenu, #moreMenu {display: table-cell; vertical-align: top; min-width: 218px}
 #moreMenu {display: none;}
 #searchResult.show-more #moreMenu {display: table-cell;}
-#defaultMenu > ul, #moreMenu > ul {display: block; position: relative; padding: 0; margin: 10px -15px 0 -15px; max-height: 360px; overflow-x: hidden; overflow-y: auto}
+#searchResult ul {display: block; position: relative; padding: 0; margin: 10px -15px 0 -15px; max-height: 360px; overflow-x: hidden; overflow-y: auto}
 #moreMenu > ul {margin-left: 15px;}
-#defaultMenu > ul > li:first-child, #moreMenu > ul > li:first-child, #searchResult > ul > li:first-child {border-top: 1px dashed #ddd}
-#defaultMenu > ul > li, #moreMenu > ul > li,#searchResult > ul > li {display: block; float: none; padding: 2px 15px; border-bottom: 1px dashed #ddd;}
-#defaultMenu > ul > li:hover, #defaultMenu > .actions > a:hover, #moreMenu > ul > li:hover, #searchResult > ul > li:hover {background: #f1f1f1}
-#defaultMenu > ul > li > a, #moreMenu > ul > li > a, #searchResult > ul > li > a {line-height: 24px; display: block;}
+#searchResult ul > li:first-child {border-top: 1px dashed #ddd}
+#searchResult ul > li:last-child {border-bottom: 1px dashed #ddd}
+#searchResult ul > li {display: block; float: none; padding: 2px 15px;}
+#searchResult ul > li:hover, #searchResult ul > li.active {background: #e5e5e5}
+#searchResult ul > li > a {line-height: 24px; display: block;}
+#searchResult ul > li.active:before {}
 #moreMenu > ul > li > a {color: #808080}
-#defaultMenu > ul > li > a:hover, #moreMenu > ul > li > a:hover, #searchResult > ul > li > a:hover, #defaultMenu > ul > li.heading:hover {background: none}
+#searchResult ul > li > a:hover, #defaultMenu > ul > li.heading:hover, #searchResult li.no-result-tip:hover {background: none}
+#searchResult li.no-result-tip {border: none!important;}
 #defaultMenu > .actions > a {display: block; text-align: right; margin: 0 -15px; padding-right: 15px; line-height: 30px}
 #searchResult.show-more #defaultMenu > ul > li, #defaultMenu > .actions > a {border-right: 1px solid #ddd}
-#defaultMenu > .actions > a > i, #defaultMenu > ul > li > a > i, #moreMenu > ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
-#searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}
-#searchResult > ul > li > a.closed, #searchResult > ul > li > a.done{color:#808080}
+#defaultMenu > .actions > a > i, #searchResult ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
+/*#searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}*/
+#searchResult ul > li > a.closed, #searchResult ul > li > a.done{color:#808080}
 
 #defaultMenu > div {padding-top: 6px;}
 

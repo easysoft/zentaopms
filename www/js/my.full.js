@@ -96,13 +96,77 @@ function showDropMenu(objectType, objectID, module, method, extra)
     var li = $('#currentItem').closest('li');
     if(li.hasClass('show')) {li.removeClass('show'); return;}
 
+    var $dropMenu = $('#dropMenu');
     if(!li.data('showagain'))
     {
         li.data('showagain', true);
         $(document).click(function() {li.removeClass('show');});
-        $('#dropMenu, #currentItem').click(function(e){e.stopPropagation();});
+        li.click(function(e){e.stopPropagation();});
+
+        $dropMenu.on('keydown', '#search', function(e){
+            var code = e.which;
+            var $this = $('#searchResult > .search-list > ul > li.active');
+            if(code === 38) // up
+            {
+                $this.removeClass('active');
+                if($this.length)
+                {
+                    var $prev = $this.prev('li');
+                    while($prev.length && $prev.hasClass('heading'))
+                    {
+                        $prev = $prev.prev('li');
+                    }
+                    if($prev.length)
+                    {
+                        $prev.addClass('active');
+                        return;
+                    }
+                }
+                $('#searchResult > .search-list > ul > li:not(.heading):last').addClass('active');
+            }
+            else if(code === 40) // down
+            {
+                $this.removeClass('active');
+                if($this.length)
+                {
+                    var $next = $this.next('li');
+                    while($next.length && $next.hasClass('heading'))
+                    {
+                        $next = $next.next('li');
+                    }
+                    if($next.length)
+                    {
+                        $next.addClass('active');
+                        return;
+                    }
+                }
+                $('#searchResult > .search-list > ul > li:not(.heading):first').addClass('active');
+            }
+            else if(code === 13) // enter
+            {
+                if($this.length) window.location.href = $this.children('a').attr('href');
+            }
+        }).on('change keyup paste input propertychange', '#search', function(){
+            var $search = $(this);
+            var searchKey = $search.val();
+            if(searchKey === $dropMenu.data('lastSearchKey')) return;
+
+            clearTimeout($dropMenu.data('lastSearch'));
+            $dropMenu.data('lastSearch', setTimeout(function()
+            {
+                $dropMenu.data('lastSearchKey', searchKey);
+                searchItems(searchKey, objectType, objectID, module, method, extra);
+            }, 200));
+        }).on('mouseenter', '#searchResult .search-list > ul > li', function(){
+            $('#searchResult > .search-list > ul > li.active').removeClass('active');
+            $(this).addClass('active');
+        });
     }
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data).find('#search').focus();});
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
+    {
+        $dropMenu.html(data).find('#search').focus();
+        $('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
+    });
 
     li.addClass('show');
 }
@@ -120,7 +184,12 @@ function showDropMenu(objectType, objectID, module, method, extra)
  */
 function showDropResult(objectType, objectID, module, method, extra)
 {
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data); setTimeout(function(){$("#dropMenu #search").focus();}, 300);});
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
+    {
+        $('#dropMenu').html(data);
+        setTimeout(function(){$("#dropMenu #search").focus();}, 200);
+        $('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
+    });
 }
 
 /**
@@ -145,7 +214,10 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     else
     {
         keywords = encodeURI(keywords);
-        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){$('#searchResult').html(data);});
+        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
+        {
+            $('#searchResult').html(data).find('.search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
+        });
     }
 }
 

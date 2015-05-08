@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
   <div class='heading'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->product->index;?>  </div>
   <div class='actions'>
@@ -35,6 +36,7 @@
     <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
+        <th class='w-20px sort-default'><?php common::printOrderLink('default', $orderBy, $vars, '<i></i>');?></th>
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
         <th class='w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
@@ -49,29 +51,32 @@
       </tr>
     </thead>
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
-    <?php foreach($productStats as $product):?>
-    <tr class='text-center'>
-      <td>
-        <?php if($canBatchEdit):?>
-        <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
-        <?php endif;?>
-        <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
-      </td>
-      <td class='text-left' title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
-      <td><?php echo $product->stories['active']?></td>
-      <td><?php echo $product->stories['changed']?></td>
-      <td><?php echo $product->stories['draft']?></td>
-      <td><?php echo $product->stories['closed']?></td>
-      <td><?php echo $product->plans?></td>
-      <td><?php echo $product->releases?></td>
-      <td><?php echo $product->bugs?></td>
-      <td><?php echo $product->unResolved;?></td>
-      <td><?php echo $product->assignToNull;?></td>
-    </tr>
-    <?php endforeach;?>
+    <tbody class='sortable' id='productTableList'>
+      <?php foreach($productStats as $product):?>
+      <tr class='text-center'>
+        <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
+        <td>
+          <?php if($canBatchEdit):?>
+          <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
+          <?php endif;?>
+          <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
+        </td>
+        <td class='text-left' title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+        <td><?php echo $product->stories['active']?></td>
+        <td><?php echo $product->stories['changed']?></td>
+        <td><?php echo $product->stories['draft']?></td>
+        <td><?php echo $product->stories['closed']?></td>
+        <td><?php echo $product->plans?></td>
+        <td><?php echo $product->releases?></td>
+        <td><?php echo $product->bugs?></td>
+        <td><?php echo $product->unResolved;?></td>
+        <td><?php echo $product->assignToNull;?></td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
     <tfoot>
       <tr>
-        <td colspan='11'>
+        <td colspan='12'>
           <?php if($canBatchEdit and !empty($productStats)):?>
           <div class='table-actions clearfix'>
             <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>

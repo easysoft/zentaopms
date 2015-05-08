@@ -1,7 +1,7 @@
 <div class='panel panel-block dynamic'>
   <div class='panel-heading'>
     <?php echo html::icon($lang->icons['dynamic']);?> <strong><?php echo $lang->my->home->latest;?></strong>
-    <div class="panel-actions pull-right"><?php common::printLink('company', 'dynamic', '', $lang->more . "&nbsp;<i class='icon-th icon icon-double-angle-right'></i>");?></div>
+    <div class="panel-actions pull-right"><?php common::printLink('company', 'dynamic', '', $lang->more . "&nbsp;<i class='icon icon-double-angle-right'></i>");?></div>
   </div>
   <table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
     <?php 

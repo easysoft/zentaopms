@@ -180,7 +180,7 @@ $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = '项目|product|project|status=all&productID=%s';
 $lang->product->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加产品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<i class="icon-th"></i>&nbsp;所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<i class="icon-cubes"></i>&nbsp;所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
