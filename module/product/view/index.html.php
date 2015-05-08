@@ -36,13 +36,9 @@
     <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
-<<<<<<< Updated upstream
         <?php if(strpos($orderBy, 'order') !== false):?>
         <th class='w-20px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
         <?php endif;?>
-=======
-        <th class='w-20px sort-default'><?php common::printOrderLink('custom', $orderBy, $vars, '<i></i>');?></th>
->>>>>>> Stashed changes
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
         <th class='w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
@@ -59,12 +55,8 @@
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
     <tbody class='sortable' id='productTableList'>
       <?php foreach($productStats as $product):?>
-<<<<<<< Updated upstream
       <tr class='text-center'>
         <?php if(strpos($orderBy, 'order') !== false):?>
-=======
-      <tr class='text-center' data-id='<?php echo $product->id ?>' data-order='<?php echo $product->id ?>'>
->>>>>>> Stashed changes
         <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
         <?php endif;?>
         <td>

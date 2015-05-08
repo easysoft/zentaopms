@@ -26,12 +26,6 @@ $(document).ready(function()
             trigger: $tbody.find('.sort-handler').length ? '.sort-handler' : null,
             finish: function(e)
             {
-                var orders = {};
-                e.list.each(function(){
-                    var $this = $(this);
-                    orders[$this.data('id')] = parseInt($this.attr('data-order'));
-                });
-                e.orders = orders;
                 $tbody.trigger('sort.sortable', e);
                 var $thead = $tbody.closest('table').children('thead');
                 $thead.find('.headerSortDown, .headerSortUp').removeClass('headerSortDown headerSortUp').addClass('header');
