@@ -36,7 +36,9 @@
     <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
-        <th class='w-20px sort-default'><?php common::printOrderLink('default', $orderBy, $vars, '<i></i>');?></th>
+        <?php if(strpos($orderBy, 'order') !== false):?>
+        <th class='w-20px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
+        <?php endif;?>
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
         <th class='w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
@@ -54,7 +56,9 @@
     <tbody class='sortable' id='productTableList'>
       <?php foreach($productStats as $product):?>
       <tr class='text-center'>
+        <?php if(strpos($orderBy, 'order') !== false):?>
         <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
+        <?php endif;?>
         <td>
           <?php if($canBatchEdit):?>
           <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
@@ -76,7 +80,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='12'>
+        <td colspan='<?php echo strpos($orderBy, 'order') !== false ? 12 : 11?>'>
           <?php if($canBatchEdit and !empty($productStats)):?>
           <div class='table-actions clearfix'>
             <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
@@ -91,4 +95,5 @@
 </form>
 <?php endif;?>
 </div>
+<?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>

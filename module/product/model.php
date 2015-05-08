@@ -135,7 +135,7 @@ class productModel extends model
             ->beginIF($status = 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->orderBy('code')
+            ->orderBy('`order`')
             ->fetchAll('id');
     }
 
@@ -461,7 +461,7 @@ class productModel extends model
      * @access public
      * @return array 
      */
-    public function getStats($orderBy = 'code_asc', $pager = null)
+    public function getStats($orderBy = 'order_asc', $pager = null)
     {
         $this->loadModel('report');
         $this->loadModel('story');

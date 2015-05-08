@@ -37,7 +37,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'undone', $projectID = 0, $orderBy = 'code_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index($locate = 'yes', $status = 'undone', $projectID = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
@@ -1692,7 +1692,7 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('code')->fetchAll();
+        $this->view->projects  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order')->fetchAll();
         $this->display();
     }
 
@@ -1708,7 +1708,7 @@ class project extends control
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('order')->fetchAll();
         foreach($projects as $key => $project)
         {
             if(!$this->project->checkPriv($project)) unset($projects[$key]);
@@ -1718,5 +1718,26 @@ class project extends control
         $this->view->projects = $projects;
         $this->view->keywords = $keywords;
         $this->display();
+    }
+
+    /**
+     * Ajax order.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxOrder()
+    {
+        $idList   = explode(',', trim($this->post->projects, ','));
+        $orderBy  = $this->post->orderBy;
+        if(strpos($orderBy, 'order') === false) return false;
+
+        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        foreach($projects as $order => $id)
+        {
+            $newID = array_shift($idList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+        }
     }
 }

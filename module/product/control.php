@@ -47,7 +47,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $productID = 0, $orderBy = 'code_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index($locate = 'yes', $productID = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
@@ -529,7 +529,7 @@ class product extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('code')->fetchAll();
+        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order`')->fetchAll();
         $this->display();
     }
 
@@ -545,7 +545,7 @@ class product extends control
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('`order`')->fetchAll();
         foreach($products as $key => $product)
         {
             if(!$this->product->checkPriv($product)) unset($products[$key]);
@@ -555,5 +555,26 @@ class product extends control
         $this->view->products = $products;
         $this->view->keywords = $keywords;
         $this->display();
+    }
+
+    /**
+     * Ajax order.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxOrder()
+    {
+        $idList   = explode(',', trim($this->post->products, ','));
+        $orderBy  = $this->post->orderBy;
+        if(strpos($orderBy, 'order') === false) return false;
+
+        $products = $this->dao->select('id,`order`')->from(TABLE_PRODUCT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        foreach($products as $order => $id)
+        {
+            $newID = array_shift($idList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+        }
     }
 }

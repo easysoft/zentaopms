@@ -547,7 +547,7 @@ class projectModel extends model
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
                 ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->orderBy('code')
+                ->orderBy('order')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -558,7 +558,7 @@ class projectModel extends model
                 ->beginIF($status == 'isdoing')->andWhere('status')->ne('done')->andWhere('status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('code')
+                ->orderBy('order')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -612,7 +612,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'code', $pager = null)
+    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'order', $pager = null)
     {
         /* Init vars. */
         $projects    = $this->getList($status, 0, $productID);

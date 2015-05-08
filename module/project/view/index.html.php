@@ -30,7 +30,9 @@
   <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
-      <th class='w-20px sort-default'><?php common::printOrderLink('default', $orderBy, $vars, '<i></i>');?></th>
+      <?php if(strpos($orderBy, 'order') !== false):?>
+      <th class='w-20px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
+      <?php endif;?>
       <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
       <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
       <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
@@ -48,7 +50,9 @@
   <tbody class='sortable' id='projectTableList'>
   <?php foreach($projectStats as $project):?>
   <tr class='text-center'>
+    <?php if(strpos($orderBy, 'order') !== false):?>
     <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
+    <?php endif;?>
     <td>
       <?php if($canBatchEdit):?>
       <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
@@ -73,7 +77,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan='12'>
+      <td colspan='<?php echo strpos($orderBy, 'order') !== false ? 12 : 11?>'>
         <?php if($canBatchEdit and !empty($projectStats)):?>
         <div class='table-actions clearfix'>
         <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
@@ -87,4 +91,5 @@
 </table>
 </form>
 <script>$("#<?php echo $status;?>Tab").addClass('active');</script>
+<?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>

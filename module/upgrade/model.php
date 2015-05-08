@@ -117,6 +117,9 @@ class upgradeModel extends model
             case '6_4':
             case '7_0':
                 $this->execSQL($this->getUpgradeFile('7.0'));
+            case '7_1':
+                $this->execSQL($this->getUpgradeFile('7.1'));
+                $this->initOrder();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -183,6 +186,7 @@ class upgradeModel extends model
         case '6_3':
         case '6_4':
         case '7_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.0'));
+        case '7_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -911,6 +915,25 @@ class upgradeModel extends model
         {
             if(is_dir($childDir) and !is_file($childDir . '/index.html')) @touch($childDir . '/index.html');
         }
+        return true;
+    }
+
+    /**
+     * Init order.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function initOrder()
+    {
+        $dataList = $this->dao->select('id')->from(TABLE_PRODUCT)->orderBy('code_asc')->fetchAll();
+        $i = 1;
+        foreach($dataList as $data) $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
+
+        $dataList = $this->dao->select('id')->from(TABLE_PROJECT)->orderBy('code_asc')->fetchAll();
+        $i = 1;
+        foreach($dataList as $data) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
+
         return true;
     }
 
