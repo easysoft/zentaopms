@@ -47,7 +47,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $productID = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index($locate = 'yes', $productID = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
@@ -529,7 +529,7 @@ class product extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order`')->fetchAll();
+        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll();
         $this->display();
     }
 
@@ -545,7 +545,7 @@ class product extends control
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('`order`')->fetchAll();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('`order` desc')->fetchAll();
         foreach($products as $key => $product)
         {
             if(!$this->product->checkPriv($product)) unset($products[$key]);

@@ -238,6 +238,9 @@ class projectModel extends model
             $today         = helper::today();
             $creatorExists = false;
 
+            /* Save order. */
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID)->where('id')->eq($projectID)->exec();
+
             /* Copy team of project. */
             if($copyProjectID != '') 
             {
@@ -547,7 +550,7 @@ class projectModel extends model
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
                 ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->orderBy('order')
+                ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -558,7 +561,7 @@ class projectModel extends model
                 ->beginIF($status == 'isdoing')->andWhere('status')->ne('done')->andWhere('status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('order')
+                ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -612,7 +615,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'order', $pager = null)
+    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
         $projects    = $this->getList($status, 0, $productID);

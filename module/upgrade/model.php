@@ -926,11 +926,11 @@ class upgradeModel extends model
      */
     public function initOrder()
     {
-        $dataList = $this->dao->select('id')->from(TABLE_PRODUCT)->orderBy('code_asc')->fetchAll();
+        $dataList = $this->dao->select('id')->from(TABLE_PRODUCT)->orderBy('code_desc')->fetchAll();
         $i = 1;
         foreach($dataList as $data) $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
 
-        $dataList = $this->dao->select('id')->from(TABLE_PROJECT)->orderBy('code_asc')->fetchAll();
+        $dataList = $this->dao->select('id')->from(TABLE_PROJECT)->orderBy('code_desc')->fetchAll();
         $i = 1;
         foreach($dataList as $data) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
 

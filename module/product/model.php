@@ -135,7 +135,7 @@ class productModel extends model
             ->beginIF($status = 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->orderBy('`order`')
+            ->orderBy('`order` desc')
             ->fetchAll('id');
     }
 
@@ -215,7 +215,10 @@ class productModel extends model
             ->check('name', 'unique')
             ->check('code', 'unique')
             ->exec();
-        return $this->dao->lastInsertID();
+
+        $productID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID)->where('id')->eq($productID)->exec();
+        return $productID;
     }
 
     /**
@@ -461,7 +464,7 @@ class productModel extends model
      * @access public
      * @return array 
      */
-    public function getStats($orderBy = 'order_asc', $pager = null)
+    public function getStats($orderBy = 'order_desc', $pager = null)
     {
         $this->loadModel('report');
         $this->loadModel('story');
