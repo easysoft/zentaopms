@@ -15,6 +15,7 @@ $lang->group->create             = 'Create';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
 $lang->group->delete             = 'Delete';
+$lang->group->manageView         = 'Manage view';
 $lang->group->managePriv         = 'Privilege';
 $lang->group->managePrivByGroup  = 'Privilege';
 $lang->group->managePrivByModule = 'Manage privilege by module';
@@ -25,6 +26,9 @@ $lang->group->unlinkMember       = 'Remove member';
 $lang->group->confirmDelete      = 'Are you sure to delete this group?';
 $lang->group->successSaved       = 'Success saved.';
 $lang->group->errorNotSaved      = 'Not saved, please make sure you have selected some actions and groups.';
+$lang->group->visitProduct       = 'Visit product';
+$lang->group->visitProject       = 'Visit project';
+$lang->group->noticeVisit        = 'All elected representatives have no access restrictions';
 
 $lang->group->id       = 'Id';
 $lang->group->name     = 'Name';

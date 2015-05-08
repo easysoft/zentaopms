@@ -15,6 +15,7 @@ $lang->group->create             = '新增分组';
 $lang->group->edit               = '编辑分组';
 $lang->group->copy               = '复制分组';
 $lang->group->delete             = '删除分组';
+$lang->group->manageView         = '视图维护';
 $lang->group->managePriv         = '权限维护';
 $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
@@ -25,6 +26,9 @@ $lang->group->unlinkMember       = '移除用户';
 $lang->group->confirmDelete      = '您确定删除该用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
+$lang->group->visitProduct       = '可访问的产品';
+$lang->group->visitProject       = '可访问的项目';
+$lang->group->noticeVisit        = '全不选代表没有访问限制';
 
 $lang->group->id       = '编号';
 $lang->group->name     = '分组名称';

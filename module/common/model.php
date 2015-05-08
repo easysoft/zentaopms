@@ -454,28 +454,26 @@ class commonModel extends model
         /* Sort the subMenu according to menuOrder. */
         if(isset($lang->$moduleName->menuOrder))
         {
-            $menus = $submenus;
+            $menus = json_decode(json_encode($submenus), true);
             $submenus = new stdclass();
 
             ksort($lang->$moduleName->menuOrder, SORT_ASC);
-            if(isset($menus->list)) 
+            if(isset($menus['list'])) 
             {
-                $submenus->list = $menus->list; 
-                unset($menus->list);
+                $submenus->list = $menus['list']; 
+                unset($menus['list']);
             }
             foreach($lang->$moduleName->menuOrder as $order)  
             {
-                if(($order != 'list') && isset($menus->$order))
+                if(($order != 'list') && isset($menus[$order]))
                 {
-                    $subOrder = $menus->$order;
-                    unset($menus->$order);
+                    $subOrder = $menus[$order];
+                    unset($menus[$order]);
                     $submenus->$order = $subOrder;
                 }
             }
-            foreach($menus as $key => $menu)
-            {
-                $submenus->$key = $menu; 
-            }
+
+            foreach($menus as $key => $menu) $submenus->$key = $menu; 
         }
 
         /* The beginning of the menu. */

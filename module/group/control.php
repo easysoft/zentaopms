@@ -120,6 +120,34 @@ class group extends control
     }
 
     /**
+     * manageView 
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
+    public function manageView($groupID)
+    {
+        if($_POST)
+        {
+            $result = $this->group->updateView($groupID);
+            die(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
+        }
+
+        $group = $this->group->getById($groupID);
+        if($group->acl) $group->acl = json_decode($group->acl, true);
+
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
+        $this->view->position[] = $group->name;
+        $this->view->position[] = $this->lang->group->manageView;
+
+        $this->view->group      = $group;
+        $this->view->products   = $this->loadModel('product')->getPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->display();
+    }
+
+    /**
      * Manage privleges of a group. 
      * 
      * @param  int    $groupID 

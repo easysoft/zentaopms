@@ -538,22 +538,46 @@ class userModel extends model
         $rights = array();
         if($account == 'guest')
         {
+            $acl  = $this->dao->select('acl')->from(TABLE_GROUP)->where('name')->eq('guest')->fetch('acl');
+            $acls = empty($acl) ? array() : json_decode($acl, true);
+
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.id = t2.group')->where('t1.name')->eq('guest');
         }
         else
         {
+            $groups = $this->dao->select('t1.acl')->from(TABLE_GROUP)->alias('t1')
+                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
+                ->where('t2.account')->eq($account)
+                ->fetchAll();
+            $acls = array();
+            foreach($groups as $group)
+            {
+                if(empty($group->acl)) continue;
+                $acl = json_decode($group->acl, true);
+                if(empty($acls))
+                {
+                    $acls = $acl;
+                    continue;
+                }
+
+                $acls['views'] = array_merge($acls['views'], $acl['views']);
+                if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
+                if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
+            }
+
             $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.group = t2.group')
                 ->where('t1.account')->eq($account);
         }
+
         $stmt = $sql->query();
-        if(!$stmt) return $rights;
+        if(!$stmt) return array('rights' => $rights, 'acls' => $acls);
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
-        return $rights;
+        return array('rights' => $rights, 'acls' => $acls);
     }
 
     /**

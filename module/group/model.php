@@ -257,6 +257,24 @@ class groupModel extends model
     }
 
     /**
+     * Update view priv
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return bool
+     */
+    public function updateView($groupID)
+    {
+        $actions = $this->post->actions;
+        if(!isset($actions['views']['product']) and isset($actions['products'])) unset($actions['products']);
+        if(!isset($actions['views']['project']) and isset($actions['projects'])) unset($actions['projects']);
+
+        $actions = empty($actions) ? '' : json_encode($actions);
+        $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
+        return dao::isError() ? false : true;
+    }
+
+    /**
      * Update privilege by module.
      * 
      * @access public

@@ -29,6 +29,9 @@ class projectModel extends model
         $account = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) !== false) return true; 
 
+        $acls = $this->app->user->rights['acls'];
+        if(!empty($acls['projects'])) return !in_array($project->id, $acls['projects']) ? false : true;
+
         /* If project is open, return true. */
         if($project->acl == 'open') return true;
 

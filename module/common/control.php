@@ -85,15 +85,29 @@ class common extends control
      */
     public static function hasPriv($module, $method)
     {
-        global $app;
+        global $app, $lang;
 
         /* Check is the super admin or not. */
         $account = ',' . $app->user->account . ',';
         if(strpos($app->company->admins, $account) !== false) return true; 
 
         /* If not super admin, check the rights. */
-        $rights  = $app->user->rights;
-        if(isset($rights[strtolower($module)][strtolower($method)])) return true;
+        $rights  = $app->user->rights['rights'];
+        $acls    = $app->user->rights['acls'];
+        $module  = strtolower($module);
+        $method  = strtolower($method);
+        if(isset($rights[$module][$method]))
+        {
+            if(empty($acls)) return true;
+            $menu = isset($lang->menugroup->$module) ? $lang->menugroup->$module : $module;
+            $menu = strtolower($menu);
+            if(!isset($lang->$menu->menu)) return true;
+            if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;
+            if($module == 'company' and $method == 'dynamic') return true;
+            if($module == 'action' and $method == 'editcomment') return true;
+            if(!isset($acls['views'][$menu])) return false;
+            return true;
+        }
         return false;
     }
 

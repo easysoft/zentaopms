@@ -1,0 +1,58 @@
+<?php
+/**
+ * The manage view by group view of group module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv11.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     group
+ * @version     $Id: managepriv.html.php 1517 2011-03-07 10:02:57Z wwccss $
+ * @link        http://www.zentao.net
+ */
+?>
+<?php include '../../common/view/header.html.php';?>
+<form class='form-condensed' method='post' target='hiddenwin'>
+  <table class='table table-hover table-striped table-bordered table-form'> 
+    <tr>
+      <th class='w-150px'>
+        <?php echo $lang->group->module;?>
+        <input type="checkbox" name="allchecker[]" onclick="selectAll(this, '', 'checkbox')">
+      </th>
+      <td colspan='2'>
+        <?php foreach($lang->menu as $menu):?>
+        <?php list($moduleName, $module) = explode('|', $menu);?>
+        <?php if($module == 'my') continue;?>
+        <?php $moduleName = strip_tags($moduleName);?>
+        <div class='group-item'>
+          <label class='priv' for='<?php echo $module?>'>
+            <input type='checkbox' id='<?php echo $module?>' name='actions[views][<?php echo strtolower($module);?>]' value='<?php echo $module;?>' <?php if(isset($group->acl['views'][$module])) echo "checked";?> />
+            <?php echo $moduleName;?>
+          </label>
+        </div>
+      <?php endforeach;?>
+      </td>
+    </tr>
+    <tr id='productBox' style='display:none'>
+      <th class='text-right'><?php echo $lang->group->visitProduct?></th>
+      <td class='w-p60'><?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='chosen' multiple")?></td>
+      <td><?php echo $lang->group->noticeVisit?></td>
+    </tr>
+    <tr id='projectBox' style='display:none'>
+      <th class='text-right'><?php echo $lang->group->visitProject?></th>
+      <td><?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='chosen' multiple")?></td>
+      <td><?php echo $lang->group->noticeVisit?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
+      <td colspan='2'>
+        <?php 
+        echo html::submitButton($lang->save);
+        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
+        echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
+        echo $lang->group->noticeVisit;
+        ?>
+      </td>
+    </tr>
+  </table>
+</form>
+<?php include '../../common/view/footer.html.php';?>
