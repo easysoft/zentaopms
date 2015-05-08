@@ -30,6 +30,7 @@ $lang->editor->deleteConfirm = 'Are you sure?';
 $lang->editor->extendConfirm = 'Would you reuse the code.';
 $lang->editor->repeatFile    = 'File name repeat';
 $lang->editor->repeatPage    = 'This page has extisted. Is override?';
+$lang->editor->noticeOkFile  = 'The ok file does not exist or has expired\nFor safe, please re create the ok file\nYou can perform the following commands on the server: \nFor windows:echo ok > %s\nFor linux:touch %s;';
 
 $lang->editor->notWritable   = "Can not writable, maybe no power. please try chmod 777 -R ";
 $lang->editor->notDelete     = "Can not delete, please check power!";
