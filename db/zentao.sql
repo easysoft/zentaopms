@@ -348,7 +348,6 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `createdDate` datetime NOT NULL,
   `createdVersion` varchar(20) NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
-  `name` varchar(90) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
