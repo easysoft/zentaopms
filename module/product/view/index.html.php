@@ -55,7 +55,7 @@
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
     <tbody class='sortable' id='productTableList'>
       <?php foreach($productStats as $product):?>
-      <tr class='text-center'>
+      <tr class='text-center' data-id='<?php echo $product->id ?>' data-order='<?php echo $product->id ?>'>
         <?php if(strpos($orderBy, 'order') !== false):?>
         <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
         <?php endif;?>

@@ -49,7 +49,7 @@
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <tbody class='sortable' id='projectTableList'>
   <?php foreach($projectStats as $project):?>
-  <tr class='text-center'>
+  <tr class='text-center' data-id='<?php echo $project->id ?>' data-order='<?php echo $project->id ?>'>
     <?php if(strpos($orderBy, 'order') !== false):?>
     <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
     <?php endif;?>
