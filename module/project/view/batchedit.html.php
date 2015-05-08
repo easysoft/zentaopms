@@ -28,7 +28,7 @@
       <th class='w-100px'><?php echo $lang->project->status;?></th>
       <th class='w-110px'><?php echo $lang->project->begin;?> <span class='required'></span></th>
       <th class='w-110px'><?php echo $lang->project->end;?> <span class='required'></span></th>
-      <th class='w-150px'>    <?php echo $lang->project->days;?></th>
+      <th class='w-150px'><?php echo $lang->project->days;?></th>
     </tr>
   </thead>
   <?php foreach($projectIDList as $projectID):?>
@@ -42,7 +42,7 @@
     <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
     <td>
       <div class='input-group'>
-        <?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='form-control'");?>
+        <?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='form-control' autocomplete='off'");?>
         <span class='input-group-addon'><?php echo $lang->project->day;?></span>
       </div>
     </td>

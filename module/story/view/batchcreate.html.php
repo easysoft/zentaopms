@@ -48,7 +48,7 @@
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
       <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
-      <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
+      <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control' autocomplete='off'");?></td>
       <td>
         <?php
         echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");
@@ -72,7 +72,7 @@
       <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
       <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
-      <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
+      <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");?></td>
     </tr>  
     <?php endfor;?>
@@ -90,7 +90,7 @@
         <?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control autosize'");?>
       </td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("pri[%s]", $priList, $pri, "class='form-control'");?></td>
-      <td><?php echo html::input("estimate[%s]", $estimate, "class='form-control'");?></td>
+      <td><?php echo html::input("estimate[%s]", $estimate, "class='form-control autocomplete='off''");?></td>
       <td><?php echo html::select("needReview[%s]", $lang->story->reviewList, 0, "class='form-control'");?></td>
     </tr>
   </tbody>

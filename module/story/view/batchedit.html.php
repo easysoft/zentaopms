@@ -43,7 +43,7 @@
       <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$storyID]",       $moduleOptionMenus[$stories[$storyID]->product], $stories[$storyID]->module, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("plans[$storyID]",         $productPlans[$stories[$storyID]->product], $stories[$storyID]->plan, "class='form-control chosen'");?></td>
       <td><?php echo html::input("titles[$storyID]",         $stories[$storyID]->title, 'class=form-control'); ?></td>
-      <td><?php echo html::input("estimates[$storyID]",      $stories[$storyID]->estimate, 'class=form-control'); ?></td>
+      <td><?php echo html::input("estimates[$storyID]",      $stories[$storyID]->estimate, "class='form-control' autocomplete='off'"); ?></td>
       <td><?php echo html::select("pris[$storyID]",          (array)$lang->story->priList, $stories[$storyID]->pri, 'class=form-control');?></td>
       <td><?php echo html::select("sources[$storyID]",       $lang->story->sourceList, $stories[$storyID]->source, 'class=form-control');?></td>
       <td class='story-<?php echo $stories[$storyID]->status;?>'><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>

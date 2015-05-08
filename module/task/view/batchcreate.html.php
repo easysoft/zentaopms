@@ -69,7 +69,7 @@
       <td><?php echo html::input("name[$i]", '', 'class=form-control');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td style='overflow:visible'><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
-      <td><?php echo html::input("estimate[$i]", '', 'class=form-control text-center');?></td>
+      <td><?php echo html::input("estimate[$i]", '', "class='form-control text-center' autocomplete='off'");?></td>
       <td>
         <?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?>
       </td>
@@ -95,7 +95,7 @@
       <td><?php echo html::input("name[%s]", '', 'class=form-control');?></td>
       <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control'");?></td>
-      <td><?php echo html::input("estimate[%s]", '', 'class=form-control text-center');?></td>
+      <td><?php echo html::input("estimate[%s]", '', "class='form-control text-center' autocomplete='off'");?></td>
       <td><?php echo html::textarea("desc[%s]", '', "rows='1' class='form-control autosize'");?></td>
       <td><?php echo html::select("pri[%s]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>

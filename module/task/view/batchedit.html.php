@@ -53,9 +53,9 @@
       <td><?php echo html::select("types[$taskID]",         $lang->task->typeList, $tasks[$taskID]->type, 'class=form-control');?></td>
       <td><?php echo html::select("statuses[$taskID]",      $lang->task->statusList, $tasks[$taskID]->status, 'class=form-control');?></td>
       <td><?php echo html::select("pris[$taskID]",          (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=form-control');?></td>
-      <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='form-control text-center'");?></td>
-      <td><?php echo html::input("consumeds[$taskID]",      '', "class='form-control text-center'");?></td>
-      <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='form-control text-center'");?></td>
+      <td><?php echo html::input("estimates[$taskID]",      $tasks[$taskID]->estimate, "class='form-control text-center' autocomplete='off'");?></td>
+      <td><?php echo html::input("consumeds[$taskID]",      '', "class='form-control text-center' autocomplete='off'");?></td>
+      <td><?php echo html::input("lefts[$taskID]",          $tasks[$taskID]->left, "class='form-control text-center' autocomplete='off'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("finishedBys[$taskID]",   $members, $tasks[$taskID]->finishedBy, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("closedBys[$taskID]",     $members, $tasks[$taskID]->closedBy, "class='form-control chosen'");?></td>
       <td><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=form-control');?></td>
