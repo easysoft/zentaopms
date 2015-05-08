@@ -120,6 +120,13 @@ class extension extends control
         $this->view->upgrade     = $upgrade;
         $this->view->title       = $installTitle . $extension;
 
+        
+        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        if($statusFile)
+        {
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile, $statusFile);
+            die($this->display());
+        }
         /* Get the package file name. */
         $packageFile = $this->extension->getPackageFile($extension);
 

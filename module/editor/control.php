@@ -134,6 +134,11 @@ class editor extends control
      */
     public function save($filePath = '', $action = '')
     {
+        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        if($statusFile)
+        {
+            die(js::alert(sprintf($this->lang->editor->noticeOkFile, $statusFile, $statusFile, $statusFile)));
+        }
         if($filePath and $_POST)
         {
             $filePath = helper::safe64Decode($filePath);

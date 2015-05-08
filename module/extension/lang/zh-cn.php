@@ -81,6 +81,14 @@ $lang->extension->viewInstalled            = '查看已安装插件';
 $lang->extension->viewAvailable            = '查看可安装插件';
 $lang->extension->viewDeactivated          = '查看已禁用插件';
 $lang->extension->backDBFile               = '插件相关数据已经备份到 %s 文件中！';
+$lang->extension->noticeOkFile             = '<h4>ok文件不存在或文件已过期</h4>
+    <h4>为了系统的安全，请重新创建ok文件</h4>
+    <p>您可在服务器执行下面相应的命令：</p>
+    <ul>
+    <li>windows: 打开命令行，执行<strong>echo ok &gt; %s</strong></li>
+    <li>linux: <strong>touch %s;</strong></li>
+    <li>或者删掉 <strong>"%s"</strong> 这个文件 ，重新创建一个ok.txt文件，不需要内容。</li>
+    </ul> '; 
 
 $lang->extension->upgradeExt     = '升级';
 $lang->extension->installExt     = '安装';
