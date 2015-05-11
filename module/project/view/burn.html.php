@@ -40,7 +40,6 @@
   <canvas id='burnChart' width='800' height='400' data-bezier-curve='false' data-responsive='true'></canvas>
   <h1><?php echo $projectName . ' ' . $this->lang->project->burn;?></h1>
 </div>
-<?php echo json_encode($chartData) ?>
 <script>
 function initBurnChar()
 {
