@@ -729,7 +729,7 @@ class project extends control
         $position[] = $this->lang->project->burn;
 
         /* Get date list. */
-        list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval);
+        list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'j/n');
 
         $sets          = $this->project->getBurnDataFlot($project->id);
         $limitJSON     = '[]';
@@ -740,16 +740,12 @@ class project extends control
         $days         = count($dateList) - 1;
         $rate         = $firstTime / $days;
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .='[' . $i . ',' . ($days - $i) * $rate . '],';
+        foreach($dateList as $i => $date) $baselineJSON .= ($days - $i) * $rate . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
-        $flotJSON['data']     = $this->report->createSingleJSON($sets, $dateList);
-        $flotJSON['limit']    = $limitJSON;
-        $flotJSON['baseline'] = $baselineJSON;
-        $flotJSON['dateList'] = json_encode($dateList);
-        $flotJSON['ticks']    = json_encode(array_keys($dateList));
-
-        $charts = $this->report->createJSChartFlot($project->name, $flotJSON, 900, 400);
+        $chartData['labels'] = $dateList;
+        $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
+        $chartData['baseLine'] = $baselineJSON;
 
         /* Set a space when assemble the string for english. */
         $space   = $this->app->getClientLang() == 'en' ? ' ' : '';
@@ -757,14 +753,16 @@ class project extends control
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . $space . ($key + 1) . $space . $this->lang->day;
 
         /* Assign. */
-        $this->view->title     = $title;
-        $this->view->position  = $position;
-        $this->view->tabID     = 'burn';
-        $this->view->charts    = $charts;
-        $this->view->projectID = $projectID;
-        $this->view->type      = $type;
-        $this->view->interval  = $interval;
-        $this->view->dayList   = array('full' => $this->lang->project->interval . $space . 1 . $space . $this->lang->day) + $dayList;
+        $this->view->title       = $title;
+        $this->view->position    = $position;
+        $this->view->tabID       = 'burn';
+        $this->view->charts      = $charts;
+        $this->view->projectID   = $projectID;
+        $this->view->projectName = $project->name;
+        $this->view->type        = $type;
+        $this->view->interval    = $interval;
+        $this->view->chartData   = $chartData;
+        $this->view->dayList     = array('full' => $this->lang->project->interval . $space . 1 . $space . $this->lang->day) + $dayList;
 
         $this->display();
     }

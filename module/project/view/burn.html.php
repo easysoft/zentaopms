@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/chart.html.php';?>
 <?php include './taskheader.html.php';?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('type', $type);?>
@@ -36,6 +37,32 @@
       <div class='text pull-left'><?php echo $lang->project->howToUpdateBurn;?></div>
     </div>
   </div>
-  <?php echo $charts;?>
+  <canvas id='burnChart' width='800' height='400' data-bezier-curve='false' data-responsive='true'></canvas>
+  <h1><?php echo $projectName . ' ' . $this->lang->project->burn;?></h1>
 </div>
+<?php echo json_encode($chartData) ?>
+<script>
+function initBurnChar()
+{
+    var data = 
+    {
+        labels: <?php echo json_encode($chartData['labels'])?>,
+        datasets: [
+        {
+            label: "<?php echo $lang->project->baseline;?>",
+            color: "#CCC",
+            fillColor: "rgba(0,0,0,0)",
+            showTooltips: false,
+            data: <?php echo $chartData['baseLine']?>
+        },
+        {
+            label: "<?php echo $lang->project->Left?>",
+            color: "#0033CC",
+            data: <?php echo $chartData['burnLine']?>
+        }]
+    };
+
+    var burnChart = $("#burnChart").lineChart(data, {});
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>
