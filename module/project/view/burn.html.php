@@ -37,7 +37,7 @@
       <div class='text pull-left'><?php echo $lang->project->howToUpdateBurn;?></div>
     </div>
   </div>
-  <canvas id='burnChart' width='800' height='400' data-bezier-curve='false' data-responsive='true'></canvas>
+  <div class='canvas-wrapper'><div class='chart-canvas'><canvas id='burnChart' width='800' height='400' data-bezier-curve='false' data-responsive='true'></canvas></div></div>
   <h1><?php echo $projectName . ' ' . $this->lang->project->burn;?></h1>
 </div>
 <script>
