@@ -44,23 +44,22 @@
         <strong><?php echo $lang->task->report->common;?></strong>
       </div>
       <table class='table active-disabled'>
-        <?php foreach($charts as $chartType => $chartContent):?>
+        <?php foreach($charts as $chartType => $chartOption):?>
         <tr class='text-top'>
           <td>
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->task->report->charts[$chartType];?></h5>
-              <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='500' height='140' data-responsive='true'></canvas></div>
+              <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='<?php echo $chartOption->width;?>' height='<?php echo $chartOption->height;?>' data-responsive='true'></canvas></div>
             </div>
           </td>
           <td style='width: 320px'>
-            <?php $height = zget($lang->task->report->$chartType, 'height', $lang->story->report->options->height) . 'px'; ?>
-            <div style="max-height:<?php echo $height;?>; overflow:auto;">
-              <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='pie' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
+            <div style="overflow:auto;" class='table-wrapper'>
+              <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
                 <caption class='text-left'><?php echo $lang->task->report->charts[$chartType];?></caption>
                 <thead>
                   <tr>
                     <th class='w-20px'></th>
-                    <th><?php echo $lang->task->report->$chartType->item;?></th>
+                    <th class='chart-label'><?php echo $lang->task->report->$chartType->item;?></th>
                     <th><?php echo $lang->task->report->value;?></th>
                     <th><?php echo $lang->report->percent;?></th>
                   </tr>

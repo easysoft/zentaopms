@@ -1003,7 +1003,7 @@ class task extends control
                 $chartOption = $this->lang->task->report->$chart;
                 $this->task->mergeChartOption($chart);
 
-                $this->view->charts[$chart] = $this->report->createJSChart($chartOption->swf, $chartXML, $chartOption->width, $chartOption->height);
+                $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }

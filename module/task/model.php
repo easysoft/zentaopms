@@ -1113,7 +1113,7 @@ class taskModel extends model
         $commonOption = $this->lang->task->report->options;
 
         $chartOption->graph->caption = $this->lang->task->report->charts[$chartType];
-        if(!isset($chartOption->swf))    $chartOption->swf    = $commonOption->swf;
+        if(!isset($chartOption->type))    $chartOption->type  = $commonOption->type;
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
         if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
 

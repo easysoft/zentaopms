@@ -182,18 +182,9 @@ $lang->task->report->charts['finishedTasksPerDay']  = 'Finished tasks per day';
 
 $lang->task->report->options = new stdclass();
 $lang->task->report->options->graph = new stdclass();
-$lang->task->report->options->swf                     = 'pie2d';
-$lang->task->report->options->width                   = 'auto';
-$lang->task->report->options->height                  = 300;
-$lang->task->report->options->graph->baseFontSize     = 12;
-$lang->task->report->options->graph->showNames        = 1;
-$lang->task->report->options->graph->formatNumber     = 1;
-$lang->task->report->options->graph->decimalPrecision = 0;
-$lang->task->report->options->graph->animation        = 0;
-$lang->task->report->options->graph->rotateNames      = 0;
-$lang->task->report->options->graph->yAxisName        = 'COUNT';
-$lang->task->report->options->graph->pieRadius        = 100;
-$lang->task->report->options->graph->showColumnShadow = 0;
+$lang->task->report->options->type   = 'pie';
+$lang->task->report->options->width  = 500;
+$lang->task->report->options->height = 140;
 
 $lang->task->report->tasksPerProject      = new stdclass();
 $lang->task->report->tasksPerModule       = new stdclass();
@@ -250,9 +241,7 @@ $lang->task->report->tasksPerConsumed->graph->xAxisName     = 'Time';
 $lang->task->report->tasksPerFinishedBy->graph->xAxisName   = 'User';
 $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Closed Reason';
 
-$lang->task->report->finishedTasksPerDay->swf                = 'column2d';
-$lang->task->report->finishedTasksPerDay->height             = 400;
+$lang->task->report->finishedTasksPerDay->type               = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = 'Date';
-$lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->estimateTip = 'The estimated time for this task';
