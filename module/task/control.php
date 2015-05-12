@@ -992,7 +992,6 @@ class task extends control
         
         $this->loadModel('report');
         $this->view->charts   = array();
-        $this->view->renderJS = '';
 
         if(!empty($_POST))
         {

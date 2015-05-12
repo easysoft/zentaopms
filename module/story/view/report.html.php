@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/chart.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
@@ -43,24 +44,31 @@
         <strong><?php echo $lang->story->report->common;?></strong>
       </div>
       <table class='table active-disabled'>
-        <?php foreach($charts as $chartType => $chartContent):?>
-        <tr valign='top'>
-          <td><?php echo $chartContent;?></td>
-          <td width='300'>
-            <div style="height:<?php echo $lang->story->report->options->height . 'px';?>; overflow:auto">
-              <table class='table table-condensed table-hover table-striped table-bordered'>
+        <?php foreach($charts as $chartType => $chartOption):?>
+        <tr class='text-top'>
+          <td>
+            <div class='chart-wrapper text-center'>
+              <h5><?php echo $lang->story->report->charts[$chartType];?></h5>
+              <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='<?php echo $chartOption->width;?>' height='<?php echo $chartOption->height;?>' data-responsive='true'></canvas></div>
+            </div>
+          </td>
+          <td style='width: 320px'>
+            <div style="overflow:auto">
+              <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
                 <caption class='text-left'><?php echo $lang->story->report->charts[$chartType];?></caption>
                 <thead>
                   <tr>
-                    <th><?php echo $lang->story->report->$chartType->item;?></th>
+                    <th class='w-20px'></th>
+                    <th class='chart-label'><?php echo $lang->story->report->$chartType->item;?></th>
                     <th><?php echo $lang->story->report->value;?></th>
                     <th><?php echo $lang->report->percent;?></th>
                   </tr>
                 </thead>
                 <?php foreach($datas[$chartType] as $key => $data):?>
                 <tr class='text-center'>
-                  <td><?php echo $data->name;?></td>
-                  <td><?php echo $data->value;?></td>
+                  <td class='chart-color'><i class='chart-color-dot icon-circle'></i></td>
+                  <td class='chart-label'><?php echo $data->name;?></td>
+                  <td class='chart-value'><?php echo $data->value;?></td>
                   <td><?php echo ($data->percent * 100) . '%';?></td>
                 </tr>
                 <?php endforeach;?>
@@ -73,5 +81,4 @@
     </div>
   </div>
 </div>
-<?php echo $renderJS;?>
 <?php include '../../common/view/footer.html.php';?>

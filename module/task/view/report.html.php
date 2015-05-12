@@ -83,5 +83,4 @@
     </div>
   </div>
 </div>
-<!-- <?php echo $renderJS;?> -->
 <?php include '../../common/view/footer.html.php';?>

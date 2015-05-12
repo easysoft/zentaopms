@@ -1085,7 +1085,6 @@ class story extends control
     {
         $this->loadModel('report');
         $this->view->charts   = array();
-        $this->view->renderJS = '';
 
         if(!empty($_POST))
         {
@@ -1096,11 +1095,10 @@ class story extends control
                 $chartOption = $this->lang->story->report->$chart;
                 $this->story->mergeChartOption($chart);
 
-                $chartXML  = $this->report->createSingleXML($chartData, $chartOption->graph);
-                $this->view->charts[$chart] = $this->report->createJSChart($chartOption->swf, $chartXML, $chartOption->width, $chartOption->height);
+
+                $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
-            $this->view->renderJS = $this->report->renderJsCharts(count($this->view->charts));
         }
         $this->products = $this->product->getPairs();
         $this->product->setMenu($this->products, $productID);

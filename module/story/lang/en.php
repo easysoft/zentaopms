@@ -217,19 +217,10 @@ $lang->story->report->charts['storysPerClosedReason']   = 'Storys for reason';
 $lang->story->report->charts['storysPerChange']         = 'Story version';
 
 $lang->story->report->options = new stdclass();
-$lang->story->report->options->graph = new stdclass();
-$lang->story->report->options->swf                     = 'pie2d';
-$lang->story->report->options->width                   = 'auto';
-$lang->story->report->options->height                  = 300;
-$lang->story->report->options->graph->baseFontSize     = 12;
-$lang->story->report->options->graph->showNames        = 1;
-$lang->story->report->options->graph->formatNumber     = 1;
-$lang->story->report->options->graph->decimalPrecision = 0;
-$lang->story->report->options->graph->animation        = 0;
-$lang->story->report->options->graph->rotateNames      = 0;
-$lang->story->report->options->graph->yAxisName        = 'COUNT';
-$lang->story->report->options->graph->pieRadius        = 100;
-$lang->story->report->options->graph->showColumnShadow = 0; 
+$lang->story->report->options->graph   = new stdclass();
+$lang->story->report->options->type    = 'pie';
+$lang->story->report->options->width   = 500;
+$lang->story->report->options->height  = 140;
 
 $lang->story->report->storysPerProduct      = new stdclass();     
 $lang->story->report->storysPerModule       = new stdclass();
