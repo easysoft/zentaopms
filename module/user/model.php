@@ -206,8 +206,20 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->setIF($this->post->password1 == false, 'password', '')
-            ->remove('group, password1, password2')
+            ->remove('group, password1, password2, verifyPwd')
             ->get();
+
+        if(isset($this->config->safe->mode) and $this->pwdLevel($this->post->password1) < $this->config->safe->mode)
+        {
+            dao::$errors['password1'][] = $this->lang->user->weakPwd;
+            return false;
+        }
+
+        if(empty($_POST['verifyPwd']) or md5($this->post->verifyPwd) != $this->app->user->password)
+        {
+            dao::$errors['verifyPwd'][] = $this->lang->user->error->verifyPwd;
+            return false;
+        }
 
         $this->dao->insert(TABLE_USER)->data($user)
             ->autoCheck()
@@ -234,6 +246,8 @@ class userModel extends model
      */
     public function batchCreate()
     {
+        if(empty($_POST['verifyPwd']) or md5($this->post->verifyPwd) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPwd));
+
         $users    = fixer::input('post')->get(); 
         $data     = array();
         $accounts = array();
@@ -297,7 +311,7 @@ class userModel extends model
      */
     public function update($userID)
     {
-        if(!$this->checkPassword()) return;
+        if(!$this->checkPassword(true)) return;
 
         $oldUser = $this->getById($userID);
 
@@ -305,8 +319,20 @@ class userModel extends model
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
-            ->remove('password1, password2, groups')
+            ->remove('password1, password2, groups,verifyPwd')
             ->get();
+
+        if(isset($this->config->safe->mode) and $user->password and $this->pwdLevel($this->post->password1) < $this->config->safe->mode)
+        {
+            dao::$errors['password1'][] = $this->lang->user->weakPwd;
+            return false;
+        }
+
+        if(empty($_POST['verifyPwd']) or md5($this->post->verifyPwd) != $this->app->user->password)
+        {
+            dao::$errors['verifyPwd'][] = $this->lang->user->error->verifyPwd;
+            return false;
+        }
 
         $this->dao->update(TABLE_USER)->data($user)
             ->autoCheck()
@@ -340,6 +366,7 @@ class userModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
         }
+        if($user->password and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
     }
 
     /**
@@ -350,6 +377,8 @@ class userModel extends model
      */
     public function batchEdit()
     {
+        if(empty($_POST['verifyPwd']) or md5($this->post->verifyPwd) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPwd));
+
         $oldUsers     = $this->dao->select('id, account')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchPairs('id', 'account');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($this->post->account)->fetchGroup('account', 'id');
 
@@ -406,10 +435,23 @@ class userModel extends model
         
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
-            ->remove('account, password1, password2')
+            ->remove('account, password1, password2, originalPwd')
             ->get();
 
+        if(isset($this->config->safe->mode) and $this->pwdLevel($this->post->password1) < $this->config->safe->mode)
+        {
+            dao::$errors['password1'][] = $this->lang->user->weakPwd;
+            return false;
+        }
+
+        if(empty($_POST['originalPwd']) or md5($this->post->originalPwd) != $this->app->user->password)
+        {
+            dao::$errors['originalPwd'][] = $this->lang->user->error->originalPwd;
+            return false;
+        }
+
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
+        $this->app->user->password = $user->password;
     }
 
     /**
@@ -418,9 +460,9 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkPassword()
+    public function checkPassword($canNoPwd = false)
     {
-        if(empty($_POST['password1'])) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+        if(!$canNoPwd and empty($_POST['password1'])) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
         if($this->post->password1 != false)
         {
             if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
@@ -823,5 +865,99 @@ class userModel extends model
         $data['user']->company  = $this->app->company->name;
 
         return $data;
+    }
+
+    /**
+     * Get weak users.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getWeakUsers()
+    {
+        $users = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll();
+        $weaks = array();
+        foreach(explode(',', $this->config->safe->weak) as $weak)
+        {
+            $weak = md5(trim($weak));
+            $weaks[$weak] = $weak;
+        }
+
+        $weakUsers = array();
+        foreach($users as $user)
+        {
+            if(isset($weaks[$user->password])
+                or $user->password == md5($user->account)
+                or ($user->phone and $user->password == md5($user->phone))
+                or ($user->mobile and $user->password == md5($user->mobile))
+                or ($user->birthday and $user->password == md5($user->birthday))
+            )
+            {
+                $weakUsers[] = $user;
+            }
+        }
+
+        return $weakUsers;
+    }
+
+    /**
+     * Get password level. 
+     * 
+     * @param  string    $password 
+     * @access public
+     * @return int
+     */
+    public function pwdLevel($password)
+    {
+        if(strlen($password) == 0) return 0;
+
+        $strength = 0;
+        $length   = strlen($password);
+
+        if(strtolower($password) != $password) $strength += 1;
+        if(strtoupper($password) == $password) $strength += 1;
+
+        if($length >= 4 && $length <= 7)
+        {
+            $strength += 1;
+        }
+        elseif($length >= 8 && $length <= 15)
+        {
+            $strength += 2;
+        }
+        elseif($length >= 16 && $length <= 35)
+        {
+            $strength += 3;
+        }
+        elseif($length > 35)
+        {
+            $strength += 4;
+        }
+
+        $uniqueChars = '';
+        $chars = str_split($password);
+        foreach($chars as $letter)
+        {
+            if($letter >= 48 && $letter <= 57)
+            {
+                $strength += 1;
+            }
+            elseif($letter >= 65 && $letter <= 90)
+            {
+                $strength += 1;
+            }
+            elseif(!($letter >= 97 && $letter <= 122))
+            {
+                $strength += 2;
+            }
+            if(strpos($uniqueChars, $letter) === false) $uniqueChars .= $letter;
+        }
+        $strength += strlen($uniqueChars) * 2;
+
+        $strength = $strength > 99 ? 99 : $strength;
+        $strength = floor($strength / 10);
+        $strength = floor($strength / 3);
+
+        return $strength;
     }
 }

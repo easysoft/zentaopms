@@ -39,3 +39,8 @@ function changeEmail(num)
     if(mailsuffix != '' && (mailValue == '' || mailValue == account[num] + mailsuffix)) $('.email_' + num).val($('.account_' + num).val() + mailsuffix);
     account[num] = $('.account_' + num).val();
 }
+
+function checkPwd(password)
+{
+    $('#pwdLevel').html(pwdLevelList[pwdLevel(password)]);
+}

@@ -27,6 +27,7 @@ $lang->user->gender      = 'Gender';
 $lang->user->email       = 'Email';
 $lang->user->basicInfo   = 'Basic info';
 $lang->user->accountInfo = 'Account info';
+$lang->user->verify      = 'Safety verification';
 $lang->user->contactInfo = 'Contact info';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
@@ -43,6 +44,8 @@ $lang->user->ip          = 'Last IP';
 $lang->user->last        = 'Last login';
 $lang->user->status      = 'Status';
 $lang->user->ditto       = 'Ditto';
+$lang->user->originalPwd = 'Original password';
+$lang->user->verifyPwd   = 'Verify password';
 
 $lang->user->index           = "Index";
 $lang->user->view            = "Info";
@@ -103,6 +106,7 @@ $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s
 $lang->user->loginFailed = "Login failed, please check your account and password.";
 $lang->user->lockWarning = "You only have %s times to try.";
 $lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s minutes.";
+$lang->user->weakPwd     = "Your password strength is less than the system settings.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -118,6 +122,10 @@ $lang->user->roleList['others'] = 'Others';
 $lang->user->genderList['m'] = 'Male';
 $lang->user->genderList['f'] = 'Female';
 
+$lang->user->pwdLevelList[0] = 'Weak';
+$lang->user->pwdLevelList[1] = 'Intermediate';
+$lang->user->pwdLevelList[2] = 'Strong';
+
 $lang->user->statusList['active'] = 'Activate';
 $lang->user->statusList['delete'] = 'Deleted';
 
@@ -131,6 +139,7 @@ $lang->user->placeholder->role      = '';
 $lang->user->placeholder->group     = '';
 $lang->user->placeholder->join      = 'The date the employee joined the company';
 $lang->user->placeholder->commiter  = 'The account in version control systems';
+$lang->user->placeholder->verify    = 'You need to enter the password to verify.';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，Letters/underline/numbers, three above";
@@ -139,6 +148,8 @@ $lang->user->error->realname      = "ID %s，please input realname";
 $lang->user->error->password      = "ID %s，password must be six letters at least";
 $lang->user->error->mail          = "ID %s，please input correct email address";
 $lang->user->error->role          = "ID %s，please input role";
+$lang->user->error->verifyPwd     = "Please enter the correct password";
+$lang->user->error->originalPwd   = "The original password is not correct";
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';

@@ -120,4 +120,38 @@ class admin extends control
             echo "Repairing TABLE: " . $result->Table . "\t" . $result->Msg_type . ":" . $result->Msg_text . "\n";
         }
     }
+
+    /**
+     * Account safe.
+     * 
+     * @access public
+     * @return void
+     */
+    public function safe()
+    {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $this->loadModel('setting')->setItems('system.common.safe', $data);
+            die(js::reload('parent'));
+        }
+        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->account;
+        $this->view->position[] = $this->lang->admin->safe->common;
+        $this->display();
+    }
+
+    /**
+     * Check weak user.
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkWeak()
+    {
+        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
+        $this->view->position[] = html::a(inlink('safe'), $this->lang->admin->safe->common);
+        $this->view->position[] = $this->lang->admin->safe->checkWeak;
+        $this->view->weakUsers  = $this->loadModel('user')->getWeakUsers();
+        $this->display();
+    }
 }

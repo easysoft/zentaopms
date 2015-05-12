@@ -1261,6 +1261,61 @@ function startCron()
     $.ajax({type:"GET", timeout:100, url:createLink('cron', 'ajaxExec')});
 }
 
+function pwdLevel(password)
+{
+    if(password.length == 0) return 0;
+
+    var strength = 0;
+    var length   = password.length;
+
+    if(password.toLowerCase() != password) strength += 1;
+    if(password.toUpperCase() == password) strength += 1;
+
+    if(length >= 4 && length <= 7)
+    {
+        strength += 1;
+    }
+    else if(length >= 8 && length <= 15)
+    {
+        strength += 2;
+    }
+    else if(length >= 16 && length <= 35)
+    {
+        strength += 3;
+    }
+    else if(length > 35)
+    {
+        strength += 4;
+    }
+
+    var uniqueChars = '';
+    for(i = 0; i < length; i++)
+    {
+        letter = password.charAt(i);
+        if(letter >= 48 && letter <= 57)
+        {
+          strength += 1;
+        }
+        else if((letter >= 65 && letter <= 90))
+        {
+          strength += 1;
+        }
+        else(!(letter >= 97 && letter <= 122))
+        {
+          strength += 2;
+        }
+        if(uniqueChars.indexOf(letter) == -1) uniqueChars += letter;
+    }
+
+    strength += uniqueChars.length * 2;
+
+    strength = strength > 99 ? 99 : strength;
+    strength = Math.floor(strength / 10);
+    strength = Math.floor(strength / 3);
+
+    return strength;
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

@@ -42,3 +42,17 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption  = '关联社区账号';
 $lang->admin->bind->action   = '关联';
 $lang->admin->bind->success  = "关联账户成功";
+
+$lang->admin->safe = new stdclass();
+$lang->admin->safe->common    = '安全';
+$lang->admin->safe->account   = '账号';
+$lang->admin->safe->checkPwd  = '密码检查';
+$lang->admin->safe->weak      = '常用弱口令';
+$lang->admin->safe->checkWeak = '弱口令检查';
+$lang->admin->safe->weakUser  = '弱口令账号';
+
+$lang->admin->safe->modeList[0] = '不检查';
+$lang->admin->safe->modeList[1] = '中';
+$lang->admin->safe->modeList[2] = '强';
+
+$lang->admin->safe->noticeMode = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';

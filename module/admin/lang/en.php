@@ -42,3 +42,17 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Bind with community account';
 $lang->admin->bind->action  = 'bind';
 $lang->admin->bind->success = "Bind success";
+
+$lang->admin->safe = new stdclass();
+$lang->admin->safe->common    = 'Safe';
+$lang->admin->safe->account   = 'Account';
+$lang->admin->safe->checkPwd  = 'Check password';
+$lang->admin->safe->weak      = 'weak Password';
+$lang->admin->safe->checkWeak = 'Weak password check';
+$lang->admin->safe->weakUser  = 'Weak password account';
+
+$lang->admin->safe->modeList[0] = 'Do not check';
+$lang->admin->safe->modeList[1] = 'Intermediate';
+$lang->admin->safe->modeList[2] = 'Strong';
+
+$lang->admin->safe->noticeMode = 'The system will log in, create and modify the user password, check the user password.';

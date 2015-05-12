@@ -37,7 +37,12 @@
       </tr>
       <tr>
         <th><?php echo $lang->user->password;?></th>
-        <td><?php echo html::password('password1', '', "class='form-control' autocomplete='off'");?></td>
+        <td>
+          <span class='input-group'>
+            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onkeyup='checkPwd(this.value)'");?>
+            <span class='input-group-addon' id='pwdLevel'></span>
+          </span>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->user->password2;?></th>
@@ -69,9 +74,14 @@
         <th><?php echo $lang->user->gender;?></th>
         <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
       </tr>
+      <tr>
+        <th><?php echo $lang->user->verifyPwd;?></th>
+        <td><?php echo html::password('verifyPwd', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?></td>
+      </tr>
 
       <tr><th></th><td><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>
   </form>
 </div>
+<?php js::set('pwdLevelList', $lang->user->pwdLevelList)?>
 <?php include '../../common/view/footer.html.php';?>

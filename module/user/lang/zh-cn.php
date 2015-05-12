@@ -27,6 +27,7 @@ $lang->user->gender      = '性别';
 $lang->user->email       = '邮箱';
 $lang->user->basicInfo   = '基本信息';
 $lang->user->accountInfo = '帐号信息';
+$lang->user->verify      = '安全验证';
 $lang->user->contactInfo = '联系信息';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
@@ -43,6 +44,8 @@ $lang->user->ip          = '最后IP';
 $lang->user->last        = '最后登录';
 $lang->user->status      = '状态';
 $lang->user->ditto       = '同上';
+$lang->user->originalPwd = '原密码';
+$lang->user->verifyPwd   = '验证密码';
 
 $lang->user->index           = "用户视图首页";
 $lang->user->view            = "用户详情";
@@ -103,6 +106,7 @@ $lang->user->errorDeny   = "抱歉，您无权访问『<b>%s</b>』模块的『<
 $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是否填写正确。";
 $lang->user->lockWarning = "您还有%s次尝试机会。";
 $lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
+$lang->user->weakPwd     = "您的密码强度小于系统设定。";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';
@@ -118,6 +122,10 @@ $lang->user->roleList['others'] = '其他';
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
 
+$lang->user->pwdLevelList[0] = '弱';
+$lang->user->pwdLevelList[1] = '中';
+$lang->user->pwdLevelList[2] = '强';
+
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 
@@ -131,6 +139,7 @@ $lang->user->placeholder->role      = '职位影响内容和用户列表的顺�
 $lang->user->placeholder->group     = '分组决定用户的权限列表。';
 $lang->user->placeholder->join      = '入职日期';
 $lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
+$lang->user->placeholder->verify    = '需要输入你的密码加以验证';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，英文、数字和下划线的组合，三位以上";
@@ -139,6 +148,8 @@ $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";
 $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
 $lang->user->error->role          = "ID %s，职位不能为空";
+$lang->user->error->verifyPwd     = "请输入正确验证密码";
+$lang->user->error->originalPwd   = "原密码不正确";
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';

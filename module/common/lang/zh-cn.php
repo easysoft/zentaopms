@@ -283,6 +283,7 @@ $lang->admin->menu->custom    = array('link' => '自定义|custom|index', 'subMo
 $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => '备份|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->safe      = array('link' => '安全|admin|safe',);
 $lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');

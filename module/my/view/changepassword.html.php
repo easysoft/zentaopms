@@ -22,8 +22,17 @@
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
       </tr>  
       <tr>
+        <th><?php echo $lang->user->originalPwd;?></th>
+        <td><?php echo html::password('originalPwd', '', "class='form-control'");?></td>
+      </tr>  
+      <tr>
         <th><?php echo $lang->user->password;?></th>
-        <td><?php echo html::password('password1', '', "class='form-control'");?></td>
+        <td>
+          <span class='input-group'>
+            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onkeyup='checkPwd(this.value)'");?>
+            <span class='input-group-addon' id='pwdLevel'></span>
+          </span>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->password2;?></th>
@@ -37,4 +46,11 @@
   </form>  
 </div>
 
+<?php js::set('pwdLevelList', $lang->user->pwdLevelList)?>
+<script>
+function checkPwd(password)
+{
+    $('#pwdLevel').html(pwdLevelList[pwdLevel(password)]);
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

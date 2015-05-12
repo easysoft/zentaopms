@@ -532,16 +532,13 @@ class user extends control
      * @access public
      * @return void
      */
-    public function delete($userID, $confirm = 'no')
+    public function delete($userID)
     {
         $user = $this->user->getByID($userID);
         if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
-        if($confirm == 'no')
+        if($_POST)
         {
-            die(js::confirm($this->lang->user->confirmDelete, $this->createLink('user', 'delete', "userID=$userID&confirm=yes")));
-        }
-        else
-        {
+            if(md5($this->post->verifyPwd) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPwd));
             $this->user->delete(TABLE_USER, $userID);
 
             /* if ajax request, send result. */
@@ -559,8 +556,10 @@ class user extends control
                 }
                 $this->send($response);
             }
-            die(js::locate($this->session->userList, 'parent'));
+            die(js::locate($this->session->userList, 'parent.parent'));
         }
+
+        $this->display();
     }
 
     /**
@@ -656,6 +655,9 @@ class user extends control
 
                 /* Keep login. */
                 if($this->post->keepLogin) $this->user->keepLogin($user);
+
+                /* Check password. */
+                if(isset($this->config->safe->mode) and $this->user->pwdLevel($password) < $this->config->safe->mode) echo js::alert($this->lang->user->weakPwd);
 
                 /* Go to the referer. */
                 if($this->post->referer and 

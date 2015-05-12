@@ -47,13 +47,18 @@
       <table class='table table-form'>
         <tr>
           <th class='w-90px'><?php echo $lang->user->account;?></th>
-          <td><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
+          <td style='width:33%'><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
           <th class='w-90px'><?php echo $lang->user->commiter;?></th>
           <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->password;?></th>
-          <td><?php echo html::password('password1', '', "class='form-control'");?></td>
+        <td>
+          <span class='input-group'>
+            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onkeyup='checkPwd(this.value)'");?>
+            <span class='input-group-addon' id='pwdLevel'></span>
+          </span>
+        </td>
           <th><?php echo $lang->user->password2;?></th>
           <td><?php echo html::password('password2', '', "class='form-control'");?></td>
         </tr>
@@ -93,7 +98,23 @@
         </tr>
       </table>
     </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->user->verify;?></legend>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-90px'><?php echo $lang->user->verifyPwd;?></th>
+          <td><?php echo html::password('verifyPwd', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?></td>
+        </tr>
+      </table>
+    </fieldset>
     <div class='text-center'><?php echo html::submitButton('', '', 'btn-primary') . ' &nbsp; ' . html::backButton();?></div>
   </form>
 </div>
+<?php js::set('pwdLevelList', $lang->user->pwdLevelList)?>
+<script>
+function checkPwd(password)
+{
+    $('#pwdLevel').html(pwdLevelList[pwdLevel(password)]);
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>
