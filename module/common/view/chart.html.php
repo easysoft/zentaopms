@@ -29,7 +29,7 @@ if($config->debug)
         $(this).each(function()
         {
             var $table    = $(this);
-            var options   = $.extend({scaleShowLabels: true, scaleLabel: '<%=label%>: <%=value%>'}, $table.data());
+            var options   = $table.data();
             var chartType = options.chart || 'pie';
             var $canvas   = $(options.target);
             if(!$canvas.length) return;
@@ -37,6 +37,7 @@ if($config->debug)
 
             if(chartType === 'pie')
             {
+                options = $.extend({scaleShowLabels: true, scaleLabel: '<%=label%>: <%=value%>'}, options);
                 var data = [];
                 var $rows = $table.find('tbody > tr').each(function(idx)
                 {
@@ -58,6 +59,22 @@ if($config->debug)
                     }
                 });
             }
+            else if(chartType === 'bar')
+            {
+                var labels = [], dataset = {label: $table.find('thead .chart-label').text(), color: nextAccentColor().toCssStr(), data: []};
+
+                var $rows = $table.find('tbody > tr').each(function(idx)
+                {
+                    var $row = $(this);
+                    labels.push($row.find('.chart-label').text());
+                    dataset.data.push(parseInt($row.find('.chart-value').text()));
+                });
+                var data = {labels: labels, datasets: [dataset]};
+                if(labels.length) options.barValueSpacing = ($canvas.width() - 50*labels.length)/(labels.length*2);
+
+                chart = $canvas.barChart(data, options);
+            }
+
             if(chart !== null) $table.data('zui.chart', chart);
         });
     };
