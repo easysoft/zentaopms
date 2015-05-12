@@ -53,6 +53,10 @@
       <td><?php echo html::input("join[$user->id]", $user->join, "class='form-control form-date'");?></td>
     </tr>
     <?php endforeach;?>
+    <tr>
+      <th colspan='2'><?php echo $lang->user->verifyPwd?></th>
+      <td colspan='6'><?php echo html::password('verifyPwd', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?></td>
+    </tr>
     <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
