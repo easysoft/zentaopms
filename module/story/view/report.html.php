@@ -53,7 +53,7 @@
             </div>
           </td>
           <td style='width: 320px'>
-            <div style="overflow:auto">
+            <div style="overflow:auto;" class='table-wrapper'>
               <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
                 <caption class='text-left'><?php echo $lang->story->report->charts[$chartType];?></caption>
                 <thead>

@@ -283,18 +283,9 @@ $lang->bug->report->charts['bugsPerAssignedTo']     = 'AssignedTo';
 
 $lang->bug->report->options = new stdclass();
 $lang->bug->report->options->graph = new stdclass();
-$lang->bug->report->options->swf                     = 'pie2d';
-$lang->bug->report->options->width                   = 'auto';
-$lang->bug->report->options->height                  = 300;
-$lang->bug->report->options->graph->baseFontSize     = 12;
-$lang->bug->report->options->graph->showNames        = 1;
-$lang->bug->report->options->graph->formatNumber     = 1;
-$lang->bug->report->options->graph->decimalPrecision = 0;
-$lang->bug->report->options->graph->animation        = 0;
-$lang->bug->report->options->graph->rotateNames      = 0;
-$lang->bug->report->options->graph->yAxisName        = 'COUNT';
-$lang->bug->report->options->graph->pieRadius        = 100;
-$lang->bug->report->options->graph->showColumnShadow = 0;
+$lang->bug->report->options->type   = 'pie';
+$lang->bug->report->options->width  = 500;
+$lang->bug->report->options->height = 140;
 
 $lang->bug->report->bugsPerProject        = new stdclass();
 $lang->bug->report->bugsPerBuild          = new stdclass();
@@ -336,20 +327,14 @@ $lang->bug->report->bugsPerProject->graph->xAxisName     = 'Project';
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 
-$lang->bug->report->openedBugsPerDay->swf                = 'column2d';
-$lang->bug->report->openedBugsPerDay->height             = 400;
+$lang->bug->report->openedBugsPerDay->type                = 'bar';
 $lang->bug->report->openedBugsPerDay->graph->xAxisName   = 'Date';
-$lang->bug->report->openedBugsPerDay->graph->rotateNames = 1;
 
-$lang->bug->report->resolvedBugsPerDay->swf              = 'column2d';
-$lang->bug->report->resolvedBugsPerDay->height           = 400;
+$lang->bug->report->resolvedBugsPerDay->type              = 'bar';
 $lang->bug->report->resolvedBugsPerDay->graph->xAxisName = 'Date';
-$lang->bug->report->resolvedBugsPerDay->graph->rotateNames = 1;
 
-$lang->bug->report->closedBugsPerDay->swf                = 'column2d';
-$lang->bug->report->closedBugsPerDay->height             = 400;
+$lang->bug->report->closedBugsPerDay->type                = 'bar';
 $lang->bug->report->closedBugsPerDay->graph->xAxisName   = 'Date';
-$lang->bug->report->closedBugsPerDay->graph->rotateNames = 1;
 
 $lang->bug->report->openedBugsPerUser->graph->xAxisName  = 'User';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName= 'User';
