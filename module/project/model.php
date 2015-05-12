@@ -1535,7 +1535,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getDateList($begin, $end, $type, $interval = '')
+    public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y')
     {
         $begin    = strtotime($begin);
         $end      = strtotime($end);
@@ -1575,7 +1575,7 @@ class projectModel extends model
             }
 
             $counter    = 0;
-            $dateList[] = date('m/d/Y', $date);
+            $dateList[] = date($format, $date);
             $date += 24 * 3600;
         }
 
