@@ -30,6 +30,7 @@ $lang->action->trashTips      = '提示：为了保证系统的完整性，禅�
 $lang->action->textDiff       = '文本格式';
 $lang->action->original       = '原始格式';
 $lang->action->confirmHideAll = '您确定要全部隐藏这些记录吗？';
+$lang->action->needEdit       = '要还原%s的名称或代号已经存在，请编辑更改。';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';

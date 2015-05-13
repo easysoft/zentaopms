@@ -30,6 +30,7 @@ $lang->action->trashTips      = "Tips:The deleting actions in zentao are all log
 $lang->action->textDiff       = 'Text mode';
 $lang->action->original       = 'Original content';
 $lang->action->confirmHideAll = 'Are you sure you hide these records?';
+$lang->action->needEdit       = 'To restore the %s name or code already exists, please change the editor.';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';

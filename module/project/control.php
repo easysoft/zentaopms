@@ -911,7 +911,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function edit($projectID)
+    public function edit($projectID, $action = 'edit', $extra = '')
     {
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
@@ -919,6 +919,13 @@ class project extends control
             $changes = $this->project->update($projectID);
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+            if($action == 'undelete')
+            {
+                $this->loadModel('action');
+                $this->dao->update(TABLE_PROJECT)->set('deleted')->eq(0)->where('id')->eq($projectID)->exec();
+                $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
+                $this->action->create('project', $projectID, 'undeleted');
+            }
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');

@@ -227,8 +227,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique')
-            ->check('code', 'unique')
+            ->check('name', 'unique', "deleted='0'")
+            ->check('code', 'unique', "deleted='0'")
             ->exec();
 
         /* Add the creater to the team. */
@@ -300,8 +300,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "id!=$projectID")
-            ->check('code', 'unique', "id!=$projectID")
+            ->check('name', 'unique', "id!=$projectID and deleted='0'")
+            ->check('code', 'unique', "id!=$projectID and deleted='0'")
             ->where('id')->eq($projectID)
             ->limit(1)
             ->exec();
@@ -357,8 +357,8 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->check('name', 'unique', "id!=$projectID")
-                ->check('code', 'unique', "id!=$projectID")
+                ->check('name', 'unique', "id!=$projectID and deleted='0'")
+                ->check('code', 'unique', "id!=$projectID and deleted='0'")
                 ->where('id')->eq($projectID)
                 ->limit(1)
                 ->exec();

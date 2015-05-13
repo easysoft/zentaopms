@@ -730,8 +730,28 @@ class actionModel extends model
      */
     public function undelete($actionID)
     {
-        $action = $this->loadModel('action')->getById($actionID);
+        $action = $this->getById($actionID);
         if($action->action != 'deleted') return;
+        if($action->objectType == 'product')
+        {
+            $product = $this->dao->select('name,code')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
+            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCT)->where('name')->eq($product->name)->orWhere('code')->eq($product->code)->fetch('count');
+            if($count > 0)
+            {
+                echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['product']));
+                die(js::locate(helper::createLink('product', 'edit', "productID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
+            }
+        }
+        elseif($action->objectType == 'project')
+        {
+            $project = $this->dao->select('name,code')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)->where('name')->eq($project->name)->orWhere('code')->eq($project->code)->fetch('count');
+            if($count > 0)
+            {
+                echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['project']));
+                die(js::locate(helper::createLink('project', 'edit', "projectID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
+            }
+        }
 
         /* Update deleted field in object table. */
         $table = $this->config->objectTables[$action->objectType];
@@ -739,7 +759,7 @@ class actionModel extends model
 
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
-        $this->action->create($action->objectType, $action->objectID, 'undeleted');
+        $this->create($action->objectType, $action->objectID, 'undeleted');
     }
 
     /**

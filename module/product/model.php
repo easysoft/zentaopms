@@ -212,8 +212,8 @@ class productModel extends model
             ->data($product)
             ->autoCheck()
             ->batchCheck('name,code', 'notempty')
-            ->check('name', 'unique')
-            ->check('code', 'unique')
+            ->check('name', 'unique', "deleted = '0'")
+            ->check('code', 'unique', "deleted = '0'")
             ->exec();
 
         $productID = $this->dao->lastInsertID();
@@ -241,8 +241,8 @@ class productModel extends model
             ->data($product)
             ->autoCheck()
             ->batchCheck('name,code', 'notempty')
-            ->check('name', 'unique', "id != $productID")
-            ->check('code', 'unique', "id != $productID")
+            ->check('name', 'unique', "id != $productID and deleted = '0'")
+            ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
             ->exec();
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
@@ -276,8 +276,8 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->check('name', 'unique', "id != $productID")
-                ->check('code', 'unique', "id != $productID")
+                ->check('name', 'unique', "id != $productID and deleted = '0'")
+                ->check('code', 'unique', "id != $productID and deleted = '0'")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));

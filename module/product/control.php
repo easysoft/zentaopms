@@ -221,12 +221,19 @@ class product extends control
      * @access public
      * @return void
      */
-    public function edit($productID)
+    public function edit($productID, $action = 'edit', $extra = '')
     {
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID); 
             if(dao::isError()) die(js::error(dao::getError()));
+            if($action == 'undelete')
+            {
+                $this->loadModel('action');
+                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(0)->where('id')->eq($productID)->exec();
+                $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
+                $this->action->create('product', $productID, 'undeleted');
+            }
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
