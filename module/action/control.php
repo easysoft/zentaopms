@@ -113,8 +113,7 @@ class action extends control
      */
     public function editComment($actionID)
     {
-        if(!strip_tags($this->post->lastComment, '<img>')) die(js::locate($this->server->http_referer, 'parent'));
-        $this->action->updateComment($actionID);
+        if(trim(strip_tags($this->post->lastComment, '<img>'))) $this->action->updateComment($actionID);
         die(js::locate($this->server->http_referer, 'parent'));
     }
 }

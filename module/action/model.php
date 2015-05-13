@@ -39,7 +39,7 @@ class actionModel extends model
         $action->actor      = $actor ? $actor : $this->app->user->account;
         $action->action     = strtolower($actionType);
         $action->date       = helper::now();
-        $action->comment    = trim(strip_tags($comment, $this->config->allowedTags)) ? $comment : '';
+        $action->comment    = trim(strip_tags($comment, $this->config->allowedTags));
         $action->extra      = $extra;
 
         /* Get product and project for this object. */
@@ -804,7 +804,7 @@ class actionModel extends model
     {
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq($this->post->lastComment)
+            ->set('comment')->eq(trim(strip_tags($this->post->lastComment, $this->config->allowedTags)))
             ->where('id')->eq($actionID)
             ->exec();
     }
