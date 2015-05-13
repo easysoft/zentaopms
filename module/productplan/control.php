@@ -170,9 +170,10 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc')
+    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '')
     {
-        $this->session->set('storyList', $this->app->getURI(true));
+        if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
+        if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -192,6 +193,8 @@ class productplan extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
+        $this->view->link        = $link;
+        $this->view->param       = $param;
         $this->display();
     }
 
@@ -215,11 +218,13 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0, $browseType = '', $param = 0)
+    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc')
     {
-        $this->session->set('storyList', $this->app->getURI(true));
-
-        if(!empty($_POST['stories'])) $this->productplan->linkStory($planID);
+        if(!empty($_POST['stories']))
+        {
+            $this->productplan->linkStory($planID);
+            die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+        }
 
         $this->loadModel('story');
         $this->loadModel('tree');
@@ -230,7 +235,7 @@ class productplan extends control
         /* Build search form. */
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'linkStory', "planID=$planID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
@@ -253,15 +258,15 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $moduleID = '0', $status = 'draft,active,changed');
         }
 
-        $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkStory;
-        $this->view->position[] = html::a($this->createLink('productPlan', 'view', "planID=$plan->id"), $plan->title);
-        $this->view->position[] = $this->lang->productplan->linkStory;
         $this->view->allStories = $allStories;
         $this->view->planStories= $this->story->getPlanStories($planID);
         $this->view->products   = $products;
         $this->view->plan       = $plan;
         $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 
@@ -309,13 +314,10 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($confirm = 'no')
+    public function batchUnlinkStory($planID, $orderBy = 'id_desc', $link = 'false', $param = '')
     {
-        foreach($this->post->unlinkStories as $storyID)
-        {
-            $this->productplan->unlinkStory($storyID);
-        }
-        die(js::reload('parent'));
+        foreach($this->post->unlinkStories as $storyID) $this->productplan->unlinkStory($storyID);
+        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy&link=$link&param=$param"), 'parent'));
     }
 
     /**
@@ -327,14 +329,16 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkBug($planID = 0, $browseType = '', $param = 0)
+    public function linkBug($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc')
     {
-        $this->session->set('bugList', $this->app->getURI(true));
-
         $projects = $this->loadModel('project')->getPairs();
         $projects[0] = '';
 
-        if(!empty($_POST['bugs'])) $this->productplan->linkBug($planID);
+        if(!empty($_POST['bugs']))
+        {
+            $this->productplan->linkBug($planID);
+            die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+        }
 
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
@@ -344,7 +348,7 @@ class productplan extends control
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Build the search form. */
-        $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'linkBug', "planID=$planID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
@@ -369,15 +373,15 @@ class productplan extends control
             $allBugs= $this->bug->getActiveBugs($this->view->product->id, $projects);
         }
 
-        $this->view->title      = $plan->title . $this->lang->colon . $this->lang->productplan->linkBug;
-        $this->view->position[] = html::a($this->createLink('productPlan', 'view', "planID=$plan->id"), $plan->title);
-        $this->view->position[] = $this->lang->productplan->linkBug;
         $this->view->allBugs    = $allBugs;
         $this->view->planBugs   = $this->bug->getPlanBugs($planID);
         $this->view->products   = $products;
         $this->view->plan       = $plan;
         $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 
@@ -425,12 +429,9 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($confirm = 'no')
+    public function batchUnlinkBug($planID, $orderBy = 'id_desc', $link = 'false', $param = '')
     {
-        foreach($this->post->unlinkBugs as $bugID)
-        {
-            $this->productplan->unlinkBug($bugID);
-        }
-        die(js::reload('parent'));
+        foreach($this->post->unlinkBugs as $bugID) $this->productplan->unlinkBug($bugID);
+        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=$link&param=$param"), 'parent'));
     }
 }
