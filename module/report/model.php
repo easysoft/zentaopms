@@ -29,6 +29,25 @@ class reportModel extends model
     }
 
     /**
+     * Create json data of single charts
+     * @param  array $sets
+     * @param  array $dateList
+     * @return string the json string
+     */
+    public function createSingleJSON($sets, $dateList)
+    {
+        $data = '[';
+        foreach($dateList as $i => $date)
+        {
+            $date = date('Y-m-d', strtotime($date));
+            if(isset($sets[$date]))$data .= "[$i, {$sets[$date]->value}],";
+        }
+        $data = rtrim($data, ',');
+        $data .= ']';
+        return $data;
+    }
+
+    /**
      * Get projects. 
      * 
      * @access public
