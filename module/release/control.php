@@ -136,8 +136,11 @@ class release extends control
      * @access public
      * @return void
      */
-    public function view($releaseID)
+    public function view($releaseID, $type = 'story', $link = 'false', $param = '')
     {
+        if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
+        if($type == 'bug')    $this->session->set('bugList', $this->app->getURI(true));
+
         $this->loadModel('story');
         $this->loadModel('bug');
 
@@ -176,6 +179,9 @@ class release extends control
         $this->view->generatedBugs = empty($build->project) ? array() : $this->bug->getProjectBugs($build->project, 'id_desc', null, $build->id);
         $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->type          = $type;
+        $this->view->link          = $link;
+        $this->view->param         = $param;
         $this->display();
     }
  
@@ -223,61 +229,104 @@ class release extends control
      * @access public
      * @return void
      */
-    public function export($type)
+    public function export()
     {
         if(!empty($_POST))
         {
-            if($type == 'story')
+            $type = $this->post->type;
+            $html = '';
+
+            if($type == 'story' or $type == 'all')
             {
+                $html .= "<h3>{$this->lang->release->stories}</h3>";
                 $this->loadModel('story');
 
                 $stories = $this->dao->select('id, title')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
                     ->beginIF($this->session->storyOrderBy != false)->orderBy($this->session->storyOrderBy)->fi()
                     ->fetchAll('id');
 
-                foreach($stories as $story)
-                {
-                    $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
-                }
+                foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
 
-                $this->post->set('fields', array('id' => $this->lang->story->id, 'title' => $this->lang->story->title));
-                $this->post->set('rows', $stories);
-                $this->fetch('file', 'export2HTML', $_POST);
+                $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+                $rows   = $stories;
+
+                $html .= '<table><tr>';
+                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+                $html .= '</tr>';
+                foreach($rows as $row)
+                {
+                    $html .= "<tr valign='top'>\n";
+                    foreach($fields as $fieldName => $fieldLabel)
+                    {
+                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                    }
+                    $html .= "</tr>\n";
+                }
+                $html .= '</table>';
             }
-            else if($type == 'bug')
+
+            if($type == 'bug' or $type == 'all')
             {
+                $html .= "<h3>{$this->lang->release->bugs}</h3>";
                 $this->loadModel('bug');
 
                 $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->linkedBugQueryCondition)
                     ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
                     ->fetchAll('id');
 
-                foreach($bugs as $bug)
-                {
-                    $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-                }
+                foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
 
-                $this->post->set('fields', array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title));
-                $this->post->set('rows', $bugs);
-                $this->fetch('file', 'export2HTML', $_POST);
+                $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+                $rows   = $bugs;
+
+                $html .= '<table><tr>';
+                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+                $html .= '</tr>';
+                foreach($rows as $row)
+                {
+                    $html .= "<tr valign='top'>\n";
+                    foreach($fields as $fieldName => $fieldLabel)
+                    {
+                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                    }
+                    $html .= "</tr>\n";
+                }
+                $html .= '</table>';
             }
-            else if($type == 'newBugs')
+
+            if($type == 'newbug' or $type == 'all')
             {
-                $this->loadModel('bug');
+                $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
 
                 $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->newBugsQueryCondition)
                     ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
                     ->fetchAll('id');
 
-                foreach($bugs as $bug)
-                {
-                    $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-                }
+                foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
 
-                $this->post->set('fields', array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title));
-                $this->post->set('rows', $bugs);
-                $this->fetch('file', 'export2HTML', $_POST);
+                $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+                $rows   = $bugs;
+
+                $html .= '<table><tr>';
+                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+                $html .= '</tr>';
+                foreach($rows as $row)
+                {
+                    $html .= "<tr valign='top'>\n";
+                    foreach($fields as $fieldName => $fieldLabel)
+                    {
+                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                    }
+                    $html .= "</tr>\n";
+                }
+                $html .= '</table>';
             }
+
+            $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
+            die($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
         }
 
         $this->display();
@@ -294,9 +343,11 @@ class release extends control
      */
     public function linkStory($releaseID = 0, $browseType = '', $param = 0)
     {
-        $this->session->set('storyList', $this->app->getURI(true));
-
-        if(!empty($_POST['stories'])) $this->release->linkStory($releaseID);
+        if(!empty($_POST['stories']))
+        {
+            $this->release->linkStory($releaseID);
+            die(js::locate(inlink('view', "releaseID=$releaseID&type=story&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+        }
 
         $release = $this->release->getById($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build); 
@@ -309,7 +360,7 @@ class release extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
-        $this->config->product->search['actionURL'] = $this->createLink('release', 'linkStory', "releaseID=$releaseID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->product->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($release->product, $viewType = 'story', $startModuleID = 0);
@@ -325,13 +376,12 @@ class release extends control
             $allStories = $this->story->getProjectStories($build->project);
         }
 
-        $this->view->title          = $release->name . $this->lang->colon . $this->lang->release->linkStory;
-        $this->view->position[]     = html::a($this->createLink('release', 'view', "releaseID=$release->id"), $release->name);
-        $this->view->position[]     = $this->lang->release->linkStory;
         $this->view->allStories     = $allStories;
         $this->view->release        = $release;
         $this->view->releaseStories = empty($release->stories) ? array() : $this->story->getByList($release->stories);
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
         $this->display();
     }
 
@@ -372,10 +422,10 @@ class release extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($releaseID)
+    public function batchUnlinkStory($releaseID, $link = 'false', $param = '')
     {
         $this->release->batchUnlinkStory($releaseID);
-        die(js::reload('parent'));
+        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story&link=$link&param=$param"), 'parent'));
     }
 
     /**
@@ -389,9 +439,11 @@ class release extends control
      */
     public function linkBug($releaseID = 0, $browseType = '', $param = 0)
     {
-        $this->session->set('bugList', $this->app->getURI(true));
-
-        if(!empty($_POST['bugs'])) $this->release->linkBug($releaseID);
+        if(!empty($_POST['bugs']))
+        {
+            $this->release->linkBug($releaseID);
+            die(js::locate(inlink('view', "releaseID=$releaseID&type=bug&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+        }
 
         /* Set menu. */
         $release = $this->release->getByID($releaseID);
@@ -402,7 +454,7 @@ class release extends control
         $this->loadModel('bug');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         unset($this->config->bug->search['fields']['product']);
-        $this->config->bug->search['actionURL'] = $this->createLink('release', 'linkBug', "planID=$releaseID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->bug->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=bug&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, $viewType = 'bug', $startModuleID = 0);
@@ -420,13 +472,12 @@ class release extends control
             $allBugs = empty($build->project) ? array() : $this->bug->getReleaseBugs($build->id, $release->product);
         }
 
-        $this->view->title       = $release->name . $this->lang->colon . $this->lang->release->linkBug;
-        $this->view->position[]  = html::a($this->createLink('release', 'view', "releaseID=$release->id"), $release->name);
-        $this->view->position[]  = $this->lang->release->linkBug;
         $this->view->allBugs     = $allBugs;
         $this->view->releaseBugs = empty($release->bugs) ? array() : $this->bug->getByList($release->bugs);
         $this->view->release     = $release;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
         $this->display();
     }
 
@@ -467,9 +518,9 @@ class release extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($releaseID)
+    public function batchUnlinkBug($releaseID, $link = 'false', $param = '')
     {
         $this->release->batchUnlinkBug($releaseID);
-        die(js::reload('parent'));
+        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=bug&link=$link&param=$param"), 'parent'));
     }
 }

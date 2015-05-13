@@ -697,13 +697,14 @@ function toggleSearch()
  * @access public
  * @return void
  */
-function ajaxGetSearchForm()
+function ajaxGetSearchForm(querybox)
 {
-    if($('#querybox').html() == '')
+    querybox = typeof(querybox) == 'undefined' ? '#querybox' : querybox;
+    if($(querybox).html() == '')
     {
         $.get(createLink('search', 'buildForm'), function(data)
         {
-            $('#querybox').html(data);
+            $(querybox).html(data);
         });
     }
 }

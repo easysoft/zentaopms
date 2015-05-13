@@ -18,6 +18,7 @@ $lang->release->delete    = "Delete";
 $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
+$lang->release->batchUnlink      = "Batch unlink";
 $lang->release->batchUnlinkStory = "Batch unlink story";
 $lang->release->batchUnlinkBug   = "Batch unlink bug";
 
@@ -49,3 +50,8 @@ $lang->release->export                = 'Export as HTML';
 
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Path : ';
+
+$lang->release->exportTypeList['all']    = 'All';
+$lang->release->exportTypeList['story']  = 'Resolved Stories';
+$lang->release->exportTypeList['bug']    = 'Resolved bugs';
+$lang->release->exportTypeList['newbug'] = 'Generated bugs';

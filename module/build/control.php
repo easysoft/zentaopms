@@ -104,8 +104,11 @@ class build extends control
      * @access public
      * @return void
      */
-    public function view($buildID)
+    public function view($buildID, $type = 'story', $link = 'false', $param = '')
     {
+        if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
+        if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
+
         $this->loadModel('story');
         $this->loadModel('bug');
 
@@ -133,6 +136,9 @@ class build extends control
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->type           = $type;
+        $this->view->link          = $link;
+        $this->view->param         = $param;
         $this->display();
     }
  
@@ -226,9 +232,11 @@ class build extends control
      */
     public function linkStory($buildID = 0, $browseType = '', $param = 0)
     {
-        $this->session->set('storyList', $this->app->getURI(true));
-
-        if(!empty($_POST['stories'])) $this->build->linkStory($buildID);
+        if(!empty($_POST['stories']))
+        {
+            $this->build->linkStory($buildID);
+            die(js::locate(inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+        }
 
         $build = $this->build->getById($buildID);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
@@ -240,7 +248,7 @@ class build extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
-        $this->config->product->search['actionURL'] = $this->createLink('build', 'linkStory', "planID=$buildID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($build->product, $viewType = 'story', $startModuleID = 0);
@@ -256,13 +264,12 @@ class build extends control
             $allStories = $this->story->getProjectStories($build->project);
         }
 
-        $this->view->title        = $build->name . $this->lang->colon . $this->lang->build->linkStory;
-        $this->view->position[]   = html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name);
-        $this->view->position[]   = $this->lang->build->linkStory;
         $this->view->allStories   = $allStories;
         $this->view->build        = $build;
         $this->view->buildStories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
         $this->display();
     }
 
@@ -303,10 +310,10 @@ class build extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($buildID)
+    public function batchUnlinkStory($buildID, $link = 'false', $param = '')
     {
         $this->build->batchUnlinkStory($buildID);
-        die(js::reload('parent'));
+        die(js::locate($this->createLink('build', 'view', "buildID=$buildID&type=story&link=$link&param=$param"), 'parent'));
     }
 
     /**
@@ -320,9 +327,11 @@ class build extends control
      */
     public function linkBug($buildID = 0, $browseType = '', $param = 0)
     {
-        $this->session->set('bugList', $this->app->getURI(true));
-
-        if(!empty($_POST['bugs'])) $this->build->linkBug($buildID);
+        if(!empty($_POST['bugs']))
+        {
+            $this->build->linkBug($buildID);
+            die(js::locate(inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+        }
 
         /* Set menu. */
         $build = $this->build->getByID($buildID);
@@ -332,7 +341,7 @@ class build extends control
 
         /* Build the search form. */
         $this->loadModel('bug');
-        $this->config->bug->search['actionURL'] = $this->createLink('build', 'linkBug', "planID=$buildID&browseType=bySearch&queryID=myQueryID");   
+        $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
@@ -364,13 +373,12 @@ class build extends control
             $allBugs += $projectBugs;
         }
 
-        $this->view->title      = $build->name . $this->lang->colon . $this->lang->productplan->linkBug;
-        $this->view->position[] = html::a($this->createLink('build', 'view', "buildID=$build->id"), $build->name);
-        $this->view->position[] = $this->lang->build->linkBug;
         $this->view->allBugs    = $allBugs;
         $this->view->buildBugs  = empty($build->bugs) ? array() : $this->bug->getByList($build->bugs);
         $this->view->build      = $build;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
         $this->display();
     }
 
@@ -411,9 +419,9 @@ class build extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($buildID)
+    public function batchUnlinkBug($buildID, $link = 'false', $param = '')
     {
         $this->build->batchUnlinkBug($buildID);
-        die(js::reload('parent'));
+        die(js::locate($this->createLink('build', 'view', "buildID=$buildID&type=bug&link=$link&param=$param"), 'parent'));
     }
 }

@@ -31,6 +31,7 @@ $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar
 $lang->agreement      = "I Agree to the <a href='http://zpl.pub/page/zplv11.html' target='_blank'>Z PUBLIC LICENSE 1.1</a>, <span class='text-danger'>and promise to keep the logo, link of ZenTao.</span>";
 
 $lang->reset        = 'Reset';
+$lang->cancel       = 'Cancel';
 $lang->refresh      = 'Refresh';
 $lang->edit         = 'Edit';
 $lang->copy         = 'Copy';

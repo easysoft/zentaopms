@@ -19,6 +19,7 @@ $lang->build->deleted   = "Deleted";
 $lang->build->view      = "Info";
 $lang->build->ajaxGetProductBuilds = 'API:Product builds';
 $lang->build->ajaxGetProjectBuilds = 'API:Project builds';
+$lang->build->batchUnlink          = 'Batch unlink';
 $lang->build->batchUnlinkStory     = 'Batch unlink story';
 $lang->build->batchUnlinkBug       = 'Batch unlink bug';
 

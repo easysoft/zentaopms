@@ -19,6 +19,7 @@ $lang->build->deleted   = "已删除";
 $lang->build->view      = "版本详情";
 $lang->build->ajaxGetProductBuilds = '接口:产品版本列表';
 $lang->build->ajaxGetProjectBuilds = '接口:项目版本列表';
+$lang->build->batchUnlink          = '批量移除';
 $lang->build->batchUnlinkStory     = '批量移除需求';
 $lang->build->batchUnlinkBug       = '批量移除Bug';
 
