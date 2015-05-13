@@ -501,7 +501,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0)
+    public function view($storyID, $version = 0, $from = 'product', $param = 0)
     {
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -518,6 +518,12 @@ class story extends control
 
         /* Set the menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
+
+        if($from == 'project')
+        {
+            $project = $this->loadModel('project')->getById($param);
+            if($project->status == 'done') $from = '';
+        }
 
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
@@ -538,6 +544,8 @@ class story extends control
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->from       = $from;
+        $this->view->param      = $param;
         $this->display();
     }
 

@@ -45,6 +45,7 @@
         common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
         common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
         common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'sitemap');
+        if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id", '', 'button', 'smile');
         echo '</div>';
 
         echo "<div class='btn-group'>";

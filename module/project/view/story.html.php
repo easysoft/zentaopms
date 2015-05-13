@@ -67,7 +67,7 @@
         ?>
         <?php foreach($stories as $key => $story):?>
         <?php
-        $storyLink      = $this->createLink('story', 'view', "storyID=$story->id");
+        $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
         $totalEstimate += $story->estimate;
         ?>
         <tr class='text-center' id="story<?php echo $story->id?>">
