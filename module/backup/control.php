@@ -112,6 +112,17 @@ class backup extends control
             $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
         }
 
+        /* Delete expired backup. */
+        $sqlFiles = glob("{$this->backupPath}*.sql.php");
+        if(!empty($sqlFiles))
+        {
+            $time = time();
+            foreach($sqlFiles as $file)
+            {
+                if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600) unlink($file);
+            }
+        }
+
         if($reload == 'yes')
         {
             echo js::alert($this->lang->backup->success->backup);
@@ -191,5 +202,23 @@ class backup extends control
         }
 
         die(js::reload('parent'));
+    }
+
+    /**
+     * Change hold days. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function change()
+    {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->display();
     }
 }

@@ -5,6 +5,8 @@ $lang->backup->history  = 'History';
 $lang->backup->delete   = 'Delete';
 $lang->backup->backup   = 'Backup';
 $lang->backup->restore  = 'Restore';
+$lang->backup->change   = 'Change hold days';
+$lang->backup->changeAB = 'change';
 
 $lang->backup->name  = 'Name';
 $lang->backup->time  = 'Time';
@@ -14,6 +16,7 @@ $lang->backup->size  = 'Size';
 $lang->backup->waitting       = '<span id="backupType"></span> is in progress, please wait...';
 $lang->backup->confirmDelete  = 'Are you sure delete this backup?';
 $lang->backup->confirmRestore = 'Are you sure restore this backup?';
+$lang->backup->holdDays       = 'Keep backup copy of the recent %s days';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = 'Success backup!';
