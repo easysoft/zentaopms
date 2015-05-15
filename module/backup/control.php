@@ -51,10 +51,10 @@ class backup extends control
                     $backupFile = new stdclass();
                     $backupFile->time  = filemtime($file);
                     $backupFile->name  = str_replace('.sql.php', '', basename($file));
-                    $backupFile->files[$file] = filesize($file);
+                    $backupFile->files[$file] = abs(filesize($file));
                     if(file_exists($this->backupPath . $backupFile->name . '.file.zip.php'))
                     {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip.php'] = filesize($this->backupPath . $backupFile->name . '.file.zip.php');
+                        $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip.php'] = abs(filesize($this->backupPath . $backupFile->name . '.file.zip.php'));
                     }
 
                     $backups[$backupFile->name] = $backupFile;

@@ -178,9 +178,9 @@ class customModel extends model
                 if(strpos($value, $this->lang->custom->productproject->locked) !== false) continue;
                 foreach($changes as $change)
                 {
-                    if(strpos($value, $change['before']) !== false)
+                    if(stripos($value, $change['before']) !== false)
                     {
-                        $value = str_replace($change['before'], $change['after'], $value);
+                        $value = str_ireplace($change['before'], $change['after'], $value);
                         if($type == 'array') $lang[$key] = $value;
                         if($type == 'object')$lang->$key = $value;
                         $changed[$value] = true;

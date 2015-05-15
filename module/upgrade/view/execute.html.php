@@ -22,6 +22,39 @@
       <?php else:?>
       <div class='alert alert-success mgb-10'><strong><?php echo $lang->upgrade->success?></strong></div>
       <div class='mt-10px'><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-sm'")?></div>
+      <div class='row adbox'>
+        <h5><?php echo $lang->install->other?></h5>
+        <div class='col-md-4'>
+          <a class="card ad" href="http://www.chanzhi.org" target="_blank">
+            <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/chanzhi.png'?>" alt=""></div>
+            <strong class="card-heading"><?php echo $lang->install->chanzhi->name?></strong>
+            <div class="card-reveal">
+              <h5 class="card-heading"><?php echo $lang->install->chanzhi->name?></h5>
+              <div class="card-content"><?php echo $lang->install->chanzhi->desc?></div>
+            </div>
+          </a>
+        </div>
+        <div class='col-md-4'>
+          <a class="card ad" href="http://www.ranzhico.com" target="_blank">
+            <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
+            <strong class="card-heading"><?php echo $lang->install->ranzhi->name?></strong>
+            <div class="card-reveal">
+              <h5 class="card-heading"><?php echo $lang->install->ranzhi->name?></h5>
+              <div class="card-content"><?php echo $lang->install->ranzhi->desc?></div>
+            </div>
+          </a>
+        </div>
+        <div class='col-md-4'>
+          <a class="card ad" href="http://www.yidou.in" target="_blank">
+            <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/yidou.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/yidou.png'?>" alt=""></div>
+            <strong class="card-heading"><?php echo $lang->install->yidou->name?></strong>
+            <div class="card-reveal">
+              <h5 class="card-heading"><?php echo $lang->install->yidou->name?></h5>
+              <div class="card-content"><?php echo $lang->install->yidou->desc?></div>
+            </div>
+          </a>
+        </div>
+      </div>
       <?php endif;?>
     </div>
   </div>
