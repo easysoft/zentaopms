@@ -97,5 +97,20 @@ class custom extends control
         $this->custom->deleteItems("module=$module&section=$field");
         die(js::reload('parent'));
     }
-}
 
+    /**
+     * Flow zentao. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function flow()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.custom.productproject', $this->post->productproject);
+            die(js::reload('parent'));
+        }
+        $this->display();
+    }
+}

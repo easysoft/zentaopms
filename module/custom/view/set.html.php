@@ -41,6 +41,9 @@ EOT;
       common::printLink('custom', 'set', "module=$object",  $name); 
       echo '</li>';
   }
+  echo '<li>'; 
+  common::printLink('custom', 'flow', "",  $lang->custom->flow); 
+  echo '</li>';
   ?>
   </ul>
 </div>
