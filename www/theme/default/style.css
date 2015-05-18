@@ -129,7 +129,7 @@ code {margin-left: 0;}
 /* Icons */
 i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[class*=" icon-"]{font-size: 14px}
 
-i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before {color: #ccc; cursor:not-allowed}
+.dropdown-menu .disabled,i[class^="icon-"].disabled,i[class*=" icon-"].disabled,i[class^="icon-"].disabled:hover,i[class*=" icon-"].disabled:hover,i[class^="icon-"].disabled:before,i[class*=" icon-"].disabled:before {color: #ccc; cursor:not-allowed}
 
 /* Icon rotate */
 .icon-rotate-270:before {display: inline-block; -webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
