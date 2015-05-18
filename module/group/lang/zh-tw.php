@@ -15,6 +15,7 @@ $lang->group->create             = '新增分組';
 $lang->group->edit               = '編輯分組';
 $lang->group->copy               = '複製分組';
 $lang->group->delete             = '刪除分組';
+$lang->group->manageView         = '視圖維護';
 $lang->group->managePriv         = '權限維護';
 $lang->group->managePrivByGroup  = '權限維護';
 $lang->group->managePrivByModule = '按模組分配權限';
@@ -25,6 +26,9 @@ $lang->group->unlinkMember       = '移除用戶';
 $lang->group->confirmDelete      = '您確定刪除該用戶分組嗎？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '沒有保存，請確認選擇了權限數據。';
+$lang->group->visitProduct       = '可訪問的產品';
+$lang->group->visitProject       = '可訪問的項目';
+$lang->group->noticeVisit        = '全不選代表沒有訪問限制';
 
 $lang->group->id       = '編號';
 $lang->group->name     = '分組名稱';
@@ -43,6 +47,8 @@ $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
 
 $lang->group->versions['']          = '修改歷史';
+$lang->group->versions['7_2']       = '禪道7.2';
+$lang->group->versions['7_1']       = '禪道7.1';
 $lang->group->versions['6_4']       = '禪道6.4';
 $lang->group->versions['6_3']       = '禪道6.3';
 $lang->group->versions['6_2']       = '禪道6.2';

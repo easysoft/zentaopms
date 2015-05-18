@@ -5,6 +5,7 @@ $lang->custom->set       = '自定義配置';
 $lang->custom->restore   = '恢復預設';
 $lang->custom->key       = '鍵';
 $lang->custom->value     = '值';
+$lang->custom->flow      = '流程';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
@@ -69,3 +70,19 @@ $lang->custom->notice->userRole = '鍵的長度必須小於20個字元！';
 $lang->custom->storyReview   = '評審流程';
 $lang->custom->reviewList[1] = '開啟';
 $lang->custom->reviewList[0] = '關閉';
+
+$lang->custom->flowList['productproject'] = '產項關係';
+
+$lang->custom->productproject = new stdclass();
+$lang->custom->productproject->relation['0_0'] = '產品 - 項目';
+$lang->custom->productproject->relation['0_1'] = '產品 - 迭代';
+$lang->custom->productproject->relation['1_1'] = '項目 - 迭代';
+
+$lang->custom->productproject->product[0] = '產品';
+$lang->custom->productproject->product[1] = '項目';
+$lang->custom->productproject->project[0] = '項目';
+$lang->custom->productproject->project[1] = '迭代';
+
+$lang->custom->productproject->locked = '項目管理';
+
+$lang->custom->productproject->notice = '可以修改產品視圖和項目視圖的名稱，以及相應的名稱顯示';

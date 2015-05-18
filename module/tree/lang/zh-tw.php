@@ -44,3 +44,4 @@ $lang->tree->child      = '子模組';
 $lang->tree->owner      = '負責人';
 $lang->tree->order      = '排序';
 $lang->tree->projectDoc = '項目文檔';
+$lang->tree->product    = '所屬產品';

@@ -30,6 +30,7 @@ $lang->editor->deleteConfirm = '是否要刪除？';
 $lang->editor->extendConfirm = '是否要重用原來代碼？';
 $lang->editor->repeatFile    = '檔案名重複';
 $lang->editor->repeatPage    = '已經有此頁面。是否覆蓋？';
+$lang->editor->noticeOkFile  = 'ok檔案不存在或檔案已過期\n為了系統的安全，請重新創建ok檔案\n您可在伺服器執行下面相應的命令：\nwindows: 打開命令行，執行 echo ok > %s\nlinux: touch %s;\n或者刪掉 %s 這個檔案 ，重新創建一個ok.txt檔案，不需要內容。';
 
 $lang->editor->notWritable   = "無法寫入，可能沒有權限。請嘗試執行 chmod 777 -R ";
 $lang->editor->notDelete     = '無法刪除，請檢查權限！';

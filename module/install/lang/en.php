@@ -138,3 +138,35 @@ $lang->install->joinZentao = <<<EOT
 <p>You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>.</p>
 <i>Tips: For you get zentao news in time, please register Zetao community(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>).</i> 
 EOT;
+
+$lang->install->other   = "Other products recommended: ";
+$lang->install->chanzhi = new stdclass();
+$lang->install->chanzhi->name = '蝉知企业门户系统';
+$lang->install->chanzhi->desc = <<<EOD
+<ul>
+  <li>专业的企业营销门户系统</li>
+  <li>功能丰富，操作简洁方便</li>
+  <li>大量细节针对SEO优化</li>
+  <li>开源免费，不限商用！</li>
+</ul>
+EOD;
+$lang->install->ranzhi = new stdclass();
+$lang->install->ranzhi->name = '然之协同管理系统';
+$lang->install->ranzhi->desc = <<<EOD
+<ul>
+  <li>客户管理，订单跟踪</li>
+  <li>项目任务，公告文档</li>
+  <li>收入支出，出帐入账</li>
+  <li>论坛博客，动态消息</li>
+</ul>
+EOD;
+$lang->install->yidou = new stdclass();
+$lang->install->yidou->name = '亿斗进销存管理运营系统';
+$lang->install->yidou->desc = <<<EOD
+<ul>
+  <li>销售订单处理，信息及时反馈</li>
+  <li>采销业务状况，时时查询跟进</li>
+  <li>仓储配货送货，轻松便利快捷</li>
+  <li>财务收款付款，简单实用准确</li>
+</ul>
+EOD;

@@ -18,6 +18,7 @@ $lang->release->delete    = "刪除發佈";
 $lang->release->deleted   = '已刪除';
 $lang->release->view      = "發佈詳情";
 $lang->release->browse    = "瀏覽發佈";
+$lang->release->batchUnlink      = "批量移除";
 $lang->release->batchUnlinkStory = "批量移除需求";
 $lang->release->batchUnlinkBug   = "批量移除Bug";
 
@@ -49,3 +50,8 @@ $lang->release->export                = '導出HTML';
 
 $lang->release->filePath = '下載地址：';
 $lang->release->scmPath  = '版本庫地址：';
+
+$lang->release->exportTypeList['all']    = '所有';
+$lang->release->exportTypeList['story']  = '已完成需求';
+$lang->release->exportTypeList['bug']    = '已解決Bug';
+$lang->release->exportTypeList['newbug'] = '遺留Bug';

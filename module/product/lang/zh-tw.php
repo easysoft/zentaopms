@@ -24,7 +24,7 @@ $lang->product->close     = "關閉";
 $lang->product->select    = '--請選擇產品--';
 $lang->product->mine      = '我負責：';
 $lang->product->other     = '其他：';
-$lang->product->closed    = '已關閉&raquo;';
+$lang->product->closed    = '已關閉';
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

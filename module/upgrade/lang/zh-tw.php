@@ -16,6 +16,7 @@ $lang->upgrade->success = '升級成功';
 $lang->upgrade->tohome  = '返迴首頁';
 $lang->upgrade->license = '禪道項目管理軟件已更換授權協議至 Z PUBLIC LICENSE(ZPL) 1.1';
 $lang->upgrade->warnning= '警告';
+$lang->upgrade->checkExtension  = '檢查插件';
 $lang->upgrade->warnningContent = <<<EOT
 <p>升級有危險，請先備份資料庫，以防萬一。</p>
 <pre>
@@ -30,17 +31,17 @@ $lang->upgrade->setStatusFile = '<h4>升級之前請先執行下面的命令：<
                                  <ul>
                                  <li>windows: 打開命令行，執行<strong>echo ok > %s</strong></li>
                                  <li>linux: <strong>touch %s;</strong></li>
-                                 <li>或者刪掉"%s" 這個檔案 ，重新創建一個ok檔案，不需要副檔名，不需要內容。</li>
+                                 <li>或者刪掉"%s" 這個檔案 ，重新創建一個ok.txt檔案，不需要內容。</li>
                                  </ul>
                                  <strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="upgrade.php">繼續更新</a></strong>';
 $lang->upgrade->selectVersion = '選擇版本';
+$lang->upgrade->continue      = '繼續';
 $lang->upgrade->noteVersion   = "務必選擇正確的版本，否則會造成數據丟失。";
 $lang->upgrade->fromVersion   = '原來的版本';
 $lang->upgrade->toVersion     = '升級到';
 $lang->upgrade->confirm       = '確認要執行的SQL語句';
 $lang->upgrade->sureExecute   = '確認執行';
 $lang->upgrade->forbiddenExt  = '以下插件與新版本不兼容，已經自動禁用：';
-$lang->upgrade->checkExtension = '正在檢查插件的兼容性，請稍候 ...';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';
@@ -89,3 +90,4 @@ $lang->upgrade->fromVersions['6_2']       = '6.2';
 $lang->upgrade->fromVersions['6_3']       = '6.3';
 $lang->upgrade->fromVersions['6_4']       = '6.4';
 $lang->upgrade->fromVersions['7_0']       = '7.0';
+$lang->upgrade->fromVersions['7_1']       = '7.1';
