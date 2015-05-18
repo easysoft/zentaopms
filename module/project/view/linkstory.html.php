@@ -42,7 +42,7 @@
       <td class='text-left'>
         <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
         <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
-        <?php echo html::a($storyLink, $story->id);?>
+        <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
       </td>
       <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>

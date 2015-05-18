@@ -47,6 +47,8 @@ $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 
 $lang->group->versions['']          = 'History';
+$lang->group->versions['7_2']       = 'Zentao 7.2';
+$lang->group->versions['7_1']       = 'Zentao 7.1';
 $lang->group->versions['6_4']       = 'Zentao 6.4';
 $lang->group->versions['6_3']       = 'Zentao 6.3';
 $lang->group->versions['6_2']       = 'Zentao 6.2';

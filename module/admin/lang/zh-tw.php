@@ -15,7 +15,9 @@ $lang->admin->checkDB = '檢查資料庫';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用戶管理';
 $lang->admin->group   = '分組管理';
-$lang->admin->welcome = '歡迎使用禪道管理軟件後台管理系統';
+$lang->admin->safeIndex = '安全';
+$lang->admin->checkWeak = '弱口令檢查';
+$lang->admin->welcome   = '歡迎使用禪道管理軟件後台管理系統';
 
 $lang->admin->browseCompany = '瀏覽公司';
 
@@ -42,3 +44,17 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption  = '關聯社區賬號';
 $lang->admin->bind->action   = '關聯';
 $lang->admin->bind->success  = "關聯賬戶成功";
+
+$lang->admin->safe = new stdclass();
+$lang->admin->safe->common    = '安全';
+$lang->admin->safe->account   = '賬號';
+$lang->admin->safe->checkPwd  = '密碼檢查';
+$lang->admin->safe->weak      = '常用弱口令';
+$lang->admin->safe->checkWeak = '弱口令檢查';
+$lang->admin->safe->weakUser  = '弱口令賬號';
+
+$lang->admin->safe->modeList[0] = '不檢查';
+$lang->admin->safe->modeList[1] = '中';
+$lang->admin->safe->modeList[2] = '強';
+
+$lang->admin->safe->noticeMode = '系統會在登錄、創建和修改用戶、修改密碼的時候檢查用戶口令。';

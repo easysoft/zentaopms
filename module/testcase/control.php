@@ -250,7 +250,12 @@ class testcase extends control
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         /* Set productID and currentModuleID. */
-        $productID       = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
+        if($storyID and empty($moduleID))
+        {
+            $story    = $this->loadModel('story')->getByID($storyID);
+            $moduleID = $story->module;
+        }
         $currentModuleID = (int)$moduleID;
 
         /* Set menu. */
@@ -324,7 +329,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($stories[$storyID]) ? $stories[$storyID]->module : 0);
         $this->view->stories          = $stories;
         $this->view->type             = $type;
         $this->view->stage            = $stage;
@@ -360,7 +365,12 @@ class testcase extends control
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         /* Set productID and currentModuleID. */
-        $productID       = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
+        if($storyID and empty($moduleID))
+        {
+            $story    = $this->loadModel('story')->getByID($storyID);
+            $moduleID = $story->module;
+        }
         $currentModuleID = (int)$moduleID;
 
         /* Set menu. */

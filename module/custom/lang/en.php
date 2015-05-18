@@ -5,6 +5,7 @@ $lang->custom->set       = 'Set custom';
 $lang->custom->restore   = 'restore';
 $lang->custom->key       = 'Key';
 $lang->custom->value     = 'Value';
+$lang->custom->flow      = 'Flow';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -69,3 +70,19 @@ $lang->custom->notice->userRole = 'The length of key must be less than 20!';
 $lang->custom->storyReview   = 'Reviewed procedure';
 $lang->custom->reviewList[1] = 'Open';
 $lang->custom->reviewList[0] = 'Close';
+
+$lang->custom->flowList['productproject'] = 'The relation of product and project';
+
+$lang->custom->productproject = new stdclass();
+$lang->custom->productproject->relation['0_0'] = 'Product - Project';
+$lang->custom->productproject->relation['0_1'] = 'Product - Iterative';
+$lang->custom->productproject->relation['1_1'] = 'Project - Iterative';
+
+$lang->custom->productproject->product[0] = 'Product';
+$lang->custom->productproject->product[1] = 'Project';
+$lang->custom->productproject->project[0] = 'Project';
+$lang->custom->productproject->project[1] = 'Iterative';
+
+$lang->custom->productproject->locked = 'PMS';
+
+$lang->custom->productproject->notice = 'You can change the name of product and project, and the corresponding name display';

@@ -138,6 +138,7 @@ class cron extends control
 
         /* Update last time. */
         $this->cron->changeStatus(key($parsedCrons), 'normal', true);
+        $this->loadModel('common');
         $startedTime = time();
         while(true)
         {
@@ -148,6 +149,7 @@ class cron extends control
 
             /* Run crons. */
             $now = new datetime('now');
+            $this->common->loadConfigFromDB();
             foreach($parsedCrons as $id => $cron)
             {
                 $cronInfo = $this->cron->getById($id);
@@ -156,7 +158,7 @@ class cron extends control
                 /* Skip cron that status is running and run time is less than max. */
                 if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
                 /* Skip cron that last time is more than this cron time. */
-                if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) continue;
+                if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) die();
 
                 if($now > $cron['time'])
                 {
@@ -173,6 +175,7 @@ class cron extends control
                             parse_str($cron['command'], $params);
                             if(isset($params['moduleName']) and isset($params['methodName']))
                             {
+                                $this->app->loadConfig($params['moduleName']);
                                 $output = $this->fetch($params['moduleName'], $params['methodName']);
                             }
                         }
@@ -210,7 +213,7 @@ class cron extends control
 
             /* Break while. */
             if(connection_status() != CONNECTION_NORMAL) break;
-            if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
+            if(((time() - $startedTime) / 60/ 4) >= $this->config->cron->maxRunDays) break;
         }
 
         /* Revert cron status to stop. */

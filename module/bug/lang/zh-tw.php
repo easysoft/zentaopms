@@ -282,19 +282,10 @@ $lang->bug->report->charts['bugsPerAssignedTo']     = '指派給統計';
 //$lang->bug->report->charts['bugHistories']       = 'Bug處理步驟統計';
 
 $lang->bug->report->options = new stdclass();
-$lang->bug->report->options->graph = new stdclass();
-$lang->bug->report->options->swf                     = 'pie2d';
-$lang->bug->report->options->width                   = 'auto';
-$lang->bug->report->options->height                  = 300;
-$lang->bug->report->options->graph->baseFontSize     = 12;
-$lang->bug->report->options->graph->showNames        = 1;
-$lang->bug->report->options->graph->formatNumber     = 1;
-$lang->bug->report->options->graph->decimalPrecision = 0;
-$lang->bug->report->options->graph->animation        = 0;
-$lang->bug->report->options->graph->rotateNames      = 0;
-$lang->bug->report->options->graph->yAxisName        = 'COUNT';
-$lang->bug->report->options->graph->pieRadius        = 100; // 餅圖直徑。
-$lang->bug->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
+$lang->bug->report->options->graph  = new stdclass();
+$lang->bug->report->options->type   = 'pie';
+$lang->bug->report->options->width  = 500;
+$lang->bug->report->options->height = 140;
 
 $lang->bug->report->bugsPerProject        = new stdclass();
 $lang->bug->report->bugsPerBuild          = new stdclass();
@@ -336,20 +327,14 @@ $lang->bug->report->bugsPerProject->graph->xAxisName     = '項目';
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = '模組';
 
-$lang->bug->report->openedBugsPerDay->swf                = 'column2d';
-$lang->bug->report->openedBugsPerDay->height             = 400;
+$lang->bug->report->openedBugsPerDay->type                = 'bar';
 $lang->bug->report->openedBugsPerDay->graph->xAxisName   = '日期';
-$lang->bug->report->openedBugsPerDay->graph->rotateNames = 1;
 
-$lang->bug->report->resolvedBugsPerDay->swf              = 'column2d';
-$lang->bug->report->resolvedBugsPerDay->height           = 400;
+$lang->bug->report->resolvedBugsPerDay->type              = 'bar';
 $lang->bug->report->resolvedBugsPerDay->graph->xAxisName = '日期';
-$lang->bug->report->resolvedBugsPerDay->graph->rotateNames = 1;
 
-$lang->bug->report->closedBugsPerDay->swf                = 'column2d';
-$lang->bug->report->closedBugsPerDay->height             = 400;
+$lang->bug->report->closedBugsPerDay->type                = 'bar';
 $lang->bug->report->closedBugsPerDay->graph->xAxisName   = '日期';
-$lang->bug->report->closedBugsPerDay->graph->rotateNames = 1;
 
 $lang->bug->report->openedBugsPerUser->graph->xAxisName  = '用戶';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName= '用戶';

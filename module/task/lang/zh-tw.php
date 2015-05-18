@@ -86,7 +86,8 @@ $lang->task->recordEstimate    = '工時';
 $lang->task->editEstimate      = '編輯工時';
 $lang->task->deleteEstimate    = '刪除工時';
 
-$lang->task->ditto = '同上';
+$lang->task->ditto         = '同上';
+$lang->task->selectAllUser = '選擇全部人員';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未開始';
@@ -181,18 +182,9 @@ $lang->task->report->charts['finishedTasksPerDay']  = '每天完成統計';
 
 $lang->task->report->options = new stdclass();
 $lang->task->report->options->graph = new stdclass();
-$lang->task->report->options->swf                     = 'pie2d';
-$lang->task->report->options->width                   = 'auto';
-$lang->task->report->options->height                  = 300;
-$lang->task->report->options->graph->baseFontSize     = 12;
-$lang->task->report->options->graph->showNames        = 1;
-$lang->task->report->options->graph->formatNumber     = 1;
-$lang->task->report->options->graph->decimalPrecision = 0;
-$lang->task->report->options->graph->animation        = 0;
-$lang->task->report->options->graph->rotateNames      = 0;
-$lang->task->report->options->graph->yAxisName        = 'COUNT';
-$lang->task->report->options->graph->pieRadius        = 100; // 餅圖直徑。
-$lang->task->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
+$lang->task->report->options->type   = 'pie';
+$lang->task->report->options->width  = 500;
+$lang->task->report->options->height = 140;
 
 $lang->task->report->tasksPerProject      = new stdclass();
 $lang->task->report->tasksPerModule       = new stdclass();
@@ -249,9 +241,7 @@ $lang->task->report->tasksPerConsumed->graph->xAxisName     = '時間';
 $lang->task->report->tasksPerFinishedBy->graph->xAxisName   = '用戶';
 $lang->task->report->tasksPerClosedReason->graph->xAxisName = '關閉原因';
 
-$lang->task->report->finishedTasksPerDay->swf                = 'column2d';
-$lang->task->report->finishedTasksPerDay->height             = 400;
+$lang->task->report->finishedTasksPerDay->type               = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
-$lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->estimateTip = '對該任務最初的預計';

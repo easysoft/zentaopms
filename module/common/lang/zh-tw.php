@@ -31,6 +31,7 @@ $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar
 $lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv11.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.1》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
 
 $lang->reset        = '重填';
+$lang->cancel       = '取消';
 $lang->refresh      = '刷新';
 $lang->edit         = '編輯';
 $lang->copy         = '複製';
@@ -283,6 +284,7 @@ $lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subMo
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => '備份|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->safe      = array('link' => '安全|admin|safe',);
 $lang->admin->menu->cron      = array('link' => '計劃任務|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');

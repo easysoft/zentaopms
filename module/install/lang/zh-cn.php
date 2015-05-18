@@ -23,7 +23,7 @@ $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '欢迎使用禅道项目管理软件！';
 $lang->install->license          = '禅道项目管理软件使用 Z PUBLIC LICENSE(ZPL) 1.1 授权协议';
 $lang->install->desc             = <<<EOT
-禅道项目管理软件(ZenTaoPMS)是一款国产的，基于LGPL协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
+禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub' target='_blank'>ZPL</a>协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
 
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
@@ -138,3 +138,35 @@ $lang->install->joinZentao = <<<EOT
 <p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。</p><p>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)进行登记。</p>
 
 EOT;
+
+$lang->install->other   = "其他产品推荐：";
+$lang->install->chanzhi = new stdclass();
+$lang->install->chanzhi->name = '蝉知企业门户系统';
+$lang->install->chanzhi->desc = <<<EOD
+<ul>
+  <li>专业的企业营销门户系统</li>
+  <li>功能丰富，操作简洁方便</li>
+  <li>大量细节针对SEO优化</li>
+  <li>开源免费，不限商用！</li>
+</ul>
+EOD;
+$lang->install->ranzhi = new stdclass();
+$lang->install->ranzhi->name = '然之协同管理系统';
+$lang->install->ranzhi->desc = <<<EOD
+<ul>
+  <li>客户管理，订单跟踪</li>
+  <li>项目任务，公告文档</li>
+  <li>收入支出，出帐入账</li>
+  <li>论坛博客，动态消息</li>
+</ul>
+EOD;
+$lang->install->yidou = new stdclass();
+$lang->install->yidou->name = '亿斗进销存管理运营系统';
+$lang->install->yidou->desc = <<<EOD
+<ul>
+  <li>销售订单处理，信息及时反馈</li>
+  <li>采销业务状况，时时查询跟进</li>
+  <li>仓储配货送货，轻松便利快捷</li>
+  <li>财务收款付款，简单实用准确</li>
+</ul>
+EOD;

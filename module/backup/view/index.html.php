@@ -57,6 +57,14 @@
       <?php endforeach;?>
     <?php endforeach;?>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan='4'>
+        <?php printf($lang->backup->holdDays, $config->backup->holdDays)?>
+        <?php if(common::hasPriv('backup', 'change')) echo html::a(inlink('change'), $lang->backup->changeAB, '', "class='iframe' data-width='300'");?>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">

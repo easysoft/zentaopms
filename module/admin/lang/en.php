@@ -15,7 +15,9 @@ $lang->admin->checkDB = 'Repair data';
 $lang->admin->company = 'Company';
 $lang->admin->user    = 'User';
 $lang->admin->group   = 'Group';
-$lang->admin->welcome = 'Welcome to ZenTaoPMS.';
+$lang->admin->safeIndex = 'Safe';
+$lang->admin->checkWeak = 'Check weak';
+$lang->admin->welcome   = 'Welcome to ZenTaoPMS.';
 
 $lang->admin->browseCompany = 'Browse Company';
 

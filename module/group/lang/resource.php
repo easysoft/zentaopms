@@ -556,6 +556,7 @@ $lang->resource->custom = new stdclass();
 $lang->resource->custom->index   = 'index';
 $lang->resource->custom->set     = 'set';
 $lang->resource->custom->restore = 'restore';
+$lang->resource->custom->flow    = 'flow';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -615,6 +616,7 @@ $lang->resource->group->create       = 'create';
 $lang->resource->group->edit         = 'edit';
 $lang->resource->group->copy         = 'copy';
 $lang->resource->group->delete       = 'delete';
+$lang->resource->group->manageView   = 'manageView';
 $lang->resource->group->managePriv   = 'managePriv';
 $lang->resource->group->manageMember = 'manageMember';
 
@@ -714,6 +716,8 @@ $lang->search->methodOrder[25] = 'select';
 $lang->resource->admin = new stdclass();
 $lang->resource->admin->index     = 'index';
 $lang->resource->admin->checkDB   = 'checkDB';
+$lang->resource->admin->safe      = 'safeIndex';
+$lang->resource->admin->checkWeak = 'checkWeak';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
@@ -826,6 +830,7 @@ $lang->resource->backup = new stdclass();
 $lang->resource->backup->index   = 'index';
 $lang->resource->backup->backup  = 'backup';
 $lang->resource->backup->restore = 'restore';
+$lang->resource->backup->change  = 'change';
 $lang->resource->backup->delete  = 'delete';
 
 $lang->backup->methodOrder[5]  = 'index';
@@ -1057,3 +1062,9 @@ $lang->changelog['7.1'][] = 'mail-delete';
 $lang->changelog['7.1'][] = 'mail-batchDelete';
 $lang->changelog['7.1'][] = 'dev-api';
 $lang->changelog['7.1'][] = 'dev-db';
+
+$lang->changelog['7.2'][] = 'admin-safeIndex';
+$lang->changelog['7.2'][] = 'admin-checkWeak';
+$lang->changelog['7.2'][] = 'backup-change';
+$lang->changelog['7.2'][] = 'custom-flow';
+$lang->changelog['7.2'][] = 'group-manageView';
