@@ -23,7 +23,7 @@ include '../../common/view/header.lite.html.php';
             <?php endforeach;?>
           </ul>
         </div>
-        <button data-placement='bottom' data-toggle='popover' data-content="<?php if(extension_loaded('gd')) echo "<img height='297' width='297' src='" . $this->createLink('misc', 'qrcode') . "' />"; else echo $noGDLib; ?>" title="<?php echo $lang->user->mobileLogin;?>" id='mobile' class='btn'><i class='icon-mobile-phone'></i></button>
+        <button data-placement='bottom' data-toggle='popover' data-content="<?php if(extension_loaded('gd')) echo "<img height='297' width='297' src='" . $this->createLink('misc', 'qrcode') . "' />"; else echo $noGDLib; ?>" title="<?php echo $lang->user->mobileLogin;?>" id='mobile' class='btn'><i class='icon-mobile'></i></button>
       </div>
     </div>
     <div class="panel-content" id="login-form">
