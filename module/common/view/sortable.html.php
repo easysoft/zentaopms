@@ -11,6 +11,7 @@ tbody.sortable-sorting > tr {opacity: .3;}
 tbody.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red}
 tbody.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2)}
 tbody.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
+tbody.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 </style>
 <script> 
 $(document).ready(function()
@@ -37,6 +38,8 @@ $(document).ready(function()
                 var $thead = $tbody.closest('table').children('thead');
                 $thead.find('.headerSortDown, .headerSortUp').removeClass('headerSortDown headerSortUp').addClass('header');
                 $thead.find('th.sort-default .header').removeClass('header').addClass('headerSortDown');
+                e.element.addClass('drop-success');
+                setTimeout(function(){e.element.removeClass('drop-success');}, 800)
             }
         });
     });

@@ -31,9 +31,6 @@
   <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
-      <?php if(strpos($orderBy, 'order') !== false):?>
-      <th class='w-20px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
-      <?php endif;?>
       <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
       <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
       <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
@@ -45,15 +42,13 @@
       <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
       <th class='w-150px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
+      <th class='w-30px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
     </tr>
   </thead>
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
   <tbody class='sortable' id='projectTableList'>
   <?php foreach($projectStats as $project):?>
   <tr class='text-center' data-id='<?php echo $project->id ?>' data-order='<?php echo $project->order ?>'>
-    <?php if(strpos($orderBy, 'order') !== false):?>
-    <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
-    <?php endif;?>
     <td>
       <?php if($canBatchEdit):?>
       <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
@@ -73,6 +68,7 @@
       <small><?php echo $project->hours->progress;?>%</small>
     </td>
     <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
+    <td class='sort-handler'><i class="icon icon-move"></i></td>
   </tr>
   <?php endforeach;?>
   </tbody>

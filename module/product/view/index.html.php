@@ -36,9 +36,6 @@
     <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
-        <?php if(strpos($orderBy, 'order') !== false):?>
-        <th class='w-20px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
-        <?php endif;?>
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
         <th class='w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
@@ -50,15 +47,13 @@
         <th class='w-80px'><?php echo $lang->product->bugs;?></th>
         <th class='w-80px'><?php echo $lang->bug->unResolved;?></th>
         <th class='w-80px'><?php echo $lang->bug->assignToNull;?></th>
+        <th class='w-30px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
       </tr>
     </thead>
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
     <tbody class='sortable' id='productTableList'>
       <?php foreach($productStats as $product):?>
       <tr class='text-center' data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code ?>'>
-        <?php if(strpos($orderBy, 'order') !== false):?>
-        <td class='sort-handler'><i class="icon icon-ellipsis-v"></i></td>
-        <?php endif;?>
         <td>
           <?php if($canBatchEdit):?>
           <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
@@ -75,6 +70,7 @@
         <td><?php echo $product->bugs?></td>
         <td><?php echo $product->unResolved;?></td>
         <td><?php echo $product->assignToNull;?></td>
+        <td class='sort-handler'><i class="icon icon-move"></i></td>
       </tr>
       <?php endforeach;?>
     </tbody>
