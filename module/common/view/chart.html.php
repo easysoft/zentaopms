@@ -49,6 +49,11 @@ if($config->debug)
                 });
 
                 if(data.length > 1) options.scaleLabelPlacement = 'outside';
+                else if(data.length === 1)
+                {
+                    options.scaleLabelPlacement = 'inside';
+                    data.push({label: '', value: data[0].value/2000, color: '#fff', showLabel: false})
+                }
 
                 chart = $canvas.pieChart(data, options);
                 $canvas.on('mousemove', function(e)
