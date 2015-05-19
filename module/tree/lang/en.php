@@ -35,6 +35,7 @@ $lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
 $lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
 $lang->tree->confirmDelete = 'Are you sure to delete this module and its children?';
+$lang->tree->confirmRoot   = 'Modify the module products, modified the products belong to the needs of the module, bug, use case, and project and product relationship. This is dangerous, please be careful. To confirm the change?';
 $lang->tree->successSave   = 'Successfully saved';
 $lang->tree->successFixed  = 'Successfully fixed.';
 
