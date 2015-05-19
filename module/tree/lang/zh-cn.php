@@ -35,6 +35,7 @@ $lang->tree->ajaxGetOptionMenu = '接口:获取下拉列表';
 $lang->tree->ajaxGetSonModules = '接口:获得子菜单列表';
 
 $lang->tree->confirmDelete = '该模块及其子模块都会被删除，您确定删除吗？';
+$lang->tree->confirmRoot   = '模块的所属产品修改，会关联修改该模块下的需求、Bug、用例的所属产品，以及项目和产品的关联关系。该操作比较危险，请谨慎操作。是否确认修改？';
 $lang->tree->successSave   = '成功保存';
 $lang->tree->successFixed  = '成功修正数据！';
 

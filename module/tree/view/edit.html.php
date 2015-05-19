@@ -28,7 +28,7 @@ $jsRoot  = $webRoot . "js/";
         <?php if($showProduct):?>
         <tr>
           <th class='w-80px'><?php echo $lang->tree->product;?></th>
-          <td><?php echo html::select('root', $products, $module->root, "class='form-control chosen' onchange='getProductModules(this.value)'");?></td>
+          <td><?php echo html::select('root', $products, $module->root, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
@@ -69,4 +69,17 @@ function getProductModules(productID)
         $('#parent').trigger('chosen:updated')
     }, 'json');
 }
+$(function()
+{
+    $('#root').change(function()
+    {
+        if($(this).val() == currentRoot) return true;
+        if(!confirm('<?php echo $lang->tree->confirmRoot?>'))
+        {
+            $('#root').val(currentRoot);
+            $('#root').trigger('chosen:updated');
+        }
+        getProductModules($(this).val());
+    })
+})
 </script>
