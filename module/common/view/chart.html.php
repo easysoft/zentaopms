@@ -72,7 +72,7 @@ if($config->debug)
                     dataset.data.push(parseInt($row.find('.chart-value').text()));
                 });
                 var data = {labels: labels, datasets: [dataset]};
-                if(labels.length) options.barValueSpacing = ($canvas.width() - 50*labels.length)/(labels.length*2);
+                if(labels.length) options.barValueSpacing = 5;
 
                 chart = $canvas.barChart(data, options);
             }
