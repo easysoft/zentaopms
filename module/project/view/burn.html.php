@@ -61,7 +61,7 @@ function initBurnChar()
         }]
     };
 
-    var burnChart = $("#burnChart").lineChart(data, {});
+    var burnChart = $("#burnChart").lineChart(data, {animation: !($.zui.browser && $.zui.browser.ie === 8)});
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
