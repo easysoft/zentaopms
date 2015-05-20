@@ -87,7 +87,7 @@ $lang->task->editEstimate      = '编辑工时';
 $lang->task->deleteEstimate    = '删除工时';
 
 $lang->task->ditto         = '同上';
-$lang->task->selectAllUser = '选择全部人员';
+$lang->task->selectAllUser = '全部';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';

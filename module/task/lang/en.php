@@ -87,7 +87,7 @@ $lang->task->editEstimate      = 'Edit Hour';
 $lang->task->deleteEstimate    = 'Delete Hour';
 
 $lang->task->ditto         = 'Ditto';
-$lang->task->selectAllUser = 'Select all user';
+$lang->task->selectAllUser = 'All';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Pending';
