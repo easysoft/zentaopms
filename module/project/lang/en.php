@@ -62,7 +62,6 @@ $lang->project->typeDesc      = 'No burndown and story in OPS';
 $lang->project->mine          = 'I charge : ';
 $lang->project->other         = 'Other : ';
 $lang->project->deleted       = 'Deleted';
-$lang->project->updateOrder   = 'Order';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -134,6 +133,7 @@ $lang->project->batchUnlinkStory = 'Batch remove story';
 $lang->project->importTask       = 'Transfer task';
 $lang->project->importBug        = 'Import bug';
 $lang->project->ajaxGetProducts  = "API: get project's products";
+$lang->project->updateOrder      = 'Order';
 
 /* Browse. */
 $lang->project->allTasks             = 'All';

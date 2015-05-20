@@ -62,7 +62,6 @@ $lang->project->typeDesc      = '运维项目禁用燃尽图和需求。';
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
-$lang->project->updateOrder   = '排序';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
@@ -134,6 +133,7 @@ $lang->project->batchUnlinkStory = '批量移除需求';
 $lang->project->importTask       = '转入任务';
 $lang->project->importBug        = '导入Bug';
 $lang->project->ajaxGetProducts  = '接口：获得项目产品列表';
+$lang->project->updateOrder      = '排序';
 
 /* 分组浏览。*/
 $lang->project->allTasks             = '所有';
