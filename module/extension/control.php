@@ -124,7 +124,7 @@ class extension extends control
         $statusFile = $this->loadModel('upgrade')->checkSafeFile();
         if($statusFile)
         {
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile, $statusFile);
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile);
             die($this->display());
         }
         /* Get the package file name. */

@@ -81,14 +81,13 @@ $lang->extension->viewInstalled            = 'View installed extensions.';
 $lang->extension->viewAvailable            = 'View available extensions';
 $lang->extension->viewDeactivated          = 'View deactivated extensions';
 $lang->extension->backDBFile               = 'Plug-related data has been backed up to %s file!';
-$lang->extension->noticeOkFile             = '<h4>The ok file does not exist or has expired</h4>
-    <h4>For safe, please re create the ok file</h4>
-    <p>You can perform the following commands on the server: </p>
-    <ul>
-    <li>For linux:<strong>touch %s;</strong> </li>
-    <li>For windows:<strong>echo ok > %s</strong></li>
-    </ul> '; 
-
+$lang->extension->noticeOkFile             = "<h5>For security reason, system need to confirm you're administrator of zentao system.</h5>
+    <h5>Please login into the zentao host and create the %s file.</h5>
+    <p>Note:</p>
+    <ol>
+    <li>Keep the ok.txt content empty.</li>
+    <li>If the file exists already, remove and recreate it again.</li>
+    <ul>"; 
 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Install';

@@ -30,7 +30,7 @@ $lang->editor->deleteConfirm = '是否要删除？';
 $lang->editor->extendConfirm = '是否要重用原来代码？';
 $lang->editor->repeatFile    = '文件名重复';
 $lang->editor->repeatPage    = '已经有此页面。是否覆盖？';
-$lang->editor->noticeOkFile  = 'ok文件不存在或文件已过期\n为了系统的安全，请重新创建ok文件\n您可在服务器执行下面相应的命令：\nwindows: 打开命令行，执行 echo ok > %s\nlinux: touch %s;\n或者删掉 %s 这个文件 ，重新创建一个ok.txt文件，不需要内容。';
+$lang->editor->noticeOkFile  = '为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。';
 
 $lang->editor->notWritable   = "无法写入，可能没有权限。请尝试执行 chmod 777 -R ";
 $lang->editor->notDelete     = '无法删除，请检查权限！';
