@@ -122,9 +122,9 @@ $lang->user->roleList['others'] = 'Others';
 $lang->user->genderList['m'] = 'Male';
 $lang->user->genderList['f'] = 'Female';
 
-$lang->user->passwordStrengthList[0] = 'Weak';
-$lang->user->passwordStrengthList[1] = 'Good';
-$lang->user->passwordStrengthList[2] = 'Strong';
+$lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
+$lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
+$lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>";
 
 $lang->user->statusList['active'] = 'Activate';
 $lang->user->statusList['delete'] = 'Deleted';

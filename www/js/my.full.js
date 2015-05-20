@@ -1310,7 +1310,7 @@ function computePasswordStrength(password)
 
     strength += uniqueChars.length * 2;
 
-    strength = strength > 99 ? 99 : strength;
+    strength = strength > 89 ? 89 : strength;
     strength = Math.floor(strength / 10);
     strength = Math.floor(strength / 3);
 

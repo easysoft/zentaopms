@@ -40,7 +40,7 @@ function changeEmail(num)
     account[num] = $('.account_' + num).val();
 }
 
-function checkPwd(password)
+function checkPassword(password)
 {
-    $('#passwordStrength').html(passwordStrengthList[computePasswordStrength(password)]);
+    $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
 }

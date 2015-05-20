@@ -122,9 +122,9 @@ $lang->user->roleList['others'] = '其他';
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
 
-$lang->user->passwordStrengthList[0] = '弱';
-$lang->user->passwordStrengthList[1] = '中';
-$lang->user->passwordStrengthList[2] = '强';
+$lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
+$lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";
+$lang->user->passwordStrengthList[2] = "<span style='color:green'>强</span>";
 
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';

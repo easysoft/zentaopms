@@ -509,6 +509,7 @@ class userModel extends model
                 $hash = sha1($record->account . $record->password . $record->last);
                 $user = $password == $hash ? $record : '';
             }
+            if(!$user and md5($password) == $record->password) $user = $record;
         }
 
         if($user)
@@ -970,7 +971,7 @@ class userModel extends model
         }
         $strength += strlen($uniqueChars) * 2;
 
-        $strength = $strength > 99 ? 99 : $strength;
+        $strength = $strength > 89 ? 89 : $strength;
         $strength = floor($strength / 10);
         $strength = floor($strength / 3);
 

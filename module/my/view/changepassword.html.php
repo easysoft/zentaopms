@@ -29,7 +29,7 @@
         <th><?php echo $lang->user->password;?></th>
         <td>
           <span class='input-group'>
-            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onkeyup='checkPwd(this.value)'");?>
+            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>
@@ -48,9 +48,9 @@
 
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <script>
-function checkPwd(password)
+function checkPassword(password)
 {
-    $('#passwordStrength').html(passwordStrengthList[computePasswordStrength(password)]);
+    $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
