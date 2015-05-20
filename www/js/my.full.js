@@ -1262,7 +1262,7 @@ function startCron()
     $.ajax({type:"GET", timeout:100, url:createLink('cron', 'ajaxExec')});
 }
 
-function pwdLevel(password)
+function computePasswordStrength(password)
 {
     if(password.length == 0) return 0;
 

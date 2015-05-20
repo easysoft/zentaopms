@@ -42,5 +42,5 @@ function changeEmail(num)
 
 function checkPwd(password)
 {
-    $('#pwdLevel').html(pwdLevelList[pwdLevel(password)]);
+    $('#passwordStrength').html(passwordStrengthList[computePasswordStrength(password)]);
 }

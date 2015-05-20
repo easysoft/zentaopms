@@ -30,7 +30,7 @@
         <td>
           <span class='input-group'>
             <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onkeyup='checkPwd(this.value)'");?>
-            <span class='input-group-addon' id='pwdLevel'></span>
+            <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>
       </tr>  
@@ -46,11 +46,11 @@
   </form>  
 </div>
 
-<?php js::set('pwdLevelList', $lang->user->pwdLevelList)?>
+<?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <script>
 function checkPwd(password)
 {
-    $('#pwdLevel').html(pwdLevelList[pwdLevel(password)]);
+    $('#passwordStrength').html(passwordStrengthList[computePasswordStrength(password)]);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

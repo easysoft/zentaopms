@@ -13,24 +13,25 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <ul class='nav'>
-    <li class='active'><?php echo html::a($this->inlink('safe'), $lang->admin->safe->account);?></li>
+    <li class='active'><?php common::printLink('admin', 'safe', '', $lang->admin->safe->set);?></li>
+    <li><?php common::printLink('admin', 'checkWeak', '', $lang->admin->safe->checkWeak);?></li>
   </ul>
 </div>
 <div class='container mw-800px'>
   <form method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-100px'><?php echo $lang->admin->safe->checkPwd?></th>
-        <td><?php echo html::select('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "class='form-control'")?></td>
+        <th class='w-100px'><?php echo $lang->admin->safe->password?></th>
+        <td><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0)?></td>
         <td><?php echo $lang->admin->safe->noticeMode?></td>
       </tr>
       <tr>
         <th><?php echo $lang->admin->safe->weak?></th>
-        <td colspan='2'><?php echo html::input('weak', $config->safe->weak, "class='form-control'")?></td>
+        <td colspan='2'><?php echo html::textarea('weak', $config->safe->weak, "class='form-control' rows='4'")?></td>
       </tr>
       <tr>
         <th></th>
-        <td colspan='2'><?php echo html::submitButton() . html::a(inlink('checkWeak'), $lang->admin->safe->checkWeak, '', "class='btn'");?></td>
+        <td colspan='2'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

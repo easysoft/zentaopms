@@ -122,9 +122,9 @@ $lang->user->roleList['others'] = 'Others';
 $lang->user->genderList['m'] = 'Male';
 $lang->user->genderList['f'] = 'Female';
 
-$lang->user->pwdLevelList[0] = 'Weak';
-$lang->user->pwdLevelList[1] = 'Intermediate';
-$lang->user->pwdLevelList[2] = 'Strong';
+$lang->user->passwordStrengthList[0] = 'Weak';
+$lang->user->passwordStrengthList[1] = 'Good';
+$lang->user->passwordStrengthList[2] = 'Strong';
 
 $lang->user->statusList['active'] = 'Activate';
 $lang->user->statusList['delete'] = 'Deleted';

@@ -47,14 +47,20 @@ $lang->admin->bind->success = "Bind success";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common    = 'Safe';
-$lang->admin->safe->account   = 'Account';
-$lang->admin->safe->checkPwd  = 'Check password';
+$lang->admin->safe->set       = 'Set password safe';
+$lang->admin->safe->password  = 'Password safe';
 $lang->admin->safe->weak      = 'weak Password';
+$lang->admin->safe->reason    = 'Type';
 $lang->admin->safe->checkWeak = 'Weak password check';
-$lang->admin->safe->weakUser  = 'Weak password account';
 
 $lang->admin->safe->modeList[0] = 'Do not check';
 $lang->admin->safe->modeList[1] = 'Intermediate';
 $lang->admin->safe->modeList[2] = 'Strong';
+
+$lang->admin->safe->reasonList['weak']     = 'Common weak password';
+$lang->admin->safe->reasonList['account']  = 'Same account';
+$lang->admin->safe->reasonList['mobile']   = 'Same mobile';
+$lang->admin->safe->reasonList['phone']    = 'Same phone';
+$lang->admin->safe->reasonList['birthday'] = 'Same birthday';
 
 $lang->admin->safe->noticeMode = 'The system will log in, create and modify the user password, check the user password.';

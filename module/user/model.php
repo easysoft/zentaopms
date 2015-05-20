@@ -209,7 +209,7 @@ class userModel extends model
             ->remove('group, password1, password2, verifyPwd')
             ->get();
 
-        if(isset($this->config->safe->mode) and $this->pwdLevel($this->post->password1) < $this->config->safe->mode)
+        if(isset($this->config->safe->mode) and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode)
         {
             dao::$errors['password1'][] = $this->lang->user->weakPwd;
             return false;
@@ -322,7 +322,7 @@ class userModel extends model
             ->remove('password1, password2, groups,verifyPwd')
             ->get();
 
-        if(isset($this->config->safe->mode) and $user->password and $this->pwdLevel($this->post->password1) < $this->config->safe->mode)
+        if(isset($this->config->safe->mode) and $user->password and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode)
         {
             dao::$errors['password1'][] = $this->lang->user->weakPwd;
             return false;
@@ -438,7 +438,7 @@ class userModel extends model
             ->remove('account, password1, password2, originalPwd')
             ->get();
 
-        if(isset($this->config->safe->mode) and $this->pwdLevel($this->post->password1) < $this->config->safe->mode)
+        if(isset($this->config->safe->mode) and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode)
         {
             dao::$errors['password1'][] = $this->lang->user->weakPwd;
             return false;
@@ -886,13 +886,29 @@ class userModel extends model
         $weakUsers = array();
         foreach($users as $user)
         {
-            if(isset($weaks[$user->password])
-                or $user->password == md5($user->account)
-                or ($user->phone and $user->password == md5($user->phone))
-                or ($user->mobile and $user->password == md5($user->mobile))
-                or ($user->birthday and $user->password == md5($user->birthday))
-            )
+            if(isset($weaks[$user->password]))
             {
+                $user->weakReason = 'weak';
+                $weakUsers[] = $user;
+            }
+            elseif($user->password == md5($user->account))
+            {
+                $user->weakReason = 'account';
+                $weakUsers[] = $user;
+            }
+            elseif($user->phone and $user->password == md5($user->phone))
+            {
+                $user->weakReason = 'phone';
+                $weakUsers[] = $user;
+            }
+            elseif($user->mobile and $user->password == md5($user->mobile))
+            {
+                $user->weakReason = 'mobile';
+                $weakUsers[] = $user;
+            }
+            elseif($user->birthday and $user->password == md5($user->birthday))
+            {
+                $user->weakReason = 'birthday';
                 $weakUsers[] = $user;
             }
         }
@@ -901,13 +917,13 @@ class userModel extends model
     }
 
     /**
-     * Get password level. 
+     * Compute  password strength. 
      * 
      * @param  string    $password 
      * @access public
      * @return int
      */
-    public function pwdLevel($password)
+    public function computePasswordStrength($password)
     {
         if(strlen($password) == 0) return 0;
 
