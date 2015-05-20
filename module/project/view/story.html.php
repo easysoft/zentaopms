@@ -136,7 +136,7 @@
                     $misc       = "onclick=\"setFormAction('$actionLink')\"";
                     echo '<li>' . html::a('#', $lang->close, '', $misc) . '</li>';
                 }
-                if(common::hasPriv('story', 'batchUnlinkStory'))
+                if(common::hasPriv('project', 'batchUnlinkStory'))
                 {
                     $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
                     $misc       = "onclick=\"setFormAction('$actionLink')\"";

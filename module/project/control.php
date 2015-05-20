@@ -1728,12 +1728,12 @@ class project extends control
     }
 
     /**
-     * Ajax order.
+     * Update order.
      * 
      * @access public
      * @return void
      */
-    public function ajaxOrder()
+    public function updateOrder()
     {
         $idList   = explode(',', trim($this->post->projects, ','));
         $orderBy  = $this->post->orderBy;

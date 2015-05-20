@@ -62,6 +62,7 @@ $lang->project->typeDesc      = '运维项目禁用燃尽图和需求。';
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
+$lang->project->updateOrder   = '排序';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';

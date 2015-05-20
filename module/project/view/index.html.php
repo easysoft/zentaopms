@@ -26,6 +26,7 @@
     <?php echo "<li>" . html::select('product', $products, $productID, "class='chosen' onchange='byProduct(this.value, $projectID)'") . '</li>';?>
   </ul>
 </div>
+<?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form class='form-condensed' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
 <table class='table table-fixed tablesorter'>
   <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
@@ -42,7 +43,9 @@
       <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
       <th class='w-150px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
-      <th class='w-30px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
+      <?php if($canOrder):?>
+      <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->updateOrder);?></th>
+      <?php endif;?>
     </tr>
   </thead>
   <?php $canBatchEdit = common::hasPriv('project', 'batchEdit'); ?>
@@ -68,19 +71,22 @@
       <small><?php echo $project->hours->progress;?>%</small>
     </td>
     <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
+    <?php if($canOrder):?>
     <td class='sort-handler'><i class="icon icon-move"></i></td>
+    <?php endif;?>
   </tr>
   <?php endforeach;?>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan='<?php echo strpos($orderBy, 'order') !== false ? 12 : 11?>'>
-        <?php if($canBatchEdit and !empty($projectStats)):?>
+      <td colspan='<?php echo $canOrder ? 12 : 11?>'>
         <div class='table-actions clearfix'>
-        <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
-        <?php echo html::submitButton($lang->project->batchEdit);?>
+          <?php if($canBatchEdit and !empty($projectStats)):?>
+          <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
+          <?php echo html::submitButton($lang->project->batchEdit);?>
+          <?php endif;?>
+          <?php if(!$canOrder and common::hasPriv('project', 'updateOrder')) echo html::a(inlink('index', "locate=no&status=$status&projectID=$projectID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder, '', "class='btn'");?>
         </div>
-        <?php endif;?>
         <div class='text-right'><?php $pager->show();?></div>
       </td>
     </tr>

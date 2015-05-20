@@ -31,6 +31,7 @@
   </div>
 </div>
 <?php else:?>
+<?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
   <table class='table table-condensed table-hover table-striped tablesorter'>
     <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
@@ -47,7 +48,9 @@
         <th class='w-80px'><?php echo $lang->product->bugs;?></th>
         <th class='w-80px'><?php echo $lang->bug->unResolved;?></th>
         <th class='w-80px'><?php echo $lang->bug->assignToNull;?></th>
-        <th class='w-30px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, '<i></i>');?></th>
+        <?php if($canOrder):?>
+        <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
+        <?php endif;?>
       </tr>
     </thead>
     <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
@@ -70,19 +73,22 @@
         <td><?php echo $product->bugs?></td>
         <td><?php echo $product->unResolved;?></td>
         <td><?php echo $product->assignToNull;?></td>
+        <?php if($canOrder):?>
         <td class='sort-handler'><i class="icon icon-move"></i></td>
+        <?php endif;?>
       </tr>
       <?php endforeach;?>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='<?php echo strpos($orderBy, 'order') !== false ? 12 : 11?>'>
-          <?php if($canBatchEdit and !empty($productStats)):?>
+        <td colspan='<?php echo $canOrder ? 12 : 11?>'>
           <div class='table-actions clearfix'>
+            <?php if($canBatchEdit and !empty($productStats)):?>
             <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
+            <?php endif;?>
+            <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('index', "locate=no&productID=$productID&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder);?>
           </div>
-          <?php endif;?>
           <div class='text-right'><?php $pager->show();?></div>
         </td>
       </tr>

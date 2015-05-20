@@ -116,19 +116,20 @@ $lang->todo->methodOrder[40] = 'import2Today';
 
 /* Product. */
 $lang->resource->product = new stdclass();
-$lang->resource->product->index     = 'index';
-$lang->resource->product->browse    = 'browse';
-$lang->resource->product->create    = 'create';
-$lang->resource->product->view      = 'view';
-$lang->resource->product->edit      = 'edit';
-$lang->resource->product->batchEdit = 'batchEdit';
-$lang->resource->product->order     = 'order';
-$lang->resource->product->delete    = 'delete';
-$lang->resource->product->roadmap   = 'roadmap';
-$lang->resource->product->doc       = 'doc';
-$lang->resource->product->dynamic   = 'dynamic';
-$lang->resource->product->project   = 'project';
-$lang->resource->product->close     = 'close';
+$lang->resource->product->index       = 'index';
+$lang->resource->product->browse      = 'browse';
+$lang->resource->product->create      = 'create';
+$lang->resource->product->view        = 'view';
+$lang->resource->product->edit        = 'edit';
+$lang->resource->product->batchEdit   = 'batchEdit';
+$lang->resource->product->order       = 'order';
+$lang->resource->product->delete      = 'delete';
+$lang->resource->product->roadmap     = 'roadmap';
+$lang->resource->product->doc         = 'doc';
+$lang->resource->product->dynamic     = 'dynamic';
+$lang->resource->product->project     = 'project';
+$lang->resource->product->close       = 'close';
+$lang->resource->product->updateOrder = 'updateOrder';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -143,6 +144,7 @@ $lang->product->methodOrder[45] = 'doc';
 $lang->product->methodOrder[50] = 'dynamic';
 $lang->product->methodOrder[55] = 'project';
 $lang->product->methodOrder[60] = 'close';
+$lang->product->methodOrder[65] = 'updateOrder';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -275,6 +277,7 @@ $lang->resource->project->unlinkMember   = 'unlinkMember';
 $lang->resource->project->linkStory      = 'linkStory';
 $lang->resource->project->unlinkStory    = 'unlinkStory';
 $lang->resource->project->batchUnlinkStory = 'batchUnlinkStory';
+$lang->resource->project->updateOrder      = 'updateOrder';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -309,6 +312,7 @@ $lang->project->methodOrder[145] = 'unlinkMember';
 $lang->project->methodOrder[150] = 'linkStory';
 $lang->project->methodOrder[155] = 'unlinkStory';
 $lang->project->methodOrder[160] = 'batchUnlinkStory';
+$lang->project->methodOrder[165] = 'updateOrder';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -1068,3 +1072,5 @@ $lang->changelog['7.2'][] = 'admin-checkWeak';
 $lang->changelog['7.2'][] = 'backup-change';
 $lang->changelog['7.2'][] = 'custom-flow';
 $lang->changelog['7.2'][] = 'group-manageView';
+$lang->changelog['7.2'][] = 'product-updateOrder';
+$lang->changelog['7.2'][] = 'project-updateOrder';

@@ -9,22 +9,23 @@
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common    = '产品视图';
-$lang->product->index     = "产品首页";
-$lang->product->browse    = "浏览产品";
-$lang->product->dynamic   = "动态";
-$lang->product->view      = "产品概况";
-$lang->product->edit      = "编辑产品";
-$lang->product->batchEdit = "批量编辑";
-$lang->product->create    = "新增产品";
-$lang->product->read      = "产品详情";
-$lang->product->delete    = "删除产品";
-$lang->product->deleted   = "已删除";
-$lang->product->close     = "关闭";
-$lang->product->select    = '--请选择产品--';
-$lang->product->mine      = '我负责：';
-$lang->product->other     = '其他：';
-$lang->product->closed    = '已关闭';
+$lang->product->common      = '产品视图';
+$lang->product->index       = "产品首页";
+$lang->product->browse      = "浏览产品";
+$lang->product->dynamic     = "动态";
+$lang->product->view        = "产品概况";
+$lang->product->edit        = "编辑产品";
+$lang->product->batchEdit   = "批量编辑";
+$lang->product->create      = "新增产品";
+$lang->product->read        = "产品详情";
+$lang->product->delete      = "删除产品";
+$lang->product->deleted     = "已删除";
+$lang->product->close       = "关闭";
+$lang->product->select      = '--请选择产品--';
+$lang->product->mine        = '我负责：';
+$lang->product->other       = '其他：';
+$lang->product->closed      = '已关闭';
+$lang->product->updateOrder = "排序";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

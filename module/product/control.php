@@ -565,12 +565,12 @@ class product extends control
     }
 
     /**
-     * Ajax order.
+     * Update order.
      * 
      * @access public
      * @return void
      */
-    public function ajaxOrder()
+    public function updateOrder()
     {
         $idList   = explode(',', trim($this->post->products, ','));
         $orderBy  = $this->post->orderBy;

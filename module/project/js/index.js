@@ -4,7 +4,7 @@ $(function()
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i]).attr('data-id') + ',';
-        $.post(createLink('project', 'ajaxOrder'), {'projects' : list, 'orderBy' : orderBy});
+        $.post(createLink('project', 'updateOrder'), {'projects' : list, 'orderBy' : orderBy});
     });
 });
 
