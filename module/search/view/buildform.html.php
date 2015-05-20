@@ -362,18 +362,22 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </table>
     </td>
-    <td class='w-150px'> 
+    <td class='<?php echo $style == 'simple' ? 'w-60px' : 'w-150px'?>'> 
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
       echo "<div class='btn-group'>";
       echo html::submitButton($lang->search->common, '', 'btn-primary');
-      echo html::commonButton($lang->search->reset, 'onclick=resetForm(); class=btn');
-      echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
+      if($style != 'simple')
+      {
+          echo html::commonButton($lang->search->reset, 'onclick=resetForm(); class=btn');
+          echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
+      }
       echo '</div>';
       ?>
     </td>
+    <?php if($style != 'simple'):?>
     <td class='w-120px'>
       <div class='input-group'>
       <?php
@@ -382,6 +386,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </div>
     </td>
+    <?php endif;?>
   </tr>
 </table>
 <div id='moreOrLite'>

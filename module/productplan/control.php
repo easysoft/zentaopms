@@ -223,7 +223,7 @@ class productplan extends control
         if(!empty($_POST['stories']))
         {
             $this->productplan->linkStory($planID);
-            die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+            die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
         $this->loadModel('story');
@@ -237,6 +237,7 @@ class productplan extends control
         unset($this->config->product->search['fields']['product']);
         $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->productplan->getForProducts(array($plan->product => $plan->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($plan->product, $viewType = 'story', $startModuleID = 0);
@@ -314,10 +315,10 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($planID, $orderBy = 'id_desc', $link = 'false', $param = '')
+    public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->unlinkStories as $storyID) $this->productplan->unlinkStory($storyID);
-        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy&link=$link&param=$param"), 'parent'));
+        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
     }
 
     /**
@@ -337,7 +338,7 @@ class productplan extends control
         if(!empty($_POST['bugs']))
         {
             $this->productplan->linkBug($planID);
-            die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+            die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
         $this->loadModel('bug');
@@ -350,6 +351,7 @@ class productplan extends control
         /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
         $this->config->bug->search['params']['plan']['values']          = $this->productplan->getForProducts(array($plan->product => $plan->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
@@ -429,9 +431,9 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($planID, $orderBy = 'id_desc', $link = 'false', $param = '')
+    public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->unlinkBugs as $bugID) $this->productplan->unlinkBug($bugID);
-        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=$link&param=$param"), 'parent'));
+        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 }

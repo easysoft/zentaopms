@@ -346,7 +346,7 @@ class release extends control
         if(!empty($_POST['stories']))
         {
             $this->release->linkStory($releaseID);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=story&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+            die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
 
         $release = $this->release->getById($releaseID);
@@ -362,6 +362,7 @@ class release extends control
         unset($this->config->product->search['fields']['project']);
         $this->config->product->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($release->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
@@ -422,10 +423,10 @@ class release extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($releaseID, $link = 'false', $param = '')
+    public function batchUnlinkStory($releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story&link=$link&param=$param"), 'parent'));
+        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent'));
     }
 
     /**
@@ -442,7 +443,7 @@ class release extends control
         if(!empty($_POST['bugs']))
         {
             $this->release->linkBug($releaseID);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=bug&link=true&parma=" . helper::safe64Encode("&browseType=$browseType&param=$param")), 'parent'));
+            die(js::locate(inlink('view', "releaseID=$releaseID&type=bug"), 'parent'));
         }
 
         /* Set menu. */
@@ -456,6 +457,7 @@ class release extends control
         unset($this->config->bug->search['fields']['product']);
         $this->config->bug->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=bug&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($release->product);
@@ -518,9 +520,9 @@ class release extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($releaseID, $link = 'false', $param = '')
+    public function batchUnlinkBug($releaseID)
     {
         $this->release->batchUnlinkBug($releaseID);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=bug&link=$link&param=$param"), 'parent'));
+        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=bug"), 'parent'));
     }
 }

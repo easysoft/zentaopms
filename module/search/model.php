@@ -27,6 +27,7 @@ class searchModel extends model
         $searchParams['searchFields'] = json_encode($searchConfig['fields']);
         $searchParams['fieldParams']  = json_encode($searchConfig['params']);
         $searchParams['actionURL']    = $searchConfig['actionURL'];
+        $searchParams['style']        = zget($searchConfig, 'style', 'full');
         $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
         /* remove onlybody for url*/

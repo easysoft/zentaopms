@@ -5,6 +5,7 @@ function showLink(releaseID, type, param)
     {
         var obj = type == 'story' ? '.tab-pane#stories .linkBox' : '.tab-pane#bugs .linkBox';
         $(obj).html(data);
+        $('#' + type + 'List').hide();
     });
 }
 $(function()

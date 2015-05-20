@@ -54,10 +54,10 @@
         <div class='tab-content'>
           <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
             <?php if(common::hasPriv('productplan', 'linkStory')):?>
-            <div class='action'><?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm'");?></div>
+            <div class='action'><?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy" . (($type == 'story' and $link == 'true') ? "&link=true&param=$param" : ''));?>">
+            <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
               <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='storyList'>
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
@@ -130,10 +130,10 @@
           </div>
           <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
             <?php if(common::hasPriv('productplan', 'linkBug')):?>
-            <div class='action'><?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm'");?></div>
+            <div class='action'><?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy" . (($type == 'bug' and $link == 'true') ? "&link=true&param=$param" : ''));?>">
+            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
               <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='bugList'>
                 <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>

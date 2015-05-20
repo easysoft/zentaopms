@@ -2,6 +2,5 @@
 .tabs .tab-content .tab-pane .action{position: absolute; right: 0px; top: 0px;}
 .tabs .tab-content .tab-pane #querybox{margin:0px}
 .tabs .tab-content .tab-pane #querybox form{padding-left:0px;}
-.tabs .tab-content .tab-pane #querybox form .btn-group>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle){display:none;}
 
 #unlinkBugList, #unlinkStoryList{margin-bottom:5px;}

@@ -48,7 +48,7 @@
           {
               echo "<div class='table-actions clearfix'>";
               echo "<div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>';
-              echo html::submitButton($lang->build->linkBug) . html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->cancel, '', "class='btn'") . '</div>';
+              echo html::submitButton($lang->build->linkBug) . html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->goback, '', "class='btn'") . '</div>';
           }
           ?>
         </td>

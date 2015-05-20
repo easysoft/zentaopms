@@ -52,7 +52,7 @@
             {
                 echo "<div class='table-actions clearfix'>";
                 echo "<div class='btn-group'>" . html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') . '</div>';
-                echo html::submitButton($lang->story->linkStory) . html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->cancel, '', "class='btn'") . '</div>';
+                echo html::submitButton($lang->story->linkStory) . html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'") . '</div>';
             }
             ?>
           </td>

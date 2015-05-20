@@ -69,10 +69,10 @@
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
             <?php if(common::hasPriv('release', 'linkStory')):?>
-            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-sm'");?></div>
+            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id" . (($type == 'story' and $link == 'true') ? "&link=true&param=$param" : ''));?>" id='linkedStoriesForm'>
+            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='storyList'>
               <thead>
                 <tr>
@@ -128,10 +128,10 @@
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
             <?php if(common::hasPriv('release', 'linkBug')):?>
-            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm'");?></div>
+            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id" . (($type == 'bug' and $link == 'true') ? "&link=true&param=$param" : ''));?>" id='linkedBugsForm'>
+            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='bugList'>
               <thead>
                 <tr>

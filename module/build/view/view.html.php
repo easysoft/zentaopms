@@ -52,10 +52,10 @@
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
             <?php if(common::hasPriv('build', 'linkStory')):?>
-            <div class='action'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-sm'");?></div>
+            <div class='action'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}" . (($type == 'story' and $link == 'true') ? "&link=true&param=$param" : ''))?>' id='linkedStoriesForm'>
+            <form method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='storyList'>
               <thead>
                 <tr>
@@ -111,10 +111,10 @@
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
             <?php if(common::hasPriv('build', 'linkBug')):?>
-            <div class='action'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-sm'");?></div>
+            <div class='action'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id" . (($type == 'bug' and $link == 'true') ? "&link=true&param=$param" : ''));?>" id='linkedBugsForm'>
+            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='bugList'>
               <thead>
                 <tr>
