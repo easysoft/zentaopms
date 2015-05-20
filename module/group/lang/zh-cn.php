@@ -26,9 +26,10 @@ $lang->group->unlinkMember       = '移除用户';
 $lang->group->confirmDelete      = '您确定删除该用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
-$lang->group->visitProduct       = '可访问的产品';
-$lang->group->visitProject       = '可访问的项目';
-$lang->group->noticeVisit        = '全不选代表没有访问限制';
+$lang->group->viewList           = '限制访问视图';
+$lang->group->productList        = '限制访问产品';
+$lang->group->projectList        = '限制访问项目';
+$lang->group->noticeVisit        = '空代访问没有访问限制';
 
 $lang->group->id       = '编号';
 $lang->group->name     = '分组名称';

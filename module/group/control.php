@@ -142,8 +142,8 @@ class group extends control
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group      = $group;
-        $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->view->products   = $this->dao->select('*')->from(TABLE_PRODUCT)->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects   = $this->dao->select('*')->from(TABLE_PROJECT)->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->display();
     }
 

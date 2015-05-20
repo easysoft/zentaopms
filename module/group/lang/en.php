@@ -26,9 +26,10 @@ $lang->group->unlinkMember       = 'Remove member';
 $lang->group->confirmDelete      = 'Are you sure to delete this group?';
 $lang->group->successSaved       = 'Success saved.';
 $lang->group->errorNotSaved      = 'Not saved, please make sure you have selected some actions and groups.';
-$lang->group->visitProduct       = 'Visit product';
-$lang->group->visitProject       = 'Visit project';
-$lang->group->noticeVisit        = 'All elected representatives have no access restrictions';
+$lang->group->viewList           = 'Restricted access view';
+$lang->group->productList        = 'Restricted access product';
+$lang->group->projectList        = 'Restricted access project';
+$lang->group->noticeVisit        = 'The empty access has no access restrictions';
 
 $lang->group->id       = 'Id';
 $lang->group->name     = 'Name';

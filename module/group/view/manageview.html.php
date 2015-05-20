@@ -12,13 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-hover table-striped table-bordered table-form'> 
+  <table class='table table-form'> 
     <tr>
       <th class='w-150px'>
-        <?php echo $lang->group->module;?>
+        <?php echo $lang->group->viewList;?>
         <input type="checkbox" name="allchecker[]" onclick="selectAll(this, '', 'checkbox')">
       </th>
-      <td colspan='2'>
+      <td class='w-p60'>
         <?php foreach($lang->menu as $menu):?>
         <?php list($moduleName, $module) = explode('|', $menu);?>
         <?php if($module == 'my') continue;?>
@@ -31,25 +31,25 @@
         </div>
       <?php endforeach;?>
       </td>
+      <td><?php echo $lang->group->noticeVisit?></td>
     </tr>
     <tr id='productBox' style='display:none'>
-      <th class='text-right'><?php echo $lang->group->visitProduct?></th>
-      <td class='w-p60'><?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='chosen' multiple")?></td>
+      <th class='text-right'><?php echo $lang->group->productList?></th>
+      <td><?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='chosen' multiple")?></td>
       <td><?php echo $lang->group->noticeVisit?></td>
     </tr>
     <tr id='projectBox' style='display:none'>
-      <th class='text-right'><?php echo $lang->group->visitProject?></th>
+      <th class='text-right'><?php echo $lang->group->projectList?></th>
       <td><?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='chosen' multiple")?></td>
       <td><?php echo $lang->group->noticeVisit?></td>
     </tr>
     <tr>
-      <th><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
+      <th><span class='hidden'><?php echo html::selectAll('', 'checkbox')?></span></th>
       <td colspan='2'>
         <?php 
         echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
         echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
-        echo $lang->group->noticeVisit;
         ?>
       </td>
     </tr>
