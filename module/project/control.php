@@ -579,7 +579,7 @@ class project extends control
         $this->view->type       = $type;
         $this->view->param      = $param;
         $this->view->storyTasks = $storyTasks;
-        $this->view->moduleTree = $this->loadModel('tree')->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
+        $this->view->moduleTree = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
         $this->view->tabID      = 'story';
         $this->view->users      = $users;
 

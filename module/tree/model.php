@@ -353,7 +353,7 @@ class treeModel extends model
             }
             else
             {
-                $link  = $userFunc[1] == 'createProjectStoryLink' ? helper::createLink('project', 'story', "root=$rootID&orderBy=&status=byProduct&praram=$id") : helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id");
+                $link  = helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id");
                 $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
             }
 
@@ -397,6 +397,7 @@ class treeModel extends model
             $menu    .= $lastMenu . '</li>';
         }
 
+        /* Get project module. */
         if($startModule == 0)
         {
             /* tree menu. */
@@ -436,6 +437,81 @@ class treeModel extends model
             $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
             $menu .= $tree . '</li>';
         }
+        $menu .= '</ul>';
+        return $menu;
+    }
+
+    /**
+     * Get project story tree menu.
+     * 
+     * @param  int    $rootID 
+     * @param  int    $startModule 
+     * @param  array  $userFunc 
+     * @access public
+     * @return string
+     */
+    public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
+    {
+        $extra['projectID'] = $rootID;
+        $menu = "<ul class='tree'>";
+        $startModulePath = '';
+        if($startModule > 0)
+        {
+            $startModule = $this->getById($startModule);
+            if($startModule) $startModulePath = $startModule->path . '%';
+        }
+
+        $projectModules = $this->getTaskTreeModules($rootID, true);
+
+        /* Get module according to product. */
+        $products = $this->loadModel('product')->getProductsByProject($rootID);
+        foreach($products as $id => $product)
+        {
+            $extra['productID'] = $id;
+            $link  = helper::createLink('project', 'story', "project=$rootID&ordery=&status=byProduct&praram=$id");
+            $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+
+            /* tree menu. */
+            $treeMenu = array();
+            $query = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where("(root = $id and type = 'story')")
+                ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                ->orderBy('grade desc, type, `order`')
+                ->get();
+            $stmt = $this->dbh->query($query);
+            while($module = $stmt->fetch())
+            {
+                /* if not manage, ignore unused modules. */
+                if(!isset($projectModules[$module->id])) continue;
+
+                $linkHtml = call_user_func($userFunc, 'task', $module, $extra);
+
+                if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
+                {
+                    if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
+                    $treeMenu[$module->parent] .= "<li class='closed'>$linkHtml";  
+                    $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
+                }
+                else
+                {
+                    if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
+                    {
+                        $treeMenu[$module->parent] .= "<li>$linkHtml\n";
+                    }
+                    else
+                    {
+                        $treeMenu[$module->parent] = "<li>$linkHtml\n";
+                    }
+                }
+                $treeMenu[$module->parent] .= "</li>\n";
+            }
+
+            $tree     = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            $lastMenu = "<ul>" . $tree . "</ul>\n";
+            $menu    .= $lastMenu . '</li>';
+        }
+
+        $menu .= '</ul>';
         return $menu;
     }
 
