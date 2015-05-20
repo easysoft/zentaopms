@@ -102,8 +102,11 @@
     <table align='center' class='table table-form'>
       <caption class='text-left text-muted'><?php echo $lang->user->verify;?></caption>
       <tr>
-        <th class='w-90px'><?php echo $lang->user->verifyPwd;?></th>
-        <td><?php echo html::password('verifyPwd', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?></td>
+        <th class='w-120px'><?php echo $lang->user->verifyPassword;?></th>
+        <td>
+          <div class="required required-wrapper"></div>
+          <?php echo html::password('verifyPassword', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+        </td>
       </tr>
       <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>

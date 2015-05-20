@@ -24,7 +24,7 @@
   <form class='form-condensed mw-700px' method='post' target='hiddenwin' id='dataform'>
     <table align='center' class='table table-form'> 
       <tr>
-        <th class='w-100px'><?php echo $lang->user->dept;?></th>
+        <th class='w-120px'><?php echo $lang->user->dept;?></th>
         <td class='w-p50'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
       </tr>
       <tr>
@@ -75,8 +75,11 @@
         <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->user->verifyPwd;?></th>
-        <td><?php echo html::password('verifyPwd', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?></td>
+        <th><?php echo $lang->user->verifyPassword;?></th>
+        <td>
+          <div class="required required-wrapper"></div>
+          <?php echo html::password('verifyPassword', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+        </td>
       </tr>
 
       <tr><th></th><td><?php echo html::submitButton() . html::backButton();?></td></tr>

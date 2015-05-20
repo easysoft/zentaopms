@@ -58,8 +58,11 @@
     </tr>  
     <?php endfor;?>
     <tr>
-      <th colspan='2'><?php echo $lang->user->verifyPwd?></th>
-      <td colspan='7'><?php echo html::password('verifyPwd', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?></td>
+      <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
+      <td colspan='7'>
+        <div class="required required-wrapper"></div>
+        <?php echo html::password('verifyPassword', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+      </td>
     </tr>
     <tr><td colspan='9' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>

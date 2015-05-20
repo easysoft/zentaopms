@@ -22,8 +22,8 @@
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
       </tr>  
       <tr>
-        <th><?php echo $lang->user->originalPwd;?></th>
-        <td><?php echo html::password('originalPwd', '', "class='form-control'");?></td>
+        <th><?php echo $lang->user->originalPassword;?></th>
+        <td><?php echo html::password('originalPassword', '', "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->password;?></th>

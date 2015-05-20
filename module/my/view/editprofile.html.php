@@ -102,8 +102,11 @@
       <legend><?php echo $lang->user->verify;?></legend>
       <table class='table table-form'>
         <tr>
-          <th class='w-90px'><?php echo $lang->user->verifyPwd;?></th>
-          <td><?php echo html::password('verifyPwd', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?></td>
+          <th class='w-120px'><?php echo $lang->user->verifyPassword;?></th>
+          <td>
+            <div class="required required-wrapper"></div>
+            <?php echo html::password('verifyPassword', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?>
+          </td>
         </tr>
       </table>
     </fieldset>

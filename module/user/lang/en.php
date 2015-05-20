@@ -44,8 +44,8 @@ $lang->user->ip          = 'Last IP';
 $lang->user->last        = 'Last login';
 $lang->user->status      = 'Status';
 $lang->user->ditto       = 'Ditto';
-$lang->user->originalPwd = 'Original password';
-$lang->user->verifyPwd   = 'Verify password';
+$lang->user->originalPassword = 'Original password';
+$lang->user->verifyPassword   = 'Enter your password';
 
 $lang->user->index           = "Index";
 $lang->user->view            = "Info";
@@ -102,11 +102,11 @@ $lang->user->testTask2Him = 'His task';
 $lang->user->case2Him     = 'His case';
 $lang->user->caseByHim    = 'Case he opened';
 
-$lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
-$lang->user->loginFailed = "Login failed, please check your account and password.";
-$lang->user->lockWarning = "You only have %s times to try.";
-$lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s minutes.";
-$lang->user->weakPwd     = "Your password strength is less than the system settings.";
+$lang->user->errorDeny    = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
+$lang->user->loginFailed  = "Login failed, please check your account and password.";
+$lang->user->lockWarning  = "You only have %s times to try.";
+$lang->user->loginLocked  = "You try the password too many times, please contact the administrator or try again after %s minutes.";
+$lang->user->weakPassword = "Your password strength is less than the system settings.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -148,8 +148,9 @@ $lang->user->error->realname      = "ID %s，please input realname";
 $lang->user->error->password      = "ID %s，password must be six letters at least";
 $lang->user->error->mail          = "ID %s，please input correct email address";
 $lang->user->error->role          = "ID %s，please input role";
-$lang->user->error->verifyPwd     = "Please enter the correct password";
-$lang->user->error->originalPwd   = "The original password is not correct";
+
+$lang->user->error->verifyPassword   = "Password error security verification. Please enter your login password.";
+$lang->user->error->originalPassword = "The original password is not correct";
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';

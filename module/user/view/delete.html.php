@@ -20,10 +20,11 @@
   <table class='w-p100 table-form'>
     <tr>
       <th class='w-100px text-right'>
-        <?php echo $lang->user->verifyPwd;?>
+        <?php echo $lang->user->verifyPassword;?>
       </th>
       <td>
-        <?php echo html::input('verifyPwd', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?>
+        <div class="required required-wrapper"></div>
+        <?php echo html::input('verifyPassword', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?>
       </td>
       <td class='w-100px'><?php echo html::submitButton();?></td>
     </tr>

@@ -44,8 +44,8 @@ $lang->user->ip          = '最后IP';
 $lang->user->last        = '最后登录';
 $lang->user->status      = '状态';
 $lang->user->ditto       = '同上';
-$lang->user->originalPwd = '原密码';
-$lang->user->verifyPwd   = '验证密码';
+$lang->user->originalPassword = '原密码';
+$lang->user->verifyPassword   = '请输入你的密码';
 
 $lang->user->index           = "用户视图首页";
 $lang->user->view            = "用户详情";
@@ -102,11 +102,11 @@ $lang->user->testTask2Him = '他的任务';
 $lang->user->case2Him     = '给他的用例';
 $lang->user->caseByHim    = '他建的用例';
 
-$lang->user->errorDeny   = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
-$lang->user->loginFailed = "登录失败，请检查您的用户名或密码是否填写正确。";
-$lang->user->lockWarning = "您还有%s次尝试机会。";
-$lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
-$lang->user->weakPwd     = "您的密码强度小于系统设定。";
+$lang->user->errorDeny    = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
+$lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是否填写正确。";
+$lang->user->lockWarning  = "您还有%s次尝试机会。";
+$lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
+$lang->user->weakPassword = "您的密码强度小于系统设定。";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';
@@ -148,8 +148,9 @@ $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";
 $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
 $lang->user->error->role          = "ID %s，职位不能为空";
-$lang->user->error->verifyPwd     = "请输入正确验证密码";
-$lang->user->error->originalPwd   = "原密码不正确";
+
+$lang->user->error->verifyPassword   = "安全验证密码错误，请输入你的登录密码";
+$lang->user->error->originalPassword = "原密码不正确";
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';

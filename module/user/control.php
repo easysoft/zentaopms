@@ -538,7 +538,7 @@ class user extends control
         if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
         if($_POST)
         {
-            if(md5($this->post->verifyPwd) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPwd));
+            if(md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
             $this->user->delete(TABLE_USER, $userID);
 
             /* if ajax request, send result. */
@@ -657,7 +657,7 @@ class user extends control
                 if($this->post->keepLogin) $this->user->keepLogin($user);
 
                 /* Check password. */
-                if(isset($this->config->safe->mode) and $this->user->computePasswordStrength($password) < $this->config->safe->mode) echo js::alert($this->lang->user->weakPwd);
+                if(isset($this->config->safe->mode) and $this->user->computePasswordStrength($password) < $this->config->safe->mode) echo js::alert($this->lang->user->weakPassword);
 
                 /* Go to the referer. */
                 if($this->post->referer and 
