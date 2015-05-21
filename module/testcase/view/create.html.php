@@ -47,7 +47,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->testcase->type;?></th>
-        <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control'");?></td>
+        <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->stage;?></th>
