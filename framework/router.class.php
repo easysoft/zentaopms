@@ -1430,6 +1430,22 @@ class router
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
+        /* Set productcommon and projectcommon for flow. */
+        if($moduleName == 'common')
+        {
+            $productproject = false;
+            if($this->dbh) $productproject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productproject'")->fetch();
+
+            $productcommon = $projectcommon = 0;
+            if($productproject)
+            {
+                $productproject = $productproject->value;
+                list($productcommon, $projectcommon) = explode('_', $productproject);
+            }
+            $lang->productcommon = isset($this->config->productcommonList[$this->clientLang][(int)$productcommon]) ? $this->config->productcommonList[$this->clientLang][(int)$productcommon] : $this->config->productcommonList['zh-cn'][0];
+            $lang->projectcommon = isset($this->config->projectcommonList[$this->clientLang][(int)$projectcommon]) ? $this->config->projectcommonList[$this->clientLang][(int)$projectcommon] : $this->config->projectcommonList['zh-cn'][0];
+        }
+
         static $loadedLangs = array();
         foreach($langFiles as $langFile)
         {

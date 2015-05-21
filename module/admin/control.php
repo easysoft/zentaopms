@@ -135,7 +135,7 @@ class admin extends control
             $this->loadModel('setting')->setItems('system.common.safe', $data);
             die(js::reload('parent'));
         }
-        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->account;
+        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->view->position[] = $this->lang->admin->safe->common;
         $this->display();
     }

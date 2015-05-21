@@ -27,8 +27,8 @@ $lang->group->confirmDelete      = 'Are you sure to delete this group?';
 $lang->group->successSaved       = 'Success saved.';
 $lang->group->errorNotSaved      = 'Not saved, please make sure you have selected some actions and groups.';
 $lang->group->viewList           = 'Restricted access view';
-$lang->group->productList        = 'Restricted access product';
-$lang->group->projectList        = 'Restricted access project';
+$lang->group->productList        = "Restricted access {$lang->productcommon}";
+$lang->group->projectList        = "Restricted access {$lang->projectcommon}";
 $lang->group->noticeVisit        = 'The empty access has no access restrictions';
 
 $lang->group->id       = 'Id';

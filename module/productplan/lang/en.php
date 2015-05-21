@@ -37,7 +37,7 @@ $lang->productplan->confirmUnlinkStory = "Are you sure to remove this story?";
 $lang->productplan->confirmUnlinkBug   = "Are you sure to remove this bug?";
 
 $lang->productplan->id      = 'ID';
-$lang->productplan->product = 'Product';
+$lang->productplan->product = $lang->productcommon;
 $lang->productplan->title   = 'Title';
 $lang->productplan->desc    = 'Desc';
 $lang->productplan->begin   = 'Begin';

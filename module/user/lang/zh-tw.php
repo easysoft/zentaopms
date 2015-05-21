@@ -44,8 +44,8 @@ $lang->user->ip          = '最後IP';
 $lang->user->last        = '最後登錄';
 $lang->user->status      = '狀態';
 $lang->user->ditto       = '同上';
-$lang->user->originalPwd = '原密碼';
-$lang->user->verifyPwd   = '驗證密碼';
+$lang->user->originalPassword = '原密碼';
+$lang->user->verifyPassword   = '請輸入你的密碼';
 
 $lang->user->index           = "用戶視圖首頁";
 $lang->user->view            = "用戶詳情";
@@ -78,7 +78,7 @@ $lang->user->deleted         = '(已刪除)';
 $lang->user->select          = '請選擇用戶';
 
 $lang->user->profile      = '檔案';
-$lang->user->project      = '項目';
+$lang->user->project      = $lang->projectcommon;
 $lang->user->task         = '任務';
 $lang->user->bug          = '缺陷';
 $lang->user->test         = '測試';
@@ -102,11 +102,11 @@ $lang->user->testTask2Him = '他的任務';
 $lang->user->case2Him     = '給他的用例';
 $lang->user->caseByHim    = '他建的用例';
 
-$lang->user->errorDeny   = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
-$lang->user->loginFailed = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
-$lang->user->lockWarning = "您還有%s次嘗試機會。";
-$lang->user->loginLocked = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
-$lang->user->weakPwd     = "您的密碼強度小於系統設定。";
+$lang->user->errorDeny    = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
+$lang->user->loginFailed  = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
+$lang->user->lockWarning  = "您還有%s次嘗試機會。";
+$lang->user->loginLocked  = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
+$lang->user->weakPassword = "您的密碼強度小於系統設定。";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研發';
@@ -122,9 +122,9 @@ $lang->user->roleList['others'] = '其他';
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
 
-$lang->user->pwdLevelList[0] = '弱';
-$lang->user->pwdLevelList[1] = '中';
-$lang->user->pwdLevelList[2] = '強';
+$lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
+$lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";
+$lang->user->passwordStrengthList[2] = "<span style='color:green'>強</span>";
 
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
@@ -148,8 +148,9 @@ $lang->user->error->realname      = "ID %s，必須填寫真實姓名";
 $lang->user->error->password      = "ID %s，密碼必須六位以上";
 $lang->user->error->mail          = "ID %s，請填寫正確的郵箱地址";
 $lang->user->error->role          = "ID %s，職位不能為空";
-$lang->user->error->verifyPwd     = "請輸入正確驗證密碼";
-$lang->user->error->originalPwd   = "原密碼不正確";
+
+$lang->user->error->verifyPassword   = "安全驗證密碼錯誤，請輸入你的登錄密碼";
+$lang->user->error->originalPassword = "原密碼不正確";
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '聯繫人';

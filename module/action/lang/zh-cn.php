@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 $lang->action->common     = '系统日志';
-$lang->action->product    = '产品';
-$lang->action->project    = '项目';
+$lang->action->product    = $lang->productcommon;
+$lang->action->project    = $lang->projectcommon;
 $lang->action->objectType = '对象类型';
 $lang->action->objectID   = '对象ID';
 $lang->action->objectName = '对象名称';
@@ -44,11 +44,11 @@ $lang->action->dynamic->all        = '所有';
 $lang->action->dynamic->hidden     = '已隐藏';
 $lang->action->dynamic->search     = '搜索';
 
-$lang->action->objectTypes['product']     = '产品';
+$lang->action->objectTypes['product']     = $lang->productcommon;
 $lang->action->objectTypes['story']       = '需求';
-$lang->action->objectTypes['productplan'] = '产品计划';
+$lang->action->objectTypes['productplan'] = '计划';
 $lang->action->objectTypes['release']     = '发布';
-$lang->action->objectTypes['project']     = '项目';
+$lang->action->objectTypes['project']     = $lang->projectcommon;
 $lang->action->objectTypes['task']        = '任务';
 $lang->action->objectTypes['build']       = 'Build';
 $lang->action->objectTypes['bug']         = 'Bug';
@@ -127,8 +127,8 @@ $lang->action->label->gitcommited         = '提交代码';
 $lang->action->label->linked2plan         = '关联计划';
 $lang->action->label->unlinkedfromplan    = '移除计划';
 $lang->action->label->marked              = '编辑了';
-$lang->action->label->linked2project      = '关联项目';
-$lang->action->label->unlinkedfromproject = '移除项目';
+$lang->action->label->linked2project      = "关联{$lang->projectcommon}";
+$lang->action->label->unlinkedfromproject = "移除{$lang->projectcommon}";
 $lang->action->label->started             = '开始了';
 $lang->action->label->restarted           = '继续了';
 $lang->action->label->recordestimate      = '记录了工时';
@@ -143,11 +143,11 @@ $lang->action->label->logout              = "退出登录";
 $lang->action->label->deleteestimate      = "删除了工时";
 
 /* 用来生成相应对象的链接。*/
-$lang->action->label->product     = '产品|product|view|productID=%s';
+$lang->action->label->product     = $lang->productcommon . '|product|view|productID=%s';
 $lang->action->label->productplan = '计划|productplan|view|productID=%s';
 $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = '需求|story|view|storyID=%s';
-$lang->action->label->project     = '项目|project|view|projectID=%s';
+$lang->action->label->project     = "{$lang->projectcommon}|project|view|projectID=%s";
 $lang->action->label->task        = '任务|task|view|taskID=%s';
 $lang->action->label->build       = 'Build|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
@@ -161,8 +161,8 @@ $lang->action->label->space       = ' ';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    
-$lang->action->search->objectTypeList['product']     = '产品';    
-$lang->action->search->objectTypeList['project']     = '项目';    
+$lang->action->search->objectTypeList['product']     = $lang->productcommon;
+$lang->action->search->objectTypeList['project']     = $lang->projectcommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = '用例'; 
 $lang->action->search->objectTypeList['story']       = '需求';  

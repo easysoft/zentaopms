@@ -111,6 +111,8 @@ class custom extends control
             $this->loadModel('setting')->setItem('system.custom.productproject', $this->post->productproject);
             die(js::reload('parent'));
         }
+        $this->view->title      = $this->lang->custom->flow;
+        $this->view->position[] = $this->lang->custom->flow;
         $this->display();
     }
 }

@@ -12,11 +12,11 @@
 /* 字段列表。*/
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug编号';
-$lang->bug->product          = '所属产品';
+$lang->bug->product          = '所属' . $lang->productcommon;
 $lang->bug->productplan      = '所属计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->path             = '模块路径';
-$lang->bug->project          = '所属项目';
+$lang->bug->project          = '所属' . $lang->projectcommon;
 $lang->bug->story            = '相关需求';
 $lang->bug->storyVersion     = '需求版本';
 $lang->bug->task             = '相关任务';
@@ -98,7 +98,7 @@ $lang->bug->ajaxGetModuleOwner = '接口:获得模块的默认指派人';
 $lang->bug->confirmStoryChange = '确认需求变动';
 
 /* 查询条件列表。*/
-$lang->bug->selectProduct  = '请选择产品';
+$lang->bug->selectProduct  = '请选择' . $lang->productcommon;
 $lang->bug->byModule       = '按模块';
 $lang->bug->assignToMe     = '指派给我';
 $lang->bug->openedByMe     = '由我创建';
@@ -113,12 +113,12 @@ $lang->bug->allBugs        = '所有';
 $lang->bug->moduleBugs     = '按模块';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
-$lang->bug->allProduct     = '所有产品';
+$lang->bug->allProduct     = '所有' . $lang->productcommon;
 $lang->bug->ditto          = '同上';
 
 /* 页面标签。*/
-$lang->bug->lblProductAndModule         = '产品模块';
-$lang->bug->lblProjectAndTask           = '项目任务';
+$lang->bug->lblProductAndModule         = $lang->productcommon . '模块';
+$lang->bug->lblProjectAndTask           = $lang->projectcommon . '任务';
 $lang->bug->lblStory                    = '相关需求';
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
@@ -134,7 +134,7 @@ $lang->bug->legendBasicInfo    = '基本信息';
 $lang->bug->legendMailto       = '抄送给';
 $lang->bug->legendAttatch      = '附件';
 $lang->bug->legendLinkBugs     = '相关Bug';
-$lang->bug->legendPrjStoryTask = '项目/需求/任务';
+$lang->bug->legendPrjStoryTask = $lang->projectcommon . '/需求/任务';
 $lang->bug->legendCases        = '相关用例';
 $lang->bug->legendSteps        = '重现步骤';
 $lang->bug->legendAction       = '操作';
@@ -155,7 +155,7 @@ $lang->bug->buttonToList         = '返回';
 $lang->bug->buttonCreateTestcase = '转用例';
 
 /* 交互提示。*/
-$lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
+$lang->bug->confirmChangeProduct = "修改{$lang->productcommon}会导致相应的{$lang->projectcommon}、需求和任务发生变化，确定吗？";
 $lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
 $lang->bug->setTemplateTitle     = '请输入bug模板标题';
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
@@ -263,7 +263,7 @@ $lang->bug->report->common = '报表';
 $lang->bug->report->select = '请选择报表类型';
 $lang->bug->report->create = '生成报表';
 
-$lang->bug->report->charts['bugsPerProject']        = '项目Bug数量';
+$lang->bug->report->charts['bugsPerProject']        = $lang->projectcommon . 'Bug数量';
 $lang->bug->report->charts['bugsPerBuild']          = '版本Bug数量';
 $lang->bug->report->charts['bugsPerModule']         = '模块Bug数量';
 $lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug数';
@@ -323,7 +323,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = '项目';
+$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectcommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = '模块';
 

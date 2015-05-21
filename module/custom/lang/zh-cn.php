@@ -6,6 +6,7 @@ $lang->custom->restore   = '恢复默认';
 $lang->custom->key       = '键';
 $lang->custom->value     = '值';
 $lang->custom->flow      = '流程';
+$lang->custom->select    = '请选择：';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';
@@ -71,18 +72,9 @@ $lang->custom->storyReview   = '评审流程';
 $lang->custom->reviewList[1] = '开启';
 $lang->custom->reviewList[0] = '关闭';
 
-$lang->custom->flowList['productproject'] = '产项关系';
-
 $lang->custom->productproject = new stdclass();
 $lang->custom->productproject->relation['0_0'] = '产品 - 项目';
 $lang->custom->productproject->relation['0_1'] = '产品 - 迭代';
 $lang->custom->productproject->relation['1_1'] = '项目 - 迭代';
 
-$lang->custom->productproject->product[0] = '产品';
-$lang->custom->productproject->product[1] = '项目';
-$lang->custom->productproject->project[0] = '项目';
-$lang->custom->productproject->project[1] = '迭代';
-
-$lang->custom->productproject->locked = '项目管理';
-
-$lang->custom->productproject->notice = '可以修改产品视图和项目视图的名称，以及相应的名称显示';
+$lang->custom->productproject->notice = '请根据实际情况选择适合自己团队的概念。';

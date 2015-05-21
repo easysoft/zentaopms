@@ -78,7 +78,7 @@ $lang->user->deleted         = '(已删除)';
 $lang->user->select          = '请选择用户';
 
 $lang->user->profile      = '档案';
-$lang->user->project      = '项目';
+$lang->user->project      = $lang->projectcommon;
 $lang->user->task         = '任务';
 $lang->user->bug          = '缺陷';
 $lang->user->test         = '测试';

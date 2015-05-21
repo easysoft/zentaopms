@@ -36,8 +36,8 @@ $lang->testtask->done           = "Tested build";
 
 $lang->testtask->common         = 'Test build';
 $lang->testtask->id             = 'ID';
-$lang->testtask->product        = 'Product';
-$lang->testtask->project        = 'Project';
+$lang->testtask->product        = $lang->productcommon;
+$lang->testtask->project        = $lang->projectcommon;
 $lang->testtask->build          = 'Build';
 $lang->testtask->owner          = 'Owner';
 $lang->testtask->pri            = 'Priority';

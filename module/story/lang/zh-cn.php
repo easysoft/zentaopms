@@ -38,7 +38,7 @@ $lang->story->batchAssignTo    = "批量指派";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';
-$lang->story->product        = '所属产品';
+$lang->story->product        = "所属{$lang->productcommon}";
 $lang->story->module         = '所属模块';
 $lang->story->source         = '来源';
 $lang->story->fromBug        = '来源Bug';
@@ -70,7 +70,7 @@ $lang->story->rejectedReason = '拒绝原因';
 $lang->story->reviewedBy     = '由谁评审';
 $lang->story->reviewedDate   = '评审时间';
 $lang->story->version        = '版本号';
-$lang->story->project        = '所属项目';
+$lang->story->project        = '所属' . $lang->projectcommon;
 $lang->story->plan           = '所属计划';
 $lang->story->planAB         = '计划';
 $lang->story->comment        = '备注';
@@ -126,7 +126,7 @@ $lang->story->reviewList[1] = '是';
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['customer']   = '客户';
 $lang->story->sourceList['user']       = '用户';
-$lang->story->sourceList['po']         = '产品经理';
+$lang->story->sourceList['po']         = $lang->productcommon . '经理';
 $lang->story->sourceList['market']     = '市场';
 $lang->story->sourceList['service']    = '客服';
 $lang->story->sourceList['competitor'] = '竞争对手';
@@ -147,7 +147,7 @@ $lang->story->legendLifeTime       = '需求的一生';
 $lang->story->legendRelated        = '相关信息';
 $lang->story->legendMailto         = '抄送给';
 $lang->story->legendAttatch        = '附件';
-$lang->story->legendProjectAndTask = '项目任务';
+$lang->story->legendProjectAndTask = $lang->projectcommon . '任务';
 $lang->story->legendBugs           = '相关Bug';
 $lang->story->legendFromBug        = '来源Bug';
 $lang->story->legendCases          = '相关用例';
@@ -164,7 +164,7 @@ $lang->story->lblActivate          = '激活需求';
 $lang->story->lblClose             = '关闭需求';
 
 $lang->story->checkAffection       = '检查影响';
-$lang->story->affectedProjects     = '影响的项目';
+$lang->story->affectedProjects     = '影响的' . $lang->projectcommon;
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
@@ -178,8 +178,8 @@ $lang->story->errorFormat           = '需求数据有误';
 $lang->story->errorEmptyTitle       = '标题不能为空';
 $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
-$lang->story->ajaxGetProjectStories = '接口:获取项目需求列表';
-$lang->story->ajaxGetProductStories = '接口:获取产品需求列表';
+$lang->story->ajaxGetProjectStories = "接口:获取{$lang->projectcommon}需求列表";
+$lang->story->ajaxGetProductStories = "接口:获取{$lang->productcommon}需求列表";
 
 $lang->story->form = new stdclass();
 $lang->story->form->titleNote = '一句话简要表达需求内容';
@@ -193,8 +193,8 @@ $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>
 $lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
-$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。'); 
-$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。'); 
+$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectcommon . ' <strong>$extra</strong>。'); 
+$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectcommon . ' <strong>$extra</strong> 移除。'); 
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
@@ -203,7 +203,7 @@ $lang->story->report->select = '请选择报表类型';
 $lang->story->report->create = '生成报表';
 $lang->story->report->value  = '需求数';
 
-$lang->story->report->charts['storysPerProduct']        = '产品需求数量';
+$lang->story->report->charts['storysPerProduct']        = $lang->productcommon . '需求数量';
 $lang->story->report->charts['storysPerModule']         = '模块需求数量';
 $lang->story->report->charts['storysPerSource']         = '需求来源统计';
 $lang->story->report->charts['storysPerPlan']           = '计划进行统计';
@@ -235,7 +235,7 @@ $lang->story->report->storysPerClosedReason = new stdclass();
 $lang->story->report->storysPerEstimate     = new stdclass();
 $lang->story->report->storysPerChange       = new stdclass();
 
-$lang->story->report->storysPerProduct->item      = '产品';     
+$lang->story->report->storysPerProduct->item      = $lang->productcommon;
 $lang->story->report->storysPerModule->item       = '模块';
 $lang->story->report->storysPerSource->item       = '来源';
 $lang->story->report->storysPerPlan->item         = '计划';
@@ -261,10 +261,10 @@ $lang->story->report->storysPerClosedReason->graph = new stdclass();
 $lang->story->report->storysPerEstimate->graph     = new stdclass();
 $lang->story->report->storysPerChange->graph       = new stdclass();
 
-$lang->story->report->storysPerProduct->graph->xAxisName      = '产品';
+$lang->story->report->storysPerProduct->graph->xAxisName      = $lang->productcommon;
 $lang->story->report->storysPerModule->graph->xAxisName       = '模块';
 $lang->story->report->storysPerSource->graph->xAxisName       = '来源';
-$lang->story->report->storysPerPlan->graph->xAxisName         = '产品计划';
+$lang->story->report->storysPerPlan->graph->xAxisName         = '计划';
 $lang->story->report->storysPerStatus->graph->xAxisName       = '状态';
 $lang->story->report->storysPerStage->graph->xAxisName        = '所处阶段';
 $lang->story->report->storysPerPri->graph->xAxisName          = '优先级';

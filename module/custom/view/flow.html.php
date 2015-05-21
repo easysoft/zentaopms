@@ -31,15 +31,12 @@
   <form method='post' class='form-condensed' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-100px'><?php echo $lang->custom->flowList['productproject'];?></th>
-        <td class='w-p40'><?php echo html::select('productproject', $lang->custom->productproject->relation, isset($config->custom->productproject) ? $config->custom->productproject : '', "class='form-control'");?></td>
-        <td><?php echo $lang->custom->productproject->notice?></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td colspan='2'><?php echo html::submitButton();?></td>
+        <th class='w-100px'><?php echo $lang->custom->select;?></th>
+        <td class='w-300px'><?php echo html::radio('productproject', $lang->custom->productproject->relation, isset($config->custom->productproject) ? $config->custom->productproject : '0_0');?></td>
+        <td><?php echo html::submitButton()?></td>
       </tr>
     </table>
+    <div class='alert alert-info'><strong><?php echo $lang->custom->productproject->notice?></strong></div>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

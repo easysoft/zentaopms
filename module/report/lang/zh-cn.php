@@ -33,21 +33,21 @@ $lang->report->colors[]   = 'A186BE';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = '项目偏差报表';
-$lang->report->productInfo      = '产品信息统计表';
+$lang->report->projectDeviation = $lang->projectcommon . '偏差报表';
+$lang->report->productInfo      = $lang->productcommon . '信息统计表';
 $lang->report->bugSummary       = 'Bug汇总表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 
-$lang->reportList->project->lists[10] = '项目偏差报表|report|projectdeviation';
-$lang->reportList->product->lists[10] = '产品信息统计表|report|productinfo';
+$lang->reportList->project->lists[10] = $lang->projectcommon . '偏差报表|report|projectdeviation';
+$lang->reportList->product->lists[10] = $lang->productcommon . '信息统计表|report|productinfo';
 $lang->reportList->test->lists[10]    = 'Bug汇总表|report|bugsummary';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '员工负载表|report|workload';
 
 $lang->report->id            = '编号';
-$lang->report->project       = '项目';
-$lang->report->product       = '产品';
+$lang->report->project       = $lang->projectcommon;
+$lang->report->product       = $lang->productcommon;
 $lang->report->user          = '姓名';
 $lang->report->bug           = 'Bug';
 $lang->report->task          = '任务数';

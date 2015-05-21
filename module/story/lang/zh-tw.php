@@ -38,7 +38,7 @@ $lang->story->batchAssignTo    = "批量指派";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';
-$lang->story->product        = '所屬產品';
+$lang->story->product        = "所屬{$lang->productcommon}";
 $lang->story->module         = '所屬模組';
 $lang->story->source         = '來源';
 $lang->story->fromBug        = '來源Bug';
@@ -70,7 +70,7 @@ $lang->story->rejectedReason = '拒絶原因';
 $lang->story->reviewedBy     = '由誰評審';
 $lang->story->reviewedDate   = '評審時間';
 $lang->story->version        = '版本號';
-$lang->story->project        = '所屬項目';
+$lang->story->project        = '所屬' . $lang->projectcommon;
 $lang->story->plan           = '所屬計劃';
 $lang->story->planAB         = '計劃';
 $lang->story->comment        = '備註';
@@ -126,7 +126,7 @@ $lang->story->reviewList[1] = '是';
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['customer']   = '客戶';
 $lang->story->sourceList['user']       = '用戶';
-$lang->story->sourceList['po']         = '產品經理';
+$lang->story->sourceList['po']         = $lang->productcommon . '經理';
 $lang->story->sourceList['market']     = '市場';
 $lang->story->sourceList['service']    = '客服';
 $lang->story->sourceList['competitor'] = '競爭對手';
@@ -147,7 +147,7 @@ $lang->story->legendLifeTime       = '需求的一生';
 $lang->story->legendRelated        = '相關信息';
 $lang->story->legendMailto         = '抄送給';
 $lang->story->legendAttatch        = '附件';
-$lang->story->legendProjectAndTask = '項目任務';
+$lang->story->legendProjectAndTask = $lang->projectcommon . '任務';
 $lang->story->legendBugs           = '相關Bug';
 $lang->story->legendFromBug        = '來源Bug';
 $lang->story->legendCases          = '相關用例';
@@ -164,7 +164,7 @@ $lang->story->lblActivate          = '激活需求';
 $lang->story->lblClose             = '關閉需求';
 
 $lang->story->checkAffection       = '檢查影響';
-$lang->story->affectedProjects     = '影響的項目';
+$lang->story->affectedProjects     = '影響的' . $lang->projectcommon;
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
@@ -178,8 +178,8 @@ $lang->story->errorFormat           = '需求數據有誤';
 $lang->story->errorEmptyTitle       = '標題不能為空';
 $lang->story->mustChooseResult      = '必須選擇評審結果';
 $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
-$lang->story->ajaxGetProjectStories = '介面:獲取項目需求列表';
-$lang->story->ajaxGetProductStories = '介面:獲取產品需求列表';
+$lang->story->ajaxGetProjectStories = "介面:獲取{$lang->projectcommon}需求列表";
+$lang->story->ajaxGetProductStories = "介面:獲取{$lang->productcommon}需求列表";
 
 $lang->story->form = new stdclass();
 $lang->story->form->titleNote = '一句話簡要表達需求內容';
@@ -193,8 +193,8 @@ $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>
 $lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。'); 
-$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到項目 <strong>$extra</strong>。'); 
-$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 從項目 <strong>$extra</strong> 移除。'); 
+$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到' . $lang->projectcommon . ' <strong>$extra</strong>。'); 
+$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 從' . $lang->projectcommon . ' <strong>$extra</strong> 移除。'); 
 
 /* 統計報表。*/
 $lang->story->report = new stdclass();
@@ -203,7 +203,7 @@ $lang->story->report->select = '請選擇報表類型';
 $lang->story->report->create = '生成報表';
 $lang->story->report->value  = '需求數';
 
-$lang->story->report->charts['storysPerProduct']        = '產品需求數量';
+$lang->story->report->charts['storysPerProduct']        = $lang->productcommon . '需求數量';
 $lang->story->report->charts['storysPerModule']         = '模組需求數量';
 $lang->story->report->charts['storysPerSource']         = '需求來源統計';
 $lang->story->report->charts['storysPerPlan']           = '計划進行統計';
@@ -235,7 +235,7 @@ $lang->story->report->storysPerClosedReason = new stdclass();
 $lang->story->report->storysPerEstimate     = new stdclass();
 $lang->story->report->storysPerChange       = new stdclass();
 
-$lang->story->report->storysPerProduct->item      = '產品';     
+$lang->story->report->storysPerProduct->item      = $lang->productcommon;
 $lang->story->report->storysPerModule->item       = '模組';
 $lang->story->report->storysPerSource->item       = '來源';
 $lang->story->report->storysPerPlan->item         = '計劃';
@@ -261,10 +261,10 @@ $lang->story->report->storysPerClosedReason->graph = new stdclass();
 $lang->story->report->storysPerEstimate->graph     = new stdclass();
 $lang->story->report->storysPerChange->graph       = new stdclass();
 
-$lang->story->report->storysPerProduct->graph->xAxisName      = '產品';
+$lang->story->report->storysPerProduct->graph->xAxisName      = $lang->productcommon;
 $lang->story->report->storysPerModule->graph->xAxisName       = '模組';
 $lang->story->report->storysPerSource->graph->xAxisName       = '來源';
-$lang->story->report->storysPerPlan->graph->xAxisName         = '產品計劃';
+$lang->story->report->storysPerPlan->graph->xAxisName         = '計劃';
 $lang->story->report->storysPerStatus->graph->xAxisName       = '狀態';
 $lang->story->report->storysPerStage->graph->xAxisName        = '所處階段';
 $lang->story->report->storysPerPri->graph->xAxisName          = '優先順序';

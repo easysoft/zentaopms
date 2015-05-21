@@ -12,11 +12,11 @@
 /* Fieldlist. */
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'ID';
-$lang->bug->product          = 'Product';
+$lang->bug->product          = $lang->productcommon;
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
 $lang->bug->path             = 'Path';
-$lang->bug->project          = 'Project';
+$lang->bug->project          = $lang->projectcommon;
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->task             = 'Task';
@@ -98,7 +98,7 @@ $lang->bug->ajaxGetModuleOwner = 'API: Get module default owner';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 
 /* Browse tabs. */
-$lang->bug->selectProduct  = 'Select product';
+$lang->bug->selectProduct  = "Select {$lang->productcommon}";
 $lang->bug->byModule       = 'ByModule';
 $lang->bug->assignToMe     = 'MyBugs';
 $lang->bug->openedByMe     = 'MyOpen';
@@ -113,12 +113,12 @@ $lang->bug->allBugs        = 'Allbug';
 $lang->bug->moduleBugs     = 'ByModule';
 $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'StoryChanged';
-$lang->bug->allProduct     = 'All products';
+$lang->bug->allProduct     = "All {$lang->productcommon}s";
 $lang->bug->ditto          = 'Ditto';
 
 /* Labels. */
-$lang->bug->lblProductAndModule         = 'Product&Module';
-$lang->bug->lblProjectAndTask           = 'Project&Task';
+$lang->bug->lblProductAndModule         = "{$lang->productcommon}&Module";
+$lang->bug->lblProjectAndTask           = "{$lang->projectcommon}&Task";
 $lang->bug->lblStory                    = 'Story';
 $lang->bug->lblTypeAndSeverity          = 'Type&Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'OS&Browser';
@@ -134,7 +134,7 @@ $lang->bug->legendBasicInfo    = 'Basic info';
 $lang->bug->legendMailto       = 'Mailto';
 $lang->bug->legendAttatch      = 'Files';
 $lang->bug->legendLinkBugs     = 'Related bug';
-$lang->bug->legendPrjStoryTask = 'Project, story & task';
+$lang->bug->legendPrjStoryTask = "{$lang->projectcommon}, story & task";
 $lang->bug->legendCases        = 'Related case';
 $lang->bug->legendSteps        = 'Steps';
 $lang->bug->legendAction       = 'Action';
@@ -155,7 +155,7 @@ $lang->bug->buttonToList         = 'Back';
 $lang->bug->buttonCreateTestcase = 'Create Case';
 
 /* Confirm messags. */
-$lang->bug->confirmChangeProduct = 'Change product will change project, task and story also, are you sure?';
+$lang->bug->confirmChangeProduct = "Change {$lang->productcommon} will change {$lang->projectcommon}, task and story also, are you sure?";
 $lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please input the template title:';
 $lang->bug->remindTask           = 'This bug has been to be a task, update the task:%s or not?';
@@ -263,7 +263,7 @@ $lang->bug->report->common = 'Report';
 $lang->bug->report->select = 'Select';
 $lang->bug->report->create = 'Create';
 
-$lang->bug->report->charts['bugsPerProject']        = 'Project bugs';
+$lang->bug->report->charts['bugsPerProject']        = $lang->projectcommon . ' bugs';
 $lang->bug->report->charts['bugsPerBuild']          = 'Build bugs';
 $lang->bug->report->charts['bugsPerModule']         = 'Module bugs';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Opened bugs per day';
@@ -323,7 +323,7 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = 'Project';
+$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectcommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 

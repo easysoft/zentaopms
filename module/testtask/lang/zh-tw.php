@@ -36,8 +36,8 @@ $lang->testtask->done           = "已測版本";
 
 $lang->testtask->common         = '測試視圖版本';
 $lang->testtask->id             = '版本編號';
-$lang->testtask->product        = '所屬產品';
-$lang->testtask->project        = '所屬項目';
+$lang->testtask->product        = '所屬' . $lang->productcommon;
+$lang->testtask->project        = '所屬' . $lang->projectcommon;
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '負責人';
 $lang->testtask->pri            = '優先順序';

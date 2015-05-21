@@ -9,7 +9,7 @@
  * @version     $Id: zh-tw.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->productplan->common     = '產品計劃';
+$lang->productplan->common     = $lang->productcommon . '計劃';
 $lang->productplan->browse     = "瀏覽計劃";
 $lang->productplan->index      = "計劃列表";
 $lang->productplan->create     = "創建計劃";
@@ -37,7 +37,7 @@ $lang->productplan->confirmUnlinkStory = "您確認移除該需求嗎？";
 $lang->productplan->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 
 $lang->productplan->id      = '編號';
-$lang->productplan->product = '產品';
+$lang->productplan->product = $lang->productcommon;
 $lang->productplan->title   = '名稱';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '開始日期';

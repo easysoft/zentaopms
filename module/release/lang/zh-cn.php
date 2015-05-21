@@ -29,7 +29,7 @@ $lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->release->basicInfo = '基本信息';
 
 $lang->release->id                    = 'ID';
-$lang->release->product               = '产品';
+$lang->release->product               = $lang->productcommon;
 $lang->release->build                 = '版本';
 $lang->release->name                  = '发布名称';
 $lang->release->date                  = '发布日期';

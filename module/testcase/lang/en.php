@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = 'ID';
-$lang->testcase->product          = 'Product';
+$lang->testcase->product          = $lang->productcommon;
 $lang->testcase->module           = 'Module';
 $lang->testcase->story            = 'Story';
 $lang->testcase->storyVersion     = 'Story version';
@@ -41,7 +41,7 @@ $lang->testcase->linkCase         = 'Related cases';
 $lang->testcase->stage            = 'Stage';
 $lang->testcase->lastEditedByAB   = 'Last edited by';
 $lang->testcase->lastEditedDateAB = 'Last edited date';
-$lang->testcase->allProduct       = 'All product';
+$lang->testcase->allProduct       = "All {$lang->productcommon}";
 $lang->testcase->fromBug          = 'From bug';
 $lang->testcase->toBug            = 'To bug';
 $lang->testcase->changed          = 'Changed';
@@ -81,7 +81,7 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Insert before';
 $lang->testcase->insertAfter  = 'Insert after';
 
-$lang->testcase->selectProduct = 'Select product';
+$lang->testcase->selectProduct = "Select {$lang->productcommon}";
 $lang->testcase->byModule      = 'By module';
 $lang->testcase->assignToMe    = 'Cases to me';
 $lang->testcase->openedByMe    = 'My Opened cases';
@@ -91,7 +91,7 @@ $lang->testcase->moduleCases   = 'By module';
 $lang->testcase->bySearch      = 'By search';
 $lang->testcase->doneByMe      = 'My runed cases';
 
-$lang->testcase->lblProductAndModule         = 'Product & module';
+$lang->testcase->lblProductAndModule         = "{$lang->productcommon} & module";
 $lang->testcase->lblTypeAndPri               = 'Type & priority';
 $lang->testcase->lblSystemBrowserAndHardware = 'OS & browser';
 $lang->testcase->lblAssignAndMail            = 'Assigned & mailto';
@@ -110,7 +110,7 @@ $lang->testcase->legendSteps        = 'Steps';
 $lang->testcase->legendAction       = 'Action';
 $lang->testcase->legendHistory      = 'History';
 $lang->testcase->legendComment      = 'Comment';
-$lang->testcase->legendProduct      = 'Product & module';
+$lang->testcase->legendProduct      = "{$lang->productcommon} & module";
 
 $lang->testcase->confirmDelete      = 'Are you sure to delete this case?';
 $lang->testcase->confirmBatchDelete = 'Are you sure to batch delete there cases?';

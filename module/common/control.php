@@ -25,6 +25,18 @@ class common extends control
         $this->common->setCompany();
         $this->common->setUser();
         $this->common->loadConfigFromDB();
+        if(isset($this->config->custom->productproject))
+        {
+            $productcommon = $projectcommon = 0;
+            list($productcommon, $projectcommon) = explode('_', $this->config->custom->productproject);
+            if($productcommon != 0 or $projectcommon != 0)
+            {
+                $this->lang->productcommon = $this->lang->productcommonList[$productcommon];
+                $this->lang->projectcommon = $this->lang->projectcommonList[$projectcommon];
+                $this->app->loadLang('common');
+            }
+        }
+
         $this->common->loadCustomFromDB();
         if($this->app->getViewType() == 'mhtml') $this->common->setMobileMenu();
         $this->app->loadLang('company');

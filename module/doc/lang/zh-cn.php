@@ -12,8 +12,8 @@
 /* 字段列表。*/
 $lang->doc->common         = '文档';
 $lang->doc->id             = '文档编号';
-$lang->doc->product        = '所属产品';
-$lang->doc->project        = '所属项目';
+$lang->doc->product        = '所属' . $lang->productcommon;
+$lang->doc->project        = '所属' . $lang->projectcommon;
 $lang->doc->lib            = '所属文档库';
 $lang->doc->module         = '所属分类';
 $lang->doc->title          = '文档标题';
@@ -54,11 +54,11 @@ $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
 
 /* 查询条件列表 */
-$lang->doc->allProduct     = '所有产品';
-$lang->doc->allProject     = '所有项目';
+$lang->doc->allProduct     = '所有' . $lang->productcommon;
+$lang->doc->allProject     = '所有' . $lang->projectcommon;
 
-$lang->doc->systemLibs['product'] = '产品文档库';
-$lang->doc->systemLibs['project'] = '项目文档库';
+$lang->doc->systemLibs['product'] = $lang->productcommon . '文档库';
+$lang->doc->systemLibs['project'] = $lang->projectcommon . '文档库';
 
 $lang->doc->types['file'] = '文件';
 $lang->doc->types['url']  = '链接';
