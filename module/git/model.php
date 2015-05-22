@@ -468,7 +468,7 @@ class gitModel extends model
         $action->actor   = $log->author;
         $action->action  = 'gitcommited';
         $action->date    = $log->date;
-        $action->comment = $this->iconvComment($log->msg);
+        $action->comment = htmlspecialchars($this->iconvComment($log->msg));
         $action->extra   = substr($log->revision, 0, 10);
 
         $changes = $this->createActionChanges($log, $repoRoot);

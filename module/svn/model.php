@@ -461,7 +461,7 @@ class svnModel extends model
         $action->actor   = $log->author;
         $action->action  = 'svncommited';
         $action->date    = $log->date;
-        $action->comment = $this->iconvComment($log->msg);
+        $action->comment = htmlspecialchars($this->iconvComment($log->msg));
         $action->extra   = $log->revision;
 
         $changes = $this->createActionChanges($log, $repoRoot);
