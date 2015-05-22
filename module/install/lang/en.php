@@ -139,8 +139,8 @@ $lang->install->joinZentao = <<<EOT
 <i>Tips: For you get zentao news in time, please register Zetao community(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>).</i> 
 EOT;
 
-$lang->install->other   = "Other products recommended: ";
-$lang->install->chanzhi = new stdclass();
+$lang->install->promotion = "Other products of Nature EasySoft: ";
+$lang->install->chanzhi   = new stdclass();
 $lang->install->chanzhi->name = '蝉知企业门户系统';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>

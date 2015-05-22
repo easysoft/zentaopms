@@ -139,8 +139,8 @@ $lang->install->joinZentao = <<<EOT
 
 EOT;
 
-$lang->install->other   = "其他产品推荐：";
-$lang->install->chanzhi = new stdclass();
+$lang->install->promotion = "易软天创其他产品：";
+$lang->install->chanzhi   = new stdclass();
 $lang->install->chanzhi->name = '蝉知企业门户系统';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
