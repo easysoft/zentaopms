@@ -34,7 +34,7 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 
 /* Detect mobile. */
 $mobile = $app->loadClass('mobile');
-if(!$mobile->isTablet() and $mobile->isMobile())
+if(!$mobile->isTablet() and $mobile->isMobile() and $config->default->view == 'html')
 {
     $config->default->view = 'mhtml';
     helper::setViewType();

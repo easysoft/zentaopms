@@ -362,7 +362,7 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($plan->product, $projects, $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id_desc');
             foreach($allBugs as $key => $bug)
             {
                 if($bug->status != 'active') unset($allBugs[$key]);

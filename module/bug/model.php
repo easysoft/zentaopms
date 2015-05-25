@@ -820,7 +820,7 @@ class bugModel extends model
      */
     public function getReleaseBugs($buildID, $productID)
     {
-        $project = $this->dao->select('t1.begin')
+        $project = $this->dao->select('t1.id,t1.begin')
             ->from(TABLE_PROJECT)->alias('t1') 
             ->leftJoin(TABLE_BUILD)->alias('t2')
             ->on('t1.id = t2.project')
@@ -830,6 +830,7 @@ class bugModel extends model
             ->where('resolvedDate')->ge($project->begin)
             ->andWhere('resolution')->ne('postponed')
             ->andWhere('product')->eq($productID)
+            ->andWhere("(project != '$project->id' OR (project = '$project->id' and openedDate < '$project->begin'))")
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
             ->fetchAll();
@@ -1455,14 +1456,13 @@ class bugModel extends model
      * Get bugs by search. 
      * 
      * @param  int    $productID 
-     * @param  array  $projects 
      * @param  int    $queryID 
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $projects, $queryID, $orderBy, $pager = null)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null)
     {
         if($queryID)
         {
@@ -1482,12 +1482,6 @@ class bugModel extends model
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
         }
 
-        /* check the purview of projects.*/
-        if(strpos($this->session->bugQuery, '`project`') === false) 
-        {
-            $var = $this->session->bugQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
-            $this->session->set('bugQuery', "$var");
-        }
         if(strpos($this->session->bugQuery, '`product`') === false) 
         {
             $var = $this->session->bugQuery . ' AND `product` = ' . $productID;

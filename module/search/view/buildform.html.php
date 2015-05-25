@@ -80,7 +80,7 @@ $(function()
     setDateField('.date');
 });
 
-var params        = <?php echo empty($fieldParams) ? '{}' : json_encode($fieldParams);?>;
+var <?php echo $module . 'params'?> = <?php echo empty($fieldParams) ? '{}' : json_encode($fieldParams);?>;
 var groupItems    = <?php echo $config->search->groupItems;?>;
 var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
 var module        = '<?php echo $module;?>';
@@ -100,11 +100,11 @@ function setDateField(query, fieldNO)
         $period = $("<ul id='selectPeriod' class='dropdown-menu'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
         $period.find('li > a').click(function(event)
         {
-            var target = $('#' + $period.data('target'));
+            var target = $(query).parents('form').find('#' + $period.data('target'));
             if(target.length)
             {
                 target.val($(this).attr('href').replace('#', '$'));
-                $('#operator' + $period.data('fieldNO')).val('between');
+                $(query).parents('form').find('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }
             event.stopPropagation();
@@ -119,7 +119,7 @@ function setDateField(query, fieldNO)
         $period.find("li > a[href='" + $e.val().replace('$', '#') + "']").closest('li').addClass('active');
     }).on('changeDate', function()
     {
-        var opt = $('#operator' + $period.data('fieldNO'));
+        var opt = $(query).parents('form').find('#operator' + $period.data('fieldNO'));
         if(opt.val() == 'between') opt.val('<=');
         $period.hide();
     }).on('hide', function(){setTimeout(function(){$period.hide();}, 200);});
@@ -128,33 +128,35 @@ function setDateField(query, fieldNO)
 /**
  * When the value of the fields select changed, set the operator and value of the new field.
  * 
- * @param  string $fieldName 
+ * @param  string $obj 
  * @param  int    $fieldNO 
  * @access public
  * @return void
  */
-function setField(fieldName, fieldNO)
+function setField(obj, fieldNO, moduleparams)
 {
-    $('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
-    $('#valueBox' + fieldNO).html($('#box' + fieldName).children().clone());
-    $('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
+    var params    = moduleparams;
+    var fieldName = $(obj).val();
+    $(obj).parents('form').find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
+    $(obj).parents('form').find('#valueBox' + fieldNO).html($(obj).parents('form').find('#box' + fieldName).children().clone());
+    $(obj).parents('form').find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
 
     if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
-        setDateField("#value" + fieldNO, fieldNO);
-        $("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
+        setDateField($(obj).parents('form').find("#value" + fieldNO), fieldNO);
+        $(obj).parents('form').find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
         var groupItems = <?php echo $config->search->groupItems?>;
         var maxNO      = 2 * groupItems;
         var nextNO     = fieldNO > groupItems ? fieldNO - groupItems + 1 : fieldNO + groupItems;
-        var nextValue  = $('#value' + nextNO).val();
+        var nextValue  = $(obj).parents('form').find('#value' + nextNO).val();
         if(nextNO <= maxNO && fieldNO < maxNO && (nextValue == '' || nextValue == 0))
         {
-            $('#field' + nextNO).val($('#field' + fieldNO).val());
-            $('#operator' + nextNO).val('<=');
-            $('#valueBox' + nextNO).html($('#box' + fieldName).children().clone());
-            $('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
-            setDateField("#value" + nextNO, nextNO);
-            $("#value" + nextNO).addClass('date');
+            $(obj).parents('form').find('#field' + nextNO).val($(obj).parents('form').find('#field' + fieldNO).val());
+            $(obj).parents('form').find('#operator' + nextNO).val('<=');
+            $(obj).parents('form').find('#valueBox' + nextNO).html($(obj).parents('form').find('#box' + fieldName).children().clone());
+            $(obj).parents('form').find('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
+            setDateField($(obj).parents('form').find("#value" + nextNO), nextNO);
+            $(obj).parents('form').find("#value" + nextNO).addClass('date');
         }
     }
 }
@@ -165,11 +167,11 @@ function setField(fieldName, fieldNO)
  * @access public
  * @return void
  */
-function resetForm()
+function resetForm(obj)
 {
     for(i = 1; i <= groupItems * 2; i ++)
     {
-        $('#value' + i).val('');
+        $(obj).parents('form').find('#value' + i).val('');
     }
 }
 
@@ -179,18 +181,18 @@ function resetForm()
  * @access public
  * @return void
  */
-function showmore()
+function showmore(obj)
 {
     for(i = 1; i <= groupItems * 2; i ++)
     {
         if(i != 1 && i != groupItems + 1 )
         {
-            $('#searchbox' + i).removeClass('hidden');
+            $(obj).parents('form').find('#searchbox' + i).removeClass('hidden');
         }
     }
 
-    $('#formType').val('more');
-    $('#searchform').addClass('showmore');
+    $(obj).parents('form').find('#formType').val('more');
+    $(obj).parents('form').addClass('showmore');
 }
 
 /**
@@ -199,18 +201,18 @@ function showmore()
  * @access public
  * @return void
  */
-function showlite()
+function showlite(obj)
 {
     for(i = 1; i <= groupItems * 2; i ++)
     {
         if(i != 1 && i != groupItems + 1)
         {
-            $('#value' + i).val('');
-            $('#searchbox' + i).addClass('hidden');
+            $(obj).parents('form').find('#value' + i).val('');
+            $(obj).parents('form').find('#searchbox' + i).addClass('hidden');
         }
     }
-    $('#searchform').removeClass('showmore');
-    $('#formType').val('lite');
+    $(obj).parents('form').removeClass('showmore');
+    $(obj).parents('form').find('#formType').val('lite');
 }
 
 /**
@@ -259,6 +261,7 @@ function deleteQuery()
 }
 </script>
 
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform' class='form-condensed'>
 <div class='hidden'>
 <?php
 /* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
@@ -271,7 +274,6 @@ foreach($fieldParams as $fieldName => $param)
 }
 ?>
 </div>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform' class='form-condensed'>
 <table class='table table-condensed table-form' style='max-width: 1200px; margin: 0 auto'>
   <tr>
     <td class='w-400px'>
@@ -297,7 +299,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
+          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -339,7 +341,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)' class='form-control'") . '</td>';
+          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}param)' class='form-control'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -371,7 +373,7 @@ foreach($fieldParams as $fieldName => $param)
       echo html::submitButton($lang->search->common, '', 'btn-primary');
       if($style != 'simple')
       {
-          echo html::commonButton($lang->search->reset, 'onclick=resetForm(); class=btn');
+          echo html::commonButton($lang->search->reset, 'onclick=resetForm(this) class=btn');
           echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
       }
       echo '</div>';
@@ -390,8 +392,8 @@ foreach($fieldParams as $fieldName => $param)
   </tr>
 </table>
 <div id='moreOrLite'>
-  <a id="searchmore" href="javascript:showmore()"><i class="icon-double-angle-down icon-2x"></i></a>
-  <a id="searchlite" href="javascript:showlite()"><i class="icon-double-angle-up icon-2x"></i></a>
+  <a id="searchmore" href="javascript:;" onclick="showmore(this)"><i class="icon-double-angle-down icon-2x"></i></a>
+  <a id="searchlite" href="javascript:;" onclick="showlite(this)"><i class="icon-double-angle-up icon-2x"></i></a>
   <?php echo html::hidden('formType', 'lite');?>
 </div>
 </form>

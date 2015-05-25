@@ -342,7 +342,7 @@ class build extends control
 
         /* Build the search form. */
         $this->loadModel('bug');
-        $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
+        $this->config->bug->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
@@ -354,7 +354,7 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, array($build->project => $build->project), $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($build->product, $queryID, 'id_desc');
         }
         else
         {

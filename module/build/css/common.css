@@ -3,3 +3,4 @@
 .red {color:red}
 .green {color:green}
 #unlinkBugList, #unlinkStoryList{margin-bottom:5px;}
+input[type=checkbox].ml-10px{margin-left:10px;}
