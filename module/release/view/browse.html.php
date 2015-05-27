@@ -39,8 +39,8 @@
       <td class='text-center'><?php echo $release->date;?></td>
       <td class='text-center'>
         <?php
-        common::printIcon('release', 'linkStory', "releaseID=$release->id", '', 'list', 'link');
-        common::printIcon('release', 'linkBug', "releaseID=$release->id", '', 'list', 'bug');
+        common::printIcon('release', 'view', "releaseID=$release->id&type=story&link=true", '', 'list', 'link');
+        common::printIcon('release', 'view', "releaseID=$release->id&type=bug&link=true", '', 'list', 'bug');
         common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
         if(common::hasPriv('release', 'delete'))
         {

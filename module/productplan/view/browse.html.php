@@ -40,8 +40,8 @@
     <td><?php echo $plan->end;?></td>
     <td class='text-center'>
       <?php
-      common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list', 'link');
-      common::printIcon('productplan', 'linkBug', "planID=$plan->id", '', 'list', 'bug');
+      common::printIcon('productplan', 'view', "planID=$plan->id&type=story&orderBy=id_desc&link=true", '', 'list', 'link');
+      common::printIcon('productplan', 'view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true", '', 'list', 'bug');
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
 
       if(common::hasPriv('productplan', 'delete'))
