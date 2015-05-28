@@ -18,6 +18,7 @@ $jsFiles[] = $jsRoot     . 'my.full.js';
 $jsFiles[] = $jqueryRoot . 'chosen/min.js';
 $jsFiles[] = $jqueryRoot . 'treeview/min.js';
 $jsFiles[] = $jqueryRoot . 'datetimepicker/min.js';
+$jsFiles[] = $jsRoot     . 'chartjs/chart.min.js';
 
 /* Combine these js files. */
 $allJSFile  = $jsRoot . 'all.js';
