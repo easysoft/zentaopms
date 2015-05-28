@@ -33,7 +33,7 @@ class git extends control
     public function diff($path, $revision)
     {
         $path = helper::safe64Decode($path);
-        $this->view->url      = $path;
+        $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->diff     = $this->git->diff($path, $revision);
         
