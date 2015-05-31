@@ -69,7 +69,7 @@ class report extends control
         $this->app->loadLang('bug');
         if($begin == 0) 
         {
-            $begin = date('Y-m-d', strtotime('last month'));
+            $begin = date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01')));
         }
         else
         {

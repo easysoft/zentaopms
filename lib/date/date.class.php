@@ -207,7 +207,7 @@ class date
      */
     public static function getLastMonth()
     {
-        $begin = date('Y-m', strtotime('last month')) . '-01 00:00:00';
+        $begin = date('Y-m', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01'))) . '-01 00:00:00';
         $end   = date('Y-m', strtotime('this month')) . '-00 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
