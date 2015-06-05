@@ -39,12 +39,26 @@ class reportModel extends model
         $data = '[';
         foreach($dateList as $i => $date)
         {
-            $date = date('Y-m-d', strtotime($date));
-            if(isset($sets[$date]))$data .= "[$i, {$sets[$date]->value}],";
+            $date  = date('Y-m-d', strtotime($date));
+            $data .= isset($sets[$date]) ? "{$sets[$date]->value}," : "'',";
         }
         $data = rtrim($data, ',');
         $data .= ']';
         return $data;
+    }
+
+    /**
+     * Convert date format.
+     * 
+     * @param  array  $dateList 
+     * @param  string $format 
+     * @access public
+     * @return array
+     */
+    public function convertFormat($dateList, $format = 'Y-m-d')
+    {
+        foreach($dateList as $i => $date) $dateList[$i] = date($format, strtotime($date));
+        return $dateList;
     }
 
     /**

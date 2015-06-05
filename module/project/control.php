@@ -729,7 +729,7 @@ class project extends control
         $position[] = $this->lang->project->burn;
 
         /* Get date list. */
-        list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'j/n');
+        list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
 
         $sets          = $this->project->getBurnDataFlot($project->id);
         $limitJSON     = '[]';
@@ -738,12 +738,12 @@ class project extends control
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
         $days         = count($dateList) - 1;
-        $rate         = $firstTime / $days;
+        $rate         = round($firstTime / $days, 2);
         $baselineJSON = '[';
         foreach($dateList as $i => $date) $baselineJSON .= ($days - $i) * $rate . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
-        $chartData['labels'] = $dateList;
+        $chartData['labels']   = $this->report->convertFormat($dateList, 'j/n');
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
 

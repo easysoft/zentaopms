@@ -6,4 +6,4 @@ $config->cron->create->requiredFields = 'm,h,dom,mon,dow,command';
 $config->cron->edit->requiredFields   = 'm,h,dom,mon,dow,command';
 
 $config->cron->maxRunDays = 8;
-$config->cron->maxRunTime = 1800;
+$config->cron->maxRunTime = 180;
