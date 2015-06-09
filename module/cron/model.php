@@ -135,7 +135,7 @@ class cronModel extends model
         if(empty($this->config->global->cron)) return false;
 
         $lastTime = $this->getLastTime();
-        if($lastTime == '0000-00-00 00:00:00' or ((time() - strtotime($lastTime)) >= 65)) return true;
+        if($lastTime == '0000-00-00 00:00:00' or ((time() - strtotime($lastTime)) > $this->config->cron->maxRunTime)) return true;
         if(!isset($this->config->cron->run->status)) return true;
         if($this->config->cron->run->status == 'stop') return true;
 

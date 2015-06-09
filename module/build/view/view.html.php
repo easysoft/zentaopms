@@ -27,8 +27,8 @@
   if(!$build->deleted)
   {
       echo "<div class='btn-group'>";
-      common::printIcon('build', 'linkStory',"buildID=$build->id", '', 'button', $lang->icons['link']);
-      common::printIcon('build', 'linkBug',  "buildID=$build->id", '', 'button', $lang->icons['bug']);
+      if(common::hasPriv('build', 'linkStory')) echo html::a(inlink('view', "buildID=$build->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn'");
+      if(common::hasPriv('build', 'linkBug'))   echo html::a(inlink('view', "buildID=$build->id&type=bug&link=true"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn'");
       echo '</div>';
       echo "<div class='btn-group'>";
       common::printIcon('build', 'edit',   "buildID=$build->id");

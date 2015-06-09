@@ -213,7 +213,7 @@ class cron extends control
 
             /* Break while. */
             if(connection_status() != CONNECTION_NORMAL) break;
-            if(((time() - $startedTime) / 60/ 4) >= $this->config->cron->maxRunDays) break;
+            if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
         }
 
         /* Revert cron status to stop. */
