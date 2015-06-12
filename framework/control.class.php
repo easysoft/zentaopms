@@ -297,7 +297,7 @@ class control
         /* The main view file, extension view file and hook file. */
         $mainViewFile = $modulePath . 'view' . $this->pathFix . $this->viewPrefix . $methodName . '.' . $viewType . '.php';
         $extViewFile  = $viewExtPath . $this->viewPrefix . $methodName . ".{$viewType}.php";
-        $extHookFiles = glob($viewExtPath . $this->viewPrefix . $methodName . "*.{$viewType}.hook.php");
+        $extHookFiles = glob($viewExtPath . $this->viewPrefix . $methodName . ".*.{$viewType}.hook.php");
 
         $viewFile = file_exists($extViewFile) ? $extViewFile : $mainViewFile;
         if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);

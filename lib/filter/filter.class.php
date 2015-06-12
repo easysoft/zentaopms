@@ -214,7 +214,8 @@ class validater
     public static function checkAccount($var)
     {
         global $config;
-        return self::checkREG($var, $config->accountRule);
+        $accountRule = empty($config->accountRule) ? '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|' : $config->accountRule;
+        return self::checkREG($var, $accountRule);
     }
 
     /**
