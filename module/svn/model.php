@@ -97,10 +97,9 @@ class svnModel extends model
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
-            if(empty($logs)) return false;
+            if(empty($logs)) continue;
 
             $this->printLog("get " . count($logs) . " logs");
-
             $this->printLog('begin parsing logs');
             foreach($logs as $log)
             {

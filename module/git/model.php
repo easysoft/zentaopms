@@ -97,11 +97,9 @@ class gitModel extends model
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
-            if(empty($logs)) return false;
-
-            $this->printLog("get " . count($logs) . " logs");
             if(empty($logs)) continue;
 
+            $this->printLog("get " . count($logs) . " logs");
             $this->printLog('begin parsing logs');
             $latestRevision = $logs[0]->revision;
             foreach($logs as $log)

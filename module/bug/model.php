@@ -953,6 +953,7 @@ class bugModel extends model
                     }
                     else
                     {
+                        if(!isset($datas[$buildID])) $datas[$buildID] = new stdclass();
                         $datas[$buildID]->name  = $buildID;
                         $datas[$buildID]->value = 1;
                     }
