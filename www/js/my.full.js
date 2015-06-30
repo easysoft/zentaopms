@@ -944,6 +944,12 @@ function setModal()
                     initModalFrame();
                     $.get(url, function(data)
                     {
+                        var options = 
+                        {
+                            width:      $e.data('width') || 800,
+                            icon:       $e.data('icon') || '?',
+                            title:      $e.data('title') || $e.attr('title') || $e.text(),
+                        };
                         var ajaxModal = $('#ajaxModal');
                         if(data.indexOf('modal-dialog') < 0)
                         {
