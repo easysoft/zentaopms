@@ -442,6 +442,18 @@ class helper
     }
 
     /**
+     * Check is ajax request.
+     * 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isAjaxRequest()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+    }
+
+    /**
      * Set viewType.
      * 
      * @static
