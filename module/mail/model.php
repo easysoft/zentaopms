@@ -285,7 +285,6 @@ class mailModel extends model
             $this->setBody($this->convertCharset($body));
             $this->setErrorLang();
             $this->mta->send();
-            if($this->config->mail->mta == 'smtp') $this->mta->smtpClose();
         }
         catch (phpmailerException $e) 
         {
@@ -295,6 +294,7 @@ class mailModel extends model
         {
             $this->errors[] = trim(strip_tags($e->getMessage()));
         }
+        if($this->config->mail->mta == 'smtp') $this->mta->smtpClose();
 
         /* save errors. */
         if($this->isError()) $this->app->saveError('E_MAIL', join(' ', $this->errors), __FILE__, __LINE__, true);

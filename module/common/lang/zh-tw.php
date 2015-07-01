@@ -299,6 +299,7 @@ $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
 $lang->cron      = new stdclass();
 $lang->dev       = new stdclass();
+$lang->search    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;

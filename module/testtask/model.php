@@ -316,7 +316,7 @@ class testtaskModel extends model
          * 
          * */
         $postData   = fixer::input('post')->get();
-        $caseResult = $postData->result ? $postData->result : 'pass';
+        $caseResult = isset($postData->result) ? $postData->result : 'pass';
         if($postData->steps)
         {
             foreach($postData->steps as $stepID => $stepResult)

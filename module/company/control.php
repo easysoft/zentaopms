@@ -69,6 +69,7 @@ class company extends control
         $this->config->company->browse->search['actionURL'] = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
         $this->config->company->browse->search['queryID']   = $queryID;
         $this->config->company->browse->search['params']['dept']['values'] = array('' => '') + $this->dept->getOptionMenu();
+        $this->loadModel('search')->setSearchParams($this->config->company->browse->search);
 
         if($type == 'bydept')
         {

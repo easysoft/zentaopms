@@ -1405,8 +1405,12 @@ class taskModel extends model
      */
     public function reportCondition()
     {
-        if(!$this->session->taskOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->taskQueryCondition) . ')';
-        return $this->session->taskQueryCondition;
+        if(isset($_SESSION['taskQueryCondition']))
+        {
+            if(!$this->session->taskOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->taskQueryCondition) . ')';
+            return $this->session->taskQueryCondition;
+        }
+        return true;
     }
 
     /**

@@ -341,7 +341,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}param)' class='form-control'") . '</td>';
+          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';

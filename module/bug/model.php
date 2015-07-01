@@ -1573,7 +1573,11 @@ class bugModel extends model
      */
     public function reportCondition()
     {
-        if(!$this->session->bugOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->bugQueryCondition) . ')';
-        return $this->session->bugQueryCondition;
+        if(isset($_SESSION['bugQueryCondition']))
+        {
+            if(!$this->session->bugOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->bugQueryCondition) . ')';
+            return $this->session->bugQueryCondition;
+        }
+        return true;
     }
 }

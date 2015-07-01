@@ -31,8 +31,8 @@
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->task->report->charts, $checkedCharts, '', 'block')?>
           <div class='btn-group'>
-            <?php echo html::selectButton(); ?>
-            <?php echo html::submitButton($lang->task->report->create);?>
+            <?php echo html::selectButton('', 'btn-sm'); ?>
+            <?php echo html::submitButton($lang->task->report->create, "", 'btn-sm btn-primary');?>
           </div>
         </form>
       </div>

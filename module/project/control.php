@@ -126,6 +126,7 @@ class project extends control
     {
         $this->loadModel('tree');
         $this->loadModel('search');
+        $this->loadModel('task');
 
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
@@ -162,11 +163,11 @@ class project extends control
         if($status == 'byProduct')
         {
             $modules = $this->tree->getProjectModule($projectID, $productID);
-            $tasks   = $this->loadModel('task')->getTasksByModule($projectID, $modules, $sort, $pager);
+            $tasks   = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
         }
         elseif($status == 'byModule') 
         {
-            $tasks = $this->loadModel('task')->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $sort, $pager);
+            $tasks = $this->task->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $sort, $pager);
         }
         elseif($browseType != "bysearch")
         {
@@ -177,7 +178,7 @@ class project extends control
                 unset($qureyStatus['closed']);
                 $qureyStatus = array_keys($qureyStatus);
             }
-            $tasks = $this->loadModel('task')->getProjectTasks($projectID, $qureyStatus, $sort, $pager); 
+            $tasks = $this->task->getProjectTasks($projectID, $qureyStatus, $sort, $pager); 
         }
         else
         {   

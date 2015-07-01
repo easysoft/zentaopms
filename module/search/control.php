@@ -29,7 +29,7 @@ class search extends control
         $searchFields = empty($searchFields) ? json_decode($this->session->searchParams['searchFields'], true) : $searchFields;
         $fieldParams  = empty($fieldParams) ?  json_decode($this->session->searchParams['fieldParams'], true)  : $fieldParams;
         $actionURL    = empty($actionURL) ?    $this->session->searchParams['actionURL'] : $actionURL;
-        $style        = $this->session->searchParams['style'];
+        $style        = isset($_SESSION['searchParams']['style']) ? $this->session->searchParams['style'] : '';
         $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->view->module       = $module;
