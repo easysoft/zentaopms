@@ -371,7 +371,7 @@ EOT;
      * @param  string $scope  the scope of select reverse.
      * @return string
      */
-     static public function selectButton($scope = "")
+     static public function selectButton($scope = "", $appendClass = '')
     {
                 $string = <<<EOT
 <script>
@@ -392,8 +392,8 @@ $(function()
 </script>
 EOT;
         global $lang;
-        $string .= "<a class='btn btn-select-all check-all' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
-        $string .= "<a class='btn btn-select-reverse check-inverse' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
+        $string .= "<a class='btn btn-select-all check-all $appendClass' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
+        $string .= "<a class='btn btn-select-reverse check-inverse $appendClass' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
         return  $string;
     }
 
@@ -819,11 +819,11 @@ EOT;
      * @access public
      * @return void
      */
-    static public function closeModal($window = 'self', $location = 'this')
+    static public function closeModal($window = 'self', $location = 'this', $callback = 'null')
     {
         $js  = self::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
-        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal(null, '$location');}";
+        $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal($callback, '$location');}";
         $js .= self::end();
         return $js;
     }
