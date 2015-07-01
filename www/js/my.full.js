@@ -628,7 +628,7 @@ function autoCheck()
 {
     $(document).on('click', '.tablesorter tr :checkbox', function(){clickInCheckbox = 1;});
 
-    $(document).on('click', '.tablesorter tr', function()
+    $(document).on('click', '.tablesorter:not(.table-datatable) tr', function()
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
