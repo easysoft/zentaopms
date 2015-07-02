@@ -53,8 +53,8 @@ if(file_exists('install.php') or file_exists('upgrade.php'))
 {
     $wwwDir = dirname(__FILE__);
     echo "<html><head><meta charset='utf-8'></head><body>";
-    echo "目录 {$wwwDir} 下存在 install.php 和 upgrade.php 文件，为了系统的安全，请您删掉这两个文件。<br />";
-    echo "The presence of install.php and upgrade.php file in directory {$wwwDir}, in order to software security, please delete these two files.";
+    echo "<p>目录 {$wwwDir} 下存在 install.php 和 upgrade.php 文件，为了系统的安全，请您删掉这两个文件。</p>";
+    echo "<p>Please remove install.php and upgrade.php for security reason.</p>";
     echo '</body></html>';
     exit;
 }

@@ -20,39 +20,28 @@
       <div class='alert alert-danger mgb-10'><strong><?php echo $lang->upgrade->fail?></strong></div>
       <pre><?php echo join('<br />', $errors);?></pre>
       <?php else:?>
-      <div class='alert alert-success mgb-10'><strong><?php echo $lang->upgrade->success?></strong></div>
-      <div class='mt-10px'><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-sm'")?></div>
-      <div class='row adbox'>
-        <h5><?php echo $lang->install->promotion?></h5>
-        <div class='col-md-4'>
-          <a class="card ad" href="http://www.chanzhi.org" target="_blank">
-            <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/chanzhi.png'?>" alt=""></div>
-            <strong class="card-heading"><?php echo $lang->install->chanzhi->name?></strong>
-            <div class="card-reveal">
-              <h5 class="card-heading"><?php echo $lang->install->chanzhi->name?></h5>
-              <div class="card-content"><?php echo $lang->install->chanzhi->desc?></div>
-            </div>
-          </a>
-        </div>
-        <div class='col-md-4'>
-          <a class="card ad" href="http://www.ranzhico.com" target="_blank">
-            <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
-            <strong class="card-heading"><?php echo $lang->install->ranzhi->name?></strong>
-            <div class="card-reveal">
-              <h5 class="card-heading"><?php echo $lang->install->ranzhi->name?></h5>
-              <div class="card-content"><?php echo $lang->install->ranzhi->desc?></div>
-            </div>
-          </a>
-        </div>
-        <div class='col-md-4'>
-          <a class="card ad" href="http://www.yidouio.com" target="_blank">
-            <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/yidou.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/yidou.png'?>" alt=""></div>
-            <strong class="card-heading"><?php echo $lang->install->yidou->name?></strong>
-            <div class="card-reveal">
-              <h5 class="card-heading"><?php echo $lang->install->yidou->name?></h5>
-              <div class="card-content"><?php echo $lang->install->yidou->desc?></div>
-            </div>
-          </a>
+      <div class='alert alert-success mgb-10'>
+        <strong><?php echo $lang->upgrade->success?></strong>
+        <span class='pull-right'><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-sm'")?></span>
+      </div>
+      <div class='panel adbox'>
+        <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
+        <div class='panel-body'>
+          <div class='col-md-4'>
+            <a class="card ad" href="http://www.chanzhi.org" target="_blank">
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/chanzhi.png'?>" alt=""></div>
+            </a>
+          </div>
+          <div class='col-md-4'>
+            <a class="card ad" href="http://www.ranzhico.com" target="_blank">
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
+            </a>
+          </div>
+          <div class='col-md-4'>
+            <a class="card ad" href="http://www.yidouio.com" target="_blank">
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/yidou.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/yidou.png'?>" alt=""></div>
+            </a>
+          </div>
         </div>
       </div>
       <?php endif;?>

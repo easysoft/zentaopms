@@ -99,9 +99,9 @@ class upgrade extends control
         $this->view->title      = $this->lang->upgrade->result;
         $this->view->position[] = $this->lang->upgrade->common;
 
-        $this->app->loadLang('install');
         if(!$this->upgrade->isError())
         {
+            $this->app->loadLang('install');
             $this->view->result = 'success';
         }
         else
