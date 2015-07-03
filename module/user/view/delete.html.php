@@ -24,7 +24,7 @@
       </th>
       <td>
         <div class="required required-wrapper"></div>
-        <?php echo html::input('verifyPassword', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?>
+        <?php echo html::password('verifyPassword', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?>
       </td>
       <td class='w-100px'><?php echo html::submitButton();?></td>
     </tr>
