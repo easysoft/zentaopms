@@ -9,7 +9,6 @@
  * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->search = new stdclass();
 $lang->search->common        = '搜索';
 $lang->search->reset         = '重置';
 $lang->search->more          = '更多';
