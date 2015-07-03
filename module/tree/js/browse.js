@@ -45,6 +45,6 @@ function syncProductOrProject(obj, type)
 
 $(document).ready(function()
 {
-    $("#submenucreate").modalTrigger({type: 'iframe', width: 500});
-    $("#submenuedit").modalTrigger({type: 'iframe', width: 500});
+//    $("#submenucreate").modalTrigger({type: 'iframe', width: 500});
+//    $("#submenuedit").modalTrigger({type: 'iframe', width: 500});
 });
