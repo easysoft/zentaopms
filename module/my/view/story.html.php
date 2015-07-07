@@ -86,7 +86,7 @@
               $actionLink = $this->createLink('story', 'batchEdit');
               echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
           }
-          if($canBatchClose)
+          if($canBatchClose and $type != 'closedBy')
           {
               $actionLink = $this->createLink('story', 'batchClose');
               echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
