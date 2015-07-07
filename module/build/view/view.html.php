@@ -185,7 +185,7 @@
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr class='text-center'>
                 <td><?php echo sprintf('%03d', $bug->id);?></td>
-                <td><span class='severity<?php echo $bug->severity?>'><?php echo $bug->severity;?></span></td>
+                <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
                 <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
                 <td><?php echo $users[$bug->openedBy];?></td>
