@@ -14,7 +14,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
   <div class='actions'>
-    <?php echo html::a($this->createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->project->create,'', "class='btn'") ?>
+    <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn'")?>
   </div>
   <ul class='nav'>
     <?php echo "<li id='undoneTab'>" . html::a(inlink("index", "locate=no&status=undone&projectID=$project->id"), $lang->project->undone) . '</li>';?>
