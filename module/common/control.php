@@ -112,7 +112,7 @@ class common extends control
             if(empty($acls)) return true;
             $menu = isset($lang->menugroup->$module) ? $lang->menugroup->$module : $module;
             $menu = strtolower($menu);
-            if(!isset($lang->$menu->menu)) return true;
+            if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
             if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
