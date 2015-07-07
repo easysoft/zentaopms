@@ -22,7 +22,7 @@
       <?php else:?>
       <div class='alert alert-success mgb-10'>
         <strong><?php echo $lang->upgrade->success?></strong>
-        <span class='pull-right'><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-sm'")?></span>
+        <span class='pull-right'><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-sm' id='tohome'")?></span>
       </div>
       <div class='panel adbox'>
         <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
