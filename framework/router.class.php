@@ -1434,7 +1434,7 @@ class router
         if($moduleName == 'common')
         {
             $productproject = false;
-            if($this->dbh) $productproject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productproject'")->fetch();
+            if($this->dbh and !empty($this->config->db->name)) $productproject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productproject'")->fetch();
 
             $productcommon = $projectcommon = 0;
             if($productproject)
