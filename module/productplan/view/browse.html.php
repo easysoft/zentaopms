@@ -27,7 +27,7 @@
     <th class='w-p50'>   <?php common::printOrderLink('desc',  $orderBy, $vars, $lang->productplan->desc);?></th>
     <th class='w-100px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
     <th class='w-100px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-    <th class="w-100px {sorter: false}"><?php echo $lang->actions;?></th>
+    <th class="w-110px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -40,8 +40,8 @@
     <td><?php echo $plan->end;?></td>
     <td class='text-center'>
       <?php
-      common::printIcon('productplan', 'view', "planID=$plan->id&type=story&orderBy=id_desc&link=true", '', 'list', 'link');
-      common::printIcon('productplan', 'view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true", '', 'list', 'bug');
+      if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn-icon' title='{$lang->productplan->linkStory}'");
+      if(common::hasPriv('productplan', 'linkBug'))   echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn-icon' title='{$lang->productplan->linkBug}'");
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
 
       if(common::hasPriv('productplan', 'delete'))

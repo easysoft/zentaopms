@@ -29,8 +29,8 @@
         ob_start();
 
         echo "<div class='btn-group'>";
-        common::printIcon('release', 'linkStory',"releaseID=$release->id", '', 'button', $lang->icons['link']);
-        common::printIcon('release', 'linkBug',  "releaseID=$release->id", '', 'button', $lang->icons['bug']);
+        if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn'");
+        if(common::hasPriv('release', 'linkBug'))   echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn'");
         echo '</div>';
 
         echo "<div class='btn-group'>";
