@@ -19,7 +19,7 @@ class report extends control
      */
     public function index()
     {
-        $this->locate(inlink('productinfo')); 
+        $this->locate(inlink('productSummary')); 
     }
     
     /**
@@ -43,16 +43,17 @@ class report extends control
      * @access public
      * @return void
      */
-    public function productInfo()
+    public function productSummary($conditions = '')
     {
         $this->app->loadLang('product');
         $this->app->loadLang('productplan');
         $this->app->loadLang('story');
-        $this->view->title      = $this->lang->report->productInfo;
-        $this->view->position[] = $this->lang->report->productInfo;
-        $this->view->products   = $this->report->getProducts();
+        $this->view->title      = $this->lang->report->productSummary;
+        $this->view->position[] = $this->lang->report->productSummary;
+        $this->view->products   = $this->report->getProducts($conditions);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->submenu    = 'product';
+        $this->view->conditions = $conditions;
         $this->display();
     }
 

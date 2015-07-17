@@ -757,7 +757,6 @@ class project extends control
         $this->view->title       = $title;
         $this->view->position    = $position;
         $this->view->tabID       = 'burn';
-        $this->view->charts      = $charts;
         $this->view->projectID   = $projectID;
         $this->view->projectName = $project->name;
         $this->view->type        = $type;

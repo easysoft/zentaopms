@@ -34,13 +34,13 @@ $lang->report->colors[]   = 'A186BE';
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectcommon . '偏差报表';
-$lang->report->productInfo      = $lang->productcommon . '信息统计表';
+$lang->report->productSummary   = $lang->productcommon . '汇总表';
 $lang->report->bugSummary       = 'Bug汇总表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 
 $lang->reportList->project->lists[10] = $lang->projectcommon . '偏差报表|report|projectdeviation';
-$lang->reportList->product->lists[10] = $lang->productcommon . '信息统计表|report|productinfo';
+$lang->reportList->product->lists[10] = $lang->productcommon . '汇总表|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug汇总表|report|bugsummary';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '员工负载表|report|workload';
@@ -71,6 +71,10 @@ $lang->report->bugTotal      = "共%s个Bug";
 $lang->report->validRate     = "有效率";
 $lang->report->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
 $lang->report->unplanned     = '未计划';
+
+$lang->report->conditions    = '筛选条件：';
+$lang->report->closedProduct = '关闭' . $lang->productcommon;
+$lang->report->overduePlan   = '过期计划';
 
 /* daily reminder. */
 $lang->report->idAB     = 'ID';

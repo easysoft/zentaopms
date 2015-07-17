@@ -153,11 +153,15 @@ class reportModel extends model
      * @access public
      * @return array 
      */
-    public function getProducts()
+    public function getProducts($conditions)
     {
-        $products = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
-        $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))->fetchAll('id');
-        if(!$plans) return array();
+        $products = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('status')->ne('closed')->fi()
+            ->fetchAll('id');
+        $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))
+            ->beginIF(strpos($conditions, 'overduePlan') === false)->andWhere('end')->gt(date('Y-m-d'))->fi()
+            ->fetchAll('id');
         foreach($plans as $plan) $products[$plan->product]->plans[$plan->id] = $plan;
 
         $planStories = $this->dao->select('plan, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->in(array_keys($plans))->fetchGroup('plan', 'id');
@@ -181,6 +185,8 @@ class reportModel extends model
                 $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
             }
         }
+
+        unset($products['']);
         return $products;
     }
 

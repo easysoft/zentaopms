@@ -15,6 +15,17 @@
 </div>
 
 <div class='main'>
+  <div id='conditions'>
+    <strong><?php echo $lang->report->conditions?></strong>
+    <label for='closedProduct'>
+    <input type='checkbox' value='closedProduct' name='closedProduct' id='closedProduct' <?php if(strpos($conditions, 'closedProduct') !== false) echo "checked='checked'"?>/>
+      <?php echo $lang->report->closedProduct?>
+    </label>
+    <label for='overduePlan'>
+      <input type='checkbox' value='overduePlan' name='overduePlan' id='overduePlan' <?php if(strpos($conditions, 'overduePlan') !== false) echo "checked='checked'"?>/>
+      <?php echo $lang->report->overduePlan?>
+    </label>
+  </div>
   <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id='product'>
     <thead>
     <tr class='colhead'>
