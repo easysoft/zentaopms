@@ -1399,6 +1399,7 @@ class router
         $view->sessionID   = session_id();
         $view->rand        = $this->session->rand;
         $view->expiredTime = ini_get('session.gc_maxlifetime');
+        $view->serverTime  = time();
         echo json_encode($view);
     }
     
