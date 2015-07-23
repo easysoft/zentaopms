@@ -1,4 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['report-file']);?></span>
@@ -14,21 +15,20 @@
   </div>
 </div>
 <div class='main'>
+  <div class='input-group w-300px input-group-sm'>
+    <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
+    <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+    <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
+  </div>
   <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled'>
     <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->report->id;?></th>
-          <th class="w-200px"><?php echo $lang->report->project;?></th>
-          <th><?php echo $lang->report->task;?></th>
-          <th><?php echo $lang->report->stories;?></th>
-          <th><?php echo $lang->report->bugs;?></th>
-          <th><?php echo $lang->report->devConsumed;?></th>
-          <th><?php echo $lang->report->testConsumed;?></th>
-          <th><?php echo $lang->report->devTestRate;?></th>
-          <th><?php echo $lang->report->estimate;?></th>
-          <th><?php echo $lang->report->consumed;?></th>
-          <th><?php echo $lang->report->deviation;?></th>
-          <th><?php echo $lang->report->deviationRate;?></th>
+          <th><?php echo $lang->report->project;?></th>
+          <th class="w-100px"><?php echo $lang->report->estimate;?></th>
+          <th class="w-100px"><?php echo $lang->report->consumed;?></th>
+          <th class="w-100px"><?php echo $lang->report->deviation;?></th>
+          <th class="w-100px"><?php echo $lang->report->deviationRate;?></th>
         </tr>
     </thead>
     <tbody>
@@ -36,18 +36,6 @@
       <tr class="a-center">
         <td><?php echo $id;?></td>
         <td align="left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
-        <td><?php echo isset($project->tasks) ? $project->tasks : 0;?></td>
-        <td><?php echo isset($project->stories) ? $project->stories : 0;?></td>
-        <td><?php echo isset($project->bugs) ? $project->bugs : 0;?></td>
-        <?php
-            $project->devConsumed  = isset($project->devConsumed) ? $project->devConsumed : 0;
-            $project->testConsumed = isset($project->testConsumed) ? $project->testConsumed : 0;
-            $project->estimate     = isset($project->estimate) ? $project->estimate : 0;
-            $project->consumed     = isset($project->consumed) ? $project->consumed : 0;
-        ?>
-        <td><?php echo $project->devConsumed;?></td>
-        <td><?php echo $project->testConsumed;?></td>
-        <td><?php echo round($project->devConsumed / (($project->testConsumed < 1) ? 1 : $project->testConsumed), 1);?></td>
         <td><?php echo $project->estimate;?></td>
         <td><?php echo $project->consumed;?></td>
         <?php $deviation = $project->consumed - $project->estimate;?>

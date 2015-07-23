@@ -67,12 +67,11 @@ class reportModel extends model
      * @access public
      * @return void
      */
-    public function getProjects()
+    public function getProjects($begin = 0, $end = 0)
     {
         $projects = array();
 
-        $tasks = $this->dao->select('t1.*')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.*')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t1.status')->ne('cancel')
@@ -85,44 +84,13 @@ class reportModel extends model
 
             $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : $task->estimate;
             $projects[$task->project]->consumed = isset($projects[$task->project]->consumed) ? $projects[$task->project]->consumed + $task->consumed : $task->consumed;
-            $projects[$task->project]->tasks    = isset($projects[$task->project]->tasks)    ? $projects[$task->project]->tasks + 1 : 1;
-            if($task->type == 'devel') $projects[$task->project]->devConsumed  = isset($projects[$task->project]->devConsumed) ? $projects[$task->project]->devConsumed + $task->consumed : $task->consumed;
-            if($task->type == 'test')  $projects[$task->project]->testConsumed = isset($projects[$task->project]->testConsumed) ? $projects[$task->project]->testConsumed + $task->consumed : $task->consumed;
         }
 
-        $bugs = $this->dao->select('t1.project')
-            ->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
+        $projectList = $this->dao->select('id, name, status')->from(TABLE_PROJECT)
+            ->where('1=1')
+            ->beginIF($begin)->andWhere('begin')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('end')->le($end)->fi()
             ->fetchAll();
-        foreach($bugs as $bug)
-        {
-            if($bug->project)
-            {
-                if(!isset($projects[$bug->project]))$projects[$bug->project] = new stdclass();
-                $projects[$bug->project]->bugs = isset($projects[$bug->project]->bugs) ? $projects[$bug->project]->bugs + 1 : 1;
-            }
-        }
-
-        $stories = $this->dao->select('t1.project')
-            ->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
-            ->leftJoin(TABLE_STORY)->alias('t3')
-            ->on('t1.story = t3.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
-            ->fetchAll();
-        foreach($stories as $story)
-        {
-            if(!isset($projects[$story->project])) $projects[$story->project] = new stdclass();
-
-            $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
-        }
-
-        $projectList = $this->dao->select('id, name, status')->from(TABLE_PROJECT)->fetchAll();
         $projectPairs = array();
         foreach($projectList as $project)
         {
@@ -136,10 +104,6 @@ class reportModel extends model
                 unset($projects[$id]);
                 continue;
             }
-            if(!isset($project->stories)) $projects[$id]->stories = 0;
-            if(!isset($project->bugs)) $projects[$id]->bugs = 0;
-            if(!isset($project->devConsumed)) $projects[$id]->devConsumed = 0;
-            if(!isset($project->testConsumed)) $projects[$id]->testConsumed = 0;
             if(!isset($project->consumed)) $projects[$id]->consumed = 0;
             if(!isset($project->estimate)) $projects[$id]->estimate = 0;
             $projects[$id]->name = $projectPairs[$id];
