@@ -260,13 +260,14 @@ class gitModel extends model
         $parsedLogs = array();
 
         /* The git log command. */
+        chdir($this->repoRoot);
         if($fromRevision)
         {
-            $cmd = "cd $this->repoRoot; $this->client log --stat $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log --stat $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         else
         {
-            $cmd = "cd $this->repoRoot; $this->client log  --stat --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log  --stat --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         exec($cmd, $list, $return);
 
@@ -401,8 +402,13 @@ class gitModel extends model
 
         $path = str_replace('%2F', '/', urlencode($path));
         $path = str_replace('%3A', ':', $path);
+        $path = str_replace('%5C', '\\', $path);
 
-        $cmd = "cd $repo->path;$this->client diff $revision^ $revision $path";
+        chdir($repo->path);
+        $subPath = substr($path, strlen($repo->path) + 1);
+        exec("$this->client rev-list -n 2 $revision", $lists);
+        if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
+        $cmd = "$this->client diff $preRevision $nowRevision -- $subPath";
         $diff = `$cmd`;
         return $diff;
     }
@@ -427,9 +433,11 @@ class gitModel extends model
 
         $path = str_replace('%2F', '/', urlencode($path));
         $path = str_replace('%3A', ':', $path);
+        $path = str_replace('%5C', '\\', $path);
 
         $subPath = substr($path, strlen($repo->path) + 1);
-        $cmd  = "cd $repo->path;$this->client show $revision:$subPath";
+        chdir($repo->path);
+        $cmd  = "$this->client show $revision:$subPath";
         $code = `$cmd`;
         return $code;
     }
@@ -589,6 +597,7 @@ class gitModel extends model
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
         }
+        $changes = new stdclass();
         $changes->field = 'git';
         $changes->old   = '';
         $changes->new   = '';
