@@ -691,15 +691,14 @@ $lang->resource->report = new stdclass();
 $lang->resource->report->index            = 'index';
 $lang->resource->report->projectDeviation = 'projectDeviation';
 $lang->resource->report->productSummary   = 'productSummary';
-$lang->resource->report->bugSummary       = 'bugSummary';
+$lang->resource->report->bugCreate        = 'bugCreate';
 $lang->resource->report->bugAssign        = 'bugAssign';
 $lang->resource->report->workload         = 'workload';
 
 $lang->report->methodOrder[0]  = 'index';
 $lang->report->methodOrder[5]  = 'projectDeviation';
 $lang->report->methodOrder[10] = 'productSummary';
-$lang->report->methodOrder[15] = 'bugSummary';
-$lang->report->methodOrder[17] = 'bugSummary';
+$lang->report->methodOrder[15] = 'bugCreate';
 $lang->report->methodOrder[20] = 'workload';
 
 /* Search. */
@@ -950,7 +949,7 @@ $lang->changelog['3.2'][] = 'release-export';
 $lang->changelog['3.2'][] = 'report-index';
 $lang->changelog['3.2'][] = 'report-projectDeviation';
 $lang->changelog['3.2'][] = 'report-productSummary';
-$lang->changelog['3.2'][] = 'report-bugSummary';
+$lang->changelog['3.2'][] = 'report-bugCreate';
 $lang->changelog['3.2'][] = 'report-workload';
 $lang->changelog['3.2'][] = 'tree-fix';
 

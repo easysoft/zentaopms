@@ -249,9 +249,9 @@ $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</spa
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->product = array('link' => "{$lang->productcommon}|report|productSummary");
+$lang->report->menu->product = array('link' => "{$lang->productcommon}|report|productsummary");
 $lang->report->menu->prj     = array('link' => "{$lang->projectcommon}|report|projectdeviation");
-$lang->report->menu->test    = array('link' => 'Test|report|bugsummary', 'alias' => 'bugassign');
+$lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 /* Company menu. */

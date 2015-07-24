@@ -249,9 +249,9 @@ $lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添�
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->product = array('link' => $lang->productcommon . '|report|productSummary');
+$lang->report->menu->product = array('link' => $lang->productcommon . '|report|productsummary');
 $lang->report->menu->prj     = array('link' => $lang->projectcommon . '|report|projectdeviation');
-$lang->report->menu->test    = array('link' => '测试|report|bugsummary', 'alias' => 'bugassign');
+$lang->report->menu->test    = array('link' => '测试|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
 
 /* 组织结构视图菜单设置。*/

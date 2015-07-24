@@ -15,10 +15,22 @@
   </div>
 </div>
 <div class='main'>
-  <div class='input-group w-300px input-group-sm'>
-    <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
-    <span class='input-group-addon'><?php echo $lang->report->to;?></span>
-    <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
+  <div class='row'>
+    <div class='col-sm-4'>
+      <div class='input-group w-300px input-group-sm'>
+        <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control form-date' onchange='changeParams(this)'");?></div>
+        <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+        <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
+      </div>
+    </div>
+    <div class='col-sm-4'>
+      <div class='input-group w-300px input-group-sm'>
+        <span class='input-group-addon'><?php echo $lang->report->product;?></span>
+        <?php echo html::select('product', $products, $product, "class='form-control chosen' onchange='changeParams(this)'");?>
+        <span class='input-group-addon'><?php echo $lang->report->project;?></span>
+        <?php echo html::select('project', $projects, $project, "class='form-control chosen' onchange='changeParams(this)'");?>
+      </div>
+    </div>
   </div>
   <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id="bug">
     <thead>
@@ -58,5 +70,4 @@
     </tbody>
   </table> 
 </div>
-
 <?php include '../../common/view/footer.html.php';?>

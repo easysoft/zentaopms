@@ -35,13 +35,13 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectcommon . ' deviation';
 $lang->report->productSummary   = $lang->productcommon . ' summary';
-$lang->report->bugSummary       = 'Bug summary';
+$lang->report->bugCreate        = 'Bug create';
 $lang->report->bugAssign        = 'Bug assign';
 $lang->report->workload         = 'Workload';
 
 $lang->reportList->project->lists[10] = $lang->projectcommon . ' deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productcommon . ' summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bug summary|report|bugsummary';
+$lang->reportList->test->lists[10]    = 'Bug summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug assign|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 

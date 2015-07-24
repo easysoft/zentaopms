@@ -162,35 +162,37 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function getBugs($begin, $end)
+    public function getBugs($begin, $end, $product, $project)
     {
         $end = date('Ymd', strtotime("$end +1 day"));
         $bugs = $this->dao->select('id, resolution, openedBy, status')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->andWhere('openedDate')->ge($begin)
             ->andWhere('openedDate')->le($end)
+            ->beginIF($product)->andWhere('product')->eq($product)->fi()
+            ->beginIF($project)->andWhere('project')->eq($project)->fi()
             ->fetchAll();
 
-        $bugSummary = array();
+        $bugCreate = array();
         foreach($bugs as $bug)
         {
-            $bugSummary[$bug->openedBy][$bug->resolution] = empty($bugSummary[$bug->openedBy][$bug->resolution]) ? 1 : $bugSummary[$bug->openedBy][$bug->resolution] + 1;
-            $bugSummary[$bug->openedBy]['all']            = empty($bugSummary[$bug->openedBy]['all']) ? 1 : $bugSummary[$bug->openedBy]['all'] + 1;
+            $bugCreate[$bug->openedBy][$bug->resolution] = empty($bugCreate[$bug->openedBy][$bug->resolution]) ? 1 : $bugCreate[$bug->openedBy][$bug->resolution] + 1;
+            $bugCreate[$bug->openedBy]['all']            = empty($bugCreate[$bug->openedBy]['all']) ? 1 : $bugCreate[$bug->openedBy]['all'] + 1;
             if($bug->status == 'resolved' or $bug->status == 'closed')
             {
-                $bugSummary[$bug->openedBy]['resolved'] = empty($bugSummary[$bug->openedBy]['resolved']) ? 1 : $bugSummary[$bug->openedBy]['resolved'] + 1;
+                $bugCreate[$bug->openedBy]['resolved'] = empty($bugCreate[$bug->openedBy]['resolved']) ? 1 : $bugCreate[$bug->openedBy]['resolved'] + 1;
             }
         }
 
-        foreach($bugSummary as $account => $bug)
+        foreach($bugCreate as $account => $bug)
         {
             $validRate = 0;
             if(isset($bug['fixed']))     $validRate += $bug['fixed'];
             if(isset($bug['postponed'])) $validRate += $bug['postponed'];
-            $bugSummary[$account]['validRate'] = (isset($bug['resolved']) and $bug['resolved']) ? ($validRate / $bug['resolved']) : "0";
+            $bugCreate[$account]['validRate'] = (isset($bug['resolved']) and $bug['resolved']) ? ($validRate / $bug['resolved']) : "0";
         }
-        uasort($bugSummary, 'sortSummary');
-        return $bugSummary; 
+        uasort($bugCreate, 'sortSummary');
+        return $bugCreate; 
     }
 
     /**

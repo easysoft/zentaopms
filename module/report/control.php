@@ -64,38 +64,29 @@ class report extends control
     }
 
     /**
-     * Bug summary report.
+     * Bug create report.
      * 
      * @param  int    $begin 
      * @param  int    $end 
      * @access public
      * @return void
      */
-    public function bugSummary($begin = 0, $end = 0)
+    public function bugCreate($begin = 0, $end = 0, $product = 0, $project = 0)
     {
         $this->app->loadLang('bug');
-        if($begin == 0) 
-        {
-            $begin = date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01')));
-        }
-        else
-        {
-            $begin = date('Y-m-d', strtotime($begin));
-        }
-        if($end == 0)
-        {
-            $end = date('Y-m-d', strtotime('now'));
-        }
-        else
-        {
-            $end = date('Y-m-d', strtotime($end));
-        }
-        $this->view->title      = $this->lang->report->bugSummary;
-        $this->view->position[] = $this->lang->report->bugSummary;
+        $begin = $begin == 0 ? date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01'))) : date('Y-m-d', strtotime($begin));
+        $end   = $end == 0   ? date('Y-m-d', strtotime('now')) : $end = date('Y-m-d', strtotime($end));
+
+        $this->view->title      = $this->lang->report->bugCreate;
+        $this->view->position[] = $this->lang->report->bugCreate;
         $this->view->begin      = $begin;
         $this->view->end        = $end;
-        $this->view->bugs       = $this->report->getBugs($begin, $end);
+        $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $project);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->projects   = array('' => '') + $this->loadModel('project')->getPairs();
+        $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
+        $this->view->project    = $project;
+        $this->view->product    = $product;
         $this->view->submenu    = 'test';
         $this->display(); 
     }
