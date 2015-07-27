@@ -38,6 +38,7 @@ $lang->report->productSummary   = $lang->productcommon . '汇总表';
 $lang->report->bugCreate        = 'Bug创建表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
+$lang->report->workloadAB       = '工作负载';
 
 $lang->reportList->project->lists[10] = $lang->projectcommon . '偏差报表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productcommon . '汇总表|report|productsummary';
@@ -71,6 +72,7 @@ $lang->report->bugTotal      = "共%s个Bug";
 $lang->report->validRate     = "有效率";
 $lang->report->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
 $lang->report->unplanned     = '未计划';
+$lang->report->workday       = '每天工时';
 
 $lang->report->conditions    = '筛选条件：';
 $lang->report->closedProduct = '关闭' . $lang->productcommon;

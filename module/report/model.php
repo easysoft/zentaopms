@@ -201,15 +201,20 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function getWorkload()
+    public function getWorkload($begin = '', $end = '', $dept = 0)
     {
-        $tasks = $this->dao->select('t1.*, t2.name as projectName')
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+        $depts = array();
+        if($dept) $depts = $this->loadModel('dept')->getAllChildId($dept);
+
+        $tasks = $this->dao->select('t1.*, t2.name as projectName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->notin('cancel, closed, done')
             ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($begin)->andWhere('assignedDate')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('assignedDate')->le($end)->fi()
+            ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
             ->fetchGroup('assignedTo');
         $workload = array();
         foreach($tasks as $user => $userTasks)

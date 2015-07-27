@@ -113,13 +113,26 @@ class report extends control
      * @access public
      * @return void
      */
-    public function workload()
+    public function workload($begin = '', $end = '', $workday = 7, $dept = 0)
     {
+        $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-d', strtotime('now'));
+        $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime('+1 week'));
+
+        $days = helper::diffDate($end, $begin);
+        $days = $days - ($days / 7 * 2);
+
         $this->view->title      = $this->lang->report->workload;
         $this->view->position[] = $this->lang->report->workload;
-        $this->view->workload   = $this->report->getWorkload();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->submenu    = 'staff';
+
+        $this->view->workload = $this->report->getWorkload($begin, $end, $dept);
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
+        $this->view->begin    = $begin;
+        $this->view->end      = $end;
+        $this->view->workday  = $workday;
+        $this->view->dept     = $dept;
+        $this->view->allHour  = $days * $workday;
+        $this->view->submenu  = 'staff';
         $this->display();
     }
 

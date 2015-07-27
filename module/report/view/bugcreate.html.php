@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class='col-sm-4'>
-      <div class='input-group w-300px input-group-sm'>
+      <div class='input-group w-200px input-group-sm'>
         <span class='input-group-addon'><?php echo $lang->report->product;?></span>
         <?php echo html::select('product', $products, $product, "class='form-control chosen' onchange='changeParams(this)'");?>
         <span class='input-group-addon'><?php echo $lang->report->project;?></span>

@@ -38,6 +38,7 @@ $lang->report->productSummary   = $lang->productcommon . ' summary';
 $lang->report->bugCreate        = 'Bug create';
 $lang->report->bugAssign        = 'Bug assign';
 $lang->report->workload         = 'Workload';
+$lang->report->workloadAB       = 'Workload';
 
 $lang->reportList->project->lists[10] = $lang->projectcommon . ' deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productcommon . ' summary|report|productsummary';
@@ -71,6 +72,7 @@ $lang->report->bugTotal      = "%s Bugs";
 $lang->report->validRate     = "Valid Rate";
 $lang->report->validRateTips = "Resolution is fixed or postponed/status is resolved or closed";
 $lang->report->unplanned     = 'unplanned';
+$lang->report->workday       = 'Working per day';
 
 /* daily reminder. */
 $lang->report->idAB  = 'ID';
