@@ -86,23 +86,27 @@ class admin extends control
 	 */
 	public function bind()
 	{
-		if($_POST)
-		{
-			$response = $this->admin->bindByAPI();	
-			if($response == 'success') 
-			{
-				$this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
-				echo js::alert($this->lang->admin->bind->success);
-				die(js::locate(inlink('index'), 'parent'));
-			}
-			die($response);
-		}
+        if($_POST)
+        {
+            $response = $this->admin->bindByAPI();
+            if($response == 'success')
+            {
+                $this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
+                echo js::alert($this->lang->admin->bind->success);
+                die(js::locate(inlink('index'), 'parent'));
+            }
+            else
+            {
+                $response = json_decode($response);
+                if($response->result == 'fail') die(js::alert($response->message));
+            }
+        }
 
         $this->view->title      = $this->lang->admin->bind->caption;
         $this->view->position[] = $this->lang->admin->bind->caption;
-		$this->view->sn         = $this->config->global->sn;
-		$this->display();
-	}
+        $this->view->sn         = $this->config->global->sn;
+        $this->display();
+    }
 
     /**
      * Check all tables.
