@@ -390,7 +390,7 @@ class doc extends control
 
         /* Check priv when lib is product or project. */
         $systemLib = ($doc->lib == 'project' or $doc->lib == 'product') ? $doc->lib : '';
-        if($systemLib and !$this->{$systemLib}->checkPriv($this->{$systemLib}->getById($doc->{$systemLib})))
+        if($systemLib and $doc->{$systemLib} and !$this->{$systemLib}->checkPriv($this->{$systemLib}->getById($doc->{$systemLib})))
         {
             echo(js::alert($this->lang->error->accessDenied));
             die(js::locate('back'));
