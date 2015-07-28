@@ -16,9 +16,12 @@ class devModel extends model
         foreach($datatables as $table)
         {
             $table = current($table);
-            $subTable = substr($table, strpos($table, '_') + 1);
-            $group    = zget($this->config->dev->group, $subTable, 'other');
-            $tables[$group][$subTable] = $table;
+            if(strpos($table, $this->config->db->prefix) !== false)
+            {
+                $subTable = substr($table, strpos($table, '_') + 1);
+                $group    = zget($this->config->dev->group, $subTable, 'other');
+                $tables[$group][$subTable] = $table;
+            }
         }
         return $tables;
     }
