@@ -406,7 +406,8 @@ class gitModel extends model
 
         chdir($repo->path);
         $subPath = substr($path, strlen($repo->path) + 1);
-        exec("$this->client rev-list -n 2 $revision", $lists);
+        $subPath = ltrim(DIRECTORY_SEPARATOR, $subPath);
+        exec("$this->client rev-list -n 2 $revision -- $subPath", $lists);
         if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
         $cmd = "$this->client diff $preRevision $nowRevision -- $subPath";
         $diff = `$cmd`;
@@ -436,6 +437,7 @@ class gitModel extends model
         $path = str_replace('%5C', '\\', $path);
 
         $subPath = substr($path, strlen($repo->path) + 1);
+        $subPath = ltrim(DIRECTORY_SEPARATOR, $subPath);
         chdir($repo->path);
         $cmd  = "$this->client show $revision:$subPath";
         $code = `$cmd`;
