@@ -1498,18 +1498,18 @@ class projectModel extends model
     public function getProjectLink($module, $method, $extra)
     {
         $link = '';
-        if($module == 'task' && ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
+        if($module == 'task' and ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
         {   
             $module = 'project';
             $method = 'task';
         }   
-        if($module == 'build' && $method == 'edit')
+        if($module == 'build' and ($method == 'edit' || $method= 'view'))
         {   
             $module = 'project';
             $method = 'build';
         }   
 
-        if($module == 'project' && $method == 'create') return;
+        if($module == 'project' and $method == 'create') return;
         if($extra != '')
         {
             $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
