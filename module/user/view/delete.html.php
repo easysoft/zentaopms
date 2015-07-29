@@ -19,14 +19,14 @@
 <form class='form-condensed' method='post' target='hiddenwin' style='padding: 20px 5% 40px'>
   <table class='w-p100 table-form'>
     <tr>
-      <th class='w-100px text-right'>
+      <th class='w-120px text-right'>
         <?php echo $lang->user->verifyPassword;?>
       </th>
       <td>
         <div class="required required-wrapper"></div>
         <?php echo html::password('verifyPassword', '', "class='form-control' placeholder='{$lang->user->placeholder->verify}'");?>
       </td>
-      <td class='w-100px'><?php echo html::submitButton();?></td>
+      <td class='w-100px'><?php echo html::submitButton($lang->delete);?></td>
     </tr>
   </table>
 </form>

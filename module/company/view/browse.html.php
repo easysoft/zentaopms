@@ -81,7 +81,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
         if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
         {
-            echo html::a($this->createLink('user', 'delete', "userID= $user->id"), '<i class="icon-remove"></i>', '', "title='{$lang->user->delete}' class='btn-icon iframe'");
+            echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-remove"></i>', '', "title='{$lang->user->delete}' class='btn-icon iframe'");
         }
         if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
         {
