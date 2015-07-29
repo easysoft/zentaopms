@@ -274,7 +274,7 @@ foreach($fieldParams as $fieldName => $param)
 }
 ?>
 </div>
-<table class='table table-condensed table-form' style='max-width: 1200px; margin: 0 auto'>
+<table class='table table-condensed table-form' id='<?php echo "{$module}-search";?>' style='max-width: 1200px; margin: 0 auto'>
   <tr>
     <td class='w-400px'>
       <table class='table active-disabled'>
@@ -398,5 +398,5 @@ foreach($fieldParams as $fieldName => $param)
 </div>
 </form>
 <script language='Javascript'>
-<?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}()";?>
+<?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}('#{$module}-search')";?>
 </script>
