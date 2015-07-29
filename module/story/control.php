@@ -93,20 +93,17 @@ class story extends control
         }
 
         /* Set products, users and module. */
-        if($productID != 0) 
+        if($projectID != 0)
         {
-            $product  = $this->product->getById($productID);
-            $products = $this->product->getPairs();
+            $products = $this->product->getProductsByProject($projectID);
+            $product  = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
         }
         else
         {
-            $products = $this->product->getProductsByProject($projectID); 
-            foreach($products as $key => $title)
-            {
-                $product = $this->product->getById($key);
-                break;
-            }
+            $products = $this->product->getPairs();
+            $product  = $this->product->getById($productID ? $productID : key($products));
         }
+
         $users = $this->user->getPairs('nodeleted|pdfirst|noclosed');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 
