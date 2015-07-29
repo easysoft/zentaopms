@@ -112,22 +112,31 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->module;?></th>
-                <td> 
                 <?php
+                $moduleTitle = '';
+                ob_start();
                 if(empty($modulePath))
                 {
+                    $moduleTitle .= '/';
                     echo "/";
                 }
                 else
                 {
                     foreach($modulePath as $key => $module)
                     {
+                        $moduleTitle .= $module->name;
                         if(!common::printLink('product', 'browse', "productID=$story->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                        if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                        if(isset($modulePath[$key + 1]))
+                        {
+                            $moduleTitle .= '/';
+                            echo $lang->arrow;
+                        }
                     }
                 }
+                $printModule = ob_get_contents();
+                ob_end_clean();
                 ?>
-                </td>
+                <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->plan;?></th>

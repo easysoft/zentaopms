@@ -5,6 +5,7 @@
 ul li{list-style:none;}
 
 #product p{margin:2px 0;}
+#titlebar{display:none;}
 .table-bordered, .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table{border: none}
 
 #report-list.list-group {margin-bottom: 0;}

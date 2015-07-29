@@ -98,23 +98,36 @@
           </tr>  
           <tr>
             <th><?php echo $lang->task->module;?></th>
-            <td>
-              <?php
-              if(empty($modulePath))
-              {
-                  echo "/";
-              }
-              else
-              {
-                 if($product) echo $product->name . $lang->arrow;
-                 foreach($modulePath as $key => $module)
-                 {
+            <?php
+            $moduleTitle = '';
+            ob_start();
+            if(empty($modulePath))
+            {
+                $moduleTitle .= '/';
+                echo "/";
+            }
+            else
+            {
+                if($product)
+                {
+                    $moduleTitle .= $product->name . '/';
+                    echo $product->name . $lang->arrow;
+                }
+               foreach($modulePath as $key => $module)
+               {
+                   $moduleTitle .= $module->name;
                    if(!common::printLink('project', 'task', "projectID=$task->project&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                   if(isset($modulePath[$key + 1])) echo $lang->arrow;
-                 }
-              }
-              ?>
-            </td>
+                   if(isset($modulePath[$key + 1]))
+                   {
+                       $moduleTitle .= '/';
+                       echo $lang->arrow;
+                   }
+               }
+            }
+            $printModule = ob_get_contents();
+            ob_end_clean();
+            ?>
+            <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
           </tr>  
           <tr class='nofixed'>
             <th><?php echo $lang->task->story;?></th>
