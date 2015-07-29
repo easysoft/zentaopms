@@ -214,7 +214,7 @@ class bug extends control
      */
     public function create($productID, $extras = '')
     {
-        $this->view->users = $this->user->getPairs('nodeleted,devfirst');
+        $this->view->users = $this->user->getPairs('nodeleted|devfirst|noclosed');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->app->loadLang('release');
 
