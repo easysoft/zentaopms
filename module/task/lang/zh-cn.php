@@ -35,7 +35,7 @@ $lang->task->confirmStoryChange = "确认需求变动";
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
-$lang->task->project           = '所属' . $lang->projectcommon;
+$lang->task->project           = '所属' . $lang->projectCommon;
 $lang->task->module            = '所属模块';
 $lang->task->story             = '相关需求';
 $lang->task->storySpec         = '需求描述';
@@ -138,7 +138,7 @@ $lang->task->legendDesc   = '任务描述';
 $lang->task->legendAction = '操作';
 
 $lang->task->ajaxGetUserTasks      = "接口:我的任务";
-$lang->task->ajaxGetProjectTasks   = "接口:{$lang->projectcommon}任务";
+$lang->task->ajaxGetProjectTasks   = "接口:{$lang->projectCommon}任务";
 $lang->task->confirmDelete         = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate = "您确定要删除这个记录吗？";
 $lang->task->copyStoryTitle        = "同需求";
@@ -146,7 +146,7 @@ $lang->task->afterSubmit           = "添加之后";
 $lang->task->successSaved          = "成功添加，";
 $lang->task->delayWarning          = " <strong class='delayed f-14px'> 延期%s天 </strong>";
 $lang->task->remindBug             = "该任务为Bug转化得到，是否更新Bug:%s ?";
-$lang->task->confirmChangeProject  = "修改{$lang->projectcommon}会导致相应的所属模块、相关需求和指派人发生变化，确定吗？";
+$lang->task->confirmChangeProject  = "修改{$lang->projectCommon}会导致相应的所属模块、相关需求和指派人发生变化，确定吗？";
 $lang->task->confirmFinish         = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';
 $lang->task->confirmRecord         = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
 
@@ -166,7 +166,7 @@ $lang->task->report->select = '请选择报表类型';
 $lang->task->report->create = '生成报表';
 $lang->task->report->value  = '任务数';
 
-$lang->task->report->charts['tasksPerProject']      = $lang->projectcommon . '任务数统计';
+$lang->task->report->charts['tasksPerProject']      = $lang->projectCommon . '任务数统计';
 $lang->task->report->charts['tasksPerModule']       = '模块任务数统计';
 $lang->task->report->charts['tasksPerAssignedTo']   = '指派给统计';
 $lang->task->report->charts['tasksPerType']         = '任务类型统计';
@@ -200,7 +200,7 @@ $lang->task->report->tasksPerFinishedBy   = new stdclass();
 $lang->task->report->tasksPerClosedReason = new stdclass();
 $lang->task->report->finishedTasksPerDay  = new stdclass();
 
-$lang->task->report->tasksPerProject->item      = $lang->projectcommon;
+$lang->task->report->tasksPerProject->item      = $lang->projectCommon;
 $lang->task->report->tasksPerModule->item       = '模块';
 $lang->task->report->tasksPerAssignedTo->item   = '用户';
 $lang->task->report->tasksPerType->item         = '类型';
@@ -228,7 +228,7 @@ $lang->task->report->tasksPerFinishedBy->graph   = new stdclass();
 $lang->task->report->tasksPerClosedReason->graph = new stdclass();
 $lang->task->report->finishedTasksPerDay->graph  = new stdclass();
 
-$lang->task->report->tasksPerProject->graph->xAxisName      = $lang->projectcommon;
+$lang->task->report->tasksPerProject->graph->xAxisName      = $lang->projectCommon;
 $lang->task->report->tasksPerModule->graph->xAxisName       = '模块';
 $lang->task->report->tasksPerAssignedTo->graph->xAxisName   = '用户';
 $lang->task->report->tasksPerType->graph->xAxisName         = '类型';

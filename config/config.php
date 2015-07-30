@@ -48,18 +48,18 @@ $config->langs['zh-cn'] = '简体';
 $config->langs['zh-tw'] = '繁體';
 $config->langs['en']    = 'English';
 
-$config->productcommonList['en'][0]    = 'Product';
-$config->productcommonList['en'][1]    = 'Project';
-$config->projectcommonList['en'][0]    = 'Project';
-$config->projectcommonList['en'][1]    = 'Sprint';
-$config->productcommonList['zh-cn'][0] = '产品';
-$config->productcommonList['zh-cn'][1] = '项目';
-$config->projectcommonList['zh-cn'][0] = '项目';
-$config->projectcommonList['zh-cn'][1] = '迭代';
-$config->productcommonList['zh-tw'][0] = '產品';
-$config->productcommonList['zh-tw'][1] = '項目';
-$config->projectcommonList['zh-tw'][0] = '項目';
-$config->projectcommonList['zh-tw'][1] = '迭代';
+$config->productCommonList['en'][0]    = 'Product';
+$config->productCommonList['en'][1]    = 'Project';
+$config->projectCommonList['en'][0]    = 'Project';
+$config->projectCommonList['en'][1]    = 'Sprint';
+$config->productCommonList['zh-cn'][0] = '产品';
+$config->productCommonList['zh-cn'][1] = '项目';
+$config->projectCommonList['zh-cn'][0] = '项目';
+$config->projectCommonList['zh-cn'][1] = '迭代';
+$config->productCommonList['zh-tw'][0] = '產品';
+$config->productCommonList['zh-tw'][1] = '項目';
+$config->projectCommonList['zh-tw'][0] = '項目';
+$config->projectCommonList['zh-tw'][1] = '迭代';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';

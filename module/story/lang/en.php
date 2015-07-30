@@ -38,7 +38,7 @@ $lang->story->batchAssignTo    = "Batch assignto";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
-$lang->story->product        = $lang->productcommon;
+$lang->story->product        = $lang->productCommon;
 $lang->story->module         = 'Module';
 $lang->story->source         = 'Source';
 $lang->story->fromBug        = 'From bug';
@@ -70,7 +70,7 @@ $lang->story->rejectedReason = 'Reject reason';
 $lang->story->reviewedBy     = 'Reviewed by';
 $lang->story->reviewedDate   = 'Reviewed date';
 $lang->story->version        = 'Version';
-$lang->story->project        = $lang->projectcommon;
+$lang->story->project        = $lang->projectCommon;
 $lang->story->plan           = 'Plan';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Comment';
@@ -96,7 +96,7 @@ $lang->story->statusList['changed']   = 'Changed';
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Waitting';
 $lang->story->stageList['planned']    = 'Planned';
-$lang->story->stageList['projected']  = "{$lang->projectcommon}ed";
+$lang->story->stageList['projected']  = "{$lang->projectCommon}ed";
 $lang->story->stageList['developing'] = 'Developing';
 $lang->story->stageList['developed']  = 'Developed';
 $lang->story->stageList['testing']    = 'Testing';
@@ -126,7 +126,7 @@ $lang->story->reviewList[1] = 'Yes';
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['customer']   = 'Customer';
 $lang->story->sourceList['user']       = 'User';
-$lang->story->sourceList['po']         = $lang->productcommon . ' Owner';
+$lang->story->sourceList['po']         = $lang->productCommon . ' Owner';
 $lang->story->sourceList['market']     = 'Market';
 $lang->story->sourceList['service']    = 'Customer service';
 $lang->story->sourceList['competitor'] = 'Competitor';
@@ -147,7 +147,7 @@ $lang->story->legendLifeTime       = 'Life time';
 $lang->story->legendRelated        = 'Related info';
 $lang->story->legendMailto         = 'Maitto';
 $lang->story->legendAttatch        = 'Files';
-$lang->story->legendProjectAndTask = "{$lang->projectcommon} & task";
+$lang->story->legendProjectAndTask = "{$lang->projectCommon} & task";
 $lang->story->legendBugs           = 'Related Bug';
 $lang->story->legendFromBug        = 'From Bug';
 $lang->story->legendCases          = 'Related Case';
@@ -164,7 +164,7 @@ $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
 
 $lang->story->checkAffection       = 'Check Affection';
-$lang->story->affectedProjects     = "Affected {$lang->projectcommon}s";
+$lang->story->affectedProjects     = "Affected {$lang->projectCommon}s";
 $lang->story->affectedBugs         = 'Affected bugs';
 $lang->story->affectedCases        = 'Affected cases';
 
@@ -178,8 +178,8 @@ $lang->story->errorFormat           = 'Error format';
 $lang->story->errorEmptyTitle       = "Title can't be empty";
 $lang->story->mustChooseResult      = 'Must choose s result';
 $lang->story->mustChoosePreVersion  = 'Must select an version to revert';
-$lang->story->ajaxGetProjectStories = "API:{$lang->projectcommon} stories";
-$lang->story->ajaxGetProductStories = "API:{$lang->productcommon} stories";
+$lang->story->ajaxGetProjectStories = "API:{$lang->projectCommon} stories";
+$lang->story->ajaxGetProductStories = "API:{$lang->productCommon} stories";
 
 $lang->story->form = new stdclass();
 $lang->story->form->titleNote = 'A word to briefly express story content';
@@ -193,8 +193,8 @@ $lang->story->action->reviewed            = array('main' => '$date, reviewed by 
 $lang->story->action->closed              = array('main' => '$date, closed by <strong>$actor</strong>, reason is <strong>$extra</strong>.', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
-$lang->story->action->linked2project      = array('main' => '$date, linked to ' . $lang->projectcommon . ' <strong>$extra</strong> by <strong>$actor</strong>.'); 
-$lang->story->action->unlinkedfromproject = array('main' => '$date, removed from ' . $lang->projectcommon . ' <strontg>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->linked2project      = array('main' => '$date, linked to ' . $lang->projectCommon . ' <strong>$extra</strong> by <strong>$actor</strong>.'); 
+$lang->story->action->unlinkedfromproject = array('main' => '$date, removed from ' . $lang->projectCommon . ' <strontg>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
 $lang->story->report = new stdclass();
@@ -203,7 +203,7 @@ $lang->story->report->select = 'Select';
 $lang->story->report->create = 'Create';
 $lang->story->report->value  = 'Stories';
 
-$lang->story->report->charts['storysPerProduct']        = "{$lang->productcommon} storys";
+$lang->story->report->charts['storysPerProduct']        = "{$lang->productCommon} storys";
 $lang->story->report->charts['storysPerModule']         = 'Module storys';
 $lang->story->report->charts['storysPerSource']         = 'Source storys';
 $lang->story->report->charts['storysPerPlan']           = 'Plan storys';
@@ -235,7 +235,7 @@ $lang->story->report->storysPerClosedReason = new stdclass();
 $lang->story->report->storysPerEstimate     = new stdclass();
 $lang->story->report->storysPerChange       = new stdclass();
 
-$lang->story->report->storysPerProduct->item      = $lang->productcommon;
+$lang->story->report->storysPerProduct->item      = $lang->productCommon;
 $lang->story->report->storysPerModule->item       = 'Module';
 $lang->story->report->storysPerSource->item       = 'Source';
 $lang->story->report->storysPerPlan->item         = 'Plan';
@@ -261,7 +261,7 @@ $lang->story->report->storysPerClosedReason->graph = new stdclass();
 $lang->story->report->storysPerEstimate->graph     = new stdclass();
 $lang->story->report->storysPerChange->graph       = new stdclass();
 
-$lang->story->report->storysPerProduct->graph->xAxisName      = $lang->productcommon;
+$lang->story->report->storysPerProduct->graph->xAxisName      = $lang->productCommon;
 $lang->story->report->storysPerModule->graph->xAxisName       = 'Module';
 $lang->story->report->storysPerSource->graph->xAxisName       = 'Source';
 $lang->story->report->storysPerPlan->graph->xAxisName         = 'Plan';

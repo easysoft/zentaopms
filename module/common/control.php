@@ -27,12 +27,12 @@ class common extends control
         $this->common->loadConfigFromDB();
         if(isset($this->config->custom->productproject))
         {
-            $productcommon = $projectcommon = 0;
-            list($productcommon, $projectcommon) = explode('_', $this->config->custom->productproject);
-            if($productcommon != 0 or $projectcommon != 0)
+            $productCommon = $projectCommon = 0;
+            list($productCommon, $projectCommon) = explode('_', $this->config->custom->productproject);
+            if($productCommon != 0 or $projectCommon != 0)
             {
-                $this->lang->productcommon = $this->lang->productcommonList[$productcommon];
-                $this->lang->projectcommon = $this->lang->projectcommonList[$projectcommon];
+                $this->lang->productCommon = $this->lang->productCommonList[$productCommon];
+                $this->lang->projectCommon = $this->lang->projectCommonList[$projectCommon];
                 $this->app->loadLang('common');
             }
         }

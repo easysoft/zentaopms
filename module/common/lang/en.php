@@ -73,8 +73,8 @@ $lang->fold         = '-';
 $lang->selectAll     = 'All';
 $lang->selectReverse = 'Inverse';
 $lang->notFound      = 'Sorry, the object not found.';
-$lang->showAll       = "[[Show all {$lang->projectcommon}s]]";
-$lang->hideClosed    = "[[Show {$lang->projectcommon}s going]]";
+$lang->showAll       = "[[Show all {$lang->projectCommon}s]]";
+$lang->hideClosed    = "[[Show {$lang->projectCommon}s going]]";
 
 $lang->future       = 'Future';
 $lang->year         = 'Year';
@@ -93,8 +93,8 @@ $lang->common->common = 'Common module';
 /* The main menu. */
 $lang->menu = new stdclass();
 $lang->menu->my       = '<i class="icon-home"></i> <span>Dashboard</span>|my|index';
-$lang->menu->product  = "{$lang->productcommon}|product|index";
-$lang->menu->project  = "{$lang->projectcommon}|project|index";
+$lang->menu->product  = "{$lang->productCommon}|product|index";
+$lang->menu->project  = "{$lang->projectCommon}|project|index";
 $lang->menu->qa       = 'Test|qa|index';
 $lang->menu->doc      = 'Doc|doc|index';
 $lang->menu->report   = 'Report|report|index';
@@ -106,8 +106,8 @@ $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
 $lang->searchObjects['testcase']    = 'Test Case';
-$lang->searchObjects['project']     = $lang->projectcommon;
-$lang->searchObjects['product']     = $lang->productcommon;
+$lang->searchObjects['project']     = $lang->projectCommon;
+$lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['user']        = 'User';
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
@@ -144,8 +144,8 @@ $lang->themes['blackberry'] = 'Blackberry';
 $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
-$lang->index->menu->product = "{$lang->productcommon}s|product|browse";
-$lang->index->menu->project = "{$lang->projectcommon}s|project|browse";
+$lang->index->menu->product = "{$lang->productCommon}s|product|browse";
+$lang->index->menu->project = "{$lang->projectCommon}s|project|browse";
 
 /* Dashboard menu. */
 $lang->my = new stdclass();
@@ -158,7 +158,7 @@ $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' =
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => 'Test|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
-$lang->my->menu->myProject      = "{$lang->projectcommon}|my|project|";
+$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Change Password|my|changepassword|';
@@ -179,7 +179,7 @@ $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => 'Info|product|view|productID=%s', 'alias' => 'edit');
-$lang->product->menu->project = "{$lang->projectcommon}s|product|project|status=all&productID=%s";
+$lang->product->menu->project = "{$lang->projectCommon}s|product|project|status=all&productID=%s";
 $lang->product->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<span class="icon-cubes">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
 
@@ -204,10 +204,10 @@ $lang->project->menu->build     = array('link' => 'Build|project|build|projectID
 $lang->project->menu->testtask  = 'Testtask|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
-$lang->project->menu->product   = array('link' => "{$lang->productcommon}|project|manageproducts|projectID=%s", 'alias' => 'edit,start,suspend,delay,close');
+$lang->project->menu->product   = array('link' => "{$lang->productCommon}|project|manageproducts|projectID=%s", 'alias' => 'edit,start,suspend,delay,close');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>New|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;{$lang->projectcommon}s|project|index|locate=no&status=undone&projectID=%s", 'float' => 'right');
+$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;{$lang->projectCommon}s|project|index|locate=no&status=undone&projectID=%s", 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -249,8 +249,8 @@ $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</spa
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->product = array('link' => "{$lang->productcommon}|report|productsummary");
-$lang->report->menu->prj     = array('link' => "{$lang->projectcommon}|report|projectdeviation");
+$lang->report->menu->product = array('link' => "{$lang->productCommon}|report|productsummary");
+$lang->report->menu->prj     = array('link' => "{$lang->projectCommon}|report|projectdeviation");
 $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 

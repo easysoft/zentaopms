@@ -12,8 +12,8 @@
 /* 欄位列表。*/
 $lang->doc->common         = '文檔';
 $lang->doc->id             = '文檔編號';
-$lang->doc->product        = '所屬' . $lang->productcommon;
-$lang->doc->project        = '所屬' . $lang->projectcommon;
+$lang->doc->product        = '所屬' . $lang->productCommon;
+$lang->doc->project        = '所屬' . $lang->projectCommon;
 $lang->doc->lib            = '所屬文檔庫';
 $lang->doc->module         = '所屬分類';
 $lang->doc->title          = '文檔標題';
@@ -54,11 +54,11 @@ $lang->doc->editLib        = '編輯文檔庫';
 $lang->doc->deleteLib      = '刪除文檔庫';
 
 /* 查詢條件列表 */
-$lang->doc->allProduct     = '所有' . $lang->productcommon;
-$lang->doc->allProject     = '所有' . $lang->projectcommon;
+$lang->doc->allProduct     = '所有' . $lang->productCommon;
+$lang->doc->allProject     = '所有' . $lang->projectCommon;
 
-$lang->doc->systemLibs['product'] = $lang->productcommon . '文檔庫';
-$lang->doc->systemLibs['project'] = $lang->projectcommon . '文檔庫';
+$lang->doc->systemLibs['product'] = $lang->productCommon . '文檔庫';
+$lang->doc->systemLibs['project'] = $lang->projectCommon . '文檔庫';
 
 $lang->doc->types['file'] = '檔案';
 $lang->doc->types['url']  = '連結';

@@ -29,7 +29,7 @@ $lang->release->confirmUnlinkBug   = "Are you sure to remove this bug?";
 $lang->release->basicInfo = 'Basic Info';
 
 $lang->release->id                    = 'ID';
-$lang->release->product               = $lang->productcommon;
+$lang->release->product               = $lang->productCommon;
 $lang->release->build                 = 'Build';
 $lang->release->name                  = 'Name';
 $lang->release->date                  = 'Date';

@@ -33,22 +33,22 @@ $lang->report->colors[]   = 'A186BE';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = $lang->projectcommon . ' deviation';
-$lang->report->productSummary   = $lang->productcommon . ' summary';
+$lang->report->projectDeviation = $lang->projectCommon . ' deviation';
+$lang->report->productSummary   = $lang->productCommon . ' summary';
 $lang->report->bugCreate        = 'Bug create';
 $lang->report->bugAssign        = 'Bug assign';
 $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
 
-$lang->reportList->project->lists[10] = $lang->projectcommon . ' deviation|report|projectdeviation';
-$lang->reportList->product->lists[10] = $lang->productcommon . ' summary|report|productsummary';
+$lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
+$lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug assign|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->project       = $lang->projectcommon;
-$lang->report->product       = $lang->productcommon;
+$lang->report->project       = $lang->projectCommon;
+$lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Username';
 $lang->report->bug           = 'Bug';
 $lang->report->task          = 'Tasks';

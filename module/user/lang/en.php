@@ -78,7 +78,7 @@ $lang->user->deleted         = '(deleted)';
 $lang->user->select          = 'Select user';
 
 $lang->user->profile     = 'Profile';
-$lang->user->project     = $lang->projectcommon;
+$lang->user->project     = $lang->projectCommon;
 $lang->user->task        = 'Task';
 $lang->user->bug         = 'Bug';
 $lang->user->test        = 'Test';

@@ -35,7 +35,7 @@ $lang->task->confirmStoryChange = "Confirm story change";
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
-$lang->task->project           = $lang->projectcommon;
+$lang->task->project           = $lang->projectCommon;
 $lang->task->module            = 'Module';
 $lang->task->story             = 'Story';
 $lang->task->storySpec         = 'Story desc';
@@ -138,7 +138,7 @@ $lang->task->legendDesc   = 'Desc';
 $lang->task->legendAction = 'Action';
 
 $lang->task->ajaxGetUserTasks      = "API:My tasks";
-$lang->task->ajaxGetProjectTasks   = "API:{$lang->projectcommon} tasks";
+$lang->task->ajaxGetProjectTasks   = "API:{$lang->projectCommon} tasks";
 $lang->task->confirmDelete         = "Are you sure you want to delete this task?";
 $lang->task->confirmDeleteEstimate = "Are you sure you want to delete this hour?";
 $lang->task->copyStoryTitle        = "Same as story";
@@ -146,7 +146,7 @@ $lang->task->afterSubmit           = "After created";
 $lang->task->successSaved          = "Successfully saved";
 $lang->task->delayWarning          = " <strong class='delayed f-14px'> Postponed %s days </strong>";
 $lang->task->remindBug             = "This task from Bug, update the Bug:%s or not?";
-$lang->task->confirmChangeProject  = "Change {$lang->projectcommon} will change module, story and assignedTo also, are you sure?";
+$lang->task->confirmChangeProject  = "Change {$lang->projectCommon} will change module, story and assignedTo also, are you sure?";
 $lang->task->confirmFinish         = '"Left" is zero, this task will be done. Are you sure?';
 $lang->task->confirmRecord         = '"Left" is zero, this task will be done. Are you sure?';
 
@@ -166,7 +166,7 @@ $lang->task->report->select = 'Select';
 $lang->task->report->create = 'Create';
 $lang->task->report->value  = 'Tasks';
 
-$lang->task->report->charts['tasksPerProject']      = $lang->projectcommon . ' tasks';
+$lang->task->report->charts['tasksPerProject']      = $lang->projectCommon . ' tasks';
 $lang->task->report->charts['tasksPerModule']       = 'Module tasks';
 $lang->task->report->charts['tasksPerAssignedTo']   = 'Assigned To';
 $lang->task->report->charts['tasksPerType']         = 'Type';
@@ -200,7 +200,7 @@ $lang->task->report->tasksPerFinishedBy   = new stdclass();
 $lang->task->report->tasksPerClosedReason = new stdclass();
 $lang->task->report->finishedTasksPerDay  = new stdclass();
 
-$lang->task->report->tasksPerProject->item      = $lang->projectcommon;
+$lang->task->report->tasksPerProject->item      = $lang->projectCommon;
 $lang->task->report->tasksPerModule->item       = 'Module';
 $lang->task->report->tasksPerAssignedTo->item   = 'Account';
 $lang->task->report->tasksPerType->item         = 'Type';
@@ -228,7 +228,7 @@ $lang->task->report->tasksPerFinishedBy->graph   = new stdclass();
 $lang->task->report->tasksPerClosedReason->graph = new stdclass();
 $lang->task->report->finishedTasksPerDay->graph  = new stdclass();
 
-$lang->task->report->tasksPerProject->graph->xAxisName      = $lang->projectcommon;
+$lang->task->report->tasksPerProject->graph->xAxisName      = $lang->projectCommon;
 $lang->task->report->tasksPerModule->graph->xAxisName       = 'Module';
 $lang->task->report->tasksPerAssignedTo->graph->xAxisName   = 'User';
 $lang->task->report->tasksPerType->graph->xAxisName         = 'Type';

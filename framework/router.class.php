@@ -1431,20 +1431,20 @@ class router
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
-        /* Set productcommon and projectcommon for flow. */
+        /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common')
         {
-            $productproject = false;
-            if($this->dbh and !empty($this->config->db->name)) $productproject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productproject'")->fetch();
+            $productProject = false;
+            if($this->dbh and !empty($this->config->db->name)) $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productproject'")->fetch();
 
-            $productcommon = $projectcommon = 0;
-            if($productproject)
+            $productCommon = $projectCommon = 0;
+            if($productProject)
             {
-                $productproject = $productproject->value;
-                list($productcommon, $projectcommon) = explode('_', $productproject);
+                $productProject = $productProject->value;
+                list($productCommon, $projectCommon) = explode('_', $productProject);
             }
-            $lang->productcommon = isset($this->config->productcommonList[$this->clientLang][(int)$productcommon]) ? $this->config->productcommonList[$this->clientLang][(int)$productcommon] : $this->config->productcommonList['zh-cn'][0];
-            $lang->projectcommon = isset($this->config->projectcommonList[$this->clientLang][(int)$projectcommon]) ? $this->config->projectcommonList[$this->clientLang][(int)$projectcommon] : $this->config->projectcommonList['zh-cn'][0];
+            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['zh-cn'][0];
+            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['zh-cn'][0];
         }
 
         static $loadedLangs = array();

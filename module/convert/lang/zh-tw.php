@@ -35,7 +35,7 @@ $lang->convert->source           = '來源系統';
 $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必須選擇一個來源。";
 
-$lang->convert->direction             = "請選擇{$lang->projectcommon}問題轉換方向";
+$lang->convert->direction             = "請選擇{$lang->projectCommon}問題轉換方向";
 $lang->convert->questionTypeOfRedmine = 'Redmine中問題類型';
 $lang->convert->aimTypeOfZentao       = '轉化為Zentao中的類型';
 
@@ -73,7 +73,7 @@ $lang->convert->info       = '轉換信息';
 
 $lang->convert->bugfree = new stdclass();
 $lang->convert->bugfree->users    = '用戶';
-$lang->convert->bugfree->projects = $lang->projectcommon;
+$lang->convert->bugfree->projects = $lang->projectCommon;
 $lang->convert->bugfree->modules  = '模組';
 $lang->convert->bugfree->bugs     = 'Bug';
 $lang->convert->bugfree->cases    = '測試用例';
@@ -84,12 +84,12 @@ $lang->convert->bugfree->files    = '附件';
 $lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = '用戶';
 $lang->convert->redmine->groups       = '用戶分組';
-$lang->convert->redmine->products     = $lang->productcommon;
-$lang->convert->redmine->projects     = $lang->projectcommon;
+$lang->convert->redmine->products     = $lang->productCommon;
+$lang->convert->redmine->projects     = $lang->projectCommon;
 $lang->convert->redmine->stories      = '需求';
 $lang->convert->redmine->tasks        = '任務';
 $lang->convert->redmine->bugs         = 'Bug';
-$lang->convert->redmine->productPlans = $lang->productcommon . '計劃';
+$lang->convert->redmine->productPlans = $lang->productCommon . '計劃';
 $lang->convert->redmine->teams        = '團隊';
 $lang->convert->redmine->releases     = '發佈';
 $lang->convert->redmine->builds       = 'Build';

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例编号';
-$lang->testcase->product          = "所属{$lang->productcommon}";
+$lang->testcase->product          = "所属{$lang->productCommon}";
 $lang->testcase->module           = '所属模块';
 $lang->testcase->story            = '相关需求';
 $lang->testcase->storyVersion     = '需求版本';
@@ -41,7 +41,7 @@ $lang->testcase->linkCase         = '相关用例';
 $lang->testcase->stage            = '适用阶段';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
-$lang->testcase->allProduct       = "所有{$lang->productcommon}";
+$lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '来源Bug';
 $lang->testcase->toBug            = '生成Bug';
 $lang->testcase->changed          = '用例变更';
@@ -81,7 +81,7 @@ $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
 $lang->testcase->insertAfter  = '之后添加';
 
-$lang->testcase->selectProduct = "请选择{$lang->productcommon}";
+$lang->testcase->selectProduct = "请选择{$lang->productCommon}";
 $lang->testcase->byModule      = '按模块';
 $lang->testcase->assignToMe    = '给我的用例';
 $lang->testcase->openedByMe    = '我建的用例';
@@ -91,7 +91,7 @@ $lang->testcase->moduleCases   = '按模块';
 $lang->testcase->bySearch      = '搜索';
 $lang->testcase->doneByMe      = '我完成的用例';
 
-$lang->testcase->lblProductAndModule         = "{$lang->productcommon}模块";
+$lang->testcase->lblProductAndModule         = "{$lang->productCommon}模块";
 $lang->testcase->lblTypeAndPri               = '类型&优先级';
 $lang->testcase->lblSystemBrowserAndHardware = '系统::浏览器';
 $lang->testcase->lblAssignAndMail            = '指派给::抄送给';
@@ -110,7 +110,7 @@ $lang->testcase->legendSteps        = '用例步骤';
 $lang->testcase->legendAction       = '操作';
 $lang->testcase->legendHistory      = '历史记录';
 $lang->testcase->legendComment      = '备注';
-$lang->testcase->legendProduct      = $lang->productcommon . '模块';
+$lang->testcase->legendProduct      = $lang->productCommon . '模块';
 
 $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';

@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 $lang->action->common     = 'Logs';
-$lang->action->product    = $lang->productcommon;
-$lang->action->project    = $lang->projectcommon;
+$lang->action->product    = $lang->productCommon;
+$lang->action->project    = $lang->projectCommon;
 $lang->action->objectType = 'Object';
 $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Name';
@@ -44,11 +44,11 @@ $lang->action->dynamic->all        = 'All';
 $lang->action->dynamic->hidden     = 'Hidden';
 $lang->action->dynamic->search     = 'Search';
 
-$lang->action->objectTypes['product']     = $lang->productcommon;
+$lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = 'Story';
 $lang->action->objectTypes['productplan'] = 'Plan';
 $lang->action->objectTypes['release']     = 'Release';
-$lang->action->objectTypes['project']     = $lang->projectcommon;
+$lang->action->objectTypes['project']     = $lang->projectCommon;
 $lang->action->objectTypes['task']        = 'Task';
 $lang->action->objectTypes['build']       = 'Build';
 $lang->action->objectTypes['bug']         = 'Bug';
@@ -127,8 +127,8 @@ $lang->action->label->gitcommited         = 'commited code';
 $lang->action->label->linked2plan         = 'link to plan';
 $lang->action->label->unlinkedfromplan    = 'unlink from plan';
 $lang->action->label->marked              = 'edited';
-$lang->action->label->linked2project      = "link to {$lang->projectcommon}";
-$lang->action->label->unlinkedfromproject = "unlik from {$lang->projectcommon}";
+$lang->action->label->linked2project      = "link to {$lang->projectCommon}";
+$lang->action->label->unlinkedfromproject = "unlik from {$lang->projectCommon}";
 $lang->action->label->started             = 'started';
 $lang->action->label->restarted           = 'continued';
 $lang->action->label->recordestimate      = 'Hours';
@@ -143,11 +143,11 @@ $lang->action->label->logout              = "logout";
 $lang->action->label->deleteestimate      = "delete estimate";
 
 /* Link of every action. */
-$lang->action->label->product     = $lang->productcommon . '|product|view|productID=%s';
+$lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'release|release|view|productID=%s';
 $lang->action->label->story       = 'story|story|view|storyID=%s';
-$lang->action->label->project     = $lang->projectcommon . '|project|view|projectID=%s';
+$lang->action->label->project     = $lang->projectCommon . '|project|view|projectID=%s';
 $lang->action->label->task        = 'task|task|view|taskID=%s';
 $lang->action->label->build       = 'build|build|view|buildID=%s';
 $lang->action->label->bug         = 'bug|bug|view|bugID=%s';
@@ -161,8 +161,8 @@ $lang->action->label->space       = ' ';
 
 /* Object type. */
 $lang->action->search->objectTypeList['']            = '';    
-$lang->action->search->objectTypeList['product']     = $lang->productcommon;
-$lang->action->search->objectTypeList['project']     = $lang->projectcommon;
+$lang->action->search->objectTypeList['product']     = $lang->productCommon;
+$lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['bug']         = 'bug';
 $lang->action->search->objectTypeList['case']        = 'case';
 $lang->action->search->objectTypeList['story']       = 'story';

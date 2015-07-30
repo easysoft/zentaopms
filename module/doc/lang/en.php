@@ -12,8 +12,8 @@
 /* Fields. */
 $lang->doc->common         = 'Doc';
 $lang->doc->id             = 'ID';
-$lang->doc->product        = $lang->productcommon;
-$lang->doc->project        = $lang->projectcommon;
+$lang->doc->product        = $lang->productCommon;
+$lang->doc->project        = $lang->projectCommon;
 $lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Module';
 $lang->doc->title          = 'Title';
@@ -54,11 +54,11 @@ $lang->doc->editLib        = 'Edit library';
 $lang->doc->deleteLib      = 'Delete library';
 
 /* Browse tabs. */
-$lang->doc->allProduct     = "All {$lang->productcommon}s";
-$lang->doc->allProject     = "All {$lang->projectcommon}s";
+$lang->doc->allProduct     = "All {$lang->productCommon}s";
+$lang->doc->allProject     = "All {$lang->projectCommon}s";
 
-$lang->doc->systemLibs['product'] = "{$lang->productcommon} doc";
-$lang->doc->systemLibs['project'] = "{$lang->projectcommon} doc";
+$lang->doc->systemLibs['product'] = "{$lang->productCommon} doc";
+$lang->doc->systemLibs['project'] = "{$lang->projectCommon} doc";
 
 $lang->doc->types['file'] = 'File';
 $lang->doc->types['url']  = 'Link';

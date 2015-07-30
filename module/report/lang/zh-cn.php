@@ -33,22 +33,22 @@ $lang->report->colors[]   = 'A186BE';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = $lang->projectcommon . '偏差报表';
-$lang->report->productSummary   = $lang->productcommon . '汇总表';
+$lang->report->projectDeviation = $lang->projectCommon . '偏差报表';
+$lang->report->productSummary   = $lang->productCommon . '汇总表';
 $lang->report->bugCreate        = 'Bug创建表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 $lang->report->workloadAB       = '工作负载';
 
-$lang->reportList->project->lists[10] = $lang->projectcommon . '偏差报表|report|projectdeviation';
-$lang->reportList->product->lists[10] = $lang->productcommon . '汇总表|report|productsummary';
+$lang->reportList->project->lists[10] = $lang->projectCommon . '偏差报表|report|projectdeviation';
+$lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug创建表|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '员工负载表|report|workload';
 
 $lang->report->id            = '编号';
-$lang->report->project       = $lang->projectcommon;
-$lang->report->product       = $lang->productcommon;
+$lang->report->project       = $lang->projectCommon;
+$lang->report->product       = $lang->productCommon;
 $lang->report->user          = '姓名';
 $lang->report->bug           = 'Bug';
 $lang->report->task          = '任务数';
@@ -75,7 +75,7 @@ $lang->report->unplanned     = '未计划';
 $lang->report->workday       = '每天工时';
 
 $lang->report->conditions    = '筛选条件：';
-$lang->report->closedProduct = '关闭' . $lang->productcommon;
+$lang->report->closedProduct = '关闭' . $lang->productCommon;
 $lang->report->overduePlan   = '过期计划';
 
 /* daily reminder. */
