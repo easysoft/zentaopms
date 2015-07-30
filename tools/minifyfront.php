@@ -52,8 +52,8 @@ $themeRoot  = $baseDir . '/www/theme/';
 /* Iinclude config and lang file to get langs and themes. */
 include $baseDir . '/config/config.php';
 $lang = new stdclass();
-$lang->productcommon = '';
-$lang->projectcommon = '';
+$lang->productCommon = '';
+$lang->projectCommon = '';
 include $baseDir . '/module/common/lang/zh-cn.php';
 $langs  = array_keys($config->langs);
 $themes = array_keys($lang->themes);
