@@ -115,6 +115,15 @@ class report extends control
      */
     public function workload($begin = '', $end = '', $workday = 7, $dept = 0)
     {
+        if($_POST)
+        {
+            $data     = fixer::input('post')->get();
+            $begin    = $data->begin;
+            $end      = $data->end;
+            $dept     = $data->dept;
+            $workday  = $data->workday;
+        }
+
         $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-d', strtotime('now'));
         $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime('+1 week'));
 
