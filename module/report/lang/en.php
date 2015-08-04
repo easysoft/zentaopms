@@ -39,6 +39,7 @@ $lang->report->bugCreate        = 'Bug create';
 $lang->report->bugAssign        = 'Bug assign';
 $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
+$lang->report->bugOpenedDate    = 'Bug opened date';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';

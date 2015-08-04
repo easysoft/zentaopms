@@ -39,6 +39,7 @@ $lang->report->bugCreate        = 'Bug创建表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 $lang->report->workloadAB       = '工作负载';
+$lang->report->bugOpenedDate    = 'Bug创建时间';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差报表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';

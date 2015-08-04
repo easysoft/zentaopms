@@ -15,9 +15,10 @@
   </div>
 </div>
 <div class='main'>
-  <div class='row'>
+  <div class='row' style='margin-bottom:5px;'>
     <div class='col-sm-4'>
-      <div class='input-group w-300px input-group-sm'>
+      <div class='input-group input-group-sm'>
+        <span class='input-group-addon'><?php echo $lang->report->bugOpenedDate;?></span>
         <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control form-date' onchange='changeParams(this)'");?></div>
         <span class='input-group-addon'><?php echo $lang->report->to;?></span>
         <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
@@ -36,7 +37,6 @@
     <thead>
     <tr class='colhead'>
       <th><?php echo $lang->bug->openedBy;?></th>
-      <th><?php echo $lang->report->total;?></th>
       <th><?php echo $lang->bug->unResolved;?></th>
       <th><?php echo $lang->bug->resolutionList['bydesign'];?></th>
       <th><?php echo $lang->bug->resolutionList['duplicate'];?></th>
@@ -47,6 +47,7 @@
       <th><?php echo $lang->bug->resolutionList['willnotfix'];?></th>
       <th><?php echo $lang->bug->resolutionList['tostory'];?></th>
       <th title='<?php echo $lang->report->validRateTips;?>'><?php echo $lang->report->validRate;?></th>
+      <th><?php echo $lang->report->total;?></th>
     </tr>
     </thead>
     <tbody>
@@ -54,7 +55,6 @@
       <?php if(!array_key_exists($user, $users)) continue;?>
       <tr class="a-center">
         <td><?php echo $users[$user];?></td>
-        <td><?php echo $bug['all'];?></td>
         <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>
         <td><?php echo isset($bug['bydesign']) ? $bug['bydesign'] : 0;?></td>
         <td><?php echo isset($bug['duplicate']) ? $bug['duplicate'] : 0;?></td>
@@ -65,6 +65,7 @@
         <td><?php echo isset($bug['willnotfix']) ? $bug['willnotfix'] : 0;?></td>
         <td><?php echo isset($bug['tostory']) ? $bug['tostory'] : 0;?></td>
         <td><?php echo round($bug['validRate'] * 100, 2) . '%';?></td>
+        <td><?php echo $bug['all'];?></td>
       </tr>
     <?php endforeach;?>
     </tbody>
