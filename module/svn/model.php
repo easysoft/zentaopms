@@ -440,7 +440,7 @@ class svnModel extends model
         foreach($this->config->svn->repos as $repo)
         {
             if(empty($repo['path'])) continue;
-            if(strpos($url, $repo['path']) !== false) return (object)$repo;
+            if(strpos(strtolower($url), strtolower($repo['path'])) !== false) return (object)$repo;
         }
         return false;
     }

@@ -168,10 +168,7 @@ class devModel extends model
             $comment = preg_split('/\r?\n\r?/', $comment);
 
             // Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
-            $comment = array_map(function($line)
-            {
-                return ltrim(rtrim($line), "* \t\n\r\0\x0B");
-            }, $comment);
+            $comment = array_map(array('devModel', "trimSpace"), $comment);
 
             // Group the lines together by @tags
             $blocks = array();
@@ -245,5 +242,17 @@ class devModel extends model
             $modules[$group][] = $module;
         }
         return $modules;
+    }
+
+    /**
+     * Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
+     * 
+     * @param  string    $line 
+     * @access public
+     * @return string
+     */
+    public function trimSpace($line)
+    {
+        return ltrim(rtrim($line), "* \t\n\r\0\x0B");
     }
 }

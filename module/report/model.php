@@ -37,10 +37,30 @@ class reportModel extends model
     public function createSingleJSON($sets, $dateList)
     {
         $data = '[';
+        $now  = date('Y-m-d');
+        $preValue = '';
+        $setsDate = array_keys($sets);
         foreach($dateList as $i => $date)
         {
             $date  = date('Y-m-d', strtotime($date));
-            $data .= isset($sets[$date]) ? "{$sets[$date]->value}," : "'',";
+            if($date > $now) break;
+            if(!isset($sets[$date]) and $sets)
+            {
+                $tmpDate = $setsDate;
+                $tmpDate[] = $date;
+                sort($tmpDate);
+                $tmpDateStr = ',' . join(',', $tmpDate);
+                $preDate = rtrim(substr($tmpDateStr, 0, strpos($tmpDateStr, $date)), ',');
+                $preDate = substr($preDate, strrpos($preDate, ',') + 1);
+
+                if($preDate)
+                {
+                    $preValue = $sets[$preDate];
+                    $preValue = $preValue->value;
+                }
+            }
+
+            $data .= isset($sets[$date]) ? "{$sets[$date]->value}," : "{$preValue},";
         }
         $data = rtrim($data, ',');
         $data .= ']';
