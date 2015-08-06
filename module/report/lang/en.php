@@ -77,6 +77,10 @@ $lang->report->validRateTips = "Resolution is fixed or postponed/status is resol
 $lang->report->unplanned     = 'unplanned';
 $lang->report->workday       = 'Working per day';
 
+$lang->report->conditions    = 'Conditions:';
+$lang->report->closedProduct = 'Closed ' . $lang->productCommon;
+$lang->report->overduePlan   = 'Overdue plan';
+
 /* daily reminder. */
 $lang->report->idAB  = 'ID';
 $lang->report->bugTitle = 'Bug Title';

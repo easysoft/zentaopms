@@ -34,14 +34,18 @@ $lang->report->colors[]   = 'A186BE';
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . '偏差報表';
-$lang->report->productInfo      = $lang->productCommon . '信息統計表';
-$lang->report->bugSummary       = 'Bug彙總表';
+$lang->report->productSummary   = $lang->productCommon . '彙總表';
+$lang->report->bugCreate        = 'Bug創建表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '員工負載表';
+$lang->report->workloadAB       = '工作負載';
+$lang->report->bugOpenedDate    = 'Bug創建時間';
+$lang->report->taskAssignedDate = '任務指派時間';
+$lang->report->dept             = '部門';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差報表|report|projectdeviation';
-$lang->reportList->product->lists[10] = $lang->productCommon . '信息統計表|report|productinfo';
-$lang->reportList->test->lists[10]    = 'Bug彙總表|report|bugsummary';
+$lang->reportList->product->lists[10] = $lang->productCommon . '彙總表|report|productsummary';
+$lang->reportList->test->lists[10]    = 'Bug創建表|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '員工負載表|report|workload';
 
@@ -71,6 +75,11 @@ $lang->report->bugTotal      = "共%s個Bug";
 $lang->report->validRate     = "有效率";
 $lang->report->validRateTips = "方案為已解決或延期/狀態為已解決或已關閉";
 $lang->report->unplanned     = '未計劃';
+$lang->report->workday       = '每天工時';
+
+$lang->report->conditions    = '篩選條件：';
+$lang->report->closedProduct = '關閉' . $lang->productCommon;
+$lang->report->overduePlan   = '過期計劃';
 
 /* daily reminder. */
 $lang->report->idAB     = 'ID';

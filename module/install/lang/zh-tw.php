@@ -30,8 +30,8 @@ EOT;
 $lang->install->links = <<<EOT
 禪道項目管理軟件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>青島易軟天創網絡科技有限公司</a>開發</strong>。
 官方網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
-技術支持: <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
-新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
+技術支持：<a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
+新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
 
 您現在正在安裝的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
