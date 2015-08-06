@@ -594,9 +594,18 @@ class userModel extends model
                 ->where('t2.account')->eq($account)
                 ->fetchAll();
             $acls = array();
+            $viewAllow    = false;
+            $productAllow = false;
+            $projectAllow = false;
             foreach($groups as $group)
             {
-                if(empty($group->acl)) continue;
+                if(empty($group->acl))
+                {
+                    $productAllow = true;
+                    $projectAllow = true;
+                    $viewAllow    = true;
+                    break;
+                }
                 $acl = json_decode($group->acl, true);
                 if(empty($acls))
                 {
@@ -604,10 +613,17 @@ class userModel extends model
                     continue;
                 }
 
+                if(empty($acl['products'])) $productAllow = true;
+                if(empty($acl['projects'])) $projectAllow = true;
+
                 $acls['views'] = array_merge($acls['views'], $acl['views']);
                 if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
             }
+
+            if($productAllow) $acls['products'] = array();
+            if($projectAllow) $acls['projects'] = array();
+            if($viewAllow)    $acls = array();
 
             $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.group = t2.group')
