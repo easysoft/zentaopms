@@ -382,6 +382,7 @@ class installModel extends model
             if(strpos($table, '--') === 0) continue;
 
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+            $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
         }

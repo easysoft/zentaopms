@@ -735,7 +735,7 @@ class actionModel extends model
         if($action->objectType == 'product')
         {
             $product = $this->dao->select('name,code')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
-            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCT)->where('name')->eq($product->name)->orWhere('code')->eq($product->code)->fetch('count');
+            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere("(`name`='{$product->name}' OR `code`='{$product->code}')")->fetch('count');
             if($count > 0)
             {
                 echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['product']));
@@ -745,7 +745,7 @@ class actionModel extends model
         elseif($action->objectType == 'project')
         {
             $project = $this->dao->select('name,code')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
-            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)->where('name')->eq($project->name)->orWhere('code')->eq($project->code)->fetch('count');
+            $count   = $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere("(`name`='{$project->name}' OR `code`='{$project->code}')")->fetch('count');
             if($count > 0)
             {
                 echo js::alert(sprintf($this->lang->action->needEdit, $this->lang->action->objectTypes['project']));
