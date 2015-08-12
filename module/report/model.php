@@ -38,7 +38,7 @@ class reportModel extends model
     {
         $data = '[';
         $now  = date('Y-m-d');
-        $preValue = '';
+        $preValue = 0;
         $setsDate = array_keys($sets);
         foreach($dateList as $i => $date)
         {
