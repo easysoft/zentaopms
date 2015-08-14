@@ -41,7 +41,7 @@
   <tbody>
     <?php
     $canBatchEdit  = common::hasPriv('story', 'batchEdit');
-    $canBatchClose = common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedbyme';
+    $canBatchClose = (common::hasPriv('story', 'batchClose') && strtolower($type) != 'closedbyme');
     ?>
     <?php foreach($stories as $key => $story):?>
     <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>

@@ -141,7 +141,7 @@
             <div class='table-actions clearfix'>
             <?php 
             $canBatchEdit     = common::hasPriv('task', 'batchEdit');
-            $canBatchClose    = common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy';
+            $canBatchClose    = (common::hasPriv('task', 'batchClose') && strtolower($browseType) != 'closedBy');
             $canBatchAssignTo = common::hasPriv('task', 'batchAssignTo');
             if(count($tasks))
             {
