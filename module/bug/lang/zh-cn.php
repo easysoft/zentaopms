@@ -106,6 +106,7 @@ $lang->bug->resolvedByMe   = '由我解决';
 $lang->bug->closedByMe     = '由我关闭';
 $lang->bug->assignToNull   = '未指派';
 $lang->bug->unResolved     = '未解决';
+$lang->bug->toClosed       = '待关闭';
 $lang->bug->unclosed       = '未关闭';
 $lang->bug->longLifeBugs   = '久未处理';
 $lang->bug->postponedBugs  = '被延期';

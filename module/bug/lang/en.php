@@ -106,6 +106,7 @@ $lang->bug->resolvedByMe   = 'MyResolve';
 $lang->bug->closedByMe     = 'MyClose';
 $lang->bug->assignToNull   = 'Unassigned';
 $lang->bug->unResolved     = 'Unresolved';
+$lang->bug->toClosed       = 'Stay close';
 $lang->bug->unclosed       = 'Unclosed';
 $lang->bug->longLifeBugs   = 'Longlife';
 $lang->bug->postponedBugs  = 'Postponed';

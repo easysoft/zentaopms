@@ -1386,6 +1386,7 @@ class bugModel extends model
             ->andWhere('product')->eq($productID)
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status == 'unresolved')->andWhere('status')->eq('active')->fi()
+            ->beginIF($status == 'toclosed')->andWhere('status')->eq('resolved')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

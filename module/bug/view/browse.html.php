@@ -27,6 +27,7 @@ js::set('moduleID', $moduleID);
     echo "<li id='unconfirmedTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unconfirmed&param=0"),   $lang->bug->confirmedList[0])  . "</li>";
     echo "<li id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</li>";
     echo "<li id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</li>";
+    echo "<li id='toclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=toClosed&param=0"),      $lang->bug->toClosed)      . "</li>";
     echo "<li id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</li>";
     echo "<li id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</li>";
     echo "<li id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</li>";
