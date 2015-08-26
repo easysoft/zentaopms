@@ -37,16 +37,10 @@
         $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
         $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
         echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
-
-        $misc = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-        echo "<li>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
         ?>
         </ul>
       </div>
       <?php 
-      common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');
-
       $initModule = isset($moduleID) ? (int)$moduleID : 0;
       common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$initModule");
       common::printIcon('testcase', 'create', "productID=$productID&moduleID=$initModule");
