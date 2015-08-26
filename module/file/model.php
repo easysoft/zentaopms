@@ -284,7 +284,7 @@ class fileModel extends model
      */
     public function parseCSV($fileName)
     {
-        $handle = fopen($this->session->importFile, 'r');
+        $handle = fopen($fileName, 'r');
         $col    = -1;
         $row    = 0;
         $data   = array();
@@ -369,7 +369,7 @@ class fileModel extends model
             $row ++;
             $col = -1;
         }
-        fclose ($handle);
+        fclose($handle);
 
         return $data;
     }

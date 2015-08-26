@@ -930,7 +930,7 @@ class task extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send emails. */
-        $this->loadModel('mail')->send($toList, $projectName . ':' . 'TASK#' . $task->id . $this->lang->colon . $task->name, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, 'TASK#' . $task->id . $this->lang->colon . $task->name . ' - ' . $projectName, $mailContent, $ccList);
         if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
     

@@ -1104,7 +1104,7 @@ class bug extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
-        $this->loadModel('mail')->send($toList, $productName . ':' . 'BUG #'. $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, 'BUG #'. $bug->id . $this->lang->colon . $bug->title . ' - ' . $productName, $mailContent, $ccList);
         if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 
