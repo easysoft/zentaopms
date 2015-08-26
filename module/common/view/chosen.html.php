@@ -6,20 +6,19 @@ if($config->debug)
     js::import($jsRoot . 'jquery/chosen/min.js');
 }
 ?>
-<script> 
-noResultsMatch       = '<?php echo $lang->noResultsMatch;?>';
-chooseUsersToMail    = '<?php echo $lang->chooseUsersToMail;?>';
-defaultChosenOptions = {no_results_text: noResultsMatch, width:'100%', allow_single_deselect: true, disable_search_threshold: 1, placeholder_text_single: ' ', placeholder_text_multiple: ' ', search_contains: true};
+<script>
+var noResultsMatch       = '<?php echo $lang->noResultsMatch;?>';
+var chooseUsersToMail    = '<?php echo $lang->chooseUsersToMail;?>';
+var defaultChosenOptions = {no_results_text: noResultsMatch, width:'100%', allow_single_deselect: true, disable_search_threshold: 1, placeholder_text_single: ' ', placeholder_text_multiple: ' ', search_contains: true};
 $(document).ready(function()
 {
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
-    $("#mailto, .chosen, #productID").each(function()
+    $("#mailto, .chosen, #productID").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
     {
         var $this = $(this);
-        if($this.offset().top + 240 > $(document.body).height())
-        {
-            $this.attr('data-css-class', 'chosen-up');
-        }
-    }).chosen(defaultChosenOptions);
+        var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
+        var $drop = $chosen.find('.chosen-drop');
+        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+    });
 });
 </script>
