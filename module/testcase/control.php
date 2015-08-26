@@ -853,7 +853,6 @@ class testcase extends control
         if($_POST)
         {
             $fields['module']       = $this->lang->testcase->module;
-            $fields['story']        = $this->lang->testcase->story;
             $fields['title']        = $this->lang->testcase->title;
             $fields['stepDesc']     = $this->lang->testcase->stepDesc;
             $fields['stepExpect']   = $this->lang->testcase->stepExpect;
@@ -862,9 +861,21 @@ class testcase extends control
             $fields['pri']          = $this->lang->testcase->pri;
             $fields['stage']        = $this->lang->testcase->stage;
             $fields['precondition'] = $this->lang->testcase->precondition;
+
+            $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+            $rows    = array();
+            foreach($modules as $moduleID => $module)
+            {
+                $row = new stdclass();
+                $row->module     = $module . "(#$moduleID)";
+                $row->stepDesc   = "1. \n2. \n3.";
+                $row->stepExpect = "1. \n2. \n3.";
+                $rows[] = $row;
+            }
+
             $this->post->set('fields', $fields);
             $this->post->set('kind', 'testcase');
-            $this->post->set('rows', array());
+            $this->post->set('rows', $rows);
             $this->post->set('extraNum',   $this->post->num);
             $this->post->set('fileName', 'templet');
             $this->fetch('file', 'export2csv', $_POST);
@@ -887,25 +898,49 @@ class testcase extends control
             $file = $this->loadModel('file')->getUpload('file');
             $file = $file[0];
 
-            $fc = file_get_contents($file['tmpname']);
-            if( $this->post->encode != "utf-8")
+            move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
+
+            $fileName = $this->file->savePath . $file['pathname'];
+            $fields   = $this->testcase->getImportFields();
+            $rows     = $this->file->parseCSV($fileName);
+            $header   = $rows[0];
+            unset($rows[0]);
+            foreach($header as $title)
             {
+                $field = array_search($title, $fields);
+                if(!$field) continue;
+                $columnKey[] = $field;
+            }
+            if(empty($columnKey))
+            {
+                $fc     = file_get_contents($fileName);
+                $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
                 if(function_exists('mb_convert_encoding'))
                 {
-                    $fc = @mb_convert_encoding($fc, 'utf-8', $this->post->encode);
+                    $fc = @mb_convert_encoding($fc, 'utf-8', $encode);
                 }
                 elseif(function_exists('iconv'))
                 {
-                    $fc = @iconv($this->post->encode, 'utf-8', $fc);
+                    $fc = @iconv($encode, 'utf-8', $fc);
                 }
                 else
                 {
                     die(js::alert($this->lang->testcase->noFunction));
                 }
-            }
-            file_put_contents($this->file->savePath . $file['pathname'], $fc);
+                file_put_contents($fileName, $fc);
 
-            $fileName = $this->file->savePath . $file['pathname'];
+                $rows     = $this->file->parseCSV($fileName);
+                $header   = $rows[0];
+                unset($rows[0]);
+                foreach($header as $title)
+                {
+                    $field = array_search($title, $fields);
+                    if(!$field) continue;
+                    $columnKey[] = $field;
+                }
+                if(empty($columnKey)) die(js::alert($this->lang->testcase->errorEncode));
+            }
+
             $this->session->set('importFile', $fileName);
 
             die(js::locate(inlink('showImport', "productID=$productID"), 'parent.parent'));
@@ -933,15 +968,9 @@ class testcase extends control
         $file       = $this->session->importFile;
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
-        $fields     = explode(',', $caseConfig->exportFields);
         $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case');
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID);
-        foreach($fields as $key => $fieldName)
-        {
-            $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
-            unset($fields[$key]);
-        }
+        $fields     = $this->testcase->getImportFields();
 
         $rows   = $this->loadModel('file')->parseCSV($file);
         $header = $rows[0];
@@ -952,11 +981,6 @@ class testcase extends control
             $field = array_search($title, $fields);
             if(!$field) continue;
             $columnKey[] = $field;
-        }
-        if(empty($columnKey))
-        {
-            echo js::alert($this->lang->testcase->errorEncode);
-            die(js::locate(inlink('browse', "productID=$productID")));
         }
 
         $endField = $field;

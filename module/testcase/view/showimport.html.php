@@ -29,6 +29,7 @@
     </tr>
   </thead>
   <?php foreach($caseData as $key => $case):?>
+  <?php if(empty($case->title)) continue;?>
   <tr valign='top' align='center'>
     <td>
     <?php

@@ -582,4 +582,25 @@ class testcaseModel extends model
         unlink($this->session->importFile);
         unset($_SESSION['importFile']);
     }
+
+    /**
+     * Get fields for import.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getImportFields()
+    {
+        $caseLang   = $this->lang->testcase;
+        $caseConfig = $this->config->testcase;
+        $fields     = explode(',', $caseConfig->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        return $fields;
+    }
 }
