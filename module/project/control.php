@@ -14,7 +14,7 @@ class project extends control
 
     /**
      * Construct function, Set projects.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -30,7 +30,7 @@ class project extends control
 
     /**
      * The index page.
-     * 
+     *
      * @param  string $locate     yes|no locate to the browse page or not.
      * @param  string $status     the projects status, if locate is no, then get projects by the $status.
      * @param  int    $projectID
@@ -67,8 +67,8 @@ class project extends control
 
     /**
      * Browse a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -79,8 +79,8 @@ class project extends control
 
     /**
      * Common actions.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return object current object
      */
@@ -112,13 +112,13 @@ class project extends control
 
     /**
      * Tasks of a project.
-     * 
-     * @param  int    $projectID 
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $projectID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -135,7 +135,7 @@ class project extends control
         $productID  = ($browseType == 'byproduct') ? (int)$param : 0;
         $project    = $this->commonAction($projectID, $status);
         $projectID  = $project->id;
-     
+
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',    $uri);
@@ -165,7 +165,7 @@ class project extends control
             $modules = $this->tree->getProjectModule($projectID, $productID);
             $tasks   = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
         }
-        elseif($status == 'byModule') 
+        elseif($status == 'byModule')
         {
             $tasks = $this->task->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $sort, $pager);
         }
@@ -178,10 +178,10 @@ class project extends control
                 unset($qureyStatus['closed']);
                 $qureyStatus = array_keys($qureyStatus);
             }
-            $tasks = $this->task->getProjectTasks($projectID, $qureyStatus, $sort, $pager); 
+            $tasks = $this->task->getProjectTasks($projectID, $qureyStatus, $sort, $pager);
         }
         else
-        {   
+        {
             if($queryID)
             {
                 $query = $this->search->getQuery($queryID);
@@ -204,7 +204,7 @@ class project extends control
             if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
-            $projectQuery = "`project`" . helper::dbIN(array_keys($this->projects));  
+            $projectQuery = "`project`" . helper::dbIN(array_keys($this->projects));
             $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
@@ -252,8 +252,8 @@ class project extends control
 
     /**
      * Browse tasks in group.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @param  string $groupBy    the field to group by
      * @access public
      * @return void
@@ -289,7 +289,7 @@ class project extends control
                 $groupByList[$task->story]  = $task->storyTitle;
             }
             elseif($groupBy == 'story')
-            { 
+            {
                 $groupTasks[$task->story][] = $task;
                 $groupByList[$task->story]  = $task->storyTitle;
             }
@@ -338,13 +338,13 @@ class project extends control
 
     /**
      * Import tasks undoned from other projects.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function importTask($toProject, $fromProject = 0)
-    {   
+    {
         if(!empty($_POST))
         {
             $this->project->importTask($toProject,$fromProject);
@@ -372,13 +372,13 @@ class project extends control
     }
 
     /**
-     * Import from Bug. 
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Import from Bug.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -416,7 +416,7 @@ class project extends control
         $title      = $projects[$projectID] . $this->lang->colon . $this->lang->project->importBug;
         $position[] = html::a($this->createLink('project', 'task', "projectID=$projectID"), $projects[$projectID]);
         $position[] = $this->lang->project->importBug;
-        
+
         /* Get users, products and projects.*/
         $users    = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $products = $this->dao->select('t1.product, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -485,26 +485,26 @@ class project extends control
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
         $this->config->bug->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($projectID, $viewType = 'bug', $startModuleID = 0);
-        unset($this->config->bug->search['fields']['resolvedBy']); 
-        unset($this->config->bug->search['fields']['closedBy']);    
-        unset($this->config->bug->search['fields']['status']);      
-        unset($this->config->bug->search['fields']['toTask']);      
-        unset($this->config->bug->search['fields']['toStory']);     
-        unset($this->config->bug->search['fields']['severity']);    
-        unset($this->config->bug->search['fields']['resolution']);  
+        unset($this->config->bug->search['fields']['resolvedBy']);
+        unset($this->config->bug->search['fields']['closedBy']);
+        unset($this->config->bug->search['fields']['status']);
+        unset($this->config->bug->search['fields']['toTask']);
+        unset($this->config->bug->search['fields']['toStory']);
+        unset($this->config->bug->search['fields']['severity']);
+        unset($this->config->bug->search['fields']['resolution']);
         unset($this->config->bug->search['fields']['resolvedBuild']);
         unset($this->config->bug->search['fields']['resolvedDate']);
-        unset($this->config->bug->search['fields']['closedDate']);   
-        unset($this->config->bug->search['params']['resolvedBy']); 
-        unset($this->config->bug->search['params']['closedBy']);    
-        unset($this->config->bug->search['params']['status']);      
-        unset($this->config->bug->search['params']['toTask']);      
-        unset($this->config->bug->search['params']['toStory']);     
-        unset($this->config->bug->search['params']['severity']);    
-        unset($this->config->bug->search['params']['resolution']);  
+        unset($this->config->bug->search['fields']['closedDate']);
+        unset($this->config->bug->search['params']['resolvedBy']);
+        unset($this->config->bug->search['params']['closedBy']);
+        unset($this->config->bug->search['params']['status']);
+        unset($this->config->bug->search['params']['toTask']);
+        unset($this->config->bug->search['params']['toStory']);
+        unset($this->config->bug->search['params']['severity']);
+        unset($this->config->bug->search['params']['resolution']);
         unset($this->config->bug->search['params']['resolvedBuild']);
         unset($this->config->bug->search['params']['resolvedDate']);
-        unset($this->config->bug->search['params']['closedDate']);   
+        unset($this->config->bug->search['params']['closedDate']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */
@@ -523,9 +523,9 @@ class project extends control
 
     /**
      * Browse stories of a project.
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -588,13 +588,13 @@ class project extends control
     }
 
     /**
-     * Browse bugs of a project. 
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse bugs of a project.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -625,7 +625,7 @@ class project extends control
 
         /* team member pairs. */
         $memberPairs = array();
-        $memberPairs[] = ""; 
+        $memberPairs[] = "";
         foreach($this->view->teamMembers as $key => $member)
         {
             $memberPairs[$key] = $member->realname;
@@ -648,9 +648,9 @@ class project extends control
     }
 
     /**
-     * Browse builds of a project. 
-     * 
-     * @param  int    $projectID 
+     * Browse builds of a project.
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -674,13 +674,13 @@ class project extends control
     }
 
     /**
-     * Browse test tasks of project. 
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse test tasks of project.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -711,10 +711,10 @@ class project extends control
 
     /**
      * Browse burndown chart of a project.
-     * 
-     * @param  int       $projectID 
-     * @param  string    $type 
-     * @param  int       $interval 
+     *
+     * @param  int       $projectID
+     * @param  string    $type
+     * @param  int       $interval
      * @access public
      * @return void
      */
@@ -744,7 +744,7 @@ class project extends control
         foreach($dateList as $i => $date) $baselineJSON .= ($days - $i) * $rate . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
-        $chartData['labels']   = $this->report->convertFormat($dateList, 'j/n');
+        $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE4);
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
 
@@ -768,9 +768,9 @@ class project extends control
     }
 
     /**
-     * Get data of burndown chart. 
-     * 
-     * @param  int    $projectID 
+     * Get data of burndown chart.
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -783,8 +783,8 @@ class project extends control
 
     /**
      * Compute burndown datas.
-     * 
-     * @param  string $reload 
+     *
+     * @param  string $reload
      * @access public
      * @return void
      */
@@ -797,8 +797,8 @@ class project extends control
 
     /**
      * Browse team of a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -818,8 +818,8 @@ class project extends control
 
     /**
      * Docs of a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -844,7 +844,7 @@ class project extends control
 
     /**
      * Create a project.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -874,7 +874,7 @@ class project extends control
             $team        = $copyProject->team;
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
-            $products    = join(',', array_keys($this->project->getProducts($copyProjectID))); 
+            $products    = join(',', array_keys($this->project->getProducts($copyProjectID)));
         }
 
         if(!empty($_POST))
@@ -906,8 +906,8 @@ class project extends control
 
     /**
      * Edit a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -952,7 +952,7 @@ class project extends control
         $linkedProducts = $this->project->getProducts($project->id);
         $allProducts   += $linkedProducts;
         $linkedProducts = join(',', array_keys($linkedProducts));
-        
+
         $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->projects       = $projects;
@@ -970,8 +970,8 @@ class project extends control
 
     /**
      * Batch edit.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1006,9 +1006,9 @@ class project extends control
     }
 
     /**
-     * Start project. 
-     * 
-     * @param  int    $projectID 
+     * Start project.
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1039,15 +1039,15 @@ class project extends control
 
     /**
      * Delay project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function putoff($projectID)
     {
         $this->commonAction($projectID);
-        
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1071,15 +1071,15 @@ class project extends control
 
     /**
      * Suspend project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function suspend($projectID)
     {
         $this->commonAction($projectID);
-        
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1103,15 +1103,15 @@ class project extends control
 
     /**
      * Activate project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function activate($projectID)
     {
         $this->commonAction($projectID);
-        
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1135,15 +1135,15 @@ class project extends control
 
     /**
      * Close project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function close($projectID)
     {
         $this->commonAction($projectID);
-        
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1167,8 +1167,8 @@ class project extends control
 
     /**
      * View a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1195,8 +1195,8 @@ class project extends control
 
     /**
      * Delete a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @param  string $confirm   yes|no
      * @access public
      * @return void
@@ -1218,9 +1218,9 @@ class project extends control
 
     /**
      * Send email.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $actionID 
+     *
+     * @param  int    $taskID
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -1273,8 +1273,8 @@ class project extends control
 
     /**
      * Manage products.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1319,8 +1319,8 @@ class project extends control
 
     /**
      * Manage childs projects.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1357,11 +1357,11 @@ class project extends control
 
         $this->display();
     }
-    
+
     /**
      * Manage members of the project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @param  int    $team2Import    the team to import.
      * @access public
      * @return void
@@ -1411,9 +1411,9 @@ class project extends control
 
     /**
      * Unlink a memeber.
-     * 
-     * @param  int    $projectID 
-     * @param  string $account 
+     *
+     * @param  int    $projectID
+     * @param  string $account
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -1449,8 +1449,8 @@ class project extends control
 
     /**
      * Link stories to a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1496,7 +1496,7 @@ class project extends control
         $position[] = $this->lang->project->linkStory;
 
         if($browseType == 'bySearch')
-        {    
+        {
             $allStories = $this->story->getBySearch('', $queryID, 'id', null, $projectID);
         }
         else
@@ -1518,9 +1518,9 @@ class project extends control
 
     /**
      * Unlink a story.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $storyID 
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
      * @param  string $confirm    yes|no
      * @access public
      * @return void
@@ -1558,8 +1558,8 @@ class project extends control
 
     /**
      * batch unlink story.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1577,12 +1577,12 @@ class project extends control
 
     /**
      * Project dynamic.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1645,8 +1645,8 @@ class project extends control
 
     /**
      * AJAX: get products of a project in html select.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1655,11 +1655,11 @@ class project extends control
         $products = $this->project->getProducts($projectID);
         die(html::select('product', $products, '', 'class="form-control"'));
     }
-    
+
     /**
-     * AJAX: get team members of the project. 
-     * 
-     * @param  int    $projectID 
+     * AJAX: get team members of the project.
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1670,25 +1670,25 @@ class project extends control
     }
 
     /**
-     * When create a project, help the user. 
-     * 
-     * @param  int    $projectID 
+     * When create a project, help the user.
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function tips($projectID)
     {
-        $this->view->projectID = $projectID;        
+        $this->view->projectID = $projectID;
         $this->display('project', 'tips');
     }
 
     /**
      * Drop menu page.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $module 
-     * @param  int    $method 
-     * @param  int    $extra 
+     *
+     * @param  int    $projectID
+     * @param  int    $module
+     * @param  int    $method
+     * @param  int    $extra
      * @access public
      * @return void
      */
@@ -1705,11 +1705,11 @@ class project extends control
 
     /**
      * The results page of search.
-     * 
-     * @param  string  $keywords 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
+     *
+     * @param  string  $keywords
+     * @param  string  $module
+     * @param  string  $method
+     * @param  mix     $extra
      * @access public
      * @return void
      */
@@ -1729,7 +1729,7 @@ class project extends control
 
     /**
      * Update order.
-     * 
+     *
      * @access public
      * @return void
      */
