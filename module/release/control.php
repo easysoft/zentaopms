@@ -146,7 +146,7 @@ class release extends control
             $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where('project')->eq((int)$build->project)
                 ->beginIF($build->id != 0)->andWhere('openedBuild')->eq($build->id)->fi()
-                ->andWhere('deleted')->eq(0)
+                ->andWhere('deleted')->eq('0')
                 ->andWhere('status')->eq('active')
                 ->orderBy('id_desc')
                 ->fetchAll();
@@ -162,7 +162,7 @@ class release extends control
         $this->view->release       = $release;
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;
-        $this->view->generatedBugs = empty($build->project) ? array() : $this->bug->getProjectBugs($build->project, 'id_desc', null, $build->id);
+        $this->view->generatedBugs = $generatedBugs;
         $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->type          = $type;
