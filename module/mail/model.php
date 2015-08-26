@@ -50,7 +50,7 @@ class mailModel extends model
 
         /* Set default values. */
         $config->mta      = 'smtp';
-        $config->fromName = 'zentao';
+        $config->fromName = '';
         $config->password = '';
         $config->debug    = 1;
         $config->charset  = 'utf-8';

@@ -7,7 +7,7 @@ $config->mail->smtp = new stdclass();
 
 $config->mail->turnon      = false;         // trun on email feature or not. true|false
 $config->mail->fromAddress = '';            // The from address.
-$config->mail->fromName    = 'zentao';      // The from name.
+$config->mail->fromName    = '';            // The from name.
 $config->mail->mta         = 'smtp';        // The send mail type.
 $config->mail->smtp->debug    = 0;          // Debug level, 0,1,2.
 $config->mail->smtp->charset  = 'utf-8';    // Charset 

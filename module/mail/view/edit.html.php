@@ -37,7 +37,10 @@ include '../../common/view/header.html.php';
       </tr>
       <tr>
         <th><?php echo $lang->mail->fromName; ?></th>
-        <td><?php echo html::input('fromName', $mailConfig->fromName, "class='form-control'");?></td>
+        <td>
+          <div class='required required-wrapper'></div>
+          <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control'");?>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->host; ?></th>

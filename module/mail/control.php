@@ -133,6 +133,12 @@ class mail extends control
             $mailConfig->smtp->debug    = $this->post->debug;
             $mailConfig->smtp->charset  = $this->post->charset;
 
+            if(empty($mailConfig->fromName))
+            {
+                echo js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName));
+                die(js::locate('back'));
+            }
+
             /* The mail need openssl and curl extension when secure is tls. */
             if($mailConfig->smtp->secure == 'tls')
             {
