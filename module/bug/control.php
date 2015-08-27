@@ -772,18 +772,23 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        $bug             = $this->bug->getById($bugID);
-        $productID       = $bug->product;
+        $bug        = $this->bug->getById($bugID);
+        $productID  = $bug->product;
+        $users      = $this->user->getPairs('nodeleted');
+        $assignedTo = $bug->openedBy;
+        if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
+
         $this->bug->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->resolve;
 
-        $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted', $bug->openedBy);
-        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->view->bug        = $bug;
+        $this->view->users      = $users;
+        $this->view->assignedTo = $assignedTo;
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->actions    = $this->action->getList('bug', $bugID);
         $this->display();
     }
 
@@ -1015,9 +1020,7 @@ class bug extends control
      */
     public function ajaxGetModuleOwner($moduleID, $productID = 0)
     {
-        $owner = '';
-        if($moduleID) $owner = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner');
-        if(!$owner)   $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
+        $owner = $this->bug->getModuleOwner($moduleID, $productID);
         die($owner);
     }
 

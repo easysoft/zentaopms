@@ -41,7 +41,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $bug->openedBy, "class='form-control chosen'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->files;?></th>

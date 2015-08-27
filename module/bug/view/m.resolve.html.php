@@ -21,7 +21,7 @@
     </tr>
     <tr>
       <td><?php echo $lang->bug->assignedTo?></div>
-      <td><?php echo html::select('assignedTo', $users, $bug->openedBy);?></div>
+      <td><?php echo html::select('assignedTo', $users, $assignedTo);?></div>
     </tr>
     <tr>
       <td><?php echo $lang->comment;?></td>

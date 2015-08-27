@@ -341,6 +341,43 @@ class bugModel extends model
     }
 
     /**
+     * Get module owner.
+     * 
+     * @param  int    $moduleID 
+     * @param  int    $productID 
+     * @access public
+     * @return string
+     */
+    public function getModuleOwner($moduleID, $productID)
+    {
+        $users = $this->loadModel('user')->getPairs('nodeleted');
+
+        if($moduleID)
+        {
+            $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch();
+            if($module->owner and isset($users[$module->owner])) return $module->owner;
+
+            $moduleIDList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
+            krsort($moduleIDList);
+            if($moduleIDList)
+            {
+                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIDList)->fetchAll('id');
+                foreach($moduleIDList as $moduleID)
+                {
+                    if(isset($modules[$moduleID]))
+                    {
+                        $module = $modules[$moduleID];
+                        if($module->owner and isset($users[$module->owner])) return $module->owner;
+                    }
+                }
+            }
+        }
+
+        $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
+        return isset($users[$owner]) ? $users[$owner] : '';
+    }
+
+    /**
      * Update a bug.
      * 
      * @param  int    $bugID 
@@ -598,10 +635,37 @@ class bugModel extends model
     {
         $now  = helper::now();
         $bugs = $this->getByList($bugIDList);
+
+        $bug       = reset($bugs);
+        $productID = $bug->product;
+        $users     = $this->loadModel('user')->getPairs('nodeleted');
+        $product   = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', ''));
+        $modules   = array();
+        while($module = $stmt->fetch()) $modules[$module->id] = $module;
+
         foreach($bugIDList as $bugID)
         {
             $oldBug = $bugs[$bugID];
             if($oldBug->status != 'active') continue;
+
+            $assignedTo = $oldBug->openedBy;
+            if(!isset($users[$assignedTo]))
+            {
+                $assignedTo = '';
+                $module     = isset($modules[$oldBug->module]) ? $modules[$oldBug->module] : '';
+                while($module)
+                {
+                    if($module->owner and isset($users[$module->owner]))
+                    {
+                        $assignedTo = $module->owner;
+                        break;
+                    }
+                    $module = isset($modules[$module->parent]) ? $modules[$module->parent] : '';
+                }
+                if(empty($assignedTo)) $assignedTo = $product->QD;
+            }
+
             $bug = new stdClass();
             $bug->resolution     = $resolution;
             $bug->resolvedBuild  = $resolution == 'fixed' ? $resolvedBuild : '';
@@ -609,7 +673,7 @@ class bugModel extends model
             $bug->resolvedDate   = $now;
             $bug->status         = 'resolved';
             $bug->confirmed      = 1;
-            $bug->assignedTo     = $oldBug->openedBy;
+            $bug->assignedTo     = $assignedTo;
             $bug->assignedDate   = $now;
             $bug->lastEditedBy   = $this->app->user->account;
             $bug->lastEditedDate = $now;
