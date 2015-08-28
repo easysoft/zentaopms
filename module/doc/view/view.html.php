@@ -83,9 +83,9 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->doc->basicInfo;?></legend>
-        <table class='table table-data table-condensed table-borderless table-fixed'>
+        <table class='table table-data table-condensed table-borderless'>
          <tr>
-            <th class='w-60px'><?php echo $lang->doc->lib;?></th>
+            <th class='w-80px'><?php echo $lang->doc->lib;?></th>
             <td><?php echo $lib;?></td>
           </tr>
           <tr>
