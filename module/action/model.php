@@ -31,13 +31,17 @@ class actionModel extends model
      */
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '')
     {
+        $actor      = $actor ? $actor : $this->app->user->account;
+        $actionType = strtolower($actionType);
+        if($actor == 'guest' and $actionType == 'logout') return false;
+
         $action = new stdclass();
 
         $objectType = str_replace('`', '', $objectType);
         $action->objectType = strtolower($objectType);
         $action->objectID   = $objectID;
-        $action->actor      = $actor ? $actor : $this->app->user->account;
-        $action->action     = strtolower($actionType);
+        $action->actor      = $actor;
+        $action->action     = $actionType;
         $action->date       = helper::now();
         $action->comment    = trim(strip_tags($comment, $this->config->allowedTags));
         $action->extra      = $extra;
