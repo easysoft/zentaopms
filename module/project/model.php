@@ -1581,4 +1581,17 @@ class projectModel extends model
 
         return array($dateList, $interval);
     }
+
+    /**
+     * Get total estimate.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return float
+     */
+    public function getTotalEstimate($projectID)
+    {
+        $estimate = $this->dao->select('SUM(estimate) as estimate')->from(TABLE_TASK)->where('deleted')->eq('0')->andWhere('project')->eq($projectID)->fetch('estimate');
+        return round($estimate);
+    }
 }

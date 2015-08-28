@@ -737,7 +737,7 @@ class project extends control
         $baselineJSON  = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
+        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : $this->project->getTotalEstimate($projectInfo->id);
         $days         = count($dateList) - 1;
         $rate         = round($firstTime / $days, 2);
         $baselineJSON = '[';
