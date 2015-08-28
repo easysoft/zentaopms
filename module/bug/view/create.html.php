@@ -141,7 +141,7 @@ js::set('refresh', $lang->refresh);
       </tr>
       <tr>
         <th><?php echo $lang->bug->files;?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=2&percent=0.85');?></td>
+        <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>
       </tr>
       <tr>
         <td></td>

@@ -67,7 +67,7 @@
       </tr>  
       <tr id='fileBox'>
         <th><?php echo $lang->doc->files;?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=2');?></td>
+        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
       <tr>
         <td></td>

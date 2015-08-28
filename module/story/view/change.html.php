@@ -50,7 +50,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->attatch;?></th>
-        <td><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></td>
+        <td><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>
       <tr>
         <th><?php echo $lang->story->checkAffection;?></th>

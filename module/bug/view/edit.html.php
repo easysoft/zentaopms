@@ -52,7 +52,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->bug->legendAttatch;?></legend>
-        <div class='form-group'><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></div>
+        <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
       </fieldset>
       <div class='actions'>
         <?php 
