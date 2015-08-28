@@ -73,7 +73,7 @@ class productplanModel extends model
     public function getPairs($product = 0, $expired = '')
     {
         $date = date('Y-m-d');
-        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
+        return array('' => '') + $this->dao->select('id,CONCAT(title, " (", begin, " ~ ", end, ")") as title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF($expired == 'unexpired')
