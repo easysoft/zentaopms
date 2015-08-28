@@ -35,6 +35,12 @@
     <?php
     $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
     $actionLinks = '';
+
+    /* Add story convenient. */
+    echo "<div class='btn-group'>";
+    common::printIcon('story', 'create', "productID=$story->product&moduleID=$story->module", '', 'button', 'plus');
+    echo '</div>';
+
     if(!$story->deleted)
     {
         ob_start();
