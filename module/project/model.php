@@ -1124,7 +1124,7 @@ class projectModel extends model
      */
     public function getTeamMembers($projectID)
     {
-        return $this->dao->select('t1.*, t1.hours * t1.days AS totalHours, t2.realname')->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->fetchAll('account');

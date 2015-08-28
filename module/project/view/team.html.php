@@ -51,7 +51,7 @@
       <td><?php echo $member->hours;?></td>
       <td><?php echo $memberHours;?></td>
       <td>
-        <?php 
+        <?php
         if (common::hasPriv('project', 'unlinkMember'))
         {
             $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
@@ -61,7 +61,7 @@
       </td>
     </tr>
     <?php endforeach;?>
-    </tbody>     
+    </tbody>
     <tfoot>
     <tr>
       <td colspan='7'>
