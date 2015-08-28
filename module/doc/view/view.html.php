@@ -48,18 +48,13 @@
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
-      <fieldset>
-        <legend><?php echo $lang->doc->digest;?></legend>
-        <div><?php echo $doc->digest;?></div>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->doc->keywords;?></legend>
-        <div><?php echo $doc->keywords;?></div>
-      </fieldset>
       <?php if($doc->type == 'url'):?>
       <fieldset>
         <legend><?php echo $lang->doc->url;?></legend>
-        <div><?php echo html::a(urldecode($doc->url), '', '_blank');?></div>
+        <div>
+          <?php echo html::a(urldecode($doc->url), '', '_blank');?>
+          <iframe src='<?php echo urldecode($doc->url);?>' width='100%'frameborder='0' id='url-content'></iframe>
+        </div>
       </fieldset>
       <?php endif;?>
       <?php if($doc->type == 'text'):?>
@@ -68,15 +63,24 @@
         <div class='content'><?php echo $doc->content;?></div>
       </fieldset>
       <?php endif;?>
-      <?php if($doc->type == 'file'):?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
-      <?php endif;?>
-      <?php include '../../common/view/action.html.php';?>
+      <div class='file-content'>
+        <?php if($doc->type == 'file'):?>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
+        <?php endif;?>
+      </div>
       <div class='actions'><?php if(!$doc->deleted) echo $actionLinks;?></div>
     </div>
   </div>
   <div class='col-side'>
     <div class='main main-side'>
+      <fieldset>
+        <legend><?php echo $lang->doc->digest;?></legend>
+        <div><?php echo $doc->digest;?></div>
+      </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->doc->keywords;?></legend>
+        <div><?php echo $doc->keywords;?></div>
+      </fieldset>
       <fieldset>
         <legend><?php echo $lang->doc->basicInfo;?></legend>
         <table class='table table-data table-condensed table-borderless table-fixed'>
@@ -110,6 +114,7 @@
           </tr>
         </table>
       </fieldset>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

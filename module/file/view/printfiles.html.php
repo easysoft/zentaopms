@@ -34,8 +34,8 @@ function downloadFile(fileID)
   {
       if(common::hasPriv('file', 'download'))
       {
-          echo "<li class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;";
-          echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
+          $fileTitle = "<li class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
+          echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle, '_blank', "onclick='return downloadFile($file->id)'");
           echo "<span class='right-icon'>";
           common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit btn-icon' title='{$lang->file->edit}'");
           if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
