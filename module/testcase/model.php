@@ -480,7 +480,7 @@ class testcaseModel extends model
 
         foreach($cases as $key => $caseData)
         {
-            if(!empty($_POST['id'][$key]))
+            if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
             {
                 $caseID      = $data->id[$key];
                 $stepChanged = false;

@@ -153,6 +153,7 @@ class reportModel extends model
         {
             foreach($stories as $story)
             {
+                if(!isset($plans[$story->plan])) continue;
                 $plan = $plans[$story->plan];
                 $products[$plan->product]->plans[$story->plan]->status[$story->status] = isset($products[$plan->product]->plans[$story->plan]->status[$story->status]) ? $products[$plan->product]->plans[$story->plan]->status[$story->status] + 1 : 1;
             }

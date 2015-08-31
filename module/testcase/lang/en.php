@@ -75,7 +75,8 @@ $lang->testcase->confirmStoryChange = 'Confirm story change';
 
 $lang->testcase->new = 'New';
   
-$lang->testcase->num = 'The number of cases';
+$lang->testcase->num    = 'The number of cases';
+$lang->testcase->insert = 'New insertion';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Insert before';

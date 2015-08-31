@@ -3,7 +3,7 @@
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
 <form target='hiddenwin' method='post' class='form-condensed'>
-<table class='table table-fixed active-disabled'>
+<table class='table table-fixed active-disabled table-custom'>
   <thead>
     <tr>
       <th class='w-80px'><?php echo $lang->testcase->id?></th>
@@ -28,6 +28,8 @@
       </th>
     </tr>
   </thead>
+  <tbody>
+  <?php $insert = true;?>
   <?php foreach($caseData as $key => $case):?>
   <?php if(empty($case->title)) continue;?>
   <tr valign='top' align='center'>
@@ -36,6 +38,7 @@
       if(!empty($case->id))
       {
           echo $case->id . html::hidden("id[$key]", $case->id);
+          $insert = false;
       }
       else
       {
@@ -65,11 +68,14 @@
       <?php endif;?>
     </td>
   </tr>
-  <?php unset($caseData[$key]);?>
   <?php endforeach;?>
+  </tbody>
   <tfoot>
     <tr>
-      <td colspan='10' class='text-center'><?php echo html::submitButton() . ' &nbsp; ' . html::backButton()?></td>
+      <td colspan='10' class='text-center'>
+        <?php if(!$insert) echo "<label for='insert' class='pull-left'><input type='checkbox' id='insert' name='insert' value='1' />{$lang->testcase->insert}</label>"?>
+        <?php echo html::submitButton() . ' &nbsp; ' . html::backButton()?>
+      </td>
     </tr>
   </tfoot>
 </table>
@@ -79,7 +85,7 @@ $(function(){affix('thead')})
 function affix(obj)
 {
     var fixH = $(obj).offset().top;
-    var first = true;          
+    var first = true;
     $(window).scroll(function()
     {
         var scroH = $(this).scrollTop();
@@ -88,7 +94,7 @@ function affix(obj)
             $(obj).parent().parent().before("<table id='headerClone' class='table'></table>");
             $('#headerClone').append($(obj).clone()).addClass('affix');
             $('.active-disabled ' + obj + ' th').each(function(i){$('#headerClone ' + obj + ' th').eq(i).width($(this).width())});
-            first = false;     
+            first = false;
         }
         else if(scroH<fixH)    
         {
