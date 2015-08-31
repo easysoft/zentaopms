@@ -579,8 +579,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .side-body {overflow: hidden;}
 .outer .side-body .panel {min-width: 180px;}
 .outer .side-body .panel-body {padding: 10px;}
-.outer .side-handle {position: absolute; text-align: center; cursor: pointer; right: 0; top: 0; width: 15px; padding: 0; line-height: 32px; border: 1px solid #d1d1d1; background: #d5d5d5; color: #555; transition: all 0.3s; z-index: 99}
-.outer .side-handle:hover {background: #c5c5c5; color: #101010}
+.outer .side-handle {position: absolute; text-align: center; cursor: pointer; right: 0; top: 0; width: 15px; padding: 0; line-height: 32px; border: 1px solid #d1d1d1; background: #d5d5d5; color: #03c; transition: all 0.3s; z-index: 99}
+.outer .side-handle:hover {background: #c5c5c5; color: #04f}
 .outer.with-transition .side, .outer .side-handle.with-transition {transition: all 0.3s;}
 
 .outer.hide-side .side{width: 0; border: none;}
