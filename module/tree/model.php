@@ -344,6 +344,7 @@ class treeModel extends model
         if(!$manage) $projectModules = $this->getTaskTreeModules($rootID, true);
 
         /* Get module according to product. */
+        $productNum = count($products);
         foreach($products as $id => $product)
         {
             $extra['productID'] = $id;
@@ -354,7 +355,7 @@ class treeModel extends model
             else
             {
                 $link  = helper::createLink('project', 'task', "root=$rootID&status=byProduct&praram=$id");
-                $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+                if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
             }
 
             /* tree menu. */
@@ -392,9 +393,9 @@ class treeModel extends model
                 $treeMenu[$module->parent] .= "</li>\n";
             }
 
-            $tree     = isset($treeMenu[0]) ? $treeMenu[0] : '';
-            $lastMenu = "<ul>" . $tree . "</ul>\n";
-            $menu    .= $lastMenu . '</li>';
+            $tree = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            if($productNum > 1 or $manage) $tree = "<ul>" . $tree . "</ul>\n</li>";
+            $menu .= $tree;
         }
 
         /* Get project module. */
@@ -464,12 +465,13 @@ class treeModel extends model
         $projectModules = $this->getTaskTreeModules($rootID, true);
 
         /* Get module according to product. */
-        $products = $this->loadModel('product')->getProductsByProject($rootID);
+        $products   = $this->loadModel('product')->getProductsByProject($rootID);
+        $productNum = count($products);
         foreach($products as $id => $product)
         {
             $extra['productID'] = $id;
             $link  = helper::createLink('project', 'story', "project=$rootID&ordery=&status=byProduct&praram=$id");
-            $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+            if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
 
             /* tree menu. */
             $treeMenu = array();
@@ -506,9 +508,9 @@ class treeModel extends model
                 $treeMenu[$module->parent] .= "</li>\n";
             }
 
-            $tree     = isset($treeMenu[0]) ? $treeMenu[0] : '';
-            $lastMenu = "<ul>" . $tree . "</ul>\n";
-            $menu    .= $lastMenu . '</li>';
+            $tree = isset($treeMenu[0]) ? $treeMenu[0] : '';
+            if($productNum > 1) $tree = "<ul>" . $tree . "</ul>\n</li>";
+            $menu .= $tree;
         }
 
         $menu .= '</ul>';
