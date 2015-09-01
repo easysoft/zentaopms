@@ -480,7 +480,7 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-    if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
+//    if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
 
     var side   = $('#wrap .outer > .side');
     var resetOuterHeight = function()

@@ -98,7 +98,7 @@ $lang->user->closedBy    = '由他关闭';
 $lang->user->reviewedBy  = '由他评审';
 $lang->user->canceledBy  = '由他取消';
 
-$lang->user->testTask2Him = '他的任务';
+$lang->user->testTask2Him = '负责版本';
 $lang->user->case2Him     = '给他的用例';
 $lang->user->caseByHim    = '他建的用例';
 

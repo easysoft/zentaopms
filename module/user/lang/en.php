@@ -98,7 +98,7 @@ $lang->user->closedBy    = 'Closed by him';
 $lang->user->reviewedBy  = 'Reviewed by him';
 $lang->user->canceledBy  = 'Canceled by him';
 
-$lang->user->testTask2Him = 'His task';
+$lang->user->testTask2Him = 'His build';
 $lang->user->case2Him     = 'His case';
 $lang->user->caseByHim    = 'Case he opened';
 
