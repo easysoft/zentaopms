@@ -71,10 +71,17 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
+      <?php if($task->fromBug != 0):?>
+      <fieldset>
+        <legend><?php echo $lang->bug->steps;?></legend>
+        <div class='article-content'><?php echo $task->bugSteps;?></div>
+      </fieldset>
+      <?php else:?>
       <fieldset>
         <legend><?php echo $lang->task->storySpec;?></legend>
         <div class='article-content'><?php echo $task->storySpec;?></div>
       </fieldset>
+      <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>

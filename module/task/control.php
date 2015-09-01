@@ -432,8 +432,25 @@ class task extends control
         $task = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $story           = $this->story->getById($task->story);
-        $task->storySpec = ($story != null) ? $story->spec : '';
+        if($task->fromBug != 0)
+        {
+            $bug = $this->loadModel('bug')->getById($task->fromBug);
+            if($bug)
+            {
+                $task->bugSteps = $bug->steps;
+                foreach($bug->files as $file) $task->files[] = $file;
+            }
+        }
+        else
+        {
+            $story = $this->story->getById($task->story);
+            if($story)
+            {
+                $task->storySpec = $story->spec;
+                $story->files    = $this->loadModel('file')->getByObject('story', $task->story);
+                foreach($story->files as $file) $task->files[] = $file;
+            }
+        }
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
