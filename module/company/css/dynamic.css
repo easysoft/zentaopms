@@ -1,0 +1,4 @@
+#featurebar ul.nav li .chosen-container{height:20px;}
+#featurebar ul.nav li .chosen-container a.chosen-single{background:#F8FAFE; border:none; -webkit-box-shadow:none;box-shadow:none; font-size:13px;}
+#featurebar ul.nav li.active .chosen-container a.chosen-single{font-weight:bold}
+#featurebar ul.nav li .chosen-container .chosen-drop {min-width: 300px;!important}
