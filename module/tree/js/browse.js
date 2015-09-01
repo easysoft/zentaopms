@@ -43,8 +43,16 @@ function syncProductOrProject(obj, type)
     $('#copyModule').bind('click', function(){syncModule(obj.value, viewType)});
 }
 
+function toggleCopy()
+{
+   var $copy = $('table.copy');
+   if($copy.size() == 0) return false;
+   $copy.toggle();
+}
+
 $(document).ready(function()
 {
+    toggleCopy();
 //    $("#submenucreate").modalTrigger({type: 'iframe', width: 500});
 //    $("#submenuedit").modalTrigger({type: 'iframe', width: 500});
 });

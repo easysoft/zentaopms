@@ -38,6 +38,9 @@
           <i class='icon-sitemap'></i> 
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
           <?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
+          <?php if($viewType == 'story' and $allProduct):?>
+          <div class='panel-actions pull-right'><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm'")?></div>
+          <?php endif;?>
         </div>
         <div class='panel-body'>
           <table class='table table-form'>
@@ -57,16 +60,13 @@
               </td>
               <td id='moduleBox'> 
                 <?php
-                if($viewType == 'story')
+                if($viewType == 'story' and $allProduct)
                 {
-                    if($allProduct)
-                    {
-                        echo "<table class='copy w-p100'><tr>";
-                        echo "<td class='w-260px'>" . html::select('allProduct', $allProduct, '', "class='form-control chosen' onchange=\"syncProductOrProject(this,'product')\"") . '</td>';
-                        echo "<td class='w-200px'>" . html::select('productModule', $productModules, '', "class='form-control chosen'") . '</td>';
-                        echo "<td class=''>" . html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'") . '</td>';
-                        echo '</tr></table>';
-                    }
+                    echo "<table class='copy w-p100'><tr>";
+                    echo "<td class='w-260px'>" . html::select('allProduct', $allProduct, '', "class='form-control chosen' onchange=\"syncProductOrProject(this,'product')\"") . '</td>';
+                    echo "<td class='w-200px'>" . html::select('productModule', $productModules, '', "class='form-control chosen'") . '</td>';
+                    echo "<td class=''>" . html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'") . '</td>';
+                    echo '</tr></table>';
                 }
                 $maxOrder = 0;
                 echo '<div id="sonModule">';
