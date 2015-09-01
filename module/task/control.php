@@ -435,6 +435,7 @@ class task extends control
         if($task->fromBug != 0)
         {
             $bug = $this->loadModel('bug')->getById($task->fromBug);
+            $task->bugSteps = '';
             if($bug)
             {
                 $task->bugSteps = $bug->steps;
@@ -444,12 +445,7 @@ class task extends control
         else
         {
             $story = $this->story->getById($task->story);
-            if($story)
-            {
-                $task->storySpec = $story->spec;
-                $story->files    = $this->loadModel('file')->getByObject('story', $task->story);
-                foreach($story->files as $file) $task->files[] = $file;
-            }
+            $task->storySpec = empty($story) ? '' : $story->spec;
         }
 
         /* Update action. */
