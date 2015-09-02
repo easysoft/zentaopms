@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::import($jsRoot . 'misc/date.js');?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -33,11 +34,14 @@
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $plan->begin, 'class="form-control form-date"');?></td>
+        <td><?php echo html::input('begin', $plan->begin, "class='form-control form-date'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->productplan->end;?></th>
         <td><?php echo html::input('end', $plan->end, 'class="form-control form-date"');?></td>
+        <td>
+          &nbsp; &nbsp; <?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->desc;?></th>
