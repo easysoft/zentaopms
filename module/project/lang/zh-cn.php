@@ -115,6 +115,7 @@ $lang->project->burn             = '燃尽图';
 $lang->project->baseline         = '基准线';
 $lang->project->computeBurn      = '更新';
 $lang->project->burnData         = '燃尽图数据';
+$lang->project->fixFirst         = '修复首天值';
 $lang->project->team             = '团队成员';
 $lang->project->doc              = '文档列表';
 $lang->project->manageProducts   = '关联' . $lang->productCommon;
@@ -230,7 +231,8 @@ $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code = '团队内部的简称';
+$lang->project->placeholder->code      = '团队内部的简称';
+$lang->project->placeholder->totalLeft = '总剩余工时';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->doing     = '(进行中)';

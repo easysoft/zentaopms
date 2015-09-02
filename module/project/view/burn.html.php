@@ -26,6 +26,7 @@
       <?php
       $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
       echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn btn-sm'");
+      common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-sm iframe' data-width='500'");
       common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary btn-sm' id='computeBurn'");
       echo $lang->project->howToUpdateBurn;
       ?>

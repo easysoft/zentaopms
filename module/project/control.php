@@ -796,6 +796,25 @@ class project extends control
     }
 
     /**
+     * Fix burn for first date.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function fixFirst($projectID)
+    {
+        if($_POST)
+        {
+            $this->project->fixFirst($projectID);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->project = $this->project->getById($projectID);
+        $this->display();
+    }
+
+    /**
      * Browse team of a project.
      *
      * @param  int    $projectID

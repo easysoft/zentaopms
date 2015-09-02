@@ -1283,6 +1283,30 @@ class projectModel extends model
     }
 
     /**
+     * Fix burn for first day.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function fixFirst($projectID)
+    {
+        $project = $this->getById($projectID);
+        $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)
+            ->andWhere('date')->eq($project->begin)
+            ->fetch();
+
+        $data = fixer::input('post')
+            ->add('project', $projectID)
+            ->add('date', $project->begin)
+            ->add('consumed', empty($burn) ? 0 : $burn->consumed)
+            ->get();
+        if(!is_numeric($data->left)) return false;
+
+        $this->dao->replace(TABLE_BURN)->data($data)->exec();
+    }
+
+    /**
      * Get data of burn down chart.
      * 
      * @param  int    $projectID 

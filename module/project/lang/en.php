@@ -115,6 +115,7 @@ $lang->project->burn             = 'Burndown';
 $lang->project->baseline         = 'Base Line';
 $lang->project->computeBurn      = 'Update';
 $lang->project->burnData         = 'Burndown data';
+$lang->project->fixFirst         = 'Fix first data';
 $lang->project->team             = 'Team';
 $lang->project->doc              = 'Doc';
 $lang->project->manageProducts   = 'Link ' . $lang->productCommon;
@@ -230,7 +231,8 @@ $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code = "{$lang->projectCommon} code";
+$lang->project->placeholder->code      = "{$lang->projectCommon} code";
+$lang->project->placeholder->totalLeft = 'Total left';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->doing     = '(doing)';
