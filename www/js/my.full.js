@@ -1323,12 +1323,24 @@ function computePasswordStrength(password)
     return strength;
 }
 
+/**
+ * Check onlybody page when it is not open in modal then location to on onlybody page. 
+ * 
+ * @access public
+ * @return void
+ */
+function checkOnlybodyPage()
+{
+    if(location.href == top.location.href) location.href = location.href.replace('onlybody=yes', '');
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
+    if(onlybody == 'yes') checkOnlybodyPage();
     $('body').addClass('m-{currentModule}-{currentMethod}'.format(config));
 
     setModal();

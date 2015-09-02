@@ -49,7 +49,7 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 /* columns */
 .row-table {display: table; width: 100%}
 .col-side, .col-main {padding: 0; display: table-cell; vertical-align: top;}
-.col-side {width: 350px; padding-left: 10px;}
+.col-side {width: 350px; max-width:350px; padding-left: 10px;}
 .col-main {padding-right: 10px;}
 .row-table-side-left .col-side {padding-right: 10px; padding-left: 0;}
 .row-table-side-left .col-main {padding-left: 10px; padding-right: 0;}

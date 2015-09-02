@@ -1,4 +1,8 @@
-<style>#actionbox a{font-weight:normal}</style>
+<style>
+#actionbox a{font-weight:normal}
+.col-side fieldset#actionbox{padding-right:5px;}
+.col-side #actionbox #historyItem li span.item{white-space:nowrap}
+</style>
 <script language='Javascript'>
 var fold   = '<?php echo $lang->fold;?>';
 var unfold = '<?php echo $lang->unfold;?>';
@@ -132,7 +136,7 @@ $(function()
       if($action->action == 'assigned' and isset($users[$action->extra]) ) $action->extra = $users[$action->extra];
       if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
       ?>
-      <span>
+      <span class='item'>
         <?php $this->action->printAction($action);?>
         <?php if(!empty($action->history)) echo "<a id='switchButton$i' class='switch-btn btn-icon' onclick='switchChange($i)' href='javascript:;'><i class='change-show icon-'></i></a>";?>
       </span>
