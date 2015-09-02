@@ -23,18 +23,12 @@
         <?php echo html::select('interval', $dayList, $interval, "class='form-control'");?>
       </div>
       <?php endif;?>
-      <div class='input-group input-group-sm pull-left w-100px'>
-        <?php
-        $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
-        echo "<span class='input-group-btn'>";
-        echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn'");
-        echo '</span>';
-        echo "<span class='input-group-btn'>";
-        common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary' id='computeBurn'");
-        echo '</span>';
-        ?>
-      </div>
-      <div class='text pull-left'><?php echo $lang->project->howToUpdateBurn;?></div>
+      <?php
+      $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
+      echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn btn-sm'");
+      common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary btn-sm' id='computeBurn'");
+      echo $lang->project->howToUpdateBurn;
+      ?>
     </div>
   </div>
   <div class='canvas-wrapper'><div class='chart-canvas'><canvas id='burnChart' width='800' height='400' data-bezier-curve='false' data-responsive='true'></canvas></div></div>
