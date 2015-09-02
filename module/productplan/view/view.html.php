@@ -43,8 +43,8 @@
   ?>
   </div>
 </div>
-<div class='row'>
-  <div class='col-sm-8 col-lg-9'>
+<div class='row-table'>
+  <div class='col-main'>
     <div class='main'>
       <div class='tabs'>
         <ul class='nav nav-tabs'>
@@ -197,7 +197,7 @@
       </div>
     </div>
   </div>
-  <div class='col-sm-4 col-lg-3'>
+  <div class='col-side'>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->productplan->desc;?></legend>

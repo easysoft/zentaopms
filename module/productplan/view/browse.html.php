@@ -18,6 +18,7 @@
     <?php common::printIcon('productplan', 'create', "productID=$product->id", '', 'button', 'plus');?>
   </div>
 </div>
+<form method='post' action='<?php echo inlink('batchEdit', "productID=$product->id")?>'>
 <table class='table' id="productplan">
   <thead>
   <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -33,7 +34,10 @@
   <tbody>
   <?php foreach($plans as $plan):?>
   <tr class='text-center'>
-    <td><?php echo $plan->id;?></td>
+    <td class='text-left'>
+      <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' /> 
+      <?php echo $plan->id;?>
+    </td>
     <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
     <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
     <td><?php echo $plan->begin;?></td>
@@ -54,6 +58,15 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot>
+    <tr>
+      <td colspan='6'>
+        <?php echo html::selectButton();?>
+        <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
+        <?php $pager->show();?>
+      </td>
+    </tr>
+  </tfoot>
 </table>
+</form>
 <?php include '../../common/view/footer.html.php';?>

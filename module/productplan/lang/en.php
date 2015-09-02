@@ -18,6 +18,7 @@ $lang->productplan->delete     = "Delete";
 $lang->productplan->view       = "Info";
 $lang->productplan->bugSummary = "Total %s bugs in this page";
 $lang->productplan->basicInfo  = 'Basic Info';
+$lang->productplan->batchEdit  = 'Batch edit';
 
 $lang->productplan->batchUnlink      = "Batch Remove";
 $lang->productplan->linkStory        = "Link story";
@@ -50,3 +51,8 @@ $lang->productplan->endList[62]  = 'Two Months';
 $lang->productplan->endList[93]  = 'Three Months';
 $lang->productplan->endList[186] = 'Half Of Year';
 $lang->productplan->endList[365] = 'One Year';
+
+$lang->productplan->errorNoTitle = 'Title of ID %s can not empty';
+$lang->productplan->errorNoBegin = 'Begin of ID %s can not empty';
+$lang->productplan->errorNoEnd   = 'End of ID %s can not empty';
+$lang->productplan->beginGeEnd   = 'Begin of ID %s can not more than end.';

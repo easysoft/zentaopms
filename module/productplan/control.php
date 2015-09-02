@@ -90,6 +90,39 @@ class productplan extends control
         $this->view->plan = $plan;
         $this->display();
     }
+
+    /**
+     * Batch edit plan.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($productID)
+    {
+        if(isset($_POST['planIDList']))
+        {
+            $this->commonAction($productID);
+            $this->view->title      = $this->lang->productplan->batchEdit;
+            $this->view->position[] = html::a(inlink('browse', "productID=$productID"), $this->lang->productplan->common);
+            $this->view->position[] = $this->lang->productplan->batchEdit;
+
+            $this->view->plans = $this->productplan->getByIDList($this->post->planIDList);
+            die($this->display());
+        }
+        elseif($_POST)
+        {
+            $changes = $this->productplan->batchUpdate($productID);
+            $this->loadModel('action');
+            foreach($changes as $planID => $change)
+            {
+                $actionID = $this->action->create('productplan', $planID, 'Edited');
+                $this->action->logHistory($actionID, $change);
+            }
+            die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+        }
+        die(js::locate('back'));
+    }
                                                           
     /**
      * Delete a plan.

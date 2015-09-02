@@ -200,6 +200,7 @@ $lang->resource->productplan->batchUnlinkStory = 'batchUnlinkStory';
 $lang->resource->productplan->linkBug          = 'linkBug';
 $lang->resource->productplan->unlinkBug        = 'unlinkBug';
 $lang->resource->productplan->batchUnlinkBug   = 'batchUnlinkBug';
+$lang->resource->productplan->batchEdit        = 'batchEdit';
 
 $lang->productplan->methodOrder[5]  = 'browse';
 $lang->productplan->methodOrder[10] = 'create';
@@ -212,6 +213,7 @@ $lang->productplan->methodOrder[40] = 'batchUnlinkStory';
 $lang->productplan->methodOrder[45] = 'linkBug';
 $lang->productplan->methodOrder[50] = 'unlinkBug';
 $lang->productplan->methodOrder[55] = 'batchUnlinkBug';
+$lang->productplan->methodOrder[60] = 'batchEdit';
 
 /* Release. */
 $lang->resource->release = new stdclass();
@@ -1077,3 +1079,4 @@ $lang->changelog['7.2'][] = 'product-updateOrder';
 $lang->changelog['7.2'][] = 'project-updateOrder';
 
 $lang->changelog['7.3'][] = 'project-fixFirst';
+$lang->changelog['7.3'][] = 'productplan-batchEdit';

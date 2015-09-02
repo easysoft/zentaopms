@@ -29,6 +29,18 @@ class productplanModel extends model
     }
 
     /**
+     * Get plans by idList 
+     * 
+     * @param  int    $planIDList 
+     * @access public
+     * @return array
+     */
+    public function getByIDList($planIDList)
+    {
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->orderBy('begin desc')->fetchAll('id');
+    }
+
+    /**
      * Get last plan.
      * 
      * @param  int    $productID 
@@ -134,6 +146,49 @@ class productplanModel extends model
             ->where('id')->eq((int)$planID)
             ->exec();
         if(!dao::isError()) return common::createChanges($oldPlan, $plan);
+    }
+
+    /**
+     * Batch update plan.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
+    public function batchUpdate($productID)
+    {
+        $data = fixer::input('post')->get();
+        $oldPlans = $this->getByIDList($data->id);
+
+        $plans = array();
+        foreach($data->id as $planID)
+        {
+            $plan = new stdclass();
+            $plan->title = $data->title[$planID];
+            $plan->begin = $data->begin[$planID];
+            $plan->end   = $data->end[$planID];
+
+            if(empty($plan->title))die(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+            if(empty($plan->begin))die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
+            if(empty($plan->end))  die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
+            if($plan->begin > $plan->end) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+
+            $plans[$planID] = $plan;
+        }
+
+        $changes = array();
+        foreach($plans as $planID => $plan)
+        {
+            $change = common::createChanges($oldPlans[$planID], $plan);
+            if($change)
+            {
+                $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq($planID)->exec();
+                if(dao::isError()) die(js::error(dao::getError()));
+                $changes[$planID] = $change;
+            }
+        }
+
+        return $changes;
     }
 
     /**

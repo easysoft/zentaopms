@@ -18,6 +18,7 @@ $lang->productplan->delete     = "删除计划";
 $lang->productplan->view       = "计划详情";
 $lang->productplan->bugSummary = "本页共 <strong>%s</strong> 个Bug";
 $lang->productplan->basicInfo  = '基本信息';
+$lang->productplan->batchEdit  = '批量编辑';
 
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->linkStory        = "关联需求";
@@ -50,3 +51,8 @@ $lang->productplan->endList[62]  = '两个月';
 $lang->productplan->endList[93]  = '三个月';
 $lang->productplan->endList[186] = '半年';
 $lang->productplan->endList[365] = '一年';
+
+$lang->productplan->errorNoTitle = 'ID %s 标题不能为空';
+$lang->productplan->errorNoBegin = 'ID %s 开始时间不能为空';
+$lang->productplan->errorNoEnd   = 'ID %s 结束时间不能为空';
+$lang->productplan->beginGeEnd   = 'ID %s 开始时间不能大于结束时间';
