@@ -46,7 +46,7 @@
     <table class='table tablesorter table-condensed table-fixed' id='storyList'>
       <thead>
         <tr class='colhead'>
-        <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param"; ?>
+        <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
           <th class='w-id  {sorter:false}'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
           <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='{sorter:false}'>          <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
@@ -147,6 +147,7 @@
             echo "<div class='text'>" . $summary . '</div>';
             ?>
             </div>
+            <?php echo $pager->show();?>
           </td>
         </tr>
       </tfoot>

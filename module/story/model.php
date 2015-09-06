@@ -1181,7 +1181,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc', $type = 'byModule', $param = 0)
+    public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc', $type = 'byModule', $param = 0, $pager = null)
     {
         $modules = ($type == 'byModule' and $param) ? $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$param,%")->andWhere('type')->eq('story')->fetchPairs('id', 'id') : array();
         $stories = $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -1191,6 +1191,7 @@ class storyModel extends model
             ->beginIF($type == 'byModule' and $param)->andWhere('t2.module')->in($modules)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
         return $stories;
     }

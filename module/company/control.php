@@ -129,6 +129,7 @@ class company extends control
             die(js::reload('parent.parent'));
         }
 
+        $this->company->setMenu();
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
         $position[] = $this->lang->company->edit;
         $this->view->title     = $title;

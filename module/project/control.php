@@ -529,7 +529,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = '', $type = 'byModule', $param = 0)
+    public function story($projectID = 0, $orderBy = '', $type = 'byModule', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -554,8 +554,12 @@ class project extends control
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->story;
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* The pager. */
-        $stories    = $this->story->getProjectStories($projectID, $sort, $type, $param);
+        $stories    = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
@@ -583,6 +587,7 @@ class project extends control
         $this->view->moduleTree = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
         $this->view->tabID      = 'story';
         $this->view->users      = $users;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
