@@ -68,7 +68,21 @@
     <div class='main'>
       <fieldset>
         <legend><?php echo $lang->bug->legendSteps;?></legend>
-        <div class='content'><?php echo str_replace('<p>[', '<p class="stepTitle">[', $bug->steps);?></div>
+        <div class='content'>
+          <?php
+          $tplStep = strip_tags(trim($lang->bug->tplStep));
+          $steps   = str_replace('<p>' . $tplStep, '<p class="stepTitle">' . $tplStep . '</p><p>', $bug->steps);
+
+          $tplResult = strip_tags(trim($lang->bug->tplResult));
+          $steps     = str_replace('<p>' . $tplResult, '<p class="stepTitle">' . $tplResult . '</p><p>', $steps);
+
+          $tplExpect = strip_tags(trim($lang->bug->tplExpect));
+          $steps     = str_replace('<p>' . $tplExpect, '<p class="stepTitle">' . $tplExpect . '</p><p>', $steps);
+
+          $steps = str_replace('<p></p>', '', $steps);
+          echo $steps;
+          ?>
+        </div>
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
