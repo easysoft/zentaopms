@@ -13,6 +13,7 @@
 <?php
 $jsRoot = $this->app->getWebRoot() . "js/";
 include '../../common/view/datepicker.html.php';
+include '../../common/view/chosen.html.php';
 ?>
 <style>
 #bysearchTab {transition: all .3s cubic-bezier(.175, .885, .32, 1);}
@@ -38,7 +39,7 @@ include '../../common/view/datepicker.html.php';
 #selectPeriod li > a {padding: 4px 15px; border-radius: 2px}
 
 #moreOrLite {position: absolute; right: 0; top: 0; bottom: 0}
-#searchlite, #searchmore {color: #4d90fe; width: 50px; padding: 0 5px; line-height: 70px; text-align: center;}
+#searchlite, #searchmore {color: #4d90fe; width: 50px; padding: 0 5px; line-height: 60px; text-align: center;}
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
@@ -158,6 +159,16 @@ function setField(obj, fieldNO, moduleparams)
             setDateField($(obj).parents('form').find("#value" + nextNO), nextNO);
             $(obj).parents('form').find("#value" + nextNO).addClass('date');
         }
+    }
+    else if(params[fieldName]['control'] == 'select')
+    {
+        $(obj).parents('form').find("#value" + fieldNO).chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
+        {
+            var $this = $(this);
+            var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
+            var $drop = $chosen.find('.chosen-drop');
+            $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+        });
     }
 }
 
@@ -306,7 +317,7 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Print value. */
           echo "<td id='valueBox$fieldNO'>";
-          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect'");
+          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
           if($param['control'] == 'input') 
           {
               $fieldName  = $formSession["field$fieldNO"];
@@ -348,7 +359,7 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Print value. */
           echo "<td id='valueBox$fieldNO'>";
-          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect'");
+          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
 
           if($param['control'] == 'input')
           {
