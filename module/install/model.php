@@ -133,14 +133,10 @@ class installModel extends model
      */
     public function getSessionSavePath()
     {
-        if(preg_match('/WIN/i', PHP_OS))
-        {
-            $result['path']     = preg_replace("/\d;/", '', session_save_path());
-            $result['exists']   = is_dir($result['path']);
-            $result['writable'] = is_writable($result['path']);
-            return $result;
-        }
-        return array('path' => '/tmp', 'exists' => true, 'writable' => true);
+        $result['path']     = preg_replace("/\d;/", '', session_save_path());
+        $result['exists']   = is_dir($result['path']);
+        $result['writable'] = is_writable($result['path']);
+        return $result;
     }
 
     /**

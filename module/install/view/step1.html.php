@@ -79,7 +79,6 @@
             ?>
           </td>
         </tr>
-        <?php if(preg_match('/WIN/i', PHP_OS)):?>
         <tr>
           <th><?php echo $lang->install->session;?></th>
           <td>
@@ -103,7 +102,6 @@
             ?>
           </td>
         </tr>
-        <?php endif;?>
       </table>
     </div>
     <div class='modal-footer'>
