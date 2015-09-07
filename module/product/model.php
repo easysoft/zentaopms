@@ -121,6 +121,18 @@ class productModel extends model
     }
 
     /**
+     * Get by idList.
+     * 
+     * @param  array    $productIDList 
+     * @access public
+     * @return array
+     */
+    public function getByIdList($productIDList)
+    {
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
+    }
+
+    /**
      * Get products.
      * 
      * @param  string $status 
@@ -217,7 +229,7 @@ class productModel extends model
             ->exec();
 
         $productID = $this->dao->lastInsertID();
-        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID)->where('id')->eq($productID)->exec();
+        $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         return $productID;
     }
 
@@ -256,8 +268,9 @@ class productModel extends model
      */
     public function batchUpdate()
     {
-        $products   = array();
-        $allChanges = array();
+        $products    = array();
+        $allChanges  = array();
+        $oldProducts = $this->getByIdList($this->post->productIDList);
         foreach($this->post->productIDList as $productID)
         {
             $products[$productID] = new stdClass();
@@ -267,11 +280,12 @@ class productModel extends model
             $products[$productID]->QD     = $this->post->QDs[$productID];
             $products[$productID]->RD     = $this->post->RDs[$productID];
             $products[$productID]->status = $this->post->statuses[$productID];
+            $products[$productID]->order  = $this->post->orders[$productID];
         }
 
         foreach($products as $productID => $product)
         {
-            $oldProduct = $this->getById($productID);
+            $oldProduct = $oldProducts[$productID];
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()
@@ -283,6 +297,7 @@ class productModel extends model
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
+        $this->fixOrder();
         return $allChanges;
     }
     
@@ -678,5 +693,25 @@ class productModel extends model
             $link = helper::createLink($module, $method, "productID=%s&type=$extra");
         }
         return $link;
+    }
+
+    /**
+     * Fix order.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixOrder()
+    {
+        $products = $this->dao->select('id,`order`')->from(TABLE_PRODUCT)->orderBy('order')->fetchPairs('id', 'order');
+
+        $i = 0;
+        foreach($products as $id => $order)
+        {
+            $i++;
+            $newOrder = $i * 5;
+            if($order == $newOrder) continue;
+            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($newOrder)->where('id')->eq($id)->exec();
+        }
     }
 }

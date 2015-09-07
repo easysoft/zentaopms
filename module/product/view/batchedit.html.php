@@ -27,6 +27,7 @@
         <th class='w-150px'><?php echo $lang->product->QD;?></th>
         <th class='w-150px'><?php echo $lang->product->RD;?></th>
         <th class='w-100px'><?php echo $lang->product->status;?></th>
+        <th class='w-80px'><?php echo $lang->product->order;?></th>
       </tr>
     </thead>
     <?php foreach($productIDList as $productID):?>
@@ -38,9 +39,10 @@
       <td class='text-left' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
       <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
+      <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr><td colspan='7' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='8' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

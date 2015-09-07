@@ -123,6 +123,8 @@ class upgradeModel extends model
             case '7_2':
             case '7_2_4':
                 $this->execSQL($this->getUpgradeFile('7.2.4'));
+            case '7_2_5':
+                $this->adjustOrder7_3();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -938,6 +940,23 @@ class upgradeModel extends model
         $dataList = $this->dao->select('id')->from(TABLE_PROJECT)->orderBy('code_desc')->fetchAll();
         $i = 1;
         foreach($dataList as $data) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
+
+        return true;
+    }
+
+    /**
+     * Adjust order for 7.3
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustOrder7_3()
+    {
+        $products = $this->dao->select('`order`')->from(TABLE_PRODUCT)->orderBy('order desc')->limit(2)->fetchAll();
+        if(count($products) == 2 and ($products[0]->order - $products[1]->order) != 5) $this->dao->update(TABLE_PRODUCT)->set('`order`=`order` * 5')->exec();
+
+        $projects = $this->dao->select('`order`')->from(TABLE_PROJECT)->orderBy('order desc')->limit(2)->fetchAll();
+        if(count($projects) == 2 and ($projects[0]->order - $projects[1]->order) != 5) $this->dao->update(TABLE_PROJECT)->set('`order`=`order` * 5')->exec();
 
         return true;
     }

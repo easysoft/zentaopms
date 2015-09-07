@@ -29,6 +29,7 @@
       <th class='w-110px'><?php echo $lang->project->begin;?> <span class='required'></span></th>
       <th class='w-110px'><?php echo $lang->project->end;?> <span class='required'></span></th>
       <th class='w-150px'><?php echo $lang->project->days;?></th>
+      <th class='w-80px'><?php echo $lang->project->order;?></th>
     </tr>
   </thead>
   <?php foreach($projectIDList as $projectID):?>
@@ -46,9 +47,10 @@
         <span class='input-group-addon'><?php echo $lang->project->day;?></span>
       </div>
     </td>
+    <td><?php echo html::input("orders[$projectID]", $projects[$projectID]->order, "class='form-control' autocomplete='off'")?></td>
   </tr>
   <?php endforeach;?>
-  <tr><td colspan='8' class='text-center'><?php echo html::submitButton();?></td></tr>
+  <tr><td colspan='9' class='text-center'><?php echo html::submitButton();?></td></tr>
 </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

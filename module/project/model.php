@@ -239,7 +239,7 @@ class projectModel extends model
             $creatorExists = false;
 
             /* Save order. */
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID)->where('id')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
 
             /* Copy team of project. */
             if($copyProjectID != '') 
@@ -332,8 +332,9 @@ class projectModel extends model
      */
     public function batchUpdate()
     {
-        $projects   = array();
-        $allChanges = array();
+        $projects    = array();
+        $allChanges  = array();
+        $oldProjects = $this->getByIdList($this->post->projectIDList);
         foreach($this->post->projectIDList as $projectID)
         {
             $projects[$projectID] = new stdClass();
@@ -344,11 +345,12 @@ class projectModel extends model
             $projects[$projectID]->begin  = $this->post->begins[$projectID];
             $projects[$projectID]->end    = $this->post->ends[$projectID];
             $projects[$projectID]->days   = $this->post->dayses[$projectID];
+            $projects[$projectID]->order  = $this->post->orders[$projectID];
         }
 
         foreach($projects as $projectID => $project)
         {
-            $oldProject = $this->getById($projectID);
+            $oldProject = $oldProjects[$projectID];
             $team       = $this->getTeamMemberPairs($projectID);
 
             $this->dao->update(TABLE_PROJECT)->data($project)
@@ -378,6 +380,7 @@ class projectModel extends model
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
+        $this->fixOrder();
         return $allChanges;
     }
 
@@ -525,6 +528,18 @@ class projectModel extends model
             $pairs[$firstProject->id] = $firstProject->name;
         }
         return $pairs;
+    }
+
+    /**
+     * Get by idList.
+     * 
+     * @param  array    $projectIDList 
+     * @access public
+     * @return array
+     */
+    public function getByIdList($projectIDList)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchAll('id');
     }
 
     /**
@@ -1617,5 +1632,25 @@ class projectModel extends model
     {
         $estimate = $this->dao->select('SUM(estimate) as estimate')->from(TABLE_TASK)->where('deleted')->eq('0')->andWhere('project')->eq($projectID)->fetch('estimate');
         return round($estimate);
+    }
+
+    /**
+     * Fix order.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixOrder()
+    {
+        $projects = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->orderBy('order')->fetchPairs('id', 'order');
+
+        $i = 0;
+        foreach($projects as $id => $order)
+        {
+            $i++;
+            $newOrder = $i * 5;
+            if($order == $newOrder) continue;
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($newOrder)->where('id')->eq($id)->exec();
+        }
     }
 }
