@@ -725,9 +725,13 @@ $lang->resource->admin->index     = 'index';
 $lang->resource->admin->checkDB   = 'checkDB';
 $lang->resource->admin->safe      = 'safeIndex';
 $lang->resource->admin->checkWeak = 'checkWeak';
+$lang->resource->admin->sso       = 'sso';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
+$lang->admin->methodOrder[10] = 'safeIndex';
+$lang->admin->methodOrder[15] = 'checkWeak';
+$lang->admin->methodOrder[20] = 'sso';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();
@@ -1080,3 +1084,4 @@ $lang->changelog['7.2'][] = 'project-updateOrder';
 
 $lang->changelog['7.3'][] = 'project-fixFirst';
 $lang->changelog['7.3'][] = 'productplan-batchEdit';
+$lang->changelog['7.3'][] = 'admin-sso';

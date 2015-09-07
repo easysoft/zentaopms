@@ -15,6 +15,7 @@ $lang->admin->checkDB = '检查数据库';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用户管理';
 $lang->admin->group   = '分组管理';
+$lang->admin->sso     = '然之集成';
 $lang->admin->safeIndex = '安全';
 $lang->admin->checkWeak = '弱口令检查';
 $lang->admin->welcome   = '欢迎使用禅道管理软件后台管理系统';

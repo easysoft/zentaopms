@@ -158,4 +158,38 @@ class admin extends control
         $this->view->weakUsers  = $this->loadModel('user')->getWeakUsers();
         $this->display();
     }
+
+    /**
+     * Config sso for ranzhi.
+     * 
+     * @access public
+     * @return void
+     */
+    public function sso()
+    {
+        if(!empty($_POST))
+        {
+            $ssoConfig = new stdclass();
+            $ssoConfig->turnon = $this->post->turnon;
+            $ssoConfig->addr   = $this->post->addr;
+            $ssoConfig->code   = trim($this->post->code);
+            $ssoConfig->key    = trim($this->post->key);
+
+            $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die($this->locate(inlink('sso')));
+        }
+
+        $this->loadModel('sso');
+        if(!isset($this->config->sso)) $this->config->sso = new stdclass();
+
+        $this->view->title      = $this->lang->admin->sso;
+        $this->view->position[] = $this->lang->admin->sso;
+
+        $this->view->turnon = isset($this->config->sso->turnon) ? $this->config->sso->turnon : 1;
+        $this->view->addr   = isset($this->config->sso->addr) ? $this->config->sso->addr : '';
+        $this->view->key    = isset($this->config->sso->key) ? $this->config->sso->key : '';
+        $this->view->code   = isset($this->config->sso->code) ? $this->config->sso->code : '';
+        $this->display();
+    }
 }

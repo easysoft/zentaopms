@@ -288,6 +288,7 @@ $lang->admin->menu->safe      = array('link' => 'Safe|admin|safe', 'alias' => 'c
 $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
+$lang->admin->menu->sso       = 'Integrate RanZhi|admin|sso';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
