@@ -20,7 +20,10 @@
 <div class='panel'>
   <div class='panel-heading'>
     <strong><?php echo $lang->cron->list?></strong>
-    <div class='panel-actions pull-right'><?php echo html::a(inlink('create'), $lang->cron->create, '', "class='btn btn-primary btn-sm'")?></div>
+    <div class='panel-actions pull-right'>
+      <?php if(common::hasPriv('cron', 'openProcess')) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn btn-sm'")?>
+      <?php if(common::hasPriv('cron', 'create'))      echo html::a(inlink('create'), $lang->cron->create, '', "class='btn btn-primary btn-sm'")?>
+    </div>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
     <thead>
@@ -61,6 +64,7 @@
     </tbody>
   </table>
 </div>
+<div class='alert alert-info'><?php echo $lang->cron->notice->help?></div>
 <?php else:?>
 <div class='container mw-700px'>
   <div class='panel-body'>

@@ -41,6 +41,17 @@ class cron extends control
     }
 
     /**
+     * Open cron process.
+     * 
+     * @access public
+     * @return void
+     */
+    public function openProcess()
+    {
+        $this->display();
+    }
+
+    /**
      * Create cron. 
      * 
      * @access public

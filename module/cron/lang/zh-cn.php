@@ -1,12 +1,13 @@
 <?php
-$lang->cron->common  = '定时任务';
-$lang->cron->index   = '首页';
-$lang->cron->list    = '任务列表';
-$lang->cron->create  = '添加';
-$lang->cron->edit    = '编辑';
-$lang->cron->delete  = '删除';
-$lang->cron->toggle  = '激活/禁用';
-$lang->cron->turnon  = '打开/关闭';
+$lang->cron->common      = '定时任务';
+$lang->cron->index       = '首页';
+$lang->cron->list        = '任务列表';
+$lang->cron->create      = '添加';
+$lang->cron->edit        = '编辑';
+$lang->cron->delete      = '删除';
+$lang->cron->toggle      = '激活/禁用';
+$lang->cron->turnon      = '打开/关闭';
+$lang->cron->openProcess = '创建进程';
 
 $lang->cron->m        = '分';
 $lang->cron->h        = '小时';
@@ -43,8 +44,9 @@ $lang->cron->confirmOpen = <<<EOD
 EOD;
 
 $lang->cron->notice = new stdclass();
-$lang->cron->notice->m   = '取值范围:0-59，"*"代表取值范围内的数字，"/"代表"每"， "-"代表数字范围。';
-$lang->cron->notice->h   = '取值范围:0-23';
-$lang->cron->notice->dom = '取值范围:1-31';
-$lang->cron->notice->mon = '取值范围:1-12';
-$lang->cron->notice->dow = '取值范围:0-6';
+$lang->cron->notice->m    = '取值范围:0-59，"*"代表取值范围内的数字，"/"代表"每"， "-"代表数字范围。';
+$lang->cron->notice->h    = '取值范围:0-23';
+$lang->cron->notice->dom  = '取值范围:1-31';
+$lang->cron->notice->mon  = '取值范围:1-12';
+$lang->cron->notice->dow  = '取值范围:0-6';
+$lang->cron->notice->help = '注：如果服务器重启，或者发现定时任务没有正常工作，那么定时任务已经停止工作。需要手动点击【创建进程】按钮，或者一分钟后刷新页面，来开启计划任务。如果任务列表中第一条记录的最后执行时间改变，说明任务开启成功。';

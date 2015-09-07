@@ -40,7 +40,7 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     }
 
     /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-    if(onlybody == 'yes' || isOnlyBody)
+    if((typeof(onlybody) != 'undefined' && onlybody == 'yes') || isOnlyBody)
     {
         var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
         link = link + onlybody;
@@ -1340,7 +1340,7 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    if(onlybody == 'yes') checkOnlybodyPage();
+    if(typeof(onlybody) != 'undefined' && onlybody == 'yes') checkOnlybodyPage();
     $('body').addClass('m-{currentModule}-{currentMethod}'.format(config));
 
     setModal();

@@ -856,6 +856,7 @@ $lang->resource->cron->create  = 'create';
 $lang->resource->cron->edit    = 'edit';
 $lang->resource->cron->toggle  = 'toggle';
 $lang->resource->cron->delete  = 'delete';
+$lang->resource->cron->openProcess = 'openProcess';
 
 $lang->cron->methodOrder[5]  = 'index';
 $lang->cron->methodOrder[10] = 'turnon';
@@ -863,6 +864,7 @@ $lang->cron->methodOrder[15] = 'create';
 $lang->cron->methodOrder[20] = 'edit';
 $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
+$lang->cron->methodOrder[35] = 'openProcess';
 
 $lang->resource->dev = new stdclass();
 $lang->resource->dev->api = 'api';
@@ -1085,3 +1087,4 @@ $lang->changelog['7.2'][] = 'project-updateOrder';
 $lang->changelog['7.3'][] = 'project-fixFirst';
 $lang->changelog['7.3'][] = 'productplan-batchEdit';
 $lang->changelog['7.3'][] = 'admin-sso';
+$lang->changelog['7.3'][] = 'cron-openProcess';

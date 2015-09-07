@@ -1,12 +1,13 @@
 <?php
-$lang->cron->common  = 'Cron';
-$lang->cron->index   = 'Index';
-$lang->cron->list    = 'List';
-$lang->cron->create  = 'Create';
-$lang->cron->edit    = 'Edit';
-$lang->cron->delete  = 'Delete';
-$lang->cron->toggle  = 'Activation/Disable';
-$lang->cron->turnon  = 'Open/Close';
+$lang->cron->common      = 'Cron';
+$lang->cron->index       = 'Index';
+$lang->cron->list        = 'List';
+$lang->cron->create      = 'Create';
+$lang->cron->edit        = 'Edit';
+$lang->cron->delete      = 'Delete';
+$lang->cron->toggle      = 'Activation/Disable';
+$lang->cron->turnon      = 'Open/Close';
+$lang->cron->openProcess = 'Open process';
 
 $lang->cron->m        = 'Minute';
 $lang->cron->h        = 'Hour';
@@ -43,8 +44,9 @@ $lang->cron->confirmOpen = <<<EOD
 EOD;
 
 $lang->cron->notice = new stdclass();
-$lang->cron->notice->m   = 'Range : 0-59，"*" express the range of numbers, "/" express "Every", "-" express digital range.';
-$lang->cron->notice->h   = 'Range : 0-23';
-$lang->cron->notice->dom = 'Range : 1-31';
-$lang->cron->notice->mon = 'Range : 1-12';
-$lang->cron->notice->dow = 'Range : 0-6';
+$lang->cron->notice->m    = 'Range : 0-59，"*" express the range of numbers, "/" express "Every", "-" express digital range.';
+$lang->cron->notice->h    = 'Range : 0-23';
+$lang->cron->notice->dom  = 'Range : 1-31';
+$lang->cron->notice->mon  = 'Range : 1-12';
+$lang->cron->notice->dow  = 'Range : 0-6';
+$lang->cron->notice->help = 'Note: if the server is restarted, or that the timing task is not normal, then the timing task has stopped. You need to click the [Open process] button or refresh page after a minute to open the scheduled tasks. If the last run time of first record is changed in cron list, then the task is turned on.';
