@@ -52,7 +52,7 @@
         <td class='text-left'>
           <?php
           if(common::hasPriv('cron', 'toggle') and !empty($cron->command)) echo html::a(inlink('toggle', "id=$cron->id&status=" . ($cron->status == 'stop' ? 'normal' :  'stop')), $cron->status == 'stop' ? $lang->cron->toggleList['start'] : $lang->cron->toggleList['stop'], 'hiddenwin');
-          if($cron->buildin == 0 and common::hasPriv('cron', 'edit')) echo html::a(inlink('edit', "id=$cron->id"), $lang->edit);
+          if(!empty($cron->command) and common::hasPriv('cron', 'edit')) echo html::a(inlink('edit', "id=$cron->id"), $lang->edit);
           if($cron->buildin == 0 and common::hasPriv('cron', 'delete')) echo html::a(inlink('delete', "id=$cron->id"), $lang->delete, 'hiddenwin');
           ?>
         </td>
