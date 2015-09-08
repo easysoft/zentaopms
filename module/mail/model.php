@@ -21,7 +21,7 @@ class mailModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->app->loadClass('phpmailer', $static = true);
+        $this->app->loadClass($this->config->mail->mta == 'sendcloud' ? 'sendcloud' : 'phpmailer', $static = true);
         $this->setMTA();
     }
 
@@ -161,7 +161,8 @@ class mailModel extends model
      */
     public function setMTA()
     {
-        if(self::$instance == null) self::$instance = new phpmailer(true);
+        $className = $this->config->mail->mta == 'sendcloud' ? 'sendcloud' : 'phpmailer';
+        if(self::$instance == null) self::$instance = new $className(true);
         $this->mta = self::$instance;
         $this->mta->CharSet = $this->config->charset;
         $funcName = "set{$this->config->mail->mta}";
@@ -186,6 +187,18 @@ class mailModel extends model
         if(isset($this->config->mail->smtp->charset)) $this->mta->CharSet = $this->config->mail->smtp->charset;
         if(isset($this->config->mail->smtp->port)) $this->mta->Port = $this->config->mail->smtp->port;
         if(isset($this->config->mail->smtp->secure) and !empty($this->config->mail->smtp->secure))$this->mta->SMTPSecure = strtolower($this->config->mail->smtp->secure);
+    }
+
+    /**
+     * Set sendcloud 
+     * 
+     * @access public
+     * @return void
+     */
+    public function setSendcloud()
+    {
+        $this->mta->accessKey = $this->config->mail->sendcloud->accessKey;
+        $this->mta->secretKey = $this->config->mail->sendcloud->secretKey;
     }
 
     /**
@@ -318,8 +331,16 @@ class mailModel extends model
         $toList = explode(',', str_replace(' ', '', $toList));
         foreach($toList as $account)
         {
-            if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
-            $this->mta->addAddress($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
+            if(!isset($emails[$account]) or isset($emails[$account]->sended)) continue;
+            if($this->config->mail->mta == 'sendcloud')
+            {
+                $this->mta->addAddress($account);
+            }
+            else
+            {
+                if(strpos($emails[$account]->email, '@') == false) continue;
+                $this->mta->addAddress($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
+            }
             $emails[$account]->sended = true;
         }
     }
@@ -338,8 +359,16 @@ class mailModel extends model
         if(!is_array($ccList)) return;
         foreach($ccList as $account)
         {
-            if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
-            $this->mta->addCC($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
+            if(!isset($emails[$account]) or isset($emails[$account]->sended)) continue;
+            if($this->config->mail->mta == 'sendcloud')
+            {
+                $this->mta->addAddress($account);
+            }
+            else
+            {
+                if(strpos($emails[$account]->email, '@') == false) continue;
+                $this->mta->addCC($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
+            }
             $emails[$account]->sended = true;
         }
     }
@@ -377,7 +406,7 @@ class mailModel extends model
      */
     public function convertCharset($string)
     {
-        if($this->config->mail->smtp->charset != strtolower($this->config->charset)) return iconv($this->config->charset, $this->config->mail->smtp->charset . '//IGNORE', $string);
+        if(!empty($this->config->mail->smtp->charset) and $this->config->mail->smtp->charset != strtolower($this->config->charset)) return iconv($this->config->charset, $this->config->mail->smtp->charset . '//IGNORE', $string);
         return $string;
     }
 

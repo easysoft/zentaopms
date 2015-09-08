@@ -8,6 +8,7 @@ $lang->mail->test   = '测试发信';
 $lang->mail->reset  = '重置';
 $lang->mail->browse = '邮件列表';
 $lang->mail->delete = '删除邮件';
+$lang->mail->sendCloud   = 'SendCloud发信';
 $lang->mail->batchDelete = '批量删除';
 
 $lang->mail->turnon      = '是否打开';
@@ -23,6 +24,8 @@ $lang->mail->password    = 'smtp密码';
 $lang->mail->secure      = '是否加密';
 $lang->mail->debug       = '调试级别';
 $lang->mail->charset     = '编码';
+$lang->mail->accessKey   = 'accessKey';
+$lang->mail->secretKey   = 'secretKey';
 
 $lang->mail->toList      = '收信人';
 $lang->mail->subjectName = '主题';
@@ -64,3 +67,7 @@ $lang->mail->sendmailTips   = '提示：系统不会为当前操作者发信。'
 $lang->mail->needConfigure  = '无法找到邮件配置信息，请先配置邮件发送参数。';
 $lang->mail->nofsocket      = 'fsocket相关函数被禁用，不能发信！请在php.ini中修改allow_url_fopen为On，打开openssl扩展。 保存并重新启动apache。';
 $lang->mail->noOpenssl      = 'ssl和tls加密，请打开openssl扩展。 保存并重新启动apache。';
+$lang->mail->sendCloudHelp  = <<<EOD
+<p>Notice SendCloud是SendCloud的团队通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
+<p>accessKey和secretKey可以到登陆后的"设置"页面查看。发信人地址和名称也在"设置"页面设置。</p>
+EOD;

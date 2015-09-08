@@ -18,6 +18,7 @@ include '../../common/view/header.html.php';
       <strong><?php echo $lang->mail->common;?></strong>
       <small class='text-muted'> <?php echo $lang->mail->detect;?> <?php echo html::icon('cog');?></small>
     </div>
+    <div class='actions'><?php common::printLink('mail', 'sendCloud', '', $lang->mail->sendCloud, '', "class='btn btn-primary'")?></div>
   </div>
   <form class='form-condensed pdt-20' method='post' target='hiddenwin'>
     <table class='table table-form'>

@@ -37,7 +37,11 @@ class mail extends control
      */
     public function index()
     {
-        if($this->config->mail->turnon) $this->locate(inlink('edit'));
+        if($this->config->mail->turnon)
+        {
+            if($this->config->mail->mta == 'sendcloud') $this->locate(inlink('sendcloud'));
+            $this->locate(inlink('edit'));
+        }
         $this->locate(inlink('detect'));
     }
 
@@ -166,6 +170,53 @@ class mail extends control
             $this->view->mailExist   = $this->mail->mailExist();
             $this->display();
         }
+    }
+
+    /**
+     * Set SendCloud.
+     * 
+     * @access public
+     * @return void
+     */
+    public function sendCloud()
+    {
+        if($_POST)
+        {
+            $mailConfig = new stdclass();
+            $mailConfig->sendcloud = new stdclass();
+
+            $mailConfig->turnon         = $this->post->turnon;
+            $mailConfig->mta            = 'sendcloud';
+            $mailConfig->fromAddress    = ''; 
+            $mailConfig->fromName       = '';
+            $mailConfig->sendcloud->accessKey = trim($this->post->accessKey);
+            $mailConfig->sendcloud->secretKey = trim($this->post->secretKey);
+
+            if(empty($mailConfig->sendcloud->accessKey)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->accessKey)));
+            if(empty($mailConfig->sendcloud->secretKey)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->secretKey)));
+
+            $this->loadModel('setting')->setItems('system.mail', $mailConfig);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            die(js::reload('parent'));
+        }
+
+        $mailConfig = '';
+        if($this->config->mail->turnon)
+        {
+            $mailConfig = $this->config->mail->sendcloud;
+            $mailConfig->fromAddress = $this->config->mail->fromAddress;
+            $mailConfig->fromName    = $this->config->mail->fromName;
+            $mailConfig->turnon      = $this->config->mail->turnon;
+        }
+
+        $this->view->title      = $this->lang->mail->sendCloud;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->sendCloud;
+
+        $this->view->mailExist  = $this->mail->mailExist();
+        $this->view->mailConfig = $mailConfig;
+        $this->display();
     }
 
     /**
