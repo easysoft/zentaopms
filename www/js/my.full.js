@@ -1334,6 +1334,39 @@ function checkOnlybodyPage()
     if(location.href == top.location.href) location.href = location.href.replace('onlybody=yes', '');
 }
 
+/**
+ * Fix tfoot action like productplan,release.
+ * 
+ * @param  string $formID 
+ * @access public
+ * @return void
+ */
+function fixTfootAction(formID)
+{
+    var tfootOffset = $(formID + ' table tfoot').offset().top;
+    var windowH     = $(window).height();
+    var tableWidth  = $(formID + ' table').width() - 2;
+    if(tfootOffset > windowH)
+    {
+        $(formID + ' table tfoot').addClass('fixTfootAction');
+        $(formID + ' table tfoot').width(tableWidth);
+        $(formID + ' table tfoot td').width(tableWidth);
+    }
+    $(window).scroll(function()
+    {
+        if(tfootOffset <= windowH + $(window).scrollTop() - 110)
+        {
+            $(formID + ' table tfoot').removeClass('fixTfootAction');
+        }
+        else if(!$(formID + ' table tfoot').hasClass('fixTfootAction'))
+        {
+            $(formID + ' table tfoot').addClass('fixTfootAction');
+            $(formID + ' table tfoot').width(tableWidth);
+            $(formID + ' table tfoot td').width(tableWidth);
+        }
+    });
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

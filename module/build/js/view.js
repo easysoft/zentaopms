@@ -6,6 +6,9 @@ function showLink(buildID, type, param)
         var obj = type == 'story' ? '.tab-pane#stories .linkBox' : '.tab-pane#bugs .linkBox';
         $(obj).html(data);
         $('#' + type + 'List').hide();
+
+        var formID = type == 'story' ? '#unlinkedStoriesForm' : '#unlinkedBugsForm';
+        fixTfootAction(formID);
     });
 }
 $(function()
