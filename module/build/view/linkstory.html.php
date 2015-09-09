@@ -28,7 +28,6 @@
         </tr>
       </thead>
       <tbody>
-      <?php echo $build?>
       <?php foreach($allStories as $story):?>
       <?php if(strpos(",{$build->stories},", ",{$story->id},") !== false) continue; ?>
       <tr>

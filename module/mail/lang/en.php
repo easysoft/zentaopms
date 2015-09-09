@@ -70,4 +70,5 @@ $lang->mail->noOpenssl      = 'Please open the extension of openssl when use tls
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>SendCloud Notice is SendCloud's team notification service. Can view to <a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a></p>
 <p>accessKey and secretKey can go to the "Settings" page view after login. The sender name and address is also provided in the "Settings" page.</p>
+<p>Letter, ZenTao account must be SendCloud contacts inside the same nickname. You may not succeed in sending.</p>
 EOD;

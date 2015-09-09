@@ -20,3 +20,9 @@ $lang->sso->addrNotice = 'Example: http://www.ranzhi.com/sys/sso-check.html';
 $lang->sso->turnonList = array();
 $lang->sso->turnonList[1] = 'on';
 $lang->sso->turnonList[0] = 'off';
+
+$lang->sso->help = <<<EOD
+<p>1. Fill in Address, PATH_INFO ：http://ranzhi site/sys/sso-check.html, GET：http://ranzhi site/sys/index.php?m=sso&f=check</p>
+<p>2. Code and Key must be the same of setting of RanZhi.</p>
+<p>3. The account of RanZhi must be consistent with the ZenTao, otherwise you can not correlation log in ZenTao from RanZhi </p>
+EOD;

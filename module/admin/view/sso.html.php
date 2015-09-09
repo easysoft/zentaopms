@@ -43,5 +43,6 @@
        </tr>
     </table>
   </form>
+  <div class='alert alert-info'><?php echo $lang->sso->help?></div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
