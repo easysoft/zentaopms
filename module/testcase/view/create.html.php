@@ -29,7 +29,7 @@
         <td class='w-p25-f'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?>
         </td>
-        <td class='w-p25-f'>
+        <td class='w-p25-f' style='padding-left:15px'>
           <div class='input-group' id='moduleIdBox'>
           <?php 
           echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
@@ -48,10 +48,12 @@
       <tr>
         <th><?php echo $lang->testcase->type;?></th>
         <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->testcase->stage;?></th>
-        <td><?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?></td>
+        <td style='padding-left:15px'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->testcase->stage?></span>
+            <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->pri;?></th>
@@ -78,7 +80,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->precondition;?></th>
-        <td colspan='3'><?php echo html::textarea('precondition', $precondition, " rows='4' class='form-control'");?></td>
+        <td colspan='3'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->steps;?></th>
@@ -98,9 +100,9 @@
                 $stepID += 1;
                 echo "<tr id='row$stepID' class='text-center'>";
                 echo "<td class='stepID strong'>$stepID</td>";
-                echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
-                echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='form-control'") . '</td>';
-                echo "<td class='text-left w-100px'><div class='btn-group-vertical'>";
+                echo '<td class="w-p40">' . html::textarea('steps[]', $step->desc, "rows='1' class='form-control'") . '</td>';
+                echo '<td>' . html::textarea('expects[]', $step->expect, "rows='1' class='form-control'") . '</td>';
+                echo "<td class='text-left w-140px text-top'><div class='btn-group'>";
                 echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' />";
                 echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  />";
                 echo "<input type='button' tabindex='-1' class='delbutton btn btn-xs' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   />";

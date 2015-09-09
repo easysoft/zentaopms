@@ -15,6 +15,22 @@ function setPreview()
     }
 }
 
+function createRow()
+{
+    if(newRowID == 0) newRowID = $('.stepID').size();
+    newRowID ++;
+    var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
+    newRow += "<td class='stepID strong'></td>";
+    newRow += "<td class='w-p40'><textarea name='steps[]' rows=1 class='form-control'></textarea></td>";
+    newRow += "<td><textarea name='expects[]' rows=1 class='form-control'></textarea></td>";
+    newRow += "<td class='text-left w-140px text-top'><div class='btn-group'>";
+    newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' />";
+    newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' />";
+    newRow += "<input type='button' tabindex='-1' class='delbutton btn' value='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' />";
+    newRow += "</div></td>";
+    return newRow;
+}
+
 $(function()
 {
     var $searchStories = $('#searchStories');
