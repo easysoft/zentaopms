@@ -27,7 +27,7 @@
         <td class='w-p25-f'>
           <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
         </td>
-        <td class='w-p15-f'>
+        <td class='w-p25-f'>
           <div class='input-group' id='moduleIdBox'>
           <?php 
           echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
@@ -60,14 +60,34 @@
           ?>
           </div>
         </td>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->story->source?></span>
+            <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
+          </div>
+        </td>
       </tr>
       <tr>
-        <th><?php echo $lang->story->source;?></th>
-        <td><?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?></td>
-      </tr>
+        <th><?php echo $lang->story->pri;?></th>
+        <td><?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control'");?></td>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->story->estimate;?></span>
+            <?php echo html::input('estimate', $estimate, "class='form-control'");?>
+            <span class='input-group-addon'><?php echo $lang->story->hour;?></span>
+          </div>
+        </td>
+      </tr> 
       <tr>
         <th><?php echo $lang->story->title;?></th>
-        <td colspan='3'><?php echo html::input('title', $storyTitle, "class='form-control'");?></td>
+        <td colspan='3'>
+          <div class='input-group'>
+            <?php echo html::input('title', $storyTitle, "class='form-control'");?>
+            <span class='input-group-addon fix-border'><?php echo $lang->story->reviewedBy?></span>
+            <?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?>
+            <span class='input-group-addon'><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></span>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->story->spec;?></th>
@@ -77,25 +97,7 @@
         <th><?php echo $lang->story->verify;?></th>
         <td colspan='3'><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
       </tr> 
-       <tr>
-        <th><?php echo $lang->story->pri;?></th>
-        <td><?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control'");?></td>
-      </tr>
       <tr>
-        <th><?php echo $lang->story->estimate;?></th>
-        <td>
-          <div class='input-group'>
-            <?php echo html::input('estimate', $estimate, "class='form-control'");?>
-            <span class='input-group-addon'><?php echo $lang->story->hour;?></span>
-          </div>
-        </td>
-      </tr> 
-      <tr>
-        <th><?php echo $lang->story->reviewedBy;?></th>
-        <td><?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?></td>
-        <td><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></td>
-      </tr>  
-       <tr>
         <th><nobr><?php echo $lang->story->mailto;?></nobr></th>
         <td colspan='3'>
           <div class='input-group'>
@@ -106,7 +108,6 @@
           </div>
         </td>
       </tr>
-
       <tr>
         <th><nobr><?php echo $lang->story->keywords;?></nobr></th>
         <td colspan='3'><?php echo html::input('keywords', $keywords, 'class="form-control"');?></td>

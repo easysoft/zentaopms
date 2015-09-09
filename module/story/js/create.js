@@ -9,6 +9,7 @@ $(function()
         $('#assignedTo').removeAttr('disabled');
     }
     $('#assignedTo').trigger("chosen:updated");
+    $('#assignedTo_chosen').width(150);
 })
 
 $('#needNotReview').change(function()

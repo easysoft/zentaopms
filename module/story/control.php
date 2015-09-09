@@ -170,6 +170,7 @@ class story extends control
         $this->view->source           = $source;
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
+        $this->view->product          = $product;
         $this->view->projectID        = $projectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
@@ -177,7 +178,7 @@ class story extends control
         $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
-        $this->view->needReview       = ($projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
 
         $this->display();
     }
@@ -926,7 +927,7 @@ class story extends control
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus, 'id_desc', $limit);
-        $select  = html::select('story', $stories, $storyID, "class='form-control'");
+        $select  = html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));
