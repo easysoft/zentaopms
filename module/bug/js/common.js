@@ -231,7 +231,7 @@ function setStories(moduleID, productID)
  */
 function notice()
 {
-    $('#buildBoxActions').empty();
+    $('#buildBoxActions').empty().hide();
     if($('#openedBuild').find('option').length <= 1) 
     {
         var html = '';
@@ -249,6 +249,7 @@ function notice()
         if($bba.length)
         {
             $bba.html(html);
+            $bba.show();
         }
         else
         {

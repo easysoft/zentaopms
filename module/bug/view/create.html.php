@@ -31,41 +31,64 @@ js::set('refresh', $lang->refresh);
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
-        <td class='w-p35-f'>
+        <td class='w-p45-f'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control chosen' autocomplete='off'");?>
         </td>
         <td>
-          <div class='input-group w-p35-f' id='moduleIdBox'>
-          <?php
-          echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
-          if(count($moduleOptionMenu) == 1)
-          {
-              echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug"), $lang->tree->manage, '_blank');
-              echo '&nbsp; ';
-              echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
-              echo '</span>';
-          }
-          ?>
+          <div class='input-group' id='moduleIdBox'>
+            <?php
+            echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
+            if(count($moduleOptionMenu) == 1)
+            {
+                echo "<span class='input-group-addon'>";
+                echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug"), $lang->tree->manage, '_blank');
+                echo '&nbsp; ';
+                echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                echo '</span>';
+            }
+            ?>
           </div>
         </td>
+        <td class='w-100px'></td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->project;?></th>
         <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->bug->openedBuild;?></th>
         <td>
-          <span id='buildBox'>
-          <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
-          </span>
+          <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
+          <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
+          <span class='input-group-addon' id='buildBoxActions'></span>
+          </div>
         </td>
-        <td id='buildBoxActions'></td>
       </tr>
       <tr>
         <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
         <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></span></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->bug->type;?></th>
+        <td>
+          <div class='input-group'>
+            <?php
+            /* Remove the unused types. */
+            unset($lang->bug->typeList['designchange']);
+            unset($lang->bug->typeList['newfeature']);
+            unset($lang->bug->typeList['trackthings']);
+            echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
+            ?>
+            <span class='input-group-addon fix-border'><?php echo $lang->bug->severity?></span>
+            <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control'");?>
+          </div>
+        </td>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+            <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->title;?></th>
@@ -85,54 +108,30 @@ js::set('refresh', $lang->refresh);
               </div>
             </div>
           </div>
-          <?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?>
+          <?php echo html::textarea('steps', $steps, "rows='5' class='form-control'");?>
         </td>
       </tr>
       <tr>
-        <th><?php echo $lang->bug->lblStory;?></th>
-        <td colspan='2'>
-          <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID, "class='form-control chosen'");?></span>
+        <th><?php echo $lang->bug->story;?></th>
+        <td>
+          <span id='storyIdBox'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></span>
         </td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->bug->task;?></th>
-        <td colspan='2'><span id='taskIdBox'><?php echo html::select('task', '', $taskID, "class='form-control chosen'");?></span></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->bug->lblTypeAndSeverity;?></th>
         <td>
           <div class='input-group'>
-            <?php
-            /* Remove the unused types. */
-            unset($lang->bug->typeList['designchange']);
-            unset($lang->bug->typeList['newfeature']);
-            unset($lang->bug->typeList['trackthings']);
-            echo html::select('type', $lang->bug->typeList, $type, "class='form-control' style='width: 50%'");
-            ?>
-            <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control' style='width: 50%'");?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th><nobr><?php echo $lang->bug->lblSystemBrowserAndHardware;?></nobr></th>
-        <td>
-          <div class='input-group'>
-          <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control' style='width: 50%'");?>
-          <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control' style='width: 50%'");?>
+            <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+            <span id='taskIdBox'> <?php echo html::select('task', '', $taskID, "class='form-control chosen'");?></span>
           </div>
         </td>
       </tr>
       <tr>
         <th><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
         <td colspan='2'>
+          <div class='input-group'>
           <?php 
           echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
-          ?>
-        </td>
-        <td class='text-top'>
-          <?php
           if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
           ?>
+          </div>
         </td>
       </tr>
       <tr>
