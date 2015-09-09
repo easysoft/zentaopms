@@ -64,6 +64,7 @@ function initBurnChar()
         pointDotRadius: 1,
         datasetFill: false,
         datasetStroke: true,
+        multiTooltipTemplate: "<%= value %>h"
     });
 }
 </script>
