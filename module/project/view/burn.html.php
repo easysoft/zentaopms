@@ -38,25 +38,33 @@
 <script>
 function initBurnChar()
 {
-    var data = 
+    var data =
     {
         labels: <?php echo json_encode($chartData['labels'])?>,
         datasets: [
         {
             label: "<?php echo $lang->project->baseline;?>",
             color: "#CCC",
-            fillColor: "rgba(0,0,0,0)",
             showTooltips: false,
             data: <?php echo $chartData['baseLine']?>
         },
         {
             label: "<?php echo $lang->project->Left?>",
             color: "#0033CC",
+            pointStrokeColor: '#0033CC',
+            pointHighlightStroke: '0033CC',
             data: <?php echo $chartData['burnLine']?>
         }]
     };
 
-    var burnChart = $("#burnChart").lineChart(data, {animation: !($.zui.browser && $.zui.browser.ie === 8)});
+    var burnChart = $("#burnChart").lineChart(data,
+    {
+        animation: !($.zui.browser && $.zui.browser.ie === 8),
+        pointDotStrokeWidth: 0,
+        pointDotRadius: 1,
+        datasetFill: false,
+        datasetStroke: true,
+    });
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
