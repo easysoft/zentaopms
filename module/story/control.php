@@ -895,7 +895,7 @@ class story extends control
         }
         $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID, $type);
         $storyName = $number === '' ? 'story' : "story[$number]";
-        die(html::select($storyName, $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
+        die(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
     }
 
     /**
@@ -927,7 +927,7 @@ class story extends control
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus, 'id_desc', $limit);
-        $select  = html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control'");
+        $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));

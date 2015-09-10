@@ -24,12 +24,9 @@
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
       <tr>
-        <th class='w-100px'><?php echo $lang->task->project;?></th>
-        <td colspan='3'><?php echo $project->name;?></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->task->module;?></th>
-        <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value,$project->id)'");?></td><td></td><td class='w-150px'></td>
+        <th class='w-100px'><?php echo $lang->task->module;?></th>
+        <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value,$project->id)'");?></td>
+        <td class='w-p25-f'></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->type;?></th>
@@ -44,7 +41,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->story;?></th>
-        <td colspan='2'>
+        <td colspan='3'>
           <div class='input-group'>
             <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
             <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
@@ -53,7 +50,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->task->name;?></th>
-        <td colspan='2'>
+        <td colspan='3'>
           <div class='input-group'>
             <?php echo html::input('name', $task->name, "class='form-control'");?>
             <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
@@ -62,16 +59,14 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', $task->desc, "rows='7' class='form-control'");?></td><td></td>
+        <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->task->pri;?></th>
-        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?></td><td></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->task->estimate;?></th>
+        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?></td>
         <td>
           <div class="input-group">
+            <span class='input-group-addon'><?php echo $lang->task->estimate;?></span>
             <?php echo html::input('estimate', $task->estimate, "class='form-control'")?>
             <span class="input-group-addon"><?php echo $lang->task->hour;?></span>
           </div>
@@ -79,20 +74,26 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->estStarted;?></th>
-        <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td><td></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->task->deadline;?></th>
-        <td><?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?></td><td></td>
+        <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->task->deadline;?></span>
+            <?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->task->mailto;?></th>
-        <td colspan='2'><?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?></td>
-        <td class='text-top'><?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?></td>
+        <td colspan='3'>
+          <div class='input-group'>
+            <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?>
+            <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->files;?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->afterSubmit;?></th>
