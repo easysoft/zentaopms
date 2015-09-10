@@ -17,6 +17,11 @@
   <div class='actions'>
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>
+  <ul class='nav'>
+    <?php echo "<li id='noclosedTab'>" . html::a(inlink("index", "locate=no&productID=$productID&status=noclosed"), $lang->product->unclosed) . '</li>';?>
+    <?php echo "<li id='closedTab'>" . html::a(inlink("index", "locate=no&productID=$productID&status=closed"), $lang->product->statusList['closed']) . '</li>';?>
+    <?php echo "<li id='allTab'>" . html::a(inlink("index", "locate=no&productID=$productID&status=all"), $lang->product->allProduct) . '</li>';?>
+  </ul>
 </div>
 
 <div class='block' id='productbox'>
@@ -34,7 +39,7 @@
 <?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
   <table class='table table-condensed table-hover table-striped tablesorter'>
-    <?php $vars = "locate=no&productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+    <?php $vars = "locate=no&productID=$productID&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
@@ -97,5 +102,6 @@
 </form>
 <?php endif;?>
 </div>
+<script>$("#<?php echo $status;?>Tab").addClass('active');</script>
 <?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>

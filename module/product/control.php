@@ -47,7 +47,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $productID = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index($locate = 'yes', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
@@ -61,12 +61,13 @@ class product extends control
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
         $this->view->position[]   = $this->lang->product->allProduct;
-        $this->view->productStats = $this->product->getStats($orderBy, $pager);
+        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status);
         $this->view->productID    = $productID;
         $this->view->pager        = $pager;
         $this->view->recTotal     = $pager->recTotal;
         $this->view->recPerPage   = $pager->recPerPage;
         $this->view->orderBy      = $orderBy;
+        $this->view->status       = $status;
         $this->display();
     }
 
