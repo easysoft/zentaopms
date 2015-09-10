@@ -70,5 +70,5 @@ $lang->mail->noOpenssl      = 'ssl和tls加密，请打开openssl扩展。 保�
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>Notice SendCloud是SendCloud的团队通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
 <p>accessKey和secretKey可以到登陆后的"设置"页面查看。发信人地址和名称也在"设置"页面设置。</p>
-<p>发信时，禅道的用户名必须与Notice SendCloud联系人里面的昵称一致。否则可能无法成功发信。</p>
+<p>发信时，Notice SendCloud联系人里面的昵称要跟邮箱一致。否则可能无法成功发信。</p>
 EOD;
