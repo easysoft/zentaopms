@@ -842,9 +842,8 @@ class bugModel extends model
     public function getProjectBugs($projectID, $orderBy = 'id_desc', $pager = null, $build = 0)
     {
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('project')->eq((int)$projectID)
-            ->beginIF($build != 0)->andWhere('openedBuild')->eq($build)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
+            ->andWhere("(project = '" . (int)$projectID . "' " . (empty($build) ? '' : "OR CONCAT(',', openedBuild, ',') like '%,$build,%'") . ")")
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
