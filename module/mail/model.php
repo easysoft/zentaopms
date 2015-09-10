@@ -331,16 +331,8 @@ class mailModel extends model
         $toList = explode(',', str_replace(' ', '', $toList));
         foreach($toList as $account)
         {
-            if(!isset($emails[$account]) or isset($emails[$account]->sended)) continue;
-            if($this->config->mail->mta == 'sendcloud')
-            {
-                $this->mta->addAddress($account);
-            }
-            else
-            {
-                if(strpos($emails[$account]->email, '@') == false) continue;
-                $this->mta->addAddress($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
-            }
+            if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
+            $this->mta->addAddress($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
             $emails[$account]->sended = true;
         }
     }
@@ -359,16 +351,8 @@ class mailModel extends model
         if(!is_array($ccList)) return;
         foreach($ccList as $account)
         {
-            if(!isset($emails[$account]) or isset($emails[$account]->sended)) continue;
-            if($this->config->mail->mta == 'sendcloud')
-            {
-                $this->mta->addAddress($account);
-            }
-            else
-            {
-                if(strpos($emails[$account]->email, '@') == false) continue;
-                $this->mta->addCC($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
-            }
+            if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
+            $this->mta->addCC($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
             $emails[$account]->sended = true;
         }
     }

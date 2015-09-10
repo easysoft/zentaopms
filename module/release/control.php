@@ -144,8 +144,10 @@ class release extends control
         if($build->project)
         {
             $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
-                ->andWhere("(project = '" . (int)$projectID . "' " . (empty($build) ? '' : "OR CONCAT(',', openedBuild, ',') like '%,$build,%'") . ")")
+                ->andWhere('product')->eq($release->product)
+                ->andWhere("(project = '" . (int)$build->project . "'" . (empty($build->id) ? '' : " OR CONCAT(',', openedBuild, ',') like '%,$build->id,%'") . ")")
                 ->andWhere('status')->eq('active')
+                ->andWhere('toStory')->eq(0)
                 ->orderBy('id_desc')->fetchAll();
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'newBugs');
         }
