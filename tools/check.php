@@ -13,6 +13,9 @@ foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile)
     include $resourceFile;
 }
 
+$lang->productCommon = '';
+$lang->projectCommon = '';
+
 $whiteList[] = 'api-getsessionid';
 $whiteList[] = 'admin-setflow';
 $whiteList[] = 'bug-buildtemplates';
@@ -56,6 +59,9 @@ $whiteList[] = 'report-remind';
 $whiteList[] = 'sso-auth';
 $whiteList[] = 'sso-depts';
 $whiteList[] = 'sso-users';
+$whiteList[] = 'sso-login';
+$whiteList[] = 'sso-logout';
+$whiteList[] = 'mail-asyncsend';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
@@ -69,6 +75,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
         include $controlFile;
         if(class_exists($moduleName))
         {
+            if($moduleName == 'block') continue;
             $class   = new ReflectionClass($moduleName);
             $methods = $class->getMethods();
             foreach($methods as $method)
@@ -81,9 +88,12 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                     if(strpos($methodName, 'ajax') !== false) continue;
 
                     $exits = false;
-                    foreach($lang->resource->$moduleName as $key => $label)
+                    if(isset($lang->resource->$moduleName))
                     {
-                        if(strtolower($methodName) == strtolower($key)) $exits = true;
+                        foreach($lang->resource->$moduleName as $key => $label)
+                        {
+                            if(strtolower($methodName) == strtolower($key)) $exits = true;
+                        }
                     }
                     if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
                 }
