@@ -10,14 +10,13 @@
 <table class='table table-condensed table-hover table-striped table-borderless table-fixed'>
   <thead>
     <tr class='text-center'>
-      <th class='w-150px'><div class='text-left'><i class="icon-folder-close-alt icon"></i> <?php echo $lang->project->name;?></div></th>
+      <th class='w-200px'><div class='text-left'><i class="icon-folder-close-alt icon"></i> <?php echo $lang->project->name;?></div></th>
       <th><?php echo $lang->project->end;?></th>
-      <th><?php echo $lang->statusAB;?></th>
       <th><?php echo $lang->project->totalEstimate;?></th>
       <th><?php echo $lang->project->totalConsumed;?></th>
       <th><?php echo $lang->project->totalLeft;?></th>
       <th class='w-150px'><?php echo $lang->project->progess;?></th>
-      <th class='w-100px'><?php echo $lang->project->burn;?></th>
+      <th class='w-120px'><?php echo $lang->project->burn;?></th>
     </tr>
   </thead>
   <tbody>
@@ -26,11 +25,10 @@
     <tr class='text-center'>
       <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></td>
       <td><?php echo $project->end;?></td>
-      <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
       <td><?php echo $project->hours->totalEstimate;?></td>
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>
-      <td class='text-left w-150px'>
+      <td class='text-left'>
         <img class='progressbar' src='<?php echo $webRoot;?>theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress);?>'>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
