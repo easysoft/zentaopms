@@ -952,11 +952,8 @@ class upgradeModel extends model
      */
     public function adjustOrder7_3()
     {
-        $products = $this->dao->select('`order`')->from(TABLE_PRODUCT)->orderBy('order desc')->limit(2)->fetchAll();
-        if(count($products) == 2 and ($products[0]->order - $products[1]->order) != 5) $this->dao->update(TABLE_PRODUCT)->set('`order`=`order` * 5')->exec();
-
-        $projects = $this->dao->select('`order`')->from(TABLE_PROJECT)->orderBy('order desc')->limit(2)->fetchAll();
-        if(count($projects) == 2 and ($projects[0]->order - $projects[1]->order) != 5) $this->dao->update(TABLE_PROJECT)->set('`order`=`order` * 5')->exec();
+        $this->loadModel('product')->fixOrder();
+        $this->loadModel('project')->fixOrder();
 
         return true;
     }
