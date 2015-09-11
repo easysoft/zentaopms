@@ -100,6 +100,14 @@ class task extends control
                 $this->sendmail($taskID, $actionID);
             }            
 
+            /* If link from no head then reload*/
+            if(isonlybody())
+            {
+                $response['locate'] = 'reload';
+                $response['target'] = 'parent';
+                $this->send($response);
+            }
+
             /* Locate the browser. */
             if($this->post->after == 'continueAdding')
             {

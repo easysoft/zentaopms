@@ -58,7 +58,7 @@ if(file_exists('install.php') or file_exists('upgrade.php'))
 <html><head><meta charset='utf-8'>
 <style>table{width:700px; margin-top:50px; border:1px solid gray; font-size:14px; padding:5px}</style>
 </head><body>
-<table align='center'><tr><td>安全期间，请删除{$wwwDir}目录下的install.php和upgrade.php文件。<br />
+<table align='center'><tr><td>安全起见，请删除{$wwwDir}目录下的install.php和upgrade.php文件。<br />
 Please remove install.php and upgrade.php under $wwwDir dir for security reason.</td></tr></table>
 </body></html>
 EOT;
