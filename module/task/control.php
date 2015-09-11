@@ -58,7 +58,7 @@ class task extends control
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
-        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted');
 
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $project->id);
@@ -277,7 +277,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noletter', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();
     }
