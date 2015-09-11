@@ -57,35 +57,13 @@ class sso extends control
             if($data->auth == md5($code . $userIP . $token . $key))
             {
                 $user = $this->loadModel('user')->getById($data->account);
-                if(!$user)
-                {
-                    $user = new stdclass();
-                    $user->account  = $data->account;
-                    $user->password = $data->password;
-                    $user->realname = $data->realname;
-                    $user->email    = $data->email;
-                    $user->visits   = 1;
-                    $user->last     = $this->server->request_time;
-                    $user->mobile   = $data->mobile;
-                    $user->phone    = $data->phone;
-                    $user->address  = $data->address;
-                    $user->skype    = $data->skype;
-                    $user->qq       = $data->qq;
-                    $user->birthday = $data->birthday;
-                    $user->gender   = $data->gender != 'u' ? $data->gender : 'm';
+                if(!$user) $this->locate($this->createLink('user', 'login', empty($referer) ? '' : "referer=$referer"));
 
-                    $this->dao->insert(TABLE_USER)->data($user)->exec();
-                    $user->id     = $this->dao->lastInsertID();
-                    $user->rights = array();
-                }
-                else
-                {
-                    $this->user->cleanLocked($user->account);
-                    /* Authorize him and save to session. */
-                    $user->rights = $this->user->authorize($user->account);
-                    $user->groups = $this->user->getGroups($user->account);
-                    $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
-                }
+                $this->user->cleanLocked($user->account);
+                /* Authorize him and save to session. */
+                $user->rights = $this->user->authorize($user->account);
+                $user->groups = $this->user->getGroups($user->account);
+                $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
 
                 $user->last   = date(DT_DATETIME1, $last);
                 $this->session->set('user', $user);
