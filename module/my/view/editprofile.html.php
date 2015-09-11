@@ -118,6 +118,7 @@
 function checkPassword(password)
 {
     $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
+    $('#passwordStrength').css('display', password == '' ? 'none' : 'table-cell');
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

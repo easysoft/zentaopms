@@ -43,4 +43,5 @@ function changeEmail(num)
 function checkPassword(password)
 {
     $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
+    $('#passwordStrength').css('display', password == '' ? 'none' : 'table-cell');
 }
