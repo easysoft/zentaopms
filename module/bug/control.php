@@ -112,6 +112,9 @@ class bug extends control
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
 
+        /* Process bug for check story changed. */
+        $bugs  = $this->loadModel('story')->checkNeedConfirm($bugs);
+
         /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['queryID']   = $queryID;

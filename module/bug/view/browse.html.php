@@ -88,12 +88,8 @@ js::set('moduleID', $moduleID);
         <th class='w-id'>       <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-severity'> <?php common::printOrderLink('severity',    $orderBy, $vars, $lang->bug->severityAB);?></th>
         <th class='w-pri'>      <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-
         <th>                    <?php common::printOrderLink('title',       $orderBy, $vars, $lang->bug->title);?></th>
-
-        <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-        <th class='w-80px'><?php common::printOrderLink('status',           $orderBy, $vars, $lang->bug->statusAB);?></th>
-        <?php endif;?>
+        <th class='w-80px'>     <?php common::printOrderLink('status',      $orderBy, $vars, $lang->bug->statusAB);?></th>
 
         <?php if($browseType == 'needconfirm'):?>
         <th class='w-200px'><?php common::printOrderLink('story',           $orderBy, $vars, $lang->bug->story);?></th>
@@ -130,10 +126,7 @@ js::set('moduleID', $moduleID);
 
         <?php $class = 'confirm' . $bug->confirmed;?>
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
-
-        <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-        <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-        <?php endif;?>
+        <td class='bug-<?php echo $bug->status?>'><?php echo $bug->needconfirm ? "<span class='warning'>{$lang->story->changed}</span>" : $lang->bug->statusList[$bug->status];?></td>
 
         <?php if($browseType == 'needconfirm'):?>
         <td class='text-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
@@ -171,8 +164,8 @@ js::set('moduleID', $moduleID);
       <tfoot>
         <tr>
           <?php
-          $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 9;
-          if($browseType == 'needconfirm') $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 7 : 6; 
+          $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 10;
+          if($browseType == 'needconfirm') $columns = 7; 
           ?>
           <td colspan='<?php echo $columns;?>'>
             <?php if(!empty($bugs)):?>

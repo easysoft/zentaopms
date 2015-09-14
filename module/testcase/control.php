@@ -80,12 +80,12 @@ class testcase extends control
         if($browseType == 'bymodule' or $browseType == 'all')
         {
             $childModuleIds    = $this->tree->getAllChildId($moduleID);
-            $this->view->cases = $this->testcase->getModuleCases($productID, $childModuleIds, $sort, $pager);
+            $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $sort, $pager);
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
         {
-            $this->view->cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where("t2.status = 'active'")
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
@@ -127,7 +127,7 @@ class testcase extends control
             }
             $caseQuery .= ')';
 
-            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -135,6 +135,9 @@ class testcase extends control
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
+
+        /* Process case for check story changed. */
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         /* Build the search form. */
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
@@ -156,6 +159,7 @@ class testcase extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
+        $this->view->cases         = $cases;
 
         $this->display();
     }

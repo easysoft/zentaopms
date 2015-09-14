@@ -1379,6 +1379,36 @@ class storyModel extends model
     }
 
     /**
+     * Check need confirm.
+     * 
+     * @param  array    $dataList 
+     * @access public
+     * @return array
+     */
+    public function checkNeedConfirm($dataList)
+    {
+        $storyIDList      = array();
+        $storyVersionList = array();
+        foreach($dataList as $key => $data)
+        {
+            $data->needconfirm = false;
+            if($data->story)
+            {
+                $storyIDList[$key]      = $data->story;
+                $storyVersionList[$key] = $data->storyVersion;
+            }
+        }
+
+        $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
+        foreach($storyIDList as $key => $storyID)
+        {
+            if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $dataList[$key]->needconfirm = true;
+        }
+
+        return $dataList;
+    }
+
+    /**
      * Format stories 
      * 
      * @param  array    $stories 
