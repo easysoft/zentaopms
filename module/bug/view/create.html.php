@@ -77,6 +77,8 @@ js::set('refresh', $lang->refresh);
             unset($lang->bug->typeList['trackthings']);
             echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
             ?>
+            <span class='input-group-addon fix-border'><?php echo $lang->bug->pri?></span>
+            <?php echo html::select('pri', $lang->bug->priList, $severity, "class='form-control'");?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->severity?></span>
             <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control'");?>
           </div>
