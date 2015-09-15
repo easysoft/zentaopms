@@ -92,7 +92,7 @@
             <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
             <?php endif;?>
-            <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('index', "locate=no&productID=$productID&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder);?>
+            <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('index', "locate=no&productID=$productID&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
           </div>
           <div class='text-right'><?php $pager->show();?></div>
         </td>
