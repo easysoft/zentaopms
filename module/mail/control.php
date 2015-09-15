@@ -374,4 +374,67 @@ class mail extends control
         if($idList) $this->dao->delete()->from(TABLE_MAILQUEUE)->where('id')->in($idList)->exec();
         die(js::reload('parent'));
     }
+
+    /**
+     * Sendcloud user.
+     * 
+     * @access public
+     * @return void
+     */
+    public function sendcloudUser()
+    {
+        if($this->config->mail->mta != 'sendcloud') die(js::locate('back'));
+
+        $this->mta = $this->mail->setMTA();
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $action   = $data->action;
+            $listName = $action == 'delete' ? 'syncedList' : 'unsyncList';
+
+            $users = array_unique($data->$listName);
+            if(empty($users)) die(js::reload('parent'));
+
+            $realnameAndEmails = $this->loadModel('user')->getRealNameAndEmails($users);
+            $actionedEmail = array();
+            foreach($realnameAndEmails as $realnameAndEmail)
+            {
+                $email = $realnameAndEmail->email;
+                if(isset($actionedEmail[$email])) continue;
+
+                if($action == 'delete')
+                {
+                    $result = $this->mta->deleteMember($email);
+                }
+                elseif($action == 'sync')
+                {
+                    $member = new stdclass();
+                    $member->nickName = $email;
+                    $member->email    = $email;
+                    $member->userName = $realnameAndEmail->realname;
+
+                    $result = $this->mta->addMember($member);
+                }
+
+                if(!$result->result)
+                {
+                    echo(js::alert($this->lang->mail->sendCloudFail . $result->message . "(CODE: $result->statusCode)"));
+                    die(js::reload('parent'));
+                }
+
+                $actionedEmail[$email] = $email;
+            }
+
+            echo(js::alert($this->lang->mail->sendCloudSuccess));
+            die(js::reload('parent'));
+        }
+
+        $this->view->title      = $this->lang->mail->sendcloudUser;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->sendcloudUser;
+
+        $this->view->members = $this->mta->memberList();
+        $this->view->users   = $this->loadModel('user')->getList();
+        $this->display();
+    }
 }

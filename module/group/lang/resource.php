@@ -547,8 +547,9 @@ $lang->resource->mail->test   = 'test';
 $lang->resource->mail->reset  = 'reset';
 $lang->resource->mail->browse = 'browse';
 $lang->resource->mail->delete = 'delete';
-$lang->resource->mail->batchDelete = 'batchDelete';
-$lang->resource->mail->sendCloud   = 'sendCloud';
+$lang->resource->mail->batchDelete   = 'batchDelete';
+$lang->resource->mail->sendCloud     = 'sendCloud';
+$lang->resource->mail->sendcloudUser = 'sendcloudUser';
 
 $lang->mail->methodOrder[5]  = 'index';
 $lang->mail->methodOrder[10] = 'detect';
@@ -560,6 +561,7 @@ $lang->mail->methodOrder[35] = 'browse';
 $lang->mail->methodOrder[40] = 'delete';
 $lang->mail->methodOrder[45] = 'batchDelete';
 $lang->mail->methodOrder[50] = 'sendCloud';
+$lang->mail->methodOrder[55] = 'sendcloudUser';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
@@ -1091,3 +1093,4 @@ $lang->changelog['7.3'][] = 'productplan-batchEdit';
 $lang->changelog['7.3'][] = 'admin-sso';
 $lang->changelog['7.3'][] = 'cron-openProcess';
 $lang->changelog['7.3'][] = 'mail-sendCloud';
+$lang->changelog['7.3'][] = 'mail-sendcloudUser';

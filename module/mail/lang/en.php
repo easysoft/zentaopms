@@ -8,8 +8,9 @@ $lang->mail->test   = 'Testing';
 $lang->mail->reset  = 'Reset';
 $lang->mail->browse = 'Mail list';
 $lang->mail->delete = 'Delete mail';
-$lang->mail->sendCloud   = 'SendCloud';
-$lang->mail->batchDelete = 'Batch delete';
+$lang->mail->sendCloud     = 'SendCloud';
+$lang->mail->batchDelete   = 'Batch delete';
+$lang->mail->sendcloudUser = 'SendCloud Contact';
 
 $lang->mail->turnon      = 'Turnon';
 $lang->mail->async       = 'Asynchronous';
@@ -26,6 +27,11 @@ $lang->mail->debug       = 'Debug';
 $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'accessKey';
 $lang->mail->secretKey   = 'secretKey';
+
+$lang->mail->syncedUser = 'Synced user';
+$lang->mail->unsyncUser = 'Unsync user';
+$lang->mail->sync       = 'Sync';
+$lang->mail->remove     = 'Remove';
 
 $lang->mail->toList      = 'Addressee';
 $lang->mail->subjectName = 'Subject';
@@ -67,8 +73,10 @@ $lang->mail->sendmailTips   = 'Tips: system will not send mail to current user.'
 $lang->mail->needConfigure  = "I can not find the configuration, please configure it first.";
 $lang->mail->nofsocket      = 'The fsocket correlation function is disabled, not letter! Please enlarge the setting of allow_url_fopen to On in php.ini and open the extension of openssl. Restart apache.';
 $lang->mail->noOpenssl      = 'Please open the extension of openssl when use tls. Restart apache.';
+$lang->mail->sendCloudFail  = 'Fail. Reason:';
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>SendCloud Notice is SendCloud's team notification service. Can view to <a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a></p>
 <p>accessKey and secretKey can go to the "Settings" page view after login. The sender name and address is also provided in the "Settings" page.</p>
 <p>Letter, The nickname of Notice SendCloud contact must to be consistent with the email. You may not succeed in sending.</p>
 EOD;
+$lang->mail->sendCloudSuccess = 'Success';

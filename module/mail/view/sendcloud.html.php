@@ -44,12 +44,13 @@ include '../../common/view/header.html.php';
            <?php 
            echo html::submitButton();
            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
+           if($this->config->mail->turnon and common::hasPriv('mail', 'sendcloudUser')) echo html::linkButton($lang->mail->sendcloudUser, inlink('sendcloudUser'));
            echo html::linkButton($lang->mail->reset, inlink('reset'));
            ?>
          </td>
        </tr>
     </table>
   </form>
-  <div class='alert alert-info'><?php echo $lang->mail->sendCloudHelp?></div>
+  <div class='alert alert-info'><?php printf($lang->mail->sendCloudHelp, common::hasPriv('mail', 'sendcloudUser') ? inlink('sendcloudUser') : '#')?></div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
