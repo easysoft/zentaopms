@@ -115,7 +115,7 @@ $lang->project->burn             = '燃尽图';
 $lang->project->baseline         = '基准线';
 $lang->project->computeBurn      = '更新';
 $lang->project->burnData         = '燃尽图数据';
-$lang->project->fixFirst         = '修复首天值';
+$lang->project->fixFirst         = '修改首天工时';
 $lang->project->team             = '团队成员';
 $lang->project->doc              = '文档列表';
 $lang->project->manageProducts   = '关联' . $lang->productCommon;
@@ -184,7 +184,7 @@ $lang->project->groupSummary    = "本组共 <strong>%s</strong> 个任务，未
 $lang->project->wbs             = "分解任务";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '点击查看大图';
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-sm'><i class='icon-question-sign'></i></a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-sm'>帮助</a>";
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下{$lang->projectCommon}关联的{$lang->productCommon}中有没有需求，而且要确保它们已经审核通过。";
 $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';
@@ -232,7 +232,7 @@ $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = '团队内部的简称';
-$lang->project->placeholder->totalLeft = '总剩余工时';
+$lang->project->placeholder->totalLeft = '项目开始时的总预计工时';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->doing     = '(进行中)';

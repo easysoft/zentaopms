@@ -184,7 +184,7 @@ $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait
 $lang->project->wbs             = "WBS";
 $lang->project->batchWBS        = "Batch WBS";
 $lang->project->largeBurnChart  = 'View large';
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' title='How to update burndown?' target='_blank' class='btn btn-sm'><i class='icon-question-sign'></i></a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' title='How to update burndown?' target='_blank' class='btn btn-sm'>Help</a>";
 $lang->project->whyNoStories    = "There no active stories to added to this {$lang->projectCommon}. Please check the linked {$lang->productCommon}.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->unDoneProjects  = 'Undone';
@@ -232,7 +232,7 @@ $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = "{$lang->projectCommon} code";
-$lang->project->placeholder->totalLeft = 'Total left';
+$lang->project->placeholder->totalLeft = 'Total left when start project';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->doing     = '(doing)';
