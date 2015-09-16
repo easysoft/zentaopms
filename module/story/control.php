@@ -1075,7 +1075,7 @@ class story extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
-        $this->loadModel('mail')->send($toList, 'STORY #' . $story->id . $this->lang->colon . $story->title . ' - ' . $productName, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName, $mailContent, $ccList);
         if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
     /**
