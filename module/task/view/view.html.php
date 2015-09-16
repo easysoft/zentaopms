@@ -54,7 +54,7 @@
         echo '</div>';
 
         $actionLinks = ob_get_contents();
-        ob_clean();
+        ob_end_clean();
         echo $actionLinks;
     }
     else

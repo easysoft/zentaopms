@@ -315,7 +315,7 @@ class mailModel extends model
         if($this->isError()) $this->app->saveError('E_MAIL', join(' ', $this->errors), __FILE__, __LINE__, true);
 
         $message = ob_get_contents();
-        ob_clean();
+        ob_end_clean();
 
         return $message;
     }
