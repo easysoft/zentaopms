@@ -613,14 +613,14 @@ class user extends control
             }
 
             if(strpos($this->referer, $loginLink) === false and 
-               strpos($this->referer, $denyLink)  === false 
+               strpos($this->referer, $denyLink)  === false and $this->referer
             )
             {
-                $this->locate($this->referer);
+                die(js::locate($this->referer, 'parent'));
             }
             else
             {
-                $this->locate($this->createLink($this->config->default->module));
+                die(js::locate($this->createLink($this->config->default->module), 'parent'));
             }
         }
 
