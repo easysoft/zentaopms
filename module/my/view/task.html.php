@@ -32,6 +32,7 @@
       <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
       <th class='w-150px'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
       <th>                 <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+      <th class='w-user'>  <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
       <th class='w-user'>  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
       <th class='w-user'>  <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
@@ -39,7 +40,6 @@
       <th class='w-hour'>  <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
       <th class='w-date'>  <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
       <th class='w-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-      <th class='w-user'>  <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
       <th class='w-140px'> <?php echo $lang->actions;?></th>
     </tr>
     </thead>   
@@ -55,6 +55,7 @@
       <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
       <td class='text-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
+      <td><?php echo $users[$task->openedBy];?></td>
       <td><?php echo $users[$task->assignedTo];?></td>
       <td><?php echo $users[$task->finishedBy];?></td>
       <td><?php echo $task->estimate;?></td>
@@ -62,7 +63,6 @@
       <td><?php echo $task->left;?></td>
       <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class='task-<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
-      <td><?php echo $users[$task->openedBy];?></td>
       <td class='text-right'>
         <?php 
         common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', 'hand-right', '', 'iframe', true);
