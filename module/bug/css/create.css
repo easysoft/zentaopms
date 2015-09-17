@@ -16,3 +16,6 @@
 
 #module_chosen.chosen-container .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
 #openedBuild_chosen.chosen-container .chosen-drop {min-width: 450px; border-top: 1px solid #ddd!important}
+
+.row .col-sm-8{width:75%;}
+.row .col-sm-4{padding-left:0px; width:25%;}

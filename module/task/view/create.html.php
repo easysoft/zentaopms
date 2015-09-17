@@ -51,9 +51,25 @@
       <tr>
         <th><?php echo $lang->task->name;?></th>
         <td colspan='3'>
-          <div class='input-group'>
-            <?php echo html::input('name', $task->name, "class='form-control'");?>
-            <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
+          <div class='row'>
+            <div class='col-sm-8'>
+              <div class='input-group' style='display:block'>
+                <?php echo html::input('name', $task->name, "class='form-control'");?>
+                <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
+              </div>
+            </div>
+            <div class='col-sm-2'>
+              <div class="input-group">
+                <span class='input-group-addon fix-border'><?php echo $lang->task->pri;?></span>
+                <?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?>
+              </div>
+            </div>
+            <div class='col-sm-2'>
+              <div class="input-group">
+                <span class='input-group-addon fix-border'><?php echo $lang->task->estimate;?></span>
+                <?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+              </div>
+            </div>
           </div>
         </td>
       </tr>
@@ -61,17 +77,6 @@
         <th><?php echo $lang->task->desc;?></th>
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td><td></td>
       </tr>  
-      <tr>
-        <th><?php echo $lang->task->pri;?></th>
-        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?></td>
-        <td>
-          <div class="input-group">
-            <span class='input-group-addon'><?php echo $lang->task->estimate;?></span>
-            <?php echo html::input('estimate', $task->estimate, "class='form-control'")?>
-            <span class="input-group-addon"><?php echo $lang->task->hour;?></span>
-          </div>
-        </td><td><div class='help-block'><?php echo $lang->task->estimateTip?></div></td>
-      </tr>
       <tr>
         <th><?php echo $lang->task->estStarted;?></th>
         <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>

@@ -68,8 +68,13 @@
         </td>
       </tr>
       <tr>
-        <th><?php echo $lang->story->pri;?></th>
-        <td><?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control'");?></td>
+        <th><?php echo $lang->story->reviewedBy;?></th>
+        <td>
+          <div class='input-group'>
+            <?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?>
+            <span class='input-group-addon'><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></span>
+          </div>
+        </td>
         <td>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->story->estimate;?></span>
@@ -81,11 +86,16 @@
       <tr>
         <th><?php echo $lang->story->title;?></th>
         <td colspan='3'>
-          <div class='input-group'>
-            <?php echo html::input('title', $storyTitle, "class='form-control'");?>
-            <span class='input-group-addon fix-border'><?php echo $lang->story->reviewedBy?></span>
-            <?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?>
-            <span class='input-group-addon'><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></span>
+          <div class='row'>
+            <div class='col-sm-10'>
+              <?php echo html::input('title', $storyTitle, "class='form-control'");?>
+            </div>
+            <div class='col-sm-2'>
+              <div class='input-group'>
+                <span class='input-group-addon fix-border'><?php echo $lang->story->pri?></span>
+                <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control'");?>
+              </div>
+            </div>
           </div>
         </td>
       </tr>  

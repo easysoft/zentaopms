@@ -77,14 +77,6 @@ js::set('refresh', $lang->refresh);
             unset($lang->bug->typeList['trackthings']);
             echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
             ?>
-            <span class='input-group-addon fix-border'><?php echo $lang->bug->pri?></span>
-            <?php echo html::select('pri', $lang->bug->priList, $severity, "class='form-control'");?>
-            <span class='input-group-addon fix-border'><?php echo $lang->bug->severity?></span>
-            <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control'");?>
-          </div>
-        </td>
-        <td>
-          <div class='input-group'>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
             <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
@@ -94,7 +86,19 @@ js::set('refresh', $lang->refresh);
       </tr>
       <tr>
         <th><?php echo $lang->bug->title;?></th>
-        <td colspan='2'><?php echo html::input('title', $bugTitle, "class='form-control'");?></td>
+        <td colspan='2'>
+          <div class='row'>
+            <div class='col-sm-8'><?php echo html::input('title', $bugTitle, "class='form-control'");?></div>
+            <div class='col-sm-4'>
+              <div class='input-group'>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->pri?></span>
+                <?php echo html::select('pri', $lang->bug->priList, $severity, "class='form-control'");?>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->severity?></span>
+                <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control'");?>
+              </div>
+            </div>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->bug->steps;?></th>

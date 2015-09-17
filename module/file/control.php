@@ -204,8 +204,9 @@ class file extends control
      */
     public function sendDownHeader($fileName, $fileType, $content)
     {
+        /* Clean the ob content to make sure no space or utf-8 bom output. */
         $obLevel = ob_get_level();
-        for($i = 0; $i < $obLevel; $i++) ob_end_clean();    // clean the ob content to make sure no space or utf-8 bom output.
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
         setcookie('downloading', 1);
