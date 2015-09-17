@@ -53,7 +53,8 @@
         <legend><?php echo $lang->doc->url;?></legend>
         <div>
           <?php echo html::a(urldecode($doc->url), '', '_blank');?>
-          <iframe src='<?php echo urldecode($doc->url);?>' width='100%'frameborder='0' id='url-content'></iframe>
+          <!-- Remove referer -->
+          <iframe src="javascript:location.replace('<?php echo urldecode($doc->url);?>' + (parent.location.hash||''))" width='100%'frameborder='0' id='url-content'></iframe>
         </div>
       </fieldset>
       <?php endif;?>
