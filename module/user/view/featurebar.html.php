@@ -7,7 +7,6 @@
     $date = isset($date) ? $date : helper::today();
 
     echo "<li class='w-150px'>" . $userList . '</li>';
-    echo '<li> &nbsp; ' . $lang->arrow . ' &nbsp; </li>';
     echo "<li id='todoTab'>";    common::printLink('user', 'todo',     "account=$account", $lang->user->todo);  echo '</li>';
     echo "<li id='storyTab'>";   common::printLink('user', 'story',    "account=$account", $lang->user->story); echo '</li>';
     echo "<li id='taskTab'>";    common::printLink('user', 'task',     "account=$account", $lang->user->task);  echo '</li>';
