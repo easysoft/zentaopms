@@ -381,6 +381,7 @@ $lang->downNotify     = "Down notify";
 
 $lang->suhosinInfo   = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
 $lang->pasteTextInfo = "Paste the text into a text field, each line of text as a data header.";
+$lang->noticeImport  = "<p style='font-size:14px'>Import data, containing the existing system of data, please confirm these data to cover or insert</p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Cover</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>Insert</a></p>";
 
 $lang->noResultsMatch    = "No results match";
 $lang->searchMore        = "Search more results with the key:";

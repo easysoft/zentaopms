@@ -70,8 +70,18 @@
   <tfoot>
     <tr>
       <td colspan='10' class='text-center'>
-        <?php if(!$insert) echo "<label for='insert' class='pull-left'><input type='checkbox' id='insert' name='insert' value='1' />{$lang->testcase->insert}</label>"?>
-        <?php echo html::submitButton() . ' &nbsp; ' . html::backButton()?>
+        <?php
+        if(!$insert)
+        {
+          include '../../common/view/noticeimport.html.php';
+          echo "<button type='button' data-toggle='myModal' class='btn btn-primary'>{$lang->save}</button>";
+        }
+        else
+        {
+            echo html::submitButton();
+        }
+        echo ' &nbsp; ' . html::backButton()
+        ?>
       </td>
     </tr>
   </tfoot>
