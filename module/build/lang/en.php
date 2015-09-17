@@ -45,7 +45,7 @@ $lang->build->linkStories        = 'Stories';
 $lang->build->unlinkStory        = 'Remove story';
 $lang->build->linkBugs           = 'Bugs';
 $lang->build->unlinkBug          = 'Remove bug';
-$lang->build->stories            = 'Resolved stories';
+$lang->build->stories            = 'Finished stories';
 $lang->build->bugs               = 'Resolved bugs';
 $lang->build->generatedBugs      = 'Generated bug';
 
