@@ -7,7 +7,7 @@ $lang->cron->edit        = 'Edit';
 $lang->cron->delete      = 'Delete';
 $lang->cron->toggle      = 'Activation/Disable';
 $lang->cron->turnon      = 'Open/Close';
-$lang->cron->openProcess = 'Open process';
+$lang->cron->openProcess = 'Restart';
 
 $lang->cron->m        = 'Minute';
 $lang->cron->h        = 'Hour';

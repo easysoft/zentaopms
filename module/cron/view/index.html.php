@@ -13,7 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'><?php echo $lang->cron->common;?></div>
-  <div class='actions'><?php if(common::hasPriv('cron', 'turnon') and !empty($config->global->cron)) echo html::a(inlink('turnon'), $lang->cron->turnonList[0] . $lang->cron->common, 'hiddenwin', "class='btn'");?></div>
+  <div class='actions'>
+    <?php if(common::hasPriv('cron', 'openProcess')) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn'")?>
+    <?php if(common::hasPriv('cron', 'turnon') and !empty($config->global->cron)) echo html::a(inlink('turnon'), $lang->cron->turnonList[0], 'hiddenwin', "class='btn'");?>
+  </div>
 </div>
 
 <?php if(!empty($config->global->cron)):?>
@@ -21,7 +24,6 @@
   <div class='panel-heading'>
     <strong><?php echo $lang->cron->list?></strong>
     <div class='panel-actions pull-right'>
-      <?php if(common::hasPriv('cron', 'openProcess')) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn btn-sm'")?>
       <?php if(common::hasPriv('cron', 'create'))      echo html::a(inlink('create'), $lang->cron->create, '', "class='btn btn-primary btn-sm'")?>
     </div>
   </div>
