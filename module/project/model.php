@@ -974,7 +974,6 @@ class projectModel extends model
             $task->pri          = $bugToTasks->pri[$key];
             $task->consumed     = 0;
             $task->status       = 'wait';
-            $task->desc         = $this->lang->bug->resolve . ':' . '#' . html::a(helper::createLink('bug', 'view', "bugID=$key"), sprintf('%03d', $key));
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
             if(!empty($bugToTasks->estimate[$key]))

@@ -449,6 +449,7 @@ class task extends control
                 $task->bugSteps = $bug->steps;
                 foreach($bug->files as $file) $task->files[] = $file;
             }
+            $this->view->fromBug = $bug;
         }
         else
         {

@@ -150,6 +150,12 @@
             ?>
             </td>
           </tr>
+          <?php if($task->fromBug):?>
+          <tr>
+            <th><?php echo $lang->task->fromBug;?></th>
+            <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug"), "#$task->fromBug " . $fromBug->title, '_blank');?></td> 
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
