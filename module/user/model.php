@@ -235,6 +235,12 @@ class userModel extends model
             $data->group   = $this->post->group;
             $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
         }
+
+        if(!dao::isError())
+        {
+            $this->loadModel('mail');
+            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+        }
     }
 
     /**
@@ -283,6 +289,7 @@ class userModel extends model
             }
         }
 
+        $this->loadModel('mail');
         foreach($data as $user)
         {
             if($user->group)
@@ -298,6 +305,10 @@ class userModel extends model
             {
                 echo js::error(dao::getError());
                 die(js::reload('parent'));
+            }
+            else
+            {
+                if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
             }
         }
     }
@@ -367,6 +378,16 @@ class userModel extends model
             }
         }
         if($user->password and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
+
+        if(!dao::isError())
+        {
+            $this->loadModel('mail');
+            if($this->config->mail->mta == 'sendcloud' and $user->email != $oldUser->email)
+            {
+                $this->mail->syncSendCloud('delete', $oldUser->email);
+                $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+            }
+        }
     }
 
     /**
@@ -379,7 +400,7 @@ class userModel extends model
     {
         if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
 
-        $oldUsers     = $this->dao->select('id, account')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchPairs('id', 'account');
+        $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($this->post->account)->fetchGroup('account', 'id');
 
         $accounts = array();
@@ -405,12 +426,23 @@ class userModel extends model
             $prev['role']  = $users[$id]['role'];
         }
 
+        $this->loadModel('mail');
         foreach($users as $id => $user)
         {
             $this->dao->update(TABLE_USER)->data($user)->where('id')->eq((int)$id)->exec();
-            if($user['account'] != $oldUsers[$id])
+            $oldUser = $oldUsers[$id];
+            if(!dao::isError())
             {
-                $oldAccount = $oldUsers[$id];
+                if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
+                {
+                    $this->mail->syncSendCloud('delete', $oldUser->email);
+                    $this->mail->syncSendCloud('sync', $user['email'], $user['realname']);
+                }
+            }
+
+            if($user['account'] != $oldUser->account)
+            {
+                $oldAccount = $oldUser->account;
                 $this->dao->update(TABLE_USERGROUP)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
                 if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
                 {

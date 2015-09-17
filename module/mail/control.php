@@ -405,20 +405,7 @@ class mail extends control
                 $email = $realnameAndEmail->email;
                 if(isset($actionedEmail[$email])) continue;
 
-                if($action == 'delete')
-                {
-                    $result = $this->mta->deleteMember($email);
-                }
-                elseif($action == 'sync')
-                {
-                    $member = new stdclass();
-                    $member->nickName = $email;
-                    $member->email    = $email;
-                    $member->userName = $realnameAndEmail->realname;
-
-                    $result = $this->mta->addMember($member);
-                }
-
+                $result = $this->mail->syncSendCloud($action, $email, $realnameAndEmail->realname);
                 if(!$result->result)
                 {
                     echo(js::alert($this->lang->mail->sendCloudFail . $result->message . "(CODE: $result->statusCode)"));

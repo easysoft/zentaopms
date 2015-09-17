@@ -507,4 +507,33 @@ class mailModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * Sync to sendCloud 
+     * 
+     * @param  string $action 
+     * @param  string $email 
+     * @param  string $userName 
+     * @access public
+     * @return object
+     */
+    public function syncSendCloud($action, $email, $userName = '')
+    {
+        $result = '';
+        if($action == 'delete')
+        {
+            $result = $this->mta->deleteMember($email);
+        }
+        elseif($action == 'sync')
+        {
+            $member = new stdclass();
+            $member->nickName = $email;
+            $member->email    = $email;
+            $member->userName = $userName;
+
+            $result = $this->mta->addMember($member);
+        }
+
+        return $result;
+    }
 }

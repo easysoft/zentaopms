@@ -540,6 +540,11 @@ class user extends control
         {
             if(md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
             $this->user->delete(TABLE_USER, $userID);
+            if(!dao::isError())
+            {
+                $this->loadModel('mail');
+                if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('delete', $user->email);
+            }
 
             /* if ajax request, send result. */
             if($this->server->ajax)
