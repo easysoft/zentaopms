@@ -35,5 +35,9 @@ $lang->company->backyard = '内网';
 $lang->company->pms      = 'PMS网站';
 $lang->company->guest    = '匿名登录';
 
+$lang->company->product = $lang->productCommon;
+$lang->company->project = $lang->projectCommon;
+$lang->company->user    = '用户';
+
 $lang->company->guestList[0] = '不允许';
 $lang->company->guestList[1] = '允许';

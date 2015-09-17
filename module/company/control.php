@@ -201,17 +201,17 @@ class company extends control
 
         /* Get products' list.*/
         $products = $this->loadModel('product')->getPairs('nocode');
-        $products = array($this->lang->product->select) + $products;
+        $products = array($this->lang->company->product) + $products;
         $this->view->products = $products;
 
         /* Get projects' list.*/
         $projects = $this->loadModel('project')->getPairs('nocode');
-        $projects = array($this->lang->project->select) + $projects;
+        $projects = array($this->lang->company->project) + $projects;
         $this->view->projects = $projects; 
 
         /* Get users.*/
         $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $users[''] = $this->lang->user->select;
+        $users[''] = $this->lang->company->user;
         $this->view->users    = $users; 
 
         /* The header and position. */

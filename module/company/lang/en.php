@@ -35,5 +35,9 @@ $lang->company->backyard = 'Intranet';
 $lang->company->pms      = 'Zentao';
 $lang->company->guest    = 'Guest';
 
+$lang->company->product = $lang->productCommon;
+$lang->company->project = $lang->projectCommon;
+$lang->company->user    = 'User';
+
 $lang->company->guestList[0] = 'Deny';
 $lang->company->guestList[1] = 'Allow';
