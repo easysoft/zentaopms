@@ -16,7 +16,6 @@
     <tr>
       <th class='w-150px'>
         <?php echo $lang->group->viewList;?>
-        <input type="checkbox" name="allchecker[]" onclick="selectAll(this, '', 'checkbox')">
       </th>
       <td class='w-p60'>
         <?php foreach($lang->menu as $menu):?>
@@ -30,6 +29,12 @@
           </label>
         </div>
       <?php endforeach;?>
+        <div class='group-item'>
+          <label class='priv' for='allchecker'>
+            <input type="checkbox" id='allchecker' name="allchecker[]" onclick="selectAll(this, '', 'checkbox')">
+            <?php echo $lang->selectAll?>
+          </label>
+        </div>
       </td>
       <td><?php echo $lang->group->noticeVisit?></td>
     </tr>
