@@ -36,11 +36,6 @@
     $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
     $actionLinks = '';
 
-    /* Add story convenient. */
-    echo "<div class='btn-group'>";
-    common::printIcon('story', 'create', "productID=$story->product&moduleID=$story->module", '', 'button', 'plus');
-    echo '</div>';
-
     if(!$story->deleted)
     {
         ob_start();
@@ -301,5 +296,11 @@
     </div>
   </div>
 </div>
+<?php
+js::set('canCreate', common::hasPriv('story', 'story'));
+js::set('createStory', $lang->story->create);
+js::set('productID', $story->product);
+js::set('moduleID', $story->module);
+?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
