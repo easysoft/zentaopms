@@ -10,7 +10,7 @@ $lang->mail->browse = '邮件列表';
 $lang->mail->delete = '删除邮件';
 $lang->mail->sendCloud     = 'SendCloud发信';
 $lang->mail->batchDelete   = '批量删除';
-$lang->mail->sendcloudUser = 'SendCloud 联系人';
+$lang->mail->sendcloudUser = '同步联系人';
 
 $lang->mail->turnon      = '是否打开';
 $lang->mail->async       = '异步发送';
@@ -27,6 +27,9 @@ $lang->mail->debug       = '调试级别';
 $lang->mail->charset     = '编码';
 $lang->mail->accessKey   = 'accessKey';
 $lang->mail->secretKey   = 'secretKey';
+
+$lang->mail->selectMTA = '请选择发信方式：';
+$lang->mail->smtp      = 'SMTP发信';
 
 $lang->mail->syncedUser = '已经同步';
 $lang->mail->unsyncUser = '未同步';
@@ -77,6 +80,7 @@ $lang->mail->sendCloudFail  = '操作失败，原因：';
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>1、Notice SendCloud是SendCloud的团队通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
 <p>2、accessKey和secretKey可以到登陆后的"设置"页面查看。发信人地址和名称也在"设置"页面设置。</p>
-<p>3、发信时，Notice SendCloud联系人里面的昵称要跟邮箱一致，否则无法成功发信。可以到[<a href='%s'>SendCloud 联系人</a>]页面，将禅道用户同步到SendCloud联系人中</p>
+<p>3、发信时，Notice SendCloud联系人里面的昵称要跟邮箱一致，否则无法成功发信。可以到[<a href='%s'>同步联系人</a>]页面，将禅道用户同步到SendCloud联系人中</p>
 EOD;
 $lang->mail->sendCloudSuccess = '操作成功';
+$lang->mail->closeSendCloud   = '关闭SendCloud';

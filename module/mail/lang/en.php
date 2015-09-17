@@ -28,6 +28,9 @@ $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'accessKey';
 $lang->mail->secretKey   = 'secretKey';
 
+$lang->mail->selectMTA = 'Select MTA';
+$lang->mail->smtp      = 'SMTP';
+
 $lang->mail->syncedUser = 'Synced user';
 $lang->mail->unsyncUser = 'Unsync user';
 $lang->mail->sync       = 'Sync';
@@ -80,3 +83,4 @@ $lang->mail->sendCloudHelp  = <<<EOD
 <p>Letter, The nickname of Notice SendCloud contact must to be consistent with the email. You may not succeed in sending.</p>
 EOD;
 $lang->mail->sendCloudSuccess = 'Success';
+$lang->mail->closeSendCloud   = 'Close SendCloud';

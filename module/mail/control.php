@@ -22,7 +22,7 @@ class mail extends control
         parent::__construct($moduleName, $methodName);
 
         /* Task #1967. check the function of fsocket. */
-        if(!function_exists('fsockopen'))
+        if(isset($this->config->mail->mta) and $this->config->mail->mta != 'sendcloud' and !function_exists('fsockopen'))
         {
             echo js::alert($this->lang->mail->nofsocket);
             die(js::locate('back'));
@@ -40,9 +40,12 @@ class mail extends control
         if($this->config->mail->turnon)
         {
             if($this->config->mail->mta == 'sendcloud') $this->locate(inlink('sendcloud'));
-            $this->locate(inlink('edit'));
+            if($this->config->mail->mta == 'smtp') $this->locate(inlink('edit'));
         }
-        $this->locate(inlink('detect'));
+        $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->index;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->index;
+        $this->display();
     }
 
     /**
@@ -275,7 +278,7 @@ class mail extends control
     public function reset()
     {
         $this->dao->delete('*')->from(TABLE_CONFIG)->where('module')->eq('mail')->exec(); 
-        $this->locate(inlink('detect'));
+        $this->locate(inlink('index'));
     }
 
     /**
