@@ -88,10 +88,10 @@
           <table class='table table-form mg-0' style='border: 1px solid #ddd'>
             <thead>
               <tr>
-                <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
-                <th><?php echo $lang->testcase->stepDesc;?></th>
-                <th class='w-200px'><?php echo $lang->testcase->stepExpect;?></th>
-                <th class='w-100px'><?php echo $lang->actions;?></th>
+                <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
+                <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
+                <th><?php echo $lang->testcase->stepExpect;?></th>
+                <th class='w-140px'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <?php
@@ -100,13 +100,13 @@
                 $stepID += 1;
                 echo "<tr id='row$stepID' class='text-center'>";
                 echo "<td class='stepID strong'>$stepID</td>";
-                echo '<td class="w-p40">' . html::textarea('steps[]', $step->desc, "rows='1' class='form-control'") . '</td>';
+                echo '<td>' . html::textarea('steps[]', $step->desc, "rows='1' class='form-control'") . '</td>';
                 echo '<td>' . html::textarea('expects[]', $step->expect, "rows='1' class='form-control'") . '</td>';
-                echo "<td class='text-left w-140px text-top'><div class='btn-group'>";
-                echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' />";
-                echo "<input type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  />";
-                echo "<input type='button' tabindex='-1' class='delbutton btn btn-xs' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   />";
-                echo "</div></td>";
+                echo "<td class='text-left text-top'>";
+                echo "<button type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='preInsert($stepID)'  title='{$lang->testcase->insertBefore}'><i class=\"icon icon-double-angle-up\"></i></button>";
+                echo "<button type='button' tabindex='-1' class='addbutton btn btn-xs' onclick='postInsert($stepID)' title='{$lang->testcase->insertAfter}'><i class=\"icon icon-double-angle-down\"></i></button>";
+                echo "<button type='button' tabindex='-1' class='delbutton btn btn-xs' onclick='deleteRow($stepID)'  title='{$lang->testcase->deleteStep}'><i class=\"icon icon-remove\"></i></button>";
+                echo "</td>";
                 echo '</tr>';
             }
             ?>

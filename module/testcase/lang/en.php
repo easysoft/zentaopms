@@ -98,6 +98,8 @@ $lang->testcase->lblSystemBrowserAndHardware = 'OS & browser';
 $lang->testcase->lblAssignAndMail            = 'Assigned & mailto';
 $lang->testcase->lblStory                    = 'Story';
 $lang->testcase->lblLastEdited               = 'Last edited';
+$lang->testcase->lblTypeValue                = 'List of type';
+$lang->testcase->lblStageValue               = 'List of stage';
 
 $lang->testcase->legendRelated      = 'Related info';
 $lang->testcase->legendBasicInfo    = 'Basic info';

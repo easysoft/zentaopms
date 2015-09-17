@@ -111,13 +111,13 @@ function createRow()
     newRowID ++;
     var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
     newRow += "<td class='stepID strong'></td>";
-    newRow += "<td class='w-p50'><textarea name='steps[]' rows=3 class='form-control'></textarea></td>";
+    newRow += "<td><textarea name='steps[]' rows=3 class='form-control'></textarea></td>";
     newRow += "<td><textarea name='expects[]' rows=3 class='form-control'></textarea></td>";
-    newRow += "<td class='text-left w-100px'><div class='btn-group-vertical'>";
-    newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' />";
-    newRow += "<input type='button' tabindex='-1' class='addbutton btn' value='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' />";
-    newRow += "<input type='button' tabindex='-1' class='delbutton btn' value='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' />";
-    newRow += "</div></td>";
+    newRow += "<td class='text-left'>";
+    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' ><i class='icon icon-double-angle-up'></i></button>";
+    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' ><i class='icon icon-double-angle-down'></i></button>";
+    newRow += "<button type='button' tabindex='-1' class='delbutton btn' title='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' ><i class='icon icon-remove'></i></button>";
+    newRow += "</td>";
     return newRow;
 }
 

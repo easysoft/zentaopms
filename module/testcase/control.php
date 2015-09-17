@@ -866,6 +866,10 @@ class testcase extends control
             $fields['stage']        = $this->lang->testcase->stage;
             $fields['precondition'] = $this->lang->testcase->precondition;
 
+            $fields[''] = '';
+            $fields['typeValue']  = $this->lang->testcase->lblTypeValue;
+            $fields['stageValue'] = $this->lang->testcase->lblStageValue;
+
             $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
             $rows    = array();
             foreach($modules as $moduleID => $module)
@@ -874,6 +878,12 @@ class testcase extends control
                 $row->module     = $module . "(#$moduleID)";
                 $row->stepDesc   = "1. \n2. \n3.";
                 $row->stepExpect = "1. \n2. \n3.";
+
+                if(empty($rows))
+                {
+                    $row->typeValue  = join("\n", $this->lang->testcase->typeList);
+                    $row->stageValue = join("\n", $this->lang->testcase->stageList);
+                }
                 $rows[] = $row;
             }
 

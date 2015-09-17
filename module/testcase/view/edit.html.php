@@ -15,7 +15,7 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
-<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
@@ -43,9 +43,9 @@
             <thead>
               <tr>
                 <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
-                <th><?php echo $lang->testcase->stepDesc;?></th>
+                <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
                 <th><?php echo $lang->testcase->stepExpect;?></th>
-                <th class='w-100px'><?php echo $lang->actions;?></th>
+                <th class='w-60px'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <?php
@@ -54,13 +54,13 @@
                 $stepID += 1;
                 echo "<tr id='row$stepID' class='text-center'>";
                 echo "<td class='stepID strong'>$stepID</td>";
-                echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
+                echo '<td>' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
                 echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='form-control'") . '</td>';
-                echo "<td class='text-left w-100px'><div class='btn-group-vertical'>";
-                echo "<input type='button' tabindex='-1' class='addbutton btn' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' />";
-                echo "<input type='button' tabindex='-1' class='addbutton btn' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /> ";
-                echo "<input type='button' tabindex='-1' class='delbutton btn' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /> ";
-                echo "</div></td>";
+                echo "<td class='text-left'>";
+                echo "<button type='button' tabindex='-1' class='addbutton btn' onclick='preInsert($stepID)'  title='{$lang->testcase->insertBefore}'><i class='icon icon-double-angle-up'></i></button>";
+                echo "<button type='button' tabindex='-1' class='addbutton btn' onclick='postInsert($stepID)' title='{$lang->testcase->insertAfter}' ><i class='icon icon-double-angle-down'></i></button>";
+                echo "<button type='button' tabindex='-1' class='delbutton btn' onclick='deleteRow($stepID)'  title='{$lang->testcase->deleteStep}'  ><i class='icon icon-remove'></i></button>";
+                echo "</td>";
                 echo '</tr>';
             }
             ?>

@@ -18,9 +18,6 @@
       <th class='w-300px'>
         <table class='w-p100 table-borderless'>
           <tr>
-            <th colspan='2'><?php echo $lang->testcase->steps?></th>
-          </tr>
-          <tr>
             <th><?php echo $lang->testcase->stepDesc?></th>
             <th><?php echo $lang->testcase->stepExpect?></th>
           </tr>
