@@ -49,7 +49,7 @@ js::set('refresh', $lang->refresh);
             ?>
           </div>
         </td>
-        <td class='w-100px'></td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->project;?></th>

@@ -56,6 +56,7 @@ function setPreview()
     {
         $('#preview').addClass('hidden');
         $('#copyButton').addClass('hidden');
+        $('input#name').css('padding-right', $('input#name').css('padding-left'));
     }
     else
     {
@@ -65,6 +66,7 @@ function setPreview()
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
+        $('input#name').css('padding-right', '60px');
     }
 
     setAfter();

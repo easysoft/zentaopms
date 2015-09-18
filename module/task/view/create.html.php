@@ -53,10 +53,8 @@
         <td colspan='3'>
           <div class='row'>
             <div class='col-sm-8'>
-              <div class='input-group' style='display:block'>
-                <?php echo html::input('name', $task->name, "class='form-control'");?>
-                <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
-              </div>
+              <?php echo html::input('name', $task->name, "class='form-control'");?>
+              <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
             </div>
             <div class='col-sm-2'>
               <div class="input-group">
@@ -75,7 +73,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->desc;?></th>
-        <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td><td></td>
+        <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->task->estStarted;?></th>

@@ -1,5 +1,5 @@
 .input-group-btn {width: 0.01%}
-.input-group-btn #copyButton{margin-top: -5px;}
+.input-group-btn #copyButton{float:right;z-index:100;margin-top:-30px;}
 
 .row .col-sm-8{width:76%}
 .row .col-sm-2{padding-left:0px; width:12%}
