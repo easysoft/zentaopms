@@ -1299,17 +1299,22 @@ function computePasswordStrength(password)
     for(i = 0; i < length; i++)
     {
         letter = password.charAt(i);
-        if(letter >= 48 && letter <= 57)
+        var asc = letter.charCodeAt();
+        if(asc >= 48 && asc <= 57)
         {
-          strength += 1;
+            strength += 2;
         }
-        else if((letter >= 65 && letter <= 90))
+        else if((asc >= 65 && asc <= 90))
         {
-          strength += 1;
+            strength += 2;
         }
-        else(!(letter >= 97 && letter <= 122))
+        else if(asc >= 97 && asc <= 122)
         {
-          strength += 2;
+            strength += 1;
+        }
+        else
+        {
+            strength += 3;
         }
         if(uniqueChars.indexOf(letter) == -1) uniqueChars += letter;
     }

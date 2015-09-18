@@ -1003,17 +1003,22 @@ class userModel extends model
         $chars = str_split($password);
         foreach($chars as $letter)
         {
-            if($letter >= 48 && $letter <= 57)
-            {
-                $strength += 1;
-            }
-            elseif($letter >= 65 && $letter <= 90)
-            {
-                $strength += 1;
-            }
-            elseif(!($letter >= 97 && $letter <= 122))
+            $asc = ord($letter);
+            if($asc >= 48 && $asc <= 57)
             {
                 $strength += 2;
+            }
+            elseif($asc >= 65 && $asc <= 90)
+            {
+                $strength += 2;
+            }
+            elseif($asc >= 97 && $asc <= 122)
+            {
+                $strength += 1;
+            }
+            else
+            {
+                $strength += 3;
             }
             if(strpos($uniqueChars, $letter) === false) $uniqueChars .= $letter;
         }

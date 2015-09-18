@@ -26,6 +26,10 @@
         <td><?php echo $lang->admin->safe->noticeMode?></td>
       </tr>
       <tr>
+        <th></th>
+        <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->noticeStrong;?></span></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->admin->safe->weak?></th>
         <td colspan='2'><?php echo html::textarea('weak', $config->safe->weak, "class='form-control' rows='4'")?></td>
       </tr>

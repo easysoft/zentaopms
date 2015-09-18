@@ -64,4 +64,5 @@ $lang->admin->safe->reasonList['mobile']   = '与手机相同';
 $lang->admin->safe->reasonList['phone']    = '与电话相同';
 $lang->admin->safe->reasonList['birthday'] = '与生日相同';
 
-$lang->admin->safe->noticeMode = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
+$lang->admin->safe->noticeMode   = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
+$lang->admin->safe->noticeStrong = '密码长度越长，含有大写字母或数字或特殊符合越多，密码字母越不重复，安全度越强！';

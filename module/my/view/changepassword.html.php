@@ -29,7 +29,7 @@
         <th><?php echo $lang->user->password;?></th>
         <td>
           <span class='input-group'>
-            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>
