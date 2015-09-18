@@ -15,6 +15,7 @@ $lang->admin->checkDB = '檢查資料庫';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用戶管理';
 $lang->admin->group   = '分組管理';
+$lang->admin->sso     = '然之整合';
 $lang->admin->safeIndex = '安全';
 $lang->admin->checkWeak = '弱口令檢查';
 $lang->admin->welcome   = '歡迎使用禪道管理軟件後台管理系統';
@@ -63,4 +64,5 @@ $lang->admin->safe->reasonList['mobile']   = '與手機相同';
 $lang->admin->safe->reasonList['phone']    = '與電話相同';
 $lang->admin->safe->reasonList['birthday'] = '與生日相同';
 
-$lang->admin->safe->noticeMode = '系統會在登錄、創建和修改用戶、修改密碼的時候檢查用戶口令。';
+$lang->admin->safe->noticeMode   = '系統會在登錄、創建和修改用戶、修改密碼的時候檢查用戶口令。';
+$lang->admin->safe->noticeStrong = '密碼長度越長，含有大寫字母或數字或特殊符合越多，密碼字母越不重複，安全度越強！';

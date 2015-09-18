@@ -141,6 +141,9 @@ $lang->user->placeholder->join      = 'The date the employee joined the company'
 $lang->user->placeholder->commiter  = 'The account in version control systems';
 $lang->user->placeholder->verify    = 'You need to enter the password to verify.';
 
+$lang->user->placeholder->passwordStrength[1] = 'Strength must be in the middle, as much as possible, capital letters';
+$lang->user->placeholder->passwordStrength[2] = 'Strength must be strong, 15 or more, as far as possible complex';
+
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，Letters/underline/numbers, three above";
 $lang->user->error->accountDupl   = "ID %s，this account has been exist";

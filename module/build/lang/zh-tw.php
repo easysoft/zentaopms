@@ -45,8 +45,8 @@ $lang->build->linkStories        = '相關需求';
 $lang->build->unlinkStory        = '移除需求';
 $lang->build->linkBugs           = '相關Bug';
 $lang->build->unlinkBug          = '移除Bug';
-$lang->build->stories            = '已解決需求';
-$lang->build->bugs               = '已解決Bug';
+$lang->build->stories            = '完成的需求';
+$lang->build->bugs               = '解決的Bug';
 $lang->build->generatedBugs      = '產生的Bug';
 
 $lang->build->finishStories = ' 本次共完成 %s 個需求';

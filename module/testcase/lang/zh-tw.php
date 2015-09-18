@@ -75,7 +75,8 @@ $lang->testcase->confirmStoryChange = '確認需求變動';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num = '用例記錄數：';
+$lang->testcase->num    = '用例記錄數：';
+$lang->testcase->insert = '全新插入';
 
 $lang->testcase->deleteStep   = '刪除';
 $lang->testcase->insertBefore = '之前添加';
@@ -97,6 +98,8 @@ $lang->testcase->lblSystemBrowserAndHardware = '系統::瀏覽器';
 $lang->testcase->lblAssignAndMail            = '指派給::抄送給';
 $lang->testcase->lblStory                    = '相關需求';
 $lang->testcase->lblLastEdited               = '最後編輯';
+$lang->testcase->lblTypeValue                = '類型可選值列表';
+$lang->testcase->lblStageValue               = '階段可選值列表';
 
 $lang->testcase->legendRelated      = '相關信息';
 $lang->testcase->legendBasicInfo    = '基本信息';

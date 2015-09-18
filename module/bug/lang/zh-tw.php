@@ -106,6 +106,7 @@ $lang->bug->resolvedByMe   = '由我解決';
 $lang->bug->closedByMe     = '由我關閉';
 $lang->bug->assignToNull   = '未指派';
 $lang->bug->unResolved     = '未解決';
+$lang->bug->toClosed       = '待關閉';
 $lang->bug->unclosed       = '未關閉';
 $lang->bug->longLifeBugs   = '久未處理';
 $lang->bug->postponedBugs  = '被延期';
@@ -351,7 +352,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved         = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
+$lang->bug->action->resolved         = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => 'resolutionList');
 $lang->bug->action->tostory          = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask           = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 

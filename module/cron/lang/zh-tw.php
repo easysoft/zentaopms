@@ -1,12 +1,13 @@
 <?php
-$lang->cron->common  = '定時任務';
-$lang->cron->index   = '首頁';
-$lang->cron->list    = '任務列表';
-$lang->cron->create  = '添加';
-$lang->cron->edit    = '編輯';
-$lang->cron->delete  = '刪除';
-$lang->cron->toggle  = '激活/禁用';
-$lang->cron->turnon  = '打開/關閉';
+$lang->cron->common      = '計劃任務';
+$lang->cron->index       = '首頁';
+$lang->cron->list        = '任務列表';
+$lang->cron->create      = '添加';
+$lang->cron->edit        = '編輯';
+$lang->cron->delete      = '刪除';
+$lang->cron->toggle      = '激活/禁用';
+$lang->cron->turnon      = '打開/關閉';
+$lang->cron->openProcess = '重啟';
 
 $lang->cron->m        = '分';
 $lang->cron->h        = '小時';
@@ -35,7 +36,7 @@ $lang->cron->toggleList['stop']  = '禁用';
 $lang->cron->confirmDelete = '是否刪除該計劃任務？';
 $lang->cron->confirmTurnon = '是否關閉計劃任務？';
 $lang->cron->introduction  = <<<EOD
-<p>計劃任務功能可以定時執行諸如更新燃盡圖、備份等操作，免除自己佈置定時任務。</p>
+<p>計劃任務功能可以定時執行諸如更新燃盡圖、備份等操作，免除自己佈置計劃任務。</p>
 <p>該功能還有待完善，所以預設關閉該功能</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
@@ -43,8 +44,9 @@ $lang->cron->confirmOpen = <<<EOD
 EOD;
 
 $lang->cron->notice = new stdclass();
-$lang->cron->notice->m   = '取值範圍:0-59，"*"代表取值範圍內的數字，"/"代表"每"， "-"代表數字範圍。';
-$lang->cron->notice->h   = '取值範圍:0-23';
-$lang->cron->notice->dom = '取值範圍:1-31';
-$lang->cron->notice->mon = '取值範圍:1-12';
-$lang->cron->notice->dow = '取值範圍:0-6';
+$lang->cron->notice->m    = '取值範圍:0-59，"*"代表取值範圍內的數字，"/"代表"每"， "-"代表數字範圍。';
+$lang->cron->notice->h    = '取值範圍:0-23';
+$lang->cron->notice->dom  = '取值範圍:1-31';
+$lang->cron->notice->mon  = '取值範圍:1-12';
+$lang->cron->notice->dow  = '取值範圍:0-6';
+$lang->cron->notice->help = '註：如果伺服器重啟，或者發現計劃任務沒有正常工作，那麼計劃任務已經停止工作。需要手動點擊【創建進程】按鈕，或者一分鐘後刷新頁面，來開啟計劃任務。如果任務列表中第一條記錄的最後執行時間改變，說明任務開啟成功。';

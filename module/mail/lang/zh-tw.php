@@ -8,7 +8,9 @@ $lang->mail->test   = '測試發信';
 $lang->mail->reset  = '重置';
 $lang->mail->browse = '郵件列表';
 $lang->mail->delete = '刪除郵件';
-$lang->mail->batchDelete = '批量刪除';
+$lang->mail->sendCloud     = 'SendCloud發信';
+$lang->mail->batchDelete   = '批量刪除';
+$lang->mail->sendcloudUser = '同步聯繫人';
 
 $lang->mail->turnon      = '是否打開';
 $lang->mail->async       = '非同步發送';
@@ -23,6 +25,16 @@ $lang->mail->password    = 'smtp密碼';
 $lang->mail->secure      = '是否加密';
 $lang->mail->debug       = '調試級別';
 $lang->mail->charset     = '編碼';
+$lang->mail->accessKey   = 'accessKey';
+$lang->mail->secretKey   = 'secretKey';
+
+$lang->mail->selectMTA = '請選擇發信方式：';
+$lang->mail->smtp      = 'SMTP發信';
+
+$lang->mail->syncedUser = '已經同步';
+$lang->mail->unsyncUser = '未同步';
+$lang->mail->sync       = '同步';
+$lang->mail->remove     = '移除';
 
 $lang->mail->toList      = '收信人';
 $lang->mail->subjectName = '主題';
@@ -64,3 +76,11 @@ $lang->mail->sendmailTips   = '提示：系統不會為當前操作者發信。'
 $lang->mail->needConfigure  = '無法找到郵件配置信息，請先配置郵件發送參數。';
 $lang->mail->nofsocket      = 'fsocket相關函數被禁用，不能發信！請在php.ini中修改allow_url_fopen為On，打開openssl擴展。 保存並重新啟動apache。';
 $lang->mail->noOpenssl      = 'ssl和tls加密，請打開openssl擴展。 保存並重新啟動apache。';
+$lang->mail->sendCloudFail  = '操作失敗，原因：';
+$lang->mail->sendCloudHelp  = <<<EOD
+<p>1、Notice SendCloud是SendCloud的團隊通知服務。具體可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
+<p>2、accessKey和secretKey可以到登陸後的"設置"頁面查看。發信人地址和名稱也在"設置"頁面設置。</p>
+<p>3、發信時，Notice SendCloud聯繫人裡面的暱稱要跟郵箱一致，否則無法成功發信。可以到[<a href='%s'>同步聯繫人</a>]頁面，將禪道用戶同步到SendCloud聯繫人中</p>
+EOD;
+$lang->mail->sendCloudSuccess = '操作成功';
+$lang->mail->closeSendCloud   = '關閉SendCloud';

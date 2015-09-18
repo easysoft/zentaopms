@@ -288,6 +288,7 @@ $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 
 $lang->admin->menu->cron      = array('link' => '計劃任務|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
+$lang->admin->menu->sso       = '然之整合|admin|sso';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -380,6 +381,7 @@ $lang->downNotify     = "下載桌面提醒";
 
 $lang->suhosinInfo   = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
 $lang->pasteTextInfo = "粘貼文本到文本域中，每行文字作為一條數據的標題。";
+$lang->noticeImport  = "<p style='font-size:14px'>導入數據中，含有已經存在系統的數據，請確認這些數據要覆蓋或者全新插入</p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>覆蓋</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>全新插入</a></p>";
 
 $lang->noResultsMatch     = "沒有匹配結果";
 $lang->searchMore         = "搜索此關鍵字的更多結果：";

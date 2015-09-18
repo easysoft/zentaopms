@@ -53,7 +53,7 @@ $lang->project->Left          = '剩餘';
 $lang->project->progess       = '進度';
 $lang->project->viewBug       = '查看bug';
 $lang->project->noProduct     = "無{$lang->productCommon}{$lang->projectCommon}";
-$lang->project->select        = "--請選擇{$lang->projectCommon}--";
+$lang->project->select        = "請選擇{$lang->projectCommon}";
 $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
 $lang->project->undone        = '未完成';
@@ -115,6 +115,7 @@ $lang->project->burn             = '燃盡圖';
 $lang->project->baseline         = '基準綫';
 $lang->project->computeBurn      = '更新';
 $lang->project->burnData         = '燃盡圖數據';
+$lang->project->fixFirst         = '修改首天工時';
 $lang->project->team             = '團隊成員';
 $lang->project->doc              = '文檔列表';
 $lang->project->manageProducts   = '關聯' . $lang->productCommon;
@@ -183,7 +184,7 @@ $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未
 $lang->project->wbs             = "分解任務";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '點擊查看大圖';
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank' title='如何更新燃盡圖？'><i class='icon-question-sign'></i></a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank' title='如何更新燃盡圖？' class='btn btn-sm'>幫助</a>";
 $lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下{$lang->projectCommon}關聯的{$lang->productCommon}中有沒有需求，而且要確保它們已經審核通過。";
 $lang->project->doneProjects    = '已結束';
 $lang->project->unDoneProjects  = '未結束';
@@ -230,7 +231,8 @@ $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code = '團隊內部的簡稱';
+$lang->project->placeholder->code      = '團隊內部的簡稱';
+$lang->project->placeholder->totalLeft = '項目開始時的總預計工時';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->doing     = '(進行中)';

@@ -64,4 +64,5 @@ $lang->admin->safe->reasonList['mobile']   = 'Same mobile';
 $lang->admin->safe->reasonList['phone']    = 'Same phone';
 $lang->admin->safe->reasonList['birthday'] = 'Same birthday';
 
-$lang->admin->safe->noticeMode = 'The system will log in, create and modify the user password, check the user password.';
+$lang->admin->safe->noticeMode   = 'The system will log in, create and modify the user password, check the user password.';
+$lang->admin->safe->noticeStrong = 'The longer the password length, the more the number of letters or numbers or special characters, the more secure!';

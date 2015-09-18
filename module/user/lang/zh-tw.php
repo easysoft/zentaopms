@@ -98,7 +98,7 @@ $lang->user->closedBy    = '由他關閉';
 $lang->user->reviewedBy  = '由他評審';
 $lang->user->canceledBy  = '由他取消';
 
-$lang->user->testTask2Him = '他的任務';
+$lang->user->testTask2Him = '負責版本';
 $lang->user->case2Him     = '給他的用例';
 $lang->user->caseByHim    = '他建的用例';
 
@@ -140,6 +140,9 @@ $lang->user->placeholder->group     = '分組決定用戶的權限列表。';
 $lang->user->placeholder->join      = '入職日期';
 $lang->user->placeholder->commiter  = '版本控制系統(subversion)中的帳號';
 $lang->user->placeholder->verify    = '需要輸入你的密碼加以驗證';
+
+$lang->user->placeholder->passwordStrength[1] = '強度必須為中，儘量多包含數字，大寫字母';
+$lang->user->placeholder->passwordStrength[2] = '強度必須為強，15位以上，密碼儘量複雜';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，英文、數字和下劃線的組合，三位以上";
