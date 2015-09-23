@@ -815,7 +815,10 @@ class project extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->project = $this->project->getById($projectID);
+        $project = $this->project->getById($projectID);
+
+        $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch('left');
+        $this->view->project   = $project;
         $this->display();
     }
 

@@ -17,7 +17,7 @@
       <td>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $project->begin?></span>
-          <?php echo html::input('left', '', "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}'")?>
+          <?php echo html::input('left', $firstBurn, "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}'")?>
           <span class='input-group-btn'><?php echo html::submitButton();?></span>
         </div>
       </td>
