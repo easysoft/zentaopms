@@ -326,7 +326,7 @@ class userModel extends model
 
         $oldUser = $this->getById($userID);
 
-        $userID = (int)$userID;
+        $userID = $oldUser->id;
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))

@@ -439,7 +439,10 @@ class actionModel extends model
         if(is_array($desc))
         {
             $extra = strtolower($action->extra);
+
+            /* Fix bug #741. */
             if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
+
             if(isset($desc['extra'][$extra])) 
             {
                 echo str_replace('$extra', $desc['extra'][$extra], $desc['main']);

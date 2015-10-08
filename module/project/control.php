@@ -1594,7 +1594,9 @@ class project extends control
     {
         if(isset($_POST['storyIDList']))
         {
-            foreach($this->post->storyIDList as $storyID)
+            $storyIDList = $this->post->storyIDList;
+            $_POST       = array();
+            foreach($storyIDList as $storyID)
             {
                 $this->project->unlinkStory($projectID, $storyID);
             }

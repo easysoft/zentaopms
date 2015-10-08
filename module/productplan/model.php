@@ -137,7 +137,7 @@ class productplanModel extends model
     public function update($planID)
     {
         $oldPlan = $this->getById($planID);
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->get();
+        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta')->get();
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()

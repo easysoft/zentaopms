@@ -369,7 +369,7 @@ class my extends control
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $this->view->position[] = $this->lang->my->editProfile;
-        $this->view->user       = $this->user->getById($this->app->user->id);
+        $this->view->user       = $this->user->getById($this->app->user->account);
 
         $this->display();
     }
@@ -392,7 +392,7 @@ class my extends control
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
         $this->view->position[] = $this->lang->my->changePassword;
-        $this->view->user       = $this->user->getById($this->app->user->id);
+        $this->view->user       = $this->user->getById($this->app->user->account);
 
         $this->display();
     }
