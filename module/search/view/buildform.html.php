@@ -44,6 +44,8 @@ include '../../common/view/chosen.html.php';
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
+#searchform .chosen-container .chosen-drop{min-width: 300px;}
+#searchform .chosen-container .chosen-drop ul.chosen-results li{white-space:nowrap}
 #searchmore > i, #searchlite > i {font-size: 28px;}
 #searchmore:hover, #searchlite:hover {color: #145CCD; background: #e5e5e5}
 
@@ -289,7 +291,7 @@ foreach($fieldParams as $fieldName => $param)
 <table class='table table-condensed table-form' id='<?php echo "{$module}-search";?>' style='max-width: 1200px; margin: 0 auto'>
   <tr>
     <td class='w-400px'>
-      <table class='table active-disabled'>
+      <table class='table active-disabled table-fixed'>
       <?php
       $formSessionName = $module . 'Form';
       $formSession     = $this->session->$formSessionName;
@@ -317,7 +319,7 @@ foreach($fieldParams as $fieldName => $param)
           echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
           /* Print value. */
-          echo "<td id='valueBox$fieldNO'>";
+          echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
           if($param['control'] == 'input') 
           {
