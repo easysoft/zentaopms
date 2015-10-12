@@ -102,7 +102,7 @@
                       if(common::hasPriv('productplan', 'unlinkStory'))
                       {
                           $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&confirm=yes");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkStory}'");
+                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkStory}'");
                       }
                       ?>
                     </td>
@@ -167,7 +167,7 @@
                       if(common::hasPriv('productplan', 'unlinkBug'))
                       {
                           $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkBug}'");
+                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkBug}'");
                       }
                       ?>
                     </td>

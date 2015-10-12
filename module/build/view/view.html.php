@@ -90,7 +90,7 @@
                   if(common::hasPriv('build', 'unlinkStory'))
                   {
                       $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->build->unlinkStory}'");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->build->unlinkStory}'");
                   }
                   ?>
                 </td>
@@ -148,7 +148,7 @@
                   if(common::hasPriv('build', 'unlinkBug'))
                   {
                       $unlinkURL = inlink('unlinkBug', "buildID=$build->id&bug=$bug->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->build->unlinkBug}'");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->build->unlinkBug}'");
                   }
                   ?>
                 </td>
