@@ -186,16 +186,18 @@
 
                 if(common::hasPriv('story', 'batchChangePlan'))
                 {
+                    unset($plans['']);
+                    $plans      = array(0 => $lang->null) + $plans;
+                    $withSearch = count($plans) > 10;
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript:;', $lang->story->planAB, '', "id='planItem'");
-                    echo "<ul class='dropdown-menu'>";
-                    unset($plans['']);
-                    $plans = array(0 => $lang->null) + $plans;
+                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                     foreach($plans as $planID => $plan)
                     {
                         $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                        echo "<li>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                        echo "<li class='option' data-key='$planID'>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
                     }
+                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                     echo '</ul></li>';
                 }
                 else
@@ -228,13 +230,13 @@
                       echo html::select('assignedTo', $users, '', 'class="hidden"');
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript::', $lang->story->assignedTo, 'id="assignItem"');
-                      echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       foreach ($users as $key => $value)
                       {
                           if(empty($key)) continue;
                           echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                       }
-                      if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                      if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                       echo "</ul>";
                       echo "</li>";
                 }
