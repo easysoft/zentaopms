@@ -29,6 +29,7 @@
         </td>
         <td class='w-p25-f'>
           <div class='input-group' id='moduleIdBox'>
+          <span class='input-group-addon'><?php echo $lang->story->module;?></span>
           <?php 
           echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
@@ -75,25 +76,24 @@
             <span class='input-group-addon'><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></span>
           </div>
         </td>
-        <td>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->story->estimate;?></span>
-            <?php echo html::input('estimate', $estimate, "class='form-control'");?>
-            <span class='input-group-addon'><?php echo $lang->story->hour;?></span>
-          </div>
-        </td>
       </tr> 
       <tr>
         <th><?php echo $lang->story->title;?></th>
         <td colspan='3'>
           <div class='row'>
-            <div class='col-sm-10'>
+            <div class='col-sm-8'>
               <?php echo html::input('title', $storyTitle, "class='form-control'");?>
             </div>
             <div class='col-sm-2'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border'><?php echo $lang->story->pri?></span>
                 <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control'");?>
+              </div>
+            </div>
+            <div class='col-sm-2'>
+              <div class='input-group'>
+                <span class='input-group-addon'><?php echo $lang->story->estimateAB;?></span>
+                <?php echo html::input('estimate', $estimate, "class='form-control'");?>
               </div>
             </div>
           </div>
@@ -108,21 +108,32 @@
         <td colspan='3'><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
       </tr> 
       <tr>
-        <th><nobr><?php echo $lang->story->mailto;?></nobr></th>
-        <td colspan='3'>
+        <th><?php echo $lang->story->mailto;?></th>
+        <td colspan='2'>
           <div class='input-group'>
             <?php 
             echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "multiple"); 
-            if($contactLists) echo html::select('', $contactLists, '', "class='form-control' style='width: 150px' onchange=\"setMailto('mailto', this.value)\"");
+            if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
+            if(empty($contactLists))
+            {
+                echo '<span class="input-group-addon">';
+                echo '<a href="' . $this->createLink('company', 'browse') . '" target="_blank">' . $lang->user->contacts->manage . '</a>';
+                echo '</span>';
+                echo '<span class="input-group-addon">';
+                echo '<a href="###" onclick="ajaxGetContacts(this)">' . $lang->refresh . '</a>';
+                echo '</span>';
+            }
             ?>
+          </div>
+        </td>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->story->keywords;?></span>
+            <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
           </div>
         </td>
       </tr>
       <tr>
-        <th><nobr><?php echo $lang->story->keywords;?></nobr></th>
-        <td colspan='3'><?php echo html::input('keywords', $keywords, 'class="form-control"');?></td>
-      </tr>
-     <tr>
         <th><?php echo $lang->story->legendAttatch;?></th>
         <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
@@ -131,4 +142,5 @@
     <span id='responser'></span>
   </form>
 </div>
+<?php js::set('storyModule', $lang->story->module);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -10,7 +10,11 @@ function loadProduct(productID)
 function loadProductModules(productID)
 {
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&rootModuleID=0&returnType=html&needManage=true');
-    $('#moduleIdBox').load(moduleLink, function(){$('#moduleIdBox #module').chosen(defaultChosenOptions);});
+    $('#moduleIdBox').load(moduleLink, function()
+    {
+        $('#moduleIdBox #module').chosen(defaultChosenOptions);
+        if(typeof(storyModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + storyModule + "</span>")
+    });
 }
 
 function loadProductPlans(productID)

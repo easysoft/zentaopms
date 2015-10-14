@@ -59,31 +59,35 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->module;?></th>
-            <td id='moduleIdBox'>
-            <?php
-            echo html::select('module', $moduleOptionMenu, $story->module, 'class="form-control chosen"');
-            if(count($moduleOptionMenu) == 1)
-            {
-                echo "<span class='help-block'>";
-                echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
-                echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
-                echo '</span>';
-            }
-            ?>
+            <td>
+              <div class='input-group' id='moduleIdBox'>
+              <?php
+              echo html::select('module', $moduleOptionMenu, $story->module, 'class="form-control chosen"');
+              if(count($moduleOptionMenu) == 1)
+              {
+                  echo "<span class='inpug-group-addon'>";
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
+                  echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
+                  echo '</span>';
+              }
+              ?>
+              </div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->story->plan;?></th>
-            <td id='planIdBox'>
-            <?php echo html::select('plan', $plans, $story->plan, "class='form-control chosen'");
-            if(count($plans) == 1) 
-            {
-                echo "<span class='help-block'>";
-                echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
-                echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
-                echo '</span>';
-            }
-            ?>
+            <td>
+              <div class='input-group' id='planIdBox'>
+              <?php echo html::select('plan', $plans, $story->plan, "class='form-control chosen'");
+              if(count($plans) == 1) 
+              {
+                  echo "<span class='input-group-addon'>";
+                  echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
+                  echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
+                  echo '</span>';
+              }
+              ?>
+              </div>
             </td>
           </tr>
           <tr>

@@ -275,7 +275,7 @@ $lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimate';
 $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
 
 $lang->story->placeholder = new stdclass();
-$lang->story->placeholder->estimate = 'Estimate the story point.';
+$lang->story->placeholder->estimate = $lang->story->hour;
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose users who review...';
