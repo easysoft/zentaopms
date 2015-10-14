@@ -62,15 +62,15 @@
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>
-                  <th class='w-id' >   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
-                  <th class='w-pri'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                  <th>                 <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-                  <th class='w-user'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                  <th class='w-user'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-                  <th class='w-60px'>  <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-                  <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-                  <th class='w-80px'>  <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-                  <th class='w-50px'><?php echo $lang->actions?></th>
+                  <th class='w-id {sorter:false}' >   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                  <th class='{sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+                  <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-user {sorter:false}'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                  <th class='w-60px {sorter:false}'>  <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+                  <th class='w-status {sorter:false}'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-80px {sorter:false}'>  <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+                  <th class='w-50px {sorter:false}'>  <?php echo $lang->actions?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -138,13 +138,13 @@
                 <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>
-                  <th class='w-id'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
-                  <th class='w-pri'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                  <th>                 <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
-                  <th class='w-user'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                  <th class='w-user'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-                  <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-                  <th class='w-50px'><?php echo $lang->actions?></th>
+                  <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                  <th class='{sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-user {sorter:false}'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                  <th class='w-status {sorter:false}'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-50px {sorter:false}'>  <?php echo $lang->actions?></th>
                 </tr>
                 </thead>
                 <tbody>

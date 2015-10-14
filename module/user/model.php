@@ -639,7 +639,7 @@ class userModel extends model
                     break;
                 }
                 $acl = json_decode($group->acl, true);
-                if(empty($acls))
+                if(empty($acls) and !empty($acl))
                 {
                     $acls = $acl;
                     continue;
@@ -648,7 +648,7 @@ class userModel extends model
                 if(empty($acl['products'])) $productAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
 
-                $acls['views'] = array_merge($acls['views'], $acl['views']);
+                if(!empty($acl['views'])) $acls['views'] = array_merge($acls['views'], $acl['views']);
                 if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
             }
