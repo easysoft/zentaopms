@@ -606,6 +606,27 @@ function setMailto(mailto, contactListID)
 }
 
 /**
+ * Ajax get contacts.
+ * 
+ * @param  obj $obj 
+ * @access public
+ * @return void
+ */
+function ajaxGetContacts(obj)
+{
+    link = createLink('user', 'ajaxGetContactList');
+    $.get(link, function(contacts)
+    {
+      if(!contacts) return false;
+
+      $inputgroup = $(obj).parent().parent();
+      $inputgroup.find('.input-group-addon').remove();
+      $inputgroup.append(contacts);
+      $inputgroup.find('select:last').chosen(defaultChosenOptions);
+    });
+}
+
+/**
  * Set comment. 
  * 
  * @access public

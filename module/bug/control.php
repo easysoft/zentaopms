@@ -345,7 +345,7 @@ class bug extends control
         $this->view->contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;
-        $this->view->type             = $type;    
+        $this->view->type             = $type;
 
         $this->display();
     }

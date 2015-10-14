@@ -91,10 +91,10 @@ js::set('refresh', $lang->refresh);
             <div class='col-sm-8'><?php echo html::input('title', $bugTitle, "class='form-control'");?></div>
             <div class='col-sm-4'>
               <div class='input-group'>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->pri?></span>
-                <?php echo html::select('pri', $lang->bug->priList, $severity, "class='form-control'");?>
                 <span class='input-group-addon fix-border'><?php echo $lang->bug->severity?></span>
                 <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control'");?>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->pri?></span>
+                <?php echo html::select('pri', $lang->bug->priList, $severity, "class='form-control'");?>
               </div>
             </div>
           </div>
@@ -105,8 +105,8 @@ js::set('refresh', $lang->refresh);
         <td colspan='2'>
           <div id='tplBoxWrapper'>
             <div class='btn-toolbar'>
-              <div class='btn-group'><button id='saveTplBtn' type='button' class='btn btn-mini'><?php echo $lang->bug->saveTemplate?></button></div>
-              <div class="btn-group">
+              <div class='btn-group'>
+                <button id='saveTplBtn' type='button' class='btn btn-mini'><?php echo $lang->bug->saveTemplate?></button>
                 <button type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->bug->applyTemplate?> <span class='caret'></span></button>
                 <ul id='tplBox' class='dropdown-menu pull-right'>
                   <?php echo $this->fetch('bug', 'buildTemplates');?>
@@ -130,19 +130,30 @@ js::set('refresh', $lang->refresh);
         </td>
       </tr>
       <tr>
-        <th><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
-        <td colspan='2'>
+        <th><?php echo $lang->bug->lblMailto;?></th>
+        <td>
           <div class='input-group'>
           <?php 
           echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
           if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
+          if(empty($contactLists))
+          {
+              echo '<span class="input-group-addon">';
+              echo '<a href="' . $this->createLink('company', 'browse') . '" target="_blank">' . $lang->user->contacts->manage . '</a>';
+              echo '</span>';
+              echo '<span class="input-group-addon">';
+              echo '<a href="###" onclick="ajaxGetContacts(this)">' . $lang->refresh . '</a>';
+              echo '</span>';
+          }
           ?>
           </div>
         </td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->bug->keywords;?></th>
-        <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->bug->keywords;?></span>
+            <?php echo html::input('keywords', $keywords, "class='form-control'");?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->files;?></th>

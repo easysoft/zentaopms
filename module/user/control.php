@@ -952,4 +952,17 @@ class user extends control
         $list = $this->user->getContactListByID($contactListID);
         return print(html::select('mailto[]', $users, $list->userList, "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
     }
+
+    /**
+     * Ajax get contact list.
+     * 
+     * @access public
+     * @return string
+     */
+    public function ajaxGetContactList()
+    {
+        $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
+        if(empty($contactList)) return false;
+        return print(html::select('', $contactList, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\""));
+    }
 }

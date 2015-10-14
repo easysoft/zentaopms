@@ -8,8 +8,8 @@
 #buildBoxActions {padding-left: 15px;}
 
 #tplBoxWrapper {position: relative; z-index: 10;}
-#tplBoxWrapper > .btn-toolbar {position: absolute; right: 5px; top: 2px;}
-#tplBoxWrapper .btn {padding: 2px 8px}
+#tplBoxWrapper > .btn-toolbar {position: absolute; right: 0px; top: 0px;}
+#tplBoxWrapper .btn {padding: 4px 8px}
 #tplBox li {position: relative;}
 #tplBox li .btn-delete {position: absolute; right: 0; top: 0; display: block; width: 40px; text-align:center;}
 #tplBox li .tpl-name {padding-right: 40px;}
