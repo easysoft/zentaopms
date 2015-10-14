@@ -129,12 +129,13 @@
                           {
                               echo "<ul class='dropdown-menu'>";
                               unset($plans['']);
+                              unset($plans[$plan->id]);
                               $plans      = array(0 => $lang->null) + $plans;
                               $withSearch = count($plans) > 10;
-                              foreach($plans as $planID => $plan)
+                              foreach($plans as $planID => $planName)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
                               }
                               if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                               echo '</ul>';
