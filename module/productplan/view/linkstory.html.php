@@ -67,10 +67,4 @@ include '../../common/view/tablesorter.html.php';
     </table>
   </form>
 </div>
-<script>
-$(function()
-{
-    ajaxGetSearchForm('#stories .linkBox #querybox');
-    sortTable('#unlinkedStoriesForm .tablesorter');
-});
-</script>
+<script>$(function(){ajaxGetSearchForm('#stories .linkBox #querybox');})</script>

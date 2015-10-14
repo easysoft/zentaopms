@@ -781,7 +781,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
             $this->sendmail($storyID, $actionID);
         }
-        die(js::locate($this->session->storyList, 'parent'));
+        die(js::reload('parent'));
     }
 
     /**

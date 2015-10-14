@@ -64,10 +64,4 @@ include '../../common/view/tablesorter.html.php';
     </table>
   </form>
 </div>
-<script>
-$(function()
-{
-    ajaxGetSearchForm('#bugs .linkBox #querybox');
-    sortTable('#unlinkedBugsForm .tablesorter');
-})
-</script>
+<script>$(function(){ajaxGetSearchForm('#bugs .linkBox #querybox');})</script>

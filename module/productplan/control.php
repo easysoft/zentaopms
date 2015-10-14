@@ -224,6 +224,7 @@ class productplan extends control
         $this->view->plan        = $plan;
         $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->plans       = $this->productplan->getPairs($plan->product);
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
         $this->view->link        = $link;
@@ -350,7 +351,7 @@ class productplan extends control
      */
     public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
-        foreach($this->post->unlinkStories as $storyID) $this->productplan->unlinkStory($storyID);
+        foreach($this->post->storyIDList as $storyID) $this->productplan->unlinkStory($storyID);
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
     }
 

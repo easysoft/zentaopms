@@ -76,7 +76,8 @@
                 <tbody>
                   <?php
                   $totalEstimate = 0.0;
-                  $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkStory');
+                  $canBatchUnlink     = common::hasPriv('productPlan', 'batchUnlinkStory');
+                  $canBatchChangePlan = common::hasPriv('story', 'batchChangePlan');
                   ?>
                   <?php foreach($planStories as $story):?>
                   <?php
@@ -85,8 +86,8 @@
                   ?>
                   <tr class='text-center'>
                     <td>
-                      <?php if($canBatchUnlink):?>
-                      <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
+                      <?php if($canBatchUnlink or $canBatchChangePlan):?>
+                      <input class='ml-10px' type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/> 
                       <?php endif;?>
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
@@ -114,10 +115,31 @@
                   <td colspan='9'>
                     <div class='table-actions clearfix'>
                       <?php 
-                      if(count($planStories) and $canBatchUnlink)
+                      if(count($planStories) and ($canBatchUnlink or $canBatchChangePlan))
                       {
                           echo "<div class='btn-group'>" . html::selectButton() . '</div>';
-                          echo html::submitButton($lang->productplan->batchUnlink);
+                          echo "<div class='btn-group dropup'>";
+                          $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");
+                          echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink')\"");
+                          echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                          echo "<ul class='dropdown-menu'>";
+                          echo "<li class='dropdown-submenu'>";
+                          echo html::a('javascript:;', $lang->story->planAB, '', "id='changePlan' " . ($canBatchChangePlan ? '' : "class='disabled'"));
+                          if($canBatchChangePlan)
+                          {
+                              echo "<ul class='dropdown-menu'>";
+                              unset($plans['']);
+                              $plans      = array(0 => $lang->null) + $plans;
+                              $withSearch = count($plans) > 10;
+                              foreach($plans as $planID => $plan)
+                              {
+                                  $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
+                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                              }
+                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                              echo '</ul>';
+                          }
+                          echo '</li></ul></div>';
                       }
                       ?>
                       <div class='text'><?php echo $summary;?></div>
