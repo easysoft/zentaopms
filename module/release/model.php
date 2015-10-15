@@ -212,12 +212,13 @@ class releaseModel extends model
      * @access public
      * @return void
      */
-    public function linkBug($releaseID)
+    public function linkBug($releaseID, $type = 'bug')
     {
         $release = $this->getByID($releaseID);
 
-        $release->bugs .= ',' . join(',', $this->post->bugs);
-        $this->dao->update(TABLE_RELEASE)->set('bugs')->eq($release->bugs)->where('id')->eq((int)$releaseID)->exec();
+        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
+        $release->$field .= ',' . join(',', $this->post->bugs);
+        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
     }
 
     /**
@@ -228,11 +229,12 @@ class releaseModel extends model
      * @access public
      * @return void
      */
-    public function unlinkBug($releaseID, $bugID)
+    public function unlinkBug($releaseID, $bugID, $type = 'bug')
     {
         $release = $this->getByID($releaseID);
-        $release->bugs = trim(str_replace(",$bugID,", ',', ",$release->bugs,"), ',');
-        $this->dao->update(TABLE_RELEASE)->set('bugs')->eq($release->bugs)->where('id')->eq((int)$releaseID)->exec();
+        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
+        $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
+        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
     }
 
     /**
@@ -242,16 +244,17 @@ class releaseModel extends model
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($releaseID)
+    public function batchUnlinkBug($releaseID, $type = 'bug')
     {
 
         $bugList = $this->post->unlinkBugs;
         if(empty($bugList)) return true;
 
         $release = $this->getByID($releaseID);
-        $release->bugs = ",$release->bugs,";
-        foreach($bugList as $bugID) $release->bugs = str_replace(",$bugID,", ',', $release->bugs);
-        $release->bugs = trim($release->bugs, ',');
-        $this->dao->update(TABLE_RELEASE)->set('bugs')->eq($release->bugs)->where('id')->eq((int)$releaseID)->exec();
+        $field   = $type == 'bug' ? 'bugs' : 'leftBugs';
+        $release->$field = ",{$release->$field},";
+        foreach($bugList as $bugID) $release->$field = str_replace(",$bugID,", ',', $release->$field);
+        $release->$field = trim($release->$field, ',');
+        $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
     }
 }

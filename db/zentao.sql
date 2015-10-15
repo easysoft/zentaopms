@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `action` varchar(30) NOT NULL default '',
   `date` datetime NOT NULL,
   `comment` text NOT NULL,
-  `extra` varchar(255) NOT NULL,
+  `extra` text NOT NULL,
   `read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

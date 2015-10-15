@@ -852,6 +852,41 @@ class bugModel extends model
     }
 
     /**
+     * Get product left bugs. 
+     * 
+     * @param  int    $build 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
+    public function getProductLeftBugs($build, $productID)
+    {
+        $build = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($build)->fetch();
+        if(empty($build->project)) return array();
+
+        $project      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($build->project)->fetch();
+        $beforeBuilds = $this->dao->select('t1.id')->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.status')->ne('done')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.date')->lt($project->begin)
+            ->fetchPairs('id', 'id');
+
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->andWhere('toStory')->eq(0)
+            ->andWhere('openedDate')->ge($project->begin)
+            ->andWhere('openedDate')->le($project->end)
+            ->andWhere("(status = 'active' OR resolvedDate > {$project->end})")
+            ->andWhere('openedBuild')->notin($beforeBuilds)
+            ->fetchAll();
+
+        return $bugs;
+    }
+
+    /**
      * get Product Bug Pairs 
      * 
      * @param  int    $productID 

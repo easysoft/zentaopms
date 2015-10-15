@@ -57,12 +57,12 @@
   <div class='col-main'>
     <div class='main'>
       <div class='tabs'>
-        <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
+        <?php $countStories = count($stories); $countBugs = count($bugs); $countLeftBugs = count($leftBugs);?>
         <ul class='nav nav-tabs'>
-          <li <?php if($type == 'story')  echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->release->stories;?></a></li>
-          <li <?php if($type == 'bug')    echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->release->bugs;?></a></li>
-          <li <?php if($type == 'newbug') echo "class='active'"?>><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->release->generatedBugs;?></a></li>
-          <?php if($countStories or $countBugs or $countNewBugs):?>
+          <li <?php if($type == 'story')   echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->release->stories;?></a></li>
+          <li <?php if($type == 'bug')     echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->release->bugs;?></a></li>
+          <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->release->generatedBugs;?></a></li>
+          <?php if($countStories or $countBugs or $countLeftBugs):?>
           <li class='pull-right'><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export");?></li>
           <?php endif;?>
         </ul>
@@ -185,8 +185,13 @@
             </table>
             </form>
           </div>
-          <div class='tab-pane <?php if($type == 'newbug') echo 'active'?>' id='newBugs'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed'>
+          <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
+            <?php if(common::hasPriv('release', 'linkBug')):?>
+            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
+            <div class='linkBox'></div>
+            <?php endif;?>
+            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm'>
+            <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='leftBugList'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -195,29 +200,49 @@
                   <th class='w-100px'><?php echo $lang->bug->status;?></th>
                   <th class='w-user'><?php echo $lang->openedByAB;?></th>
                   <th class='w-150px'><?php echo $lang->bug->openedDateAB;?></th>
+                  <th class='w-50px'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
-              <?php foreach($generatedBugs as $bug):?>
+              <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
+              <?php foreach($leftBugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr class='text-center'>
-                <td><?php echo sprintf('%03d', $bug->id);?></td>
+                <td>
+                  <?php if($canBatchUnlink):?>
+                  <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                  <?php endif;?>
+                  <?php echo sprintf('%03d', $bug->id);?>
+                </td>
                 <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
                 <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
                 <td><?php echo $users[$bug->openedBy];?></td>
                 <td><?php echo $bug->openedDate?></td>
+                <td>
+                  <?php
+                  if(common::hasPriv('release', 'unlinkBug'))
+                  {
+                      $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"leftBugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkBug}'");
+                  }
+                  ?>
+                </td>
               </tr>
               <?php endforeach;?>
               <tfoot>
                 <tr>
-                  <td colspan='6'>
+                  <td colspan='7'>
                     <div class='table-actions clearfix'>
-                      <div class='text'><?php echo sprintf($lang->release->createdBugs, $countNewBugs);?></div>
+                      <div class='text'>
+                        <?php if($countLeftBugs and $canBatchUnlink) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>' . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                        <?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?>
+                      </div>
                     </div>
                   </td>
                 </tr>
               </tfoot>
             </table>
+            </form>
           </div>
         </div>
       </div>
@@ -272,7 +297,7 @@
   </div>
 </div>
 <style>
-.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countNewBugs) ? '110px' : '0px'?>; top: 0px;}
+.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '110px' : '0px'?>; top: 0px;}
 </style>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>

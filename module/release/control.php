@@ -126,6 +126,7 @@ class release extends control
     {
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug')    $this->session->set('bugList', $this->app->getURI(true));
+        if($type == 'leftBug')$this->session->set('leftBugList', $this->app->getURI(true));
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -139,19 +140,8 @@ class release extends control
         $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
-        $build = $this->loadModel('build')->getById($release->build);
-        $generatedBugs = array();
-        if($build->project)
-        {
-            $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
-                ->andWhere('product')->eq($release->product)
-                ->andWhere("(project = '" . (int)$build->project . "'" . (empty($build->id) ? '' : " OR CONCAT(',', openedBuild, ',') like '%,$build->id,%'") . ")")
-                ->andWhere('status')->eq('active')
-                ->andWhere('toStory')->eq(0)
-                ->orderBy('id_desc')->fetchAll();
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'newBugs');
-        }
-        
+        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'newBugs');
 
         $this->commonAction($release->product);
         $products = $this->product->getPairs();
@@ -161,7 +151,7 @@ class release extends control
         $this->view->release       = $release;
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;
-        $this->view->generatedBugs = $generatedBugs;
+        $this->view->leftBugs      = $leftBugs;
         $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->type          = $type;
@@ -423,12 +413,12 @@ class release extends control
      * @access public
      * @return void
      */
-    public function linkBug($releaseID = 0, $browseType = '', $param = 0)
+    public function linkBug($releaseID = 0, $browseType = '', $param = 0, $type = 'bug')
     {
         if(!empty($_POST['bugs']))
         {
-            $this->release->linkBug($releaseID);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=bug"), 'parent'));
+            $this->release->linkBug($releaseID, $type);
+            die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
         /* Set menu. */
@@ -440,7 +430,7 @@ class release extends control
         $this->loadModel('bug');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         unset($this->config->bug->search['fields']['product']);
-        $this->config->bug->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=bug&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['actionURL'] = $this->createLink('release', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
@@ -450,21 +440,31 @@ class release extends control
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
+        $allBugs = array();
         if($browseType == 'bySearch')
         {
             $allBugs = $this->bug->getBySearch($release->product, $queryID, 'id_desc');
         }
-        else
+        elseif($build->project)
         {
-            $allBugs = empty($build->project) ? array() : $this->bug->getReleaseBugs($build->id, $release->product);
+            if($type == 'bug')
+            {
+                $allBugs = $this->bug->getReleaseBugs($build->id, $release->product);
+            }
+            elseif($type == 'leftBug')
+            {
+                $allBugs = $this->bug->getProductLeftBugs($build->id, $release->product);
+            }
         }
 
+        $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
         $this->view->allBugs     = $allBugs;
-        $this->view->releaseBugs = empty($release->bugs) ? array() : $this->bug->getByList($release->bugs);
+        $this->view->releaseBugs = empty($releaseBugs) ? array() : $this->bug->getByList($releaseBugs);
         $this->view->release     = $release;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
+        $this->view->type        = $type;
         $this->display();
     }
 
@@ -476,9 +476,9 @@ class release extends control
      * @access public
      * @return void
      */
-    public function unlinkBug($releaseID, $bugID)
+    public function unlinkBug($releaseID, $bugID, $type = 'bug')
     {
-        $this->release->unlinkBug($releaseID, $bugID);
+        $this->release->unlinkBug($releaseID, $bugID, $type);
 
         /* if ajax request, send result. */
         if($this->server->ajax)
@@ -505,9 +505,9 @@ class release extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($releaseID)
+    public function batchUnlinkBug($releaseID, $type = 'bug')
     {
-        $this->release->batchUnlinkBug($releaseID);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=bug"), 'parent'));
+        $this->release->batchUnlinkBug($releaseID, $type);
+        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
     }
 }
