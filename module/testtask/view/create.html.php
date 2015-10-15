@@ -26,7 +26,7 @@
       <?php if(isset($projectID)):?>
       <tr>
         <th class='w-90px'><?php echo $lang->testtask->product;?></th>
-        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control chosen'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::select('product', $products, $productID, "class='form-control chosen'");?></td><td></td>
       </tr>  
       <?php else:?>
       <tr class='hide'>

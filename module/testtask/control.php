@@ -109,7 +109,7 @@ class testtask extends control
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs('id');
 
-            $productID = key($products);
+            $productID = $productID ? $productID : key($products);
             $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->eq($build)->andWhere('deleted')->eq(0)->fetchPairs('id');
         }
@@ -123,7 +123,7 @@ class testtask extends control
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs('id');
 
-            $productID = key($products);
+            $productID = $productID ? $productID : key($products);
             $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = array('trunk' => 'Trunk') + $builds;
