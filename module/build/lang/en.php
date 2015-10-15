@@ -48,6 +48,7 @@ $lang->build->unlinkBug          = 'Remove bug';
 $lang->build->stories            = 'Finished stories';
 $lang->build->bugs               = 'Resolved bugs';
 $lang->build->generatedBugs      = 'Generated bug';
+$lang->build->noProduct          = " <span style='color:red'>The {$lang->projectCommon} isn't associated with {$lang->productCommon}, cann't create build. Please <a href='%s'>related {$lang->productCommon}</a></span>";
 
 $lang->build->finishStories = 'The total demand for a complete %s';
 $lang->build->resolvedBugs  = 'The total solution of bug %s';
