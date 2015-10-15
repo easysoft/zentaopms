@@ -1285,7 +1285,7 @@ class bugModel extends model
             ->add('type', 'bug')
             ->stripTags('content', $this->config->allowedTags)
             ->get();
-        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique')->exec();
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', "account='{$this->app->user->account}'")->exec();
     }
 
     /**
