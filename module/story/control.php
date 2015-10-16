@@ -100,8 +100,9 @@ class story extends control
         }
         else
         {
-            $products = $this->product->getPairs();
+            $products = $this->product->getPairs('noclosed');
             $product  = $this->product->getById($productID ? $productID : key($products));
+            if(!isset($products[$product->id])) $products[$product->id] = $product->name;
         }
 
         $users = $this->user->getPairs('nodeleted|pdfirst|noclosed');
