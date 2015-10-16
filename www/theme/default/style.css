@@ -551,7 +551,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* Main content in outer */
 .outer .container > .main {padding: 10px 20px}
-.outer .main .article-content {font-size: 14px; padding: 0}
+.outer .main .article-content {font-size: 14px; padding: 0; word-break:break-all}
 .outer .main .actions {text-align: center; margin-bottom: 20px;}
 .outer .main .actions > .btn, .outer .main .actions > .btn-group {margin: 0 4px}
 
