@@ -267,7 +267,7 @@ class html
      * @param  boolean $checked if the type is checkbox, set the checked attribute.
      * @return string
      */
-    static public function selectAll($scope = "", $type = "button", $checked = false)
+    static public function selectAll($scope = "", $type = "button", $checked = false, $class = '')
     {
         $string = <<<EOT
 <script>
@@ -324,7 +324,7 @@ EOT;
         }
         elseif($type == 'button')
         {
-            $string .= "<input type='button' name='allchecker' id='allchecker' class='btn btn-select-all' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            $string .= "<input type='button' name='allchecker' id='allchecker' class='btn btn-select-all $class' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
         }
 
         return  $string;

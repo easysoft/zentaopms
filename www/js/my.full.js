@@ -1393,6 +1393,31 @@ function fixTfootAction(formID)
     });
 }
 
+/**
+ * Fix table head in div box.
+ * 
+ * @param  string $boxObj 
+ * @access public
+ * @return void
+ */
+function fixTableHead(boxObj)
+{
+    $(boxObj).scroll(function()
+    {
+        $(this).css('position', 'relative');
+        if($(this).find('table').size() == 1)
+        {
+            var fixHead = "<table class='fixHead' style='position:absolute;top:0px'><thead>" + $(this).find('table thead').html() + '</thead></table>';
+            $(this).prepend(fixHead);
+            var $fixTable = $(this).find('table.fixHead');
+            $fixTable.addClass($(this).find('table:last').attr('class'));
+            var $dataTable = $(this).find('table:last thead th');
+            $fixTable.find('thead th').each(function(i){$fixTable.find('thead th').eq(i).width($dataTable.eq(i).width());})
+        }
+        $(this).find('table.fixHead').css('top',$(this).scrollTop());
+    });
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

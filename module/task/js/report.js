@@ -9,5 +9,6 @@ $(function()
         });
     };
     resizeChartTable();
+    fixTableHead('.table-wrapper');
     $(window).resize(resizeChartTable);
 });

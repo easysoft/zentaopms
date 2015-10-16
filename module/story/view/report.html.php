@@ -30,10 +30,8 @@
       <div class='panel-body' style='padding-top:0'>
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->story->report->charts, $checkedCharts, '', 'block');?>
-          <div class='btn-group'>
-            <?php echo html::selectButton('', 'btn-sm');?>
-            <?php echo html::submitButton($lang->story->report->create, '', 'btn-sm btn-primary');?>
-          </div>
+          <?php echo html::selectAll('', "button", false, 'btn-sm')?>
+          <?php echo html::submitButton($lang->story->report->create, '', 'btn-sm btn-primary');?>
         </form>
       </div>
     </div>
@@ -55,18 +53,16 @@
           <td style='width: 320px'>
             <div style="overflow:auto;" class='table-wrapper'>
               <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
-                <caption class='text-left'><?php echo $lang->story->report->charts[$chartType];?></caption>
                 <thead>
                   <tr>
-                    <th class='w-20px'></th>
-                    <th class='chart-label'><?php echo $lang->story->report->$chartType->item;?></th>
+                    <th class='chart-label' colspan='2'><?php echo $lang->story->report->$chartType->item;?></th>
                     <th><?php echo $lang->story->report->value;?></th>
                     <th><?php echo $lang->report->percent;?></th>
                   </tr>
                 </thead>
                 <?php foreach($datas[$chartType] as $key => $data):?>
                 <tr class='text-center'>
-                  <td class='chart-color'><i class='chart-color-dot icon-circle'></i></td>
+                  <td class='chart-color w-20px'><i class='chart-color-dot icon-circle'></i></td>
                   <td class='chart-label'><?php echo $data->name;?></td>
                   <td class='chart-value'><?php echo $data->value;?></td>
                   <td><?php echo ($data->percent * 100) . '%';?></td>
