@@ -27,7 +27,8 @@
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
       <th class='w-100px'><?php echo $lang->release->date;?></th>
-      <th class='w-110px'><?php echo $lang->actions;?></th>
+      <th class='w-100px'><?php echo $lang->release->status;?></th>
+      <th class='w-150px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -37,10 +38,16 @@
       <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
       <td><?php echo $release->buildName;?></td>
       <td class='text-center'><?php echo $release->date;?></td>
+      <td class='text-center'><?php echo $lang->release->statusList[$release->status];?></td>
       <td class='text-center'>
         <?php
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn-icon' title='{$lang->release->linkStory}'");
         if(common::hasPriv('release', 'linkBug'))   echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn-icon' title='{$lang->release->linkBug}'");
+        if(common::hasPriv('release', 'changeStatus'))
+        {
+            $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+            echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),   '<i class="icon-toggle-' . ($release->status == 'normal' ? 'off' : 'on') . '"></i> ',  'hiddenwin', "class='btn-icon' title='{$lang->release->statusList[$changedStatus]}'");
+        }
         common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
         if(common::hasPriv('release', 'delete'))
         {

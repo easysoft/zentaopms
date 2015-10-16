@@ -229,6 +229,7 @@ $lang->resource->release->batchUnlinkStory = 'batchUnlinkStory';
 $lang->resource->release->linkBug          = 'linkBug';
 $lang->resource->release->unlinkBug        = 'unlinkBug';
 $lang->resource->release->batchUnlinkBug   = 'batchUnlinkBug';
+$lang->resource->release->changeStatus     = 'changeStatus';
 
 $lang->release->methodOrder[5]  = 'browse';
 $lang->release->methodOrder[10] = 'create';
@@ -242,6 +243,7 @@ $lang->release->methodOrder[50] = 'batchUnlinkStory';
 $lang->release->methodOrder[55] = 'linkBug';
 $lang->release->methodOrder[60] = 'unlinkBug';
 $lang->release->methodOrder[65] = 'batchUnlinkBug';
+$lang->release->methodOrder[70] = 'changeStatus';
 
 /* Project. */
 $lang->resource->project = new stdclass();
@@ -1094,3 +1096,5 @@ $lang->changelog['7.3'][] = 'admin-sso';
 $lang->changelog['7.3'][] = 'cron-openProcess';
 $lang->changelog['7.3'][] = 'mail-sendCloud';
 $lang->changelog['7.3'][] = 'mail-sendcloudUser';
+
+$lang->changelog['7.4'][] = 'release-changeStatus';

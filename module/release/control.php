@@ -141,7 +141,7 @@ class release extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
         $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'newBugs');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
         $this->commonAction($release->product);
         $products = $this->product->getPairs();
@@ -271,11 +271,11 @@ class release extends control
                 $html .= '</table>';
             }
 
-            if($type == 'newbug' or $type == 'all')
+            if($type == 'leftbug' or $type == 'all')
             {
                 $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
 
-                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->newBugsQueryCondition)
+                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->leftBugsQueryCondition)
                     ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
                     ->fetchAll('id');
 
@@ -509,5 +509,21 @@ class release extends control
     {
         $this->release->batchUnlinkBug($releaseID, $type);
         die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+    }
+
+    /**
+     * Change status.
+     * 
+     * @param  int    $releaseID 
+     * @param  string $status 
+     * @access public
+     * @return void
+     */
+    public function changeStatus($releaseID, $status)
+    {
+        $this->release->changeStatus($releaseID, $status);
+        if(dao::isError()) die(js::error(dao::getError()));
+        $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
+        die(js::reload('parent'));
     }
 }

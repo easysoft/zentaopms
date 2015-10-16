@@ -36,6 +36,10 @@
         <td><?php echo html::input('date', $release->date, "class='form-control form-date'");?></td><td></td>
       </tr>  
       <tr>
+        <th><?php echo $lang->release->status;?></th>
+        <td><?php echo html::select('status', $lang->release->statusList, $release->status, "class='form-control'");?></td><td></td>
+      </tr>  
+      <tr>
         <th><?php echo $lang->release->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control'");?></td>
       </tr>  

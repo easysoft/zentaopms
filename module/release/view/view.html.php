@@ -29,6 +29,11 @@
         ob_start();
 
         echo "<div class='btn-group'>";
+        if(common::hasPriv('release', 'changeStatus'))
+        {
+            $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+            echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-toggle-' . ($release->status == 'normal' ? 'off' : 'on') . '"></i> ' . $lang->release->statusList[$changedStatus], 'hiddenwin', "class='btn'");
+        }
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn'");
         if(common::hasPriv('release', 'linkBug'))   echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn'");
         echo '</div>';
@@ -269,6 +274,10 @@
             <th><?php echo $lang->release->build;?></th>
             <td><?php echo $release->buildName;?></td>
           </tr>  
+          <tr>
+            <th><?php echo $lang->release->status;?></th>
+            <td><?php echo $lang->release->statusList[$release->status];?></td>
+          </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
             <td><?php echo $release->date;?></td>

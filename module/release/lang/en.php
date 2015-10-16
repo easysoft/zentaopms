@@ -18,6 +18,7 @@ $lang->release->delete    = "Delete";
 $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
+$lang->release->changeStatus     = "Change status";
 $lang->release->batchUnlink      = "Batch unlink";
 $lang->release->batchUnlinkStory = "Batch unlink story";
 $lang->release->batchUnlinkBug   = "Batch unlink bug";
@@ -34,6 +35,7 @@ $lang->release->build                 = 'Build';
 $lang->release->name                  = 'Name';
 $lang->release->date                  = 'Date';
 $lang->release->desc                  = 'Desc';
+$lang->release->status                = 'Status';
 $lang->release->last                  = 'Last release';
 $lang->release->linkStoriesAndBugs    = 'Stories and bugs';
 $lang->release->linkStories           = 'Stories';
@@ -51,7 +53,14 @@ $lang->release->export                = 'Export as HTML';
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Path : ';
 
-$lang->release->exportTypeList['all']    = 'All';
-$lang->release->exportTypeList['story']  = 'Resolved Stories';
-$lang->release->exportTypeList['bug']    = 'Resolved bugs';
-$lang->release->exportTypeList['newbug'] = 'Generated bugs';
+$lang->release->exportTypeList['all']     = 'All';
+$lang->release->exportTypeList['story']   = 'Resolved Stories';
+$lang->release->exportTypeList['bug']     = 'Resolved bugs';
+$lang->release->exportTypeList['leftbug'] = 'Generated bugs';
+
+$lang->release->statusList['']          = '';
+$lang->release->statusList['normal']    = 'Normal';
+$lang->release->statusList['terminate'] = 'Terminate';
+
+$lang->release->action = new stdclass();
+$lang->release->action->changestatus = array('main' => '$date, $extra By <strong>$actor</strong>.', 'extra' => 'statusList');
