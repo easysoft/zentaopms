@@ -403,8 +403,14 @@ class fileModel extends model
         if(is_dir($filePath)) $classFile->removeDir($filePath);
 
         $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($zipFile);
+        $zip   = new pclzip($zipFile);
         $files = $zip->listContent();
+        foreach($files as $uploadFile)
+        {
+            $extension = substr(strrchr($uploadFile['filename'], '.'), 1);
+            if(empty($extension) or strpos($this->config->file->dangers, $extension) !== false) return false;
+        }
+
         if($zip->extract(PCLZIP_OPT_PATH, $filePath) == 0) return false;
         return $filePath;
     }
