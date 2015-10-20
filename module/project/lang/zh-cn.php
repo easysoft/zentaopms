@@ -14,6 +14,7 @@ $lang->project->common        = $lang->projectCommon . '视图';
 $lang->project->id            = $lang->projectCommon . '编号';
 $lang->project->company       = '所属公司';
 $lang->project->fromproject   = '所属' . $lang->projectCommon;
+$lang->project->allProjects   = '所有' . $lang->projectCommon;
 $lang->project->iscat         = '作为目录';
 $lang->project->type          = $lang->projectCommon . '类型';
 $lang->project->parent        = '上级' . $lang->projectCommon;
