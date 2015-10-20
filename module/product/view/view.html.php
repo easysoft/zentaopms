@@ -82,6 +82,10 @@
             <td><?php echo $users[$product->RD];?></td>
           </tr>  
           <tr>
+            <th><?php echo $lang->product->type;?></th>
+            <td><?php echo $lang->product->typeList[$product->type];?></td><td></td>
+          </tr>  
+          <tr>
             <th><?php echo $lang->product->status;?></th>
             <td class='product-<?php echo $product->status?>'><?php echo $lang->product->statusList[$product->status];?></td>
           </tr>  

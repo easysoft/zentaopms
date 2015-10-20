@@ -79,9 +79,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0)
+    public function project($status = 'all', $productID = 0, $branch = 0)
     {
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID, $branch);
 
         $this->app->loadLang('my');
         $this->view->projectStats  = $this->loadModel('project')->getProjectStats($status, $productID);
@@ -106,7 +106,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = 0, $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -117,11 +117,12 @@ class product extends control
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
+        if(empty($branch)) $branch = $this->session->branch;
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. */
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID, $branch);
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
@@ -146,26 +147,26 @@ class product extends control
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, 0, array_keys($unclosedStatus), $sort, $pager);
+            $stories = $this->story->getProductStories($productID, $branch, 0, array_keys($unclosedStatus), $sort, $pager);
         }
-        if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, 0, 'all', $sort, $pager);
-        if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $sort, $pager);
+        if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, $branch, 0, 'all', $sort, $pager);
+        if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $branch, $this->tree->getAllChildID($moduleID), 'all', $sort, $pager);
         if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager);
-        if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $this->app->user->account, $sort, $pager);
-        if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $this->app->user->account, $sort, $pager);
-        if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $this->app->user->account, $sort, $pager);
-        if($browseType == 'closedbyme')  $stories = $this->story->getByClosedBy($productID, $this->app->user->account, $sort, $pager);
-        if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, 'draft', $sort, $pager);
-        if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, 'active', $sort, $pager);
-        if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $sort, $pager);
-        if($browseType == 'willclose')   $stories = $this->story->getWillClose($productID, $sort, $pager);
-        if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, 'closed', $sort, $pager);
+        if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'closedbyme')  $stories = $this->story->getByClosedBy($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, $branch, 'draft', $sort, $pager);
+        if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, $branch, 'active', $sort, $pager);
+        if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, $branch, 'changed', $sort, $pager);
+        if($browseType == 'willclose')   $stories = $this->story->getWillClose($productID, $branch, $sort, $pager);
+        if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, $branch, 'closed', $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         /* Build search form. */
-        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
+        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
         $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
@@ -185,6 +186,7 @@ class product extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
+        $this->view->branch        = $branch;
         $this->display();
     }
 

@@ -22,7 +22,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $extra = '')
+    public function setMenu($products, $productID, $branch = '', $extra = '')
     {
         /* Has access privilege?. */
         if($products and !isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
@@ -38,7 +38,7 @@ class productModel extends model
         if($currentModule == 'story' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra);
+        $selectHtml  = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch);
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = $key == 'list' ? $selectHtml : $productID;
@@ -57,13 +57,21 @@ class productModel extends model
      * @access public
      * @return string
      */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '')
     {
         if(!$productID) return;
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
+        setCookie("lastBranch",  $branch, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
-        $output = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $output  = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        if($currentProduct->type != 'normal')
+        {
+            $branches   = $this->loadModel('branch')->getPairs($productID);
+            $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
+            $output    .= '</li><li>';
+            $output    .= "<a id='currentBranch' href=\"javascript:showDropMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        }
         return $output;
     }
 
@@ -80,6 +88,7 @@ class productModel extends model
         if($productID > 0) $this->session->set('product', (int)$productID);
         if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
+        if($this->cookie->lastBranch) $this->session->set('branch', (int)$this->cookie->lastBranch);
         if(!isset($products[$this->session->product])) $this->session->set('product', key($products));
         return $this->session->product;
     }
@@ -662,18 +671,22 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function getProductLink($module, $method, $extra)
+    public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
         if(strpos('product,roadmap,bug,testcase,testtask,story', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {
-                $link = helper::createLink($module, $method, "status=all&productID=%s");
+                $link = helper::createLink($module, $method, "status=all&productID=%s" . ($branch ? "&branch=%s" : ''));
             }
             elseif($module == 'product' && $method == 'index')
             {
                 $link = helper::createLink($module, $method, "locate=no&productID=%s");
+            }
+            elseif($module == 'product' && $method == 'browse')
+            {
+                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
             }
             else
             {
@@ -683,11 +696,11 @@ class productModel extends model
         else if($module == 'productplan' || $module == 'release')
         {
             if($method != 'browse' && $method != 'create') $method = 'browse';
-            $link = helper::createLink($module, $method, "productID=%s");
+            $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
         }
         else if($module == 'tree')
         {
-            $link = helper::createLink($module, $method, "productID=%s&type=$extra");
+            $link = helper::createLink($module, $method, "productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
         }
         return $link;
     }

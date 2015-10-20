@@ -130,6 +130,7 @@ define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
+define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
 define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
 define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');

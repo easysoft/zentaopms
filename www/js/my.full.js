@@ -93,10 +93,11 @@ function shortcut()
  */
 function showDropMenu(objectType, objectID, module, method, extra)
 {
-    var li = $('#currentItem').closest('li');
+    var itemID = objectType == 'branch' ? '#currentBranch' : '#currentItem';
+    var li = $(itemID).closest('li');
     if(li.hasClass('show')) {li.removeClass('show'); return;}
 
-    var $dropMenu = $('#dropMenu');
+    var $dropMenu = li.find('#dropMenu');
     if(!li.data('showagain'))
     {
         li.data('showagain', true);
@@ -105,7 +106,7 @@ function showDropMenu(objectType, objectID, module, method, extra)
 
         $dropMenu.on('keydown', '#search', function(e){
             var code = e.which;
-            var $this = $('#searchResult > .search-list > ul > li.active');
+            var $this = $dropMenu.find('#searchResult > .search-list > ul > li.active');
             if(code === 38) // up
             {
                 $this.removeClass('active');
@@ -122,7 +123,7 @@ function showDropMenu(objectType, objectID, module, method, extra)
                         return;
                     }
                 }
-                $('#searchResult > .search-list > ul > li:not(.heading):last').addClass('active');
+                $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading):last').addClass('active');
             }
             else if(code === 40) // down
             {
@@ -140,7 +141,7 @@ function showDropMenu(objectType, objectID, module, method, extra)
                         return;
                     }
                 }
-                $('#searchResult > .search-list > ul > li:not(.heading):first').addClass('active');
+                $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading):first').addClass('active');
             }
             else if(code === 13) // enter
             {
@@ -158,14 +159,14 @@ function showDropMenu(objectType, objectID, module, method, extra)
                 searchItems(searchKey, objectType, objectID, module, method, extra);
             }, 200));
         }).on('mouseenter', '#searchResult .search-list > ul > li', function(){
-            $('#searchResult > .search-list > ul > li.active').removeClass('active');
+            $dropMenu.find('#searchResult > .search-list > ul > li.active').removeClass('active');
             $(this).addClass('active');
         });
     }
     $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
     {
         $dropMenu.html(data).find('#search').focus();
-        $('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
+        $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
     });
 
     li.addClass('show');
@@ -184,11 +185,14 @@ function showDropMenu(objectType, objectID, module, method, extra)
  */
 function showDropResult(objectType, objectID, module, method, extra)
 {
+    var itemID = objectType == 'branch' ? '#currentBranch' : '#currentItem';
+    var li     = $(itemID).closest('li');
+    var $dropMenu = li.find('#dropMenu');
     $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
     {
-        $('#dropMenu').html(data);
-        setTimeout(function(){$("#dropMenu #search").focus();}, 200);
-        $('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
+        $dropMenu.html(data);
+        setTimeout(function(){$dropMenu.find("#search").focus();}, 200);
+        $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
     });
 }
 
@@ -213,10 +217,13 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     }
     else
     {
+        var itemID = objectType == 'branch' ? '#currentBranch' : '#currentItem';
+        var li     = $(itemID).closest('li');
+        var $dropMenu = li.find('#dropMenu');
         keywords = encodeURI(keywords);
-        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
+        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra + "&objectID=" + objectID), function(data)
         {
-            $('#searchResult').html(data).find('.search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
+            $dropMenu.find('#searchResult').html(data).find('.search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
         });
     }
 }

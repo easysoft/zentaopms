@@ -15,17 +15,17 @@
 <?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
   <ul class='nav'>
-    <li id='unclosedTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=unclosed"),     $lang->product->unclosed);?></li>
-    <li id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></li>
-    <li id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></li>
-    <li id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></li>
-    <li id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></li>
-    <li id='closedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedByMe"),   $lang->product->closedByMe);?></li>
-    <li id='draftstoryTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=draftStory"),   $lang->product->draftStory);?></li>
-    <li id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></li>
-    <li id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></li>
-    <li id='willcloseTab'>    <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=willClose"),    $lang->product->willClose);?></li>
-    <li id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></li>
+    <li id='unclosedTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=unclosed"),     $lang->product->unclosed);?></li>
+    <li id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=allStory"),     $lang->product->allStory);?></li>
+    <li id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=assignedtome"), $lang->product->assignedToMe);?></li>
+    <li id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=openedByMe"),   $lang->product->openedByMe);?></li>
+    <li id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></li>
+    <li id='closedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=closedByMe"),   $lang->product->closedByMe);?></li>
+    <li id='draftstoryTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=draftStory"),   $lang->product->draftStory);?></li>
+    <li id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=activeStory"),  $lang->product->activeStory);?></li>
+    <li id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=changedStory"), $lang->product->changedStory);?></li>
+    <li id='willcloseTab'>    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=willClose"),    $lang->product->willClose);?></li>
+    <li id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=closedStory"),  $lang->product->closedStory);?></li>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
   </ul>
   <div class='actions'>
@@ -74,7 +74,7 @@
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
       <thead>
       <tr>
-        <?php $vars = "productID=$productID&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+        <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <th class='w-id'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-pri'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
         <th class='w-p30'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>

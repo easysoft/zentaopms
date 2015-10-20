@@ -177,6 +177,7 @@ $lang->product->menu->plan    = array('link' => '计划|productplan|browse|produ
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->branch  = '分支|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
@@ -186,7 +187,9 @@ $lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
 $lang->release     = new stdclass();
+$lang->branch      = new stdclass();
 
+$lang->branch->menu      = $lang->product->menu;
 $lang->story->menu       = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 $lang->release->menu     = $lang->product->menu;
