@@ -64,7 +64,8 @@ js::set('refresh', $lang->refresh);
       </tr>
       <tr>
         <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-        <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></span></td>
+        <td><span id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></span></td>
+        <td><?php echo html::commonButton($lang->bug->allUsers, "onclick='loadAllUsers()'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->type;?></th>

@@ -317,6 +317,17 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID);
         }
 
+        /* Set team members of the latest project as assignedTo list. */
+        $latestProjectID = $this->product->getLatestProject($productID);
+        if(!empty($latestProjectID)) 
+        {
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProjectID, 'nodeleted');
+        }
+        else
+        {
+            $projectMembers = $this->view->users; 
+        }
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
@@ -340,6 +351,7 @@ class bug extends control
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
+        $this->view->projectMembers   = $projectMembers;
         $this->view->assignedTo       = $assignedTo;
         $this->view->mailto           = $mailto;
         $this->view->contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -1028,7 +1040,7 @@ class bug extends control
     }
 
     /**
-     * AJAX: get assignedTo list, make sure the members of the project at the first.
+     * AJAX: get team members of the project as assignedTo list.
      * 
      * @param  int    $projectID 
      * @param  string $selectedUser 
@@ -1037,11 +1049,23 @@ class bug extends control
      */
     public function ajaxLoadAssignedTo($projectID, $selectedUser = '')
     {
-        $allUsers       = $this->loadModel('user')->getPairs('nodeleted, devfirst');
         $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID);
-        $assignedToList = array_merge($projectMembers, $allUsers);
         
-        die(html::select('assignedTo', $assignedToList, $selectedUser, 'class="form-control"'));
+        die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
+    }
+
+    /**
+     * AJAX: get all users as assignedTo list.
+     *
+     * @param  string $selectedUser
+     * @access public
+     * @return string
+     */
+    public function ajaxLoadAllUsers($selectedUser = '')
+    {
+        $allUsers = $this->loadModel('user')->getPairs('nodeleted, devfirst');
+
+        die(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
     }
 
     /**
