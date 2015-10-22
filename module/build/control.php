@@ -194,7 +194,7 @@ class build extends control
     {
         if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty,release,noterminate,nodone'), $build, 'size=4 class=form-control multiple'));
         if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, "class='form-control'"));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty,release,noterminate,nodone'), $build, "class='form-control'"));
     }
 
     /**
@@ -217,7 +217,7 @@ class build extends control
             die($output);
         }
         if($varName == 'openedBuilds')  die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, "class='form-control'"));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, 'noempty,noterminate,nodone'), $build, "class='form-control'"));
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, "class='form-control'"));
     }
 
@@ -232,7 +232,8 @@ class build extends control
      */
     public function ajaxGetAllProductBuilds($productID, $varName, $build = '')
     {
-        if($varName == 'openedBuild' ) die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, 'size=4 class=form-control multiple'));
+        if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, 'size=4 class=form-control multiple'));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty,release'), $build, "class='form-control'"));
     }
 
     /**
@@ -252,6 +253,7 @@ class build extends control
             $output = html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple');
             die($output);
         }
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, "class='form-control'"));
     }
 
     /**

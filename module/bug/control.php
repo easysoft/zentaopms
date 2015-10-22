@@ -537,12 +537,23 @@ class bug extends control
         /* Assign. */
         if($projectID)
         {
-            $this->view->openedBuilds     = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $openedBuilds = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty,noterminate,nodone');
+            $allBuilds    = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
         }
         else
         {
-            $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+            $openedBuilds = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,noterminate,nodone');
+            $allBuilds    = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         }
+
+        /* Set the openedBuilds list*/
+        $bugOpenedBuilds = array();
+        foreach($allBuilds as $buildID => $build)
+        {
+            if(strpos($bug->openedBuild, "$buildID") !== false) $bugOpenedBuilds[$buildID] = $build;
+        }
+        $openedBuilds = $openedBuilds + $bugOpenedBuilds;
+
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
@@ -553,7 +564,8 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
+        $this->view->openedBuilds     = $openedBuilds;
+        $this->view->resolvedBuilds   = array('' => '') + $openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
         $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
 
