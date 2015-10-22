@@ -355,7 +355,18 @@ class project extends control
         $projects  = $this->project->getProjectsToImport();
         unset($projects[$toProject]);
 
-        $fromProject = ($fromProject == 0 and !empty($projects)) ? key($projects) : $fromProject;
+        if($fromProject == 0)
+        {
+            $tasks2Imported = array();
+            foreach($projects as $id  => $projectName)
+            {
+                $tasks2Imported = array_merge($tasks2Imported, $this->project->getTasks2Imported($id));
+            }
+        }
+        else
+        {
+            $tasks2Imported = $this->project->getTasks2Imported($fromProject);
+        }
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true));
@@ -364,7 +375,7 @@ class project extends control
         $this->view->title          = $project->name . $this->lang->colon . $this->lang->project->importTask;
         $this->view->position[]     = html::a(inlink('browse', "projectID=$toProject"), $project->name);
         $this->view->position[]     = $this->lang->project->importTask;
-        $this->view->tasks2Imported = $this->project->getTasks2Imported($fromProject);
+        $this->view->tasks2Imported = $tasks2Imported; 
         $this->view->projects       = $projects;
         $this->view->projectID      = $project->id;
         $this->view->fromProject    = $fromProject;

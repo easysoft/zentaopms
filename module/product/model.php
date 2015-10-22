@@ -731,4 +731,25 @@ class productModel extends model
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($newOrder)->where('id')->eq($id)->exec();
         }
     }
+
+    /**
+     * get the latest project of the product.
+     *
+     * @param  int     $productID
+     * @access public 
+     * @return int
+     */
+    public function getLatestProject($productID)
+    {
+        $projectList  = array_keys($this->loadModel('project')->getPairs());
+        $projects = $this->dao->select('t2.id, t2.name, t2.begin')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t2.id')->in($projectList)
+            ->orderBy('t2.begin desc')
+            ->fetchAll('id');
+
+        return key($projects);
+    }
 }

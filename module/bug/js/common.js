@@ -52,6 +52,74 @@ function loadAll(productID)
 }
 
 /**
+  *Load all builds of one project or product.
+  *
+  * @access public
+  * @return void
+  */
+function loadAllBuilds()
+{
+    productID = $('#product').val();
+    projectID = $('#project').val();
+    if(projectID)
+    {
+        loadAllProjectBuilds(projectID, productID);
+    }
+    else
+    {
+        loadAllProductBuilds(productID);
+    }
+}
+
+/** 
+  * Load all builds of the project.
+  *
+  * @param  int    $projectID
+  * @access public
+  * @return void
+  */
+function loadAllProjectBuilds(projectID, productID)
+{
+    if(page == 'create') oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
+
+    link = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+    if(page == 'create')
+    {
+        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
+    }
+    else
+    {
+        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+
+        buildLink = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+        $('#resolvedBuildBox').load(buildLink, function(){$(this).find('select').chosen(defaultChosenOptions)});
+    }
+}
+
+/** 
+  * Load all builds of the product.
+  *
+  * @param  int    $productID
+  * @access public
+  * @return void
+  */
+function loadAllProductBuilds(productID)
+{
+    link = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+    if(page == 'create') 
+    {
+        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
+    }
+    else
+    {
+        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+
+        buildLink = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+        $('#resolvedBuildBox').load(buildLink, function(){$(this).find('select').chosen(defaultChosenOptions)});
+    }
+}
+
+/**
  * Load product's modules.
  * 
  * @param  int    $productID 

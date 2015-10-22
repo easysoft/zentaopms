@@ -310,13 +310,24 @@ class bug extends control
         /* If projectID is setted, get builds and stories of this project. */
         if($projectID)
         {
-            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty,noterminate,nodone');
             $stories = $this->story->getProjectStoryPairs($projectID);
         }
         else
         {
-            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release');
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release,noterminate,nodone');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
+        }
+
+        /* Set team members of the latest project as assignedTo list. */
+        $latestProjectID = $this->product->getLatestProject($productID);
+        if(!empty($latestProjectID)) 
+        {
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProjectID, 'nodeleted');
+        }
+        else
+        {
+            $projectMembers = $this->view->users; 
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
@@ -342,6 +353,7 @@ class bug extends control
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
+        $this->view->projectMembers   = $projectMembers;
         $this->view->assignedTo       = $assignedTo;
         $this->view->mailto           = $mailto;
         $this->view->contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -530,12 +542,23 @@ class bug extends control
         /* Assign. */
         if($projectID)
         {
-            $this->view->openedBuilds     = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $openedBuilds = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty,noterminate,nodone');
+            $allBuilds    = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
         }
         else
         {
-            $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+            $openedBuilds = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,noterminate,nodone');
+            $allBuilds    = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         }
+
+        /* Set the openedBuilds list*/
+        $bugOpenedBuilds = array();
+        foreach($allBuilds as $buildID => $build)
+        {
+            if(strpos($bug->openedBuild, "$buildID") !== false) $bugOpenedBuilds[$buildID] = $build;
+        }
+        $openedBuilds = $openedBuilds + $bugOpenedBuilds;
+
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
@@ -546,7 +569,8 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
+        $this->view->openedBuilds     = $openedBuilds;
+        $this->view->resolvedBuilds   = array('' => '') + $openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
         $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
 
@@ -1033,7 +1057,7 @@ class bug extends control
     }
 
     /**
-     * AJAX: get assignedTo list, make sure the members of the project at the first.
+     * AJAX: get team members of the project as assignedTo list.
      * 
      * @param  int    $projectID 
      * @param  string $selectedUser 
@@ -1042,11 +1066,23 @@ class bug extends control
      */
     public function ajaxLoadAssignedTo($projectID, $selectedUser = '')
     {
-        $allUsers       = $this->loadModel('user')->getPairs('nodeleted, devfirst');
         $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID);
-        $assignedToList = array_merge($projectMembers, $allUsers);
         
-        die(html::select('assignedTo', $assignedToList, $selectedUser, 'class="form-control"'));
+        die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
+    }
+
+    /**
+     * AJAX: get all users as assignedTo list.
+     *
+     * @param  string $selectedUser
+     * @access public
+     * @return string
+     */
+    public function ajaxLoadAllUsers($selectedUser = '')
+    {
+        $allUsers = $this->loadModel('user')->getPairs('nodeleted, devfirst');
+
+        die(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
     }
 
     /**

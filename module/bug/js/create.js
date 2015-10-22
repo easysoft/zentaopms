@@ -1,5 +1,5 @@
 /**
- * Load assginedTo list, make use the members of this project at first.
+ * Load team members of the project as assignedTo list.
  * 
  * @param  int     $projectID 
  * @access public
@@ -8,6 +8,18 @@
 function loadAssignedTo(projectID)
 {
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
+    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
+}
+
+/**
+  * Load all users as assignedTo list.
+  *
+  * @access public
+  * @return void
+  */
+function loadAllUsers()
+{
+    link = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val());
     $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
 }
 

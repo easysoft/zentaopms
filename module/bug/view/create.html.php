@@ -56,15 +56,21 @@ js::set('refresh', $lang->refresh);
         <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
         <td>
           <div class='input-group'>
-          <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
-          <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
-          <span class='input-group-addon' id='buildBoxActions'></span>
+            <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
+            <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
+            <span class='input-group-addon' id='buildBoxActions'></span>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick='loadAllBuilds()'")?></span>
           </div>
         </td>
       </tr>
       <tr>
         <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-        <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></span></td>
+        <td>
+          <div class='input-group'>
+            <span id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></span>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()'");?></span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->bug->type;?></th>

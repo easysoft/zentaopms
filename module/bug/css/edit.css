@@ -1,2 +1,3 @@
 .col-side .chosen-container .chosen-drop {width: 216px!important}
 .col-side .chosen-container {width: 218px!important}
+.col-side .chosen-container[id^="openedBuild"] {width: 172px!important}
