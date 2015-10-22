@@ -11,7 +11,7 @@
  */
 class tree extends control
 {
-    const NEW_CHILD_COUNT = 10;
+    const NEW_CHILD_COUNT = 5;
 
     /**
      * Module browse.
@@ -22,12 +22,13 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function browse($rootID, $viewType, $currentModuleID = 0)
+    public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0)
     {
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($product->id);
             $this->view->root = $product;
             $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }
@@ -64,7 +65,6 @@ class tree extends control
 
             $this->view->allProduct     = $products;
             $this->view->currentProduct = $currentProduct;
-            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
 
             $title      = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
             $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
@@ -110,9 +110,10 @@ class tree extends control
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
         $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
-        $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType);
+        $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
+        $this->view->branch          = $branch;
         $this->display();
     }
 
@@ -170,7 +171,7 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function edit($moduleID, $type)
+    public function edit($moduleID, $type, $branch = 0)
     {
         if(!empty($_POST))
         {
@@ -192,11 +193,12 @@ class tree extends control
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type);
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $branch);
         }
 
         $this->view->module = $module;
         $this->view->type   = $type;
+        $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
         $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
@@ -291,7 +293,7 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html', $needManage = false)
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $needManage = false)
     {
         if($viewType == 'task')
         {
@@ -299,7 +301,7 @@ class tree extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch);
         }
         if($returnType == 'html')
         {
@@ -309,7 +311,7 @@ class tree extends control
             if(count($optionMenu) == 1 and $needManage)
             {
                 $output .=  "<span class='input-group-addon'>";
-                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType"), $this->lang->tree->manage, '_blank');
+                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch"), $this->lang->tree->manage, '_blank');
                 $output .= '&nbsp; ';
                 $output .= html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
                 $output .= '</span>';
