@@ -18,12 +18,15 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function commonAction($productID)
+    public function commonAction($productID, $branch = 0)
     {
         $this->loadModel('product');
-        $this->view->product = $this->product->getById($productID);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}"), $this->view->product->name);
-        $this->product->setMenu($this->product->getPairs(), $productID);
+        $product = $this->product->getById($productID);
+        $this->view->product  = $product;
+        $this->view->branch   = $branch;
+        $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
+        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
@@ -33,17 +36,17 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function create($product = '')
+    public function create($product = '', $branch = 0)
     {
         if(!empty($_POST))
         {
             $planID = $this->productplan->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
-            die(js::locate($this->createLink('productplan', 'browse', "productID=$product"), 'parent'));
+            die(js::locate($this->createLink('productplan', 'browse', "productID=$product&branch=$branch"), 'parent'));
         }
 
-        $this->commonAction($product);
+        $this->commonAction($product, $branch);
         $lastPlan = $this->productplan->getLast($product);
         if($lastPlan)
         {
@@ -54,7 +57,7 @@ class productplan extends control
 
             $begin = date('Y-m-d', strtotime("+$delta days", $timestamp));
         }
-        $this->view->begin = $lastPlan ? $begin : '';
+        $this->view->begin  = $lastPlan ? $begin : '';
 
         $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->position[] = $this->lang->productplan->common;
@@ -84,7 +87,7 @@ class productplan extends control
         }
 
         $plan = $this->productplan->getByID($planID);
-        $this->commonAction($plan->product);
+        $this->commonAction($plan->product, $plan->branch);
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
         $this->view->plan = $plan;
@@ -98,13 +101,13 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchEdit($productID)
+    public function batchEdit($productID, $branch = 0)
     {
         if(isset($_POST['planIDList']))
         {
-            $this->commonAction($productID);
+            $this->commonAction($productID, $branch);
             $this->view->title      = $this->lang->productplan->batchEdit;
-            $this->view->position[] = html::a(inlink('browse', "productID=$productID"), $this->lang->productplan->common);
+            $this->view->position[] = html::a(inlink('browse', "productID=$productID&branch=$branch"), $this->lang->productplan->common);
             $this->view->position[] = $this->lang->productplan->batchEdit;
 
             $this->view->plans = $this->productplan->getByIDList($this->post->planIDList);
@@ -119,7 +122,7 @@ class productplan extends control
                 $actionID = $this->action->create('productplan', $planID, 'Edited');
                 $this->action->logHistory($actionID, $change);
             }
-            die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+            die(js::locate(inlink('browse', "productID=$productID&branch=$branch"), 'parent'));
         }
         die(js::locate('back'));
     }
@@ -158,7 +161,7 @@ class productplan extends control
                 }
                 $this->send($response);
             }
-            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
+            die(js::locate(inlink('browse', "productID=$plan->product&branch=$plan->branch"), 'parent'));
         }
     }
 
@@ -173,7 +176,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -183,13 +186,13 @@ class productplan extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $this->session->set('productPlanList', $this->app->getURI(true));
-        $this->commonAction($productID);
+        $this->commonAction($productID, $branch);
         $products               = $this->product->getPairs();
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
         $this->view->orderBy    = $orderBy;
-        $this->view->plans      = $this->productplan->getList($productID, $pager, $sort);
+        $this->view->plans      = $this->productplan->getList($productID, $branch, $pager, $sort);
         $this->view->pager      = $pager;
         $this->display();
     }
@@ -213,7 +216,7 @@ class productplan extends control
 
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
-        $this->commonAction($plan->product);
+        $this->commonAction($plan->product, $plan->branch);
         $products                = $this->product->getPairs();
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
@@ -239,9 +242,9 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductplans($productID)
+    public function ajaxGetProductplans($productID, $branch = 0)
     {
-        $plans = $this->productplan->getPairs($productID);
+        $plans = $this->productplan->getPairs($productID, $branch);
         die(html::select('plan', $plans, '', "class='form-control'"));
     }
 
@@ -263,7 +266,7 @@ class productplan extends control
         $this->loadModel('story');
         $this->loadModel('tree');
         $plan = $this->productplan->getByID($planID);
-        $this->commonAction($plan->product);
+        $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getPairs();
 
         /* Build search form. */
@@ -278,6 +281,15 @@ class productplan extends control
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+        if($this->view->product->type == 'normal')
+        {   
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }   
+        else
+        {   
+            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($this->view->product->id, 'noempty');
+        }   
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
@@ -377,7 +389,7 @@ class productplan extends control
 
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
-        $this->commonAction($plan->product);
+        $this->commonAction($plan->product, $plan->branch);
         $products  = $this->product->getPairs('nocode');
         $productID = $plan->product;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;

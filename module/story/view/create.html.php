@@ -56,7 +56,7 @@
           if(count($plans) == 1) 
           {
               echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('productplan', 'create', "productID=$productID"), $lang->productplan->create, '_blank');
+              echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), $lang->productplan->create, '_blank');
               echo '&nbsp; ';
               echo html::a("javascript:loadProductPlans($productID)", $lang->refresh);
               echo '</span>';

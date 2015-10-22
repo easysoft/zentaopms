@@ -539,7 +539,7 @@ class bug extends control
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->projects         = $this->product->getProjectPairs($bug->product);

@@ -524,7 +524,7 @@ class product extends control
         if(count($plans) == 1 and $needCreate) 
         {
             $output .= "<span class='input-group-addon'>";
-            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID"), $this->lang->productplan->create, '_blank');
+            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), $this->lang->productplan->create, '_blank');
             $output .= '&nbsp; ';
             $output .= html::a("javascript:loadProductPlans($productID)", $this->lang->refresh);
             $output .= '</span>';

@@ -213,7 +213,8 @@ function loadProjectBuilds(projectID)
  */
 function setStories(moduleID, productID)
 {
-    branch = $('#branch').val();
+    var branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID);
     $.get(link, function(stories)
     {

@@ -48,6 +48,7 @@ function setStories()
     moduleID  = $('#module').val();
     productID = $('#product').val();
     branch    = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50');
     $.get(link, function(stories)
     {

@@ -10,8 +10,10 @@ function loadProduct(productID)
 
 function loadBranch()
 {
-    loadProductModules($('#product').val(), $('#branch').val());
-    loadProductPlans($('#product').val(), $('#branch').val());
+    var branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+    loadProductModules($('#product').val(), branch);
+    loadProductPlans($('#product').val(), branch);
 }
 
 function loadProductBranches(productID)

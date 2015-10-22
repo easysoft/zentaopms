@@ -15,13 +15,13 @@
 <div id='titlebar'>
   <div class='heading'><i class='icon-flag'></i> <?php echo $lang->productplan->browse;?>  </div>
   <div class='actions'>
-    <?php common::printIcon('productplan', 'create', "productID=$product->id", '', 'button', 'plus');?>
+    <?php common::printIcon('productplan', 'create', "productID=$product->id&branch=$branch", '', 'button', 'plus');?>
   </div>
 </div>
-<form method='post' action='<?php echo inlink('batchEdit', "productID=$product->id")?>'>
+<form method='post' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
 <table class='table' id="productplan">
   <thead>
-  <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+  <?php $vars = "productID=$productID&branch=$branch&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
     <th class='w-id'>    <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
     <th>                 <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
