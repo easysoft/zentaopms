@@ -97,7 +97,7 @@ $(function()
             if(key && key != $searchInput.data('lastkey'))
             {
                 $searchResult.empty().append('<li class="loading"><i class="icon-spin icon-spinner icon-2x"></i></li>');
-                var link = createLink('story', 'ajaxSearchProductStories', 'key=' + key + '&productID=' + $('#product').val() + '&moduleID=' + $('#module').val() + '&storyID=0&status=noclosed&limit=50');
+                var link = createLink('story', 'ajaxSearchProductStories', 'key=' + key + '&productID=' + $('#product').val() + '&branch=' + $('#branch').val() + '&moduleID=' + $('#module').val() + '&storyID=0&status=noclosed&limit=50');
                 $.getJSON(link, function(result)
                 {
                     $searchResult.empty();

@@ -39,6 +39,7 @@ $lang->story->batchAssignTo    = "批量指派";
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';
 $lang->story->product        = "所属{$lang->productCommon}";
+$lang->story->branch         = "所属分支";
 $lang->story->module         = '所属模块';
 $lang->story->source         = '来源';
 $lang->story->fromBug        = '来源Bug';

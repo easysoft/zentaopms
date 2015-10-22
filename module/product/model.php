@@ -22,7 +22,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = '', $extra = '')
+    public function setMenu($products, $productID, $branch = 0, $extra = '')
     {
         /* Has access privilege?. */
         if($products and !isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
@@ -57,12 +57,12 @@ class productModel extends model
      * @access public
      * @return string
      */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '')
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0)
     {
         if(!$productID) return;
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
-        setCookie("lastBranch",  $branch, $this->config->cookieLife, $this->config->webRoot);
+        setCookie("lastBranch",  "$productID-$branch", $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
         $output  = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         if($currentProduct->type != 'normal')
@@ -88,8 +88,15 @@ class productModel extends model
         if($productID > 0) $this->session->set('product', (int)$productID);
         if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
-        if($this->cookie->lastBranch) $this->session->set('branch', (int)$this->cookie->lastBranch);
         if(!isset($products[$this->session->product])) $this->session->set('product', key($products));
+
+        if($this->cookie->lastBranch)
+        {
+            list($lastProduct, $branch) = explode('-', $this->cookie->lastBranch);
+            $branch = $lastProduct == $this->session->product ? $branch : 0;
+            $this->session->set('branch', (int)$branch);
+        }
+
         return $this->session->product;
     }
 
@@ -690,7 +697,7 @@ class productModel extends model
             }
             else
             {
-                $link = helper::createLink($module, $method, "productID=%s");
+                $link = helper::createLink($module, $method, "productID=%s&branch=%s");
             }
         }
         else if($module == 'productplan' || $module == 'release')
@@ -700,7 +707,7 @@ class productModel extends model
         }
         else if($module == 'tree')
         {
-            $link = helper::createLink($module, $method, "productID=%s&type=$extra" . ($branch ? "&branch=%s" : ''));
+            $link = helper::createLink($module, $method, "productID=%s&type=$extra");
         }
         return $link;
     }

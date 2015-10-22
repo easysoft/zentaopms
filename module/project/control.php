@@ -1516,6 +1516,8 @@ class project extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         unset($this->lang->story->statusList['draft']);
         $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
+        unset($this->config->product->search['fields']['branch']);
+        unset($this->config->product->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
@@ -1528,7 +1530,7 @@ class project extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $moduleID = '0', $status = 'active');
+            $allStories = $this->story->getProductStories(array_keys($products), 0, $moduleID = '0', $status = 'active');
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 

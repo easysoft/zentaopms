@@ -47,8 +47,8 @@
     </div>
     <div class='btn-group'>
     <?php 
-    common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'button', 'plus-sign');
-    common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID", '', 'button', 'plus'); 
+    common::printIcon('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID", '', 'button', 'plus-sign');
+    common::printIcon('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", '', 'button', 'plus'); 
     ?>
     </div>
   </div>
@@ -130,7 +130,7 @@
             <?php
             $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0");
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch");
             ?>
             <div class='btn-group dropup'>
               <?php echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\" $disabled");?>

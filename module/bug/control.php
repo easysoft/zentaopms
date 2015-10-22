@@ -216,7 +216,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function create($productID, $extras = '')
+    public function create($productID, $branch = 0, $extras = '')
     {
         $this->view->users = $this->user->getPairs('nodeleted|devfirst|noclosed');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -253,7 +253,9 @@ class bug extends control
 
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        $this->bug->setMenu($this->products, $productID);
+        $product   = $this->product->getById($productID);
+        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->bug->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
         $moduleID   = 0;
@@ -314,7 +316,7 @@ class bug extends control
         else
         {
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release');
-            $stories = $this->story->getProductStoryPairs($productID);
+            $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
@@ -346,6 +348,9 @@ class bug extends control
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;
         $this->view->type             = $type;
+        $this->view->product          = $product;
+        $this->view->branch           = $branch;
+        $this->view->branches         = $branches;
 
         $this->display();
     }
@@ -359,7 +364,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $projectID = 0, $moduleID = 0)
+    public function batchCreate($productID, $branch = 0, $projectID = 0, $moduleID = 0)
     {
         if(!empty($_POST))
         {
@@ -381,7 +386,7 @@ class bug extends control
         else
         {
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
-            $stories = $this->story->getProductStoryPairs($productID);
+            $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
         if($this->session->bugImagesFile)
@@ -538,7 +543,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->projects         = $this->product->getProjectPairs($bug->product);
-        $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
+        $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;

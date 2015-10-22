@@ -87,10 +87,19 @@ class treeModel extends model
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0)
     {
         $branches = array($branch => '');
-        if(strpos('story|bug|case', $type) !== false and empty($branch))
+        if(strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if($product->type != 'normal') $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+            if($product->type != 'normal')
+            {
+                $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+                if($branch)
+                {
+                    $newBranches['null']  = '';
+                    $newBranches[$branch] = $branches[$branch];
+                    $branches = $newBranches;
+                }
+            }
         }
 
         $treeMenu = array();

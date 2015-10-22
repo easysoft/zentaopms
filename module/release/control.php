@@ -18,11 +18,14 @@ class release extends control
      * @access public
      * @return void
      */
-    public function commonAction($productID)
+    public function commonAction($productID, $branch = 0)
     {
         $this->loadModel('product');
-        $this->view->product = $this->product->getById($productID);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}"), $this->view->product->name);
+        $product = $this->product->getById($productID);
+        $this->view->product  = $product;
+        $this->view->branch   = $branch;
+        $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
         $this->product->setMenu($this->product->getPairs(), $productID);
     }
 
@@ -332,6 +335,7 @@ class release extends control
         $this->loadModel('product');
 
         /* Build search form. */
+        $product = $this->product->getByID($release->product);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
@@ -341,6 +345,15 @@ class release extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($release->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+        if($product->type == 'normal')
+        {   
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }   
+        else
+        {   
+            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }   
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')

@@ -25,7 +25,10 @@
       <tr>
         <th class='w-80px'><?php echo $lang->story->product;?></th>
         <td class='w-p25-f'>
-          <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
+          <div class='input-group'>
+            <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
+            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+          </div>
         </td>
         <td class='w-p25-f'>
           <div class='input-group' id='moduleIdBox'>

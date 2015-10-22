@@ -47,5 +47,14 @@ class branch extends control
         $this->view->keywords  = $keywords;
         $this->display();
     }
+
+    public function ajaxGetBranches($productID)
+    {
+        $product = $this->loadModel('product')->getById($productID);
+        if($product->type == 'normal') die();
+
+        $branches = $this->branch->getPairs($productID);
+        die(html::select('branch[]', $branches, '', "class='form-control'"));
+    }
 }
 

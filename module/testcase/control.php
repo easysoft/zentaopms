@@ -219,7 +219,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function create($productID, $moduleID = 0, $from = '', $param = 0, $storyID = 0)
+    public function create($productID, $branch = 0, $moduleID = 0, $from = '', $param = 0, $storyID = 0)
     {
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
@@ -325,7 +325,7 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
-        $stories = $this->story->getProductStoryPairs($productID, $modules, array_keys($storyStatus), 'id_desc', 50);
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50);
 
         $this->view->title            = $title;
         $this->view->caseTitle        = $caseTitle;
@@ -357,7 +357,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $moduleID = 0, $storyID = 0)
+    public function batchCreate($productID, $branch = 0, $moduleID = 0, $storyID = 0)
     {
         $this->loadModel('story');
         if(!empty($_POST))
@@ -398,10 +398,11 @@ class testcase extends control
         $this->view->story            = $story;
         $this->view->storyList        = $storyList;
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->type             = $type;
         $this->view->title            = $title;
+        $this->view->branch           = $branch;
 
         $this->display();
     }
@@ -538,7 +539,7 @@ class testcase extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->stories          = $this->story->getProductStoryPairs($productID);
+        $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         $this->view->case             = $case;
         $this->view->actions          = $this->loadModel('action')->getList('case', $caseID);
 
@@ -969,7 +970,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function showImport($productID)
+    public function showImport($productID, $branch = 0)
     {
         if($_POST)
         {
@@ -977,13 +978,13 @@ class testcase extends control
             die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
         }
 
-        $this->testcase->setMenu($this->products, $productID);
+        $this->testcase->setMenu($this->products, $productID, $branch);
 
         $file       = $this->session->importFile;
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
-        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case');
-        $stories    = $this->loadModel('story')->getProductStoryPairs($productID);
+        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields();
 
         $rows   = $this->loadModel('file')->parseCSV($file);

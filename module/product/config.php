@@ -13,6 +13,7 @@ $config->product->search['fields']['status']   = $lang->story->status;
 $config->product->search['fields']['pri']      = $lang->story->pri;
 
 $config->product->search['fields']['product']  = $lang->story->product;
+$config->product->search['fields']['branch']   = $lang->story->branch;
 $config->product->search['fields']['module']   = $lang->story->module;
 $config->product->search['fields']['plan']     = $lang->story->plan;
 $config->product->search['fields']['estimate'] = $lang->story->estimate;
@@ -44,6 +45,7 @@ $config->product->search['params']['stage']          = array('operator' => '=', 
 $config->product->search['params']['pri']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->priList);
 
 $config->product->search['params']['product']        = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->product->search['params']['branch']         = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 $config->product->search['params']['plan']           = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');

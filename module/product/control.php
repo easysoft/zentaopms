@@ -106,7 +106,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -117,7 +117,8 @@ class product extends control
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
-        if(empty($branch)) $branch = $this->session->branch;
+        $product   = $this->product->getById($productID);
+        if($branch === '') $branch = $this->session->branch;
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -171,13 +172,22 @@ class product extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
         $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        if($product->type == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $this->view->productID     = $productID;
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
-        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
         $this->view->summary       = $this->product->summary($stories);
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', 'createStoryLink'));
         $this->view->parentModules = $this->tree->getParents($moduleID);
@@ -507,9 +517,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $planID = 0, $needCreate = false)
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $needCreate = false)
     {
-        $plans = $this->loadModel('productplan')->getPairs($productID);
+        $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
         $output = html::select('plan', $plans, $planID, "class='form-control chosen'");
         if(count($plans) == 1 and $needCreate) 
         {

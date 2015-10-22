@@ -73,7 +73,7 @@ function loadProductModules(productID)
  */
 function loadProductStories(productID)
 {
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleId=0&storyID=' + oldStoryID);
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=0&moduleId=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen(defaultChosenOptions);});
 }
 
@@ -213,7 +213,8 @@ function loadProjectBuilds(projectID)
  */
 function setStories(moduleID, productID)
 {
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
+    branch = $('#branch').val();
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
