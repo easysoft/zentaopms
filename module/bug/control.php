@@ -308,12 +308,12 @@ class bug extends control
         /* If projectID is setted, get builds and stories of this project. */
         if($projectID)
         {
-            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty,noterminate,nodone');
             $stories = $this->story->getProjectStoryPairs($projectID);
         }
         else
         {
-            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release');
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty,release,noterminate,nodone');
             $stories = $this->story->getProductStoryPairs($productID);
         }
 

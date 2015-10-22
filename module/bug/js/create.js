@@ -24,6 +24,58 @@ function loadAllUsers()
 }
 
 /**
+  *Load all builds of one project or product.
+  *
+  * @access public
+  * @return void
+  */
+function loadAllBuilds()
+{
+    productID = $('#product').val();
+    projectID = $('#project').val();
+    if(projectID)
+    {
+        loadAllProjectBuilds(projectID, productID);
+    }
+    else
+    {
+        loadAllProductBuilds(productID);
+    }
+}
+
+/** 
+  * Load all builds of the project.
+  *
+  * @param  int    $projectID
+  * @access public
+  * @return void
+  */
+function loadAllProjectBuilds(projectID, productID)
+{
+    if(page == 'create') oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
+
+    if(page == 'create')
+    {
+        link = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
+    }
+}
+
+/** 
+  * Load all builds of the product.
+  *
+  * @param  int    $productID
+  * @access public
+  * @return void
+  */
+function loadAllProductBuilds(productID)
+{
+    link = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+
+    if(page == 'create') $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
+}
+
+/**
  * load assignedTo and stories of module.
  * 
  * @access public

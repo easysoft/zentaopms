@@ -130,6 +130,7 @@ $lang->bug->lblResolved                 = '由谁解决';
 $lang->bug->lblAllFields                = '所有字段';
 $lang->bug->lblCustomFields             = '自定义字段';
 $lang->bug->allUsers                    = '所有用户';
+$lang->bug->allBuilds                   = '所有版本';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo    = '基本信息';
