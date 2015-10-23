@@ -4,6 +4,10 @@ function changeParams(obj)
     var end = $('.main .row').find('#end').val();
     var workday = $('.main .row').find('#workday').val();
     var dept = $('.main .row').find('#dept').val();
+    var days = diffDate(begin, end);
+
+    $('#days').val(days);
+
     if(begin.indexOf('-') != -1)
     {
         var beginarray = begin.split("-");
@@ -17,6 +21,44 @@ function changeParams(obj)
         for(i=0 ; i < endarray.length ; i++) end = end + endarray[i]; 
     }
 
-    link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&workday=' + workday + '&dept=' + dept);
+    link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept);
     location.href=link;
+}
+
+/**
+ * Convert a date string to date object in js.
+ * 
+ * @param  string $date 
+ * @access public
+ * @return date
+ */
+function convertStringToDate(dateString)
+{
+    dateString = dateString.split('-');
+    return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+}
+
+/**
+ * Compute the diff days of two date.
+ * 
+ * @param  string $date1 
+ * @param  string $date1 
+ * @access public
+ * @return int
+ */
+function diffDate(date1, date2)
+{
+    date1 = convertStringToDate(date1);
+    date2 = convertStringToDate(date2);
+    delta = (date2 - date1) / (1000 * 60 * 60 * 24);
+
+    weekEnds = 0;
+    for(i = 0; i < delta + 1; i++)
+    {
+        if(date1.getDay() == 0 || date1.getDay() == 6) weekEnds ++;
+        date1 = date1.valueOf();
+        date1 += 1000 * 60 * 60 * 24;
+        date1 = new Date(date1);
+    }
+    return delta - weekEnds; 
 }
