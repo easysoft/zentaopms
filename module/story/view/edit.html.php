@@ -55,7 +55,12 @@
         <table class='table table-form'>
           <tr>
             <th class='w-80px'><?php echo $lang->story->product;?></th>
-            <td><?php echo html::select('product', $products, $story->product, 'class="form-control chosen" onchange="loadProduct(this.value)";');?></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
+                <?php if($product->type != 'normal') echo html::select('branch', $branches, $story->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->story->module;?></th>
@@ -82,7 +87,7 @@
               if(count($plans) == 1) 
               {
                   echo "<span class='input-group-addon'>";
-                  echo html::a($this->createLink('productplan', 'create', "productID=$story->product"), $lang->productplan->create, '_blank');
+                  echo html::a($this->createLink('productplan', 'create', "productID=$story->product&branch=$story->branch"), $lang->productplan->create, '_blank');
                   echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
                   echo '</span>';
               }

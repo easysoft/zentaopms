@@ -35,7 +35,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0)
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0)
     {
         if(!empty($_POST))
         {
@@ -77,7 +77,7 @@ class story extends control
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
-                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
+                $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
                 $this->send($response);
             }
             if($projectID == 0)
@@ -106,7 +106,7 @@ class story extends control
         }
 
         $users = $this->user->getPairs('nodeleted|pdfirst|noclosed');
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
         /* Set menu. */
         $this->product->setMenu($products, $product->id);
@@ -158,7 +158,7 @@ class story extends control
         }
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
-        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
+        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->create;
         $this->view->products         = $products;
@@ -170,6 +170,8 @@ class story extends control
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->pri              = $pri;
+        $this->view->branch           = $branch;
+        $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->projectID        = $projectID;
@@ -192,27 +194,27 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $moduleID = 0)
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0)
     {
         if(!empty($_POST))
         {
-            $mails = $this->story->batchCreate($productID);
+            $mails = $this->story->batchCreate($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
 
             foreach($mails as $mail)
             {
                 $this->sendmail($mail->storyID, $mail->actionID);
             }
-            die(js::locate($this->createLink('product', 'browse', "productID=$productID"), 'parent'));
+            die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
         }
 
         /* Set products and module. */
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
         /* Set menu. */
-        $this->product->setMenu($products, $product->id);
+        $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
         $planID     = 0;
@@ -241,13 +243,14 @@ class story extends control
 
         $moduleOptionMenu['same'] = $this->lang->story->same;
         $plans = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
-        $plans['same']   = $this->lang->story->same;
-        $priList         = (array)$this->lang->story->priList;
-        $priList['same'] = $this->lang->story->same;
+        $plans['same']    = $this->lang->story->same;
+        $priList          = (array)$this->lang->story->priList;
+        $priList['same']  = $this->lang->story->same;
+        $branches['same'] = $this->lang->story->same;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->productName      = $product->name;
-        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
+        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->batchCreate;
         $this->view->products         = $products;
@@ -261,6 +264,8 @@ class story extends control
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
+        $this->view->branches         = $branches;
+        $this->view->branch           = $branch;
 
         $this->display();
     }
@@ -278,13 +283,13 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story');
+        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story', 0, $story->branch);
 
         /* Set menu. */
         $this->product->setMenu($products, $product->id);
 
         /* Assign. */
-        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->product          = $product;
         $this->view->products         = $products;
@@ -320,11 +325,14 @@ class story extends control
         $this->commonAction($storyID);
   
         /* Assign. */
-        $story = $this->story->getById($storyID, 0, true);
+        $story   = $this->story->getById($storyID, 0, true);
+        $product = $this->loadModel('product')->getById($story->product);
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $this->view->product    = $product;
+        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->display();
     }
 
@@ -336,7 +344,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $projectID = 0)
+    public function batchEdit($productID = 0, $projectID = 0, $branch = 0)
     {
         if($this->post->titles)
         {
@@ -365,9 +373,9 @@ class story extends control
         /* The stories of a product. */
         if($productID)
         {
-            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
+            $this->product->setMenu($this->product->getPairs('nodeleted'), $productID, $branch);
             $product = $this->product->getByID($productID);
-            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
             $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
 
         }
@@ -399,8 +407,8 @@ class story extends control
         $this->loadModel('productplan');
         foreach($stories as $story) 
         {
-            $moduleOptionMenus[$story->product] = $this->tree->getOptionMenu($story->product, $viewType = 'story');
-            $productPlans[$story->product]      = $this->productplan->getPairs($story->product);
+            $moduleOptionMenus[$story->product] = $this->tree->getOptionMenu($story->product, $viewType = 'story', 0, $branch);
+            $productPlans[$story->product]      = $this->productplan->getPairs($story->product, $branch);
         }
 
         /* Judge whether the editedStories is too large and set session. */
@@ -507,7 +515,7 @@ class story extends control
         if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
@@ -525,13 +533,14 @@ class story extends control
         }
 
         $title      = "STORY #$story->id $story->title - $product->name";
-        $position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $position[] = $this->lang->story->common;
         $position[] = $this->lang->story->view;
 
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->product    = $product;
+        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->plan       = $plan;
         $this->view->bugs       = $bugs;
         $this->view->fromBug    = $fromBug;
@@ -607,7 +616,7 @@ class story extends control
         if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->review;
 
@@ -675,7 +684,7 @@ class story extends control
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->close;
 
@@ -911,7 +920,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0)
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0)
     {
         if($moduleID)
         {
@@ -927,7 +936,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus, 'id_desc', $limit);
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit);
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
@@ -947,7 +956,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxSearchProductStories($key, $productID, $moduleID = 0, $storyID = 0, $status = 'noclosed', $limit = 50)
+    public function ajaxSearchProductStories($key, $productID, $branch = 0, $moduleID = 0, $storyID = 0, $status = 'noclosed', $limit = 50)
     {
         if($moduleID)
         {
@@ -963,7 +972,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $moduleID, $storyStatus, 'id_desc');
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc');
         $result = array();
         $i = 0;
         foreach ($stories as $id => $story)

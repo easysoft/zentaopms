@@ -65,10 +65,11 @@ class productplanModel extends model
      * @access public
      * @return object
      */
-    public function getList($product = 0, $pager = null, $orderBy = 'begin_desc')
+    public function getList($product = 0, $branch = 0, $pager = null, $orderBy = 'begin_desc')
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -82,15 +83,14 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($product = 0, $expired = '')
+    public function getPairs($product = 0, $branch = 0, $expired = '')
     {
         $date = date('Y-m-d');
         return array('' => '') + $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($expired == 'unexpired')
-            ->andWhere('end')->gt($date)
-            ->fi()
+            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($expired == 'unexpired')->andWhere('end')->gt($date)->fi()
             ->orderBy('begin desc')->fetchPairs();
     }
 

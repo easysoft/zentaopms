@@ -58,6 +58,7 @@ $lang->product->company   = '所属公司';
 $lang->product->name      = "{$lang->productCommon}名称";
 $lang->product->code      = "{$lang->productCommon}代号";
 $lang->product->order     = '排序';
+$lang->product->type      = "{$lang->productCommon}类型";
 $lang->product->status    = '状态';
 $lang->product->desc      = "{$lang->productCommon}描述";
 $lang->product->PO        = "{$lang->productCommon}负责人";
@@ -82,6 +83,11 @@ $lang->product->unclosed     = '未关闭';
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部关联' . $lang->productCommon;
+
+$lang->product->typeList['']         = '';
+$lang->product->typeList['normal']   = '正常';
+$lang->product->typeList['branch']   = '多分支';
+$lang->product->typeList['platform'] = '多平台';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';

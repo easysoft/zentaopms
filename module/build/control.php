@@ -280,6 +280,7 @@ class build extends control
         $this->loadModel('product');
 
         /* Build search form. */
+        $product = $this->product->getByID($build->product);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
@@ -289,6 +290,15 @@ class build extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($build->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+        if($product->type == 'normal')
+        {   
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }   
+        else
+        {   
+            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        }   
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')

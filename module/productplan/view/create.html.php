@@ -27,6 +27,12 @@
         <th class='w-80px'><?php echo $lang->productplan->product;?></th>
         <td class='w-p25-f'><?php echo $product->name;?></td><td></td>
       </tr>
+      <?php if($product->type != 'normal'):?>
+      <tr>
+        <th><?php echo $lang->productplan->branch;?></th>
+        <td><?php echo html::select('branch', $branches, $branch, "class='form-control'");?></td>
+      </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->productplan->title;?></th>
         <td><?php echo html::input('title', '', "class='form-control'");?></td>

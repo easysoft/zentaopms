@@ -209,7 +209,7 @@ class storyModel extends model
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
-    public function batchCreate($productID = 0)
+    public function batchCreate($productID = 0, $branch = 0)
     {
         $now      = helper::now();
         $stories  = fixer::input('post')->get();
@@ -221,14 +221,17 @@ class storyModel extends model
         $module = 0;
         $plan   = 0;
         $pri    = 0;
+        $branch = 0;
         for($i = 0; $i < $batchNum; $i++)
         {
             $module = $stories->module[$i] == 'same' ? $module : $stories->module[$i];
             $plan   = $stories->plan[$i]   == 'same' ? $plan   : $stories->plan[$i];
             $pri    = $stories->pri[$i]    == 'same' ? $pri   : $stories->pri[$i];
+            $branch = $stories->pri[$i]    == 'same' ? $branch : $stories->branch[$i];
             $stories->module[$i] = (int)$module;
             $stories->plan[$i]   = (int)$plan;
             $stories->pri[$i]    = (int)$pri;
+            $stories->branch[$i] = (int)$branch;
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -241,9 +244,11 @@ class storyModel extends model
                 $data->plan       = $stories->plan[$i];
                 $data->title      = $stories->title[$i];
                 $data->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
+                $data->branch     = $stories->branch[$i];
                 $data->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
                 $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
                 $data->product    = $productID;
+                $data->branch     = $branch;
                 $data->openedBy   = $this->app->user->account;
                 $data->openedDate = $now;
                 $data->version    = 1;
@@ -926,14 +931,15 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getProductStories($productID = 0, $branch = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
-            ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi() 
-            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF(!empty($branch))->andWhere("t1.branch")->eq($branch)->fi()
+            ->beginIF(!empty($moduleIds))->andWhere('t1.module')->in($moduleIds)->fi()
+            ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
@@ -949,13 +955,14 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc', $limit = 0)
+    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc', $limit = 0)
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
             ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($order)
@@ -974,9 +981,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByAssignedTo($productID, $account, $orderBy, $pager)
+    public function getByAssignedTo($productID, $branch, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, 'assignedTo', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, 'assignedTo', $account, $orderBy, $pager);
     }
 
     /**
@@ -989,9 +996,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByOpenedBy($productID, $account, $orderBy, $pager)
+    public function getByOpenedBy($productID, $branch, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, 'openedBy', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, 'openedBy', $account, $orderBy, $pager);
     }
 
     /**
@@ -1004,9 +1011,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByReviewedBy($productID, $account, $orderBy, $pager)
+    public function getByReviewedBy($productID, $branch, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, 'reviewedBy', $account, $orderBy, $pager, 'include');
+        return $this->getByField($productID, $branch, 'reviewedBy', $account, $orderBy, $pager, 'include');
     }
 
     /**
@@ -1018,9 +1025,9 @@ class storyModel extends model
      * @param  object $pager 
      * @return array
      */
-    public function getByClosedBy($productID, $account, $orderBy, $pager)
+    public function getByClosedBy($productID, $branch, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, 'closedBy', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, 'closedBy', $account, $orderBy, $pager);
     }
 
     /**
@@ -1033,9 +1040,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus($productID, $status, $orderBy, $pager)
+    public function getByStatus($productID, $branch, $status, $orderBy, $pager)
     {
-        return $this->getByField($productID, 'status', $status, $orderBy, $pager);
+        return $this->getByField($productID, $branch, 'status', $status, $orderBy, $pager);
     }
 
     /**
@@ -1050,13 +1057,14 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByField($productID, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
+    public function getByField($productID, $branch, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
     {
         return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!empty($branch))->andWhere("CONCAT(',', t1.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
             ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
             ->orderBy($orderBy)
@@ -1073,7 +1081,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getWillClose($productID, $orderBy, $pager)
+    public function getWillClose($productID, $branch, $orderBy, $pager)
     {
         return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
@@ -1367,7 +1375,7 @@ class storyModel extends model
      */
     public function getZeroCase($productID, $orderBy = 'id_desc')
     {
-        $allStories   = $this->getProductStories($productID, 0, 'all', $orderBy);
+        $allStories   = $this->getProductStories($productID, 0, 0, 'all', $orderBy);
         $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
 
         foreach($allStories as $key => $story)

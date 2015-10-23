@@ -7,8 +7,9 @@ function syncModule(rootID, type)
     $.getJSON(link, function(modules)
     {
         $('.helplink').addClass('hidden');
+        var $inputgroup = $('<div></div>').append($('.input-group .icon-remove:first').closest('.input-group').clone()).html();
         $.each(modules, function(key, value)
-        {   
+        {
             moduleName = value;
             $('.form-control').each(function()
             {
@@ -18,8 +19,12 @@ function syncModule(rootID, type)
         });  
 
         $.each(modules, function(key, value)
-        {  
-            if(value) $('#sonModule').append("<span><input type='text' name='modules[]' value='" + value + "' style='margin-bottom:5px' class='form-control' /><span>");
+        {
+            if(value)
+            {
+                $('#sonModule .input-group:last').after($inputgroup);
+                $('#sonModule .input-group:last input').val(value);
+            }
         })
     })
 }
@@ -28,7 +33,7 @@ function syncProductOrProject(obj, type)
 {
     if(type == 'product') viewType = 'story';
     if(type == 'project') viewType = 'task';
-    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + obj.value + "&viewType=" + viewType + "&rootModuleID=0&returnType=json");
+    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + obj.value + "&viewType=" + viewType + "&branch=0&rootModuleID=0&returnType=json");
     $.getJSON(link, function(modules)
     {
         $('.helplink').addClass('hidden');
@@ -48,6 +53,18 @@ function toggleCopy()
    var $copy = $('table.copy');
    if($copy.size() == 0) return false;
    $copy.toggle();
+}
+
+function addItem(obj)
+{
+    var $inputgroup = $(obj).closest('.input-group');
+    $inputgroup.after($inputgroup.clone()).next('.input-group').find('input').val('');
+}
+
+function deleteItem(obj)
+{
+    if($(obj).closest('.input-group').parent().find('i.icon-remove').size() <= 1) return;
+    $(obj).closest('.input-group').remove();
 }
 
 $(document).ready(function()

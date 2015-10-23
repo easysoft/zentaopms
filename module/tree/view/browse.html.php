@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
+<?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and $root->type != 'normal') ? true : false;?>
 <div id='titlebar'>
   <div class='heading'><i class='icon-cogs'></i> <?php echo $lang->tree->common;?>  </div>
 </div>
@@ -74,9 +75,20 @@
                 {
                     if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
                     $disabled = $sonModule->type == $viewType ? '' : 'disabled="true"';
-                    echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=form-control style="margin-bottom:5px" ' . $disabled) . '</span>';
+                    echo $hasBranch ? "<div class='input-group' style='margin-bottom:5px'>" : "<div style='margin-bottom:5px'>";
+                    echo html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control"' . $disabled);
+                    if($hasBranch) echo '<span class="input-group-addon" style="padding:0px"></span>' . html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled');
+                    echo '</div>';
                 }
-                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=form-control style="margin-bottom:5px"') . '</span>';
+                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
+                {
+                    echo "<div class='input-group' style='margin-bottom:5px'>";
+                    echo html::input("modules[]", '', 'class="form-control"');
+                    if($hasBranch) echo '<span class="input-group-addon" style="padding:0px"></span>' . html::select("branch[]", $branches, $branch, 'class="form-control"');
+                    echo "<span class='input-group-addon'><a href='javascript:;' onclick='addItem(this)'><i class='icon icon-plus'></i></a></span>";
+                    echo "<span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>";
+                    echo '</div>';
+                }
                 ?>
                 </div>
               </td>

@@ -25,7 +25,10 @@
       <tr>
         <th class='w-80px'><?php echo $lang->story->product;?></th>
         <td class='w-p25-f'>
-          <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
+          <div class='input-group'>
+            <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
+            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+          </div>
         </td>
         <td class='w-p25-f'>
           <div class='input-group' id='moduleIdBox'>
@@ -53,7 +56,7 @@
           if(count($plans) == 1) 
           {
               echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('productplan', 'create', "productID=$productID"), $lang->productplan->create, '_blank');
+              echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), $lang->productplan->create, '_blank');
               echo '&nbsp; ';
               echo html::a("javascript:loadProductPlans($productID)", $lang->refresh);
               echo '</span>';

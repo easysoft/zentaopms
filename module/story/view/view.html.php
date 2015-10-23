@@ -33,7 +33,7 @@
   </div>
   <div class='actions'>
     <?php
-    $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
+    $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");
     $actionLinks = '';
 
     if(!$story->deleted)
@@ -45,14 +45,14 @@
         common::printIcon('story', 'review',     "storyID=$story->id", $story);
         common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
         common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
-        common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'sitemap');
+        common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'sitemap');
         if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id", '', 'button', 'smile');
         echo '</div>';
 
         echo "<div class='btn-group'>";
         common::printIcon('story', 'edit', "storyID=$story->id");
         common::printCommentIcon('story');
-        common::printIcon('story', 'create', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'button', 'copy');
+        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'button', 'copy');
         common::printIcon('story', 'delete', "storyID=$story->id", '', 'button', '', 'hiddenwin');
         echo '</div>';
 
@@ -111,6 +111,12 @@
                 <th class='w-70px'><?php echo $lang->story->product;?></th>
                 <td><?php common::printLink('product', 'view', "productID=$story->product", $product->name);?></td>
               </tr>
+              <?php if($product->type != 'normal'):?>
+              <tr>
+                <th><?php echo $lang->story->branch;?></th>
+                <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
+              </tr>
+              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->module;?></th>
                 <?php
@@ -126,7 +132,7 @@
                     foreach($modulePath as $key => $module)
                     {
                         $moduleTitle .= $module->name;
-                        if(!common::printLink('product', 'browse', "productID=$story->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                         if(isset($modulePath[$key + 1]))
                         {
                             $moduleTitle .= '/';
@@ -300,6 +306,7 @@
 js::set('canCreate', common::hasPriv('story', 'story'));
 js::set('createStory', $lang->story->create);
 js::set('productID', $story->product);
+js::set('branch', $story->branch);
 js::set('moduleID', $story->module);
 ?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>

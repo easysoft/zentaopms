@@ -551,7 +551,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0, $productID = 0)
+    public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0)
     {
         if($productID != 0)
         {
@@ -563,6 +563,7 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
+                ->beginIF($branch != 0)->andWhere('t1.branch')->like(",$branch,")->fi()
                 ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->orderBy('order_desc')
@@ -630,10 +631,10 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getProjectStats($status = 'undone', $productID = 0, $branch, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
-        $projects    = $this->getList($status, 0, $productID);
+        $projects    = $this->getList($status, 0, $productID, $branch);
         foreach($projects as $projectID => $project)
         {
             if(!$this->checkPriv($project)) unset($projects[$projectID]);

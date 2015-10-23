@@ -22,7 +22,7 @@
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;
-    if($productID) common::printIcon('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id");
+    if($productID) common::printIcon('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id");
 
     common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link');
     ?>

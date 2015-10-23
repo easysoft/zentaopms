@@ -42,6 +42,10 @@
         <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td><td></td>
       </tr>  
       <tr>
+        <th><?php echo $lang->product->type;?></th>
+        <td><?php echo html::select('type', $lang->product->typeList, 'normal', "class='form-control'");?></td><td></td>
+      </tr>  
+      <tr>
         <th><?php echo $lang->product->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', '', "rows='8' class='form-control'");?></td>
       </tr>  
