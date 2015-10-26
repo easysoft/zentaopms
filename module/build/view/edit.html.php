@@ -25,7 +25,12 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->build->product;?></th>
-        <td class='w-p25-f'><?php echo html::select('product', $products, $build->product, "class='form-control chosen'");?></td><td></td>
+        <td class='w-p25-f'>
+          <div class='input-group'>
+            <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen'");?>
+            <?php if($build->productType != 'normal') echo html::select('branch', $branches, $build->branch, "class='form-control' style='width:100px'");?>
+          </div>
+        </td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->name;?></th>

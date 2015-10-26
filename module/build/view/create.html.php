@@ -24,7 +24,14 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->build->product;?></th>
-        <td class='w-p25-f'><?php echo html::select('product', $products, '', "class='form-control chosen'");?></td>
+        <td class='w-p25-f'>
+          <?php if($products):?>
+          <div class='input-group'>
+            <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value);' class='form-control chosen'");?>
+            <?php if($product->type != 'normal') echo html::select('branch', $branches, '', "class='form-control' style='width:100px'");?>
+          </div>
+          <?php endif;?>
+        </td>
         <td><?php if(empty($products)) printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "projectID=$projectID"));?></td>
       </tr>
       <tr>

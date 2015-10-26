@@ -31,6 +31,7 @@ $lang->build->basicInfo = '基本信息';
 
 $lang->build->id        = 'ID';
 $lang->build->product   = $lang->productCommon;
+$lang->build->branch    = '所属分支';
 $lang->build->project   = $lang->projectCommon;
 $lang->build->name      = '名称编号';
 $lang->build->date      = '打包日期';

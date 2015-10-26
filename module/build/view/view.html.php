@@ -222,10 +222,16 @@
             <th class='w-80px'><?php echo $lang->build->product;?></th>
             <td><?php echo $build->productName;?></td>
           </tr>  
+          <?php if($build->productType != 'normal'):?>
+          <tr>
+            <th><?php echo $lang->build->branch;?></th>
+            <td><?php echo $branchName;?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->build->name;?></th>
             <td><?php echo $build->name;?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->build->builder;?></th>
             <td><?php echo $users[$build->builder];?></td>

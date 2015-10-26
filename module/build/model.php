@@ -23,7 +23,7 @@ class buildModel extends model
      */
     public function getByID($buildID, $setImgSize = false)
     {
-        $build = $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
+        $build = $this->dao->select('t1.*, t2.name as projectName, t3.name as productName, t3.type as productType')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
