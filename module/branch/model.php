@@ -11,6 +11,12 @@
  */
 class branchModel extends model
 {
+    public function getById($branchID)
+    {
+        if(empty($branchID)) return $this->lang->branch->all;
+        return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name');
+    }
+
     public function getPairs($productID, $params = '')
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchPairs('id', 'name');

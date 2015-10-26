@@ -64,4 +64,5 @@
     </table>
   </form>
 </div>
+<?php js::set('productGroups', $productGroups)?>
 <?php include '../../common/view/footer.html.php';?>

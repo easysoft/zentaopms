@@ -39,20 +39,24 @@ class build extends control
         $orderBy  = 'status_asc, stage_asc, id_desc';
 
         /* Assign. */
-        $project  = $this->loadModel('project')->getById($projectID);
-        $products = $this->project->getProducts($projectID, false);
-        $product  = $this->loadModel('product')->getById(key($products));
+        $project = $this->loadModel('project')->getById($projectID);
 
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->create;
-        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->build->create;
-        $this->view->products   = $products;
-        $this->view->product    = $product;
-        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->projectID  = $projectID;
-        $this->view->lastBuild  = $this->build->getLast($projectID);
-        $this->view->users      = $this->user->getPairs('nodeleted');
-        $this->view->orderBy    = $orderBy;
+        $productGroups = $this->project->getProducts($projectID);
+        $productID     = key($productGroups);
+        $products      = array();
+        foreach($productGroups as $product) $products[$product->id] = $product->name;
+
+        $this->view->title         = $project->name . $this->lang->colon . $this->lang->build->create;
+        $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
+        $this->view->position[]    = $this->lang->build->create;
+        $this->view->productGroups = $productGroups;
+        $this->view->products      = $products;
+        $this->view->product       = $productGroups[$productID];
+        $this->view->branches      = $productGroups[$productID]->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->projectID     = $projectID;
+        $this->view->lastBuild     = $this->build->getLast($projectID);
+        $this->view->users         = $this->user->getPairs('nodeleted');
+        $this->view->orderBy       = $orderBy;
         $this->display();
     }
 
@@ -91,17 +95,21 @@ class build extends control
         $orderBy = 'status_asc, stage_asc, id_desc';
 
         /* Assign. */
-        $project  = $this->loadModel('project')->getById($build->project);
-        $products = $this->project->getProducts($build->project, false);
+        $project = $this->loadModel('project')->getById($build->project);
 
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->edit;
-        $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$build->project"), $project->name);
-        $this->view->position[] = $this->lang->build->edit;
-        $this->view->products   = $products;
-        $this->view->branches   = $build->productType == 'normal' ? array() : $this->loadModel('branch')->getPairs($build->product);
-        $this->view->build      = $build;
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
-        $this->view->orderBy    = $orderBy;
+        $productGroups = $this->project->getProducts($build->project);
+        $products      = array();
+        foreach($productGroups as $product) $products[$product->id] = $product->name;
+
+        $this->view->title         = $project->name . $this->lang->colon . $this->lang->build->edit;
+        $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $project->name);
+        $this->view->position[]    = $this->lang->build->edit;
+        $this->view->productGroups = $productGroups;
+        $this->view->products      = $products;
+        $this->view->branches      = $build->productType == 'normal' ? array() : $this->loadModel('branch')->getPairs($build->product);
+        $this->view->build         = $build;
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
+        $this->view->orderBy       = $orderBy;
         $this->display();
     }
                                                           
