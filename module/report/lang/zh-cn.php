@@ -40,7 +40,7 @@ $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 $lang->report->workloadAB       = '工作负载';
 $lang->report->bugOpenedDate    = 'Bug创建时间';
-$lang->report->taskAssignedDate = '任务指派时间';
+$lang->report->taskAssignedDate = '指派时间';
 $lang->report->dept             = '部门';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差报表|report|projectdeviation';
@@ -76,6 +76,7 @@ $lang->report->validRate     = "有效率";
 $lang->report->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
 $lang->report->unplanned     = '未计划';
 $lang->report->workday       = '每天工时';
+$lang->report->diffDays      = '工作日天数';
 
 $lang->report->conditions    = '筛选条件：';
 $lang->report->closedProduct = '关闭' . $lang->productCommon;

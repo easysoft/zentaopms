@@ -113,7 +113,7 @@ class report extends control
      * @access public
      * @return void
      */
-    public function workload($begin = '', $end = '', $workday = 7, $dept = 0)
+    public function workload($begin = '', $end = '', $days = 0, $workday = 7, $dept = 0)
     {
         if($_POST)
         {
@@ -121,14 +121,16 @@ class report extends control
             $begin    = $data->begin;
             $end      = $data->end;
             $dept     = $data->dept;
+            $days     = $data->days;
             $workday  = $data->workday;
         }
 
         $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-d', strtotime('now'));
         $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime('+1 week'));
 
-        $days = helper::diffDate($end, $begin);
-        $days = $days - ($days / 7 * 2);
+        $diffDays = helper::diffDate($end, $begin);
+        $diffDays = round($diffDays - ($diffDays / 7 * 2));
+        $days     = $days ? $days : $diffDays;
 
         $this->view->title      = $this->lang->report->workload;
         $this->view->position[] = $this->lang->report->workload;
@@ -138,6 +140,7 @@ class report extends control
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         $this->view->begin    = $begin;
         $this->view->end      = $end;
+        $this->view->days     = $days;
         $this->view->workday  = $workday;
         $this->view->dept     = $dept;
         $this->view->allHour  = $days * $workday;
