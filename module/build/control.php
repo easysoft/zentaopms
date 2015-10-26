@@ -129,14 +129,13 @@ class build extends control
         $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
         $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
         $this->view->position[]    = $this->lang->build->view;
-        $this->view->products      = $this->project->getProducts($build->project);
         $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, 'status_desc,id_desc', null, $build->id);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
-        $this->view->type           = $type;
+        $this->view->type          = $type;
         $this->view->link          = $link;
         $this->view->param         = $param;
         $this->display();

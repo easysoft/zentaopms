@@ -631,7 +631,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function getProjectStats($status = 'undone', $productID = 0, $branch, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
         $projects    = $this->getList($status, 0, $productID, $branch);
@@ -788,13 +788,23 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($projectID)
+    public function getProducts($projectID, $withBranch = true)
     {
-        return $this->dao->select('t2.id, t2.name, t2.type, t1.branch')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->fetchAll();
+            ->where('t1.project')->eq((int)$projectID);
+        if(!$withBranch) return $query->fetchPairs('id', 'name');
+        $products = $query->fetchAll();
+        $productGroups = array();
+        foreach($products as $product)
+        {
+            if(!isset($productGroups[$product->id])) $productGroups[$product->id] = $product;
+            $productGroups[$product->id]->branches[$product->branch] = $product->branch;
+            unset($productGroups[$product->id]->branch);
+        }
+
+        return $productGroups;
     }
 
     /**

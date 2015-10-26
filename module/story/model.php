@@ -937,7 +937,7 @@ class storyModel extends model
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
-            ->beginIF(!empty($branch))->andWhere("t1.branch")->eq($branch)->fi()
+            ->beginIF(!empty($branch))->andWhere("t1.branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIds))->andWhere('t1.module')->in($moduleIds)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -1136,7 +1136,13 @@ class storyModel extends model
             $queryProductID = 'all';
         }
         $storyQuery = $storyQuery . ' AND `product`' . helper::dbIN(array_keys($products));
-        if($projectID != '') $storyQuery .= " AND `status` != 'draft'"; 
+        if($projectID != '')
+        {
+            $branches = array(0 => 0);
+            foreach($products as $product) $branches += $product->branches;
+            $storyQuery .= " AND `branch`" . helper::dbIN($branches); 
+            $storyQuery .= " AND `status` != 'draft'"; 
+        }
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
     }

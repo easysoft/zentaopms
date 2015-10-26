@@ -110,7 +110,7 @@
           <tr>
             <th><?php echo $lang->project->products;?></th>
             <td>
-              <?php foreach($products as $productID => $productName) echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productName) . '<br />';?>
+              <?php foreach($products as $productID => $product) echo html::a($this->createLink('product', 'browse', "productID=$productID"), $product->name) . '<br />';?>
             </td>
           </tr>
           <tr>
