@@ -60,9 +60,9 @@
                 $maxOrder = 0;
                 if($newModule and !$productID)
                 {
-                    foreach($products as $id => $product)
+                    foreach($products as $product)
                     {
-                        echo '<span>' . html::input("products[id$id]", $product, 'class=form-control disabled="true"') . '</span>';
+                        echo '<span>' . html::input("products[id$product->id]", $product->name, 'class=form-control disabled="true"') . '</span>';
                     }
                 }
                 foreach($sons as $sonModule)

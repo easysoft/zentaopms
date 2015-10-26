@@ -3,12 +3,12 @@ $(function()
     $('#productsBox input:checkbox').each(function()
     {
         var cb = $(this);
-        if(cb.attr('checked')) cb.closest('label').addClass('checked');
+        if(cb.prop('checked')) cb.closest('.col-sm-4').addClass('checked');
     });
 
     $('#productsBox input:checkbox').change(function()
     {
         var cb = $(this);
-        cb.closest('label').toggleClass('checked', cb.attr('checked'));
+        cb.closest('.col-sm-4').toggleClass('checked', cb.prop('checked'));
     });
 })

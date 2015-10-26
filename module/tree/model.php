@@ -139,6 +139,7 @@ class treeModel extends model
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
         $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT)->where('id')->eq($rootID)->fetch('openedVersion');
         $products       = $this->loadModel('product')->getProductsByProject($rootID);
+        $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products));
 
         if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products) return $this->getOptionMenu($rootID, 'task', $startModule); 
 
@@ -185,7 +186,9 @@ class treeModel extends model
                 {
                     $parentModules = explode(',', trim($module->path, ','));
                     if($type == 'product' and isset($noProductModules[$parentModules[0]])) continue;
-                    $this->buildTreeArray($treeMenu, $modules, $module, $productNum > 1 ? "/$rootModule/" : '/');
+                    $rootName = $rootModule;
+                    if($type == 'product' and $module->branch and isset($branchGroups[$id][$module->branch])) $rootName .= '/' . $branchGroups[$id][$module->branch];
+                    $this->buildTreeArray($treeMenu, $modules, $module, $productNum > 1 ? "/$rootName/" : '/');
                 }
 
                 ksort($treeMenu);
@@ -316,7 +319,8 @@ class treeModel extends model
         $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
             ->where('id')->eq($rootID)
             ->fetch('openedVersion');
-        $products = $this->loadModel('product')->getProductsByProject($rootID);
+        $products      = $this->loadModel('product')->getProductsByProject($rootID);
+        $productGroups = $this->dao->select('product,branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($rootID)->fetchGroup('product', 'branch');
         if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products)
         {
             $extra['tip'] = false;
@@ -356,7 +360,7 @@ class treeModel extends model
 
             /* tree menu. */
             $treeMenu = array();
-            $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
+            $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch in(0," . (isset($productGroups[$id]) ? join(',', array_keys($productGroups[$id])) : 0) . ")))")
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->orderBy('grade desc, type, `order`')
                 ->get();
@@ -435,6 +439,7 @@ class treeModel extends model
             while($module = $stmt->fetch())
             {
                 /* if not manage, ignore unused modules. */
+                if(!isset($projectModules[$module->id])) continue;
                 if(!isset($projectModules[$module->id])) continue;
                 $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
             }
@@ -518,11 +523,18 @@ class treeModel extends model
         }
         else
         {
-            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-            $paths    = $this->dao->select('id')->from(TABLE_MODULE)
-                ->where('root')->in($products)
+            $productGroups = $this->dao->select('product,branch')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
+            $modules = $this->dao->select('id,root,branch')->from(TABLE_MODULE)
+                ->where('root')->in(array_keys($productGroups))
                 ->andWhere('type')->eq('story')
-                ->fetchPairs();
+                ->fetchAll();
+
+            $paths = array();
+            foreach($modules as $module)
+            {
+                if(empty($module->branch)) $paths[$module->id] = $module->id;
+                if(isset($productGroups[$module->root][$module->branch])) $paths[$module->id] = $module->id;
+            }
         }
 
         /* Add task paths of this project.*/

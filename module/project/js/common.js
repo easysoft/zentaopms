@@ -109,6 +109,31 @@ function computeEndDate(delta)
     computeWorkDays();
 }
 
+function loadBranches(product)
+{
+  if($('#productsBox .input-group:last select:first').val() != 0)
+  {
+      var length = $('#productsBox .input-group').size();
+      $('#productsBox .row').append('<div class="col-sm-3">' + $('#productsBox .col-sm-3:last').html() + '</div>');
+      if($('#productsBox .input-group:last select').size() >= 2)$('#productsBox .input-group:last select:last').remove();
+      $('#productsBox .input-group:last .chosen-container').remove();
+      $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
+      $('#productsBox .input-group:last .chosen').chosen(defaultChosenOptions);
+  }
+
+  var $inputgroup = $(product).closest('.input-group');
+  if($inputgroup.find('select').size() >= 2)$inputgroup.find('select:last').remove();
+  var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
+  $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val()), function(data)
+  {
+      if(data)
+      {
+          $inputgroup.append(data);
+          $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).css('width', '80px');
+      }
+  })
+}
+
 /* Auto compute the work days. */
 $(function() 
 {

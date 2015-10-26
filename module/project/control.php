@@ -900,10 +900,11 @@ class project extends control
         $name      = '';
         $code      = '';
         $team      = '';
-        $products  = '';
+        $products  = array();
         $whitelist = '';
         $acl       = 'open';
 
+        $productIDList = array();
         if($copyProjectID)
         {
             $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
@@ -912,7 +913,8 @@ class project extends control
             $team        = $copyProject->team;
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
-            $products    = join(',', array_keys($this->project->getProducts($copyProjectID)));
+            $products    = $this->project->getProducts($copyProjectID);
+            foreach($products as $product) $productIDList[$product->id] = $product->id;
         }
 
         if(!empty($_POST))
@@ -931,7 +933,7 @@ class project extends control
         $this->view->position[]    = $this->view->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->allProducts   = $this->loadModel('product')->getPairs('noclosed|nocode');
+        $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode');
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
@@ -939,6 +941,7 @@ class project extends control
         $this->view->whitelist     = $whitelist;
         $this->view->acl           = $acl      ;
         $this->view->copyProjectID = $copyProjectID;
+        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts($productIDList);
         $this->display();
     }
 
@@ -986,10 +989,14 @@ class project extends control
         $position[] = html::a($browseProjectLink, $project->name);
         $position[] = $this->lang->project->edit;
 
-        $allProducts    = $this->loadModel('product')->getPairs('noclosed|nocode');
+        $allProducts    = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode');
         $linkedProducts = $this->project->getProducts($project->id);
-        $allProducts   += $linkedProducts;
-        $linkedProducts = join(',', array_keys($linkedProducts));
+        $productIDList  = array();
+        foreach($linkedProducts as $product)
+        {
+            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            $productIDList[$product->id] = $product->id;
+        }
 
         $this->view->title          = $title;
         $this->view->position       = $position;
@@ -1002,6 +1009,7 @@ class project extends control
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts($productIDList);
 
         $this->display();
     }
@@ -1343,14 +1351,21 @@ class project extends control
         $allProducts     = $this->product->getPairs('noclosed|nocode');
         $linkedProducts  = $this->project->getProducts($project->id);
         // Merge allProducts and linkedProducts for closed product.
-        $allProducts    += $linkedProducts;
-        $linkedProducts  = join(',', array_keys($linkedProducts));
+        $products  = array();
+        foreach($linkedProducts as $product)
+        {
+            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if(!isset($products[$product->id])) $products[$product->id] = $product;
+            $products[$product->id]->branches[$product->branch] = $product->branch;
+        }
+        $linkedProducts = $products;
 
         /* Assign. */
         $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts));
 
         $this->display();
     }

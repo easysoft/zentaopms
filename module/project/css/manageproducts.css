@@ -1,7 +1,6 @@
 #productsBox {padding: 20px;}
-#productsBox > label {padding: 8px 15px; border:1px solid #ddd; min-width: 31%}
-#productsBox > label > input {margin-left: 0; margin-right: 5px;}
-#productsBox > label:hover {background: #f1f1f1}
-#productsBox > label.checked, #productsBox > label.checked:hover {background: #E5FFE6; border: 1px solid #229F24;}
-.radio-inline+.radio-inline, .checkbox-inline+.checkbox-inline {margin-left: 0;}
-.checkbox-inline {margin-right: 10px; margin-bottom: 10px;}
+#productsBox > .col-sm-4 {padding: 8px 15px; border:1px solid #ddd; min-height:48px; margin-bottom:5px; width:32%; margin-right:8px;}
+#productsBox > .col-sm-4 label {display:block}
+#productsBox > .col-sm-4:hover {background: #f1f1f1}
+#productsBox > .col-sm-4.checked, #productsBox > .col-sm-4.checked:hover {background: #E5FFE6; border: 1px solid #229F24;}
+.col-sm-4+.col-sm-4 {margin-left: 0;}

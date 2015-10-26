@@ -113,11 +113,11 @@ class backup extends control
         }
 
         /* Delete expired backup. */
-        $sqlFiles = glob("{$this->backupPath}*.sql.php");
-        if(!empty($sqlFiles))
+        $backupFiles = glob("{$this->backupPath}*.php");
+        if(!empty($backupFiles))
         {
             $time = time();
-            foreach($sqlFiles as $file)
+            foreach($backupFiles as $file)
             {
                 if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600) unlink($file);
             }

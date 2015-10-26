@@ -219,7 +219,7 @@ class projectModel extends model
             ->setDefault('team', substr($this->post->name,0, 30))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta')
+            ->remove('products, workDays, delta, branch')
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -292,7 +292,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products')
+            ->remove('products,branch')
             ->get();
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -790,11 +790,11 @@ class projectModel extends model
      */
     public function getProducts($projectID)
     {
-        return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('t2.id, t2.name, t2.type, t1.branch')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->fetchPairs();
+            ->fetchAll();
     }
 
     /**
@@ -833,13 +833,36 @@ class projectModel extends model
     {
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
-        $products = array_unique($_POST['products']);
-        foreach($products as $productID)
+        $products = $_POST['products'];
+        $branches = $_POST['branch'];
+
+        $existedProducts = array();
+        foreach($products as $i => $productID)
         {
+            if(empty($productID)) continue;
+
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+
+            /* When manageProducts. */
+            if(isset($branches[$i]) and is_array($branches[$i]))
+            {
+                foreach($branches[$i] as $branch)
+                {
+                    $data->branch = $branch;
+                    if(isset($existedProducts[$data->product][$data->branch])) continue;
+                    $existedProducts[$data->product][$data->branch] = true;
+                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
+            else
+            {
+                $data->branch = isset($branches[$i]) ? $branches[$i] : 0;
+                if(isset($existedProducts[$data->product][$data->branch])) continue;
+                $existedProducts[$data->product][$data->branch] = true;
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            }
         }
     }
 

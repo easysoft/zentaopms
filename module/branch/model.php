@@ -37,5 +37,19 @@ class branchModel extends model
 
         return dao::isError();
     }
+
+    public function getByProducts($products, $params = '')
+    {
+        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->in($products)->andWhere('deleted')->eq(0)->fetchAll();
+
+        $branchGroups = array();
+        foreach($branches as $branch)
+        {
+            if(!isset($branchGroups[$branch->product]) and strpos($params, 'noempty') === false) $branchGroups[$branch->product][0] = $this->lang->branch->all;
+            $branchGroups[$branch->product][$branch->id] = $branch->name;
+        }
+
+        return $branchGroups;
+    }
 }
 

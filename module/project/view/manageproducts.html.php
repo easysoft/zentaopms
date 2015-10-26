@@ -18,7 +18,26 @@
     </div>
   </div>
   <form class='form-condensed' method='post'>
-    <div id='productsBox'><?php echo html::checkbox("products", $allProducts, $linkedProducts);?><?php echo html::hidden("post", 'post');?></div>
+    <div id='productsBox' class='row'>
+      <?php foreach($allProducts as $productID => $productName):?>
+      <?php $checked = isset($linkedProducts[$productID]) ? 'checked' : ''; ?>
+      <div class='col-sm-4 <?php echo $checked?>'>
+        <?php if(isset($branchGroups[$productID])) echo "<div class='col-sm-6'>"?>
+        <label for='<?php echo 'products'. $productID?>';>
+          <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'> $productName";?>
+        </label>
+        <?php
+        if(isset($branchGroups[$productID]))
+        {
+            echo "</div><div class='col-sm-6'>";
+            echo html::select("branch[$productID][]", $branchGroups[$productID], $checked ? join(',', $linkedProducts[$productID]->branches) : '', "class='from-control chosen' multiple");
+            echo '</div>';
+        }
+        ?>
+      </div>
+      <?php endforeach;?>
+      <?php echo html::hidden("post", 'post');?>
+    </div>
     <div class="text-center">
       <?php echo html::submitButton();?>
     </div>

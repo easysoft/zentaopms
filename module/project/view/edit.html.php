@@ -102,7 +102,27 @@
       </tr>
       <tr>
         <th><?php echo $lang->project->manageProducts;?></th>
-        <td colspan='2' id='productsBox'><?php echo html::select("products[]", $allProducts, $linkedProducts, "class='form-control chosen' data-placeholder='{$lang->project->linkProduct}' multiple");?></td>
+        <td class='text-left' id='productsBox' colspan="2">
+          <div class='row'>
+            <?php $i = 0;?>
+            <?php foreach($linkedProducts as $product):?>
+            <div class='col-sm-3'>
+              <div class='input-group'>
+                <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)'");?>
+                <span class='input-group-addon fix-border' style='padding:0px'></span>
+                <?php if($product->type != 'normal') echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' style='width:80px'")?>
+              </div>
+            </div>
+            <?php $i++;?>
+            <?php endforeach;?>
+            <div class='col-sm-3'>
+              <div class='input-group'>
+                <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                <span class='input-group-addon fix-border' style='padding:0px'></span>
+              </div>
+            </div>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->project->desc;?></th>

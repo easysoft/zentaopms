@@ -51,10 +51,10 @@ class branch extends control
     public function ajaxGetBranches($productID)
     {
         $product = $this->loadModel('product')->getById($productID);
-        if($product->type == 'normal') die();
+        if(empty($product) or $product->type == 'normal') die();
 
         $branches = $this->branch->getPairs($productID);
-        die(html::select('branch[]', $branches, '', "class='form-control'"));
+        die(html::select('branch', $branches, '', "class='form-control'"));
     }
 }
 
