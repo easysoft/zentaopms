@@ -555,15 +555,13 @@ class projectModel extends model
     {
         if($productID != 0)
         {
-            return $this->dao->select('t2.*')
-                ->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')
-                ->on('t1.project = t2.id')
+            return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
-                ->beginIF($branch != 0)->andWhere('t1.branch')->like(",$branch,")->fi()
+                ->beginIF($branch != 0)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->orderBy('order_desc')
@@ -634,7 +632,7 @@ class projectModel extends model
     public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
-        $projects    = $this->getList($status, 0, $productID, $branch);
+        $projects    = $this->getList($status, 0, $productID);
         foreach($projects as $projectID => $project)
         {
             if(!$this->checkPriv($project)) unset($projects[$projectID]);

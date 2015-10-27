@@ -109,7 +109,7 @@ class story extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
         /* Set menu. */
-        $this->product->setMenu($products, $product->id);
+        $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
         $planID     = 0;

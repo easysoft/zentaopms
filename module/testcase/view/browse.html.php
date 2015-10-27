@@ -107,7 +107,7 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
              </div>
              <div class='btn-group dropup'>
                <?php
-               $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
+               $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
                $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
                echo html::commonButton($lang->edit, $misc);
                ?>

@@ -35,6 +35,7 @@ $config->testcase->search['fields']['type']           = $lang->testcase->type;
 $config->testcase->search['fields']['openedBy']       = $lang->testcase->openedBy;
 $config->testcase->search['fields']['status']         = $lang->testcase->status;
 $config->testcase->search['fields']['product']        = $lang->testcase->product;
+$config->testcase->search['fields']['branch']         = $lang->testcase->branch;
 $config->testcase->search['fields']['stage']          = $lang->testcase->stage;
 $config->testcase->search['fields']['module']         = $lang->testcase->module;
 $config->testcase->search['fields']['pri']            = $lang->testcase->pri;
@@ -52,6 +53,7 @@ $config->testcase->search['params']['pri']          = array('operator' => '=',  
 $config->testcase->search['params']['openedBy']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->testcase->search['params']['status']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->testcase->statusList);
 $config->testcase->search['params']['product']      = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->testcase->search['params']['branch']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->testcase->search['params']['stage']        = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testcase->stageList);
 
 $config->testcase->search['params']['openedDate']     = array('operator' => '>=', 'control' => 'input', 'values' => '', 'class' => 'date');

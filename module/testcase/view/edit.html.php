@@ -89,7 +89,12 @@
         <table class='table table-form' cellpadding='0' cellspacing='0'>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->product;?></th>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
+                <?php if($product->type != 'normal') echo html::select('branch', $branches, $case->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>

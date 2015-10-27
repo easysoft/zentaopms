@@ -8,8 +8,30 @@ var newRowID = 0;
  */
 function loadAll(productID)
 {
+    loadProductBranches(productID)
     loadProductModules(productID);
     setStories();
+}
+
+function loadBranch()
+{
+    var branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+    loadProductModules($('#product').val(), branch);
+    setStories();
+}
+
+function loadProductBranches(productID)
+{
+    $('#branch').remove();
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    {
+        if(data)
+        {
+            $('#product').closest('.input-group').append(data);
+            $('#branch').css('width', '65px');
+        }
+    })
 }
 
 /**
@@ -30,9 +52,11 @@ function loadModuleRelated()
  * @access public
  * @return void
  */
-function loadProductModules(productID)
+function loadProductModules(productID, branch)
 {
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&rootModuleID=0&returnType=html&needManage=true');
+    if(typeof(branch) == 'undefined') branch = 0;
+    if(!branch) branch = 0;
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&needManage=true');
     $('#moduleIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
     setStories();
 }
