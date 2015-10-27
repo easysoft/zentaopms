@@ -1189,7 +1189,7 @@ class router
      */
     private function mergeParams($defaultParams, $passedParams)
     {
-        /* If the not strict mode, the keys of passed params and defaaul params msut be the same. */
+        /* If not strict mode, the keys of passed params and default params must be the same order. */
         if(!isset($this->config->strictParams) or $this->config->strictParams == false) 
         {
             unset($passedParams['onlybody']);
