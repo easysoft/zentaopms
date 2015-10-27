@@ -24,8 +24,8 @@
     <?php
     $browseLink    = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
     $params        = "bugID=$bug->id";
-    $copyParams    = "productID=$productID&extras=bugID=$bug->id";
-    $convertParams = "productID=$productID&moduleID=0&from=bug&bugID=$bug->id";
+    $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
+    $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
     if(!$bug->deleted)
     {
         ob_start();
@@ -36,7 +36,7 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        common::printIcon('bug', 'toStory', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
+        common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
         common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'sitemap');
         echo '</div>';
 
@@ -110,6 +110,12 @@
                 <th class='w-60px'><?php echo $lang->bug->product;?></th>
                 <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
               </tr>
+              <?php if($this->session->currentProductType != 'normal'):?>
+              <tr>
+                <th><?php echo $lang->bug->branch;?></th>
+                <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
+              </tr>
+              <?php endif;?>
               <tr>
                 <th><?php echo $lang->bug->module;?></th>
                 <?php

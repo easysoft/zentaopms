@@ -320,6 +320,7 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
+$lang->menugroup->branch      = 'product';
 $lang->menugroup->productplan = 'product';
 $lang->menugroup->task        = 'project';
 $lang->menugroup->build       = 'project';

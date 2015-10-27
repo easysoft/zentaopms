@@ -64,7 +64,9 @@ class productModel extends model
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         setCookie("lastBranch",  "$productID-$branch", $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
+        $this->session->set('currentProductType', $currentProduct->type);
         $output  = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
         if($currentProduct->type != 'normal')
         {
             $branches   = $this->loadModel('branch')->getPairs($productID);
@@ -348,14 +350,14 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProjectPairs($productID, $param = 'all')
+    public function getProjectPairs($productID, $branch = 0, $param = 'all')
     {
         $projectList  = array_keys($this->loadModel('project')->getPairs());
         $projects = array();
-        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')
-            ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')->from(TABLE_PROJECTPRODUCT)
+            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq((int)$productID)
+            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.id')->in($projectList)
             ->orderBy('t1.project desc')
             ->fetchAll();
@@ -697,7 +699,7 @@ class productModel extends model
             }
             else
             {
-                $link = helper::createLink($module, $method, "productID=%s&branch=%s");
+                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
             }
         }
         else if($module == 'productplan' || $module == 'release')

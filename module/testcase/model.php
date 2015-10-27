@@ -21,10 +21,10 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID)
+    public function setMenu($products, $productID, $branch = 0)
     {
-        $this->loadModel('product')->setMenu($products, $productID);
-        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse');
+        $this->loadModel('product')->setMenu($products, $productID, $branch);
+        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch);
         foreach($this->lang->testcase->menu as $key => $menu)
         {
             $replace = ($key == 'product') ? $selectHtml : $productID;
@@ -86,13 +86,13 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    function batchCreate($productID, $storyID)
+    function batchCreate($productID, $branch, $storyID)
     {
         $now         = helper::now();
         $cases       = fixer::input('post')->get();
         $batchNum    = count(reset($cases));
 
-        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product=$productID");
+        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product=$productID&branch=$branch");
         $cases  = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
@@ -119,6 +119,7 @@ class testcaseModel extends model
             {
                 $data[$i] = new stdclass();
                 $data[$i]->product    = $productID;
+                $data[$i]->branch     = $branch;
                 $data[$i]->module     = $cases->module[$i];
                 $data[$i]->type       = $cases->type[$i];
                 $data[$i]->story      = $storyID ? $storyID : $cases->story[$i]; 
@@ -170,11 +171,12 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
+    public function getModuleCases($productID, $branch = 0, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');

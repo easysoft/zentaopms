@@ -17,26 +17,33 @@
   </div>
   <form method='post' target='hiddenwin'>
   <table class="table table-form">
-    <?php foreach($branches as $branchID => $branch):?>
     <tr>
       <td class='w-50px'></td>
-      <td class="w-200px"><?php echo html::input("branch[$branchID]", $branch, "class='form-control'")?> </td>
+      <td class="w-300px">
+        <div id='branches'>
+          <?php foreach($branches as $branchID => $branch):?>
+          <div class='input-group'>
+            <?php echo html::input("branch[$branchID]", $branch, "class='form-control'")?>
+             <span class='input-group-addon'><a href='javascript:;' onclick='addItem()'><i class='icon icon-plus'></i></a></span>
+             <span class='input-group-addon'><a href='<?php echo inlink('delete', "branch=$branchID")?>' target='hiddenwin'><i class='icon icon-remove'></i></a></span>
+          </div>
+          <?php endforeach;?>
+          <?php for($i = 0; $i < 2; $i++):?>
+          <div class='input-group'>
+            <?php echo html::input("newbranch[]", '', "class='form-control'")?>
+             <span class='input-group-addon'><a href='javascript:;' onclick='addItem()'><i class='icon icon-plus'></i></a></span>
+             <span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>
+          </div>
+          <?php endfor;?>
+         </div>
+       </td>
       <td></td>
     </tr>
-    <?php endforeach;?>
-    <?php for($i = 0; $i < 5; $i++):?>
     <tr>
-      <td class='w-50px'></td>
-      <td class="w-200px"><?php echo html::input("newbranch[$i]", '', "class='form-control'")?> </td>
       <td></td>
-    </tr>
-    <?php endfor;?>
-    <tr>
-      <td class='w-50px'></td>
-      <td class="w-200px"><?php echo html::submitButton()?> </td><td></td>
+      <td><?php echo html::submitButton() . html::backButton();?> </td><td></td>
     </tr>
   </table>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
-

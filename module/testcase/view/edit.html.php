@@ -15,7 +15,7 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form method='post' class='form-condensed' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
@@ -89,7 +89,12 @@
         <table class='table table-form' cellpadding='0' cellspacing='0'>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->product;?></th>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
+                <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $case->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>

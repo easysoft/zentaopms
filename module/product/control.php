@@ -117,7 +117,6 @@ class product extends control
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
-        $product   = $this->product->getById($productID);
         if($branch === '') $branch = $this->session->branch;
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -172,7 +171,7 @@ class product extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
         $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
-        if($product->type == 'normal')
+        if($this->session->currentProductType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
@@ -502,9 +501,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($productID, $projectID = 0)
+    public function ajaxGetProjects($productID, $projectID = 0, $branch = 0)
     {
-        $projects = $this->product->getProjectPairs($productID, $params = 'nodeleted');
+        $projects = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
         die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
     }
 

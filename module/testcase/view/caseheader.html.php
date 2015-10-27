@@ -1,8 +1,9 @@
+<?php if(!isset($branch)) $branch = 0;?>
 <div id='featurebar'>
   <ul class='nav'>
     <?php
-    echo "<li id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all"), $lang->testcase->allCases) . "</li>";
-    echo "<li id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm"), $lang->testcase->needConfirm) . "</li>";
+    echo "<li id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=all"), $lang->testcase->allCases) . "</li>";
+    echo "<li id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=needconfirm"), $lang->testcase->needConfirm) . "</li>";
 
     if(common::hasPriv('testcase', 'groupcase'))
     {
@@ -16,7 +17,7 @@
         {
             if($key == '') continue;
             echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
-            echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&groupBy=$key"), $value);
+            echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=$key"), $value);
         }
         echo '</ul></li>';
     }
@@ -45,11 +46,11 @@
         </ul>
       </div>
       <?php 
-      common::printIcon('testcase', 'import', "productID=$productID", '', 'button', '', '', 'export cboxElement iframe');
+      common::printIcon('testcase', 'import', "productID=$productID&branch=$branch", '', 'button', '', '', 'export cboxElement iframe');
 
       $initModule = isset($moduleID) ? (int)$moduleID : 0;
-      common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$initModule");
-      common::printIcon('testcase', 'create', "productID=$productID&moduleID=$initModule");
+      common::printIcon('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+      common::printIcon('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
       ?>
     </div>
   </div>

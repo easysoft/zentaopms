@@ -64,17 +64,17 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBuildPairs($projectID, $productID, $params = '')
+    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '')
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
         $builds = $this->dao->select('t1.id, t1.name')->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(strpos($params, 'nodone') !== false)->andWhere('t2.status')->ne('done')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchPairs();
@@ -82,6 +82,7 @@ class buildModel extends model
         $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
             ->where('build')->in(array_keys($builds))
             ->beginIF(strpos($params, 'noterminate') !== false)->andWhere('status')->ne('terminate')->fi()
+            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
         foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
@@ -96,24 +97,23 @@ class buildModel extends model
      * @access public
      * @return string
      */
-    public function getProductBuildPairs($products, $branchID = 0, $params = '')
+    public function getProductBuildPairs($products, $branch = 0, $params = '')
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
         $productBuilds = $this->dao->select('t1.id, t1.name, t1.project')->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->in($products)
-            ->beginIF($branchID)->andWhere('t1.branch')->eq($branchID)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(strpos($params, 'nodone') !== false)->andWhere('t2.status')->ne('done')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
         $releases = $this->dao->select('build,name,deleted')->from(TABLE_RELEASE)
            ->where('product')->in($products)
-           ->beginIF($branchID)->andWhere('branch')->eq($branchID)->fi()
            ->beginIF(strpos($params, 'noterminate') !== false)->andWhere('status')->ne('terminate')->fi()
+           ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
            ->fetchAll('build');
 
         $builds = array();

@@ -215,23 +215,20 @@ class storyModel extends model
         $stories  = fixer::input('post')->get();
         $batchNum = count(reset($stories));
 
-        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}");
+        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}&branch=$branch");
         $stories = $result['data'];
 
         $module = 0;
         $plan   = 0;
         $pri    = 0;
-        $branch = 0;
         for($i = 0; $i < $batchNum; $i++)
         {
             $module = $stories->module[$i] == 'same' ? $module : $stories->module[$i];
             $plan   = $stories->plan[$i]   == 'same' ? $plan   : $stories->plan[$i];
             $pri    = $stories->pri[$i]    == 'same' ? $pri   : $stories->pri[$i];
-            $branch = $stories->pri[$i]    == 'same' ? $branch : $stories->branch[$i];
             $stories->module[$i] = (int)$module;
             $stories->plan[$i]   = (int)$plan;
             $stories->pri[$i]    = (int)$pri;
-            $stories->branch[$i] = (int)$branch;
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -1220,17 +1217,16 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStoryPairs($projectID = 0, $productID = 0, $moduleIds = 0, $type = 'full')
+    public function getProjectStoryPairs($projectID = 0, $productID = 0, $branch = 0, $moduleIds = 0, $type = 'full')
     {
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')
-            ->on('t1.story = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')
-            ->on('t1.product = t3.id')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($branch)->andWhere('t2.branch')->eq((int)$branch)->fi()
             ->beginIF($moduleIds)->andWhere('t2.module')->in($moduleIds)->fi()
             ->fetchAll();
         if(!$stories) return array();

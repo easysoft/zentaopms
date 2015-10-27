@@ -174,6 +174,7 @@ $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;
 $config->objectTables['custom']      = TABLE_LANG;
+$config->objectTables['branch']      = TABLE_BRANCH;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');
