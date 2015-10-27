@@ -18,12 +18,15 @@ class branch extends control
             $this->branch->manage($productID);
             die(js::reload('parent'));
         }
-        $this->view->title = $this->lang->branch->manage;
-        $this->view->position[] = $this->lang->branch->manage;
 
-        $this->loadModel('product')->setMenu($this->product->getPairs('nocode'), $productID);
+        $products = $this->loadModel('product')->getPairs('nocode');
+        $this->product->setMenu($products, $productID);
 
-        $this->view->product  = $this->product->getById($productID);
+        $position[] = html::a($this->createLink('product', 'browse', "productID=$productID"), $products[$productID]);
+        $position[] = $this->lang->branch->manage;
+
+        $this->view->title    = $this->lang->branch->manage;
+        $this->view->position = $position;
         $this->view->branches = $this->branch->getPairs($productID, 'noempty');
         $this->display();
     }
@@ -55,6 +58,14 @@ class branch extends control
 
         $branches = $this->branch->getPairs($productID);
         die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch()'"));
+    }
+
+    public function delete($branchID, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->branch->confirmDelete, inlink('delete', "branchID=$branchID&confirm=yes")));
+
+        $this->branch->delete(TABLE_BRANCH, $branchID);
+        die(js::reload('parent'));
     }
 }
 

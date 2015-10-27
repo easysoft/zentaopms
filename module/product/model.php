@@ -66,6 +66,7 @@ class productModel extends model
         $currentProduct = $this->getById($productID);
         $this->session->set('currentProductType', $currentProduct->type);
         $output  = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
         if($currentProduct->type != 'normal')
         {
             $branches   = $this->loadModel('branch')->getPairs($productID);
