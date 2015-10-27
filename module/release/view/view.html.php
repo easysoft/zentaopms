@@ -266,6 +266,12 @@
             <th class='w-80px'><?php echo $lang->release->product;?></th>
             <td><?php echo $release->productName;?></td>
           </tr>  
+          <?php if($release->productType != 'normal'):?>
+          <tr>
+            <th><?php echo $lang->release->branch;?></th>
+            <td><?php echo $branchName;?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->release->name;?></th>
             <td><?php echo $release->name;?></td>

@@ -96,7 +96,7 @@ class buildModel extends model
      * @access public
      * @return string
      */
-    public function getProductBuildPairs($products, $params = '')
+    public function getProductBuildPairs($products, $branchID = 0, $params = '')
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
@@ -106,11 +106,13 @@ class buildModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t1.product')->in($products)
+            ->beginIF($branchID)->andWhere('t1.branch')->eq($branchID)->fi()
             ->beginIF(strpos($params, 'nodone') !== false)->andWhere('t2.status')->ne('done')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
         $releases = $this->dao->select('build,name,deleted')->from(TABLE_RELEASE)
            ->where('product')->in($products)
+           ->beginIF($branchID)->andWhere('branch')->eq($branchID)->fi()
            ->beginIF(strpos($params, 'noterminate') !== false)->andWhere('status')->ne('terminate')->fi()
            ->fetchAll('build');
 

@@ -13,6 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php 
+js::set('productID' , $productID);
+js::set('page'      , 'create');
+?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -22,6 +26,12 @@
   </div>
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
     <table class='table table-form'> 
+      <?php if($product->type != 'normal'):?>
+      <tr>
+        <th class='w-110px'><?php echo $lang->release->branch;?></th>
+        <td><?php echo html::select('branch', $branches, '', "onchange='loadBranchBuilds(this.value)' class='form-control chosen'");?></td>
+      </tr>
+      <?php endif;?>
       <tr>
         <th class='w-110px'><?php echo $lang->release->name;?></th>
         <td class='w-p25-f'>
@@ -33,8 +43,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->release->build;?></th>
-        <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td>
-        <td><?php if(empty($builds)) echo $lang->build->notice; ?></td>
+        <td><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></span></td>
       </tr>  
       <tr>
         <th><?php echo $lang->release->date;?></th>

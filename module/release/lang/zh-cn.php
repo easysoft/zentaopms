@@ -31,6 +31,7 @@ $lang->release->basicInfo = '基本信息';
 
 $lang->release->id                    = 'ID';
 $lang->release->product               = $lang->productCommon;
+$lang->release->branch                = '所属分支';
 $lang->release->build                 = '版本';
 $lang->release->name                  = '发布名称';
 $lang->release->date                  = '发布日期';

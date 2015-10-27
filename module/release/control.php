@@ -107,14 +107,14 @@ class release extends control
 
         /* Get release and build. */
         $release = $this->release->getById((int)$releaseID);
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, 'notrunk');
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk');
         $this->display();
     }
                                                           
@@ -160,6 +160,7 @@ class release extends control
         $this->view->type          = $type;
         $this->view->link          = $link;
         $this->view->param         = $param;
+        $this->view->branchName    = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
         $this->display();
     }
  
