@@ -501,9 +501,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($productID, $projectID = 0)
+    public function ajaxGetProjects($productID, $projectID = 0, $branch = 0)
     {
-        $projects = $this->product->getProjectPairs($productID, $params = 'nodeleted');
+        $projects = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
         die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
     }
 

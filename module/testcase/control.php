@@ -265,7 +265,6 @@ class testcase extends control
 
         /* Set productID and currentModuleID. */
         $productID = $this->product->saveState($productID, $this->products);
-        $product   = $this->product->getById($productID);
         if($storyID and empty($moduleID))
         {
             $story    = $this->loadModel('story')->getByID($storyID);
@@ -354,9 +353,8 @@ class testcase extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
-        $this->view->product          = $product;
         $this->view->branch           = $branch;
-        $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
+        $this->view->branches         = $this->session->currentProductType != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
 
         $this->display();
     }
@@ -376,7 +374,7 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseID = $this->testcase->batchCreate($productID, $storyID);
+            $caseID = $this->testcase->batchCreate($productID, $branch, $storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=byModule&param=$moduleID"), 'parent'));
         }
@@ -539,7 +537,6 @@ class testcase extends control
             $case->steps[] = $step;
         }
         $productID       = $case->product;
-        $product         = $this->loadModel('product')->getById($productID);
         $currentModuleID = $case->module;
         $title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -552,8 +549,7 @@ class testcase extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->productID        = $productID;
-        $this->view->product          = $product;
-        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
         $this->view->currentModuleID  = $currentModuleID;

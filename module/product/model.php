@@ -349,14 +349,14 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProjectPairs($productID, $param = 'all')
+    public function getProjectPairs($productID, $branch = 0, $param = 'all')
     {
         $projectList  = array_keys($this->loadModel('project')->getPairs());
         $projects = array();
-        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')
-            ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')->from(TABLE_PROJECTPRODUCT)
+            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq((int)$productID)
+            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.id')->in($projectList)
             ->orderBy('t1.project desc')
             ->fetchAll();
@@ -698,7 +698,7 @@ class productModel extends model
             }
             else
             {
-                $link = helper::createLink($module, $method, "productID=%s&branch=%s");
+                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
             }
         }
         else if($module == 'productplan' || $module == 'release')

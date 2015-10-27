@@ -54,7 +54,7 @@ class branch extends control
         if(empty($product) or $product->type == 'normal') die();
 
         $branches = $this->branch->getPairs($productID);
-        die(html::select('branch', $branches, '', "class='form-control'"));
+        die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch()'"));
     }
 }
 

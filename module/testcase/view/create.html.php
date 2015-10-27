@@ -29,7 +29,7 @@
         <td class='w-p25-f'>
           <div class='input-group'>
             <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen'");?>
-            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+            <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
           </div>
         </td>
         <td class='w-p25-f' style='padding-left:15px'>

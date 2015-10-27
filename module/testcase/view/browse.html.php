@@ -38,7 +38,7 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
 <div class='main'>
   <form id='batchForm' method='post'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
-      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>
           <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
@@ -82,7 +82,7 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
           common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'flag-checkered', '', 'results iframe');
           common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
-          common::printIcon('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+          common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
           if(common::hasPriv('testcase', 'delete'))
           {

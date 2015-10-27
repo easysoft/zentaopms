@@ -71,12 +71,17 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table table-form'>
           <tr>
             <th class='w-80px'><?php echo $lang->bug->product;?></th>
-            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
+                <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $bug->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->module;?></th>
             <td>
-              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");?></span>
+              <div class='input-group' id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");?></div>
             </td>
           </tr>
           <tr>

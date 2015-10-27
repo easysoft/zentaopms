@@ -115,7 +115,7 @@
           common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
           common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
           common::printIcon('story', 'edit',       $vars, $story, 'list', 'pencil');
-          common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+          common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
           ?>
         </td>
       </tr>

@@ -166,7 +166,7 @@ class story extends control
         $this->view->contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $branch, 'unexpired');
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->pri              = $pri;
@@ -896,14 +896,14 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjectStories($projectID, $productID = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
+    public function ajaxGetProjectStories($projectID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
     {
         if($moduleID) 
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $moduleID, $type);
+        $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
         $storyName = $number === '' ? 'story' : "story[$number]";
         die(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
     }

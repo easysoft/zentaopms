@@ -32,7 +32,10 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td class='w-p45-f'>
-          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='form-control chosen' autocomplete='off'");?>
+          <div class='input-group'>
+            <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen' autocomplete='off'");?>
+            <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control' style='width:100px'");?>
+          </div>
         </td>
         <td>
           <div class='input-group' id='moduleIdBox'>

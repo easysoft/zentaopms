@@ -19,18 +19,18 @@ js::set('moduleID', $moduleID);
 <div id='featurebar'>
   <ul class='nav'>
     <?php
-    echo "<li id='unclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unclosed&param=0"),      $lang->bug->unclosed)      . "</li>";
-    echo "<li id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</li>";
-    echo "<li id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</li>";
-    echo "<li id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</li>";
-    echo "<li id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</li>";
-    echo "<li id='unconfirmedTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unconfirmed&param=0"),   $lang->bug->confirmedList[0])  . "</li>";
-    echo "<li id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</li>";
-    echo "<li id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</li>";
-    echo "<li id='toclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=toClosed&param=0"),      $lang->bug->toClosed)      . "</li>";
-    echo "<li id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</li>";
-    echo "<li id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</li>";
-    echo "<li id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</li>";
+    echo "<li id='unclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unclosed&param=0"),      $lang->bug->unclosed)      . "</li>";
+    echo "<li id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</li>";
+    echo "<li id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</li>";
+    echo "<li id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</li>";
+    echo "<li id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</li>";
+    echo "<li id='unconfirmedTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unconfirmed&param=0"),   $lang->bug->confirmedList[0])  . "</li>";
+    echo "<li id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</li>";
+    echo "<li id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</li>";
+    echo "<li id='toclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=toClosed&param=0"),      $lang->bug->toClosed)      . "</li>";
+    echo "<li id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</li>";
+    echo "<li id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</li>";
+    echo "<li id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</li>";
     echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></li> ";
     ?>
   </ul>
@@ -55,8 +55,8 @@ js::set('moduleID', $moduleID);
     </div>
     <div class='btn-group'>
       <?php
-      common::printIcon('bug', 'batchCreate', "productID=$productID&projectID=0&moduleID=$moduleID");
-      common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
+      common::printIcon('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
+      common::printIcon('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
       ?>
     </div>
   </div>
@@ -82,7 +82,7 @@ js::set('moduleID', $moduleID);
 <div class='main'>
   <form method='post'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
-      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
       <tr>
         <th class='w-id'>       <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
@@ -154,7 +154,7 @@ js::set('moduleID', $moduleID);
           common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'edit',       $params, $bug, 'list');
-          common::printIcon('bug', 'create',     "product=$bug->product&extra=bugID=$bug->id", $bug, 'list', 'copy');
+          common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=bugID=$bug->id", $bug, 'list', 'copy');
           ?>
         </td>
         <?php endif;?>
@@ -175,7 +175,7 @@ js::set('moduleID', $moduleID);
               </div>
               <div class='btn-group dropup'>
                 <?php
-                $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID");
+                $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");
                 $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
                 echo html::commonButton($lang->edit, $misc);
                 ?>
