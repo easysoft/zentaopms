@@ -9,8 +9,8 @@ ALTER TABLE `zt_build` ADD `branch` mediumint(8) unsigned NOT NULL AFTER `produc
 ALTER TABLE `zt_release` ADD `branch` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_bug` ADD `branch` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_case` ADD `branch` mediumint(8) unsigned NOT NULL AFTER `product`;
-ALTER TABLE `zt_module` ADD `branch` varchar(50) COLLATE 'utf8_general_ci' unsigned NOT NULL AFTER `root`;
-ALTER TABLE `zt_story` ADD `branch` varchar(50) COLLATE 'utf8_general_ci' NOT NULL AFTER `product`;
+ALTER TABLE `zt_module` ADD `branch` mediumint(8) unsigned NOT NULL AFTER `root`;
+ALTER TABLE `zt_story` ADD `branch` mediumint(8) unsigned NOT NULL AFTER `product`;
 
 CREATE TABLE `zt_branch` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
