@@ -1549,7 +1549,7 @@ class project extends control
         else
         {
             $branches = array(0 => 0);
-            foreach($products as $product) $branches += $product->branches;
+            foreach($products as $product) $branches[$product->branch] = $product->branch;
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active');
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);

@@ -42,6 +42,7 @@ class storyModel extends model
             ->orderBy('t1.project DESC')
             ->fetchAll('project');
         $story->tasks     = $this->dao->select('id, name, assignedTo, project, status, consumed, `left`')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('project');
+        $story->stages    = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
         if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
@@ -837,6 +838,7 @@ class storyModel extends model
      */
     public function setStage($storyID, $customStage = '')
     {
+        $storyID = (int)$storyID;
         /* Custom stage defined, use it. */
         if($customStage)
         {
@@ -845,24 +847,32 @@ class storyModel extends model
         }
 
         /* Get projects which status is doing. */
-        $projects = $this->dao->select('project')
-            ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.story')->eq((int)$storyID)
+        $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
+        $projects = $this->dao->select('t1.project,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
+            ->where('t1.story')->eq($storyID)
             ->andWhere('t2.status')->ne('done')
             ->andWhere('t2.deleted')->eq(0)
-            ->fetchPairs();
+            ->fetchPairs('project', 'branch');
 
         /* If no projects, in plan, stage is planned. No plan, wait. */
         if(!$projects)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq((int)$storyID)->andWhere('plan')->eq(0)->exec();
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq((int)$storyID)->andWhere('plan')->gt(0)->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq(0)->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere('plan')->gt(0)->exec();
             return true;
         }
 
+        $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
+        $branches = array();
+        foreach($projects as $projectID => $branch) $branches[$branch] = $branch;
+        unset($branches[0]);
+
         /* Search related tasks. */
-        $tasks = $this->dao->select('type,status')->from(TABLE_TASK)
-            ->where('project')->in($projects)
+        $tasks = $this->dao->select('type,project,status')->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
             ->andWhere('story')->eq($storyID)
             ->andWhere('type')->in('devel,test')
             ->andWhere('status')->ne('cancel')
@@ -870,19 +880,28 @@ class storyModel extends model
             ->fetchGroup('type');
 
         /* No tasks, then the stage is projected. */
+        $hasBranch = ($product->type != 'normal' and empty($story->branch) and $branches);
         if(!$tasks)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq((int)$storyID)->exec();
+            if($hasBranch)
+            {
+                foreach($branches as $branch) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
+            }
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq($storyID)->exec();
             return true;
         }
 
         /* Get current stage and set as default value. */
-        $currentStage = $this->dao->findById($storyID)->from(TABLE_STORY)->fields('stage')->fetch('stage');
+        $taskProjects = array();
+        $currentStage = $story->stage;
         $stage = $currentStage;
 
         /* Cycle all tasks, get counts of every type and every status. */
-        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done' => 0);
-        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done' => 0);
+        $branchStatusList = array();
+        $branchDevelTasks = array();
+        $branchTestTasks  = array();
+        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done'=> 0);
+        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done'=> 0);
         foreach($tasks as $type => $typeTasks)
         {
             foreach($typeTasks as $task)
@@ -890,13 +909,22 @@ class storyModel extends model
                 $status = $task->status ? $task->status : 'wait';
                 $status = $status == 'closed' ? 'done' : $status;
 
-                $statusList[$task->type][$status] ++;
+                $branch = $projects[$task->project];
+                if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
+                $branchStatusList[$branch][$task->type][$status] ++;
+                $taskProjects[$task->project] = $task->project;
+                if($type == 'devel')
+                {
+                    if(!isset($develTasks[$branch])) $develTasks[$branch] = 0;
+                    $branchDevelTasks[$branch] ++;
+                }
+                elseif($type == 'test')
+                {
+                    if(!isset($testTasks[$branch])) $testTasks[$branch] = 0;
+                    $branchTestTasks[$branch] ++;
+                }
             }
         }
-
-        /* Get counts of every type tasks. */
-        $develTasks = isset($tasks['devel']) ? count($tasks['devel']) : 0;
-        $testTasks  = isset($tasks['test'])  ? count($tasks['test'])  : 0;
 
         /**
          * Judge stage according to the devel and test tasks' status. 
@@ -907,13 +935,26 @@ class storyModel extends model
          * 4. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
          * 5. all test tasks done, all devel tasks done, set stage as tested.
          */
-        if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing'; 
-        if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
-        if($statusList['test']['doing'] > 0) $stage = 'testing';
-        if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
-        if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
+        foreach($branchStatusList as $branch => $statusList)
+        {
+            $testTasks  = isset($branchTestTasks[$branch]) ? $branchTestTasks[$branch] : 0;
+            $develTasks = isset($branchDevelTasks[$branch]) ? $branchDevelTasks[$branch] : 0;
+            if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing'; 
+            if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
+            if($statusList['test']['doing'] > 0) $stage = 'testing';
+            if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
+            if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
 
-        $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq((int)$storyID)->exec();
+            if($hasBranch and $branch) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
+        }
+
+        foreach($projects as $projectID => $branch)
+        {
+            if(isset($taskProjects[$projectID])) continue;
+            $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
+        }
+
         return;
     }
 
@@ -1136,7 +1177,7 @@ class storyModel extends model
         if($projectID != '')
         {
             $branches = array(0 => 0);
-            foreach($products as $product) $branches += $product->branches;
+            foreach($products as $product) $branches[$product->branch] = $product->branch;
             $storyQuery .= " AND `branch`" . helper::dbIN($branches); 
             $storyQuery .= " AND `status` != 'draft'"; 
         }
@@ -1195,8 +1236,10 @@ class storyModel extends model
     public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc', $type = 'byModule', $param = 0, $pager = null)
     {
         $modules = ($type == 'byModule' and $param) ? $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$param,%")->andWhere('type')->eq('story')->fetchPairs('id', 'id') : array();
-        $stories = $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $stories = $this->dao->select('t1.*, t2.*,t3.branch as productBranch,t4.type as productType')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($type == 'byProduct')->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'byModule' and $param)->andWhere('t2.module')->in($modules)->fi()
@@ -1204,6 +1247,17 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        $branches = array();
+        foreach($stories as $story)
+        {
+            if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
+        }
+        foreach($branches as $branchID => $storyIDList)
+        {
+            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIDList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
+            foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+        }
         return $stories;
     }
 

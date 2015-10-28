@@ -12,11 +12,7 @@ function loadBranches(productID)
         {
             $('#product').closest('.input-group').append(data);
             $('#branch').css('width', '100px');
-            for(i in productGroups[productID]['branches'])
-            {
-                $('#branch').val(i);
-                break;
-            }
+            $('#branch').val(productGroups[productID]['branch']);
         }
     });
 }

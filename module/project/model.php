@@ -793,16 +793,7 @@ class projectModel extends model
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$projectID);
         if(!$withBranch) return $query->fetchPairs('id', 'name');
-        $products = $query->fetchAll();
-        $productGroups = array();
-        foreach($products as $product)
-        {
-            if(!isset($productGroups[$product->id])) $productGroups[$product->id] = $product;
-            $productGroups[$product->id]->branches[$product->branch] = $product->branch;
-            unset($productGroups[$product->id]->branch);
-        }
-
-        return $productGroups;
+        return $query->fetchAll('id');
     }
 
     /**
@@ -848,29 +839,14 @@ class projectModel extends model
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
+            if(isset($existedProducts[$productID])) continue;
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
-
-            /* When manageProducts. */
-            if(isset($branches[$i]) and is_array($branches[$i]))
-            {
-                foreach($branches[$i] as $branch)
-                {
-                    $data->branch = $branch;
-                    if(isset($existedProducts[$data->product][$data->branch])) continue;
-                    $existedProducts[$data->product][$data->branch] = true;
-                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-                }
-            }
-            else
-            {
-                $data->branch = isset($branches[$i]) ? $branches[$i] : 0;
-                if(isset($existedProducts[$data->product][$data->branch])) continue;
-                $existedProducts[$data->product][$data->branch] = true;
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            }
+            $data->branch  = isset($branches[$i]) ? $branches[$i] : 0;
+            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            $existedProducts[$productID] = true;
         }
     }
 

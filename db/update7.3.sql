@@ -18,3 +18,8 @@ CREATE TABLE `zt_branch` (
   `name` varchar(255) COLLATE 'utf8_general_ci' NOT NULL,
   `deleted` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0'
 );
+CREATE TABLE `zt_storystage` (
+  `story` mediumint unsigned NOT NULL,
+  `branch` mediumint unsigned NOT NULL,
+  `stage` varchar(50) COLLATE 'utf8_general_ci' NOT NULL
+);

@@ -137,8 +137,10 @@ class release extends control
         $release = $this->release->getById((int)$releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)->fetchAll();
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
+        foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');

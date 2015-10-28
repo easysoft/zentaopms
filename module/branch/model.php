@@ -19,7 +19,7 @@ class branchModel extends model
 
     public function getPairs($productID, $params = '')
     {
-        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchPairs('id', 'name');
+        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('id_asc')->fetchPairs('id', 'name');
         if(strpos($params, 'noempty') === false) $branches = array('0' => $this->lang->branch->all) + $branches;
         return $branches;
     }
