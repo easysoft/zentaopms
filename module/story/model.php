@@ -1121,8 +1121,7 @@ class storyModel extends model
      */
     public function getWillClose($productID, $branch, $orderBy, $pager)
     {
-        return $this->dao->select('t1.*, t2.title as planTitle')
-            ->from(TABLE_STORY)->alias('t1')
+        $stories = $this->dao->select('t1.*, t2.title as planTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
@@ -1130,7 +1129,10 @@ class storyModel extends model
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('stage')->notIN('released')->fetchPairs('story', 'story');
+        foreach($stages as $storyID) unset($stories[$storyID]);
+        return $stories;
     }
 
     /**
