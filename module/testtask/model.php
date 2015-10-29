@@ -21,10 +21,10 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID)
+    public function setMenu($products, $productID, $branch = 0)
     {
-        $this->loadModel('product')->setMenu($products, $productID);
-        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse');
+        $this->loadModel('product')->setMenu($products, $productID, $branch);
+        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
         foreach($this->lang->testtask->menu as $key => $value)
         {
             $replace = ($key == 'product') ? $selectHtml : $productID;
@@ -61,17 +61,20 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $orderBy = 'id_desc', $pager = null, $type = '')
+    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $type = '')
     {
-        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
+        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.branch, t4.branch, t5.branch) AS branch')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
             ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t5.product = t1.product')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
+            ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -108,12 +111,15 @@ class testtaskModel extends model
      */
     public function getById($taskID, $setImgSize = false)
     {
-        $task = $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
+        $task = $this->dao->select('t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.branch, t4.branch, t5.branch) AS branch')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->where('t1.id')->eq((int)$taskID)->fetch();
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
+            ->where('t1.id')->eq((int)$taskID)
+            ->andWhere('t5.product = t1.product')
+            ->fetch();
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         return $task;
     }

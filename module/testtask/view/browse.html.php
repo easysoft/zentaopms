@@ -14,14 +14,14 @@
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id="featurebar">
   <ul class="nav">
-    <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&type=wait"), $lang->testtask->wait);?></li>
-    <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&type=done"), $lang->testtask->done);?></li>
+    <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=wait"), $lang->testtask->wait);?></li>
+    <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=done"), $lang->testtask->done);?></li>
   </ul>
   <div class="actions"><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
 </div>
 <table class='table tablesorter table-fixed' id='taskList'>
   <thead>
-  <?php $vars = "productID=$productID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+  <?php $vars = "productID=$productID&branch=$branch&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <tr>
       <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
       <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
