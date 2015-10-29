@@ -38,7 +38,7 @@
           if(count($moduleOptionMenu) == 1)
           {
               echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story"), $lang->tree->manage, '_blank');
+              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch"), $lang->tree->manage, '_blank');
               echo '&nbsp; ';
               echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
               echo '</span>';

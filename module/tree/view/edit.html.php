@@ -60,7 +60,7 @@ var currentRoot   = <?php echo $module->root;?>;
 var currentParent = <?php echo $module->parent;?>;
 function getProductModules(productID)
 {
-    $.get(createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + productID + '&viewType=story&rootModuleID=0&returnType=json'), function(data)
+    $.get(createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + productID + '&viewType=story&branch=0&rootModuleID=0&returnType=json'), function(data)
     {
         var newOption = '';
         for(i in data) newOption += '<option value="' + i + '">' + data[i] + '</option>';

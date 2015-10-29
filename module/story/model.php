@@ -971,11 +971,16 @@ class storyModel extends model
      */
     public function getProductStories($productID = 0, $branch = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
+        if(is_array($branch))
+        {
+            unset($branch[0]);
+            $branch = join(',', $branch);
+        }
         return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
-            ->beginIF(!empty($branch))->andWhere("t1.branch")->in($branch)->fi()
+            ->beginIF($branch)->andWhere("t1.branch")->in("0,$branch")->fi()
             ->beginIF(!empty($moduleIds))->andWhere('t1.module')->in($moduleIds)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -1282,7 +1287,7 @@ class storyModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch)->andWhere('t2.branch')->eq((int)$branch)->fi()
+            ->beginIF($branch)->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIds)->andWhere('t2.module')->in($moduleIds)->fi()
             ->fetchAll();
         if(!$stories) return array();

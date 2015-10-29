@@ -16,11 +16,11 @@ function loadProjectBuilds(productID, projectID, index)
 {
     if(projectID)
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=''&index=" + index);
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch" + branch + "&index=" + index);
     }
     else
     {
-        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=''&index=" + index);
+        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
     }
 
     $.get(link, function(builds)
