@@ -427,7 +427,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function createBug($productID, $extras = '')
+    public function createBug($productID, $branch = 0, $extras = '')
     {
         parse_str(str_replace(array(',', ' '), array('&', ''), $extras));
 
@@ -445,13 +445,14 @@ class testcase extends control
         }
 
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
-        if(empty($case->steps)) die(js::locate($this->createLink('bug', 'create', "product=$productID&extras=$extras"), 'parent'));
+        if(empty($case->steps)) die(js::locate($this->createLink('bug', 'create', "product=$productID&branch=$branch&extras=$extras"), 'parent'));
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
         $this->view->case      = $case;
         $this->view->result    = reset($results);
         $this->view->extras    = $extras;
         $this->view->productID = $productID;
+        $this->view->branch    = $branch;
         $this->display();
     }
 

@@ -51,15 +51,6 @@ class branch extends control
         $this->display();
     }
 
-    public function ajaxGetBranches($productID)
-    {
-        $product = $this->loadModel('product')->getById($productID);
-        if(empty($product) or $product->type == 'normal') die();
-
-        $branches = $this->branch->getPairs($productID);
-        die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch()'"));
-    }
-
     public function delete($branchID, $confirm = 'no')
     {
         if($confirm == 'no') die(js::confirm($this->lang->branch->confirmDelete, inlink('delete', "branchID=$branchID&confirm=yes")));
@@ -67,5 +58,14 @@ class branch extends control
         $this->branch->delete(TABLE_BRANCH, $branchID);
         die(js::reload('parent'));
     }
-}
 
+    public function ajaxGetBranches($productID, $oldBranch = 0)
+    {
+        $product = $this->loadModel('product')->getById($productID);
+        if(empty($product) or $product->type == 'normal') die();
+
+        $branches = $this->branch->getPairs($productID);
+        if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
+        die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch()'"));
+    }
+}

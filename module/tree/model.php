@@ -284,8 +284,9 @@ class treeModel extends model
             $treeMenu = array();
             $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID));
             while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branchID);
+            if($type == 'case' and !empty($extra) and empty($treeMenu)) continue;
             ksort($treeMenu);
-            if(!empty($branchID) and $branchID != 'null')
+            if(!empty($branchID) and $branch and $branchID != 'null')
             {
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $this->createBranchLink($type, $rootID, $branchID, $branch);
                 $lastMenu .= "<li>$linkHtml<ul>" . @array_shift($treeMenu) . "</ul></li>\n";
@@ -472,7 +473,7 @@ class treeModel extends model
         {
             $modules = $this->getAllChildID($module->id);
             $runs    = $this->testtask->getRuns($extra, $modules, 'id');
-            if(empty($runs)) continue;
+            if(empty($runs)) return;
         }
 
         $extra['branchID'] = $branch;

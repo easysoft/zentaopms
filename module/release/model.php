@@ -125,7 +125,6 @@ class releaseModel extends model
         {
             $releaseID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('release', $releaseID);
-            if($release->stories) $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
             if(!dao::isError()) return $releaseID;
         }
 
@@ -151,7 +150,6 @@ class releaseModel extends model
             ->check('name','unique', "id != $releaseID")
             ->where('id')->eq((int)$releaseID)
             ->exec();
-        $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
         if(!dao::isError()) return common::createChanges($oldRelease, $release);
     }
 
@@ -168,7 +166,11 @@ class releaseModel extends model
 
         $release->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
-        if($release->stories) $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
+        if($release->stories)
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq('released')->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->exec();
+        }
     }
 
     /**

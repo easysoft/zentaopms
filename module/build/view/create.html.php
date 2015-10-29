@@ -28,7 +28,13 @@
           <?php if($products):?>
           <div class='input-group'>
             <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value);' class='form-control chosen'");?>
-            <?php if($product->type != 'normal') echo html::select('branch', $branches, key($product->branches), "class='form-control' style='width:100px'");?>
+            <?php
+            if($product->type != 'normal')
+            {
+                if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
+                echo html::select('branch', $branches, $product->branch, "class='form-control' style='width:100px'");
+            }
+            ?>
           </div>
           <?php endif;?>
         </td>

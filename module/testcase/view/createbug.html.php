@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form action='<?php echo $this->createLink('bug', 'create', "product=$productID&extras=$extras")?>' target='_parent' method='post'>
+<form action='<?php echo $this->createLink('bug', 'create', "product=$productID&branch=$branch&extras=$extras")?>' target='_parent' method='post'>
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
     <thead>
       <tr>

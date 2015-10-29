@@ -434,7 +434,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
         $this->view->users            = $this->user->getPairs('nodeleted,devfirst');
-        $this->view->projects         = $this->product->getProjectPairs($productID, $params = 'nodeleted');
+        $this->view->projects         = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
         $this->view->projectID        = $projectID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleID         = $moduleID;

@@ -159,7 +159,18 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
-                <td><?php echo $lang->story->stageList[$story->stage];?></td>
+                <td>
+                <?php
+                if($story->stages)
+                {
+                    foreach($story->stages as $branch => $stage) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
+                }
+                else
+                {
+                    echo $lang->story->stageList[$story->stage];
+                }
+                ?>
+                </td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
