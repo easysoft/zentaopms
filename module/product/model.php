@@ -743,7 +743,7 @@ class productModel extends model
      */
     public function getLatestProject($productID)
     {
-        $projectList  = array_keys($this->loadModel('project')->getPairs());
+        $projectList = array_keys($this->loadModel('project')->getPairs('noclosed'));
         $projects = $this->dao->select('t2.id, t2.name, t2.begin')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')

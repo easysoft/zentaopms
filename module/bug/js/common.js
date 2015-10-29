@@ -32,7 +32,11 @@ $(function()
  */
 function loadAll(productID)
 {
-    if(page == 'create') setAssignedTo();
+    if(page == 'create') 
+    {
+        setAssignedTo();
+        loadProjectTeamMembers(productID);
+    }
 
     if(!changeProductConfirmed)
     {

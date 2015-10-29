@@ -1084,6 +1084,29 @@ class bug extends control
     }
 
     /**
+     * AJAX: get team members of the latest project of a product as assignedTo list.
+     * 
+     * @param  int    $productID 
+     * @param  string $selectedUser 
+     * @access public
+     * @return string
+     */
+    public function ajaxLoadProjectTeamMembers($productID, $selectedUser = '')
+    {
+        $latestProjectID = $this->product->getLatestProject($productID);
+        if(!empty($latestProjectID)) 
+        {
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProjectID, 'nodeleted');
+        }
+        else
+        {
+            $projectMembers = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
+        }
+
+        die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));
+    }
+
+    /**
      * AJAX: get all users as assignedTo list.
      *
      * @param  string $selectedUser
@@ -1092,7 +1115,7 @@ class bug extends control
      */
     public function ajaxLoadAllUsers($selectedUser = '')
     {
-        $allUsers = $this->loadModel('user')->getPairs('nodeleted, devfirst');
+        $allUsers = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
 
         die(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
     }

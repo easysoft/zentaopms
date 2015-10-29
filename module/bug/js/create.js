@@ -24,6 +24,19 @@ function loadAllUsers()
 }
 
 /**
+  * Load team members of the latest project of a product as assignedTo list.
+  *
+  * @param  $productID
+  * @access public
+  * @return void
+  */
+function loadProjectTeamMembers(productID)
+{
+    link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
+}
+
+/**
  * load assignedTo and stories of module.
  * 
  * @access public
