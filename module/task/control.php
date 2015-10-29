@@ -58,7 +58,6 @@ class task extends control
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
-        $this->view->users    = $this->loadModel('user')->getPairs('nodeleted');
 
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $project->id);
@@ -132,6 +131,7 @@ class task extends control
             }
         }
 
+        $users            = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $stories          = $this->story->getProjectStoryPairs($projectID);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -146,6 +146,7 @@ class task extends control
         $this->view->position         = $position;
         $this->view->project          = $project;
         $this->view->task             = $task;
+        $this->view->users            = $users;
         $this->view->stories          = $stories;
         $this->view->members          = $members;
         $this->view->contactLists     = $contactLists;
