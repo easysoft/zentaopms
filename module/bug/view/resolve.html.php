@@ -13,6 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php 
+js::set('page'      , 'resolve');
+js::set('productID' , $bug->product);
+?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?> <strong><?php echo $bug->id;?></strong></span>
@@ -33,7 +37,12 @@
     </tr>
     <tr>
       <th><?php echo $lang->bug->resolvedBuild;?></th>
-      <td><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></td>
+      <td>
+        <div class='input-group'>
+          <span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick=loadAllBuilds()");?></span>
+        </div>
+      </td>
     </tr>
     <tr>
       <th><?php echo $lang->bug->resolvedDate;?></th>

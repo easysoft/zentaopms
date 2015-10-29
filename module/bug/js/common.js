@@ -70,17 +70,27 @@ function loadBranch()
   * @access public
   * @return void
   */
-function loadAllBuilds()
+function loadAllBuilds(that)
 {
-    productID = $('#product').val();
-    projectID = $('#project').val();
-    if(projectID)
+    if(page == 'resolve')
     {
-        loadAllProjectBuilds(projectID, productID);
+        link = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build');
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
     }
     else
     {
-        loadAllProductBuilds(productID);
+        productID = $('#product').val();
+        projectID = $('#project').val();
+        if(page == 'edit') buildBox = $(that).parent().prev().filter('span').attr('id');
+
+        if(projectID)
+        {
+            loadAllProjectBuilds(projectID, productID);
+        }
+        else
+        {
+            loadAllProductBuilds(productID);
+        }
     }
 }
 
@@ -88,6 +98,7 @@ function loadAllBuilds()
   * Load all builds of the project.
   *
   * @param  int    $projectID
+  * @param  int    $productID
   * @access public
   * @return void
   */
@@ -95,19 +106,24 @@ function loadAllProjectBuilds(projectID, productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(page == 'create') oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
-
-    link = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
     if(page == 'create')
     {
+        oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
+        link = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
         $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
     }
-    else
+    if(page == 'edit')
     {
-        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
-
-        buildLink = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(buildLink, function(){$(this).find('select').chosen(defaultChosenOptions)});
+        if(buildBox == 'openedBuildBox')
+        {
+            link = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+            $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+        }
+        if(buildBox == 'resolvedBuildBox')
+        {
+            buildLink = createLink('build', 'ajaxGetAllProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+            $('#resolvedBuildBox').load(buildLink, function(){$(this).find('select').chosen(defaultChosenOptions)});
+        }
     }
 }
 
@@ -122,17 +138,23 @@ function loadAllProductBuilds(productID)
 {
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
     if(page == 'create') 
     {
+        link = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
         $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen(defaultChosenOptions);});
     }
-    else
+    if(page == 'edit')
     {
-        $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
-
-        buildLink = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(buildLink, function(){$(this).find('select').chosen(defaultChosenOptions)});
+        if(buildBox == 'openedBuildBox')
+        {
+            link = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+            $('#openedBuildBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+        }
+        if(buildBox == 'resolvedBuildBox')
+        {
+            buildLink = createLink('build', 'ajaxGetAllProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+            $('#resolvedBuildBox').load(buildLink, function(){$(this).find('select').chosen(defaultChosenOptions)});
+        }
     }
 }
 
