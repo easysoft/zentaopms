@@ -131,5 +131,6 @@
     </tr>
   </tbody>
 </table>
+<?php js::set('branch', $branch)?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -18,7 +18,7 @@
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['report']);?></small> <?php echo $lang->bug->report->common;?></strong>
   </div>
   <div class='actions'>
-    <?php echo html::a($this->createLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID"), $lang->goback, '', "class='btn'");?>
+    <?php echo html::a($this->createLink('bug', 'browse', "productID=$productID&branch=0&browseType=$browseType&moduleID=$moduleID"), $lang->goback, '', "class='btn'");?>
   </div>
 </div>
 <div class='row-table row-table-side-left'>

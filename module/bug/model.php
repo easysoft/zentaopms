@@ -210,7 +210,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getModuleBugs($productID, $branch, $moduleIds = 0, $projects, $orderBy = 'id_desc', $pager = null)
+    public function getModuleBugs($productID, $branch = 0, $moduleIds = 0, $projects, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
@@ -642,7 +642,7 @@ class bugModel extends model
         $productID = $bug->product;
         $users     = $this->loadModel('user')->getPairs('nodeleted');
         $product   = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', ''));
+        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
         $modules   = array();
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
 

@@ -46,13 +46,13 @@
         common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
         common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
 
-        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
+        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
         echo '</div>';
 
         echo "<div class='btn-group'>";
         common::printIcon('testcase', 'edit',"caseID=$case->id");
         common::printCommentIcon('testcase');
-        common::printIcon('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
+        common::printIcon('testcase', 'create', "productID=$case->product&branch=$branch&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
         common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'button', '', 'hiddenwin');
         echo '</div>';
         
@@ -140,7 +140,7 @@
               {
                  foreach($modulePath as $key => $module)
                  {
-                     if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                     if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                      if(isset($modulePath[$key + 1])) echo $lang->arrow;
                  }
               }

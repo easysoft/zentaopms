@@ -71,7 +71,7 @@
               if(count($moduleOptionMenu) == 1)
               {
                   echo "<span class='inpug-group-addon'>";
-                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story"), $lang->tree->manage, '_blank');
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&branch=$story->branch"), $lang->tree->manage, '_blank');
                   echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
                   echo '</span>';
               }
