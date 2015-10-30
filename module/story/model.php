@@ -46,7 +46,7 @@ class storyModel extends model
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
         if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
-        if($story->plan)  $story->planTitle  = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        if($story->plan)  $story->planTitle  = join(' ', $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('id', 'title'));
         $extraStories = array();
         if($story->duplicateStory) $extraStories = array($story->duplicateStory);
         if($story->linkStories)    $extraStories = explode(',', $story->linkStories);
@@ -721,11 +721,12 @@ class storyModel extends model
      * @access public
      * @return array 
      */
-    public function batchChangePlan($storyIDList, $planID)
+    public function batchChangePlan($storyIDList, $planID, $oldPlanID = 0)
     {
         $now         = helper::now();
         $allChanges  = array();
         $oldStories  = $this->getByList($storyIDList);
+        $plan        = $this->loadModel('productplan')->getById($planID);
         foreach($storyIDList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
@@ -733,7 +734,16 @@ class storyModel extends model
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
-            $story->plan           = $planID;
+            if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
+            if($this->session->currentProductType == 'normal' or empty($oldPlanID))
+            {
+                $story->plan = $planID;
+            }
+            elseif($oldPlanID)
+            {
+                $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
+                if(empty($story->branch) or empty($plan->branch) or ($plan->branch == $oldStory->branch)) $story->plan .= ",$planID";
+            }
             if($planID) $story->stage = 'planned';
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
@@ -859,8 +869,8 @@ class storyModel extends model
         /* If no projects, in plan, stage is planned. No plan, wait. */
         if(!$projects)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq(0)->exec();
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere('plan')->gt(0)->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq('')->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere('plan')->ne('')->exec();
             return true;
         }
 
@@ -976,15 +986,14 @@ class storyModel extends model
             unset($branch[0]);
             $branch = join(',', $branch);
         }
-        return $this->dao->select('t1.*, t2.title as planTitle')
-            ->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.product')->in($productID)
-            ->beginIF($branch)->andWhere("t1.branch")->in("0,$branch")->fi()
-            ->beginIF(!empty($moduleIds))->andWhere('t1.module')->in($moduleIds)->fi()
-            ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->andWhere('t1.deleted')->eq(0)
+        $stories = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('product')->in($productID)
+            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi()
+            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->mergePlanTitle($productID, $stories, $branch);
     }
 
     /**
@@ -1102,17 +1111,16 @@ class storyModel extends model
      */
     public function getByField($productID, $branch, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
     {
-        return $this->dao->select('t1.*, t2.title as planTitle')
-            ->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.product')->in($productID)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!empty($branch))->andWhere("CONCAT(',', t1.branch, ',')")->like("%,$branch,%")->fi()
+        $stories = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('product')->in($productID)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
             ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+        return $this->mergePlanTitle($productID, $stories, $branch);
     }
 
     /**
@@ -1126,10 +1134,9 @@ class storyModel extends model
      */
     public function getWillClose($productID, $branch, $orderBy, $pager)
     {
-        $stories = $this->dao->select('t1.*, t2.title as planTitle')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.product')->in($productID)
-            ->andWhere('t1.deleted')->eq(0)
+        $stories = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('product')->in($productID)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('stage')->in('developed,released')
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
@@ -1137,7 +1144,7 @@ class storyModel extends model
             ->fetchAll('id');
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('stage')->notIN('released')->fetchPairs('story', 'story');
         foreach($stages as $storyID) unset($stories[$storyID]);
-        return $stories;
+        return $this->mergePlanTitle($productID, $stories, $branch);
     }
 
     /**
@@ -1183,15 +1190,17 @@ class storyModel extends model
         $storyQuery = $storyQuery . ' AND `product`' . helper::dbIN(array_keys($products));
         if($projectID != '')
         {
-            $branches = array(0 => 0);
             foreach($products as $product) $branches[$product->branch] = $product->branch;
-            $storyQuery .= " AND `branch`" . helper::dbIN($branches); 
+            unset($branches[0]);
+            $branches = join(',', $branches);
+            if($branches) $storyQuery .= " AND `branch`" . helper::dbIN("0,$branches"); 
             $storyQuery .= " AND `status` != 'draft'"; 
         }
         elseif($branch)
         {
             $storyQuery .= " AND `branch`" . helper::dbIN("0,$branch"); 
         }
+        $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
     }
@@ -1230,7 +1239,9 @@ class storyModel extends model
         $stories = array();
         foreach($tmpStories as $story)
         {
-            $story->planTitle = isset($plans[$story->plan]) ? $plans[$story->plan] : '';
+            $story->planTitle = '';
+            $storyPlans = explode(',', trim($story->plan, ','));
+            foreach($storyPairs as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
             $stories[] = $story;
         }
         return $stories;
@@ -1311,7 +1322,7 @@ class storyModel extends model
     public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
-            ->where('plan')->eq((int)$planID)
+            ->where("CONCAT(',', plan, ',')")->like("%,$planID,%")
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
@@ -1352,10 +1363,9 @@ class storyModel extends model
      */
     public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
+        $stories = $this->dao->select('t1.*, t2.name as productTitle')
             ->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
@@ -1368,8 +1378,10 @@ class storyModel extends model
             ->fetchAll();
         
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $productIdList = array();
+        foreach($stories as $story) $productIdList[$story->product] = $story->product;
         
-        return $stories;
+        return $this->mergePlanTitle($productIdList, $stories);
     }
 
     /**
@@ -1790,5 +1802,30 @@ class storyModel extends model
         if($action == 'activate') return $story->status == 'closed';
 
         return true;
+    }
+
+    /**
+     * Merge plan title.
+     * 
+     * @param  int|array    $productID 
+     * @param  array    $stories 
+     * @access public
+     * @return array
+     */
+    public function mergePlanTitle($productID, $stories, $branch = 0)
+    {
+        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in($productID)
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs('id', 'title');
+        foreach($stories as $story)
+        {
+            $story->planTitle = '';
+            $storyPlans = explode(',', trim($story->plan, ','));
+            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
+        }
+
+        return $stories;
     }
 }

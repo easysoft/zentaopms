@@ -102,7 +102,7 @@
                       <?php
                       if(common::hasPriv('productplan', 'unlinkStory'))
                       {
-                          $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&confirm=yes");
+                          $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&plan=$plan->id&confirm=yes");
                           echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkStory}'");
                       }
                       ?>
@@ -134,7 +134,7 @@
                               $withSearch = count($plans) > 10;
                               foreach($plans as $planID => $planName)
                               {
-                                  $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
+                                  $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID=$plan->id");
                                   echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
                               }
                               if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";

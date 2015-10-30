@@ -436,11 +436,13 @@ class build extends control
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($build->product);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product);
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        unset($this->config->bug->search['fields']['branch']);
+        unset($this->config->bug->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($build->product, $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($build->product, $queryID, 'id_desc', null, $build->branch);
         }
         else
         {

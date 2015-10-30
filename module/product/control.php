@@ -151,7 +151,7 @@ class product extends control
         }
         if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, $branch, 0, 'all', $sort, $pager);
         if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $branch, $this->tree->getAllChildID($moduleID), 'all', $sort, $pager);
-        if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager);
+        if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch);
         if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $branch, $this->app->user->account, $sort, $pager);
         if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $branch, $this->app->user->account, $sort, $pager);
         if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $branch, $this->app->user->account, $sort, $pager);

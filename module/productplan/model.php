@@ -89,7 +89,7 @@ class productplanModel extends model
         return array('' => '') + $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
             ->beginIF($expired == 'unexpired')->andWhere('end')->gt($date)->fi()
             ->orderBy('begin desc')->fetchPairs();
     }
@@ -204,7 +204,7 @@ class productplanModel extends model
         $this->loadModel('action');
         foreach($this->post->stories as $storyID)
         {
-            $this->dao->update(TABLE_STORY)->set('plan')->eq((int)$planID)->where('id')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORY)->set("plan=CONCAT(plan, ',', $planID)")->where('id')->eq((int)$storyID)->exec();
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
         }        
@@ -217,10 +217,11 @@ class productplanModel extends model
      * @access public
      * @return void
      */
-    public function unlinkStory($storyID)
+    public function unlinkStory($storyID, $planID)
     {
-        $planID = $this->dao->findByID($storyID)->from(TABLE_STORY)->fields('plan')->fetch('plan');
-        $this->dao->update(TABLE_STORY)->set('plan')->eq(0)->where('id')->eq((int)$storyID)->exec();
+        $story = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch();
+        $plans = array_unique(explode(',', trim(str_replace(",$planID,", ',', ',' . trim($story->plan) . ','). ',')));
+        $this->dao->update(TABLE_STORY)->set('plan')->eq(join(',', $plans))->where('id')->eq((int)$storyID)->exec();
         $this->loadModel('story')->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
     }
@@ -238,7 +239,7 @@ class productplanModel extends model
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID)
         {
-            $this->dao->update(TABLE_BUG)->set('plan')->eq((int)$planID)->where('id')->eq((int)$bugID)->exec();
+            $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('id')->eq((int)$bugID)->exec();
             $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
         }
     }
@@ -250,10 +251,10 @@ class productplanModel extends model
      * @access public
      * @return void
      */
-    public function unlinkBug($bugID)
+    public function unlinkBug($bugID, $planID)
     {
-        $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fields('plan')->fetch('plan');
-        $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
+        $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fetch('plan');
+        $this->dao->update(TABLE_STORY)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
     }
 }

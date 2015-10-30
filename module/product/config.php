@@ -47,7 +47,7 @@ $config->product->search['params']['pri']            = array('operator' => '=', 
 $config->product->search['params']['product']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['branch']         = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
-$config->product->search['params']['plan']           = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->product->search['params']['plan']           = array('operator' => 'include', 'control' => 'select', 'values' => '');
 $config->product->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 
 $config->product->search['params']['source']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->sourceList);

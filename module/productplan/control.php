@@ -227,7 +227,7 @@ class productplan extends control
         $this->view->plan        = $plan;
         $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans       = $this->productplan->getPairs($plan->product);
+        $this->view->plans       = $this->productplan->getPairs($plan->product, $plan->branch);
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
         $this->view->link        = $link;
@@ -318,15 +318,15 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($storyID, $confirm = 'no')
+    public function unlinkStory($storyID, $planID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('productplan', 'unlinkstory', "storyID=$storyID&confirm=yes")));
+            die(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('productplan', 'unlinkstory', "storyID=$storyID&planID=$planID&confirm=yes")));
         }
         else
         {
-            $this->productplan->unlinkStory($storyID);
+            $this->productplan->unlinkStory($storyID, $planID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -356,7 +356,7 @@ class productplan extends control
      */
     public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
-        foreach($this->post->storyIDList as $storyID) $this->productplan->unlinkStory($storyID);
+        foreach($this->post->storyIDList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
     }
 
@@ -401,7 +401,7 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id_desc', null, $plan->branch);
             foreach($allBugs as $key => $bug)
             {
                 if($bug->status != 'active') unset($allBugs[$key]);
@@ -411,7 +411,7 @@ class productplan extends control
         {
             $projects = $this->loadModel('project')->getPairs();
             $projects[0] = '';
-            $allBugs= $this->bug->getActiveBugs($this->view->product->id, $projects);
+            $allBugs= $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects);
         }
 
         $this->view->allBugs    = $allBugs;

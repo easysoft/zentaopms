@@ -107,7 +107,7 @@ class bug extends control
         elseif($browseType == 'longlifebugs')  $bugs = $this->bug->getByLonglifebugs($productID, $branch, $projects, $sort, $pager);
         elseif($browseType == 'postponedbugs') $bugs = $this->bug->getByPostponedbugs($productID, $branch, $projects, $sort, $pager);
         elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $queryID, $sort, $pager);
+        elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $queryID, $sort, $pager, $branch);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);

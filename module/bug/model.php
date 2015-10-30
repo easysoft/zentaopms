@@ -305,13 +305,14 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getActiveBugs($products, $projectID, $pager = null)
+    public function getActiveBugs($products, $branch, $projectID, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->andWhere('toTask')->eq(0)
             ->andWhere('tostory')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
@@ -861,7 +862,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getProductLeftBugs($build, $productID)
+    public function getProductLeftBugs($build, $productID, $branch = 0)
     {
         $build = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($build)->fetch();
         if(empty($build->project)) return array();
@@ -883,6 +884,7 @@ class bugModel extends model
             ->andWhere('openedDate')->le($project->end)
             ->andWhere("(status = 'active' OR resolvedDate > {$project->end})")
             ->andWhere('openedBuild')->notin($beforeBuilds)
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->fetchAll();
 
         return $bugs;
@@ -918,18 +920,17 @@ class bugModel extends model
      * @access public
      * @return object
      */
-    public function getReleaseBugs($buildID, $productID)
+    public function getReleaseBugs($buildID, $productID, $branch = 0)
     {
-        $project = $this->dao->select('t1.id,t1.begin')
-            ->from(TABLE_PROJECT)->alias('t1') 
-            ->leftJoin(TABLE_BUILD)->alias('t2')
-            ->on('t1.id = t2.project')
+        $project = $this->dao->select('t1.id,t1.begin')->from(TABLE_PROJECT)->alias('t1') 
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.id = t2.project')
             ->where('t2.id')->eq($buildID)
             ->fetch();
         $bugs = $this->dao->select('*')->from(TABLE_BUG) 
             ->where('resolvedDate')->ge($project->begin)
             ->andWhere('resolution')->ne('postponed')
             ->andWhere('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->andWhere("(project != '$project->id' OR (project = '$project->id' and openedDate < '$project->begin'))")
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
@@ -1573,7 +1574,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0)
     {
         if($queryID)
         {
@@ -1607,6 +1608,7 @@ class bugModel extends model
             $bugQuery = str_replace($allProduct, '1', $this->session->bugQuery);
             $bugQuery = $bugQuery . ' AND `product`' . helper::dbIN($products);
         }
+        if($branch) $bugQuery .= "AND `branch` in('0','$branch')";
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();

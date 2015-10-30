@@ -446,22 +446,24 @@ class release extends control
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($release->product);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product);
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        unset($this->config->bug->search['fields']['branch']);
+        unset($this->config->bug->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $allBugs = array();
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($release->product, $queryID, 'id_desc');
+            $allBugs = $this->bug->getBySearch($release->product, $queryID, 'id_desc', null, $release->branch);
         }
         elseif($build->project)
         {
             if($type == 'bug')
             {
-                $allBugs = $this->bug->getReleaseBugs($build->id, $release->product);
+                $allBugs = $this->bug->getReleaseBugs($build->id, $release->product, $release->branch);
             }
             elseif($type == 'leftBug')
             {
-                $allBugs = $this->bug->getProductLeftBugs($build->id, $release->product);
+                $allBugs = $this->bug->getProductLeftBugs($build->id, $release->product, $release->branch);
             }
         }
 
