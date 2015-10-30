@@ -553,21 +553,29 @@ class bug extends control
         if($projectID)
         {
             $openedBuilds = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
-            $allBuilds    = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $bug->branch, 'noempty');
+            $allBuilds    = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $branch = 0, 'noempty');
         }
         else
         {
             $openedBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone');
-            $allBuilds    = $this->loadModel('build')->getProductBuildPairs($productID, $bug->branch, 'noempty');
+            $allBuilds    = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
         }
 
-        /* Set the openedBuilds list*/
-        $bugOpenedBuilds = array();
-        foreach($allBuilds as $buildID => $build)
+        /* Set the openedBuilds list. */
+        $oldOpenedBuilds = array();
+        $bugOpenedBuilds = explode(',', $bug->openedBuild);
+        foreach($bugOpenedBuilds as $buildID)
         {
-            if(strpos($bug->openedBuild, "$buildID") !== false) $bugOpenedBuilds[$buildID] = $build;
+            if(isset($allBuilds[$buildID])) $oldOpenedBuilds[$buildID] = $allBuilds[$buildID];
         }
-        $openedBuilds = $openedBuilds + $bugOpenedBuilds;
+        $openedBuilds = $openedBuilds + $oldOpenedBuilds;
+
+        /* Set the resolvedBuilds list. */
+        $oldResolvedBuild = array();
+        if($bug->resolvedBuild)
+        {
+            if(isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
+        }
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -581,7 +589,7 @@ class bug extends control
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
-        $this->view->resolvedBuilds   = array('' => '') + $openedBuilds;
+        $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
         $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
 
@@ -831,7 +839,7 @@ class bug extends control
         $this->view->bug        = $bug;
         $this->view->users      = $users;
         $this->view->assignedTo = $assignedTo;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noterminate,nodone');
         $this->view->actions    = $this->action->getList('bug', $bugID);
         $this->display();
     }

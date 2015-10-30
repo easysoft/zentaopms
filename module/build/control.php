@@ -248,7 +248,7 @@ class build extends control
     public function ajaxGetAllProductBuilds($productID, $varName, $build = '', $branch = 0)
     {
         if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch, ''), $build, "class='form-control'"));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch), $build, "class='form-control'"));
     }
 
     /**
@@ -269,7 +269,7 @@ class build extends control
             $output = html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple');
             die($output);
         }
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch, ''), $build, "class='form-control'"));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch), $build, "class='form-control'"));
     }
 
     /**
