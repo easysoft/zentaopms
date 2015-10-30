@@ -48,7 +48,7 @@ function loadModuleMenu(projectID)
  */
 function loadProjectStories(projectID)
 {
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&moduleID=0&storyID=' + oldStoryID);
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen(defaultChosenOptions);});
 }
 
