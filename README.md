@@ -42,9 +42,7 @@ The main management theory of ZenTao Project Management Software is based on Scr
 * API mechanism, visible API: convenient for integration with other systems.
 
 6. Website
+==========
 
 Our website is: [www.zentao.pm](http://www.zentao.pm)
-
-
-======================================================
 
