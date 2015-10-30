@@ -856,8 +856,7 @@ class treeModel extends model
                 ->where('root')->eq((int)$rootID)
                 ->andWhere('parent')->eq((int)$moduleID)
                 ->andWhere('type')->eq($type)
-                ->beginIF(empty($branch))->andWhere("branch")->eq(0)->fi()
-                ->beginIF(!empty($branch))->andWhere("branch")->eq($branch)->fi()
+                ->andWhere("branch")->eq((int)$branch)
                 ->orderBy('`order`')
                 ->fetchAll();
         }
@@ -868,8 +867,7 @@ class treeModel extends model
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
             ->andWhere('type')->in($type)
-            ->beginIF(empty($branch))->andWhere("branch")->eq(0)->fi()
-            ->beginIF(!empty($branch))->andWhere("branch")->eq($branch)->fi()
+            ->andWhere("branch")->eq((int)$branch)
             ->orderBy('type desc,`order`')
             ->fetchAll();
     }

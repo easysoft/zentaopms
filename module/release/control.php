@@ -347,20 +347,13 @@ class release extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($release->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
-        if($this->session->currentProductType == 'normal')
-        {   
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }   
-        else
-        {   
-            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($release->product, 'noempty');
-        }   
+        unset($this->config->product->search['fields']['branch']);
+        unset($this->config->product->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $queryID, 'id', null, $build->project ? $build->project : '');
+            $allStories = $this->story->getBySearch($release->product, $queryID, 'id', null, $build->project ? $build->project : '', $release->branch);
         }
         else
         {

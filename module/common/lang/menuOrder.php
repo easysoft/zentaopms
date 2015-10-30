@@ -38,12 +38,12 @@ $lang->product->menuOrder[35] = 'project';
 $lang->product->menuOrder[40] = 'branch';
 $lang->product->menuOrder[45] = 'module';
 $lang->product->menuOrder[50] = 'view';
-$lang->product->menuOrder[55] = 'order';
-$lang->product->menuOrder[60] = 'create';
-$lang->product->menuOrder[65] = 'all';
+$lang->product->menuOrder[55] = 'create';
+$lang->product->menuOrder[60] = 'all';
 $lang->story->menuOrder       = $lang->product->menuOrder;
 $lang->productplan->menuOrder = $lang->product->menuOrder;
 $lang->release->menuOrder     = $lang->product->menuOrder;
+$lang->branch->menuOrder      = $lang->product->menuOrder;
 
 /* project menu order. */
 $lang->project->menuOrder[5]  = 'task';

@@ -689,6 +689,10 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "status=all&productID=%s" . ($branch ? "&branch=%s" : ''));
             }
+            elseif($module == 'product' && ($method == 'dynamic' or $method == 'roadmap' or $method == 'doc' or $method == 'view'))
+            {
+                $link = helper::createLink($module, $method, "productID=%s");
+            }
             elseif($module == 'product' && $method == 'index')
             {
                 $link = helper::createLink($module, $method, "locate=no&productID=%s");
@@ -709,7 +713,7 @@ class productModel extends model
         }
         else if($module == 'tree')
         {
-            $link = helper::createLink($module, $method, "productID=%s&type=$extra");
+            $link = helper::createLink($module, $method, "productID=%s&type=$extra&currentModuleID=0" . ($branch ? "&branch=%s" : ''));
         }
         return $link;
     }

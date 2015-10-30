@@ -4,7 +4,7 @@ delete defaultChosenOptions.width;
 /* Get select of stories.*/
 function setStories(moduleID, projectID, num)
 {
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
     $.get(link, function(stories)
     {
         var storyID = $('#story' + num).val();

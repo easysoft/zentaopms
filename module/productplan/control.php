@@ -281,20 +281,13 @@ class productplan extends control
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
-        if($this->view->product->type == 'normal')
-        {   
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }   
-        else
-        {   
-            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($this->view->product->id, 'noempty');
-        }   
+        unset($this->config->product->search['fields']['branch']);
+        unset($this->config->product->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, $queryID, 'id');
+            $allStories = $this->story->getBySearch($plan->product, $queryID, 'id', $pager = null, $projectID = '', $plan->branch);
             foreach($allStories as $key => $story)
             {
                 if($story->status == 'closed') unset($allStories[$key]);

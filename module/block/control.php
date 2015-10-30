@@ -167,7 +167,7 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $this->params->num, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30, $orderBy = 'code', $pager);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'code', $pager);
 
         $this->display();
     }

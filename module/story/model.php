@@ -1152,7 +1152,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '')
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0)
     {
         if($projectID != '') 
         {
@@ -1187,6 +1187,10 @@ class storyModel extends model
             foreach($products as $product) $branches[$product->branch] = $product->branch;
             $storyQuery .= " AND `branch`" . helper::dbIN($branches); 
             $storyQuery .= " AND `status` != 'draft'"; 
+        }
+        elseif($branch)
+        {
+            $storyQuery .= " AND `branch`" . helper::dbIN("0,$branch"); 
         }
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
