@@ -377,7 +377,9 @@ function notice()
         var html = '';
         if($('#project').val() == '')
         {
-            html += '<a href="' + createLink('release', 'create', 'productID=' + $('#product').val()) + '" target="_blank" style="padding-right:5px">' + createRelease + '</a> ';
+            branch = $('#branch').val();
+            if(typeof(branch) == 'undefined') branch = 0;
+            html += '<a href="' + createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch) + '" target="_blank" style="padding-right:5px">' + createRelease + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else

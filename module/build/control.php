@@ -285,7 +285,7 @@ class build extends control
     public function ajaxGetBranchBuilds($productID, $branchID, $operation, $build = '')
     {
         $builds         = $this->build->getProductBuildPairs($productID, $branchID);
-        $releasedBuilds = $this->loadModel('release')->getReleaseBuilds($productID);
+        $releasedBuilds = $this->loadModel('release')->getReleaseBuilds($productID, $branchID);
 
         if($operation == 'editRelease')
         {

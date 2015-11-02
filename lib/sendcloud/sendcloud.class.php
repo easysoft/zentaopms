@@ -8,13 +8,10 @@ class sendcloud
     public $secretKey = '';
     public $from      = '';
     public $fromname  = '';
-    public $to        = '';
-    public $cc        = '';
     public $subject   = '';
     public $content   = '';
     public $files     = '';
     public $headers   = '';
-    public $replyto   = '';
     public $Subject   = ''; //Compatible phpmailer.
     public $nickNames = '';
 
@@ -219,9 +216,7 @@ class sendcloud
      */
     public function clearAllRecipients()
     {
-        $this->to       = '';
-        $this->cc       = '';
-        $this->replyto  = '';
+        $this->nickNames = '';
     }
 
     /**

@@ -26,7 +26,7 @@ class release extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
-        $this->product->setMenu($this->product->getPairs(), $productID);
+        $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
@@ -36,14 +36,14 @@ class release extends control
      * @access public
      * @return void
      */
-    public function browse($productID)
+    public function browse($productID, $branch = 0)
     {
-        $this->commonAction($productID);
+        $this->commonAction($productID, $branch);
         $products                  = $this->product->getPairs();
         $this->session->set('releaseList', $this->app->getURI(true));
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID);
+        $this->view->releases   = $this->release->getList($productID, $branch);
         $this->display();
     }
 
@@ -54,7 +54,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function create($productID)
+    public function create($productID, $branch = 0)
     {
         if(!empty($_POST))
         {
@@ -64,17 +64,17 @@ class release extends control
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 
-        $builds        = $this->loadModel('build')->getProductBuildPairs($productID);
-        $releaseBuilds = $this->release->getReleaseBuilds($productID);
+        $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch);
+        $releaseBuilds = $this->release->getReleaseBuilds($productID, $branch);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
-        $this->commonAction($productID);
+        $this->commonAction($productID, $branch);
         $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;
         $this->view->productID   = $productID;
-        $this->view->lastRelease = $this->release->getLast($productID);
+        $this->view->lastRelease = $this->release->getLast($productID, $branch);
         $this->display();
     }
 

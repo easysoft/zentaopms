@@ -19,30 +19,35 @@
     echo '<tr class="text-center">';
     foreach($years as $year)
     {
+        $colspans = count($roadmaps[$year]);
         $year = $year == '0000' ? $lang->future : $year . $lang->year;
-        echo "<th><h4>$year</h4></th>";
+        echo "<th" . (empty($branches) ? '' : " colspan='$colspans'") . "><h4>$year</h4></th>";
     }
     echo '</tr>';
     echo '<tr class="text-center text-top">';
     foreach($years as $year)
     {
-        echo '<td>';
-        foreach($roadmaps[$year] as $key => $roadmap)
+        foreach($roadmaps[$year] as $branch => $roadmapData)
         {
-            if(isset($roadmap->build))
+            echo '<td>';
+            if(!empty($branches)) echo "<div class='roadmap branch'>{$branches[$branch]}</div>";
+            foreach($roadmapData as $key => $roadmap)
             {
-                echo "<div class='roadmap release'>";
-                echo "<h5>" . html::a($this->createLink('release', 'view', "releaseID=$roadmap->id"), $roadmap->name, '_blank') . '</h5>' . $roadmap->date;
+                if(isset($roadmap->build))
+                {
+                    echo "<div class='roadmap release'>";
+                    echo "<h5>" . html::a($this->createLink('release', 'view', "releaseID=$roadmap->id"), $roadmap->name, '_blank') . '</h5>' . $roadmap->date;
+                }
+                else
+                {
+                    echo "<div class='roadmap plan'>";
+                    echo "<h5>" . html::a($this->createLink('productplan', 'view', "planID=$roadmap->id"), $roadmap->title, '_blank') . '</h5>' . $roadmap->begin . ' ~ ' . $roadmap->end;
+                }
+                echo "</div>";
+                if(isset($roadmaps[$year][$branch][$key + 1])) echo "<h5>{$lang->downArrow}</h5>";
             }
-            else
-            {
-                echo "<div class='roadmap plan'>";
-                echo "<h5>" . html::a($this->createLink('productplan', 'view', "planID=$roadmap->id"), $roadmap->title, '_blank') . '</h5>' . $roadmap->begin . ' ~ ' . $roadmap->end;
-            }
-            echo "</div>";
-            if(isset($roadmaps[$year][$key + 1])) echo "<h5>{$lang->downArrow}</h5>";
+            echo '</td>';
         }
-        echo '</td>';
     }
     echo '</tr>';
     ?>

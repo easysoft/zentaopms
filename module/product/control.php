@@ -420,9 +420,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function roadmap($productID)
+    public function roadmap($productID, $branch = 0)
     {
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
@@ -432,7 +432,8 @@ class product extends control
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->roadmap;
         $this->view->product    = $product;
-        $this->view->roadmaps   = $this->product->getRoadmap($productID);
+        $this->view->roadmaps   = $this->product->getRoadmap($productID, $branch);
+        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }

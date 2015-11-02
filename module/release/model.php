@@ -46,13 +46,14 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID)
+    public function getList($productID, $branch = 0)
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.name as buildName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.product')->eq((int)$productID)
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC')
             ->fetchAll();
@@ -65,10 +66,11 @@ class releaseModel extends model
      * @access public
      * @return bool | object 
      */
-    public function getLast($productID)
+    public function getLast($productID, $branch = 0)
     {
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
             ->where('product')->eq((int)$productID)
+            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('date DESC')
             ->limit(1)
             ->fetch();
@@ -81,9 +83,13 @@ class releaseModel extends model
      * @access public
      * @return void
      */
-    public function getReleaseBuilds($productID)
+    public function getReleaseBuilds($productID, $branch = 0)
     {
-        $releases = $this->dao->select('build')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll('build');
+        $releases = $this->dao->select('build')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->fetchAll('build');
         return array_keys($releases);
     }
 
