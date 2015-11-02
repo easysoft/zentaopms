@@ -26,3 +26,5 @@ CREATE TABLE `zt_storystage` (
 ALTER TABLE `zt_story` ADD INDEX `product` (`product`, `module`, `type`, `pri`), DROP INDEX `product`;
 ALTER TABLE `zt_story` ADD `plan` text COLLATE 'utf8_general_ci' NOT NULL AFTER `module`;
 UPDATE `zt_story` SET `plan`='' WHERE `plan`='0';
+
+LTER TABLE `zt_release` DROP INDEX `name`;

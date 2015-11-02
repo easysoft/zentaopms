@@ -111,7 +111,7 @@ class releaseModel extends model
                 ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
                 ->remove('build,files,labels')
                 ->get();
-            $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->check('name','unique')->exec();
+            $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->check('name','unique', "deleted='0'")->exec();
             $buildID = $this->dao->lastInsertID();
         }
 
@@ -125,7 +125,7 @@ class releaseModel extends model
             ->remove('allchecker,files,labels')
             ->get();
 
-        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
+        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique', "deleted='0'")->exec();
 
         if(!dao::isError())
         {
@@ -153,7 +153,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name','unique', "id != $releaseID")
+            ->check('name','unique', "id!=$releaseID and deleted='0'")
             ->where('id')->eq((int)$releaseID)
             ->exec();
         if(!dao::isError()) return common::createChanges($oldRelease, $release);
