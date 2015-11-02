@@ -11,7 +11,6 @@
  */
 $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
-$lang->testcase->branch           = "所属分支";
 $lang->testcase->module           = '所属模块';
 $lang->testcase->story            = '相关需求';
 $lang->testcase->storyVersion     = '需求版本';

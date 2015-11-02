@@ -13,7 +13,7 @@ $config->product->search['fields']['status']   = $lang->story->status;
 $config->product->search['fields']['pri']      = $lang->story->pri;
 
 $config->product->search['fields']['product']  = $lang->story->product;
-$config->product->search['fields']['branch']   = $lang->story->branch;
+$config->product->search['fields']['branch']   = '';
 $config->product->search['fields']['module']   = $lang->story->module;
 $config->product->search['fields']['plan']     = $lang->story->plan;
 $config->product->search['fields']['estimate'] = $lang->story->estimate;

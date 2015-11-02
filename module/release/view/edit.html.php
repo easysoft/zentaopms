@@ -30,7 +30,7 @@ js::set('oldReleasedBuild' , $release->build);
     <table class='table table-form'> 
       <?php if($product->type != 'normal'):?>
       <tr>
-        <th class='w-110px'><?php echo $lang->release->branch;?></th>
+        <th class='w-110px'><?php echo $lang->product->branch;?></th>
         <td><?php echo html::select('branch', $branches, $branch, "onchange='loadBranchBuilds(this.value)' class='form-control chosen'");?></td>
       </tr>
       <?php endif;?>

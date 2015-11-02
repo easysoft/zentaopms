@@ -66,6 +66,7 @@ $lang->product->QD        = '测试负责人';
 $lang->product->RD        = '发布负责人';
 $lang->product->acl       = '访问控制';
 $lang->product->whitelist = '分组白名单';
+$lang->product->branch    = '所属%s';
 
 $lang->product->moduleStory  = '按模块';
 $lang->product->searchStory  = '搜索';
@@ -88,6 +89,9 @@ $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = '正常';
 $lang->product->typeList['branch']   = '多分支';
 $lang->product->typeList['platform'] = '多平台';
+
+$lang->product->branchName['branch']   = '分支';
+$lang->product->branchName['platform'] = '平台';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';

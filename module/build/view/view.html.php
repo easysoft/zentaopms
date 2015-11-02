@@ -224,7 +224,7 @@
           </tr>  
           <?php if($build->productType != 'normal'):?>
           <tr>
-            <th><?php echo $lang->build->branch;?></th>
+            <th><?php echo $lang->product->branch;?></th>
             <td><?php echo $branchName;?></td>
           </tr>
           <?php endif;?>

@@ -233,6 +233,12 @@
             <th class='w-80px strong'><?php echo $lang->productplan->title;?></th> 
             <td><?php echo $plan->title;?></td>
           </tr>
+          <?php if($product->type != 'normal'):?>
+          <tr>
+            <th><?php echo $lang->product->branch;?></th>
+            <td><?php echo $branches[$plan->branch];?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo $plan->begin;?></td>

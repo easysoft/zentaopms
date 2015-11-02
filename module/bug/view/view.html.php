@@ -112,7 +112,7 @@
               </tr>
               <?php if($this->session->currentProductType != 'normal'):?>
               <tr>
-                <th><?php echo $lang->bug->branch;?></th>
+                <th><?php echo $lang->product->branch;?></th>
                 <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
               </tr>
               <?php endif;?>

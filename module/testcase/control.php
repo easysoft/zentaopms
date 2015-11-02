@@ -149,6 +149,7 @@ class testcase extends control
         }
         else
         {
+            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
             $this->config->testcase->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
         $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");

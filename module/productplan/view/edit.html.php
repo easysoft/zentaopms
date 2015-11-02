@@ -30,7 +30,7 @@
       </tr>  
       <?php if($product->type != 'normal'):?>
       <tr>
-        <th><?php echo $lang->productplan->branch;?></th>
+        <th><?php echo $lang->product->branch;?></th>
         <td><?php echo html::select('branch', $branches, $plan->branch, 'class="form-control"');?></td>
       </tr>  
       <?php endif;?>

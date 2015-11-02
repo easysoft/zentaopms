@@ -14,7 +14,6 @@ $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug编号';
 $lang->bug->product          = '所属' . $lang->productCommon;
 $lang->bug->productplan      = '所属计划';
-$lang->bug->branch           = '所属分支';
 $lang->bug->module           = '所属模块';
 $lang->bug->path             = '模块路径';
 $lang->bug->project          = '所属' . $lang->projectCommon;

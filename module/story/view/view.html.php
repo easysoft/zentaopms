@@ -113,7 +113,7 @@
               </tr>
               <?php if($product->type != 'normal'):?>
               <tr>
-                <th><?php echo $lang->story->branch;?></th>
+                <th><?php echo $lang->product->branch;?></th>
                 <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
               </tr>
               <?php endif;?>

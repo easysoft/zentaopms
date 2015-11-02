@@ -61,7 +61,7 @@ $config->bug->search['fields']['status']         = $lang->bug->status;
 $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 
 $config->bug->search['fields']['product']        = $lang->bug->product;
-$config->bug->search['fields']['branch']         = $lang->bug->branch;
+$config->bug->search['fields']['branch']         = '';
 $config->bug->search['fields']['plan']           = $lang->bug->productplan;
 $config->bug->search['fields']['module']         = $lang->bug->module;
 $config->bug->search['fields']['project']        = $lang->bug->project;

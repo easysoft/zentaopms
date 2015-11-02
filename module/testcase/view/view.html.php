@@ -124,7 +124,7 @@
           </tr>
           <?php if($product->type != 'normal'):?>
           <tr>
-            <th><?php echo $lang->testcase->branch;?></th>
+            <th><?php echo $lang->product->branch;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$case->branch", $branchName)) echo $branchName;?></td>
           </tr>
           <?php endif;?>

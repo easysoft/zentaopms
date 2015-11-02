@@ -39,7 +39,6 @@ $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
 
 $lang->productplan->id      = '编号';
 $lang->productplan->product = $lang->productCommon;
-$lang->productplan->branch  = '所属分支';
 $lang->productplan->title   = '名称';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '开始日期';
