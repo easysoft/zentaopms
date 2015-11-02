@@ -378,23 +378,23 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getRoadmap($productID)
+    public function getRoadmap($productID, $branch = 0)
     {
-        $plans    = $this->loadModel('productplan')->getList($productID);
-        $releases = $this->loadModel('release')->getList($productID);
+        $plans    = $this->loadModel('productplan')->getList($productID, $branch);
+        $releases = $this->loadModel('release')->getList($productID, $branch);
         $roadmap  = array();
         if(is_array($releases)) $releases = array_reverse($releases);
         if(is_array($plans))    $plans    = array_reverse($plans);
         foreach($releases as $release)
         {
             $year = substr($release->date, 0, 4);
-            $roadmap[$year][] = $release;
+            $roadmap[$year][$release->branch][] = $release;
         }
         foreach($plans as $plan)
         {
             if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
             $year = substr($plan->end, 0, 4);
-            $roadmap[$year][] = $plan;
+            $roadmap[$year][$plan->branch][] = $plan;
         }
 
         ksort($roadmap);
@@ -689,7 +689,7 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "status=all&productID=%s" . ($branch ? "&branch=%s" : ''));
             }
-            elseif($module == 'product' && ($method == 'dynamic' or $method == 'roadmap' or $method == 'doc' or $method == 'view'))
+            elseif($module == 'product' && ($method == 'dynamic' or $method == 'doc' or $method == 'view'))
             {
                 $link = helper::createLink($module, $method, "productID=%s");
             }

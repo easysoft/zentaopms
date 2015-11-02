@@ -17,7 +17,7 @@
   <div id='titlebar'>
     <div class='heading'><i class='icon-tags'></i> <?php echo $lang->release->browse;?>  </div>
     <div class='actions'>
-      <?php common::printIcon('release', 'create', "product=$product->id");?>
+      <?php common::printIcon('release', 'create', "product=$product->id&branch=$branch");?>
     </div>
   </div>
   <table class='table tablesorter' id='releaseList'>

@@ -29,7 +29,7 @@ js::set('page'      , 'create');
       <?php if($product->type != 'normal'):?>
       <tr>
         <th class='w-110px'><?php echo $lang->release->branch;?></th>
-        <td><?php echo html::select('branch', $branches, '', "onchange='loadBranchBuilds(this.value)' class='form-control chosen'");?></td>
+        <td><?php echo html::select('branch', $branches, $branch, "onchange='loadBranchBuilds(this.value)' class='form-control chosen'");?></td>
       </tr>
       <?php endif;?>
       <tr>
