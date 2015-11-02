@@ -204,7 +204,15 @@ class productplanModel extends model
         $this->loadModel('action');
         foreach($this->post->stories as $storyID)
         {
-            $this->dao->update(TABLE_STORY)->set("plan=CONCAT(plan, ',', $planID)")->where('id')->eq((int)$storyID)->exec();
+            if($this->session->currentProductType == 'normal')
+            {
+                $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_STORY)->set("plan")->eq($planID)->where('id')->eq((int)$storyID)->andWhere('branch')->ne('0')->exec();
+                $this->dao->update(TABLE_STORY)->set("plan=CONCAT(plan, ',', $planID)")->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
+            }
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
         }        
