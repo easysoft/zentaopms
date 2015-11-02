@@ -1194,7 +1194,7 @@ class storyModel extends model
             unset($branches[0]);
             $branches = join(',', $branches);
             if($branches) $storyQuery .= " AND `branch`" . helper::dbIN("0,$branches"); 
-            $storyQuery .= " AND `status` != 'draft'"; 
+            $storyQuery .= " AND `status` NOT IN ('draft', 'closed')"; 
         }
         elseif($branch)
         {
