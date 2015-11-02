@@ -204,17 +204,19 @@ js::set('moduleID', $moduleID);
                           $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
                           if($key == 'fixed')
                           {
+                              $withSearch = count($builds) > 4;
                               echo "<li class='dropdown-submenu'>";
                               echo html::a('javascript:;', $resolution, '', "id='fixedItem'");
-                              echo "<ul class='dropdown-menu'>";
+                              echo "<ul class='dropdown-menu fix-menu" . ($withSearch ? ' with-search':'') . "'>";
                               unset($builds['']);
                               foreach($builds as $key => $build)
                               {
                                   $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
-                                  echo "<li>";
+                                  echo "<li class='option' data-key='$key'>";
                                   echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
                                   echo "</li>";
                               }
+                              if($withSearch) echo "<li class='fix-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                               echo '</ul></li>';
                           }
                           else
