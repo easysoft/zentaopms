@@ -239,9 +239,8 @@ class productModel extends model
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->get();
-        $this->dao->insert(TABLE_PRODUCT)
-            ->data($product)
-            ->autoCheck()
+        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->create['id']);
+        $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck('name,code', 'notempty')
             ->check('name', 'unique', "deleted = '0'")
             ->check('code', 'unique', "deleted = '0'")
@@ -268,9 +267,8 @@ class productModel extends model
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->get();
-        $this->dao->update(TABLE_PRODUCT)
-            ->data($product)
-            ->autoCheck()
+        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->edit['id']);
+        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck('name,code', 'notempty')
             ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->check('code', 'unique', "id != $productID and deleted = '0'")

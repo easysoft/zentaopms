@@ -111,6 +111,7 @@ class releaseModel extends model
                 ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
                 ->remove('build,files,labels')
                 ->get();
+            $build = $this->loadModel('file')->processEditor($build, $this->config->release->editor->create['id']);
             $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->check('name','unique')->exec();
             $buildID = $this->dao->lastInsertID();
         }
@@ -125,6 +126,7 @@ class releaseModel extends model
             ->remove('allchecker,files,labels')
             ->get();
 
+        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->create['id']);
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
 
         if(!dao::isError())
@@ -150,6 +152,7 @@ class releaseModel extends model
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->remove('files,labels,allchecker')
             ->get();
+        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->edit['id']);
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')

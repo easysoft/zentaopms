@@ -142,11 +142,12 @@ class storyModel extends model
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id']);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
-            $this->loadModel('file')->saveUpload('story', $storyID, $extra = 1);
+            $this->file->saveUpload('story', $storyID, $extra = 1);
 
             $data          = new stdclass();
             $data->story   = $storyID;
@@ -351,8 +352,8 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,comment,needNotReview')
             ->get();
-        $this->dao->update(TABLE_STORY)
-            ->data($story, 'spec,verify')
+        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->change['id']);
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->where('id')->eq((int)$storyID)->exec();

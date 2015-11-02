@@ -43,7 +43,7 @@ class actionModel extends model
         $action->actor      = $actor;
         $action->action     = $actionType;
         $action->date       = helper::now();
-        $action->comment    = trim(strip_tags($comment, $this->config->allowedTags));
+        $action->comment    = $this->loadModel('file')->pasteImage(trim(strip_tags($comment, $this->config->allowedTags)));
         $action->extra      = $extra;
 
         /* Get product and project for this object. */
@@ -810,9 +810,10 @@ class actionModel extends model
      */
     public function updateComment($actionID)
     {
+        $comment = $this->loadModel('file')->pasteImage(trim(strip_tags($this->post->lastComment, $this->config->allowedTags)));
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq(trim(strip_tags($this->post->lastComment, $this->config->allowedTags)))
+            ->set('comment')->eq($comment)
             ->where('id')->eq($actionID)
             ->exec();
     }

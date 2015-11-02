@@ -24,6 +24,7 @@ class taskModel extends model
     {
         $tasksID  = array();
         $taskFile = '';
+        $this->loadModel('file');
         foreach($this->post->assignedTo as $assignedTo)
         {
             if($this->post->type == 'affair' and empty($assignedTo)) continue;
@@ -56,6 +57,7 @@ class taskModel extends model
                 }
             }
 
+            $task = $this->file->processEditor($task, $this->config->task->editor->create['id']);
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
@@ -74,7 +76,7 @@ class taskModel extends model
                 }
                 else
                 {
-                    $taskFileTitle = $this->loadModel('file')->saveUpload('task', $taskID);
+                    $taskFileTitle = $this->file->saveUpload('task', $taskID);
                     $taskFile = $this->dao->select('*')->from(TABLE_FILE)->where('id')->eq(key($taskFileTitle))->fetch();
                     unset($taskFile->id);
                 }
@@ -232,6 +234,8 @@ class taskModel extends model
                 ->autoCheck()
                 ->exec();
         }
+
+        $task = $this->loadModel('file')->processEditor($task, $this->config->task->editor->edit['id']);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')

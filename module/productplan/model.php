@@ -118,6 +118,7 @@ class productplanModel extends model
     public function create()
     {
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)->remove('delta')->get();
+        $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->create['id']);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
@@ -138,6 +139,7 @@ class productplanModel extends model
     {
         $oldPlan = $this->getById($planID);
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta')->get();
+        $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->edit['id']);
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()

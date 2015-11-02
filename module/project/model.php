@@ -221,6 +221,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch')
             ->get();
+        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->create['id']);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->create->requiredFields, 'notempty')
@@ -291,9 +292,10 @@ class projectModel extends model
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
-            ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
+            ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,branch')
             ->get();
+        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->edit['id']);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
