@@ -35,6 +35,7 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task')
             ->get();
+        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->create['id']);
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
@@ -119,6 +120,7 @@ class todoModel extends model
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->get();
+        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->edit['id']);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')->where('id')->eq($todoID)

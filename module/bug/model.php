@@ -59,11 +59,12 @@ class bugModel extends model
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        $bug = $this->loadModel('file')->processEditor($bug, $this->config->bug->editor->create['id']);
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
-            $this->loadModel('file')->saveUpload('bug', $bugID);
+            $this->file->saveUpload('bug', $bugID);
             return array('status' => 'created', 'id' => $bugID);
         }
         return false;
@@ -419,6 +420,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
+        $bug = $this->loadModel('file')->processEditor($bug, $this->config->bug->editor->edit['id']);
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')

@@ -42,6 +42,7 @@ class testtaskModel extends model
     function create()
     {
         $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->get();
+        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->create['id']);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
@@ -170,6 +171,7 @@ class testtaskModel extends model
     {
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->get();
+        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->edit['id']);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
@@ -215,6 +217,7 @@ class testtaskModel extends model
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $testtask = $this->loadModel('file')->processEditor($testtask, $this->config->testtask->editor->close['id']);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
             ->where('id')->eq((int)$taskID)

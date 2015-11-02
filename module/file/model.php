@@ -251,6 +251,7 @@ class fileModel extends model
      */
     public function pasteImage($data)
     {
+        if(empty($data)) return '';
         $data = str_replace('\"', '"', $data);
 
         ini_set('pcre.backtrack_limit', strlen($data));
@@ -413,5 +414,24 @@ class fileModel extends model
 
         if($zip->extract(PCLZIP_OPT_PATH, $filePath) == 0) return false;
         return $filePath;
+    }
+
+    /**
+     * Process editor.
+     * 
+     * @param  object    $data 
+     * @param  string    $editorList 
+     * @access public
+     * @return object
+     */
+    public function processEditor($data, $editorList)
+    {
+        foreach(explode(',', $editorList) as $editorID)
+        {
+            $editorID = trim($editorID);
+            if(empty($editorID) or !isset($data->$editorID)) continue;
+            $data->$editorID = $this->pasteImage($data->$editorID);
+        }
+        return $data;
     }
 }

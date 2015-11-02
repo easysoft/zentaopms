@@ -193,6 +193,7 @@ class docModel extends model
         $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->create['id']);
         $this->dao->insert(TABLE_DOC)
             ->data($doc)
             ->autoCheck()
@@ -233,6 +234,7 @@ class docModel extends model
             ->get();
 
         $condition = "lib = '$doc->lib' AND module = $doc->module AND id != $docID";
+        $doc       = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id']);
         $this->dao->update(TABLE_DOC)->data($doc)
             ->autoCheck()
             ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')

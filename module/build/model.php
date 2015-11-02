@@ -177,11 +177,12 @@ class buildModel extends model
             ->remove('resolvedBy,allchecker,files,labels')
             ->get();
 
+        $build = $this->loadModel('file')->processEditor($build, $this->config->build->editor->create['id']);
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product} AND deleted = '0'")->exec();
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
-            $this->loadModel('file')->saveUpload('build', $buildID);
+            $this->file->saveUpload('build', $buildID);
             return $buildID;
         }
     }
@@ -200,6 +201,7 @@ class buildModel extends model
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
 
+        $build = $this->loadModel('file')->processEditor($build, $this->config->build->editor->edit['id']);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
