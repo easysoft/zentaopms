@@ -178,7 +178,7 @@ class buildModel extends model
             ->get();
 
         $build = $this->loadModel('file')->processEditor($build, $this->config->build->editor->create['id']);
-        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product}")->exec();
+        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name', 'unique', "product = {$build->product} AND deleted = '0'")->exec();
         if(!dao::isError())
         {
             $buildID = $this->dao->lastInsertID();
@@ -206,7 +206,7 @@ class buildModel extends model
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
             ->where('id')->eq((int)$buildID)
-            ->check('name','unique', "id != $buildID AND product = {$build->product}")
+            ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND deleted = '0'")
             ->exec();
         if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }
