@@ -4,7 +4,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -12,7 +12,7 @@
 
 /**
  * DAO, data access object.
- * 
+ *
  * @package framework
  */
 class dao
@@ -392,7 +392,8 @@ class dao
     /**
      * Set the data to update or insert.
      * 
-     * @param  object $data         the data object or array
+     * @param  object $data        the data object or array
+     * @param  object $skipFields  the fields to skip.
      * @access public
      * @return object the dao object self.
      */
@@ -1227,6 +1228,7 @@ class sql
      * Join the data items by key = value.
      * 
      * @param  object $data 
+     * @param  string $skipFields   the fields to skip.
      * @access public
      * @return object the sql object.
      */
@@ -1236,14 +1238,14 @@ class sql
         if($skipFields) $skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
 
         foreach($data as $field => $value)
-        {    
+        {
             if(!preg_match('|^\w+$|', $field)) 
-            {    
+            {
                 unset($data->$field);
                 continue;
-            }    
+            }
             if(strpos($skipFields, ",$field,") !== false) continue;
-            $this->sql .= "`$field` = " . $this->quote($value) . ','; 
+            $this->sql .= "`$field` = " . $this->quote($value) . ',';
         }
 
         $this->data = $data;
@@ -1260,6 +1262,7 @@ class sql
      */
     public function markLeft($count = 1)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= str_repeat('(', $count);
         return $this;
     }
@@ -1273,6 +1276,7 @@ class sql
      */
     public function markRight($count = 1)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= str_repeat(')', $count);
         return $this;
     }

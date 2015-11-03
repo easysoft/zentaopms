@@ -795,4 +795,19 @@ class commonModel extends model
         $sort = strpos($firstOrder, '_') === false ? '_asc' : strstr($firstOrder, '_');
         return strpos($orderBy, $append) === false ? $orderBy . ',' . $append . $sort : $orderBy;
     }
+
+    public function checkField($table, $field)
+    {
+        $fields   = $this->dao->query("DESC $table")->fetchAll();
+        $hasField = false;
+        foreach($fields as $fieldObj)
+        {
+            if($field == $fieldObj->Field)
+            {
+                $hasField = true;
+                break;
+            }
+        }
+        return $hasField;
+    }
 }

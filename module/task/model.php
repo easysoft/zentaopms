@@ -854,6 +854,7 @@ class taskModel extends model
      */
     public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy="id_desc")
     {
+        if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')

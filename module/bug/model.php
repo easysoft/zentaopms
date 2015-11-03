@@ -796,6 +796,7 @@ class bugModel extends model
      */
     public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null)
     {
+        if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF($type != 'all')->andWhere("$type")->eq($account)->fi()

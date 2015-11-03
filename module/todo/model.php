@@ -299,8 +299,8 @@ class todoModel extends model
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('account')->eq($account)
-            ->andWhere("date >= '$begin'")
-            ->andWhere("date <= '$end'")
+            ->andWhere('date')->ge($begin)
+            ->andWhere('date')->le($end)
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
             ->orderBy($orderBy)
