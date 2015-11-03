@@ -330,10 +330,10 @@ class bug extends control
         }
 
         /* Set team members of the latest project as assignedTo list. */
-        $latestProjectID = $this->product->getLatestProject($productID);
-        if(!empty($latestProjectID)) 
+        $latestProject = $this->product->getLatestProject($productID);
+        if(!empty($latestProject)) 
         {
-            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProjectID, 'nodeleted');
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
         }
         else
         {
@@ -1102,10 +1102,10 @@ class bug extends control
      */
     public function ajaxLoadProjectTeamMembers($productID, $selectedUser = '')
     {
-        $latestProjectID = $this->product->getLatestProject($productID);
-        if(!empty($latestProjectID)) 
+        $latestProject = $this->product->getLatestProject($productID);
+        if(!empty($latestProject)) 
         {
-            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProjectID, 'nodeleted');
+            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
         }
         else
         {
