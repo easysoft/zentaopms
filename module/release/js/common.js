@@ -3,6 +3,13 @@ $(document).ready(function()
     $("a.preview").modalTrigger({width:1000, type:'iframe'});
 })
 
+/**
+ * Load branch builds.
+ * 
+ * @param  int $branchID 
+ * @access public
+ * @return void
+ */
 function loadBranchBuilds(branchID)
 {
     if(page == 'create')

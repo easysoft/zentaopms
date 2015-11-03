@@ -183,7 +183,7 @@ class task extends control
             die(js::locate($storyLink, 'parent'));
         }
 
-        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, 'short');
+        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, 0, 'short');
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
         $title      = $project->name . $this->lang->colon . $this->lang->task->batchCreate;

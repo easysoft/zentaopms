@@ -5,6 +5,11 @@ $(document).ready(function()
         var select = $(this).prev('select');
         var id     = $(select).attr('id');
         if(id.indexOf('story') != -1)
+        {
+            index  = id.substring(5);
+            module = $('#module' + index).val();
+            if(module == 'same')
+            {
                 for(var i = index - 1; i >=0; i--)
                 {
                     if($('#module' + i).val() != 'same')

@@ -215,7 +215,7 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
-            ->beginIF(!empty($branch))->andWhere('branch')->in($branch)->fi()
+            ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi()
             ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
@@ -378,7 +378,7 @@ class bugModel extends model
         }
 
         $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
-        return isset($users[$owner]) ? $users[$owner] : '';
+        return isset($users[$owner]) ? $owner : '';
     }
 
     /**
@@ -1365,7 +1365,7 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t1.project')->in(array_keys($projects))
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll(); 
 

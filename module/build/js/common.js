@@ -3,6 +3,13 @@ $(document).ready(function()
     $("a.preview").modalTrigger({width:1000, type:'iframe'});
 })
 
+/**
+ * Load branches 
+ * 
+ * @param  int $productID 
+ * @access public
+ * @return void
+ */
 function loadBranches(productID)
 {
     $('#branch').remove();

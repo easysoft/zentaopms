@@ -796,6 +796,14 @@ class commonModel extends model
         return strpos($orderBy, $append) === false ? $orderBy . ',' . $append . $sort : $orderBy;
     }
 
+    /**
+     * Check field exists
+     * 
+     * @param  string    $table 
+     * @param  string    $field 
+     * @access public
+     * @return bool
+     */
     public function checkField($table, $field)
     {
         $fields   = $this->dao->query("DESC $table")->fetchAll();

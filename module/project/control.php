@@ -1702,7 +1702,7 @@ class project extends control
      */
     public function ajaxGetProducts($projectID)
     {
-        $products     = $this->project->getProducts($projectID, false);
+        $products = $this->project->getProducts($projectID, false);
         die(html::select('product', $products, '', 'class="form-control"'));
     }
 

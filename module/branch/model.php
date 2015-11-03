@@ -11,12 +11,27 @@
  */
 class branchModel extends model
 {
+    /**
+     * Get name by id.
+     * 
+     * @param  int    $branchID 
+     * @access public
+     * @return string
+     */
     public function getById($branchID)
     {
         if(empty($branchID)) return $this->lang->branch->all;
         return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name');
     }
 
+    /**
+     * Get pairs.
+     * 
+     * @param  int    $productID 
+     * @param  string $params 
+     * @access public
+     * @return array
+     */
     public function getPairs($productID, $params = '')
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('id_asc')->fetchPairs('id', 'name');
@@ -24,6 +39,13 @@ class branchModel extends model
         return $branches;
     }
 
+    /**
+     * Manage branch 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return bool
+     */
     public function manage($productID)
     {
         $oldBranches = $this->getPairs($productID, 'noempty');
@@ -44,6 +66,14 @@ class branchModel extends model
         return dao::isError();
     }
 
+    /**
+     * Get branch group by products 
+     * 
+     * @param  array  $products 
+     * @param  string $params 
+     * @access public
+     * @return array
+     */
     public function getByProducts($products, $params = '')
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->in($products)->andWhere('deleted')->eq(0)->fetchAll();

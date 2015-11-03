@@ -38,7 +38,7 @@ class productModel extends model
         if($currentModule == 'story' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml  = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch);
+        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch);
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = $key == 'list' ? $selectHtml : $productID;

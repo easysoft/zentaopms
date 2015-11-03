@@ -11,6 +11,13 @@
  */
 class branch extends control
 {
+    /**
+     * Manage branch 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function manage($productID)
     {
         if($_POST)
@@ -31,6 +38,16 @@ class branch extends control
         $this->display();
     }
 
+    /**
+     * Ajax get drop menu.
+     * 
+     * @param  int    $productID 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
     public function ajaxGetDropMenu($productID, $module, $method, $extra)
     {
         $this->view->link      = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
@@ -42,6 +59,17 @@ class branch extends control
         $this->display();
     }
 
+    /**
+     * Ajax get matched items 
+     * 
+     * @param  string $keywords 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra, $objectID)
     {
         $this->view->link      = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
@@ -51,6 +79,14 @@ class branch extends control
         $this->display();
     }
 
+    /**
+     * Delete branch 
+     * 
+     * @param  int    $branchID 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
     public function delete($branchID, $confirm = 'no')
     {
         if($confirm == 'no') die(js::confirm($this->lang->branch->confirmDelete, inlink('delete', "branchID=$branchID&confirm=yes")));
@@ -59,6 +95,14 @@ class branch extends control
         die(js::reload('parent'));
     }
 
+    /**
+     * Ajax get branches.
+     * 
+     * @param  int    $productID 
+     * @param  int    $oldBranch 
+     * @access public
+     * @return void
+     */
     public function ajaxGetBranches($productID, $oldBranch = 0)
     {
         $product = $this->loadModel('product')->getById($productID);

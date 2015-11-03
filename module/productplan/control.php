@@ -57,7 +57,7 @@ class productplan extends control
 
             $begin = date('Y-m-d', strtotime("+$delta days", $timestamp));
         }
-        $this->view->begin  = $lastPlan ? $begin : '';
+        $this->view->begin = $lastPlan ? $begin : '';
 
         $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->position[] = $this->lang->productplan->common;

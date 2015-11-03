@@ -16,6 +16,7 @@ $(function(){sortTable('.tablesorter');});
 
 function sortTable(obj)
 {
+    if(typeof(obj) == 'undefined') obj = '.tablesorter';
     $(obj).tablesorter(
     {
         saveSort: true,

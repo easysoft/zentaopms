@@ -261,7 +261,7 @@ class productplanModel extends model
      * @access public
      * @return void
      */
-    public function unlinkBug($bugID, $planID)
+    public function unlinkBug($bugID)
     {
         $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fetch('plan');
         $this->dao->update(TABLE_STORY)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();

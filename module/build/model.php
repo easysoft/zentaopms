@@ -76,7 +76,7 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF(strpos($params, 'nodone') !== false)->andWhere('t2.status')->ne('done')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
@@ -89,7 +89,7 @@ class buildModel extends model
 
         $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
             ->where('build')->in(array_keys($builds))
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
         foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
@@ -114,12 +114,12 @@ class buildModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->where('t1.product')->in($products)
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
         $releases = $this->dao->select('build,name,deleted')->from(TABLE_RELEASE)
             ->where('product')->in($products)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->fetchAll('build');
 
         $builds = array();

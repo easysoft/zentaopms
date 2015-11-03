@@ -328,7 +328,6 @@ class build extends control
         $this->loadModel('product');
 
         /* Build search form. */
-        $product = $this->product->getByID($build->product);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);

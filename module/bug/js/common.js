@@ -56,6 +56,12 @@ function loadAll(productID)
     }
 }
 
+/**
+ * Load by branch.
+ * 
+ * @access public
+ * @return void
+ */
 function loadBranch()
 {
     $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
@@ -350,6 +356,13 @@ function setStories(moduleID, productID)
     });
 }
 
+/**
+ * Load product branches.
+ * 
+ * @param  int $productID 
+ * @access public
+ * @return void
+ */
 function loadProductBranches(productID)
 {
     $('#branch').remove();
@@ -361,6 +374,19 @@ function loadProductBranches(productID)
             $('#branch').css('width', page == 'create' ? '100px' : '65px');
         }
     })
+}
+
+/**
+ * Load team members of the project as assignedTo list.
+ * 
+ * @param  int     $projectID 
+ * @access public
+ * @return void
+ */
+function loadAssignedTo(projectID)
+{
+    link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
+    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
 }
 
 /**

@@ -243,10 +243,9 @@ class story extends control
 
         $moduleOptionMenu['same'] = $this->lang->story->same;
         $plans = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
-        $plans['same']    = $this->lang->story->same;
-        $priList          = (array)$this->lang->story->priList;
-        $priList['same']  = $this->lang->story->same;
-        $branches['same'] = $this->lang->story->same;
+        $plans['same']   = $this->lang->story->same;
+        $priList         = (array)$this->lang->story->priList;
+        $priList['same'] = $this->lang->story->same;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->productName      = $product->name;
@@ -264,7 +263,6 @@ class story extends control
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
-        $this->view->branches         = $branches;
         $this->view->branch           = $branch;
 
         $this->display();

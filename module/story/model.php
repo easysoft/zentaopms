@@ -243,7 +243,6 @@ class storyModel extends model
                 $data->plan       = $stories->plan[$i];
                 $data->title      = $stories->title[$i];
                 $data->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
-                $data->branch     = $stories->branch[$i];
                 $data->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
                 $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
                 $data->product    = $productID;
@@ -1816,6 +1815,7 @@ class storyModel extends model
      */
     public function mergePlanTitle($productID, $stories, $branch = 0)
     {
+        $query = $this->dao->get();
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($productID)
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()

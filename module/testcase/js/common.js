@@ -13,6 +13,12 @@ function loadAll(productID)
     setStories();
 }
 
+/**
+ * Load by branch.
+ * 
+ * @access public
+ * @return void
+ */
 function loadBranch()
 {
     var branch = $('#branch').val();
@@ -21,6 +27,13 @@ function loadBranch()
     setStories();
 }
 
+/**
+ * Load product branches.
+ * 
+ * @param  int $productID 
+ * @access public
+ * @return void
+ */
 function loadProductBranches(productID)
 {
     $('#branch').remove();

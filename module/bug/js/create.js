@@ -1,17 +1,4 @@
 /**
- * Load team members of the project as assignedTo list.
- * 
- * @param  int     $projectID 
- * @access public
- * @return void
- */
-function loadAssignedTo(projectID)
-{
-    link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
-}
-
-/**
   * Load all users as assignedTo list.
   *
   * @access public
@@ -58,6 +45,8 @@ function loadModuleRelated()
  */
 function setAssignedTo(moduleID, productID)
 {
+    if(typeof(productID) == 'undefined') productID = $('#product').val();
+    if(typeof(moduleID) == 'undefined')  moduleID  = $('#module').val();
     link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
