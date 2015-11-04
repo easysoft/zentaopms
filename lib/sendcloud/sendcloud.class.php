@@ -91,7 +91,7 @@ class sendcloud
         $param['accessKey'] = $this->accessKey;
 
         $result = $this->querySendcloud($url, $param);
-        if($result->result == false)
+        if($result->result == false and $result->statusCode != '481')
         {
             throw new Exception($result->message . "(code:{$result->statusCode})");
             return false;
