@@ -1250,7 +1250,7 @@ class storyModel extends model
         {
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
-            foreach($storyPairs as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
+            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
             $stories[] = $story;
         }
         return $stories;
@@ -1838,6 +1838,7 @@ class storyModel extends model
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
         }
 
+        /* For save session query. */
         $this->dao->sqlobj->sql = $query;
         return $stories;
     }
