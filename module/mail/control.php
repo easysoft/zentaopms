@@ -143,7 +143,7 @@ class mail extends control
             if(empty($mailConfig->fromName))
             {
                 echo js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName));
-                die(js::locate('back'));
+                die(js::locate($this->server->http_referer));
             }
 
             /* The mail need openssl and curl extension when secure is tls. */
@@ -152,12 +152,12 @@ class mail extends control
                 if(!extension_loaded('openssl'))
                 {
                     echo js::alert($this->lang->mail->noOpenssl);
-                    die(js::locate('back'));
+                    die(js::locate($this->server->http_referer));
                 }
                 if(!extension_loaded('curl'))
                 {
                     echo js::alert($this->lang->mail->noCurl);
-                    die(js::locate('back'));
+                    die(js::locate($this->server->http_referer));
                 }
             }
 
