@@ -21,7 +21,7 @@ class sso extends control
     public function login($type = 'notify')
     {
         $referer = empty($_GET['referer']) ? '' : $this->get->referer;
-        $locate  = empty($referer) ? '/' : base64_decode($referer);
+        $locate  = empty($referer) ? getWebRoot() : base64_decode($referer);
         if($this->loadModel('user')->isLogon()) die($this->locate($locate));
 
         $this->app->loadConfig('sso');
