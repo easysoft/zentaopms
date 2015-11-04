@@ -207,7 +207,7 @@ js::set('moduleID', $moduleID);
                               $withSearch = count($builds) > 4;
                               echo "<li class='dropdown-submenu'>";
                               echo html::a('javascript:;', $resolution, '', "id='fixedItem'");
-                              echo "<ul class='dropdown-menu fix-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                               unset($builds['']);
                               foreach($builds as $key => $build)
                               {
@@ -216,7 +216,7 @@ js::set('moduleID', $moduleID);
                                   echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
                                   echo "</li>";
                               }
-                              if($withSearch) echo "<li class='fix-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                               echo '</ul></li>';
                           }
                           else
@@ -239,13 +239,13 @@ js::set('moduleID', $moduleID);
                       echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
-                      echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       foreach ($memberPairs as $key => $value)
                       {
                           if(empty($key)) continue;
                           echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                       }
-                      if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                      if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                       echo "</ul>";
                       echo "</li>";
                   }
