@@ -408,8 +408,8 @@ class fileModel extends model
         $files = $zip->listContent();
         foreach($files as $uploadFile)
         {
-            $extension = substr(strrchr($uploadFile['filename'], '.'), 1);
-            if(empty($extension) or strpos($this->config->file->dangers, $extension) !== false) return false;
+            $extension = strtolower(substr(strrchr($uploadFile['filename'], '.'), 1));
+            if(empty($extension) or !in_array($extension, $this->config->file->imageExtensions)) return false;
         }
 
         if($zip->extract(PCLZIP_OPT_PATH, $filePath) == 0) return false;

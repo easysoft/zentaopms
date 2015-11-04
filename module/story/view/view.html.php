@@ -147,7 +147,18 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->plan;?></th>
-                <td><?php if(isset($story->planTitle)) if(!common::printLink('productplan', 'view', "planID=$story->plan", $story->planTitle)) echo $story->planTitle;?></td>
+                <td>
+                <?php
+                if(isset($story->planTitle))
+                {
+                    foreach($story->planTitle as $planID => $planTitle)
+                    {
+                        if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle)) echo $lanTitle;
+                        echo '<br />';
+                    }
+                }
+                ?>
+                </td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->source;?></th>

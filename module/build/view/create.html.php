@@ -24,8 +24,8 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->build->product;?></th>
-        <td class='w-p25-f'>
-          <?php if($products):?>
+        <?php if($products):?>
+        <td>
           <div class='input-group'>
             <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value);' class='form-control chosen'");?>
             <?php
@@ -36,13 +36,13 @@
             }
             ?>
           </div>
-          <?php endif;?>
         </td>
+        <?php endif;?>
         <td><?php if(empty($products)) printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "projectID=$projectID"));?></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->name;?></th>
-        <td>
+        <td class='w-p25-f'>
           <?php echo html::input('name', '', "class='form-control'");?>
         </td>
         <td>

@@ -31,4 +31,5 @@ $lang->file->errorExtract     = 'Decompression failure! The file may have been d
 $lang->file->uploadImagesExplain = <<<EOD
 <p>1. Upload file to contain pictures of zip package, the program will take the file name as a title, as content with pictures</p>
 <p>2. The file name at the beginning contains 'digital+underline', generation of title will they ignore.</p>
+<p>3、Image format : jpg|jpeg|gif|png.</p>
 EOD;

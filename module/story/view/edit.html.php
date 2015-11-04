@@ -83,7 +83,8 @@
             <th><?php echo $lang->story->plan;?></th>
             <td>
               <div class='input-group' id='planIdBox'>
-              <?php echo html::select('plan', $plans, $story->plan, "class='form-control chosen'");
+              <?php $multiple = ($this->session->currentProductType != 'normal' and empty($story->branch)) ? true : false;?>
+              <?php echo html::select($multiple ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen'" . ($multiple ? ' multiple' : ''));
               if(count($plans) == 1) 
               {
                   echo "<span class='input-group-addon'>";

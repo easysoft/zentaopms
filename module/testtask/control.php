@@ -286,6 +286,7 @@ class testtask extends control
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($taskID)
+                ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
                 ->page($pager)
                 ->fetchAll();
@@ -302,16 +303,8 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->testcase->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
+        unset($this->config->testcase->search['fields']['branch']);
+        unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
@@ -335,6 +328,14 @@ class testtask extends control
         $this->display();
     }
 
+    /**
+     * Group case.
+     * 
+     * @param  int    $taskID 
+     * @param  string $groupBy 
+     * @access public
+     * @return void
+     */
     public function groupCase($taskID, $groupBy = 'story')
     {
         /* Save the session. */

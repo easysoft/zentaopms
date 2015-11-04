@@ -46,7 +46,15 @@ class storyModel extends model
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
         if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
-        if($story->plan)  $story->planTitle  = join(' ', $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('id', 'title'));
+        if($story->plan)
+        {
+            $plans  = $this->dao->select('id,title,branch')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchAll('id');
+            foreach($plans as $planID => $plan)
+            {
+                $story->planTitle[$planID] = $plan->title;
+                if($plan->branch and !isset($story->stages[$plan->branch])) $story->stages[$plan->branch] = 'planned';
+            }
+        }
         $extraStories = array();
         if($story->duplicateStory) $extraStories = array($story->duplicateStory);
         if($story->linkStories)    $extraStories = explode(',', $story->linkStories);
@@ -390,12 +398,11 @@ class storyModel extends model
         $oldStory = $this->getById($storyID);
 
         $story = fixer::input('post')
-            ->cleanInt('product,module,pri,plan')
+            ->cleanInt('product,module,pri')
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
-            ->setIF($this->post->plan !== false and $this->post->plan == '', 'plan', 0)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -405,6 +412,7 @@ class storyModel extends model
             ->join('mailto', ',')
             ->remove('files,labels,comment')
             ->get();
+        if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -1271,6 +1279,7 @@ class storyModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        $query    = $this->dao->get();
         $branches = array();
         foreach($stories as $story)
         {
@@ -1281,6 +1290,8 @@ class storyModel extends model
             $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIDList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
         }
+
+        $this->dao->sqlobj->sql = $query;
         return $stories;
     }
 
@@ -1364,8 +1375,7 @@ class storyModel extends model
      */
     public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('t1.*, t2.name as productTitle')
-            ->from(TABLE_STORY)->alias('t1')
+        $stories = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type != 'all')
@@ -1828,6 +1838,7 @@ class storyModel extends model
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
         }
 
+        $this->dao->sqlobj->sql = $query;
         return $stories;
     }
 }

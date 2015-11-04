@@ -132,6 +132,9 @@ class build extends control
         $build = $this->build->getById((int)$buildID, true);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        $product = $this->loadModel('product')->getById($build->product);
+        if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
         $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;

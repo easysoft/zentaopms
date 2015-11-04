@@ -522,7 +522,7 @@ class story extends control
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id);
+        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
 
         if($from == 'project')
         {
