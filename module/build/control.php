@@ -201,15 +201,25 @@ class build extends control
      * @param  int    $productID 
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
+     * @param  int    $branch
      * @param  int    $index        the index of batch create bug.
+     * @param  string $type         get all builds or some builds belong to normal releases and projects are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0)
+    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
     {
-        if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, $branch, 'noempty,release,noterminate,nodone'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, $branch, 'noempty,release'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch, 'noempty,release,noterminate,nodone'), $build, "class='form-control'"));
+        if($varName == 'openedBuild' )
+        { 
+            $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
+            die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, $branch, $params), $build, 'size=4 class=form-control multiple'));
+        }
+        if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
+        if($varName == 'resolvedBuild')
+        { 
+            $params = ($type == 'all') ? '' : 'noempty, noterminate, nodone';
+            die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch, $params), $build, "class='form-control'"));
+        }
     }
 
     /**
@@ -218,61 +228,31 @@ class build extends control
      * @param  int    $projectID
      * @param  string $varName      the name of the select object to create
      * @param  string $build        build to selected
+     * @param  int    $branch       
      * @param  int    $index        the index of batch create bug.
      * @param  bool   $needCreate   if need to append the link of create build
+     * @param  string $type         get all builds or some builds belong to normal releases and projects are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false)
+    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
     {
         if($varName == 'openedBuild')   
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,release,noterminate,nodone');
-            $output = html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple');
-            die($output);
+            $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params);
+            die(html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple'));
         }
-        if($varName == 'openedBuilds')  die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,noterminate,nodone'), $build, "class='form-control'"));
+        if($varName == 'openedBuilds') die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
+        if($varName == 'resolvedBuild')
+        { 
+            $params = ($type == 'all') ? '' : 'noempty, noterminate, nodone';
+            die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params), $build, "class='form-control'"));
+        }
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, "class='form-control'"));
     }
 
-    /**
-     * AJAX: get all builds of a product in html select.
-     * 
-     * @param  int    $productID 
-     * @param  string $varName    the name of the select object to create
-     * @param  string $build      build to selected
-     * @access public
-     * @return string
-     */
-    public function ajaxGetAllProductBuilds($productID, $varName, $build = '', $branch = 0)
-    {
-        if($varName == 'openedBuild' )  die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch), $build, "class='form-control'"));
-    }
-
-    /**
-     * AJAX: get all builds of a project in html select.
-     * 
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  string $varName    the name of the select object to create
-     * @param  string $build      build to selected
-     * @access public
-     * @return string
-     */
-    public function ajaxGetAllProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0)
-    {
-        if($varName == 'openedBuild')   
-        {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
-            $output = html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple');
-            die($output);
-        }
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch), $build, "class='form-control'"));
-    }
-
-    /**
+   /**
      * AJAX: get builds of a branch in html select.
      *
      * @param  int     $productID

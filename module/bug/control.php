@@ -551,15 +551,14 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
+        $allBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
         if($projectID)
         {
-            $openedBuilds = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
-            $allBuilds    = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, $branch = 0, 'noempty');
+            $openedBuilds = $this->build->getProjectBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
         }
         else
         {
-            $openedBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone');
-            $allBuilds    = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
+            $openedBuilds = $this->build->getProductBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone');
         }
 
         /* Set the openedBuilds list. */
@@ -573,10 +572,7 @@ class bug extends control
 
         /* Set the resolvedBuilds list. */
         $oldResolvedBuild = array();
-        if($bug->resolvedBuild)
-        {
-            if(isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
-        }
+        if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
