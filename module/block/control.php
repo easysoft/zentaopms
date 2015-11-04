@@ -12,6 +12,18 @@
 class block extends control
 {
     /**
+     * construct. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        if(!$this->loadModel('sso')->checkKey()) die('');
+    }
+
+    /**
      * Main function.
      * 
      * @access public
