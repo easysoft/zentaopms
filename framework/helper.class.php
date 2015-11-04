@@ -4,7 +4,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -57,6 +57,7 @@ class helper
      * @param string       $methodName     method name
      * @param string|array $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
      * @param string       $viewType       the view type
+     * @param string       $onlybody       the view type
      * @static
      * @access public
      * @return string the link string.
@@ -614,4 +615,53 @@ function getWebRoot()
 function isonlybody()
 {
     return (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes');
+}
+
+/**
+ * Process evil params.
+ * 
+ * @param  string    $value 
+ * @access public
+ * @return void
+ */
+function processEvil($value)
+{
+    if(strpos(htmlspecialchars_decode($value), '<?') !== false)
+    {
+        $value       = (string) $value;
+        $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert');
+        $gibbedEvils = array('e v a l', 'e x e c', ' p a s s t h r u', ' p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
+        return str_ireplace($evils, $gibbedEvils, $value);
+    }
+    return $value;
+}
+
+/**
+ * Process array evils.
+ * 
+ * @param  array    $params 
+ * @access public
+ * @return array
+ */
+function processArrayEvils($params)
+{
+    $params = (array) $params;
+    foreach($params as $item => $values)
+    {
+        if(!is_array($values))
+        {
+            $params[$item] = processEvil($values);
+            if(processEvil($item) != $item) unset($params[$item]);
+        }
+        else
+        {
+            foreach($values as $key => $value)
+            {
+                if(is_array($value)) continue;
+                $params[$item][$key] = processEvil($value);
+                if(processEvil($key) != $key) unset($params[$item][$key]);
+            }
+        }
+    }
+    return $params;
 }
