@@ -128,9 +128,11 @@ class report extends control
         $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-d', strtotime('now'));
         $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime('+1 week'));
 
-        $diffDays = helper::diffDate($end, $begin);
-        $diffDays = round($diffDays - ($diffDays / 7 * 2));
-        $days     = $days ? $days : $diffDays;
+        if(!$days)
+        {
+            $diffDays = helper::diffDate($end, $begin);
+            $days     = round($diffDays - ($diffDays / 7 * 2));
+        }
 
         $this->view->title      = $this->lang->report->workload;
         $this->view->position[] = $this->lang->report->workload;
