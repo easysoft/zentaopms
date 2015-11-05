@@ -222,7 +222,7 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function getWorkload($begin = '', $end = '', $dept = 0)
+    public function getWorkload($dept = 0)
     {
         $depts = array();
         if($dept) $depts = $this->loadModel('dept')->getAllChildId($dept);
@@ -233,8 +233,6 @@ class reportModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->notin('cancel, closed, done')
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($begin)->andWhere('assignedDate')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('assignedDate')->le($end)->fi()
             ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
             ->fetchGroup('assignedTo');
         $workload = array();

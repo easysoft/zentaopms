@@ -137,7 +137,7 @@ class report extends control
         $this->view->title      = $this->lang->report->workload;
         $this->view->position[] = $this->lang->report->workload;
 
-        $this->view->workload = $this->report->getWorkload($begin, $end, $dept);
+        $this->view->workload = $this->report->getWorkload($dept);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         $this->view->begin    = $begin;

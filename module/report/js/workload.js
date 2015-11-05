@@ -62,3 +62,22 @@ function diffDate(date1, date2)
     }
     return delta - weekEnds; 
 }
+
+$(function()
+{
+    var options = 
+    {
+        language: config.clientLang,
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1,
+        minView: 2,
+        format: 'yyyy-mm-dd',
+        startDate: new Date()
+    };
+    $('input#begin,input#end').fixedDate().datetimepicker(options);
+})
