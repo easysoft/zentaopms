@@ -473,7 +473,6 @@ class testcase extends control
         if($from == 'testtask') $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
 
         $productID = $case->product;
-        $product   = $this->loadModel('product')->getById($productID);
         $this->testcase->setMenu($this->products, $productID, $case->branch);
 
         $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
@@ -486,8 +485,7 @@ class testcase extends control
         $this->view->taskID         = $taskID;
         $this->view->version        = $version ? $version : $case->version;
         $this->view->productName    = $this->products[$productID];
-        $this->view->product        = $product;
-        $this->view->branchName     = $product->type == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
+        $this->view->branchName     = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
         $this->view->modulePath     = $this->tree->getParents($case->module);
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);

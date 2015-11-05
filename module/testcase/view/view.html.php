@@ -122,7 +122,7 @@
             <th class='w-60px'><?php echo $lang->testcase->product;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
           </tr>
-          <?php if($product->type != 'normal'):?>
+          <?php if($this->session->currentProductType != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$case->branch", $branchName)) echo $branchName;?></td>
