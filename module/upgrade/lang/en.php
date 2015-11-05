@@ -3,7 +3,7 @@
  * The upgrade module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv11.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -14,7 +14,7 @@ $lang->upgrade->result  = 'Result';
 $lang->upgrade->fail    = 'Fail';
 $lang->upgrade->success = 'Success';
 $lang->upgrade->tohome  = 'Visit ZenTao';
-$lang->upgrade->license = 'The license of ZentaoPMS has changed to Z PUBLIC LICENSE(ZPL) 1.1.';
+$lang->upgrade->license = 'The license of ZentaoPMS has changed to Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning= 'Warning';
 $lang->upgrade->checkExtension  = 'Check extension';
 $lang->upgrade->warnningContent = <<<EOT

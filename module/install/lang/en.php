@@ -3,7 +3,7 @@
  * The install module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv11.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: en.php 4972 2013-07-02 06:50:10Z zhujinyonging@gmail.com $
@@ -21,7 +21,7 @@ $lang->install->start            = 'Start install';
 $lang->install->keepInstalling   = 'Keep install this version';
 $lang->install->seeLatestRelease = 'See the latest release.';
 $lang->install->welcome          = 'Welcome to use ZenTaoPMS.';
-$lang->install->license          = 'ZentaoPMS use license of Z PUBLIC LICENSE(ZPL) 1.1';
+$lang->install->license          = 'ZentaoPMS use license of Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
 ZenTaoPMS is an opensource project management software licensed under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It has product manage, project mange, testing mange features, also with organization manage and affair manage.
 
