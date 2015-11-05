@@ -113,6 +113,10 @@ class fileModel extends model
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
 
+        $this->app->loadClass('purifier', true);
+        $config   = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+
         /* If the file var name is an array. */
         if(is_array($_FILES[$htmlTagName]['name']))
         {
@@ -120,9 +124,11 @@ class fileModel extends model
             foreach($name as $id => $filename)
             {
                 if(empty($filename)) continue;
+                if(!validater::checkFileName($filename)) continue;
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
                 $file['title']     = !empty($_POST['labels'][$id]) ? htmlspecialchars($_POST['labels'][$id]) : str_replace('.' . $file['extension'], '', $filename);
+                $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
                 $files[] = $file;
@@ -132,9 +138,11 @@ class fileModel extends model
         {
             if(empty($_FILES[$htmlTagName]['name'])) return $files;
             extract($_FILES[$htmlTagName]);
+            if(!validater::checkFileName($name)) return array();;
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
             $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : substr($name, 0, strpos($name, $file['extension']) - 1);
+            $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
             return array($file);

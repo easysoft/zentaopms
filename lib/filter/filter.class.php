@@ -316,6 +316,19 @@ class validater
         if(!is_array($value)) $value = explode(',', $value);
         return in_array($var, $value);
     }
+   
+    /**
+     * Check file name.
+     * 
+     * @param  string    $var 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkFileName($var)
+    {
+        return !preg_match('/>+|:+|<+/', $var);
+    }
 
     /**
      * Call a function to check it.
@@ -515,12 +528,24 @@ class fixer
      */
     public function stripTags($fieldName, $allowedTags)
     {
+        global $app;
+        $app->loadClass('purifier', true);
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Filter.YouTube', 1);
+
+        /* Disable caching. */
+        $config->set('Cache.DefinitionImpl', null);
+
+        $purifier = new HTMLPurifier($config);
+        $def = $config->getHTMLDefinition(true);
+        $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
             if(version_compare(phpversion(), '5.4', '<') and get_magic_quotes_gpc()) $this->data->$fieldName = stripslashes($this->data->$fieldName);
 
-            if(!in_array($fieldName, $this->stripedFields)) $this->data->$fieldName = strip_tags($this->data->$fieldName, $allowedTags);
+            if(!in_array($fieldName, $this->stripedFields)) $this->data->$fieldName = $purifier->purify($this->data->$fieldName);
             $this->stripedFields[] = $fieldName;
         }
         return $this;
