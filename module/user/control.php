@@ -471,6 +471,7 @@ class user extends control
      */
     public function edit($userID)
     {
+        $userID = helper::safe64Decode($userID);
         $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;

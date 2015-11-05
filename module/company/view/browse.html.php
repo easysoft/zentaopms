@@ -78,7 +78,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <td><?php echo $user->visits;?></td>
       <td class='text-left'>
         <?php 
-        common::printIcon('user', 'edit',      "userID=$user->account&from=company", '', 'list');
+        common::printIcon('user', 'edit',      "userID=" . helper::safe64Encode($user->account) . "&from=company", '', 'list');
         if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
         {
             echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-remove"></i>', '', "title='{$lang->user->delete}' class='btn-icon iframe'");

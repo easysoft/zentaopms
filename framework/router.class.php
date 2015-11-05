@@ -292,10 +292,9 @@ class router
         $this->setModuleRoot();
         $this->setThemeRoot();
 
+        $this->loadConfig('common');
         $this->filterSuperVars();
         $this->setSuperVars();
-
-        $this->loadConfig('common');
         $this->setDebug();
         $this->setErrorHandler();
 
@@ -477,9 +476,36 @@ class router
      */
     public function filterSuperVars()
     {
-        $_POST   = processArrayEvils($_POST);
-        $_GET    = processArrayEvils($_GET);
-        $_COOKIE = processArrayEvils($_COOKIE);
+        if(!empty($_COOKIE))
+        {
+            foreach($_COOKIE as $cookieKey => $cookieValue)
+            {
+                if(preg_match('/[^a-zA-Z0-9=_- ,`+\/\.]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
+            }
+        }
+
+        if(!empty($_FILES))
+        {
+            foreach($_FILES as $varName => $files)
+            {
+                if(is_array($files['name']))
+                {
+                    foreach($files['name'] as $i => $fileName)
+                    {
+                        $extension = ltrim(strrchr($fileName, '.'), '.');
+                        if(strrpos($this->config->file->dangers, $extension) !== false)
+                        {
+                            foreach($files as $fileKey => $value) unset($_FILES[$varName][$fileKey][$i]);
+                        }
+                    }
+                }
+                else
+                {
+                    $extension = ltrim(strrchr($files['name'], '.'), '.');
+                    if(strrpos($this->config->file->dangers, $extension) !== false) $_FILES[$varName] = array();
+                }
+            }
+        }
         unset($_GLOBALS);
         unset($_REQUEST);
     }
@@ -1205,6 +1231,12 @@ class router
      */
     private function mergeParams($defaultParams, $passedParams)
     {
+        /* Check params from URL. */
+        foreach($passedParams as $param => $value)
+        {
+            if(preg_match('/[^a-zA-Z0-9=_,`+\/\.]/', $value)) die('Error params!');
+        }
+
         /* If not strict mode, the keys of passed params and default params must be the same order. */
         if(!isset($this->config->strictParams) or $this->config->strictParams == false) 
         {
