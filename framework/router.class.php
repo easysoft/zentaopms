@@ -480,7 +480,7 @@ class router
         {
             foreach($_COOKIE as $cookieKey => $cookieValue)
             {
-                if(preg_match('/[^a-zA-Z0-9=_- ,`+\/\.]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
+                if(preg_match('/[^a-zA-Z0-9=_\- ,`+\/\.]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
             }
         }
 

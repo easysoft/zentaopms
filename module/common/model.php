@@ -151,6 +151,7 @@ class commonModel extends model
         if($module == 'block' and $method == 'main') return true;
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;
+        if($module == 'sso' and $method == 'bind') return true;
 
         if($this->loadModel('user')->isLogon())
         {

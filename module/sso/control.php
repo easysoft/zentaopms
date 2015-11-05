@@ -56,8 +56,12 @@ class sso extends control
             $token = $data->token;
             if($data->auth == md5($code . $userIP . $token . $key))
             {
-                $user = $this->loadModel('user')->getById($data->account);
-                if(!$user) $this->locate($this->createLink('user', 'login', empty($referer) ? '' : "referer=$referer"));
+                $user = $this->sso->getBindUser($data->account);
+                if(!$user)
+                {
+                    $this->session->set('ssoData', $data);
+                    $this->locate($this->createLink('sso', 'bind', "referer=" . helper::safe64Encode($locate)));
+                }
 
                 $this->user->cleanLocked($user->account);
                 /* Authorize him and save to session. */
@@ -135,5 +139,46 @@ class sso extends control
             if(dao::isError()) die('fail');
             die('success');
         }
+    }
+
+    /**
+     * Bind user. 
+     * 
+     * @param  string $referer 
+     * @access public
+     * @return void
+     */
+    public function bind($referer = '')
+    {
+        if(!$this->session->ssoData) die();
+
+        $ssoData = $this->session->ssoData;
+        $userIP  = $this->server->remote_addr;
+        $code    = $this->config->sso->code;
+        $key     = $this->config->sso->key;
+        if($ssoData->auth != md5($code . $userIP . $ssoData->token . $key))die();
+
+        $this->loadModel('user');
+        if($_POST)
+        {
+            $user = $this->sso->bind();
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            /* Authorize him and save to session. */
+            $user->rights = $this->user->authorize($user->account);
+            $user->groups = $this->user->getGroups($user->account);
+            $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
+
+            $user->last   = date(DT_DATETIME1, $last);
+            $this->session->set('user', $user);
+            $this->app->user = $this->session->user;
+            $this->loadModel('action')->create('user', $user->id, 'login');
+            unset($_SESSION['ssoData']);
+            die(js::locate(helper::safe64Decode($referer), 'parent'));
+        }
+        $this->view->title = $this->lang->sso->bind;
+        $this->view->users = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->data  = $ssoData;
+        $this->display();
     }
 }

@@ -27,4 +27,5 @@ ALTER TABLE `zt_story` ADD INDEX `product` (`product`, `module`, `type`, `pri`),
 ALTER TABLE `zt_story` ADD `plan` text COLLATE 'utf8_general_ci' NOT NULL AFTER `module`;
 UPDATE `zt_story` SET `plan`='' WHERE `plan`='0';
 
-LTER TABLE `zt_release` DROP INDEX `name`;
+ALTER TABLE `zt_release` DROP INDEX `name`;
+ALTER TABLE `zt_user` ADD `bindRanzhi` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `locked`;

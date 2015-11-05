@@ -126,6 +126,12 @@
       <th><?php echo $lang->user->zipcode;?></th>
       <td><?php echo $user->zipcode;?></td>
     </tr>
+    <?php if($user->bindRanzhi):?>
+    <tr>
+      <th><?php echo $lang->user->bindRanzhi;?></th>
+      <td><?php echo $user->bindRanzhi;?></td>
+    </tr>
+    <?php endif;?>
   </table>
 </div>
 <?php include '../../common/view/footer.html.php';?>

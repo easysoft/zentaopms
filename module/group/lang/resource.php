@@ -658,6 +658,7 @@ $lang->resource->user->profile        = 'profile';
 $lang->resource->user->batchEdit      = 'batchEdit';
 $lang->resource->user->manageContacts = 'manageContacts';
 $lang->resource->user->deleteContacts = 'deleteContacts';
+$lang->resource->user->unbind         = 'unbind';
 
 $lang->user->methodOrder[5]  = 'create';
 $lang->user->methodOrder[7]  = 'batchCreate';
@@ -674,6 +675,7 @@ $lang->user->methodOrder[55] = 'profile';
 $lang->user->methodOrder[60] = 'batchEdit';
 $lang->user->methodOrder[65] = 'manageContacts';
 $lang->user->methodOrder[70] = 'deleteContacts';
+$lang->user->methodOrder[75] = 'unbind';
 
 /* Tree. */
 $lang->resource->tree = new stdclass();
@@ -1094,3 +1096,4 @@ $lang->changelog['7.3'][] = 'mail-sendCloud';
 $lang->changelog['7.3'][] = 'mail-sendcloudUser';
 
 $lang->changelog['7.4'][] = 'release-changeStatus';
+$lang->changelog['7.4'][] = 'user-unbind';

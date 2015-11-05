@@ -782,6 +782,18 @@ class userModel extends model
     }
 
     /**
+     * Unbind Ranzhi 
+     * 
+     * @param  string    $account 
+     * @access public
+     * @return void
+     */
+    public function unbind($account)
+    {
+        $this->dao->update(TABLE_USER)->set('bindRanzhi')->eq('')->where('account')->eq($account)->exec();
+    }
+
+    /**
      * Get contact list of a user.
      * 
      * @param  string    $account 

@@ -49,7 +49,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <th><?php common::printOrderLink('join',     $orderBy, $vars, $lang->user->join);?></th>
       <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
       <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
-      <th class='w-80px'><?php echo $lang->actions;?></th>
+      <th class='w-90px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -87,6 +87,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         {
             common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', '', "hiddenwin");
         }
+        if($user->bindRanzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
         ?>
       </td>
     </tr>

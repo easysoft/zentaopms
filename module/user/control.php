@@ -590,6 +590,27 @@ class user extends control
     }
 
     /**
+     * Unbind  Ranzhi
+     * 
+     * @param  string $account 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function unbind($account, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->user->confirmUnbind, $this->createLink('user', 'unbind', "account=$account&confirm=yes")));
+        }
+        else
+        {
+            $this->user->unbind($account);
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+        }
+    }
+
+    /**
      * User login, identify him and authorize him.
      * 
      * @access public

@@ -225,6 +225,7 @@ class treeModel extends model
         foreach($parentModules as $parentModuleID)
         {
             if(empty($parentModuleID)) continue;
+            if(empty($modules[$parentModuleID])) continue;
             $moduleName .= $modules[$parentModuleID]->name . '/';
         }
         $moduleName = rtrim($moduleName, '/');
