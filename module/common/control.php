@@ -109,7 +109,7 @@ class common extends control
         $method  = strtolower($method);
         if(isset($rights[$module][$method]))
         {
-            if(empty($acls)) return true;
+            if(empty($acls['views'])) return true;
             $menu = isset($lang->menugroup->$module) ? $lang->menugroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <div class='container mw-700px'>
-<div class= 'panel'>
+<div class= 'panel' style='margin-top:50px'>
   <div class='panel-heading'><strong><?php echo $lang->sso->bind?></strong></div>
 <form method='post' target='hiddenwin' id='bindForm'>
   <table class='table table-form'>
@@ -28,7 +28,7 @@
     </tr>
     <tr class='params bind'>
       <th><?php echo $lang->user->password?></th>
-      <td><?php echo html::input('bindPassword', '', "class='form-control'")?></td>
+      <td><?php echo html::password('bindPassword', '', "class='form-control'")?></td>
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->account?></th>
@@ -36,11 +36,11 @@
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->password?></th>
-      <td><?php echo html::input('password1', '', "class='form-control'")?></td>
+      <td><?php echo html::password('password1', '', "class='form-control'")?></td>
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->password2?></th>
-      <td><?php echo html::input('password2', '', "class='form-control'")?></td>
+      <td><?php echo html::password('password2', '', "class='form-control'")?></td>
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->realname?></th>
