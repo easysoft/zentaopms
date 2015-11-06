@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php if(!empty($config->safe->mode)) $lang->user->placeholder->password1 = $lang->user->placeholder->passwordStrength[$config->safe->mode]?>
+<?php js::set('holders', $lang->user->placeholder);?>
 <div class='container mw-700px'>
 <div class= 'panel' style='margin-top:50px'>
   <div class='panel-heading'><strong><?php echo $lang->sso->bind?></strong></div>
@@ -32,11 +34,16 @@
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->account?></th>
-      <td><?php echo html::input('account', $data->account, "class='form-control'")?></td>
+      <td><?php echo html::input('account', $data->account, "class='form-control' autocomplete='off'")?></td>
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->password?></th>
-      <td><?php echo html::password('password1', '', "class='form-control'")?></td>
+      <td>
+        <span class='input-group'>
+          <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+          <span class='input-group-addon' id='passwordStrength'></span>
+        </span>
+      </td>
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->password2?></th>
@@ -75,5 +82,12 @@ $(function()
         $('#bindForm table tr.' + $(this).val()).removeClass('hide');
     })
 })
+
+function checkPassword(password)
+{
+    $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
+    $('#passwordStrength').css('display', password == '' ? 'none' : 'table-cell');
+}
 </script>
+<?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <?php include '../../common/view/footer.lite.html.php';?>

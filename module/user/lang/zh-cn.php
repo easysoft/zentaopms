@@ -144,8 +144,8 @@ $lang->user->placeholder->join      = '入职日期';
 $lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
 $lang->user->placeholder->verify    = '需要输入你的密码加以验证';
 
-$lang->user->placeholder->passwordStrength[1] = '强度必须为中，尽量多包含数字，大写字母';
-$lang->user->placeholder->passwordStrength[2] = '强度必须为强，15位以上，密码尽量复杂';
+$lang->user->placeholder->passwordStrength[1] = '强度必须为中，6位以上，包含大小写字母，数字。';
+$lang->user->placeholder->passwordStrength[2] = '强度必须为强，10位以上，包含字母，数字，特殊字符。';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，英文、数字和下划线的组合，三位以上";

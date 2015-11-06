@@ -1303,55 +1303,45 @@ function computePasswordStrength(password)
     var strength = 0;
     var length   = password.length;
 
-    if(password.toLowerCase() != password) strength += 1;
-    if(password.toUpperCase() == password) strength += 1;
-
-    if(length >= 4 && length <= 7)
-    {
-        strength += 1;
-    }
-    else if(length >= 8 && length <= 15)
-    {
-        strength += 2;
-    }
-    else if(length >= 16 && length <= 35)
-    {
-        strength += 3;
-    }
-    else if(length > 35)
-    {
-        strength += 4;
-    }
-
     var uniqueChars = '';
+    var complexity  = new Array();
     for(i = 0; i < length; i++)
     {
         letter = password.charAt(i);
         var asc = letter.charCodeAt();
         if(asc >= 48 && asc <= 57)
         {
-            strength += 2;
+            complexity[2] = 2;
         }
         else if((asc >= 65 && asc <= 90))
         {
-            strength += 2;
+            complexity[1] = 2;
         }
         else if(asc >= 97 && asc <= 122)
         {
-            strength += 1;
+            complexity[0] = 1;
         }
         else
         {
-            strength += 3;
+            complexity[3] = 3;
         }
         if(uniqueChars.indexOf(letter) == -1) uniqueChars += letter;
     }
 
-    strength += uniqueChars.length * 2;
+    if(uniqueChars.length > 4) strength += uniqueChars.length - 4;
+    var sumComplexity = 0;
+    var complexitySize = 0;
+    for(i in complexity)
+    {
+        complexitySize += 1;
+        sumComplexity += complexity[i];
+    }
+    strength += sumComplexity + (2 * (complexitySize - 1));
+    if(length < 6 && strength >= 10) strength = 9;
+    console.log(strength);
 
-    strength = strength > 89 ? 89 : strength;
+    strength = strength > 29 ? 29 : strength;
     strength = Math.floor(strength / 10);
-    strength = Math.floor(strength / 3);
 
     return strength;
 }

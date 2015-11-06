@@ -18,7 +18,7 @@
   </div>
   <div class='actions'>
     <?php common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy", '', 'button', '', '', "iframe");?>
-    <?php common::printIcon('bug', 'create', "productID=$productID&branch=0&extra=projectID=$project->id");?>
+    <?php common::printIcon('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id");?>
   </div>
 </div>
 <form method='post' id='projectBugForm'>

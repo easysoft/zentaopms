@@ -64,7 +64,7 @@ class testtaskModel extends model
      */
     public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $type = '')
     {
-        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.branch, t4.branch, t5.branch) AS branch')
+        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
@@ -112,7 +112,7 @@ class testtaskModel extends model
      */
     public function getById($taskID, $setImgSize = false)
     {
-        $task = $this->dao->select('t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.branch, t4.branch, t5.branch) AS branch')
+        $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')

@@ -626,6 +626,7 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $products  = $this->project->getProducts($project->id);
         $productID = key($products);    // Get the first product for creating bug.
+        $branchID  = $products[$productID]->branch;
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->bug;
@@ -658,6 +659,7 @@ class project extends control
         $this->view->orderBy     = $orderBy;
         $this->view->users       = $users;
         $this->view->productID   = $productID;
+        $this->view->branchID    = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs = $memberPairs;
 
         $this->display();

@@ -477,7 +477,7 @@ class treeModel extends model
             if(empty($runs)) return;
         }
 
-        $extra['branchID'] = $branch;
+        if(is_array($extra) or empty($extra)) $extra['branchID'] = $branch;
         $linkHtml = call_user_func($userFunc, $type, $module, $extra);
 
         if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))

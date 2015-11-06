@@ -991,54 +991,36 @@ class userModel extends model
         $strength = 0;
         $length   = strlen($password);
 
-        if(strtolower($password) != $password) $strength += 1;
-        if(strtoupper($password) == $password) $strength += 1;
-
-        if($length >= 4 && $length <= 7)
-        {
-            $strength += 1;
-        }
-        elseif($length >= 8 && $length <= 15)
-        {
-            $strength += 2;
-        }
-        elseif($length >= 16 && $length <= 35)
-        {
-            $strength += 3;
-        }
-        elseif($length > 35)
-        {
-            $strength += 4;
-        }
-
         $uniqueChars = '';
+        $complexity  = array();
         $chars = str_split($password);
         foreach($chars as $letter)
         {
             $asc = ord($letter);
             if($asc >= 48 && $asc <= 57)
             {
-                $strength += 2;
+                $complexity[2] = 2;
             }
             elseif($asc >= 65 && $asc <= 90)
             {
-                $strength += 2;
+                $complexity[1] = 2;
             }
             elseif($asc >= 97 && $asc <= 122)
             {
-                $strength += 1;
+                $complexity[0] = 1;
             }
             else
             {
-                $strength += 3;
+                $complexity[3] = 3;
             }
             if(strpos($uniqueChars, $letter) === false) $uniqueChars .= $letter;
         }
-        $strength += strlen($uniqueChars) * 2;
+        if(strlen($uniqueChars) > 4)$strength += strlen($uniqueChars) - 4;
+        $strength += array_sum($complexity) + (2 * (count($complexity) - 1));
+        if($length < 6 and $strength >= 10) $strength = 9;
 
-        $strength = $strength > 89 ? 89 : $strength;
+        $strength = $strength > 29 ? 29 : $strength;
         $strength = floor($strength / 10);
-        $strength = floor($strength / 3);
 
         return $strength;
     }
