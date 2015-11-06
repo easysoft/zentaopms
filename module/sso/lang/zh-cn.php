@@ -31,7 +31,6 @@ $lang->sso->bindTypeList['add']  = '添加新用户';
 $lang->sso->help = <<<EOD
 <p>1、接口地址的填写，如果是PATH_INFO ：http://然之网址/sys/sso-check.html，如果是GET：http://然之网址/sys/index.php?m=sso&f=check</p>
 <p>2、代号和密钥必须与然之后台设置的一致。</p>
-<p>3、然之的用户名必须和禅道里面的一致，否则无法从然之关联登录禅道</p>
 EOD;
 $lang->sso->bindNotice     = '添加的新用户暂时没有权限，需要联系禅道管理员，给该用户分配权限。';
 $lang->sso->bindNoPassword = '密码不能为空';

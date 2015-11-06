@@ -129,6 +129,8 @@ $lang->bug->lblLastEdited               = 'Last edited';
 $lang->bug->lblResolved                 = 'Resolved';
 $lang->bug->lblAllFields                = 'All Fields';
 $lang->bug->lblCustomFields             = 'Custom Fields';
+$lang->bug->allUsers                    = 'All users';
+$lang->bug->allBuilds                   = 'All';
 
 /* Legends. */
 $lang->bug->legendBasicInfo    = 'Basic info';

@@ -14,6 +14,7 @@ $lang->project->common        = $lang->projectCommon . '視圖';
 $lang->project->id            = $lang->projectCommon . '編號';
 $lang->project->company       = '所屬公司';
 $lang->project->fromproject   = '所屬' . $lang->projectCommon;
+$lang->project->allProjects   = '全部';
 $lang->project->iscat         = '作為目錄';
 $lang->project->type          = $lang->projectCommon . '類型';
 $lang->project->parent        = '上級' . $lang->projectCommon;

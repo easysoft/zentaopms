@@ -76,6 +76,7 @@ $lang->report->validRate     = "Valid Rate";
 $lang->report->validRateTips = "Resolution is fixed or postponed/status is resolved or closed";
 $lang->report->unplanned     = 'unplanned';
 $lang->report->workday       = 'Working per day';
+$lang->report->diffDays      = 'Work days';
 
 $lang->report->conditions    = 'Conditions:';
 $lang->report->closedProduct = 'Closed ' . $lang->productCommon;

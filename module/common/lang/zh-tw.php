@@ -28,7 +28,7 @@ $lang->aboutZenTao    = '關於';
 $lang->profile        = '個人檔案';
 $lang->changePassword = '更改密碼';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
-$lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.1》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
+$lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -177,6 +177,7 @@ $lang->product->menu->plan    = array('link' => '計劃|productplan|browse|produ
 $lang->product->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文檔|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->branch  = '分支|branch|manage|productID=%s';
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
@@ -186,7 +187,9 @@ $lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
 $lang->release     = new stdclass();
+$lang->branch      = new stdclass();
 
+$lang->branch->menu      = $lang->product->menu;
 $lang->story->menu       = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 $lang->release->menu     = $lang->product->menu;
@@ -317,6 +320,7 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
+$lang->menugroup->branch      = 'product';
 $lang->menugroup->productplan = 'product';
 $lang->menugroup->task        = 'project';
 $lang->menugroup->build       = 'project';

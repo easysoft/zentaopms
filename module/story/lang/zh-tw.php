@@ -275,7 +275,7 @@ $lang->story->report->storysPerEstimate->graph->xAxisName     = '預計時間';
 $lang->story->report->storysPerChange->graph->xAxisName       = '變更次數';
 
 $lang->story->placeholder = new stdclass();
-$lang->story->placeholder->estimate = "完成該需求的工作量";
+$lang->story->placeholder->estimate = $lang->story->hour;
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = '選擇評審人...';

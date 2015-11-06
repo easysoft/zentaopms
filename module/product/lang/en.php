@@ -58,6 +58,7 @@ $lang->product->company   = 'Company';
 $lang->product->name      = 'Name';
 $lang->product->code      = 'Code';
 $lang->product->order     = 'Order';
+$lang->product->type      = "Type";
 $lang->product->status    = 'Status';
 $lang->product->desc      = 'Desc';
 $lang->product->PO        = "{$lang->productCommon} owner";
@@ -65,6 +66,7 @@ $lang->product->QD        = 'Quality director';
 $lang->product->RD        = 'Release director';
 $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
+$lang->product->branch    = '%s';
 
 $lang->product->moduleStory  = 'Module';
 $lang->product->searchStory  = 'Search';
@@ -82,6 +84,14 @@ $lang->product->unclosed     = 'Unclosed';
 $lang->product->allStory    = 'All';
 $lang->product->allProduct  = "All {$lang->productCommon}s";
 $lang->product->allProductsOfProject = "All related {$lang->productCommon}s";
+
+$lang->product->typeList['']         = '';
+$lang->product->typeList['normal']   = 'Normal';
+$lang->product->typeList['branch']   = 'Multi branch';
+$lang->product->typeList['platform'] = 'Multi platform';
+
+$lang->product->branchName['branch']   = 'Branch';
+$lang->product->branchName['platform'] = 'Platform';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';

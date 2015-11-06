@@ -144,6 +144,14 @@ $lang->product->methodOrder[55] = 'project';
 $lang->product->methodOrder[60] = 'close';
 $lang->product->methodOrder[65] = 'updateOrder';
 
+/* Branch. */
+$lang->resource->branch = new stdclass();
+$lang->resource->branch->manage = 'manage';
+$lang->resource->branch->delete = 'delete';
+
+$lang->branch->methodOrder[0] = 'manage';
+$lang->branch->methodOrder[5] = 'delete';
+
 /* Story. */
 $lang->resource->story = new stdclass();
 $lang->resource->story->create      = 'create';
@@ -1097,3 +1105,5 @@ $lang->changelog['7.3'][] = 'mail-sendcloudUser';
 
 $lang->changelog['7.4'][] = 'release-changeStatus';
 $lang->changelog['7.4'][] = 'user-unbind';
+$lang->changelog['7.4'][] = 'branch-manage';
+$lang->changelog['7.4'][] = 'branch-delete';

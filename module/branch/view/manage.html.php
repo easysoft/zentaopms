@@ -25,7 +25,7 @@
           <div class='input-group'>
             <?php echo html::input("branch[$branchID]", $branch, "class='form-control'")?>
              <span class='input-group-addon'><a href='javascript:;' onclick='addItem()'><i class='icon icon-plus'></i></a></span>
-             <span class='input-group-addon'><a href='<?php echo inlink('delete', "branch=$branchID")?>' target='hiddenwin'><i class='icon icon-remove'></i></a></span>
+             <span class='input-group-addon'><a href='<?php echo common::hasPriv('branch', 'delete') ? inlink('delete', "branch=$branchID") : '###';?>' class='<?php if(!common::hasPriv('branch', 'delete')) echo 'disabled'?>' target='hiddenwin'><i class='icon icon-remove'></i></a></span>
           </div>
           <?php endforeach;?>
           <?php for($i = 0; $i < 2; $i++):?>

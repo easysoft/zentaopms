@@ -61,6 +61,7 @@ $whiteList[] = 'sso-depts';
 $whiteList[] = 'sso-users';
 $whiteList[] = 'sso-login';
 $whiteList[] = 'sso-logout';
+$whiteList[] = 'sso-bind';
 $whiteList[] = 'mail-asyncsend';
 
 /* checking actions of every module. */

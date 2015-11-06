@@ -58,6 +58,7 @@ $lang->action->objectTypes['user']        = 'User';
 $lang->action->objectTypes['doc']         = 'Doc';
 $lang->action->objectTypes['doclib']      = 'DocLib';
 $lang->action->objectTypes['todo']        = 'Todo';
+$lang->action->objectTypes['branch']      = 'Branch';
 
 /* The desc of actions. */
 $lang->action->desc = new stdclass();
@@ -176,6 +177,7 @@ $lang->action->search->objectTypeList['todo']        = 'todo';
 $lang->action->search->objectTypeList['build']       = 'build';
 $lang->action->search->objectTypeList['release']     = 'release';
 $lang->action->search->objectTypeList['productplan'] = 'plan';
+$lang->action->search->objectTypeList['branch']      = 'branch';
 
 /* Display action for search. */
 $lang->action->search->label['']                    = '';

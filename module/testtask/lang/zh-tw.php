@@ -35,13 +35,13 @@ $lang->testtask->wait           = "待測版本";
 $lang->testtask->done           = "已測版本";
 
 $lang->testtask->common         = '測試視圖版本';
-$lang->testtask->id             = '版本編號';
+$lang->testtask->id             = '編號';
 $lang->testtask->product        = '所屬' . $lang->productCommon;
 $lang->testtask->project        = '所屬' . $lang->projectCommon;
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '負責人';
 $lang->testtask->pri            = '優先順序';
-$lang->testtask->name           = '版本名稱';
+$lang->testtask->name           = '名稱';
 $lang->testtask->begin          = '開始日期';
 $lang->testtask->end            = '結束日期';
 $lang->testtask->desc           = '描述';

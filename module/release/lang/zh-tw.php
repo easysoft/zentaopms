@@ -18,6 +18,7 @@ $lang->release->delete    = "刪除發佈";
 $lang->release->deleted   = '已刪除';
 $lang->release->view      = "發佈詳情";
 $lang->release->browse    = "瀏覽發佈";
+$lang->release->changeStatus     = "修改狀態";
 $lang->release->batchUnlink      = "批量移除";
 $lang->release->batchUnlinkStory = "批量移除需求";
 $lang->release->batchUnlinkBug   = "批量移除Bug";
@@ -34,6 +35,7 @@ $lang->release->build                 = '版本';
 $lang->release->name                  = '發佈名稱';
 $lang->release->date                  = '發佈日期';
 $lang->release->desc                  = '描述';
+$lang->release->status                = '狀態';
 $lang->release->last                  = '上次發佈';
 $lang->release->linkStoriesAndBugs    = '需求和Bug';
 $lang->release->linkStories           = '相關需求';
@@ -51,7 +53,14 @@ $lang->release->export                = '導出HTML';
 $lang->release->filePath = '下載地址：';
 $lang->release->scmPath  = '版本庫地址：';
 
-$lang->release->exportTypeList['all']    = '所有';
-$lang->release->exportTypeList['story']  = '需求';
-$lang->release->exportTypeList['bug']    = 'Bug';
-$lang->release->exportTypeList['newbug'] = '遺留Bug';
+$lang->release->exportTypeList['all']     = '所有';
+$lang->release->exportTypeList['story']   = '需求';
+$lang->release->exportTypeList['bug']     = 'Bug';
+$lang->release->exportTypeList['leftbug'] = '遺留Bug';
+
+$lang->release->statusList['']          = '';
+$lang->release->statusList['normal']    = '正常維護';
+$lang->release->statusList['terminate'] = '停止維護';
+
+$lang->release->action = new stdclass();
+$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'statusList');

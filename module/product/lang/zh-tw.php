@@ -58,6 +58,7 @@ $lang->product->company   = '所屬公司';
 $lang->product->name      = "{$lang->productCommon}名稱";
 $lang->product->code      = "{$lang->productCommon}代號";
 $lang->product->order     = '排序';
+$lang->product->type      = "{$lang->productCommon}類型";
 $lang->product->status    = '狀態';
 $lang->product->desc      = "{$lang->productCommon}描述";
 $lang->product->PO        = "{$lang->productCommon}負責人";
@@ -65,6 +66,7 @@ $lang->product->QD        = '測試負責人';
 $lang->product->RD        = '發佈負責人';
 $lang->product->acl       = '訪問控制';
 $lang->product->whitelist = '分組白名單';
+$lang->product->branch    = '所屬%s';
 
 $lang->product->moduleStory  = '按模組';
 $lang->product->searchStory  = '搜索';
@@ -82,6 +84,14 @@ $lang->product->unclosed     = '未關閉';
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部關聯' . $lang->productCommon;
+
+$lang->product->typeList['']         = '';
+$lang->product->typeList['normal']   = '正常';
+$lang->product->typeList['branch']   = '多分支';
+$lang->product->typeList['platform'] = '多平台';
+
+$lang->product->branchName['branch']   = '分支';
+$lang->product->branchName['platform'] = '平台';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';

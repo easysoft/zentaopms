@@ -21,7 +21,7 @@ $lang->install->start            = '開始安裝';
 $lang->install->keepInstalling   = '繼續安裝當前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '歡迎使用禪道項目管理軟件！';
-$lang->install->license          = '禪道項目管理軟件使用 Z PUBLIC LICENSE(ZPL) 1.1 授權協議';
+$lang->install->license          = '禪道項目管理軟件使用 Z PUBLIC LICENSE(ZPL) 1.2 授權協議';
 $lang->install->desc             = <<<EOT
 禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于<a href='http://zpl.pub' target='_blank'>ZPL</a>協議，開源免費的項目管理軟件，它集產品管理、項目管理、測試管理於一體，同時還包含了事務管理、組織管理等諸多功能，是中小型企業項目管理的首選。
 

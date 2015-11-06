@@ -14,6 +14,7 @@ $lang->project->common        = $lang->projectCommon;
 $lang->project->id            = 'ID';
 $lang->project->company       = 'Company';
 $lang->project->fromproject   = 'From' . $lang->projectCommon;
+$lang->project->allProjects   = 'All';
 $lang->project->iscat         = 'Is category';
 $lang->project->type          = 'Type';
 $lang->project->parent        = 'Parent';

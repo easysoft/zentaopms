@@ -58,6 +58,7 @@ $lang->action->objectTypes['user']        = '用戶';
 $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
 $lang->action->objectTypes['todo']        = '待辦';
+$lang->action->objectTypes['branch']      = '分支';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -126,6 +127,7 @@ $lang->action->label->svncommited         = '提交代碼';
 $lang->action->label->gitcommited         = '提交代碼';
 $lang->action->label->linked2plan         = '關聯計劃';
 $lang->action->label->unlinkedfromplan    = '移除計劃';
+$lang->action->label->changestatus        = '修改狀態';
 $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = "關聯{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->projectCommon}";
@@ -170,11 +172,12 @@ $lang->action->search->objectTypeList['task']        = '任務';
 $lang->action->search->objectTypeList['testtask']    = '測試任務';     
 $lang->action->search->objectTypeList['user']        = '用戶'; 
 $lang->action->search->objectTypeList['doc']         = '文檔';
-$lang->action->search->objectTypeList['doclib']      = '文檔庫';   
-$lang->action->search->objectTypeList['todo']        = '待辦'; 
-$lang->action->search->objectTypeList['build']       = 'Build';  
-$lang->action->search->objectTypeList['release']     = '發佈';    
-$lang->action->search->objectTypeList['productplan'] = '計劃';        
+$lang->action->search->objectTypeList['doclib']      = '文檔庫';
+$lang->action->search->objectTypeList['todo']        = '待辦';
+$lang->action->search->objectTypeList['build']       = 'Build';
+$lang->action->search->objectTypeList['release']     = '發佈';
+$lang->action->search->objectTypeList['productplan'] = '計劃';
+$lang->action->search->objectTypeList['branch']      = '分支';
 
 /* 用來在動態顯示中顯示動作 */
 $lang->action->search->label['']                    = '';
@@ -204,6 +207,7 @@ $lang->action->search->label['svncommited']         = $lang->action->label->svnc
 $lang->action->search->label['gitcommited']         = $lang->action->label->gitcommited;
 $lang->action->search->label['linked2plan']         = $lang->action->label->linked2plan;
 $lang->action->search->label['unlinkedfromplan']    = $lang->action->label->unlinkedfromplan;
+$lang->action->search->label['changestatus']        = $lang->action->label->changestatus;
 $lang->action->search->label['marked']              = $lang->action->label->marked;
 $lang->action->search->label['linked2project']      = $lang->action->label->linked2project;
 $lang->action->search->label['unlinkedfromproject'] = $lang->action->label->unlinkedfromproject;

@@ -48,6 +48,7 @@ $lang->build->unlinkBug          = '移除Bug';
 $lang->build->stories            = '完成的需求';
 $lang->build->bugs               = '解決的Bug';
 $lang->build->generatedBugs      = '產生的Bug';
+$lang->build->noProduct          = " <span style='color:red'>該{$lang->projectCommon}沒有關聯{$lang->productCommon}，無法創建版本，請先<a href='%s'>關聯{$lang->productCommon}</a></span>";
 
 $lang->build->finishStories = ' 本次共完成 %s 個需求';
 $lang->build->resolvedBugs  = ' 本次共解決 %s 個Bug';
