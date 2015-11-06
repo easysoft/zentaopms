@@ -81,7 +81,19 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           <tr>
             <th><?php echo $lang->bug->module;?></th>
             <td>
-              <div class='input-group' id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");?></div>
+              <div class='input-group' id='moduleIdBox'>
+              <?php 
+              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
+              if(count($moduleOptionMenu) == 1)
+              {
+                  echo "<span class='input-group-addon'>";
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch"), $lang->tree->manage, '_blank');
+                  echo '&nbsp; ';
+                  echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                  echo '</span>';
+              }
+              ?>
+              </div>
             </td>
           </tr>
           <tr>

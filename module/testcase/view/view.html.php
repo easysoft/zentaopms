@@ -52,7 +52,7 @@
         echo "<div class='btn-group'>";
         common::printIcon('testcase', 'edit',"caseID=$case->id");
         common::printCommentIcon('testcase');
-        common::printIcon('testcase', 'create', "productID=$case->product&branch=$branch&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
+        common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
         common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'button', '', 'hiddenwin');
         echo '</div>';
         
