@@ -67,11 +67,12 @@
             <td>
               <div class='input-group' id='moduleIdBox'>
               <?php
-              echo html::select('module', $moduleOptionMenu, $story->module, 'class="form-control chosen"');
+              echo html::select('module', $moduleOptionMenu, $story->module, "class='form-control chosen'");
               if(count($moduleOptionMenu) == 1)
               {
-                  echo "<span class='inpug-group-addon'>";
-                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&branch=$story->branch"), $lang->tree->manage, '_blank');
+                  echo "<span class='input-group-addon'>";
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&currentModuleID=0&branch=$story->branch"), $lang->tree->manage, '_blank');
+                  echo '&nbsp; ';
                   echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
                   echo '</span>';
               }

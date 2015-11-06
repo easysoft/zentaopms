@@ -100,7 +100,17 @@
             <th><?php echo $lang->testcase->module;?></th>
             <td>
               <div class='input-group' id='moduleIdBox'>
-                <?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");?>
+              <?php 
+              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
+              if(count($moduleOptionMenu) == 1)
+              {
+                  echo "<span class='input-group-addon'>";
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$case->branch"), $lang->tree->manage, '_blank');
+                  echo '&nbsp; ';
+                  echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                  echo '</span>';
+              }
+              ?>
               </div>
             </td>
           </tr>
