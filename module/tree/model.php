@@ -473,7 +473,12 @@ class treeModel extends model
         if($type == 'case' and !empty($extra))
         {
             $modules = $this->getAllChildID($module->id);
-            $runs    = $this->testtask->getRuns($extra, $modules, 'id');
+            $runs    = $this->dao->select('t1.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->where('t1.task')->eq((int)$extra)
+                ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
+                ->limit(1)
+                ->fetch();
             if(empty($runs)) return;
         }
 
