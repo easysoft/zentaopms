@@ -41,7 +41,7 @@
     </tr>
     <tr>
       <td></td>
-      <td><?php echo html::submitButton() . html::backButton();?> </td><td></td>
+      <td><?php echo html::submitButton();?> </td><td></td>
     </tr>
   </table>
   </form>
