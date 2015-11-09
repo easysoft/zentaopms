@@ -11,7 +11,7 @@ li{line-height: 2em}
 .card.ad > .img-wrapper {
   background-position: center;
   background-repeat: no-repeat;
-  height: 75px;
+  height: 115px;
   width: 100%;
 }
 .card.ad > .img-wrapper > img{display: none;}
