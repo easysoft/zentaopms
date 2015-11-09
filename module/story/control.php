@@ -1162,7 +1162,7 @@ class story extends control
             }
             else
             {
-                $stmt = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND t2.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
 
@@ -1191,7 +1191,7 @@ class story extends control
 
             /* Get related objects title or names. */
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
-            $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in($relatedPlanIdList)->fetchPairs();
+            $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
@@ -1221,7 +1221,16 @@ class story extends control
                 /* fill some field with useful value. */
                 if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
                 if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module] . "(#$story->module)";
-                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan] . "(#$story->plan)";
+                if(isset($story->plan))
+                {
+                    $plans = '';
+                    foreach(explode(',', $story->plan) as $planID)
+                    {
+                        if(empty($planID)) continue;
+                        if(isset($relatedPlans[$planID]))$plans .= $relatedPlans[$planID] . "(#$planID) ";
+                    }
+                    $story->plan = $plans;
+                }
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
