@@ -392,7 +392,7 @@ class editorModel extends model
     public function extendModel($filePath)
     {
         $className = basename(dirname(dirname($filePath)));
-        if(!class_exists($className)) include(dirname($filePath));
+        if(!class_exists($className)) helper::import(dirname($filePath));
         $methodName = basename($filePath);
         $methodParam = $this->getParam($className, $methodName, 'Model');
         return $fileContent = <<<EOD
@@ -414,7 +414,7 @@ EOD;
     public function extendControl($filePath, $isExtends)
     {
         $className = basename(dirname(dirname($filePath)));
-        if(!class_exists($className)) include(dirname($filePath));
+        if(!class_exists($className)) helper::import(dirname($filePath));
         $methodName = basename($filePath);
         if($isExtends == 'yes')
         {

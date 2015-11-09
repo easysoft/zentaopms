@@ -15,7 +15,7 @@ class apiModel extends model
     {
         $fileName  = dirname($filePath);
         $className = basename(dirname(dirname($filePath)));
-        if(!class_exists($className)) include($fileName);
+        if(!class_exists($className)) helper::import($fileName);
         $methodName = basename($filePath);
 
         $method = new ReflectionMethod($className . $ext, $methodName);
