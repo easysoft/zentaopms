@@ -452,13 +452,13 @@ $lang->icons['dept']      = 'sitemap';
 $lang->icons['tree']      = 'sitemap';
 $lang->icons['usecase']   = 'sitemap';
 $lang->icons['testcase']  = 'smile';
-$lang->icons['result']    = 'flag-checkered';
+$lang->icons['result']    = 'list-alt';
 $lang->icons['mail']      = 'envelope';
 $lang->icons['trash']     = 'trash';
 $lang->icons['extension'] = 'th-large';
 $lang->icons['app']       = 'th-large';
 
-$lang->icons['results']        = 'flag-checkered';
+$lang->icons['results']        = 'list-alt';
 $lang->icons['create']         = 'plus';
 $lang->icons['post']           = 'edit';
 $lang->icons['batchCreate']    = 'plus-sign';

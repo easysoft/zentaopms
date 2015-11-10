@@ -127,6 +127,8 @@ class sso extends control
      */
     public function ajaxSetConfig()
     {
+        if(!common::hasPriv('admin', 'sso')) die('fail');
+
         if($_POST)
         {
             $ssoConfig = new stdclass();

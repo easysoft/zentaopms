@@ -64,7 +64,7 @@
         <td class='text-right'>
         <?php
         common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'iframe');
-        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'flag-checkered', '', 'iframe');
+        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'iframe');
         common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list', 'pencil');
         common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
