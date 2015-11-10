@@ -626,7 +626,7 @@ class project extends control
         $project   = $this->commonAction($projectID);
         $products  = $this->project->getProducts($project->id);
         $productID = key($products);    // Get the first product for creating bug.
-        $branchID  = $products[$productID]->branch;
+        $branchID  = isset($products[$productID]) ? $products[$productID]->branch : 0;
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->bug;
@@ -1535,9 +1535,10 @@ class project extends control
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         unset($this->lang->story->statusList['draft']);
-        $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
         unset($this->config->product->search['fields']['branch']);
         unset($this->config->product->search['params']['branch']);
+        $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
+
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;

@@ -90,6 +90,7 @@ $lang->product->typeList['normal']   = '正常';
 $lang->product->typeList['branch']   = '多分支';
 $lang->product->typeList['platform'] = '多平台';
 
+$lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = '分支';
 $lang->product->branchName['platform'] = '平台';
 

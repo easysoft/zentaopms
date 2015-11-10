@@ -18,9 +18,14 @@ class branchModel extends model
      * @access public
      * @return string
      */
-    public function getById($branchID)
+    public function getById($branchID, $productID = 0)
     {
-        if(empty($branchID)) return $this->lang->branch->all;
+        if(empty($branchID))
+        {
+            if(empty($productID)) $productID = $this->session->product;
+            $product = $this->loadModel('product')->getById($productID);
+            return $this->lang->branch->all . $this->lang->product->branchName[$product->type];
+        }
         return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name');
     }
 
@@ -35,7 +40,11 @@ class branchModel extends model
     public function getPairs($productID, $params = '')
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('id_asc')->fetchPairs('id', 'name');
-        if(strpos($params, 'noempty') === false) $branches = array('0' => $this->lang->branch->all) + $branches;
+        if(strpos($params, 'noempty') === false)
+        {
+            $product  = $this->loadModel('product')->getById($productID);
+            $branches = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branches;
+        }
         return $branches;
     }
 
@@ -77,11 +86,12 @@ class branchModel extends model
     public function getByProducts($products, $params = '')
     {
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->in($products)->andWhere('deleted')->eq(0)->fetchAll();
+        $products = $this->loadModel('product')->getByIdList($products);
 
         $branchGroups = array();
         foreach($branches as $branch)
         {
-            if(!isset($branchGroups[$branch->product]) and strpos($params, 'noempty') === false) $branchGroups[$branch->product][0] = $this->lang->branch->all;
+            if(!isset($branchGroups[$branch->product]) and strpos($params, 'noempty') === false) $branchGroups[$branch->product][0] = $this->lang->branch->all . $this->lang->product->branchName[$products[$branch->product]->type];
             $branchGroups[$branch->product][$branch->id] = $branch->name;
         }
 

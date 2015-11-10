@@ -177,7 +177,7 @@ $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|product
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->branch  = 'Branch|branch|manage|productID=%s';
+$lang->product->menu->branch  = '%branch%|branch|manage|productID=%s';
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => 'Info|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = "{$lang->projectCommon}s|product|project|status=all&productID=%s";

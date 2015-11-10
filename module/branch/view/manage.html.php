@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div class="container mw-700px">
   <div id="titlebar">
-    <div class="heading"><strong><?php echo $lang->branch->manage?></strong></div>
+    <div class="heading"><strong><?php printf($lang->branch->manageTitle, $this->lang->product->branchName[$this->session->currentProductType])?></strong></div>
   </div>
   <form method='post' target='hiddenwin'>
   <table class="table table-form">

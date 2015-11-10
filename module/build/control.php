@@ -51,8 +51,8 @@ class build extends control
         $this->view->position[]    = $this->lang->build->create;
         $this->view->productGroups = $productGroups;
         $this->view->products      = $products;
-        $this->view->product       = $productGroups[$productID];
-        $this->view->branches      = $productGroups[$productID]->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
+        $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->view->projectID     = $projectID;
         $this->view->lastBuild     = $this->build->getLast($projectID);
         $this->view->users         = $this->user->getPairs('nodeleted');

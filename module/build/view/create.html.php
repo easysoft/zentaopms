@@ -37,8 +37,10 @@
             ?>
           </div>
         </td>
+        <td></td>
+        <?php else:?>
+        <td colspan='2'><?php if(empty($products)) printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "projectID=$projectID"));?></td>
         <?php endif;?>
-        <td><?php if(empty($products)) printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "projectID=$projectID"));?></td>
       </tr>
       <tr>
         <th><?php echo $lang->build->name;?></th>

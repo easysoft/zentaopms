@@ -90,6 +90,7 @@ $lang->product->typeList['normal']   = 'Normal';
 $lang->product->typeList['branch']   = 'Multi branch';
 $lang->product->typeList['platform'] = 'Multi platform';
 
+$lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = 'Branch';
 $lang->product->branchName['platform'] = 'Platform';
 
