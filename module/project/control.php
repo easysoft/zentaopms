@@ -1221,6 +1221,8 @@ class project extends control
         $project = $this->project->getById($projectID, true);
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        $products = $this->project->getProducts($project->id);
+
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
@@ -1228,11 +1230,12 @@ class project extends control
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->view->title;
 
-        $this->view->project  = $project;
-        $this->view->products = $this->project->getProducts($project->id);
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->actions  = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->project      = $project;
+        $this->view->products     = $products;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

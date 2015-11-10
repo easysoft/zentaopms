@@ -110,7 +110,20 @@
           <tr>
             <th><?php echo $lang->project->products;?></th>
             <td>
-              <?php foreach($products as $productID => $product) echo html::a($this->createLink('product', 'browse', "productID=$productID"), $product->name) . '<br />';?>
+            <?php 
+            foreach($products as $productID => $product) 
+            {
+                if($product->type !== 'normal')
+                {
+                    echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . '/' . $branchGroups[$productID][$product->branch]);
+                }
+                else
+                {
+                    echo html::a($this->createLink('product', 'browse', "productID=$productID"), $product->name);
+                }
+                echo '<br />';
+            }
+            ?>
             </td>
           </tr>
           <tr>
