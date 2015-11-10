@@ -22,7 +22,7 @@ function syncModule(rootID, type)
         {
             if(value)
             {
-                $('#sonModule .input-group:last').after($inputgroup);
+                $('#sonModule').append($inputgroup);
                 $('#sonModule .input-group:last input').val(value);
             }
         })

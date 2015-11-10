@@ -850,43 +850,46 @@ class storyModel extends model
      * Set stage of a story.
      * 
      * @param  int    $storyID 
-     * @param  string $customStage 
      * @access public
      * @return bool
      */
-    public function setStage($storyID, $customStage = '')
+    public function setStage($storyID)
     {
         $storyID = (int)$storyID;
-        /* Custom stage defined, use it. */
-        if($customStage)
-        {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($customStage)->where('id')->eq((int)$storyID)->exec();
-            return true;
-        }
 
         /* Get projects which status is doing. */
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
+        $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $projects = $this->dao->select('t1.project,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
             ->where('t1.story')->eq($storyID)
-            ->andWhere('t2.status')->ne('done')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs('project', 'branch');
+
+        $hasBranch = ($product->type != 'normal' and empty($story->branch));
+        $stages    = array();
+        if($hasBranch and $story->plan)
+        {
+            $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('branch', 'branch');
+            foreach($plans as $branch) $stages[$branch] = 'planned';
+        }
 
         /* If no projects, in plan, stage is planned. No plan, wait. */
         if(!$projects)
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq('')->exec();
+
+            foreach($stages as $branch => $stage) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
             $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere('plan')->ne('')->exec();
             return true;
         }
 
-        $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
-        $branches = array();
-        foreach($projects as $projectID => $branch) $branches[$branch] = $branch;
-        unset($branches[0]);
+        if($hasBranch)
+        {
+            foreach($projects as $projectID => $branch) $stages[$branch] = 'projected';
+        }
 
         /* Search related tasks. */
         $tasks = $this->dao->select('type,project,status')->from(TABLE_TASK)
@@ -898,19 +901,14 @@ class storyModel extends model
             ->fetchGroup('type');
 
         /* No tasks, then the stage is projected. */
-        $hasBranch = ($product->type != 'normal' and empty($story->branch) and $branches);
         if(!$tasks)
         {
-            if($hasBranch)
-            {
-                foreach($branches as $branch) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
-            }
+            foreach($stages as $branch => $stage) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
             $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq($storyID)->exec();
             return true;
         }
 
         /* Get current stage and set as default value. */
-        $taskProjects = array();
         $currentStage = $story->stage;
         $stage = $currentStage;
 
@@ -930,15 +928,14 @@ class storyModel extends model
                 $branch = $projects[$task->project];
                 if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
                 $branchStatusList[$branch][$task->type][$status] ++;
-                $taskProjects[$task->project] = $task->project;
                 if($type == 'devel')
                 {
-                    if(!isset($develTasks[$branch])) $develTasks[$branch] = 0;
+                    if(!isset($branchDevelTasks[$branch])) $branchDevelTasks[$branch] = 0;
                     $branchDevelTasks[$branch] ++;
                 }
                 elseif($type == 'test')
                 {
-                    if(!isset($testTasks[$branch])) $testTasks[$branch] = 0;
+                    if(!isset($branchTestTasks[$branch])) $branchTestTasks[$branch] = 0;
                     $branchTestTasks[$branch] ++;
                 }
             }
@@ -963,14 +960,31 @@ class storyModel extends model
             if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
 
-            if($hasBranch and $branch) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
+            $stages[$branch] = $stage;
         }
 
-        foreach($projects as $projectID => $branch)
+        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
+        foreach($releases as $branch) $stages[$branch] = 'released';
+
+        if($hasBranch)
         {
-            if(isset($taskProjects[$projectID])) continue;
-            $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
+            $stageList   = join(',', array_keys($this->lang->story->stageList));
+            $minStagePos = strlen($stageList);
+            $minStage    = '';
+            foreach($stages as $branch => $stage)
+            {
+                $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
+                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
+                {
+                    $minStage    = $stage;
+                    $minStagePos = strpos($stageList, $stage);
+                }
+            }
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($minStage)->where('id')->eq($storyID)->exec();
+        }
+        else
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq(current($stages))->where('id')->eq($storyID)->exec();
         }
 
         return;
@@ -993,10 +1007,11 @@ class storyModel extends model
         {
             unset($branch[0]);
             $branch = join(',', $branch);
+            if($branch) $branch = "0,$branch";
         }
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
-            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->beginIF($branch)->andWhere("branch")->in("$branch")->fi()
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
@@ -1477,6 +1492,20 @@ class storyModel extends model
     }
 
     /**
+     * Get story stages.
+     * 
+     * @param  array    $stories 
+     * @access public
+     * @return array
+     */
+    public function getStoryStages($stories)
+    {
+        return $this->dao->select('*')->from(TABLE_STORYSTAGE)
+            ->where('story')->in($stories)
+            ->fetchGroup('story', 'branch');
+    }
+
+    /**
      * Check need confirm.
      * 
      * @param  array    $dataList 
@@ -1826,16 +1855,27 @@ class storyModel extends model
     public function mergePlanTitle($productID, $stories, $branch = 0)
     {
         $query = $this->dao->get();
+        if(is_array($branch))
+        {
+            unset($branch[0]);
+            $branch = join(',', $branch);
+            if($branch) $branch = "0,$branch";
+        }
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($productID)
-            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'title');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('branch')->in($branch)->fetchGroup('story', 'branch');
+
+        $branch = trim(str_replace(',0,', '', ",$branch,"), ',');
+        $branch = empty($branch) ? 0 : $branch;
         foreach($stories as $story)
         {
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
+            if(empty($story->branch) and isset($stages[$story->id][$branch])) $story->stage = $stages[$story->id][$branch]->stage;
         }
 
         /* For save session query. */

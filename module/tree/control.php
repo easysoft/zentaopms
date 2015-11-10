@@ -30,7 +30,6 @@ class tree extends control
             $product = $this->loadModel('product')->getById($rootID);
             if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($product->id);
             $this->view->root = $product;
-            $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }
         /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
@@ -65,6 +64,7 @@ class tree extends control
 
             $this->view->allProduct     = $products;
             $this->view->currentProduct = $currentProduct;
+            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
 
             $title      = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
             $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);

@@ -86,7 +86,7 @@
                     echo html::input("modules[]", '', 'class="form-control"');
                     if($hasBranch) echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::select("branch[]", $branches, $branch, 'class="form-control"');
                     echo "<span class='input-group-addon fix-border'><a href='javascript:;' onclick='addItem(this)'><i class='icon icon-plus'></i></a></span>";
-                    echo "<span class='input-group-addon fix-border'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>";
+                    echo "<span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>";
                     echo '</div>';
                 }
                 ?>
