@@ -80,7 +80,7 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
         <td class='text-right'>
           <?php
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
-          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'flag-checkered', '', 'results iframe');
+          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe');
           common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
           common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
