@@ -125,6 +125,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('7.2.4'));
             case '7_2_5':
                 $this->adjustOrder7_3();
+            case '7_3':
+                $this->execSQL($this->getUpgradeFile('7.3'));
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -194,6 +196,7 @@ class upgradeModel extends model
         case '7_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.1'));
         case '7_2':
         case '7_2_4':     $confirmContent .= file_get_contents($this->getUpgradeFile('7.2.4'));
+        case '7_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
