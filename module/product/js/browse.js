@@ -17,4 +17,7 @@ $(function()
             $option.toggleClass('hide', $option.text().toString().toLowerCase().indexOf(val) < 0 && $option.data('key').toString().toLowerCase().indexOf(val) < 0);
         });
     });
+
+    $('.popoverStage').mouseover(function(){$(this).popover('show')});
+    $('.popoverStage').mouseout(function(){$(this).popover('hide')});
 })

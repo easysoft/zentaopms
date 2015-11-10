@@ -58,7 +58,7 @@
   <a class='side-handle' data-id='productTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $branch ? $branches[$branch] : $productName;?></strong></div>
       <div class='panel-body'>
         <?php echo $moduleTree;?>
         <div class='text-right'>
@@ -100,14 +100,30 @@
           <?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
-        <td class='text-left' title="<?php echo $story->title?>"><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
+        <td class='text-left' title="<?php echo $story->title?>"><nobr>
+        <?php if($story->branch) echo "<span class='label label-info label-badge'>{$branches[$story->branch]}</span>"?>
+        <?php echo html::a($viewLink, $story->title);?>
+        </nobr></td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
         <td><?php echo $lang->story->sourceList[$story->source];?></td>
         <td><?php echo zget($users, $story->openedBy, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>
         <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
-        <td><?php echo $lang->story->stageList[$story->stage];?></td>
+        <td>
+          <?php
+          echo "<div" . (isset($storyStages[$story->id]) ? " class='popoverStage' data-toggle='popover' data-placement='bottom' data-target='\$next'" : '') . "'>";
+          echo $lang->story->stageList[$story->stage];
+          if(isset($storyStages[$story->id])) echo "<span class='pull-right'><i class='icon icon-caret-down'></i></span>";
+          echo '</div>';
+          if(isset($storyStages[$story->id]))
+          {
+              echo "<div class='popover'>";
+              foreach($storyStages[$story->id] as $storyBranch => $storyStage) echo $branches[$storyBranch] . ": " . $lang->story->stageList[$storyStage->stage] . '<br />';
+              echo "</div>";
+          }
+          ?>
+        </td>
         <td class='text-right'>
           <?php 
           $vars = "story={$story->id}";

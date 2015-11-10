@@ -42,7 +42,9 @@ class branchModel extends model
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('id_asc')->fetchPairs('id', 'name');
         if(strpos($params, 'noempty') === false)
         {
-            $product  = $this->loadModel('product')->getById($productID);
+            $product = $this->loadModel('product')->getById($productID);
+            if($product->type == 'normal') return array();
+
             $branches = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branches;
         }
         return $branches;

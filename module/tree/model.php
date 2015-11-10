@@ -271,15 +271,16 @@ class treeModel extends model
     {
         $branches = array($branch => '');
         $manage   = $userFunc[1] == 'createManageLink' ? true : false;
+        $product  = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $type) !== false and empty($branch))
         {
-            $product = $this->loadModel('product')->getById($rootID);
             if($product->type != 'normal') $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
 
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra)) $this->loadModel('testtask');
-        $lastMenu = '';
+        $lastMenu    = '';
+        $firstBranch = true;
         foreach($branches as $branchID => $branch)
         {
             $treeMenu = array();
@@ -290,6 +291,11 @@ class treeModel extends model
             if(!empty($branchID) and $branch and $branchID != 'null')
             {
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $this->createBranchLink($type, $rootID, $branchID, $branch);
+                if($firstBranch and $product->type != 'normal')
+                {
+                    $linkHtml = $this->lang->product->branchName[$product->type] . '<ul><li>' . $linkHtml;
+                    $firstBranch = false;
+                }
                 $lastMenu .= "<li>$linkHtml<ul>" . @array_shift($treeMenu) . "</ul></li>\n";
             }
             else
@@ -298,6 +304,7 @@ class treeModel extends model
             }
         }
 
+        if(!$firstBranch) $lastMenu .= '</li></ul>';
         $lastMenu = "<ul class='tree'>$lastMenu</ul>\n";
         return $lastMenu; 
     }

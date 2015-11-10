@@ -177,8 +177,8 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
         if($release->stories)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
-            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq('released')->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->exec();
+            $this->loadModel('story');
+            foreach($this->post->stories as $storyID) $this->story->setStage($storyID);
         }
     }
 
