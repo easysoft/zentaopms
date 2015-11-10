@@ -77,16 +77,16 @@
                     $disabled = $sonModule->type == $viewType ? '' : 'disabled="true"';
                     echo $hasBranch ? "<div class='input-group' style='margin-bottom:5px'>" : "<div style='margin-bottom:5px'>";
                     echo html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control"' . $disabled);
-                    if($hasBranch) echo '<span class="input-group-addon" style="padding:0px"></span>' . html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled');
+                    if($hasBranch) echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled');
                     echo '</div>';
                 }
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
                     echo "<div class='input-group' style='margin-bottom:5px'>";
                     echo html::input("modules[]", '', 'class="form-control"');
-                    if($hasBranch) echo '<span class="input-group-addon" style="padding:0px"></span>' . html::select("branch[]", $branches, $branch, 'class="form-control"');
-                    echo "<span class='input-group-addon'><a href='javascript:;' onclick='addItem(this)'><i class='icon icon-plus'></i></a></span>";
-                    echo "<span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>";
+                    if($hasBranch) echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::select("branch[]", $branches, $branch, 'class="form-control"');
+                    echo "<span class='input-group-addon fix-border'><a href='javascript:;' onclick='addItem(this)'><i class='icon icon-plus'></i></a></span>";
+                    echo "<span class='input-group-addon fix-border'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>";
                     echo '</div>';
                 }
                 ?>
