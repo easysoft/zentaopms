@@ -32,7 +32,7 @@
         if(common::hasPriv('release', 'changeStatus'))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-            echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-toggle-' . ($release->status == 'normal' ? 'off' : 'on') . '"></i> ' . $lang->release->statusList[$changedStatus], 'hiddenwin', "class='btn'");
+            echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->statusList[$changedStatus], 'hiddenwin', "class='btn'");
         }
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn'");
         if(common::hasPriv('release', 'linkBug'))   echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn'");

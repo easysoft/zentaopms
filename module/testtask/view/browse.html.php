@@ -23,15 +23,14 @@
   <thead>
   <?php $vars = "productID=$productID&branch=$branch&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <tr>
-      <th class='w-id'>  <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
-      <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-      <th>               <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
-      <th>               <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
-      <th class='w-user'><?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
-      <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
-      <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
-      <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-id'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-200px'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
+      <th>                <?php echo $lang->testtask->project . '/' . $lang->testtask->build;?>
+      <th class='w-user'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
+      <th class='w-100px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
+      <th class='w-100px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
+      <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
@@ -39,14 +38,19 @@
   <tr class='text-center'>
     <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
-    <td class='text-left' title="<?php echo $task->projectName?>"><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
-    <td class='text-left' title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+    <td title="<?php echo $task->projectName . '/' . $task->buildName?>">
+      <?php
+      echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName) . '/'; 
+      $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
+      ?>
+    </td>
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
     <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-center'>
       <?php
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'smile');
       common::printIcon('testtask', 'view',    "taskID=$task->id", '', 'list', 'file');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
@@ -61,7 +65,7 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot><tr><td colspan='8'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script>$(function(){$('#<?php echo $type?>Tab').addClass('active')})</script>
 <?php include '../../common/view/footer.html.php';?>
