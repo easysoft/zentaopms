@@ -15,7 +15,11 @@
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
 <div>
   <div id='titlebar'>
-    <div class='heading'><i class='icon-tags'></i> <?php echo $lang->release->browse;?>  </div>
+    <div class='heading'>
+      <i class='icon-tags'></i>
+      <?php if($product->type !== 'normal') echo '<span class="label label-info label-badge">' . $branches[$branch] . '</span>';?>
+      <?php echo $lang->release->browse;?>
+    </div>
     <div class='actions'>
       <?php common::printIcon('release', 'create', "product=$product->id&branch=$branch");?>
     </div>
