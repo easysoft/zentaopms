@@ -171,7 +171,7 @@ class treeModel extends model
                 {
                     $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task') OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                        ->orderBy('grade desc, type, `order`')
+                        ->orderBy('grade desc, branch, type, `order`')
                         ->fetchAll('id');
                 }
                 else
@@ -563,7 +563,7 @@ class treeModel extends model
             foreach($modules as $module)
             {
                 if(empty($module->branch)) $paths[$module->id] = $module->id;
-                if(isset($productGroups[$module->root][$module->branch])) $paths[$module->id] = $module->id;
+                if(isset($productGroups[$module->root][0]) or isset($productGroups[$module->root][$module->branch])) $paths[$module->id] = $module->id;
             }
         }
 

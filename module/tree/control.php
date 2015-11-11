@@ -306,7 +306,7 @@ class tree extends control
         if($returnType == 'html')
         {
             $changeFunc = '';
-            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'testcase') $changeFunc = "onchange='loadModuleRelated()'";
+            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
             $output = html::select("module", $optionMenu, '', "class='form-control' $changeFunc");
             if(count($optionMenu) == 1 and $needManage)
             {
