@@ -71,7 +71,7 @@
                     $disabled = $sonModule->type == 'task' ? '' : 'disabled="true"';
                     echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=form-control ' . $disabled) . '</span>';
                 }
-                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=form-control') . '</span>';
+                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=form-control') . html::hidden('branch[]', empty($module) ? 0 : $module->branch) . '</span>';
                 ?>
               </td>
             </tr>

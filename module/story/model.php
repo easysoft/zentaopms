@@ -1288,6 +1288,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($type == 'byProduct')->andWhere('t1.product')->eq($param)->fi()
+            ->beginIF($type == 'byBrach')->andWhere('t2.branch')->eq($param)->fi()
             ->beginIF($type == 'byModule' and $param)->andWhere('t2.module')->in($modules)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy($orderBy)
