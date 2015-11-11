@@ -25,15 +25,16 @@
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
       <tr>
-        <th class='w-80px'><?php echo $lang->testcase->lblProductAndModule;?></th>
-        <td class='w-p25-f'>
+        <th class='w-80px'><?php echo $lang->testcase->product;?></th>
+        <td class='w-p45-f'>
           <div class='input-group'>
             <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen'");?>
-            <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+            <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
           </div>
         </td>
-        <td class='w-p25-f' style='padding-left:15px'>
+        <td style='padding-left:15px;'>
           <div class='input-group' id='moduleIdBox'>
+          <span class="input-group-addon"><?php echo $lang->testcase->module?></span>
           <?php 
           echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
@@ -60,7 +61,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->lblStory;?></th>
-        <td colspan='3'>
+        <td colspan='2'>
           <div class='input-group' id='storyIdBox'>
             <?php echo html::select('story', $stories, $storyID, 'class="form-control chosen" onchange="setPreview();" data-no_results_text="' . $lang->searchMore . '"');?>
             <span class='input-group-btn' style='width: 0.01%'>
@@ -75,7 +76,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->title;?></th>
-        <td colspan='3'>
+        <td colspan='2'>
           <div class='row'>
             <div class='col-sm-10'>
               <?php echo html::input('title', $caseTitle, "class='form-control'");?>
@@ -91,11 +92,11 @@
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->precondition;?></th>
-        <td colspan='3'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->steps;?></th>
-        <td colspan='3'>
+        <td colspan='2'>
           <table class='table table-form mg-0' style='border: 1px solid #ddd'>
             <thead>
               <tr>
@@ -126,14 +127,15 @@
       </tr>
       <tr>
         <th><?php echo $lang->testcase->keywords;?></th>
-        <td colspan='3'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
+        <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
       </tr>  
        <tr>
         <th><?php echo $lang->testcase->files;?></th>
-        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
       <tr>
-        <td colspan='4' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
+        <th></th>
+        <td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?> </td>
       </tr>
     </table>
   </form>
@@ -154,4 +156,5 @@
     </div>
   </div>
 </div>
+<?php js::set('caseModule', $lang->testcase->module)?>
 <?php include '../../common/view/footer.html.php';?>

@@ -181,7 +181,11 @@ function loadProductModules(productID)
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&needManage=true');
-    $('#moduleIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+    $('#moduleIdBox').load(link, function()
+    {
+        $(this).find('select').chosen(defaultChosenOptions)
+        if(typeof(bugModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + bugModule + "</span>")
+    });
 }
 
 /**
@@ -372,7 +376,7 @@ function loadProductBranches(productID)
         if(data)
         {
             $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', page == 'create' ? '100px' : '65px');
+            $('#branch').css('width', page == 'create' ? '120px' : '65px');
         }
     })
 }
