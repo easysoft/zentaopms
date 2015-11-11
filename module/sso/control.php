@@ -183,4 +183,61 @@ class sso extends control
         $this->view->data  = $ssoData;
         $this->display();
     }
+
+    /**
+     * Get pairs of user.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getUserPairs()
+    {
+        $users = $this->loadModel('user')->getPairs('noclosed,nodeleted');
+        die(json_encode($users));
+    }
+
+    /**
+     * Get bind users with ranzhi.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getBindUsers()
+    {
+        $users = $this->sso->getBindUsers();
+        die(json_encode($users));
+    }
+
+    /**
+     * Bind user from ranzhi.
+     * 
+     * @access public
+     * @return void
+     */
+    public function bindUser()
+    {
+        if($_POST)
+        {
+            $this->dao->update(TABLE_USER)->set('ranzhi')->eq('')->where('ranzhi')->eq($this->post->ranzhiAccount)->exec();
+            $this->dao->update(TABLE_USER)->set('ranzhi')->eq($this->post->ranzhiAccount)->where('account')->eq($this->post->zentaoAccount)->exec();
+            if(dao::isError()) die(dao::getError());
+            die('success');
+        }
+    }
+
+    /**
+     * Create user from ranzhi.
+     * 
+     * @access public
+     * @return void
+     */
+    public function createUser()
+    {
+        if($_POST)
+        {
+            $result = $this->sso->createUser();
+            if($result['status'] != 'success') die($result['data']);
+            die('success');
+        }
+    }
 }
