@@ -265,7 +265,7 @@ class story extends control
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
         $this->view->branch           = $branch;
-        $this->view->branchGroups     = $this->loadModel('branch')->getByProducts($productID);
+        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }
