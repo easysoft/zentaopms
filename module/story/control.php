@@ -253,6 +253,7 @@ class story extends control
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->batchCreate;
         $this->view->products         = $products;
+        $this->view->product          = $product;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $plans; 
@@ -264,6 +265,7 @@ class story extends control
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
         $this->view->branch           = $branch;
+        $this->view->branchGroups     = $this->loadModel('branch')->getByProducts($productID);
 
         $this->display();
     }
