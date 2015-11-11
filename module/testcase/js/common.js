@@ -42,7 +42,7 @@ function loadProductBranches(productID)
         if(data)
         {
             $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', '65px');
+            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
         }
     })
 }
@@ -70,7 +70,11 @@ function loadProductModules(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&needManage=true');
-    $('#moduleIdBox').load(link, function(){$(this).find('select').chosen(defaultChosenOptions)});
+    $('#moduleIdBox').load(link, function()
+    {
+        $(this).find('select').chosen(defaultChosenOptions)
+        if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
+    });
     setStories();
 }
 

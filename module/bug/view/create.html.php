@@ -30,15 +30,16 @@ js::set('refresh', $lang->refresh);
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
       <tr>
-        <th class='w-110px'><?php echo $lang->bug->lblProductAndModule;?></th>
+        <th class='w-110px'><?php echo $lang->bug->product;?></th>
         <td class='w-p45-f'>
           <div class='input-group'>
             <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen' autocomplete='off'");?>
-            <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control' style='width:100px'");?>
+            <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control' style='width:120px'");?>
           </div>
         </td>
         <td>
           <div class='input-group' id='moduleIdBox'>
+            <span class="input-group-addon"><?php echo $lang->bug->module?></span>
             <?php
             echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
             if(count($moduleOptionMenu) == 1)
@@ -181,4 +182,5 @@ js::set('refresh', $lang->refresh);
     </table>
   </form>
 </div>
+<?php js::set('bugModule', $lang->bug->module);?>
 <?php include '../../common/view/footer.html.php';?>
