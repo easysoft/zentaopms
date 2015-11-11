@@ -62,5 +62,8 @@ $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = '正常維護';
 $lang->release->statusList['terminate'] = '停止維護';
 
+$lang->release->changeStatusList['normal']    = '激活';
+$lang->release->changeStatusList['terminate'] = '停止維護';
+
 $lang->release->action = new stdclass();
-$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'statusList');
+$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
