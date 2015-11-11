@@ -266,10 +266,11 @@ class fileModel extends model
         preg_match_all('/<img src="(data:image\/(\S+);base64,(\S+))".*\/>/U', $data, $out);
         foreach($out[3] as $key => $base64Image)
         {
-            if(!in_array($out[2][$key], $this->config->file->imageExtensions)) die();
+            $extension = strtolower($out[2][$key]);
+            if(!in_array($extension, $this->config->file->imageExtensions)) die();
             $imageData = base64_decode($base64Image);
 
-            $file['extension'] = $out[2][$key];
+            $file['extension'] = $extension;
             $file['pathname']  = $this->setPathName($key, $file['extension']);
             $file['size']      = strlen($imageData);
             $file['addedBy']   = $this->app->user->account;

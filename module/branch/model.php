@@ -100,4 +100,3 @@ class branchModel extends model
         return $branchGroups;
     }
 }
-

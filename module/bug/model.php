@@ -885,7 +885,7 @@ class bugModel extends model
             ->andWhere('toStory')->eq(0)
             ->andWhere('openedDate')->ge($project->begin)
             ->andWhere('openedDate')->le($project->end)
-            ->andWhere("(status = 'active' OR resolvedDate > {$project->end})")
+            ->andWhere("(status = 'active' OR resolvedDate > '{$project->end}')")
             ->andWhere('openedBuild')->notin($beforeBuilds)
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->fetchAll();

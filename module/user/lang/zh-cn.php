@@ -38,7 +38,7 @@ $lang->user->mobile      = '手机';
 $lang->user->phone       = '电话';
 $lang->user->address     = '通讯地址';
 $lang->user->zipcode     = '邮编';
-$lang->user->join        = '入职时间';
+$lang->user->join        = '入职日期';
 $lang->user->visits      = '访问次数';
 $lang->user->ip          = '最后IP';
 $lang->user->last        = '最后登录';
@@ -140,7 +140,6 @@ $lang->user->placeholder->account   = '英文、数字和下划线的组合，�
 $lang->user->placeholder->password1 = '六位以上';
 $lang->user->placeholder->role      = '职位影响内容和用户列表的顺序。';
 $lang->user->placeholder->group     = '分组决定用户的权限列表。';
-$lang->user->placeholder->join      = '入职日期';
 $lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
 $lang->user->placeholder->verify    = '需要输入你的密码加以验证';
 

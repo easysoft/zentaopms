@@ -176,6 +176,7 @@ class bug extends control
         $this->view->moduleID     = $moduleID;
         $this->view->memberPairs  = $memberPairs;
         $this->view->branch       = $branch;
+        $this->view->branches     = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }
@@ -325,7 +326,7 @@ class bug extends control
         }
         else
         {
-            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'noempty,release,noterminate,nodone');
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 

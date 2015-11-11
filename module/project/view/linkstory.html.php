@@ -29,6 +29,7 @@
       <th><?php echo $lang->story->product;?></th>
       <th><?php echo $lang->story->title;?></th>
       <th><?php echo $lang->story->plan;?></th>
+      <th><?php echo $lang->branch->common;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
       <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
     </tr>
@@ -48,6 +49,7 @@
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
       <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
+      <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
     </tr>

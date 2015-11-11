@@ -586,19 +586,20 @@ class project extends control
         if($products) $productID = key($products);
 
         /* Assign. */
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->productID  = $productID;
-        $this->view->stories    = $stories;
-        $this->view->summary    = $this->product->summary($stories);
-        $this->view->orderBy    = $orderBy;
-        $this->view->type       = $type;
-        $this->view->param      = $param;
-        $this->view->storyTasks = $storyTasks;
-        $this->view->moduleTree = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
-        $this->view->tabID      = 'story';
-        $this->view->users      = $users;
-        $this->view->pager      = $pager;
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->productID    = $productID;
+        $this->view->stories      = $stories;
+        $this->view->summary      = $this->product->summary($stories);
+        $this->view->orderBy      = $orderBy;
+        $this->view->type         = $type;
+        $this->view->param        = $param;
+        $this->view->storyTasks   = $storyTasks;
+        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
+        $this->view->tabID        = 'story';
+        $this->view->users        = $users;
+        $this->view->pager        = $pager;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
 
         $this->display();
     }
@@ -1531,11 +1532,19 @@ class project extends control
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
+        $productPairs = array();
+        foreach($products as $product)
+        {
+            $branches[$product->branch] = $product->branch;
+            $productPairs[$product->id] = $product->name;
+        }
+
+
         /* Build search form. */
         unset($this->config->product->search['fields']['module']);
         $this->config->product->search['actionURL'] = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         unset($this->lang->story->statusList['draft']);
         unset($this->config->product->search['fields']['branch']);
@@ -1554,19 +1563,19 @@ class project extends control
         }
         else
         {
-            foreach($products as $product) $branches[$product->branch] = $product->branch;
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active');
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->project    = $project;
-        $this->view->products   = $products;
-        $this->view->allStories = $allStories;
-        $this->view->prjStories = $prjStories;
-        $this->view->browseType = $browseType;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->project      = $project;
+        $this->view->products     = $products;
+        $this->view->allStories   = $allStories;
+        $this->view->prjStories   = $prjStories;
+        $this->view->browseType   = $browseType;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->display();
     }
 

@@ -171,6 +171,7 @@ class testcase extends control
         $this->view->param         = $param;
         $this->view->cases         = $cases;
         $this->view->branch        = $branch;
+        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }

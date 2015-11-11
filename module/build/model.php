@@ -122,19 +122,15 @@ class buildModel extends model
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
             ->fetchAll('build');
 
+        /* Filter done projects and terminate releases, replace build name with release name. */
         $builds = array();
         foreach($productBuilds as $key => $build)
         {
+            if((strpos($params, 'nodone')      !== false) and ($build->projectStatus === 'done'))      continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            if((strpos($params, 'nodone') !== false) and ($build->projectStatus === 'done')) continue;
-            if($build->project) 
-            {
-                $builds[$key] = $build->name;
-            }
-            else if(isset($releases[$key]) and !$releases[$key]->deleted)
-            {
-                $builds[$key] = $releases[$key]->name; 
-            }
+
+            if($build->project) $builds[$key] = $build->name;
+            if(isset($releases[$key]) and !$releases[$key]->deleted) $builds[$key] = $releases[$key]->name; 
         }
 
         if(!$builds) return $sysBuilds;

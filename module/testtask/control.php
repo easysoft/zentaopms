@@ -324,6 +324,7 @@ class testtask extends control
         $this->view->moduleID    = $moduleID;
         $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
         $this->view->pager       = $pager;
+        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }

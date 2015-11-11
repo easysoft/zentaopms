@@ -125,7 +125,13 @@ js::set('moduleID', $moduleID);
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
 
         <?php $class = 'confirm' . $bug->confirmed;?>
-        <td class='text-left' title="<?php echo $bug->title?>"><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
+        <td class='text-left' title="<?php echo $bug->title?>">
+          <?php
+          echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>";
+          if($bug->branch)echo "<span class='label label-info label-badge'>{$branches[$bug->branch]}</span>";
+          echo html::a($bugLink, $bug->title);
+          ?>
+        </td>
         <td class='bug-<?php echo $bug->status?>'><?php echo $bug->needconfirm ? "<span class='warning'>{$lang->story->changed}</span>" : $lang->bug->statusList[$bug->status];?></td>
 
         <?php if($browseType == 'needconfirm'):?>

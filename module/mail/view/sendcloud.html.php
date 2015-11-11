@@ -29,14 +29,14 @@ include '../../common/view/header.html.php';
         <th><?php echo $lang->mail->accessKey; ?></th>
         <td>
           <div class='required required-wrapper'></div>
-          <?php echo html::input('accessKey', $mailConfig->accessKey, "class='form-control'");?>
+          <?php echo html::input('accessKey', isset($mailConfig->accessKey) ? $mailConfig->accessKey : '', "class='form-control'");?>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->secretKey; ?></th>
         <td>
           <div class='required required-wrapper'></div>
-          <?php echo html::input('secretKey', $mailConfig->secretKey, "class='form-control'");?>
+          <?php echo html::input('secretKey', isset($mailConfig->secretKey) ? $mailConfig->secretKey : '', "class='form-control'");?>
         </td>
       </tr>
       <tr>

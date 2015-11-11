@@ -22,10 +22,10 @@ include '../../common/view/header.html.php';
     <tr>
       <td class='text-center'>
         <?php if(common::hasPriv('mail', 'detect')):?>
-        <?php echo html::a(inlink('detect'), $lang->mail->smtp, '', "class='btn btn-default w-150px'")?>
+        <?php echo html::a(inlink('detect'), $lang->mail->smtp, '', "class='btn btn-sm w-120px'")?>
         <?php endif;?>
         <?php if($this->app->getClientLang() != 'en' and common::hasPriv('mail', 'sendCloud')):?>
-        <?php echo html::a(inlink('sendCloud'), $lang->mail->sendCloud, '', "class='btn btn-default w-150px'")?>
+        <?php echo html::a(inlink('sendCloud'), $lang->mail->sendCloud, '', "class='btn btn-sm w-120px'")?>
         <?php endif;?>
       </td>
     </tr>

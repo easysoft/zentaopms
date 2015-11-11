@@ -204,7 +204,7 @@
                 {
                     unset($plans['']);
                     $plans      = array(0 => $lang->null) + $plans;
-                    $withSearch = count($plans) > 10;
+                    $withSearch = count($plans) > 8;
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript:;', $lang->story->planAB, '', "id='planItem'");
                     echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
