@@ -38,6 +38,14 @@ class custom extends control
         $this->app->loadLang($module);
         $this->app->loadConfig('story');
         $fieldList = $this->lang->$module->$field;
+
+        if($module == 'bug' and $field == 'typeList')
+        {
+            unset($fieldList['designchange']);
+            unset($fieldList['newfeature']);
+            unset($fieldList['trackthings']);
+        }
+
         if(!empty($_POST))
         {
             if($module == 'story' && $field == 'review')
