@@ -59,8 +59,11 @@ $lang->release->exportTypeList['bug']     = 'Bug';
 $lang->release->exportTypeList['leftbug'] = '遗留Bug';
 
 $lang->release->statusList['']          = '';
-$lang->release->statusList['normal']    = '正常维护';
+$lang->release->statusList['normal']    = '正常';
 $lang->release->statusList['terminate'] = '停止维护';
 
+$lang->release->changeStatusList['normal']    = '激活';
+$lang->release->changeStatusList['terminate'] = '停止维护';
+
 $lang->release->action = new stdclass();
-$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'statusList');
+$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
