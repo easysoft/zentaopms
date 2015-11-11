@@ -28,4 +28,4 @@ ALTER TABLE `zt_story` ADD `plan` text COLLATE 'utf8_general_ci' NOT NULL AFTER 
 UPDATE `zt_story` SET `plan`='' WHERE `plan`='0';
 
 ALTER TABLE `zt_release` DROP INDEX `name`;
-ALTER TABLE `zt_user` ADD `bindRanzhi` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `locked`;
+ALTER TABLE `zt_user` ADD `ranzhi` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `locked`;
