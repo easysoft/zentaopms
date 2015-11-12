@@ -441,6 +441,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
+        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
         $this->display();
     }
 

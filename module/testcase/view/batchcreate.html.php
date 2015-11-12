@@ -17,7 +17,11 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->testcase->batchCreate;?></strong>
+    <strong>
+      <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
+      <?php if($this->session->currentProductType !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
+      <?php echo $lang->testcase->batchCreate;?>
+    </strong>
     <?php if($story):?>
     <small class='text-muted'><?php echo html::icon($lang->icons['story']) . ' ' . $story->title ?></small>
     <?php endif;?>

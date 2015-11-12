@@ -417,6 +417,7 @@ class testcase extends control
         $this->view->type             = $type;
         $this->view->title            = $title;
         $this->view->branch           = $branch;
+        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }

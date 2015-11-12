@@ -15,7 +15,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <i class='icon-flag'></i>
-    <?php if($product->type !== 'normal') echo '<span class="label label-info label-badge">' . $branches[$branch] . '</span>';?>
+    <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     <?php echo $lang->productplan->browse;?>
   </div>
   <div class='actions'>
