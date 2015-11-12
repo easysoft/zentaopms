@@ -45,10 +45,11 @@ class buildModel extends model
      */
     public function getProjectBuilds($projectID)
     {
-        return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
+        return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC, t1.id desc')

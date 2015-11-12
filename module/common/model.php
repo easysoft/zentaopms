@@ -159,8 +159,8 @@ class commonModel extends model
             if(stripos($method, 'downnotify') !== false) return true;
         }
 
-        if(stripos($method, 'ajaxgetdropmenu') !== false and $this->app->user->account == 'guest') return true;
-        if(stripos($method, 'ajaxgetmatcheditems') !== false and $this->app->user->account == 'guest') return true;
+        if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
+        if(stripos($method, 'ajaxgetmatcheditems') !== false) return true;
         if($method == 'ajaxgetdetail' and $this->app->viewType == 'mhtml') return true;
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
