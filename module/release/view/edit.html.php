@@ -28,12 +28,6 @@ js::set('oldReleasedBuild' , $release->build);
   </div>
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
     <table class='table table-form'> 
-      <?php if($product->type != 'normal'):?>
-      <tr>
-        <th class='w-110px'><?php echo $lang->product->branch;?></th>
-        <td><?php echo html::select('branch', $branches, $branch, "onchange='loadBranchBuilds(this.value)' class='form-control chosen'");?></td>
-      </tr>
-      <?php endif;?>
       <tr>
         <th class='w-90px'><?php echo $lang->release->name;?></th>
         <td class='w-p25-f'><?php echo html::input('name', $release->name, "class='form-control'");?></td><td></td>

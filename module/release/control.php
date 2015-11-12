@@ -64,7 +64,7 @@ class release extends control
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 
-        $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch);
+        $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
         $releaseBuilds = $this->release->getReleaseBuilds($productID, $branch);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -114,7 +114,7 @@ class release extends control
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk', false);
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
         $this->display();
     }
                                                           

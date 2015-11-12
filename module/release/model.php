@@ -116,8 +116,11 @@ class releaseModel extends model
             $buildID = $this->dao->lastInsertID();
         }
 
+        $branch = 0;
+        if($this->post->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
         $release = fixer::input('post')
             ->add('product', (int)$productID)
+            ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
             ->join('stories', ',')
             ->join('bugs', ',')
@@ -149,7 +152,12 @@ class releaseModel extends model
     public function update($releaseID)
     {
         $oldRelease = $this->getByID($releaseID);
+
+        $branch = $oldRelease->branch;
+        if($oldRelease->build != $this->post->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
+
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
+            ->add('branch',  (int)$branch)
             ->remove('files,labels,allchecker')
             ->get();
         $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->edit['id']);
