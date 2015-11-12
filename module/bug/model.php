@@ -332,13 +332,16 @@ class bugModel extends model
      */
     public function getActiveAndPostponedBugs($products, $projectID, $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_BUG)
-            ->where("((status = 'resolved' AND resolution = 'postponed') OR (status = 'active'))")
-            ->andWhere('toTask')->eq(0)
-            ->andWhere('toStory')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('deleted')->eq(0)
+        return $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product = t2.product')
+            ->where("((t1.status = 'resolved' AND t1.resolution = 'postponed') OR (t1.status = 'active'))")
+            ->andWhere('t1.toTask')->eq(0)
+            ->andWhere('t1.toStory')->eq(0)
+            ->beginIF(!empty($products))->andWhere('t1.product')->in($products)->fi()
+            ->beginIF(empty($products))->andWhere('t1.project')->eq($projectID)->fi()
+            ->andWhere('t2.project')->eq($projectID)
+            ->andWhere("(t2.branch = '0' OR t1.branch = '0' OR t2.branch = t1.branch)")
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();

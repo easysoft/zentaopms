@@ -506,6 +506,7 @@ class project extends control
         unset($this->config->bug->search['fields']['resolvedBuild']);
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
+        unset($this->config->bug->search['fields']['branch']);
         unset($this->config->bug->search['params']['resolvedBy']);
         unset($this->config->bug->search['params']['closedBy']);
         unset($this->config->bug->search['params']['status']);
@@ -516,6 +517,7 @@ class project extends control
         unset($this->config->bug->search['params']['resolvedBuild']);
         unset($this->config->bug->search['params']['resolvedDate']);
         unset($this->config->bug->search['params']['closedDate']);
+        unset($this->config->bug->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */

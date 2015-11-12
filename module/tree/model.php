@@ -90,7 +90,7 @@ class treeModel extends model
         if(strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if($product->type != 'normal')
+            if($product and $product->type != 'normal')
             {
                 $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
                 if($branch)
