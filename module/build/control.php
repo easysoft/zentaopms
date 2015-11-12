@@ -220,7 +220,7 @@ class build extends control
         if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
         if($varName == 'resolvedBuild')
         { 
-            $params = ($type == 'all') ? '' : 'noempty, noterminate, nodone';
+            $params = ($type == 'all') ? '' : 'noterminate, nodone';
             die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch, $params), $build, "class='form-control'"));
         }
     }
@@ -249,7 +249,7 @@ class build extends control
         if($varName == 'openedBuilds') die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
         if($varName == 'resolvedBuild')
         { 
-            $params = ($type == 'all') ? '' : 'noempty, noterminate, nodone';
+            $params = ($type == 'all') ? '' : 'noterminate, nodone';
             die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params), $build, "class='form-control'"));
         }
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, "class='form-control'"));
@@ -267,7 +267,7 @@ class build extends control
      */
     public function ajaxGetBranchBuilds($productID, $branchID, $operation, $build = '')
     {
-        $builds         = $this->build->getProductBuildPairs($productID, $branchID);
+        $builds         = $this->build->getProductBuildPairs($productID, $branchID, 'notrunk', false);
         $releasedBuilds = $this->loadModel('release')->getReleaseBuilds($productID, $branchID);
 
         if($operation == 'editRelease')
@@ -282,7 +282,6 @@ class build extends control
         {
             foreach($releasedBuilds as $buildID) unset($builds[$buildID]);
         }
-        unset($builds['trunk']); 
 
         die(html::select('build', $builds, $build, "class='form-control'"));
     }
