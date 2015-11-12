@@ -264,7 +264,7 @@ class productplanModel extends model
     public function unlinkBug($bugID)
     {
         $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fetch('plan');
-        $this->dao->update(TABLE_STORY)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
+        $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
     }
 }
