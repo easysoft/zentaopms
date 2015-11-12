@@ -232,6 +232,7 @@ fieldset > .form-group {margin-bottom: 0;}
 .placeholder {color: #999}
 
 /* === Views === */
+
 /* Table form */
 .table-form > tbody > tr > th {text-align:right;vertical-align:middle; border-bottom:none}
 .table-form > tbody > tr > th.text-left, .table-form > tbody > tr > tr.text-left th {text-align:left;vertical-align:middle; border-bottom:none}
@@ -257,7 +258,8 @@ fieldset > .form-group {margin-bottom: 0;}
 /* Table condensed */
 .table-condensed th, .table-condensed td {padding: 6px 5px; line-height: 18px}
 
- .input-group > select.form-control {float:left; margin-left: -1px;} 
+ .input-group > select.form-control {float:left; margin-left: -1px;}
+ .input-group-addon {background-color: #f5f5f5;}
 
 /* chosen container in input group */
 .input-group > .chosen-container {display: table-cell;}
