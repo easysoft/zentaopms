@@ -87,7 +87,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         {
             common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', '', "hiddenwin");
         }
-        if($user->bindRanzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+        if($user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
         ?>
       </td>
     </tr>
