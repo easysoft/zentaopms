@@ -78,6 +78,7 @@ $lang->resource->my->profile        = 'profile';
 $lang->resource->my->dynamic        = 'dynamic';
 $lang->resource->my->editProfile    = 'editProfile';
 $lang->resource->my->changePassword = 'changePassword';
+$lang->resource->my->unbind         = 'unbind';
 
 $lang->my->methodOrder[0]  = 'index';
 $lang->my->methodOrder[5]  = 'todo';
@@ -91,6 +92,7 @@ $lang->my->methodOrder[40] = 'profile';
 $lang->my->methodOrder[45] = 'dynamic';
 $lang->my->methodOrder[50] = 'editProfile';
 $lang->my->methodOrder[55] = 'changePassword';
+$lang->my->methodOrder[60] = 'unbind';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
@@ -1107,3 +1109,4 @@ $lang->changelog['7.4'][] = 'release-changeStatus';
 $lang->changelog['7.4'][] = 'user-unbind';
 $lang->changelog['7.4'][] = 'branch-manage';
 $lang->changelog['7.4'][] = 'branch-delete';
+$lang->changelog['7.4'][] = 'my-unbind';

@@ -15,6 +15,7 @@ $lang->my->profile        = '我的档案';
 $lang->my->dynamic        = '我的动态';
 $lang->my->editProfile    = '修改档案';
 $lang->my->changePassword = '修改密码';
+$lang->my->unbind         = '解除然之绑定';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派给我';

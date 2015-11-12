@@ -15,6 +15,7 @@ $lang->my->profile        = 'Profile';
 $lang->my->dynamic        = 'Dynamic';
 $lang->my->editProfile    = 'Edit profile';
 $lang->my->changePassword = 'Change password';
+$lang->my->unbind         = 'Unbind ranzhi';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'To me';
