@@ -52,11 +52,12 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -162,7 +163,7 @@ class testcase extends control
         $this->view->position[]    = $this->lang->testcase->common;
         $this->view->productID     = $productID;
         $this->view->productName   = $this->products[$productID];
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'));
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
         $this->view->moduleID      = $moduleID;
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter');
@@ -184,10 +185,11 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = 0, $groupBy = 'stroy')
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'stroy')
     {
         $groupBy   = empty($groupBy) ? 'stroy' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
 
         $this->app->loadLang('testtask');
 
@@ -231,7 +233,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function create($productID, $branch = 0, $moduleID = 0, $from = '', $param = 0, $storyID = 0)
+    public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0)
     {
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
@@ -267,6 +269,7 @@ class testcase extends control
 
         /* Set productID and currentModuleID. */
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         if($storyID and empty($moduleID))
         {
             $story    = $this->loadModel('story')->getByID($storyID);
@@ -371,7 +374,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $branch = 0, $moduleID = 0, $storyID = 0)
+    public function batchCreate($productID, $branch = '', $moduleID = 0, $storyID = 0)
     {
         $this->loadModel('story');
         if(!empty($_POST))
@@ -384,6 +387,7 @@ class testcase extends control
 
         /* Set productID and currentModuleID. */
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         if($storyID and empty($moduleID))
         {
             $story    = $this->loadModel('story')->getByID($storyID);

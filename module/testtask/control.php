@@ -49,13 +49,14 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $type = 'wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $type = 'wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         $this->testtask->setMenu($this->products, $productID, $branch);
 
         /* Load pager. */
