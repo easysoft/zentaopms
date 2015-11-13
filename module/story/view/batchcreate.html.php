@@ -16,8 +16,8 @@
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
-      <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
       <?php echo $lang->story->batchCreate;?>
+      <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </strong>
     <div class='actions'>
       <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn' data-width='600px'")?>
