@@ -58,7 +58,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='7' class='text-left'>
+        <td colspan='8' class='text-left'>
           <div class='table-actions clearfix'>
             
           <?php 
