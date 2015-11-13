@@ -33,12 +33,12 @@ $(function()
 
 function addItem()
 {
-    var item = $('#addItem').html().replace(/%i%/g, i).replace(/%memberCount%/g, memberCount);
+    var item = $('#addItem').html().replace(/%i%/g, i);
     $('#submit').before('<tr class="addedItem">' + item  + '</tr>');
-    $('#accounts' + memberCount).trigger('liszt:updated');
-    $('#accounts' + memberCount).chosen(defaultChosenOptions);
+    var accounts = $('#submit').closest('table').find('tr.addedItem:last').find('select:first')
+    accounts.trigger('liszt:updated');
+    accounts.chosen(defaultChosenOptions);
     i ++;
-    memberCount ++;
 }
 
 function deleteItem(obj)
