@@ -31,3 +31,17 @@ $(function()
     $('#importTeams a').click(function(){importTeam($(this).data('id')); $('#importTeamModal').modal('hide')});
 });
 
+function addItem()
+{
+    var item = $('#addItem').html().replace(/%i%/g, i).replace(/%memberCount%/g, memberCount);
+    $('#submit').before('<tr class="addedItem">' + item  + '</tr>');
+    $('#accounts' + memberCount).trigger('liszt:updated');
+    $('#accounts' + memberCount).chosen(defaultChosenOptions);
+    i ++;
+    memberCount ++;
+}
+
+function deleteItem(obj)
+{
+    $(obj).closest('.addedItem').remove();
+}

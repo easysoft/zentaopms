@@ -32,7 +32,7 @@
     <th>               <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
     <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
     <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
-    <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+    <th class='w-80px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
     <th class='w-100px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
