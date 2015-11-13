@@ -1105,8 +1105,8 @@ $lang->changelog['7.3'][] = 'cron-openProcess';
 $lang->changelog['7.3'][] = 'mail-sendCloud';
 $lang->changelog['7.3'][] = 'mail-sendcloudUser';
 
-$lang->changelog['7.4'][] = 'release-changeStatus';
-$lang->changelog['7.4'][] = 'user-unbind';
-$lang->changelog['7.4'][] = 'branch-manage';
-$lang->changelog['7.4'][] = 'branch-delete';
-$lang->changelog['7.4'][] = 'my-unbind';
+$lang->changelog['7.4.beta'][] = 'release-changeStatus';
+$lang->changelog['7.4.beta'][] = 'user-unbind';
+$lang->changelog['7.4.beta'][] = 'branch-manage';
+$lang->changelog['7.4.beta'][] = 'branch-delete';
+$lang->changelog['7.4.beta'][] = 'my-unbind';

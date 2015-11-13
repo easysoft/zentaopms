@@ -127,7 +127,7 @@ class upgradeModel extends model
                 $this->adjustOrder7_3();
             case '7_3':
                 $this->execSQL($this->getUpgradeFile('7.3'));
-                $this->adjustPriv7_4();
+                $this->adjustPriv7_4_beta();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -963,12 +963,12 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 7.4 
+     * Adjust priv for 7.4.beta 
      * 
      * @access public
      * @return void
      */
-    public function adjustPriv7_4()
+    public function adjustPriv7_4_beta()
     {
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('name')->ne('guest')->fetchPairs('id', 'id');
         foreach($groups as $groupID)
