@@ -1134,7 +1134,7 @@ class storyModel extends model
      */
     public function getByField($productID, $branch, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
     {
-        if(!$this->loadModel('common')->checkField(TABLE_STORY, $type)) return array();
+        if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName)) return array();
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)

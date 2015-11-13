@@ -106,7 +106,8 @@ class build extends control
         $this->view->position[]    = $this->lang->build->edit;
         $this->view->productGroups = $productGroups;
         $this->view->products      = $products;
-        $this->view->branches      = $build->productType == 'normal' ? array() : $this->loadModel('branch')->getPairs($build->product);
+        $this->view->product       = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
+        $this->view->branches      = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
         $this->view->build         = $build;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
         $this->view->orderBy       = $orderBy;
