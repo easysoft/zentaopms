@@ -480,7 +480,8 @@ class router
         {
             foreach($_COOKIE as $cookieKey => $cookieValue)
             {
-                if(preg_match('/[^a-zA-Z0-9=_\- ,`+\/\.]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
+                if(preg_match('/[^a-zA-Z0-9_\.]/', $cookieKey)) unset($_COOKIE[$cookieKey]);
+                if(preg_match('/[^a-zA-Z0-9=_\- ,`+\/\.%\x7f-\xff]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
             }
         }
 
@@ -495,14 +496,18 @@ class router
                         $extension = ltrim(strrchr($fileName, '.'), '.');
                         if(strrpos($this->config->file->dangers, $extension) !== false)
                         {
-                            foreach($files as $fileKey => $value) unset($_FILES[$varName][$fileKey][$i]);
+                            foreach($files as $fileKey => $value)
+                            {
+                                unset($_FILES);
+                                break 2;
+                            }
                         }
                     }
                 }
                 else
                 {
                     $extension = ltrim(strrchr($files['name'], '.'), '.');
-                    if(strrpos($this->config->file->dangers, $extension) !== false) $_FILES[$varName] = array();
+                    if(strrpos($this->config->file->dangers, $extension) !== false) unset($_FILES);
                 }
             }
         }
@@ -1234,7 +1239,8 @@ class router
         /* Check params from URL. */
         foreach($passedParams as $param => $value)
         {
-            if(preg_match('/[^a-zA-Z0-9=_,`+\/\.]/', $value)) die('Error params!');
+            if(preg_match('/[^a-zA-Z0-9_\.]/', $param)) die('Bad Request!');
+            if(preg_match('/[^a-zA-Z0-9=_,`+\/\.%]/', $value)) die('Bad Request!');
         }
 
         /* If not strict mode, the keys of passed params and default params must be the same order. */
