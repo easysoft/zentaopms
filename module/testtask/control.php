@@ -418,7 +418,7 @@ class testtask extends control
 
         $this->view->task      = $task;
         $this->view->projects  = $this->product->getProjectPairs($productID);
-        $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
 
         $this->display();
@@ -818,7 +818,7 @@ class testtask extends control
 
         $this->view->case    = $case;
         $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($case->product);
+        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($case->product, $branch = 0, $params = '');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());
