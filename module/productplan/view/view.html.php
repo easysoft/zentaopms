@@ -120,7 +120,7 @@
                           echo "<div class='btn-group'>" . html::selectButton() . '</div>';
                           echo "<div class='btn-group dropup'>";
                           $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");
-                          echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink')\"");
+                          echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', '', this)\"");
                           echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                           echo "<ul class='dropdown-menu'>";
                           echo "<li class='dropdown-submenu'>";
@@ -135,7 +135,7 @@
                               foreach($plans as $planID => $planName)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID=$plan->id");
-                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
                               }
                               if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                               echo '</ul>';

@@ -114,6 +114,15 @@
       <th><?php echo $lang->user->zipcode;?></th>
       <td><?php echo $user->zipcode;?></td>
     </tr>
+    <?php if($user->ranzhi):?>
+    <tr>
+      <th><?php echo $lang->user->ranzhi;?></th>
+      <td>
+        <?php echo $user->ranzhi . ' ';?>
+        <?php if(common::hasPriv('my', 'unbind')) echo html::a($this->createLink('my', 'unbind'), "<i class='icon-unlink'></i>", 'hiddenwin', "class='bin-icon' title='{$lang->user->unbind}'");?>
+      </td>
+    </tr>
+    <?php endif;?>
   </table>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -23,7 +23,7 @@ class ssoModel extends model
      */
     public function getBindUser($user)
     {
-        return $this->dao->select('*')->from(TABLE_USER)->where('bindRanzhi')->eq($user)->andWhere('deleted')->eq('0')->fetch();
+        return $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($user)->andWhere('deleted')->eq('0')->fetch();
     }
 
     /**
@@ -52,8 +52,8 @@ class ssoModel extends model
             $password = md5($data->bindPassword);
             $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->bindUser)->andWhere('password')->eq($password)->andWhere('deleted')->eq('0')->fetch();
             if(empty($user))die(js::alert($this->lang->sso->bindNoUser));
-            $user->bindRanzhi = $this->session->ssoData->account;
-            $this->dao->update(TABLE_USER)->set('bindRanzhi')->eq($user->bindRanzhi)->where('id')->eq($user->id)->exec();
+            $user->ranzhi = $this->session->ssoData->account;
+            $this->dao->update(TABLE_USER)->set('ranzhi')->eq($user->ranzhi)->where('id')->eq($user->id)->exec();
         }
         elseif($data->bindType == 'add')
         {
@@ -73,7 +73,7 @@ class ssoModel extends model
             $user->realname   = $data->realname;
             $user->gender     = isset($data->gender) ? $data->gender : '';
             $user->email      = $data->email;
-            $user->bindRanzhi = $this->session->ssoData->account;
+            $user->ranzhi     = $this->session->ssoData->account;
 
             $this->dao->insert(TABLE_USER)->data($user)
                 ->autoCheck()

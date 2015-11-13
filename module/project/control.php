@@ -351,21 +351,24 @@ class project extends control
             die(js::locate(inlink('importTask', "toProject=$toProject&fromProject=$fromProject"), 'parent'));
         }
 
-        $project   = $this->commonAction($toProject);
-        $projects  = $this->project->getProjectsToImport();
+        $project  = $this->commonAction($toProject);
+        $branches = $this->project->getProjectBranches($toProject);
+        $tasks    = $this->project->getTasks2Imported($branches);
+        $projects = $this->project->getProjectsToImport(array_keys($tasks));
         unset($projects[$toProject]);
+        unset($tasks[$toProject]);
 
         if($fromProject == 0)
         {
             $tasks2Imported = array();
             foreach($projects as $id  => $projectName)
             {
-                $tasks2Imported = array_merge($tasks2Imported, $this->project->getTasks2Imported($id));
+                $tasks2Imported = array_merge($tasks2Imported, $tasks[$id]);
             }
         }
         else
         {
-            $tasks2Imported = $this->project->getTasks2Imported($fromProject);
+            $tasks2Imported = $tasks[$fromProject];
         }
 
         /* Save session. */
@@ -506,6 +509,7 @@ class project extends control
         unset($this->config->bug->search['fields']['resolvedBuild']);
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
+        unset($this->config->bug->search['fields']['branch']);
         unset($this->config->bug->search['params']['resolvedBy']);
         unset($this->config->bug->search['params']['closedBy']);
         unset($this->config->bug->search['params']['status']);
@@ -516,6 +520,7 @@ class project extends control
         unset($this->config->bug->search['params']['resolvedBuild']);
         unset($this->config->bug->search['params']['resolvedDate']);
         unset($this->config->bug->search['params']['closedDate']);
+        unset($this->config->bug->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */

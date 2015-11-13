@@ -32,7 +32,7 @@
       <th><?php echo $lang->build->filePath;?></th>
       <th class='w-date'><?php echo $lang->build->date;?></th>
       <th class='w-user'><?php echo $lang->build->builder;?></th>
-      <th class='w-90px'><?php echo $lang->actions;?></th>
+      <th class='w-120px'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
@@ -40,14 +40,21 @@
   <tr class='text-center'>
     <td><?php echo $build->id;?></td>
     <td><?php echo $build->productName;?></td>
-    <td class='text-left'><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
+    <td class='text-left'>
+      <?php if($build->branchName) echo "<span class='label label-info label-badge'>{$build->branchName}</span>"?>
+      <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
+    </td>
     <td class='text-left' title="<?php echo $build->scmPath?>"><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
     <td class='text-left' title="<?php echo $build->filePath?>"><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
     <td><?php echo $build->date?></td>
     <td><?php echo $users[$build->builder]?></td>
     <td class='text-right'>
       <?php 
-      common::printIcon('testtask', 'create', "product=$build->product&project=$project->id&build=$build->id", '', 'list', 'check');
+      if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view'))
+      {
+          echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn-icon' title='{$lang->build->linkStory}'");
+      }
+      common::printIcon('testtask', 'create', "product=$build->product&project=$project->id&build=$build->id", '', 'list', 'bullhorn');
       $lang->project->bug = $lang->project->viewBug;
       common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", '', 'list');
       common::printIcon('build', 'edit',   "buildID=$build->id", '', 'list');

@@ -554,12 +554,13 @@ function setForm()
  * @access public
  * @return void
  */
-function setFormAction(actionLink, hiddenwin)
+function setFormAction(actionLink, hiddenwin, obj)
 {
-    if(hiddenwin) $('form').attr('target', hiddenwin);
-    else $('form').removeAttr('target');
+    $form = typeof(obj) == 'undefined' ? $('form') : $(obj).closest('form');
+    if(hiddenwin) $form.attr('target', hiddenwin);
+    else $form.removeAttr('target');
 
-    $('form').attr('action', actionLink).submit();
+    $form.attr('action', actionLink).submit();
 }
 
 /**

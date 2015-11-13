@@ -465,4 +465,25 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * Unbind ranzhi 
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function unbind($confirm = 'no')
+    {
+        $this->loadModel('user');
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->user->confirmUnbind, $this->createLink('my', 'unbind', "confirm=yes")));
+        }
+        else
+        {
+            $this->user->unbind($this->app->user->account);
+            die(js::locate($this->createLink('my', 'profile'), 'parent'));
+        }
+    }
+
 }

@@ -126,10 +126,10 @@
       <th><?php echo $lang->user->zipcode;?></th>
       <td><?php echo $user->zipcode;?></td>
     </tr>
-    <?php if($user->bindRanzhi):?>
+    <?php if($user->ranzhi):?>
     <tr>
-      <th><?php echo $lang->user->bindRanzhi;?></th>
-      <td><?php echo $user->bindRanzhi;?></td>
+      <th><?php echo $lang->user->ranzhi;?></th>
+      <td><?php echo $user->ranzhi;?></td>
     </tr>
     <?php endif;?>
   </table>

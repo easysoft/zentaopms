@@ -61,11 +61,12 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $productID  = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -122,7 +123,7 @@ class bug extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
         {
@@ -141,7 +142,7 @@ class bug extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
-        $builds = $this->loadModel('build')->getProductBuildPairs(array_unique($productIdList));
+        $builds = $this->loadModel('build')->getProductBuildPairs(array_unique($productIdList), 0, $params = '');
         foreach($bugs as $key => $bug) 
         {
             $openBuildIdList = explode(',', $bug->openedBuild);
@@ -166,7 +167,7 @@ class bug extends control
         $this->view->productID    = $productID;
         $this->view->productName  = $this->products[$productID];
         $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->view->moduleTree   = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
+        $this->view->moduleTree   = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
         $this->view->browseType   = $browseType;
         $this->view->bugs         = $bugs;
         $this->view->users        = $users;
@@ -228,7 +229,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function create($productID, $branch = 0, $extras = '')
+    public function create($productID, $branch = '', $extras = '')
     {
         $this->view->users = $this->user->getPairs('nodeleted|devfirst|noclosed');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -265,6 +266,7 @@ class bug extends control
 
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->bug->setMenu($this->products, $productID, $branch);
 
@@ -386,7 +388,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $branch = 0, $projectID = 0, $moduleID = 0)
+    public function batchCreate($productID, $branch = '', $projectID = 0, $moduleID = 0)
     {
         if(!empty($_POST))
         {
@@ -397,6 +399,7 @@ class bug extends control
 
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->session->branch;
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* If projectID is setted, get builds and stories of this project. */
@@ -441,6 +444,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
+        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
         $this->display();
     }
 
@@ -486,7 +490,7 @@ class bug extends control
         $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($bug->branch);
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
 
         $this->display();

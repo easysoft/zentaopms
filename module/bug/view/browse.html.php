@@ -67,7 +67,7 @@ js::set('moduleID', $moduleID);
   <div class='side-body'>
     <div class='panel panel-sm'>
       <div class='panel-heading nobr'>
-        <?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong>
+        <?php echo html::icon($lang->icons['product']);?> <strong><?php echo $branch ? $branches[$branch] : $productName;?></strong>
       </div>
       <div class='panel-body'>
         <?php echo $moduleTree;?>

@@ -106,7 +106,8 @@ class build extends control
         $this->view->position[]    = $this->lang->build->edit;
         $this->view->productGroups = $productGroups;
         $this->view->products      = $products;
-        $this->view->branches      = $build->productType == 'normal' ? array() : $this->loadModel('branch')->getPairs($build->product);
+        $this->view->product       = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
+        $this->view->branches      = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
         $this->view->build         = $build;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
         $this->view->orderBy       = $orderBy;
@@ -255,37 +256,6 @@ class build extends control
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, "class='form-control'"));
     }
 
-   /**
-     * AJAX: get builds of a branch in html select.
-     *
-     * @param  int     $productID
-     * @param  int     $branchID 
-     * @param  string  $operation  the operation of creating a release or editing.
-     * @param  string  $build      build to selected.
-     * @access public
-     * @return string
-     */
-    public function ajaxGetBranchBuilds($productID, $branchID, $operation, $build = '')
-    {
-        $builds         = $this->build->getProductBuildPairs($productID, $branchID, 'notrunk', false);
-        $releasedBuilds = $this->loadModel('release')->getReleaseBuilds($productID, $branchID);
-
-        if($operation == 'editRelease')
-        {
-            foreach($releasedBuilds as $buildID)
-            {
-                if($build == $buildID) continue;
-                unset($builds[$buildID]);
-            }
-        }
-        if($operation == 'createRelease')
-        {
-            foreach($releasedBuilds as $buildID) unset($builds[$buildID]);
-        }
-
-        die(html::select('build', $builds, $build, "class='form-control'"));
-    }
-
     /**
      * Link stories
      * 
@@ -415,7 +385,7 @@ class build extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($build->product);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         unset($this->config->bug->search['fields']['branch']);
         unset($this->config->bug->search['params']['branch']);

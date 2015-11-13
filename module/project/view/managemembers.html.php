@@ -32,6 +32,8 @@
           <th><?php echo $lang->team->role;?></th>
           <th class='w-100px'><?php echo $lang->team->days;?></th>
           <th class='w-100px'><?php echo $lang->team->hours;?></th>
+          <th class="w-40px"> <?php echo $lang->actions;?></th>
+          <th class="w-40px"> <?php echo $lang->delete;?></th>
         </tr>
       </thead>
       <?php $i = 1; $memberCount = 0;?>
@@ -47,47 +49,64 @@
           <input type='hidden' name='modes[]' value='update' />
           <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
         </td>
+        <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
+        <td><a href='javascript:;' onclick='deleteItem()' class='disabled btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
       <?php $i ++; $memberCount ++;?>
       <?php endforeach;?>
 
       <?php foreach($members2Import as $member2Import):?>
-      <tr>
-        <td><?php echo html::select("accounts[$memberCount]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+      <tr class='addedItem'>
+        <td><?php echo html::select("accounts[]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
         <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->role;?>' /></td>
         <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
           <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->hours;?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
+        <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
+        <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
       <?php $i ++; $memberCount ++;?>
       <?php endforeach;?>
 
-      <?php
-      $count = count($users) - 1;
-      if($count > PROJECTMODEL::LINK_MEMBERS_ONE_TIME) $count = PROJECTMODEL::LINK_MEMBERS_ONE_TIME;
-      ?>
-
-      <?php for($j = 0; $j < $count; $j ++):?>
-      <tr>
-        <td><?php echo html::select("accounts[$memberCount]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
-        <td><input type='text' name='roles[]' id='role<?php echo ($i);?>' class='form-control' /></td>
-        <td><input type='text' name='days[]'  id='days<?php echo  ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
+      <?php for($j = 0; $j < 5; $j ++):?>
+      <tr class='addedItem'>
+        <td><?php echo html::select("accounts[]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+        <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
+        <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
           <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='7' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
+        <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
+        <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
       <?php $i ++; $memberCount ++;?>
       <?php endfor;?>
-      <tr>
-        <td colspan='4' class='text-center'>
+      <?php js::set('i', $i);?>
+
+      <tr id='submit'>
+        <td colspan='6' class='text-center'>
           <?php echo html::submitButton() ?>
         </td>
       </tr>
     </table>
   </form>
+  <?php $i = '%i%';?>
+  <table class='hidden'>
+    <tr id='addItem' class='hidden'>
+      <td><?php echo html::select("accounts[]", $users, '', "class='select-2' onchange='setRole(this.value, $i)'");?></td>
+      <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
+      <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
+      <td>
+        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='7' />
+        <input type='hidden' name='modes[]' value='create' />
+      </td>
+      <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
+      <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
+    </tr>
+  </table>
 </div>
 <div class='modal fade' id='importTeamModal'>
   <div class='modal-dialog mw-700px'>

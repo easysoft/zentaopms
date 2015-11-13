@@ -332,13 +332,16 @@ class bugModel extends model
      */
     public function getActiveAndPostponedBugs($products, $projectID, $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_BUG)
-            ->where("((status = 'resolved' AND resolution = 'postponed') OR (status = 'active'))")
-            ->andWhere('toTask')->eq(0)
-            ->andWhere('toStory')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('deleted')->eq(0)
+        return $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product = t2.product')
+            ->where("((t1.status = 'resolved' AND t1.resolution = 'postponed') OR (t1.status = 'active'))")
+            ->andWhere('t1.toTask')->eq(0)
+            ->andWhere('t1.toStory')->eq(0)
+            ->beginIF(!empty($products))->andWhere('t1.product')->in($products)->fi()
+            ->beginIF(empty($products))->andWhere('t1.project')->eq($projectID)->fi()
+            ->andWhere('t2.project')->eq($projectID)
+            ->andWhere("(t2.branch = '0' OR t1.branch = '0' OR t2.branch = t1.branch)")
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
@@ -613,10 +616,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
-        if($bug->resolvedBuild != 'trunk')
-        {
-            $bug->testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
-        }
+        if($bug->resolvedBuild != 'trunk') $bug->testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
 
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
@@ -625,6 +625,9 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
+
+        /* Link bug to build and release. */
+        $this->linkBugToBuild($bugID, $bug->resolvedBuild);
     }
 
     /**
@@ -649,9 +652,10 @@ class bugModel extends model
         $modules   = array();
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
-        foreach($bugIDList as $bugID)
+        foreach($bugIDList as $i => $bugID)
         {
             $oldBug = $bugs[$bugID];
+            if($oldBug->resolution == 'fixed' and $oldBug->resolvedBuild != $resolvedBuild) unset($bugIDList[$i]);
             if($oldBug->status != 'active') continue;
 
             $assignedTo = $oldBug->openedBy;
@@ -685,6 +689,9 @@ class bugModel extends model
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
         }
+
+        /* Link bug to build and release. */
+        $this->linkBugToBuild($bugIDList, $resolvedBuild);
     }
 
     /**
@@ -1041,7 +1048,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product);
+        $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product, $branch = 0, $params = '');
 
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data) 
@@ -1693,6 +1700,37 @@ class bugModel extends model
             if(!$this->session->bugOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->bugQueryCondition) . ')';
             return $this->session->bugQueryCondition;
         }
+        return true;
+    }
+
+    /**
+     * Link bug to build and release
+     * 
+     * @param  string|array    $bugs 
+     * @param  int    $resolvedBuild 
+     * @access public
+     * @return bool
+     */
+    public function linkBugToBuild($bugs, $resolvedBuild)
+    {
+        if(empty($resolvedBuild) or $resolvedBuild == 'trunk') return true;
+        if(is_array($bugs)) $bugs = join(',', $bugs);
+
+        $buildBugs  = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($resolvedBuild)->fetch('bugs');
+        $buildBugs .= ',' . $bugs;
+        $buildBugs  = explode(',', trim($buildBugs, ','));
+        $buildBugs  = array_unique($buildBugs);
+        $this->dao->update(TABLE_BUILD)->set('bugs')->eq(join(',', $buildBugs))->where('id')->eq($resolvedBuild)->exec();
+
+        $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();
+        if($release)
+        {
+            $releaseBugs = $release->bugs .',' . $bugs;
+            $releaseBugs = explode(',', trim($releaseBugs, ','));
+            $releaseBugs = array_unique($releaseBugs);
+            $this->dao->update(TABLE_RELEASE)->set('bugs')->eq(join(',', $releaseBugs))->where('id')->eq($release->id)->exec();
+        }
+
         return true;
     }
 }

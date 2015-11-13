@@ -24,7 +24,7 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
   <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $productName;?></strong></div>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $branch ? $branches[$branch] : $productName;?></strong></div>
       <div class='panel-body'>
         <?php echo $moduleTree;?>
         <div class='text-right'>

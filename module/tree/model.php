@@ -90,7 +90,7 @@ class treeModel extends model
         if(strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if($product->type != 'normal')
+            if($product and $product->type != 'normal')
             {
                 $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
                 if($branch)
@@ -370,6 +370,7 @@ class treeModel extends model
 
             /* tree menu. */
             $tree = '';
+            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
                 $treeMenu = array();
@@ -447,13 +448,14 @@ class treeModel extends model
 
             /* tree menu. */
             $tree = '';
+            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
                 $treeMenu = array();
                 $query = $this->dao->select('*')->from(TABLE_MODULE)->where("(root = $id and type = 'story')")
                     ->andWhere('branch')->eq($branch)
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                    ->orderBy('grade desc, type, `order`')
+                    ->orderBy('grade desc, branch, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
                 while($module = $stmt->fetch())
@@ -464,8 +466,6 @@ class treeModel extends model
                 }
                 if(isset($treeMenu[0]) and $branch)
                 {
-                    $link  = helper::createLink('project', 'story', "project=$rootID&ordery=&status=byBrach&praram=$branch");
-                    if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
                     $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch$branch'") . "<ul>{$treeMenu[0]}</ul></li>";
                 }
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';

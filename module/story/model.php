@@ -743,14 +743,14 @@ class storyModel extends model
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
-            if($this->session->currentProductType == 'normal' or empty($oldPlanID))
+            if($this->session->currentProductType == 'normal' or empty($oldPlanID) or $oldStory->branch)
             {
                 $story->plan = $planID;
             }
             elseif($oldPlanID)
             {
                 $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
-                if(empty($story->branch) or empty($plan->branch) or ($plan->branch == $oldStory->branch)) $story->plan .= ",$planID";
+                if(empty($story->branch)) $story->plan .= ",$planID";
             }
             if($planID) $story->stage = 'planned';
 
@@ -1011,7 +1011,7 @@ class storyModel extends model
         }
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
-            ->beginIF($branch)->andWhere("branch")->in("$branch")->fi()
+            ->beginIF($branch)->andWhere("branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
@@ -1134,7 +1134,7 @@ class storyModel extends model
      */
     public function getByField($productID, $branch, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
     {
-        if(!$this->loadModel('common')->checkField(TABLE_STORY, $type)) return array();
+        if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName)) return array();
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)

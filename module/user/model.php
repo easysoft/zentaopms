@@ -790,7 +790,7 @@ class userModel extends model
      */
     public function unbind($account)
     {
-        $this->dao->update(TABLE_USER)->set('bindRanzhi')->eq('')->where('account')->eq($account)->exec();
+        $this->dao->update(TABLE_USER)->set('ranzhi')->eq('')->where('account')->eq($account)->exec();
     }
 
     /**

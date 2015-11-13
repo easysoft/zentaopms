@@ -13,10 +13,20 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_branch`;
+CREATE TABLE IF NOT EXISTS `zt_branch` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `product` mediumint(8) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_bug`;
 CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL default '0',
+  `branch` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
   `plan` mediumint(8) unsigned NOT NULL default '0',
@@ -65,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
 CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL default '0',
+  `branch` mediumint(8) unsigned NOT NULL default '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
   `name` char(150) NOT NULL,
   `scmPath` char(255) NOT NULL,
@@ -89,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
 CREATE TABLE IF NOT EXISTS `zt_case` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL default '0',
+  `branch` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
   `path` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(30) unsigned NOT NULL default '0',
@@ -323,6 +335,7 @@ CREATE TABLE IF NOT EXISTS `zt_mailqueue` (
 CREATE TABLE IF NOT EXISTS `zt_module` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `root` mediumint(8) unsigned NOT NULL default '0',
+  `branch` mediumint(8) unsigned NOT NULL default '0',
   `name` char(60) NOT NULL default '',
   `parent` mediumint(8) unsigned NOT NULL default '0',
   `path` char(255) NOT NULL default '',
@@ -337,6 +350,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
+  `type` varchar(30) NOT NULL default 'normal',
   `status` varchar(30) NOT NULL default '',
   `desc` text NOT NULL,
   `PO` varchar(30) NOT NULL,
@@ -355,6 +369,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
 CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL,
+  `branch` mediumint(8) unsigned NOT NULL,
   `title` varchar(90) NOT NULL,
   `desc` text NOT NULL,
   `begin` date NOT NULL,
@@ -401,6 +416,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
 CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
+  `branch` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (`project`,`product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectstory`;
@@ -415,22 +431,25 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL default '0',
+  `branch` mediumint(8) unsigned NOT NULL default '0',
   `build` mediumint(8) unsigned NOT NULL,
   `name` char(30) NOT NULL default '',
   `date` date NOT NULL,
   `stories` text NOT NULL,
   `bugs` text NOT NULL,
+  `leftBugs` text NOT NULL,
   `desc` text NOT NULL,
+  `status` varchar(20) NOT NULL default 'normal',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL default '0',
+  `branch` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
-  `plan` mediumint(8) unsigned NOT NULL default '0',
+  `plan` text NOT NULL default '',
   `source` varchar(20) NOT NULL,
   `fromBug` mediumint(8) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL,
@@ -459,7 +478,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `version` smallint(6) NOT NULL default '1',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `product` (`product`,`module`,`plan`,`type`,`pri`),
+  KEY `product` (`product`,`module`,`type`,`pri`),
   KEY `status` (`status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storyspec`;
@@ -470,6 +489,12 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `spec` text NOT NULL,
   `verify` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_storystage`;
+CREATE TABLE IF NOT EXISTS `zt_storystage` (
+  `story` mediumint(8) unsigned NOT NULL,
+  `branch` mediumint(8) unsigned NOT NULL,
+  `stage` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
@@ -621,6 +646,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `last` int(10) unsigned NOT NULL default '0',
   `fails` tinyint(5) NOT NULL default '0',
   `locked` datetime NOT NULL default '0000-00-00 00:00:00',
+  `ranzhi` char(30) NOT NULL default '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `account` (`account`),
@@ -831,6 +857,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'my', 'testCase'),
 (1, 'my', 'testTask'),
 (1, 'my', 'todo'),
+(1, 'my', 'unbind'),
 (1, 'product', 'batchEdit'),
 (1, 'product', 'browse'),
 (1, 'product', 'close'),
@@ -845,6 +872,8 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'product', 'roadmap'),
 (1, 'product', 'view'),
 (1, 'product', 'updateOrder'),
+(1, 'branch', 'manage'),
+(1, 'branch', 'delete'),
 (1, 'productplan', 'batchUnlinkBug'),
 (1, 'productplan', 'batchUnlinkStory'),
 (1, 'productplan', 'browse'),
@@ -903,6 +932,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'release', 'unlinkBug'),
 (1, 'release', 'unlinkStory'),
 (1, 'release', 'view'),
+(1, 'release', 'changeStatus'),
 (1, 'report', 'bugAssign'),
 (1, 'report', 'bugCreate'),
 (1, 'report', 'index'),
@@ -1026,6 +1056,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'user', 'todo'),
 (1, 'user', 'unlock'),
 (1, 'user', 'view'),
+(1, 'user', 'unbind'),
 (2, 'action', 'editComment'),
 (2, 'api', 'getModel'),
 (2, 'bug', 'activate'),
@@ -1080,6 +1111,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (2, 'my', 'story'),
 (2, 'my', 'task'),
 (2, 'my', 'todo'),
+(2, 'my', 'unbind'),
 (2, 'product', 'browse'),
 (2, 'product', 'doc'),
 (2, 'product', 'dynamic'),
@@ -1238,6 +1270,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (3, 'my', 'testCase'),
 (3, 'my', 'testTask'),
 (3, 'my', 'todo'),
+(3, 'my', 'unbind'),
 (3, 'product', 'browse'),
 (3, 'product', 'doc'),
 (3, 'product', 'dynamic'),
@@ -1437,6 +1470,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4, 'my', 'testCase'),
 (4, 'my', 'testTask'),
 (4, 'my', 'todo'),
+(4, 'my', 'unbind'),
 (4, 'product', 'browse'),
 (4, 'product', 'doc'),
 (4, 'product', 'dynamic'),
@@ -1636,6 +1670,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5, 'my', 'testCase'),
 (5, 'my', 'testTask'),
 (5, 'my', 'todo'),
+(5, 'my', 'unbind'),
 (5, 'product', 'batchEdit'),
 (5, 'product', 'browse'),
 (5, 'product', 'close'),
@@ -1650,6 +1685,8 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5, 'product', 'roadmap'),
 (5, 'product', 'view'),
 (5, 'product', 'updateOrder'),
+(5, 'branch', 'manage'),
+(5, 'branch', 'delete'),
 (5, 'productplan', 'batchUnlinkBug'),
 (5, 'productplan', 'batchUnlinkStory'),
 (5, 'productplan', 'browse'),
@@ -1708,6 +1745,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5, 'release', 'unlinkBug'),
 (5, 'release', 'unlinkStory'),
 (5, 'release', 'view'),
+(5, 'release', 'changeStatus'),
 (5, 'report', 'bugAssign'),
 (5, 'report', 'bugCreate'),
 (5, 'report', 'index'),
@@ -1865,6 +1903,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (6, 'my', 'testCase'),
 (6, 'my', 'testTask'),
 (6, 'my', 'todo'),
+(6, 'my', 'unbind'),
 (6, 'product', 'browse'),
 (6, 'product', 'doc'),
 (6, 'product', 'dynamic'),
@@ -2062,6 +2101,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7, 'my', 'testCase'),
 (7, 'my', 'testTask'),
 (7, 'my', 'todo'),
+(7, 'my', 'unbind'),
 (7, 'product', 'batchEdit'),
 (7, 'product', 'browse'),
 (7, 'product', 'close'),
@@ -2076,6 +2116,8 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7, 'product', 'roadmap'),
 (7, 'product', 'view'),
 (7, 'product', 'updateOrder'),
+(7, 'branch', 'manage'),
+(7, 'branch', 'delete'),
 (7, 'productplan', 'batchUnlinkBug'),
 (7, 'productplan', 'batchUnlinkStory'),
 (7, 'productplan', 'browse'),
@@ -2117,6 +2159,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7, 'release', 'unlinkBug'),
 (7, 'release', 'unlinkStory'),
 (7, 'release', 'view'),
+(7, 'release', 'changeStatus'),
 (7, 'report', 'bugAssign'),
 (7, 'report', 'bugCreate'),
 (7, 'report', 'index'),
@@ -2269,6 +2312,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8, 'my', 'testCase'),
 (8, 'my', 'testTask'),
 (8, 'my', 'todo'),
+(8, 'my', 'unbind'),
 (8, 'product', 'browse'),
 (8, 'product', 'doc'),
 (8, 'product', 'dynamic'),
@@ -2456,6 +2500,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9, 'my', 'testCase'),
 (9, 'my', 'testTask'),
 (9, 'my', 'todo'),
+(9, 'my', 'unbind'),
 (9, 'product', 'browse'),
 (9, 'product', 'doc'),
 (9, 'product', 'dynamic'),
@@ -2548,6 +2593,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9, 'user', 'todo'),
 (9, 'user', 'unlock'),
 (9, 'user', 'view'),
+(9, 'user', 'unbind'),
 (10, 'action', 'editComment'),
 (10, 'api', 'getModel'),
 (10, 'bug', 'activate'),
@@ -2576,6 +2622,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (10, 'my', 'profile'),
 (10, 'my', 'task'),
 (10, 'my', 'todo'),
+(10, 'my', 'unbind'),
 (10, 'product', 'browse'),
 (10, 'product', 'doc'),
 (10, 'product', 'dynamic'),

@@ -45,10 +45,11 @@ class buildModel extends model
      */
     public function getProjectBuilds($projectID)
     {
-        return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
+        return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC, t1.id desc')
@@ -70,23 +71,21 @@ class buildModel extends model
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
-        $projectBuilds = $this->dao->select('t1.id, t1.name, t3.status as releaseStatus')->from(TABLE_BUILD)->alias('t1')
+        $projectBuilds = $this->dao->select('t1.id, t1.name, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
+            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF(strpos($params, 'nodone') !== false)->andWhere('t2.status')->ne('done')->fi()
+            ->beginIF(strpos($params, 'noterminate') !== false)->andWhere('t3.status')->ne('terminate')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
         /* Set builds and filter terminate releases. */
         $builds = array();
-        foreach($projectBuilds as $buildID => $build)
-        {
-            if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            $builds[$buildID] = $build->name;
-        }
+        foreach($projectBuilds as $buildID => $build) $builds[$buildID] = $build->name;
         if(!$builds) return $sysBuilds;
 
         /* if the build has been released, replace build name with release name. */
@@ -108,39 +107,37 @@ class buildModel extends model
      * @access public
      * @return string
      */
-    public function getProductBuildPairs($products, $branch = 0, $params = '', $replace = true)
+    public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
-        $productBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.status as releaseStatus')->from(TABLE_BUILD)->alias('t1')
+        $productBuilds = $this->dao->select('t1.id, t1.name, t1.project, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
+            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF(strpos($params, 'nodone') !== false)->andWhere('t2.status')->ne('none')->fi()
+            ->beginIF(strpos($params, 'noterminate') !== false)->andWhere('t3.status')->ne('terminate')->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
         /* Set builds and filter done projects and terminate releases. */
         $builds = array();
-        foreach($productBuilds as $key => $build)
-        {
-            if((strpos($params, 'nodone')      !== false) and ($build->projectStatus === 'done'))      continue;
-            if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            $builds[$key] = $build->name;
-        }
+        foreach($productBuilds as $key => $build) $builds[$key] = ((strpos($params, 'withbranch') !== false and $build->branchName) ? $build->branchName . '/' : '') . $build->name;
         if(!$builds) return $sysBuilds;
 
         /* if the build has been released and replace is true, replace build name with release name. */
-        $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
-            ->where('build')->in(array_keys($builds))
-            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs('');
         if($replace)
         {
-            foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
+            $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
+                ->where('build')->in(array_keys($builds))
+                ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            foreach($releases as $buildID => $releaseName) $builds[$buildID] = ((strpos($params, 'withbranch') !== false and $productBuilds[$buildID]->branchName) ? $productBuilds[$buildID]->branchName . '/' : '') . $releaseName;
         }
 
         return $sysBuilds + $builds;

@@ -782,7 +782,7 @@ class story extends control
      */
     public function batchChangePlan($planID, $oldPlanID = 0)
     {
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIDList = !empty($_POST['storyIDList']) ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
         $allChanges  = $this->story->batchChangePlan($storyIDList, $planID, $oldPlanID);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
