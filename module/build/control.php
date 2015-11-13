@@ -255,37 +255,6 @@ class build extends control
         if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, "class='form-control'"));
     }
 
-   /**
-     * AJAX: get builds of a branch in html select.
-     *
-     * @param  int     $productID
-     * @param  int     $branchID 
-     * @param  string  $operation  the operation of creating a release or editing.
-     * @param  string  $build      build to selected.
-     * @access public
-     * @return string
-     */
-    public function ajaxGetBranchBuilds($productID, $branchID, $operation, $build = '')
-    {
-        $builds         = $this->build->getProductBuildPairs($productID, $branchID, 'notrunk', false);
-        $releasedBuilds = $this->loadModel('release')->getReleaseBuilds($productID, $branchID);
-
-        if($operation == 'editRelease')
-        {
-            foreach($releasedBuilds as $buildID)
-            {
-                if($build == $buildID) continue;
-                unset($builds[$buildID]);
-            }
-        }
-        if($operation == 'createRelease')
-        {
-            foreach($releasedBuilds as $buildID) unset($builds[$buildID]);
-        }
-
-        die(html::select('build', $builds, $build, "class='form-control'"));
-    }
-
     /**
      * Link stories
      * 

@@ -89,7 +89,12 @@ class branch extends control
      */
     public function delete($branchID, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->branch->confirmDelete, inlink('delete', "branchID=$branchID&confirm=yes")));
+        if($confirm == 'no')
+        {
+            $this->app->loadLang('product');
+            $productType = $this->branch->getProductType($branchID);
+            die(js::confirm(str_replace('%branch%', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
+        }
 
         $this->branch->delete(TABLE_BRANCH, $branchID);
         die(js::reload('parent'));
