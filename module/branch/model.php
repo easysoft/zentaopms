@@ -99,4 +99,19 @@ class branchModel extends model
 
         return $branchGroups;
     }
+
+    /**
+     * Get product bype by branch.
+     * 
+     * @param  int    $branchID 
+     * @access public
+     * @return void
+     */
+    public function getProductType($branchID)
+    {
+        return $this->dao->select('t2.type')->from(TABLE_BRANCH)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.id')->eq($branchID)
+            ->fetch('type');
+    }
 }

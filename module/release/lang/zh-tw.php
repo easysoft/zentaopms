@@ -59,7 +59,7 @@ $lang->release->exportTypeList['bug']     = 'Bug';
 $lang->release->exportTypeList['leftbug'] = '遺留Bug';
 
 $lang->release->statusList['']          = '';
-$lang->release->statusList['normal']    = '正常維護';
+$lang->release->statusList['normal']    = '正常';
 $lang->release->statusList['terminate'] = '停止維護';
 
 $lang->release->changeStatusList['normal']    = '激活';
