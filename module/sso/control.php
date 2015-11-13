@@ -127,7 +127,7 @@ class sso extends control
      */
     public function ajaxSetConfig()
     {
-        if(!common::hasPriv('admin', 'sso')) die('fail');
+        if(strpos($this->app->company->admins, $this->app->user->account) === false) die('deny');
 
         if($_POST)
         {
