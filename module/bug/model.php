@@ -1048,7 +1048,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product);
+        $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product, $branch = 0, $params = '');
 
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data) 

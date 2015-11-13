@@ -107,7 +107,7 @@ class buildModel extends model
      * @access public
      * @return string
      */
-    public function getProductBuildPairs($products, $branch = 0, $params = '', $replace = true)
+    public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
