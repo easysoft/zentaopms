@@ -800,17 +800,16 @@ class projectModel extends model
 
     /**
      * Get projects to import 
-     * 
+     *
+     * @param  array  $projectIds 
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProjectsToImport()
+    public function getProjectsToImport($projectIds)
     {
-        $projects = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.project')
-            ->where('t2.status')->notIN('done,closed')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('id')->in($projectIds)
+            ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll('id');
 
@@ -876,18 +875,22 @@ class projectModel extends model
     }
 
     /**
-     * Get rasks can be imported.
+     * Get tasks can be imported.
      * 
-     * @param  int    $projectID 
+     * @param  array  $branches 
      * @access public
      * @return array
      */
-    public function getTasks2Imported($fromProject)
+    public function getTasks2Imported($branches)
     {
         $this->loadModel('task');
-        $tasks        = array();
-        $projectTasks = $this->task->getProjectTasks($fromProject, 'wait,doing,pause,cancel');
-        $tasks        = array_merge($tasks, $projectTasks); 
+        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.status')->in('wait, doing, pause, cancel')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere("(t1.story = 0 OR t2.branch in ('0','" . join("','", $branches) . "'))")
+            ->fetchGroup('project', 'id');
         return $tasks;
     }
 
@@ -1661,5 +1664,19 @@ class projectModel extends model
             if($order == $newOrder) continue;
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($newOrder)->where('id')->eq($id)->exec();
         }
+    }
+
+    /**
+     * Get branches of project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getProjectBranches($projectID)
+    {
+        return $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->fetchPairs();
     }
 }
