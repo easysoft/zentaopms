@@ -185,7 +185,7 @@ function resetForm(obj)
 {
     for(i = 1; i <= groupItems * 2; i ++)
     {
-        $(obj).parents('form').find('#value' + i).val('');
+        $(obj).parents('form').find('#value' + i).val('').trigger('chosen:updated');
     }
 }
 
