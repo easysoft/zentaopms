@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `stage` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ALTER TABLE `zt_story` ADD INDEX `product` (`product`, `module`, `type`, `pri`), DROP INDEX `product`;
-ALTER TABLE `zt_story` ADD `plan` text COLLATE 'utf8_general_ci' NOT NULL AFTER `module`;
+ALTER TABLE `zt_story` CHANGE `plan` `plan` text COLLATE 'utf8_general_ci' NOT NULL AFTER `module`;
 UPDATE `zt_story` SET `plan`='' WHERE `plan`='0';
 
 ALTER TABLE `zt_release` DROP INDEX `name`;
