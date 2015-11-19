@@ -45,7 +45,7 @@
         <th><?php echo $lang->todo->name;?></th>
         <td colspan='2'><div id='nameBox'>
           <?php
-          $readType = $todo->type != 'custom' ? 'readonly' : '';
+          $readType = ($todo->type == 'bug' or $todo->type == 'task') ? 'readonly' : '';
           echo html::input('name', $todo->name, "$readType class=form-control");
           ?>
           </div>

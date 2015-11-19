@@ -110,10 +110,10 @@ class todoModel extends model
     public function update($todoID)
     {
         $oldTodo = $this->getById($todoID);
-        if($oldTodo->type != 'custom') $oldTodo->name = '';
+        if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
-            ->setIF($this->post->type  != 'custom', 'name', '')
+            ->setIF($this->post->type  == 'bug' or $this->post->type == 'task', 'name', '')
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
@@ -166,7 +166,7 @@ class todoModel extends model
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $this->getById($todoID);
-                if($oldTodo->type != 'custom') $oldTodo->name = '';
+                if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
                     ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')               
