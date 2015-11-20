@@ -481,7 +481,7 @@ class router
             foreach($_COOKIE as $cookieKey => $cookieValue)
             {
                 if(preg_match('/[^a-zA-Z0-9_\.]/', $cookieKey)) unset($_COOKIE[$cookieKey]);
-                if(preg_match('/[^a-zA-Z0-9=_\- ,`+\/\.%\x7f-\xff]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
+                if(preg_match('/[^a-zA-Z0-9=_\|\- ,`+\/\.%\x7f-\xff]/', $cookieValue)) unset($_COOKIE[$cookieKey]);
             }
         }
 
@@ -1240,7 +1240,7 @@ class router
         foreach($passedParams as $param => $value)
         {
             if(preg_match('/[^a-zA-Z0-9_\.]/', $param)) die('Bad Request!');
-            if(preg_match('/[^a-zA-Z0-9=_,`+\/\.%]/', $value)) die('Bad Request!');
+            if(preg_match('/[^a-zA-Z0-9=_,`+\/\.%\|\x7f-\xff]/', trim($value))) die('Bad Request!');
         }
 
         /* If not strict mode, the keys of passed params and default params must be the same order. */
