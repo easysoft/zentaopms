@@ -49,12 +49,22 @@ class settingModel extends model
      */
     public function setItem($path, $value = '')
     {
+        /* fix bug when account has dot. */
+        $account = $this->app->user->account;
+        $replace = false;
+        if(strpos($path, $account) === 0)
+        {
+            $replace = true;
+            $path    = preg_replace("/^{$account}/", 'account', $path);
+        }
+
         $level    = substr_count($path, '.');
         $section = '';
 
         if($level <= 1) return false;
         if($level == 2) list($owner, $module, $key) = explode('.', $path);
         if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
+        if($replace) $owner = $account;
 
         $item = new stdclass();
         $item->owner   = $owner;
@@ -172,8 +182,7 @@ class settingModel extends model
             if(!isset($record->module)) return array();    // If no module field, return directly. Since 3.2 version, there's the module field.
             if(empty($record->module)) continue;
 
-            if($record->section)  $config[$record->owner]->{$record->module}[] = $record;
-            if(!$record->section) $config[$record->owner]->{$record->module}[] = $record;
+            $config[$record->owner]->{$record->module}[] = $record;
         }
         return $config;
     }
