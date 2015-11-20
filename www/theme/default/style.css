@@ -62,7 +62,7 @@ a,a:focus,a:active {text-decoration: none; outline:none;}
 .label-badge {padding: 2px 6px}
 
 /* dropdown */
-.dropdown-menu {min-width: 80px; padding: 4px 0; z-index:2222;}
+.dropdown-menu {min-width: 80px; padding: 4px 0; z-index:1020;}
 .dropdown-menu > li > a, .dropdown-header {font-size: 12px; padding: 5px 25px 5px 15px}
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:active {background: #f1f1f1; font-weight: bold;}
 .dropdown-menu > .active {position: relative;}
