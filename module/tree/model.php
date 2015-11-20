@@ -290,7 +290,8 @@ class treeModel extends model
             ksort($treeMenu);
             if(!empty($branchID) and $branch and $branchID != 'null')
             {
-                $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $this->createBranchLink($type, $rootID, $branchID, $branch);
+                $linkHtml = ($type == 'case' and !empty($extra)) ? $branch : $this->createBranchLink($type, $rootID, $branchID, $branch);
+                $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $linkHtml;
                 if($firstBranch and $product->type != 'normal')
                 {
                     $linkHtml = $this->lang->product->branchName[$product->type] . '<ul><li>' . $linkHtml;

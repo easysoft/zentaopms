@@ -115,6 +115,6 @@ class branch extends control
 
         $branches = $this->branch->getPairs($productID);
         if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
-        die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch()'"));
+        die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch(this)'"));
     }
 }

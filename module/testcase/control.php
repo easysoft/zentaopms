@@ -396,7 +396,7 @@ class testcase extends control
         $currentModuleID = (int)$moduleID;
 
         /* Set menu. */
-        $this->testcase->setMenu($this->products, $productID);
+        $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Init vars. */
         $type         = 'feature';

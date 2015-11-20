@@ -317,7 +317,7 @@ class testtask extends control
         $this->view->productName = $this->products[$productID];
         $this->view->task        = $task;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed,nodeleted,qafirst');
-        $this->view->moduleTree  = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID, $task->branch);
+        $this->view->moduleTree  = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;

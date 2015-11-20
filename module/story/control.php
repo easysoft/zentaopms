@@ -286,7 +286,7 @@ class story extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story', 0, $story->branch);
 
         /* Set menu. */
-        $this->product->setMenu($products, $product->id);
+        $this->product->setMenu($products, $product->id, $story->branch);
 
         /* Assign. */
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
@@ -609,7 +609,7 @@ class story extends control
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id);
+        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
 
         /* Set the review result options. */
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
@@ -678,7 +678,7 @@ class story extends control
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
         /* Set menu. */
-        $this->product->setMenu($this->product->getPairs(), $product->id);
+        $this->product->setMenu($this->product->getPairs(), $product->id, $story->branch);
 
         /* Set the closed reason options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);

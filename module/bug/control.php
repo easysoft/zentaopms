@@ -691,7 +691,7 @@ class bug extends control
         $bug = $this->bug->getById($bugID);
 
         /* Set menu. */
-        $this->bug->setMenu($this->products, $bug->product);
+        $this->bug->setMenu($this->products, $bug->product, $bug->branch);
 
         if(!empty($_POST))
         {
@@ -764,7 +764,7 @@ class bug extends control
 
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
-        $this->bug->setMenu($this->products, $productID);
+        $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -832,7 +832,7 @@ class bug extends control
         $assignedTo = $bug->openedBy;
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
 
-        $this->bug->setMenu($this->products, $productID);
+        $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -889,7 +889,7 @@ class bug extends control
 
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
-        $this->bug->setMenu($this->products, $productID);
+        $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -924,7 +924,7 @@ class bug extends control
 
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
-        $this->bug->setMenu($this->products, $productID);
+        $this->bug->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
