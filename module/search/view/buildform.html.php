@@ -23,7 +23,7 @@ include '../../common/view/chosen.html.php';
 #featurebar .nav {position: relative;}
 #featurebar .nav .dropdown .dropdown-menu{z-index:1010;}
 #querybox form{padding-right: 40px;}
-#querybox .form-control {padding: 2px; padding: 6px 2px\0;}
+#querybox .form-control {padding: 2px}
 @-moz-document url-prefix() {#querybox .form-control {padding: 6px 2px;}}
 #querybox .table {border: none}
 #querybox .table-form td {border: none}
@@ -378,7 +378,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </table>
     </td>
-    <td class='<?php echo $style == 'simple' ? 'w-60px' : 'w-150px'?>'> 
+    <td class='<?php echo $style == 'simple' ? 'w-80px' : 'w-160px'?>'> 
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
