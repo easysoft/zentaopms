@@ -1090,7 +1090,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $modules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(array_keys($datas))->fetchPairs();
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
         foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         return $datas;
     }

@@ -1031,6 +1031,31 @@ class treeModel extends model
     }
 
     /**
+     * Get modules name.
+     * 
+     * @param  array  $moduleIdList 
+     * @param  bool   $allPath 
+     * @access public
+     * @return array
+     */
+    public function getModulesName($moduleIdList, $allPath = true)
+    {
+        if(!$allPath) return $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->fetchPairs('id', 'name');
+
+        $modules     = $this->dao->select('id, name, path')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->fetchAll('path');
+        $allModules  = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(join(array_keys($modules)))->fetchPairs('id', 'name');
+        $modulePairs = array();
+        foreach($modules as $module)
+        {
+            $paths = explode(',', trim($module->path, ','));
+            $moduleName = '';
+            foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
+            $modulePairs[$module->id] = $moduleName;
+        }
+        return $modulePairs;
+    }
+
+    /**
      * Update modules' order.
      * 
      * @param  array   $orders 
