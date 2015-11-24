@@ -263,6 +263,8 @@ class productplan extends control
             die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
+        $this->session->set('storyList', inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
+
         $this->loadModel('story');
         $this->loadModel('tree');
         $plan = $this->productplan->getByID($planID);
@@ -380,6 +382,7 @@ class productplan extends control
             die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
+        $this->session->set('bugList', inlink('view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         $this->loadModel('bug');
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product, $plan->branch);

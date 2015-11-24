@@ -128,8 +128,7 @@ class release extends control
     public function view($releaseID, $type = 'story', $link = 'false', $param = '')
     {
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
-        if($type == 'bug')    $this->session->set('bugList', $this->app->getURI(true));
-        if($type == 'leftBug')$this->session->set('leftBugList', $this->app->getURI(true));
+        if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true));
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -329,6 +328,7 @@ class release extends control
             $this->release->linkStory($releaseID);
             die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
+        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
 
         $release = $this->release->getById($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build); 
@@ -429,6 +429,7 @@ class release extends control
             die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
+        $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         /* Set menu. */
         $release = $this->release->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build); 

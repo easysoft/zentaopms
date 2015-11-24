@@ -273,6 +273,7 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID&type=story"), 'parent'));
         }
 
+        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         $build = $this->build->getById($buildID);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
         $this->loadModel('story');
@@ -371,6 +372,7 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID&type=bug"), 'parent'));
         }
 
+        $this->session->set('bugList', inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         /* Set menu. */
         $build = $this->build->getByID($buildID);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
