@@ -69,3 +69,24 @@ tr, th, td {padding:5px}
   <?php endforeach;?>
 </table>
 <?php endif;?>
+
+<?php if(isset($mail->testtasks)):?>
+<table width='66%' align='center'>
+  <tr class='header'>
+    <th class='w-id'><?php echo $lang->report->idAB;?></th>
+    <th><?php echo $lang->report->testtaskName;?></th>
+  </tr>
+  <?php foreach($mail->testtasks as $testtask):?>
+  <tr>
+    <td><?php echo $testtask->id;?></td>
+    <td>
+    <?php
+    $link = $this->createLink('testtask', 'view', "testtask=$testtask->id");
+    if($config->requestType == 'GET' and strpos($link, 'ztcli') !== false) $link = str_replace($this->server->php_self, $config->webRoot, $link);
+    echo html::a($url . $link, $testtask->name);
+    ?>
+    </td>
+  </tr>
+  <?php endforeach;?>
+</table>
+<?php endif;?>
