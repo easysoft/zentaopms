@@ -29,9 +29,10 @@
   <tr class='colhead'>
     <th class='w-id'>    <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
     <th>                 <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
-    <th class='w-120px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
-    <th class='w-120px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-    <th class="w-120px {sorter: false}"><?php echo $lang->actions;?></th>
+    <th class='w-p50'>   <?php common::printOrderLink('desc',  $orderBy, $vars, $lang->productplan->desc);?></th>
+    <th class='w-100px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+    <th class='w-100px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
+    <th class="w-110px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -42,6 +43,7 @@
       <?php echo $plan->id;?>
     </td>
     <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
+    <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
     <td><?php echo $plan->begin;?></td>
     <td><?php echo $plan->end;?></td>
     <td class='text-center'>
@@ -62,7 +64,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan='5'>
+      <td colspan='6'>
         <?php echo html::selectButton();?>
         <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
         <?php $pager->show();?>
