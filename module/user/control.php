@@ -479,7 +479,7 @@ class user extends control
         {
             $this->user->update($userID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+            die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
         }
 
         $user       = $this->user->getById($userID);
@@ -513,7 +513,7 @@ class user extends control
         elseif($_POST)
         {
             if($this->post->account) $this->user->batchEdit();
-            die(js::locate($this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
+            die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
         }
         $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
@@ -585,7 +585,7 @@ class user extends control
         else
         {
             $this->user->cleanLocked($account);
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+            die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
         }
     }
 
@@ -606,7 +606,7 @@ class user extends control
         else
         {
             $this->user->unbind($account);
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+            die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
         }
     }
 
