@@ -441,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `desc` text NOT NULL,
   `status` varchar(20) NOT NULL default 'normal',
   `deleted` enum('0','1') NOT NULL default '0',
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
