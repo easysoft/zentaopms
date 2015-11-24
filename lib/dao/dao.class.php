@@ -429,6 +429,20 @@ class dao
     }
 
     /**
+     * Explain sql. 
+     * 
+     * @param  string $sql 
+     * @access public
+     * @return void
+     */
+    public function explain($sql = '')
+    {
+        $sql    = empty($sql) ? $this->processSQL() : $sql;
+        $result = $this->dbh->query('explain ' . $sql)->fetch();
+        a($result);
+    }
+
+    /**
      * Process the sql, replace the table, fields.
      * 
      * @access private
