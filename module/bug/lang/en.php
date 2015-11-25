@@ -354,7 +354,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Histories';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved         = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => 'resolutionList');
+$lang->bug->action->resolved         = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory          = array('main' => '$date, To story by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 $lang->bug->action->totask           = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 $lang->bug->action->linked2plan      = array('main' => '$date, Link to plan by <strong>$actor</strong>,ID is <strong>$extra</strong>。'); 

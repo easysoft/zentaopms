@@ -269,6 +269,21 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->objectID)->fetch('name');
                 if($name) $action->extra = html::a(helper::createLink('testtask', 'view', "testtaskID=$action->objectID"), "#$action->objectID " . $name);
             }
+            elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, ':')!== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = $extra;
+                    if($id)
+                    {
+                        $table = $action->objectType == 'story' ? TABLE_STORY : TABLE_BUG;
+                        $name  = $this->dao->select('title')->from($table)->where('id')->eq($id)->fetch('title');
+                        if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;

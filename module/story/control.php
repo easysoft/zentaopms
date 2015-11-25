@@ -666,7 +666,7 @@ class story extends control
         {
             $changes = $this->story->close($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
+            $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
             $this->sendmail($storyID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
@@ -713,7 +713,7 @@ class story extends control
             {
                 foreach($allChanges as $storyID => $changes)
                 {
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]));
+                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
                     $this->action->logHistory($actionID, $changes);
                     $this->sendmail($storyID, $actionID);
                 }

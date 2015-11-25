@@ -191,7 +191,7 @@ $lang->story->form->file      = 'Attachments, if the demand for related document
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, reviewed by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->closed              = array('main' => '$date, closed by <strong>$actor</strong>, reason is <strong>$extra</strong>.', 'extra' => 'reasonList');
+$lang->story->action->closed              = array('main' => '$date, closed by <strong>$actor</strong>, reason is <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->linked2plan         = array('main' => '$date, linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
 $lang->story->action->linked2project      = array('main' => '$date, linked to ' . $lang->projectCommon . ' <strong>$extra</strong> by <strong>$actor</strong>.'); 

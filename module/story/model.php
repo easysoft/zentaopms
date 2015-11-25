@@ -868,6 +868,8 @@ class storyModel extends model
             ->add('closedDate', '0000-00-00')
             ->add('reviewedBy', '')
             ->add('reviewedDate', '0000-00-00')
+            ->add('duplicateStory', 0)
+            ->add('childStories', '')
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
