@@ -14,4 +14,5 @@ $(document).ready(function()
             $option.toggleClass('hide', $option.text().toString().toLowerCase().indexOf(val) < 0 && $option.data('key').toString().toLowerCase().indexOf(val) < 0);
         });
     });
+    fixedTfootAction('#projectBugForm');
 });

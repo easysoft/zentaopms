@@ -1339,7 +1339,6 @@ function computePasswordStrength(password)
     }
     strength += sumComplexity + (2 * (complexitySize - 1));
     if(length < 6 && strength >= 10) strength = 9;
-    console.log(strength);
 
     strength = strength > 29 ? 29 : strength;
     strength = Math.floor(strength / 10);
@@ -1359,34 +1358,44 @@ function checkOnlybodyPage()
 }
 
 /**
- * Fix tfoot action like productplan,release.
+ * Fixed tfoot action like productplan,release.
  * 
  * @param  string $formID 
  * @access public
  * @return void
  */
-function fixTfootAction(formID)
+function fixedTfootAction(formID)
 {
-    var tfootOffset = $(formID + ' table tfoot').offset().top;
+    if($(formID).size() == 0) return false;
+    var $table = $(formID).find('table:last');
+    var $tfoot = $table.find('tfoot');
+    $tfoot.removeClass('fixedTfootAction');
+
+    var tfootOffset = $tfoot.offset().top + $tfoot.height();
     var windowH     = $(window).height();
-    var tableWidth  = $(formID + ' table').width() - 2;
+    var tableWidth  = $table.width();
     if(tfootOffset > windowH)
     {
-        $(formID + ' table tfoot').addClass('fixTfootAction');
-        $(formID + ' table tfoot').width(tableWidth);
-        $(formID + ' table tfoot td').width(tableWidth);
+        $tfoot.addClass('fixedTfootAction');
+        $tfoot.width(tableWidth);
+        $tfoot.find('td').width(tableWidth);
+        $tfoot.find('td .input-group').width('150');
     }
     $(window).scroll(function()
     {
-        if(tfootOffset <= windowH + $(window).scrollTop() - 110)
+        if(tfootOffset < windowH + $(window).scrollTop())
         {
-            $(formID + ' table tfoot').removeClass('fixTfootAction');
+            $tfoot.removeClass('fixedTfootAction');
+            $tfoot.removeAttr('style');
+            $tfoot.find('td').removeAttr('style');
         }
-        else if(!$(formID + ' table tfoot').hasClass('fixTfootAction'))
+        else if(!$tfoot.hasClass('fixedTfootAction'))
         {
-            $(formID + ' table tfoot').addClass('fixTfootAction');
-            $(formID + ' table tfoot').width(tableWidth);
-            $(formID + ' table tfoot td').width(tableWidth);
+            tableWidth  = $table.width();
+            $tfoot.addClass('fixedTfootAction');
+            $tfoot.width(tableWidth);
+            $tfoot.find('td').width(tableWidth);
+            $tfoot.find('td .input-group').width('150');
         }
     });
 }

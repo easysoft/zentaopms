@@ -2,7 +2,7 @@ $(function()
 {
     setOuterBox();
     if(browseType == 'bysearch') ajaxGetSearchForm();
-
+    setTimeout(function(){fixedTfootAction('#projectTaskForm')}, 100);
 
     $('.assign-search').click(function(e)
     {

@@ -20,8 +20,8 @@
   <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
   <div id='querybox' class='show'></div>
 </div>
-<form method='post' class='form-condensed'>
-  <table align='center' class='table tablesorter table-fixed'> 
+<form method='post' class='form-condensed' id='linkStoryForm'>
+  <table class='table tablesorter table-fixed'> 
     <thead>
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -71,5 +71,11 @@
     </tfoot>
   </table>
 </form>
-<script type='text/javascript'>$(function(){ajaxGetSearchForm()});</script>
+<script type='text/javascript'>
+$(function()
+{
+    ajaxGetSearchForm()
+    setTimeout(function(){fixedTfootAction('#linkStoryForm')}, 500);
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>

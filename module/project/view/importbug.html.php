@@ -25,7 +25,7 @@ var browseType = '<?php echo $browseType;?>';
   </div>
   <div id='querybox' class='show'></div>
 </div>
-<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='importBugForm'>
   <table class='table tablesorter table-fixed'>
     <thead>
       <tr class='colhead'>

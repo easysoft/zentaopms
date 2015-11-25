@@ -20,4 +20,5 @@ $(function()
 
     $('.popoverStage').mouseover(function(){$(this).popover('show')});
     $('.popoverStage').mouseout(function(){$(this).popover('hide')});
+    setTimeout(function(){fixedTfootAction('#productStoryForm')}, 100);
 })

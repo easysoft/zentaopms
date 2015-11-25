@@ -23,7 +23,7 @@
     </div>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin'>
+<form class='form-condensed' method='post' target='hiddenwin' id='importTaskForm'>
   <table class='table tablesorter table-fixed'>
     <thead>
     <tr class='colhead'>

@@ -14,7 +14,7 @@
 <div id='titlebar'>
   <div class='heading'><?php echo $lang->mail->browse?></div>
 </div>
-<form method='post' action='<?php echo inlink('batchDelete')?>' target='hiddenwin'>
+<form method='post' action='<?php echo inlink('batchDelete')?>' target='hiddenwin' id='mailForm'>
 <div class='panel'>
   <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter'>
     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -50,21 +50,22 @@
       <?php endforeach;?>
     </tbody>
     <tfoot>
-<tr>
-<td colspan='9'>
-<?php
-if(count($queueList))
-{
-    echo "<div class='btn-group'>" . html::selectButton() . '</div>';
-    if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete);
-}
-$pager->show();
-?>
-</td>
-</tr>
-</tfoot>
+      <tr>
+        <td colspan='9'>
+        <?php
+        if(count($queueList))
+        {
+            echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+            if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete);
+        }
+        $pager->show();
+        ?>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>
 </form>
+<script>$(function(){fixedTfootAction('#mailForm')})</script>
 <?php include '../../common/view/footer.html.php';?>
 

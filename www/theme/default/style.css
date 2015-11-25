@@ -682,7 +682,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
   #searchbox {display: none}
 }
 
-.fixTfootAction{position: fixed; bottom: 40px; background: #fff;}
+.fixedTfootAction{position: fixed; bottom: 40px; background: #fff;}
 #passwordStrength{display:none;}
 .warning{color:red;}
 .nofixed td{white-space:normal;}

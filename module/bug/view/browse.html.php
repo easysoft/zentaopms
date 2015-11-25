@@ -80,7 +80,7 @@ js::set('moduleID', $moduleID);
   </div>
 </div>
 <div class='main'>
-  <form method='post'>
+  <form method='post' id='bugForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>

@@ -37,7 +37,7 @@
 </div>
 <?php else:?>
 <?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
+<form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>' id='productsForm'>
   <table class='table table-condensed table-hover table-striped tablesorter'>
     <?php $vars = "locate=no&productID=$productID&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>

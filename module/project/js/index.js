@@ -6,6 +6,7 @@ $(function()
         for(i = 0; i < data.list.length; i++) list += $(data.list[i]).attr('data-id') + ',';
         $.post(createLink('project', 'updateOrder'), {'projects' : list, 'orderBy' : orderBy});
     });
+    setTimeout(function(){fixedTfootAction('#projectsForm')}, 100);
 });
 
 function byProduct(productID, projectID)

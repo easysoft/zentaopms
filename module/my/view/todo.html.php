@@ -13,38 +13,38 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
-<form method='post' id='todoform'>
-  <div id='featurebar'>
-    <ul class='nav'>
-      <?php 
-      foreach($lang->todo->periods as $period => $label)
-      {
-          $vars = "date=$period";
-          if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
-          echo "<li id='$period'>" . html::a(inlink('todo', $vars), $label) . '</li>';
-      }
-      echo "<li id='byDate' class='datepicker-wrapper datepicker-date'>" . html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)'") . '</li>';
+<div id='featurebar'>
+  <ul class='nav'>
+    <?php 
+    foreach($lang->todo->periods as $period => $label)
+    {
+        $vars = "date=$period";
+        if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
+        echo "<li id='$period'>" . html::a(inlink('todo', $vars), $label) . '</li>';
+    }
+    echo "<li id='byDate' class='datepicker-wrapper datepicker-date'>" . html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)'") . '</li>';
 
-      if(is_numeric($type)) 
-      {
-          if($date == date('Y-m-d'))
-          {
-              $type = 'today'; 
-          }
-          else if($date == date('Y-m-d', strtotime('-1 day')))
-          {
-              $type = 'yesterday'; 
-          }
-      }
-      ?>
-      <script>$('#<?php echo $type;?>').addClass('active')</script>
-    </ul>  
-    <div class='actions'>
-      <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn export'") ?>
-      <?php echo html::a(helper::createLink('todo', 'batchCreate', "date=" . str_replace('-', '', $date)), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
-      <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
-    </div>
+    if(is_numeric($type)) 
+    {
+        if($date == date('Y-m-d'))
+        {
+            $type = 'today'; 
+        }
+        else if($date == date('Y-m-d', strtotime('-1 day')))
+        {
+            $type = 'yesterday'; 
+        }
+    }
+    ?>
+    <script>$('#<?php echo $type;?>').addClass('active')</script>
+  </ul>  
+  <div class='actions'>
+    <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn export'") ?>
+    <?php echo html::a(helper::createLink('todo', 'batchCreate', "date=" . str_replace('-', '', $date)), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
+    <?php echo html::a(helper::createLink('todo', 'create', "date=" . str_replace('-', '', $date)), "<i class='icon-plus'></i> " . $lang->todo->create, '', "class='btn'") ?>
   </div>
+</div>
+<form method='post' id='todoform'>
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
@@ -95,7 +95,6 @@
     <tfoot>
       <tr>
         <td colspan='9' align='left'>
-          <?php $pager->show();?>
           <div class='table-actions clearfix'>
           <?php 
           if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))
@@ -119,15 +118,16 @@
           if(common::hasPriv('todo', 'import2Today') and $importFuture)
           {
               $actionLink = $this->createLink('todo', 'import2Today');
-              echo "<div class='pull-left'><div class='input-group'>";
+              echo "<div class='input-group'>";
               echo "<div class='datepicker-wrapper datepicker-date'>" . html::input('date', date('Y-m-d'), "class='form-control form-date'") . '</div>';
               echo "<span class='input-group-btn'>";
               echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
               echo '</span>';
-              echo '</div></div>';
+              echo '</div>';
           }
           ?>
           </div>
+          <?php $pager->show();?>
         </td>
       </tr>
     </tfoot>
