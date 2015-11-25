@@ -32,9 +32,10 @@ $lang->story->linkStory   = 'Related story';
 $lang->story->export      = "Export data";
 $lang->story->zeroCase    = "Story of zero case";
 $lang->story->reportChart = "Report";
-$lang->story->batchChangePlan  = "Batch change plan";
-$lang->story->batchChangeStage = "Batch change stage";
-$lang->story->batchAssignTo    = "Batch assignto";
+$lang->story->batchChangePlan   = "Batch change plan";
+$lang->story->batchChangeBranch = "Batch change branch";
+$lang->story->batchChangeStage  = "Batch change stage";
+$lang->story->batchAssignTo     = "Batch assignto";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';

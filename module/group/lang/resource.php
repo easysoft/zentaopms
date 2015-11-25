@@ -172,9 +172,10 @@ $lang->resource->story->activate    = 'lblActivate';
 $lang->resource->story->tasks       = 'tasks';
 $lang->resource->story->zeroCase    = 'zeroCase';
 $lang->resource->story->report      = 'reportChart';
-$lang->resource->story->batchChangePlan  = 'batchChangePlan';
-$lang->resource->story->batchChangeStage = 'batchChangeStage';
-$lang->resource->story->batchAssignTo    = 'batchAssignTo';
+$lang->resource->story->batchChangePlan   = 'batchChangePlan';
+$lang->resource->story->batchChangeBranch = 'batchChangeBranch';
+$lang->resource->story->batchChangeStage  = 'batchChangeStage';
+$lang->resource->story->batchAssignTo     = 'batchAssignTo';
 
 $lang->story->methodOrder[5]  = 'create';
 $lang->story->methodOrder[10] = 'batchCreate';
@@ -194,6 +195,7 @@ $lang->story->methodOrder[75] = 'activate';
 $lang->story->methodOrder[80] = 'tasks';
 $lang->story->methodOrder[85] = 'zeroCase';
 $lang->story->methodOrder[90] = 'report';
+$lang->story->methodOrder[95] = 'batchChangeBranch';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -1110,3 +1112,5 @@ $lang->changelog['7.4.beta'][] = 'user-unbind';
 $lang->changelog['7.4.beta'][] = 'branch-manage';
 $lang->changelog['7.4.beta'][] = 'branch-delete';
 $lang->changelog['7.4.beta'][] = 'my-unbind';
+
+$lang->changelog['8.0'][] = 'story-batchChangeBranch';

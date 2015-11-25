@@ -32,9 +32,10 @@ $lang->story->linkStory   = '关联需求';
 $lang->story->export      = "导出数据";
 $lang->story->zeroCase    = "零用例需求";
 $lang->story->reportChart = "统计报表";
-$lang->story->batchChangePlan  = "批量修改计划";
-$lang->story->batchChangeStage = "批量修改阶段";
-$lang->story->batchAssignTo    = "批量指派";
+$lang->story->batchChangePlan   = "批量修改计划";
+$lang->story->batchChangeBranch = "批量修改分支";
+$lang->story->batchChangeStage  = "批量修改阶段";
+$lang->story->batchAssignTo     = "批量指派";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';

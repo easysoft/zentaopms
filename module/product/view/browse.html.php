@@ -200,6 +200,21 @@
                     echo '<li>' . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
                 }
 
+                if(common::hasPriv('story', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
+                {
+                    $withSearch = count($branches) > 8;
+                    echo "<li class='dropdown-submenu'>";
+                    echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
+                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    foreach($branches as $branchID => $branchName)
+                    {
+                        $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
+                        echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                    }
+                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    echo '</ul></li>';
+                }
+
                 if(common::hasPriv('story', 'batchChangePlan'))
                 {
                     unset($plans['']);

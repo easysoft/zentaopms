@@ -795,6 +795,27 @@ class story extends control
     }
 
     /**
+     * Batch change branch.
+     * 
+     * @param  int    $branchID 
+     * @access public
+     * @return void
+     */
+    public function batchChangeBranch($branchID)
+    {
+        $storyIDList = !empty($_POST['storyIDList']) ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+        $allChanges  = $this->story->batchChangeBranch($storyIDList, $branchID);
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($allChanges as $storyID => $changes)
+        {
+            $actionID = $this->action->create('story', $storyID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+            $this->sendmail($storyID, $actionID);
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
      * Batch change the stage of story.
      * 
      * @param  string    $stage 

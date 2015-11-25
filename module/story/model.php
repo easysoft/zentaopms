@@ -762,6 +762,34 @@ class storyModel extends model
     }
 
     /**
+     * Batch change branch.
+     * 
+     * @param  array  $storyIDList 
+     * @param  int    $branchID 
+     * @access public
+     * @return void
+     */
+    public function batchChangeBranch($storyIDList, $branchID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldStories = $this->getByList($storyIDList);
+        foreach($storyIDList as $storyID)
+        {
+            $oldStory = $oldStories[$storyID];
+
+            $story = new stdclass();
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            $story->branch         = $branchID;
+
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Batch change the stage of story.
      * 
      * @param  string    $stage 
