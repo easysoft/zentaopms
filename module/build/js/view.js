@@ -20,7 +20,7 @@ $(function()
         var href = $(e.target).attr('href');
         var tabPane = $(href + '.tab-pane');
         if(tabPane.size() == 0) return;
-        var formID = tabPane.find('linkBox').find('form:last');
+        var formID = tabPane.find('.linkBox').find('form:last');
         if(formID.size() == 0) formID = tabPane.find('form:last');
         setTimeout(function(){fixedTfootAction(formID)}, 100);
     });
