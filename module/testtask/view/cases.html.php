@@ -30,7 +30,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 <div class='main'>
-  <form method='post' name='casesform'>
+  <form method='post' name='casesform' id='casesForm'>
     <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
       <thead>
