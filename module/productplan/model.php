@@ -159,14 +159,19 @@ class productplanModel extends model
      */
     public function batchUpdate($productID)
     {
-        $data = fixer::input('post')->get();
+        $data = fixer::input('post')->skipSpecial('desc')->get();
         $oldPlans = $this->getByIDList($data->id);
+
+        $this->app->loadClass('purifier', true);
+        $config   = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
 
         $plans = array();
         foreach($data->id as $planID)
         {
             $plan = new stdclass();
             $plan->title = $data->title[$planID];
+            $plan->desc  = $purifier->purify($data->desc[$planID]);
             $plan->begin = $data->begin[$planID];
             $plan->end   = $data->end[$planID];
 

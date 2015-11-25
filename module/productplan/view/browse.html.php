@@ -22,7 +22,7 @@
     <?php common::printIcon('productplan', 'create', "productID=$product->id&branch=$branch", '', 'button', 'plus');?>
   </div>
 </div>
-<form method='post' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
+<form method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
 <table class='table' id="productplan">
   <thead>
   <?php $vars = "productID=$productID&branch=$branch&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -73,4 +73,5 @@
   </tfoot>
 </table>
 </form>
+<script>$(function(){fixedTfootAction('#productplanForm')})</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -1371,6 +1371,10 @@ function fixedTfootAction(formID)
     var $tfoot = $table.find('tfoot');
     $tfoot.removeClass('fixedTfootAction');
 
+    var $inputgroup = $tfoot.find('.table-actions').children('.input-group');
+    if($inputgroup.size() > 0)var $inputwidth = $inputgroup.width();
+
+
     var tfootOffset = $tfoot.offset().top + $tfoot.height();
     var windowH     = $(window).height();
     var tableWidth  = $table.width();
@@ -1379,7 +1383,7 @@ function fixedTfootAction(formID)
         $tfoot.addClass('fixedTfootAction');
         $tfoot.width(tableWidth);
         $tfoot.find('td').width(tableWidth);
-        $tfoot.find('td .input-group').width('150');
+        if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
     }
     $(window).scroll(function()
     {
@@ -1395,7 +1399,7 @@ function fixedTfootAction(formID)
             $tfoot.addClass('fixedTfootAction');
             $tfoot.width(tableWidth);
             $tfoot.find('td').width(tableWidth);
-            $tfoot.find('td .input-group').width('150');
+            if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
         }
     });
 }
