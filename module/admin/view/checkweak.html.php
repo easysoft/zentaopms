@@ -39,7 +39,7 @@
         <td><?php echo $user->mobile?></td>
         <td><?php echo $user->birthday?></td>
         <td><?php echo $lang->admin->safe->reasonList[$user->weakReason];?></td>
-        <td><?php common::printIcon('user', 'edit', "userID=" . helper::safe64Encode($user->account), '', 'list');?></td>
+        <td><?php common::printIcon('user', 'edit', "userID=$user->id", '', 'list');?></td>
       </tr>
       <?php endforeach;?>
     </tbody>

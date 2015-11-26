@@ -21,7 +21,7 @@
       <small class='text-muted'> <?php echo $lang->user->profile;?> <?php echo html::icon('eye-open');?></small>
     </div>
     <div class='actions'>
-      <?php echo html::a($this->createLink('user', 'edit', "userID=" . helper::safe64Encode($user->account)), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
+      <?php echo html::a($this->createLink('user', 'edit', "userID=$user->id"), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
     </div>
   </div>
   <table class='table table-borderless table-data'>

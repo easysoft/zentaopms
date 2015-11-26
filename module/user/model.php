@@ -165,10 +165,9 @@ class userModel extends model
      * @access public
      * @return object|bool
      */
-    public function getById($userID)
+    public function getById($userID, $field = 'account')
     {
-        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($userID)->fetch();
-        if(!$user) $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($userID)->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)->where($field)->eq($userID)->fetch();
         if(!$user) return false;
         $user->last = date(DT_DATETIME1, $user->last);
         return $user;
@@ -324,7 +323,7 @@ class userModel extends model
     {
         if(!$this->checkPassword(true)) return;
 
-        $oldUser = $this->getById($userID);
+        $oldUser = $this->getById($userID, 'id');
 
         $userID = $oldUser->id;
         $user = fixer::input('post')

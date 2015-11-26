@@ -471,7 +471,6 @@ class user extends control
      */
     public function edit($userID)
     {
-        $userID = helper::safe64Decode($userID);
         $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
@@ -482,7 +481,7 @@ class user extends control
             die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
         }
 
-        $user       = $this->user->getById($userID);
+        $user       = $this->user->getById($userID, 'id');
         $userGroups = $this->loadModel('group')->getByAccount($user->account);
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
@@ -535,7 +534,7 @@ class user extends control
      */
     public function delete($userID)
     {
-        $user = $this->user->getByID($userID);
+        $user = $this->user->getByID($userID, 'id');
         if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
         if($_POST)
         {
