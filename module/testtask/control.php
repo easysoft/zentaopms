@@ -567,6 +567,9 @@ class testtask extends control
         $task      = $this->testtask->getById($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
 
+        /* Save session. */
+        $this->testtask->setMenu($this->products, $productID, $task->branch);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -576,12 +579,19 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
-        unset($this->config->testcase->search['fields']['branch']);
-        unset($this->config->testcase->search['params']['branch']);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->testcase->search['fields']['branch']);
+            unset($this->config->testcase->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($task->product, 'noempty');
+            if($task->branch) $branches = array('' => '', $task->branch => $branches[$task->branch]);
+            $this->config->testcase->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
-
-        /* Save session. */
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
 
         $this->view->title      = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -612,6 +622,7 @@ class testtask extends control
                 $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                     ->andWhere('product')->eq($productID)
                     ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                    ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                     ->andWhere('story')->in($stories)
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('id desc')
@@ -628,6 +639,7 @@ class testtask extends control
                 $cases = empty($bugs) ? array() : $this->dao->select('*')->from(TABLE_CASE)->where($query)
                     ->andWhere('product')->eq($productID)
                     ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                    ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                     ->andWhere('fromBug')->in($bugs)
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('id desc')

@@ -274,7 +274,8 @@ class build extends control
         }
 
         $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
-        $build = $this->build->getById($buildID);
+        $build   = $this->build->getById($buildID);
+        $product = $this->loadModel('product')->getById($build->product);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
         $this->loadModel('story');
         $this->loadModel('tree');
@@ -290,8 +291,18 @@ class build extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($build->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
-        unset($this->config->product->search['fields']['branch']);
-        unset($this->config->product->search['params']['branch']);
+        if($product->type == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($build->product, 'noempty');
+            if($build->branch) $branches = array('' => '', $build->branch => $branches[$build->branch]);
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
@@ -374,7 +385,8 @@ class build extends control
 
         $this->session->set('bugList', inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")));
         /* Set menu. */
-        $build = $this->build->getByID($buildID);
+        $build   = $this->build->getByID($buildID);
+        $product = $this->loadModel('product')->getByID($build->product);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -389,8 +401,18 @@ class build extends control
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($build->product);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-        unset($this->config->bug->search['fields']['branch']);
-        unset($this->config->bug->search['params']['branch']);
+        if($product->type == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($build->product, 'noempty');
+            if($build->branch) $branches = array('' => '', $build->branch => $branches[$build->branch]);
+            $this->config->bug->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         if($browseType == 'bySearch')

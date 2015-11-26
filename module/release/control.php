@@ -347,8 +347,18 @@ class release extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($release->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
-        unset($this->config->product->search['fields']['branch']);
-        unset($this->config->product->search['params']['branch']);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($release->product, 'noempty');
+            if($release->branch) $branches = array('' => '', $release->branch => $branches[$release->branch]);
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
@@ -447,8 +457,18 @@ class release extends control
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($release->product);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-        unset($this->config->bug->search['fields']['branch']);
-        unset($this->config->bug->search['params']['branch']);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($release->product, 'noempty');
+            if($release->branch) $branches = array('' => '', $release->branch => $branches[$release->branch]);
+            $this->config->bug->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $allBugs = array();

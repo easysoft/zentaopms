@@ -30,6 +30,9 @@
       <th class='w-id'><?php echo $lang->release->id;?></th>
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
+      <?php if($product->type != 'normal'):?>
+      <th class='w-100px'><?php echo $lang->product->branch;?></th>
+      <?php endif;?>
       <th class='w-100px'><?php echo $lang->release->date;?></th>
       <th class='w-100px'><?php echo $lang->release->status;?></th>
       <th class='w-150px'><?php echo $lang->actions;?></th>
@@ -41,6 +44,9 @@
       <td class='text-center'><?php echo $release->id;?></td>
       <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
       <td><?php echo $release->buildName;?></td>
+      <?php if($product->type != 'normal'):?>
+      <td class='text-center'><?php echo $branches[$release->branch];?></td>
+      <?php endif;?>
       <td class='text-center'><?php echo $release->date;?></td>
       <td class='text-center'><?php echo $lang->release->statusList[$release->status];?></td>
       <td class='text-center'>

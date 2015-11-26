@@ -1537,13 +1537,32 @@ class project extends control
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
-        $productPairs = array();
+        $allBranches = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchPairs = array();
+        $productType = 'normal';
+        $productNum  = count($products);
         foreach($products as $product)
         {
-            $branches[$product->branch] = $product->branch;
             $productPairs[$product->id] = $product->name;
+            if($product->type != 'normal')
+            {
+                $branches[$product->branch] = $product->branch;
+                $productType = $product->type;
+                if($product->branch)
+                {
+                    $branchPairs[$product->branch] = ($productNum > 1 ? $product->name . '/' : '') . $allBranches[$product->id][$product->branch];
+                }
+                else
+                {
+                    $productBranches = $allBranches[$product->id];
+                    if($productNum > 1)
+                    {
+                        foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
+                    }
+                    $branchPairs += $productBranches;
+                }
+            }
         }
-
 
         /* Build search form. */
         unset($this->config->product->search['fields']['module']);
@@ -1552,8 +1571,16 @@ class project extends control
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         unset($this->lang->story->statusList['draft']);
-        unset($this->config->product->search['fields']['branch']);
-        unset($this->config->product->search['params']['branch']);
+        if($productType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
+            $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
+        }
         $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);

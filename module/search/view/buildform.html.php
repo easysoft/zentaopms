@@ -304,7 +304,15 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
-          $param        = $fieldParams[$currentField];
+          if(!isset($fieldParams[$currentField]))
+          {
+              $currentField = key($searchFields);
+              $formSession["field$fieldNO"]    = $currentField;
+              $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
+              $formSession["value$fieldNO"]    =  '';
+          }
+
+          $param = $fieldParams[$currentField];
 
           /* Print and or. */
           echo "<td class='text-right w-60px'>";
@@ -346,7 +354,14 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
-          $param        = $fieldParams[$currentField];
+          if(!isset($fieldParams[$currentField]))
+          {
+              $currentField = key($searchFields);
+              $formSession["field$fieldNO"]    = $currentField;
+              $formSession["operator$fieldNO"] = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
+              $formSession["value$fieldNO"]    =  '';
+          }
+          $param = $fieldParams[$currentField];
 
           /* Print and or. */
           echo "<td class='text-right w-60px'>";

@@ -283,8 +283,18 @@ class productplan extends control
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
-        unset($this->config->product->search['fields']['branch']);
-        unset($this->config->product->search['params']['branch']);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($plan->product, 'noempty');
+            if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         if($browseType == 'bySearch')
@@ -400,6 +410,18 @@ class productplan extends control
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID, $branch = 0, $params = '');
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($plan->product, 'noempty');
+            if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
+            $this->config->bug->search['params']['branch']['values'] = $branches;
+        }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         if($browseType == 'bySearch')
