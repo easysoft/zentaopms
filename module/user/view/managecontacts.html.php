@@ -25,7 +25,7 @@
       </div>
       <ul class='list-group'>
         <?php 
-        foreach($lists as $listID => $listName) echo html::a(inlink('managecontacts', "listID=$listID"), $listName, '', "class='list-group-item'");
+        foreach($lists as $id => $listName) echo html::a(inlink('managecontacts', "listID=$id"), $listName, '', "class='list-group-item'");
         ?>
       </ul>
     </div>
