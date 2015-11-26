@@ -296,7 +296,7 @@ class mail extends control
         foreach($queueList as $queue)
         {
             $mailStatus = $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queue->id)->fetch('status');
-            if($mailStatus != 'wait') break;
+            if(empty($mailStatus) or $mailStatus != 'wait') break;
 
             $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->eq($queue->id)->exec();
             $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
@@ -314,6 +314,16 @@ class mail extends control
             $log .= "Send #$queue->id  result is $data->status\n";
             if($data->status == 'fail') $log .= "reason is $data->failReason\n";
         }
+
+        /* Delete sended mail. */
+        $lastMail  = $this->dao->select('id,status')->from(TABLE_MAILQUEUE)->orderBy('id_desc')->limit(1)->fetch();
+        if($lastMail->id > 1000000)
+        {
+            $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_MAILQUEUE)->where('status')->eq('wait')->fetch('count');
+            if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_MAILQUEUE);
+        }
+        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('status')->ne('wait')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+
         echo $log;
         echo "OK\n";
     }
