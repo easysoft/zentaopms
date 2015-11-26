@@ -53,4 +53,4 @@ $lang->misc->zentao->service['servicemore']= '更多服务...';
 
 $lang->misc->mobile    = "手机访问";
 $lang->misc->noGDLib   = "请用手机浏览器访问：<strong>%s</strong>";
-$lang->misc->copyright = "版权所有 &copy; 2009 - 2015 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a>";
+$lang->misc->copyright = "&copy; 2009 - 2015 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
