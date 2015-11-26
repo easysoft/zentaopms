@@ -885,12 +885,14 @@ class testcase extends control
             $fields['keywords']     = $this->lang->testcase->keywords;
             $fields['type']         = $this->lang->testcase->type;
             $fields['pri']          = $this->lang->testcase->pri;
+            $fields['status']       = $this->lang->testcase->status;
             $fields['stage']        = $this->lang->testcase->stage;
             $fields['precondition'] = $this->lang->testcase->precondition;
 
             $fields[''] = '';
-            $fields['typeValue']  = $this->lang->testcase->lblTypeValue;
-            $fields['stageValue'] = $this->lang->testcase->lblStageValue;
+            $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
+            $fields['stageValue']  = $this->lang->testcase->lblStageValue;
+            $fields['statusValue'] = $this->lang->testcase->lblStatusValue;
 
             $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
             $rows    = array();
@@ -903,8 +905,9 @@ class testcase extends control
 
                 if(empty($rows))
                 {
-                    $row->typeValue  = join("\n", $this->lang->testcase->typeList);
-                    $row->stageValue = join("\n", $this->lang->testcase->stageList);
+                    $row->typeValue   = join("\n", $this->lang->testcase->typeList);
+                    $row->stageValue  = join("\n", $this->lang->testcase->stageList);
+                    $row->statusValue = join("\n", $this->lang->testcase->statusList);
                 }
                 $rows[] = $row;
             }

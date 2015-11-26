@@ -100,6 +100,7 @@ $lang->testcase->lblStory                    = '相关需求';
 $lang->testcase->lblLastEdited               = '最后编辑';
 $lang->testcase->lblTypeValue                = '类型可选值列表';
 $lang->testcase->lblStageValue               = '阶段可选值列表';
+$lang->testcase->lblStatusValue              = '状态可选值列表';
 
 $lang->testcase->legendRelated      = '相关信息';
 $lang->testcase->legendBasicInfo    = '基本信息';

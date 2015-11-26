@@ -12,6 +12,7 @@
       <th class='w-100px'><?php echo $lang->testcase->story?></th>
       <th class='w-70px'><?php echo $lang->testcase->pri?></th>
       <th class='w-100px'><?php echo $lang->testcase->type?></th>
+      <th class='w-100px'><?php echo $lang->testcase->status?></th>
       <th><?php echo $lang->testcase->stage?></th>
       <th><?php echo $lang->testcase->precondition?></th>
       <th class='w-300px'>
@@ -30,7 +31,7 @@
   <?php if(empty($case->title)) continue;?>
   <tr valign='top' align='center'>
     <td>
-    <?php
+      <?php
       if(!empty($case->id))
       {
           echo $case->id . html::hidden("id[$key]", $case->id);
@@ -44,11 +45,12 @@
       ?>
     </td>
     <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
-    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
-    <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control'")?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, isset($case->stage) ? $case->stage : '', "multiple='multiple' class='form-control chosen'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, !empty($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, !empty($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
+    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, !empty($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("type[$key]", $lang->testcase->typeList, !empty($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("status[$key]", $lang->testcase->statusList, !empty($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
     <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? $case->precondition : "", "class='form-control'")?></td>
     <td>
       <?php if(isset($stepData[$key]['desc'])):?>
