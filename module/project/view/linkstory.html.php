@@ -29,7 +29,9 @@
       <th><?php echo $lang->story->product;?></th>
       <th><?php echo $lang->story->title;?></th>
       <th><?php echo $lang->story->plan;?></th>
-      <th><?php echo $lang->branch->common;?></th>
+      <?php if($productType != 'normal'):?>
+      <th><?php echo $lang->product->branchName[$productType];?></th>
+      <?php endif;?>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
       <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
     </tr>
@@ -49,7 +51,9 @@
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
       <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
+      <?php if($productType != 'normal'):?>
       <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
+      <?php endif;?>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
     </tr>
@@ -58,7 +62,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='8' class='text-left'>
+      <td colspan='<?php echo $productType == 'normal' ? '7' :'8';?>' class='text-left'>
           <div class='table-actions clearfix'>
             
           <?php 

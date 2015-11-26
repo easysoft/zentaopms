@@ -1537,10 +1537,10 @@ class project extends control
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
-        $allBranches = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $branchPairs = array();
-        $productType = 'normal';
-        $productNum  = count($products);
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchPairs  = array();
+        $productType  = 'normal';
+        $productNum   = count($products);
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
@@ -1550,11 +1550,11 @@ class project extends control
                 $productType = $product->type;
                 if($product->branch)
                 {
-                    $branchPairs[$product->branch] = ($productNum > 1 ? $product->name . '/' : '') . $allBranches[$product->id][$product->branch];
+                    $branchPairs[$product->branch] = ($productNum > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
                 }
                 else
                 {
-                    $productBranches = $allBranches[$product->id];
+                    $productBranches = $branchGroups[$product->id];
                     if($productNum > 1)
                     {
                         foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
@@ -1606,8 +1606,9 @@ class project extends control
         $this->view->allStories   = $allStories;
         $this->view->prjStories   = $prjStories;
         $this->view->browseType   = $browseType;
+        $this->view->productType  = $productType;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->view->branchGroups = $branchGroups;
         $this->display();
     }
 
