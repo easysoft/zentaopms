@@ -56,7 +56,7 @@
         <th><?php echo $lang->user->password;?></th>
         <td>
           <span class='input-group'>
-            <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
+            <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>
@@ -105,7 +105,7 @@
         <th class='w-120px'><?php echo $lang->user->verifyPassword;?></th>
         <td>
           <div class="required required-wrapper"></div>
-          <?php echo html::password('verifyPassword', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+          <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
         </td>
       </tr>
       <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>

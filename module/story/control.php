@@ -266,6 +266,7 @@ class story extends control
         $this->view->spec             = $spec;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
+        $this->view->needReview       = ($this->app->user->account == $product->PO || $this->config->story->needReview == 0) ? 0 : 1;
 
         $this->display();
     }
@@ -467,7 +468,7 @@ class story extends control
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
-        $this->view->needReview = $this->config->story->needReview == 0 ? "checked='checked'" : "";
+        $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->display();
     }
 

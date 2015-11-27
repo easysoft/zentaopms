@@ -61,7 +61,7 @@
       <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
       <td colspan='7'>
         <div class="required required-wrapper"></div>
-        <?php echo html::password('verifyPassword', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+        <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
       </td>
     </tr>
     <tr><td colspan='9' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>

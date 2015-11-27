@@ -79,7 +79,7 @@
         <th><?php echo $lang->user->verifyPassword;?></th>
         <td>
           <div class="required required-wrapper"></div>
-          <?php echo html::password('verifyPassword', '', "class='form-control' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+          <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
         </td>
       </tr>
 
