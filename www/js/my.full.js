@@ -1369,6 +1369,7 @@ function fixedTfootAction(formID)
     if($(formID).size() == 0) return false;
     var $table = $(formID).find('table:last');
     var $tfoot = $table.find('tfoot');
+    if($tfoot.size() == 0) return false;
     $tfoot.removeClass('fixedTfootAction');
 
     var $inputgroup = $tfoot.find('.table-actions').children('.input-group');
