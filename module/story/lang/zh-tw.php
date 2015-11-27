@@ -32,9 +32,10 @@ $lang->story->linkStory   = '關聯需求';
 $lang->story->export      = "導出數據";
 $lang->story->zeroCase    = "零用例需求";
 $lang->story->reportChart = "統計報表";
-$lang->story->batchChangePlan  = "批量修改計劃";
-$lang->story->batchChangeStage = "批量修改階段";
-$lang->story->batchAssignTo    = "批量指派";
+$lang->story->batchChangePlan   = "批量修改計劃";
+$lang->story->batchChangeBranch = "批量修改分支";
+$lang->story->batchChangeStage  = "批量修改階段";
+$lang->story->batchAssignTo     = "批量指派";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';
@@ -190,7 +191,7 @@ $lang->story->form->file      = '附件，如果該需求有相關檔案，請�
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
-$lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong>。', 'extra' => 'reasonList');
+$lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。'); 
 $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到' . $lang->projectCommon . ' <strong>$extra</strong>。'); 

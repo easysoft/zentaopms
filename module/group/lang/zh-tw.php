@@ -29,7 +29,7 @@ $lang->group->errorNotSaved      = '沒有保存，請確認選擇了權限數�
 $lang->group->viewList           = '允許訪問視圖';
 $lang->group->productList        = '允許訪問' . $lang->productCommon;
 $lang->group->projectList        = '允許訪問' . $lang->projectCommon;
-$lang->group->noticeVisit        = '空代訪問沒有訪問限制';
+$lang->group->noticeVisit        = '空代表訪問沒有訪問限制';
 
 $lang->group->id       = '編號';
 $lang->group->name     = '分組名稱';
@@ -48,6 +48,7 @@ $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
 
 $lang->group->versions['']          = '修改歷史';
+$lang->group->versions['8_0']       = '禪道8.0';
 $lang->group->versions['7_4_beta']  = '禪道7.4.beta';
 $lang->group->versions['7_3']       = '禪道7.3';
 $lang->group->versions['7_2']       = '禪道7.2';
