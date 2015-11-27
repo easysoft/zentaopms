@@ -36,4 +36,8 @@ td.delayed{background: #e84e0f!important; color: white;}
   </tr>
   <?php endforeach;?>
 </table>
-<script>$('.block-task').dataTable();</script>
+<p class='hide listLink'><?php echo $listLink;?></p>
+<script>
+$('.block-task').dataTable();
+$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+</script>

@@ -31,4 +31,8 @@
   </tr>
   <?php endforeach;?>
 </table>
-<script>$('.block-todo').dataTable();</script>
+<p class='hide listLink'><?php echo $listLink;?></p>
+<script>
+$('.block-todo').dataTable();
+$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+</script>

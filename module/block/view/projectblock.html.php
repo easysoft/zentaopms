@@ -38,4 +38,8 @@
    <?php endforeach;?>
   </tbody>
 </table>
-<script>$('.block-project').dataTable();</script>
+<p class='hide listLink'><?php echo $listLink;?></p>
+<script>
+$('.block-project').dataTable();
+$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+</script>

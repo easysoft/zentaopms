@@ -29,4 +29,8 @@
   </tr>
   <?php endforeach;?>
 </table>
-<script>$('.block-bug').dataTable();</script>
+<p class='hide listLink'><?php echo $listLink;?></p>
+<script>
+$('.block-bug').dataTable();
+$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+</script>

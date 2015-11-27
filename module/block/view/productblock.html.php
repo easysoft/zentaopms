@@ -39,4 +39,8 @@
     <?php endforeach;?>
   </tbody>
 </table>
-<script>$('.block-product').dataTable();</script>
+<p class='hide listLink'><?php echo $listLink;?></p>
+<script>
+$('.block-product').dataTable();
+$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+</script>
