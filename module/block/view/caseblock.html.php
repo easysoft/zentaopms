@@ -33,8 +33,8 @@
   </tr>
   <?php endforeach;?>
 </table>
-<p class='hide listLink'><?php echo $listLink;?></p>
+<p class='hide block-case-link'><?php echo $listLink;?></p>
 <script>
 $('.block-case').dataTable();
-$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+$('.block-case-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-case-link').html());
 </script>

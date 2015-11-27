@@ -33,8 +33,8 @@
   </tr>
   <?php endforeach;?>
 </table>
-<p class='hide listLink'><?php echo $listLink;?></p>
+<p class='hide block-story-link'><?php echo $listLink;?></p>
 <script>
 $('.block-story').dataTable();
-$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+$('.block-story-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-story-link').html());
 </script>

@@ -39,8 +39,8 @@
     <?php endforeach;?>
   </tbody>
 </table>
-<p class='hide listLink'><?php echo $listLink;?></p>
+<p class='hide block-product-link'><?php echo $listLink;?></p>
 <script>
 $('.block-product').dataTable();
-$('.listLink').closest('.panel').find('.panel-heading .more').attr('href', $('.listLink').html());
+$('.block-product-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-product-link').html());
 </script>
