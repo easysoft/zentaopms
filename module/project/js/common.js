@@ -140,6 +140,7 @@ function loadBranches(product)
         }
     })
 }
+function loadBranch(){}
 
 /* Auto compute the work days. */
 $(function() 
