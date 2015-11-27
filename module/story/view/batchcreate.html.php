@@ -55,7 +55,7 @@
       <td><?php echo html::input("estimate[$i]", $estimate, "class='form-control' autocomplete='off'");?></td>
       <td>
         <?php
-        echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");
+        echo html::select("needReview[$i]", $lang->story->reviewList, $needReview, "class='form-control'");
         echo html::hidden("uploadImage[$i]", $fileName);
         ?>
       </td>
