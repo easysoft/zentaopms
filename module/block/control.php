@@ -55,8 +55,12 @@ class block extends control
             $params = json_decode(base64_decode($params));
             $sso    = base64_decode($this->get->sso);
 
-            if(!isset($this->app->user)) $this->app->user = new stdclass();
-            if(!isset($this->app->user->account) or $this->app->user->account != $params->account) $this->app->user->account = $params->account;
+            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
+            if(empty($this->app->user)) 
+            {
+                $this->app->user = new stdclass();
+                $this->app->user->account = 'guest';
+            }
 
             $this->viewType   = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
             $this->params     = $params;
