@@ -261,7 +261,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->release->basicInfo?></legend>
-        <table class='table table-data table-condensed table-borderless  table-fixed'>
+        <table class='table table-data table-condensed table-borderless table-fixed'>
           <tr>
             <th class='w-80px'><?php echo $lang->release->product;?></th>
             <td><?php echo $release->productName;?></td>
@@ -292,6 +292,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->files?></legend>
+        <div class='article-content'>
         <?php
         if($release->files)
         {
@@ -306,6 +307,7 @@
             echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
         }
         ?>
+        </div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
     </div>
