@@ -585,7 +585,7 @@ class bug extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->projects         = $this->product->getProjectPairs($bug->product);
+        $this->view->projects         = $this->product->getProjectPairs($bug->product, $bug->branch);
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
