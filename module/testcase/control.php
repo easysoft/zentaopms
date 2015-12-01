@@ -998,7 +998,7 @@ class testcase extends control
     {
         if($_POST)
         {
-            $this->testcase->createFromImport($productID);
+            $this->testcase->createFromImport($productID, $branch);
             die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
         }
 
@@ -1125,7 +1125,7 @@ class testcase extends control
 
         $this->view->stories   = $stories;
         $this->view->modules   = $modules;
-        $this->view->cases     = $this->dao->select('id, module, story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $this->view->cases     = $this->dao->select('id, module, story, stage, status, pri, type')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $this->view->caseData  = $caseData;
         $this->view->stepData  = $stepData;
         $this->view->productID = $productID;

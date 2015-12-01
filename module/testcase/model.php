@@ -431,7 +431,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function createFromImport($productID)
+    public function createFromImport($productID, $branch = 0)
     {
         $this->loadModel('action');
         $this->loadModel('story');
@@ -560,6 +560,7 @@ class testcaseModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
+                $caseData->branch     = $branch;
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
