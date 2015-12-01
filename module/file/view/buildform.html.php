@@ -53,7 +53,7 @@ function checkSize(obj)
         var unit = maxUploadInfo.replace(/\d+/, '');
         var maxUploadSize = maxUploadInfo.replace(unit,'') * sizeType[unit];
         var fileSize = 0;
-        $(obj).parents('#fileform').find(':file').each(function()
+        $(obj).closest('#fileform').find(':file').each(function()
         {
             if($(this).val()) fileSize += $(this)[0].files[0].size;
         })

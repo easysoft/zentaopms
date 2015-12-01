@@ -104,11 +104,11 @@ function setDateField(query, fieldNO)
         $period = $("<ul id='selectPeriod' class='dropdown-menu'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
         $period.find('li > a').click(function(event)
         {
-            var target = $(query).parents('form').find('#' + $period.data('target'));
+            var target = $(query).closest('form').find('#' + $period.data('target'));
             if(target.length)
             {
                 target.val($(this).attr('href').replace('#', '$'));
-                $(query).parents('form').find('#operator' + $period.data('fieldNO')).val('between');
+                $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }
             event.stopPropagation();
@@ -123,7 +123,7 @@ function setDateField(query, fieldNO)
         $period.find("li > a[href='" + $e.val().replace('$', '#') + "']").closest('li').addClass('active');
     }).on('changeDate', function()
     {
-        var opt = $(query).parents('form').find('#operator' + $period.data('fieldNO'));
+        var opt = $(query).closest('form').find('#operator' + $period.data('fieldNO'));
         if(opt.val() == 'between') opt.val('<=');
         $period.hide();
     }).on('hide', function(){setTimeout(function(){$period.hide();}, 200);});
@@ -141,31 +141,32 @@ function setField(obj, fieldNO, moduleparams)
 {
     var params    = moduleparams;
     var fieldName = $(obj).val();
-    $(obj).parents('form').find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
-    $(obj).parents('form').find('#valueBox' + fieldNO).html($(obj).parents('form').find('#box' + fieldName).children().clone());
-    $(obj).parents('form').find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
+    console.log(fieldName);
+    $(obj).closest('form').find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
+    $(obj).closest('form').find('#valueBox' + fieldNO).html($(obj).closest('form').find('#box' + fieldName).children().clone());
+    $(obj).closest('form').find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
 
     if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
-        setDateField($(obj).parents('form').find("#value" + fieldNO), fieldNO);
-        $(obj).parents('form').find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
+        setDateField($(obj).closest('form').find("#value" + fieldNO), fieldNO);
+        $(obj).closest('form').find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
         var groupItems = <?php echo $config->search->groupItems?>;
         var maxNO      = 2 * groupItems;
         var nextNO     = fieldNO > groupItems ? fieldNO - groupItems + 1 : fieldNO + groupItems;
-        var nextValue  = $(obj).parents('form').find('#value' + nextNO).val();
+        var nextValue  = $(obj).closest('form').find('#value' + nextNO).val();
         if(nextNO <= maxNO && fieldNO < maxNO && (nextValue == '' || nextValue == 0))
         {
-            $(obj).parents('form').find('#field' + nextNO).val($(obj).parents('form').find('#field' + fieldNO).val());
-            $(obj).parents('form').find('#operator' + nextNO).val('<=');
-            $(obj).parents('form').find('#valueBox' + nextNO).html($(obj).parents('form').find('#box' + fieldName).children().clone());
-            $(obj).parents('form').find('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
-            setDateField($(obj).parents('form').find("#value" + nextNO), nextNO);
-            $(obj).parents('form').find("#value" + nextNO).addClass('date');
+            $(obj).closest('form').find('#field' + nextNO).val($(obj).closest('form').find('#field' + fieldNO).val());
+            $(obj).closest('form').find('#operator' + nextNO).val('<=');
+            $(obj).closest('form').find('#valueBox' + nextNO).html($(obj).closest('form').find('#box' + fieldName).children().clone());
+            $(obj).closest('form').find('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
+            setDateField($(obj).closest('form').find("#value" + nextNO), nextNO);
+            $(obj).closest('form').find("#value" + nextNO).addClass('date');
         }
     }
     else if(params[fieldName]['control'] == 'select')
     {
-        $(obj).parents('form').find("#value" + fieldNO).chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
+        $(obj).closest('form').find("#value" + fieldNO).chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
         {
             var $this = $(this);
             var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
@@ -185,7 +186,7 @@ function resetForm(obj)
 {
     for(i = 1; i <= groupItems * 2; i ++)
     {
-        $(obj).parents('form').find('#value' + i).val('').trigger('chosen:updated');
+        $(obj).closest('form').find('#value' + i).val('').trigger('chosen:updated');
     }
 }
 
@@ -201,12 +202,12 @@ function showmore(obj)
     {
         if(i != 1 && i != groupItems + 1 )
         {
-            $(obj).parents('form').find('#searchbox' + i).removeClass('hidden');
+            $(obj).closest('form').find('#searchbox' + i).removeClass('hidden');
         }
     }
 
-    $(obj).parents('form').find('#formType').val('more');
-    $(obj).parents('form').addClass('showmore');
+    $(obj).closest('form').find('#formType').val('more');
+    $(obj).closest('form').addClass('showmore');
 }
 
 /**
@@ -221,12 +222,12 @@ function showlite(obj)
     {
         if(i != 1 && i != groupItems + 1)
         {
-            $(obj).parents('form').find('#value' + i).val('');
-            $(obj).parents('form').find('#searchbox' + i).addClass('hidden');
+            $(obj).closest('form').find('#value' + i).val('');
+            $(obj).closest('form').find('#searchbox' + i).addClass('hidden');
         }
     }
-    $(obj).parents('form').removeClass('showmore');
-    $(obj).parents('form').find('#formType').val('lite');
+    $(obj).closest('form').removeClass('showmore');
+    $(obj).closest('form').find('#formType').val('lite');
 }
 
 /**
@@ -282,8 +283,8 @@ function deleteQuery()
 foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
-    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', "class='form-control searchSelect'");
-    if($param['control'] == 'input')  echo html::input($fieldName, '', "class='form-control searchInput'");
+    if($param['control'] == 'select') echo html::select('field' . $fieldName, $param['values'], '', "class='form-control searchSelect'");
+    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput'");
     echo '</span>';
 }
 ?>

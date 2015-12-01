@@ -18,7 +18,7 @@ function loadModule(lib)
 
     $.get(createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + root + '&viewType=' + type), function(data)
     {
-        $('#module').parents('td').html(data);
+        $('#module').closest('td').html(data);
         $("#module").removeAttr('onchange');
         $("#module").chosen(defaultChosenOptions);
     });
@@ -28,18 +28,18 @@ function changeByLib(lib)
 {
     if(lib == 'product')
     {
-        $('#product').parents('tr').show();
-        $('#project').parents('tr').hide();
+        $('#product').closest('tr').show();
+        $('#project').closest('tr').hide();
     }
     else if(lib == 'project')
     {
-        $('#product').parents('tr').show();
-        $('#project').parents('tr').show();
+        $('#product').closest('tr').show();
+        $('#project').closest('tr').show();
     }
     else
     {
-        $('#product').parents('tr').hide();
-        $('#project').parents('tr').hide();
+        $('#product').closest('tr').hide();
+        $('#project').closest('tr').hide();
     }
 }
 

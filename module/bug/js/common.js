@@ -426,15 +426,15 @@ function notice()
         }
         else
         {
-            if($('#buildBox').parents('tr').find('td').size() > 1)
+            if($('#buildBox').closest('tr').find('td').size() > 1)
             {
-                $('#buildBox').parents('td').next().attr('id', 'buildBoxActions');
-                $('#buildBox').parents('td').next().html(html);
+                $('#buildBox').closest('td').next().attr('id', 'buildBoxActions');
+                $('#buildBox').closest('td').next().html(html);
             }
             else
             {
                 html = "<td id='buildBoxActions'>" + html + '</td>';
-                $('#buildBox').parents('td').after(html);
+                $('#buildBox').closest('td').after(html);
             }
         }
     }

@@ -23,6 +23,6 @@ function submitForm(type)
     {
         $('#insert').val('0');
     }
-    $("button[data-toggle='myModal']").parents('form').submit();
+    $("button[data-toggle='myModal']").closest('form').submit();
 }
 </script>

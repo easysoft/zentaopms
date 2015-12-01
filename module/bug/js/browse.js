@@ -11,7 +11,7 @@ $(document).ready(function()
     }).on('keyup change paste', 'input', function()
     {
         var val = $(this).val().toLowerCase();
-        var $options = $(this).parents('ul.dropdown-menu.with-search').find('.option');
+        var $options = $(this).closest('ul.dropdown-menu.with-search').find('.option');
         if(val == '') return $options.removeClass('hide');
         $options.each(function()
         {

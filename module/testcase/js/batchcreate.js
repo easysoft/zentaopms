@@ -24,9 +24,9 @@ $(document).ready(function()
         }
         if($(select).val() == 'same')
         {
-            var index = $(select).parents('td').index();
-            var row   = $(select).parents('tr').index();
-            var table = $(select).parents('tr').parent();
+            var index = $(select).closest('td').index();
+            var row   = $(select).closest('tr').index();
+            var table = $(select).closest('tr').parent();
             var value = '';
             for(i = row - 1; i >= 0; i--)
             {
@@ -42,9 +42,9 @@ $(document).ready(function()
     {
         if($(this).val() == 'same')
         {
-            var index = $(this).parents('td').index();
-            var row   = $(this).parents('tr').index();
-            var table = $(this).parents('tr').parent();
+            var index = $(this).closest('td').index();
+            var row   = $(this).closest('tr').index();
+            var table = $(this).closest('tr').parent();
             var value = '';
             for(i = row - 1; i >= 0; i--)
             {
