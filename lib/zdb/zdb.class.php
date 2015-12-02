@@ -48,11 +48,12 @@ class zdb
 
         /* Get all tables in database. */
         $allTables = array();
-        $stmt      = $this->dbh->query('show tables');
-        while($table = $stmt->fetch(PDO::FETCH_ASSOC))
+        $stmt      = $this->dbh->query("show full tables");
+        while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
         {
-            $table = current($table);
-            $allTables[$table] = $table;
+            $tableName = $table['Tables_in_zentao'];
+            $tableType = strtolower($table['Table_type']);
+            $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
         }
 
         /* Dump all tables when tables is empty. */
@@ -75,15 +76,16 @@ class zdb
         /* Open this file. */
         $fp = fopen($fileName, 'w');
         fwrite($fp, "SET NAMES utf8;\n");
-        foreach($tables as $table)
+        foreach($tables as $table => $tableType)
         {
             /* Check table exists. */
             if(!isset($allTables[$table])) continue;
 
             /* Create sql code. */
-            $backupSql  = "DROP TABLE IF EXISTS `$table`;\n";
-            $backupSql .= $this->getSchemaSQL($table);
+            $backupSql  = "DROP " . strtoupper($tableType) . " IF EXISTS `$table`;\n";
+            $backupSql .= $this->getSchemaSQL($table, $tableType);
             fwrite($fp, $backupSql);
+            if($tableType != 'table') continue;
 
             $rows = $this->dbh->query("select * from `$table`");
             while($row = $rows->fetch(PDO::FETCH_ASSOC))
@@ -186,9 +188,10 @@ class zdb
      * @access public
      * @return string
      */
-    public function getSchemaSQL($table)
+    public function getSchemaSQL($table, $type = 'table')
     {
-        $createSql = $this->dbh->query("show create table `$table`")->fetch(PDO::FETCH_ASSOC);
-        return $createSql['Create Table'] . ";\n";
+        $sql = "SHOW CREATE $type `$table`";
+        $createSql = $this->dbh->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $createSql['Create ' . ucfirst($type)] . ";\n";
     }
 }

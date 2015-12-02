@@ -116,10 +116,10 @@ class admin extends control
      */
     public function checkDB()
     {
-        $tables = $this->dbh->query('SHOW TABLES')->fetchAll();
+        $tables = $this->dbh->query("show full tables where Table_Type != 'VIEW'")->fetchAll(PDO::FETCH_ASSOC);
         foreach($tables as $table)
         {
-            $tableName = current((array)$table);
+            $tableName = current($table);
             $result = $this->dbh->query("REPAIR TABLE $tableName")->fetch();
             echo "Repairing TABLE: " . $result->Table . "\t" . $result->Msg_type . ":" . $result->Msg_text . "\n";
         }
