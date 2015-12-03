@@ -328,7 +328,6 @@ class userModel extends model
         $userID = $oldUser->id;
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
-            ->setDefault('password', '')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->remove('password1, password2, groups,verifyPassword')
             ->get();
@@ -377,7 +376,7 @@ class userModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
         }
-        if($user->password and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
+        if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
 
         if(!dao::isError())
         {
