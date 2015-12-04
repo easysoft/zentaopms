@@ -164,6 +164,7 @@ class productplanModel extends model
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
+        $config->set('Cache.DefinitionImpl', null);
         $purifier = new HTMLPurifier($config);
 
         $plans = array();
