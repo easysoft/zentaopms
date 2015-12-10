@@ -1554,7 +1554,7 @@ class project extends control
                 }
                 else
                 {
-                    $productBranches = $branchGroups[$product->id];
+                    $productBranches = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(0);
                     if($productNum > 1)
                     {
                         foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
