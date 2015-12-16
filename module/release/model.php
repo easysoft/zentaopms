@@ -153,8 +153,7 @@ class releaseModel extends model
     {
         $oldRelease = $this->getByID($releaseID);
 
-        $branch = $oldRelease->branch;
-        if($oldRelease->build != $this->post->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
+        $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
