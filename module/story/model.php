@@ -130,7 +130,7 @@ class storyModel extends model
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
             ->callFunc('title', 'trim')
-            ->setDefault('plan', 0)
+            ->setDefault('plan', '')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('assignedDate', 0)
@@ -912,8 +912,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq('')->exec();
 
             foreach($stages as $branch => $stage) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere('plan')->ne('')->exec();
-            return true;
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere("(plan != '' AND plan != '0')")->exec();
         }
 
         if($hasBranch)
@@ -931,11 +930,10 @@ class storyModel extends model
             ->fetchGroup('type');
 
         /* No tasks, then the stage is projected. */
-        if(!$tasks)
+        if(!$tasks and $projects)
         {
             foreach($stages as $branch => $stage) $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
             $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq($storyID)->exec();
-            return true;
         }
 
         /* Get current stage and set as default value. */
@@ -996,6 +994,7 @@ class storyModel extends model
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
         foreach($releases as $branch) $stages[$branch] = 'released';
 
+        if(empty($stages)) return;
         if($hasBranch)
         {
             $stageList   = join(',', array_keys($this->lang->story->stageList));

@@ -1541,6 +1541,7 @@ class project extends control
         $branchPairs  = array();
         $productType  = 'normal';
         $productNum   = count($products);
+        $branches     = array();
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
