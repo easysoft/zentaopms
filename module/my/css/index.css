@@ -1,4 +1,4 @@
-.panel-block {height: 208px;overflow: auto; padding: 0}
+.panel-block {height: 208px;overflow-y: auto; overflow-x: hidden; padding: 0}
 .panel-block.dynamic {height: 435px;}
 .panel-block .panel-heading {padding: 6px 10px; margin: 0;}
 .panel-block .panel-actions.pull-right {line-height: 36px; margin-right: -2px; margin-right: 5px!important\0}

@@ -1406,27 +1406,31 @@ function fixedTfootAction(formID)
 }
 
 /**
- * Fix table head in div box.
+ * Fixed table head in div box.
  * 
  * @param  string $boxObj 
  * @access public
  * @return void
  */
-function fixTableHead(boxObj)
+function fixedTableHead(boxObj)
 {
     $(boxObj).scroll(function()
     {
-        $(this).css('position', 'relative');
-        if($(this).find('table').size() == 1)
+        var hasFixed  = $(this).find('.fixedHead').size() > 0;
+        if(!hasFixed)
         {
-            var fixHead = "<table class='fixHead' style='position:absolute;top:0px'><thead>" + $(this).find('table thead').html() + '</thead></table>';
-            $(this).prepend(fixHead);
-            var $fixTable = $(this).find('table.fixHead');
-            $fixTable.addClass($(this).find('table:last').attr('class'));
-            var $dataTable = $(this).find('table:last thead th');
-            $fixTable.find('thead th').each(function(i){$fixTable.find('thead th').eq(i).width($dataTable.eq(i).width());})
+            $(this).css('position', 'relative');
+            if($(this).find('table').size() == 1)
+            {
+                var fixed = "<table class='fixedHead' style='position:absolute;top:0px'><thead>" + $(this).find('table thead').html() + '</thead></table>';
+                $(this).prepend(fixed);
+                var $fixTable = $(this).find('table.fixedHead');
+                $fixTable.addClass($(this).find('table:last').attr('class'));
+                var $dataTable = $(this).find('table:last thead th');
+                $fixTable.find('thead th').each(function(i){$fixTable.find('thead th').eq(i).width($dataTable.eq(i).width());})
+            }
         }
-        $(this).find('table.fixHead').css('top',$(this).scrollTop());
+        $(this).find('table.fixedHead').css('top',$(this).scrollTop());
     });
 }
 
