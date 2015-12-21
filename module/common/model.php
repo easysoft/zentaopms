@@ -176,6 +176,14 @@ class commonModel extends model
      */
     public function deny($module, $method)
     {
+        /* Get authorize again. */
+        $user = $this->app->user;
+        $user->rights = $this->loadModel('user')->authorize($user->account);
+        $user->groups = $this->user->getGroups($user->account);
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+        if(common::hasPriv($module, $method)) return true;
+
         $vars = "module=$module&method=$method";
         if(isset($this->server->http_referer))
         {
