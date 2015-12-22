@@ -67,6 +67,8 @@ $lang->doc->types['text'] = 'Html';
 $lang->doc->confirmDelete      = "Are you sure to delete this doc?";
 $lang->doc->confirmDeleteLib   = " Are you sure to delete this doc library?";
 $lang->doc->errorEditSystemDoc = "System doc library needn't edit";
+$lang->doc->errorEmptyProduct  = "{$lang->productCommon} is empty, can not create doc.";
+$lang->doc->errorEmptyProject  = "{$lang->projectCommon} is empty, can not create doc.";
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'url';

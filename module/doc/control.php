@@ -307,6 +307,20 @@ class doc extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
 
+        $products = $projectID == 0 ? $this->product->getPairs() : $this->project->getProducts($projectID, false);
+        if($libID == 'product' and empty($products))
+        {
+            echo js::alert($this->lang->doc->errorEmptyProduct);
+            die(js::locate('back'));
+        }
+
+        $projects = $this->project->getPairs('all');
+        if($libID == 'project' and ($projects))
+        {
+            echo js::alert($this->lang->doc->errorEmptyProject);
+            die(js::locate('back'));
+        }
+
         $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
         $this->view->position[] = $this->lang->doc->create;
@@ -316,8 +330,8 @@ class doc extends control
         $this->view->moduleID         = $moduleID;
         $this->view->productID        = $productID;
         $this->view->projectID        = $projectID;
-        $this->view->products         = $projectID == 0 ? $this->product->getPairs() : $this->project->getProducts($projectID, false);
-        $this->view->projects         = $this->loadModel('project')->getPairs('all');
+        $this->view->products         = $products;
+        $this->view->projects         = $projects;
 
         $this->display();
     }

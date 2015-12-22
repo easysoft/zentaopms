@@ -1379,7 +1379,7 @@ function fixedTfootAction(formID)
     var tfootOffset = $tfoot.offset().top + 30;
     var windowH     = $(window).height();
     var tableWidth  = $table.width();
-    if(tfootOffset > windowH)
+    if(tfootOffset > windowH + $(window).scrollTop())
     {
         $tfoot.addClass('fixedTfootAction');
         $tfoot.width(tableWidth);

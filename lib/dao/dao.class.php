@@ -534,7 +534,7 @@ class dao
      * @access public
      * @return object the dao object self.
      */
-    public function page($pager)
+    public function page($pager, $distinctField = '')
     {
         if(!is_object($pager)) return $this;
 
@@ -542,11 +542,12 @@ class dao
         if($pager->recTotal == 0)
         {
             /* Get the SELECT, FROM position, thus get the fields, replace it by count(*). */
-            $sql       = $this->get();
-            $selectPOS = strpos($sql, 'SELECT') + strlen('SELECT');
-            $fromPOS   = strpos($sql, 'FROM');
-            $fields    = substr($sql, $selectPOS, $fromPOS - $selectPOS );
-            $sql       = str_replace($fields, ' COUNT(*) AS recTotal ', $sql);
+            $sql        = $this->get();
+            $selectPOS  = strpos($sql, 'SELECT') + strlen('SELECT');
+            $fromPOS    = strpos($sql, 'FROM');
+            $fields     = substr($sql, $selectPOS, $fromPOS - $selectPOS );
+            $countField = $distinctField ? 'distinct ' . $distinctField : '*';
+            $sql        = str_replace($fields, " COUNT($countField) AS recTotal ", $sql);
 
             /* Remove the part after order and limit. */
             $subLength = strlen($sql);

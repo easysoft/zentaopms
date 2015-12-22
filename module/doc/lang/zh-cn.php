@@ -67,6 +67,8 @@ $lang->doc->types['text'] = '网页';
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
 $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";
+$lang->doc->errorEmptyProduct  = "没有{$lang->productCommon}，无法创建文档";
+$lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文档";
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
