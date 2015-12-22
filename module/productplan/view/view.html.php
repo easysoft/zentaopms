@@ -127,11 +127,11 @@
                           echo html::a('javascript:;', $lang->story->planAB, '', "id='changePlan' " . ($canBatchChangePlan ? '' : "class='disabled'"));
                           if($canBatchChangePlan)
                           {
-                              echo "<ul class='dropdown-menu'>";
                               unset($plans['']);
                               unset($plans[$plan->id]);
                               $plans      = array(0 => $lang->null) + $plans;
                               $withSearch = count($plans) > 10;
+                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                               foreach($plans as $planID => $planName)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID=$plan->id");

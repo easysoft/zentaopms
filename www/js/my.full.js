@@ -1376,7 +1376,7 @@ function fixedTfootAction(formID)
     if($inputgroup.size() > 0)var $inputwidth = $inputgroup.width();
 
 
-    var tfootOffset = $tfoot.offset().top + $tfoot.height();
+    var tfootOffset = $tfoot.offset().top + 30;
     var windowH     = $(window).height();
     var tableWidth  = $table.width();
     if(tfootOffset > windowH)
