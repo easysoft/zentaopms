@@ -48,6 +48,7 @@ include '../../common/view/header.lite.html.php';
             echo html::submitButton($lang->login);
             if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
             echo html::hidden('referer', $referer);
+            echo html::a(inlink('reset'), $lang->user->resetPassword);
             ?>
             </td>
           </tr>

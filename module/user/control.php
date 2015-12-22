@@ -807,6 +807,48 @@ class user extends control
         $vars = !empty($referer) ? "referer=$referer" : '';
         $this->locate($this->createLink('user', 'login', $vars));
     }
+
+    /**
+     * Reset password. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function reset()
+    {
+        if(!isset($_SESSION['resetFileName']))
+        {
+            $resetFileName = $this->app->getBasePath() . 'www' . DIRECTORY_SEPARATOR . uniqid('reset_') . '.txt';
+            $this->session->set('resetFileName', $resetFileName);
+        }
+
+        $resetFileName = $this->session->resetFileName;
+        $this->view->title = $this->lang->user->resetPassword;
+
+        $status = '';
+        if(!file_exists($resetFileName) or (time() - filemtime($resetFileName)) > 60 * 2) $status = 'createFile';
+
+        if($_POST)
+        {
+            if($status == 'createFile') die(js::reload('parent'));
+
+            $result = $this->user->resetPassword();
+            if(dao::isError()) die(js::error(dao::getError()));
+            if(!$result) die(js::alert($this->lang->user->resetFail));
+
+            echo js::alert($this->lang->user->resetSuccess);
+            die(js::locate(inlink('logout'), 'parent'));
+        }
+
+        if($status == 'createFile')
+        {
+            $this->view->status = $status;
+            die($this->display());
+        }
+
+        $this->view->status = 'reset';
+        $this->display();
+    }
     
     /**
      * User dynamic.

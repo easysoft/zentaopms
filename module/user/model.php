@@ -486,6 +486,30 @@ class userModel extends model
     }
 
     /**
+     * Reset password.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function resetPassword()
+    {
+        if(!$this->checkPassword()) return;
+        
+        $user = $this->getById($this->post->account);
+        if(!$user) return false;
+
+        $password = md5($this->post->password1);
+        if(isset($this->config->safe->mode) and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode)
+        {
+            dao::$errors['password1'][] = $this->lang->user->weakPassword;
+            return false;
+        }
+
+        $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
+        return !dao::isError();
+    }
+
+    /**
      * Check the passwds posted.
      * 
      * @access public

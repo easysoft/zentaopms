@@ -87,7 +87,7 @@ $lang->extension->noticeOkFile             = "<h5>For security reason, system ne
     <ol>
     <li>Keep the ok.txt content empty.</li>
     <li>If the file exists already, remove and recreate it again.</li>
-    <ul>"; 
+    </ol>"; 
 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Install';

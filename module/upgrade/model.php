@@ -1019,6 +1019,6 @@ class upgradeModel extends model
     public function checkSafeFile()
     {
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
-        return (!file_exists($statusFile) or time() - filemtime($statusFile) > 3600) ? $statusFile : false;
+        return (!file_exists($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
     }
 }

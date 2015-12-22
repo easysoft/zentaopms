@@ -47,6 +47,7 @@ $lang->user->status      = 'Status';
 $lang->user->ditto       = 'Ditto';
 $lang->user->originalPassword = 'Original password';
 $lang->user->verifyPassword   = 'Enter your password';
+$lang->user->resetPassword    = 'Reset password';
 
 $lang->user->index           = "Index";
 $lang->user->view            = "Info";
@@ -171,3 +172,13 @@ $lang->user->contacts->createList   = 'Createa a list';
 $lang->user->contacts->noListYet    = 'No contacts list yet.';
 $lang->user->contacts->confirmDelete= 'Are you sure to delete this list?';
 $lang->user->contacts->or           = ' or ';
+
+$lang->user->resetFail       = "Reset fail, Check account";
+$lang->user->resetSuccess    = "Reset success.";
+$lang->user->noticeResetFile = "<h5>For security reason, system need to confirm you're administrator of zentao system.</h5>
+    <h5>Please login into the zentao host and create the %s file.</h5>
+    <p>Note:</p>
+    <ol>
+    <li>Keep the ok.txt content empty.</li>
+    <li>If the file exists already, remove and recreate it again.</li>
+    </ol>"; 
