@@ -315,7 +315,7 @@ class doc extends control
         }
 
         $projects = $this->project->getPairs('all');
-        if($libID == 'project' and ($projects))
+        if($libID == 'project' and empty($projects))
         {
             echo js::alert($this->lang->doc->errorEmptyProject);
             die(js::locate('back'));
