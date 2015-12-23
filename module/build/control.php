@@ -213,6 +213,7 @@ class build extends control
      */
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
     {
+        $branch = $branch ? "0,$branch" : $branch;
         if($varName == 'openedBuild' )
         { 
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
@@ -241,7 +242,8 @@ class build extends control
      */
     public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
     {
-        if($varName == 'openedBuild')   
+        $branch = $branch ? "0,$branch" : $branch;
+        if($varName == 'openedBuild')
         {
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params);

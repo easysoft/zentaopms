@@ -950,7 +950,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit);
+        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit);
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
