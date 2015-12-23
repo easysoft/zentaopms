@@ -326,7 +326,7 @@ class testtaskModel extends model
          * */
         $postData   = fixer::input('post')->get();
         $caseResult = isset($postData->result) ? $postData->result : 'pass';
-        if($postData->steps)
+        if(isset($postData->steps) and $postData->steps)
         {
             foreach($postData->steps as $stepID => $stepResult)
             {
@@ -339,7 +339,7 @@ class testtaskModel extends model
         }
 
         /* Create result of every step. */
-        if($postData->steps)
+        if(isset($postData->steps) and $postData->steps)
         {
             foreach($postData->steps as $stepID =>$stepResult)
             {

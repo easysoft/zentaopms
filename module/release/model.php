@@ -100,7 +100,7 @@ class releaseModel extends model
      * @access public
      * @return int
      */
-    public function create($productID)
+    public function create($productID, $branch = 0)
     {
         $buildID = 0;
         if($this->post->build == false)
@@ -108,6 +108,7 @@ class releaseModel extends model
             $build = fixer::input('post')
                 ->add('product', (int)$productID)
                 ->add('builder', $this->app->user->account)
+                ->add('branch', $branch)
                 ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
                 ->remove('build,files,labels')
                 ->get();
@@ -116,7 +117,6 @@ class releaseModel extends model
             $buildID = $this->dao->lastInsertID();
         }
 
-        $branch = 0;
         if($this->post->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
         $release = fixer::input('post')
             ->add('product', (int)$productID)
@@ -152,8 +152,7 @@ class releaseModel extends model
     public function update($releaseID)
     {
         $oldRelease = $this->getByID($releaseID);
-
-        $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
+        $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)

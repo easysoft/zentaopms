@@ -217,6 +217,7 @@ class buildModel extends model
             ->where('id')->eq((int)$buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND deleted = '0'")
             ->exec();
+        if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }
 

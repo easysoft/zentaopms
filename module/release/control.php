@@ -58,7 +58,7 @@ class release extends control
     {
         if(!empty($_POST))
         {
-            $releaseID = $this->release->create($productID);
+            $releaseID = $this->release->create($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
