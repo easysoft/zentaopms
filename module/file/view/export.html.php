@@ -39,7 +39,16 @@ function switchEncode(fileType)
         $('#encode').attr('disabled', 'disabled');
     }
 }
-$(document).ready(function(){$('#fileType').change();});
+$(document).ready(function()
+{
+    $('#fileType').change();
+    <?php if($this->cookie->checkedItem):?>
+    setTimeout(function()
+    {
+        $('#exportType').val('selected');
+    }, 150);
+    <?php endif;?>
+});
 </script>
 <div id='titlebar'>
   <div class='heading'>
@@ -63,7 +72,7 @@ $(document).ready(function(){$('#fileType').change();});
         <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control'");?>
       </td>
       <td class='w-100px'>
-        <?php echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all', "class='form-control'");?>
+        <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
       </td>
       <td><?php echo html::submitButton($lang->export);?></td>
     </tr>
