@@ -330,13 +330,13 @@ class file extends control
 
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
             {
-                $zipFile  = $this->file->savePath . $file['pathname'];
-                $filePath = $this->file->extractZip($zipFile);
+                $zipFile = $this->file->savePath . $file['pathname'];
+                $files   = $this->file->extractZip($zipFile);
 
                 unlink($zipFile);
-                if(!$filePath) die(js::alert($this->lang->file->errorExtract));
+                if(!$files) die(js::alert($this->lang->file->errorExtract));
 
-                $this->session->set($module . 'ImagesFile', $filePath);
+                $this->session->set($module . 'ImagesFile', $files);
                 die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent.parent'));
             }
         }

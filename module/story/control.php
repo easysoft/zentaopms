@@ -201,10 +201,7 @@ class story extends control
             $mails = $this->story->batchCreate($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail)
-            {
-                $this->sendmail($mail->storyID, $mail->actionID);
-            }
+            foreach($mails as $mail) $this->sendmail($mail->storyID, $mail->actionID);
             die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
         }
 
@@ -226,19 +223,14 @@ class story extends control
         /* Process upload images. */
         if($this->session->storyImagesFile)
         {
-            $extractPath = $this->session->storyImagesFile;
-            if(is_dir($extractPath))
+            $files = $this->session->storyImagesFile;
+            foreach($files as $fileName => $file)
             {
-                $titles = array();
-                $files  = glob($extractPath . '/*');
-                sort($files);
-                foreach($files as $fileName)
-                {
-                    $fileName = basename($fileName);
-                    $titles[$fileName] = preg_replace('/^\d+_/', '', pathinfo($fileName, PATHINFO_FILENAME));
-                }
-                $this->view->titles = $titles;
+                $title = $file['title'];
+                $titles[$title] = $fileName;
             }
+            krsort($titles);
+            $this->view->titles = $titles;
         }
 
         $moduleOptionMenu['same'] = $this->lang->story->same;

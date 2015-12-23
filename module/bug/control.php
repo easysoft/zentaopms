@@ -416,19 +416,14 @@ class bug extends control
 
         if($this->session->bugImagesFile)
         {
-            $extractPath = $this->session->bugImagesFile;
-            if(is_dir($extractPath))
+            $files = $this->session->bugImagesFile;
+            foreach($files as $fileName => $file)
             {
-                $titles = array();
-                $files = glob($extractPath . '/*');
-                sort($files);
-                foreach($files as $fileName)
-                {
-                    $fileName = basename($fileName);
-                    $titles[$fileName] = preg_replace('/^\d+_/', '', pathinfo($fileName, PATHINFO_FILENAME));
-                }
-                $this->view->titles = $titles;
+                $title = $file['title'];
+                $titles[$title] = $fileName;
             }
+            krsort($titles);
+            $this->view->titles = $titles;
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;

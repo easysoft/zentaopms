@@ -222,6 +222,7 @@ class storyModel extends model
     public function batchCreate($productID = 0, $branch = 0)
     {
         $now      = helper::now();
+        $mails    = array();
         $stories  = fixer::input('post')->get();
         $batchNum = count(reset($stories));
 
@@ -242,9 +243,10 @@ class storyModel extends model
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
+
         for($i = 0; $i < $batchNum; $i++)
         {
-            if($stories->title[$i] != '')
+            if(!empty($stories->title[$i]))
             {
                 $data = new stdclass();
                 $data->module     = $stories->module[$i];
@@ -275,18 +277,17 @@ class storyModel extends model
                 $specData->story   = $storyID;
                 $specData->version = 1;
                 $specData->title   = $stories->title[$i];
-                if($stories->spec[$i] != '') $specData->spec = nl2br($stories->spec[$i]);
+                $specData->spec    = '';
+                if(!empty($stories->spec[$i])) $specData->spec = nl2br($stories->spec[$i]);
 
                 if(!empty($stories->uploadImage[$i]))
                 {
-                    $fileName  = htmlspecialchars_decode($stories->uploadImage[$i]);
-                    $realPath  = $this->session->storyImagesFile . $fileName;
+                    $fileName = $stories->uploadImage[$i];
+                    $file     = $this->session->storyImagesFile[$fileName];
 
-                    $file = array();
-                    $file['extension'] = $this->file->getExtension($fileName);
-                    $file['pathname']  = $this->file->setPathName($i, $file['extension']);
-                    $file['title']     = str_replace(".{$file['extension']}", '', $fileName);
-                    $file['size']      = filesize($realPath);
+                    $realPath = $file['realpath'];
+                    unset($file['realpath']);
+
                     if(rename($realPath, $this->file->savePath . $file['pathname']))
                     {
                         $file['addedBy']    = $this->app->user->account;    
@@ -321,7 +322,9 @@ class storyModel extends model
         if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
         {
             $classFile = $this->app->loadClass('zfile'); 
-            if(is_dir($this->session->storyImagesFile)) $classFile->removeDir($this->session->storyImagesFile);
+            $file = current($_SESSION['storyImagesFile']);
+            $realPath = dirname($file['realpath']);
+            if(is_dir($realPath)) $classFile->removeDir($realPath);
             unset($_SESSION['storyImagesFile']);
         }
 

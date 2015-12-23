@@ -413,18 +413,38 @@ class fileModel extends model
 
         $filePath = $parentPath . str_replace('.zip', '', basename($zipFile)) . '/';
         if(is_dir($filePath)) $classFile->removeDir($filePath);
+        mkdir($filePath);
 
         $this->app->loadClass('pclzip', true);
         $zip   = new pclzip($zipFile);
         $files = $zip->listContent();
-        foreach($files as $uploadFile)
+        foreach($files as $i => $uploadFile)
         {
             $extension = strtolower(substr(strrchr($uploadFile['filename'], '.'), 1));
             if(empty($extension) or !in_array($extension, $this->config->file->imageExtensions)) return false;
         }
 
-        if($zip->extract(PCLZIP_OPT_PATH, $filePath) == 0) return false;
-        return $filePath;
+        $extractedFiles = array();
+        foreach($files as $i => $uploadFile)
+        {
+            $fileName = mb_convert_encoding($uploadFile['filename'], 'UTF-8', 'gb2312');
+
+            $file = array();
+            $file['extension'] = $this->getExtension($fileName);
+            $file['pathname']  = $this->setPathName($i, $file['extension']);
+            $file['title']     = str_replace(".{$file['extension']}", '', $fileName);
+            $file['size']      = $uploadFile['size'];
+
+            $fileName = basename($file['pathname']);
+            $file['realpath']  = $filePath . $fileName;
+            $list = $zip->extract(PCLZIP_OPT_BY_NAME, $uploadFile['filename'], PCLZIP_OPT_EXTRACT_AS_STRING);
+            if($list)
+            {
+                file_put_contents($file['realpath'], $list[0]['content']);
+                $extractedFiles[$fileName] = $file;
+            }
+        }
+        return $extractedFiles;
     }
 
     /**

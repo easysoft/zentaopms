@@ -41,7 +41,7 @@
     </thead>
     <?php $i = 0; ?>
     <?php if(!empty($titles)):?>
-    <?php foreach($titles as $fileName => $storyTitle):?>
+    <?php foreach($titles as $storyTitle => $fileName):?>
     <?php $moduleID = $i == 0 ? $moduleID : 'same';?>
     <?php $planID   = $i == 0 ? '' : 'same';?>
     <?php $pri      = $i == 0 ? '' : 'same';?>

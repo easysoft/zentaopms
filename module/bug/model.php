@@ -140,14 +140,11 @@ class bugModel extends model
 
             if(!empty($data->uploadImage[$i]))
             {
-                $fileName  = htmlspecialchars_decode($data->uploadImage[$i]);
-                $realPath  = $this->session->bugImagesFile . $fileName;
+                $fileName = $data->uploadImage[$i];
+                $file     = $this->session->bugImagesFile[$fileName];
 
-                $file = array();
-                $file['extension'] = $this->file->getExtension($fileName);
-                $file['pathname']  = $this->file->setPathName($i, $file['extension']);
-                $file['title']     = str_replace(".{$file['extension']}", '', $fileName);
-                $file['size']      = filesize($realPath);
+                $realPath = $file['realpath'];
+                unset($file['realpath']);
                 if(rename($realPath, $this->file->savePath . $file['pathname']))
                 {
                     if(in_array($file['extension'], $this->config->file->imageExtensions))
@@ -194,7 +191,9 @@ class bugModel extends model
         if(!empty($data->uploadImage) and $this->session->bugImagesFile)
         {
             $classFile = $this->app->loadClass('zfile'); 
-            if(is_dir($this->session->bugImagesFile)) $classFile->removeDir($this->session->bugImagesFile);
+            $file = current($_SESSION['bugImagesFile']);
+            $realPath = dirname($file['realpath']);
+            if(is_dir($realPath)) $classFile->removeDir($realPath);
             unset($_SESSION['bugImagesFile']);
         }
 

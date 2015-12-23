@@ -57,7 +57,7 @@
       ?>
       <?php $i = 0; ?>
       <?php if(!empty($titles)):?>
-      <?php foreach($titles as $fileName => $bugTitle):?>
+      <?php foreach($titles as $bugTitle => $fileName):?>
       <?php
       $moduleID  = $i == 0 ? $moduleID  : 'ditto';
       $projectID = $i == 0 ? $projectID  : 'ditto';
