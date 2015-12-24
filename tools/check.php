@@ -62,7 +62,12 @@ $whiteList[] = 'sso-users';
 $whiteList[] = 'sso-login';
 $whiteList[] = 'sso-logout';
 $whiteList[] = 'sso-bind';
+$whiteList[] = 'sso-getuserpairs';
+$whiteList[] = 'sso-getbindusers';
+$whiteList[] = 'sso-binduser';
+$whiteList[] = 'sso-createuser';
 $whiteList[] = 'mail-asyncsend';
+$whiteList[] = 'user-reset';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

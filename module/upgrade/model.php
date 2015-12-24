@@ -130,6 +130,7 @@ class upgradeModel extends model
                 $this->adjustPriv7_4_beta();
             case '7_4_beta':
                 $this->execSQL($this->getUpgradeFile('7.4.beta'));
+            case '8_0':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -201,6 +202,7 @@ class upgradeModel extends model
         case '7_2_4':     $confirmContent .= file_get_contents($this->getUpgradeFile('7.2.4'));
         case '7_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.3'));
         case '7_4_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('7.4.beta'));
+        case '8_0':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

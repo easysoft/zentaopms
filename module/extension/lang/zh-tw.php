@@ -87,7 +87,7 @@ $lang->extension->noticeOkFile             = '<h5>為了安全起見，系統需
     <ol>
     <li>檔案內容為空。</li>
     <li>如果之前檔案存在，刪除之後重新創建。</li>
-    </ul>'; 
+    </ol>'; 
 
 $lang->extension->upgradeExt     = '升級';
 $lang->extension->installExt     = '安裝';

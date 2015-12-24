@@ -47,6 +47,7 @@ $lang->user->status      = '狀態';
 $lang->user->ditto       = '同上';
 $lang->user->originalPassword = '原密碼';
 $lang->user->verifyPassword   = '請輸入你的密碼';
+$lang->user->resetPassword    = '忘記密碼';
 
 $lang->user->index           = "用戶視圖首頁";
 $lang->user->view            = "用戶詳情";
@@ -171,3 +172,13 @@ $lang->user->contacts->createList   = '創建新列表：';
 $lang->user->contacts->noListYet    = '還沒有創建任何列表。';
 $lang->user->contacts->confirmDelete= '您確定要刪除這個列表嗎？';
 $lang->user->contacts->or           = ' 或者 ';
+
+$lang->user->resetFail       = "重置密碼失敗，檢查用戶名是否存在！";
+$lang->user->resetSuccess    = "重置密碼成功，請用新密碼登錄。";
+$lang->user->noticeResetFile = '<h5>為了安全起見，系統需要確認您的管理員身份</h5>
+    <h5>請登錄禪道所在的伺服器，創建%s檔案。</h5>
+    <p>注意：</p>
+    <ol>
+    <li>檔案內容為空。</li>
+    <li>如果之前檔案存在，刪除之後重新創建。</li>
+    </ol>'; 
