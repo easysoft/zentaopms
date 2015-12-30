@@ -20,13 +20,13 @@
     </div>
   </div>
 
-  <div class='main pdb-20'>
+  <div class='main pdb-20' style='word-break:break-all'>
     <fieldset>
       <legend><?php echo $lang->testcase->precondition;?></legend>
       <?php echo $case->precondition;?>
     </fieldset>
     <div id='casesResults'>
-      <table class='table table-condensed table-hover' style='border: 1px solid #ddd'>
+      <table class='table table-condensed table-hover' style='border: 1px solid #ddd; word-break:break-all'>
         <?php $count = count($results);?>
         <caption class='text-left' style='border: 1px solid #ddd; border-bottom: none;'>
           <strong><?php echo $lang->testcase->result?> &nbsp;<span> <?php printf($lang->testtask->showResult, $count)?></span> <span class='result-tip'></span></strong>
@@ -51,8 +51,8 @@
               <thead>
                 <tr>
                   <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
-                  <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
-                  <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
+                  <th class='w-p30'><?php echo $lang->testcase->stepDesc;?></th>
+                  <th class='w-p30'><?php echo $lang->testcase->stepExpect;?></th>
                   <th><?php echo $lang->testcase->result;?></th>
                   <th class='w-p20'><?php echo $lang->testcase->real;?></th>
                 </tr>

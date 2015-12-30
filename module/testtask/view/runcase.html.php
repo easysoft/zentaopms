@@ -20,15 +20,15 @@
 </div>
 <div class='main'>
   <form class='form-condensed' method='post'>
-    <table class='table table-bordered table-form'>
+    <table class='table table-bordered table-form' style='word-break:break-all'>
       <thead>
         <tr>
-          <td colspan='5'><strong><?php echo $lang->testcase->precondition;?></strong> <?php echo $run->case->precondition;?></td>
+          <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong> <?php echo $run->case->precondition;?></td>
         </tr>
         <tr>
           <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
-          <th class='w-p40'><?php  echo $lang->testcase->stepDesc;?></th>
-          <th class='w-p20'><?php  echo $lang->testcase->stepExpect;?></th>
+          <th class='w-p30'><?php  echo $lang->testcase->stepDesc;?></th>
+          <th class='w-p30'><?php  echo $lang->testcase->stepExpect;?></th>
           <th class='w-100px'><?php echo $lang->testcase->result;?></th>
           <th><?php echo $lang->testcase->real;?></th>
         </tr>

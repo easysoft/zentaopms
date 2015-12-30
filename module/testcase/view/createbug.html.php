@@ -12,12 +12,12 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <form action='<?php echo $this->createLink('bug', 'create', "product=$productID&branch=$branch&extras=$extras")?>' target='_parent' method='post'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
+  <table class='table table-condensed table-hover table-striped tablesorter' style='word-break:break-all'>
     <thead>
       <tr>
         <th class='w-60px'><?php echo $lang->testcase->stepID;?></th>
-        <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
-        <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
+        <th class='w-p30'><?php echo $lang->testcase->stepDesc;?></th>
+        <th class='w-p30'><?php echo $lang->testcase->stepExpect;?></th>
         <th><?php echo $lang->testcase->result;?></th>
         <th class='w-p20'><?php echo $lang->testcase->real;?></th>
       </tr>

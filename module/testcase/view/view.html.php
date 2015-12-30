@@ -74,7 +74,7 @@
 
 <div class='row-table'>
   <div class='col-main'>
-    <div class='main'>
+    <div class='main' style='word-break:break-all'>
       <fieldset>
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <?php echo nl2br($case->precondition);?>

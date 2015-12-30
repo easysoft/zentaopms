@@ -262,7 +262,7 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$_POST['product']}&branch={$_POST['branch']}&browseType=byModule&args={$_POST['module']}");
+            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$_POST['product']}&branch=" . (isset($_POST['branch']) ? $_POST['branch'] : '') . "&browseType=byModule&args={$_POST['module']}");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
