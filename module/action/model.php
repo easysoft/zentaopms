@@ -241,8 +241,8 @@ class actionModel extends model
             }
             elseif($actionName == 'unlinkedfromproject')
             {
-                $name = $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('product', 'browse', "productID=$action->extra"), "#$action->extra " . $name);
+                $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name);
             }
             elseif($actionName == 'unlinkedfromplan')
             {
