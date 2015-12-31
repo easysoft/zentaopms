@@ -199,11 +199,50 @@ class helper
         /* Create the merged model file and import it. */
         $replaceMark = '//**//';    // This mark is for replacing code using.
         $modelLines .= "$replaceMark\n}";
-        if(!@file_put_contents($mergedModelFile, $modelLines))
+
+        /* Unset conflic function for model. */
+        preg_match_all('/.* function\s+(\w+)\s*\(.*\)[^\{]*\{/Ui', $modelLines, $functions);
+        $functions = $functions[1];
+        $conflics  = array_count_values($functions);
+        foreach($conflics as $functionName => $count)
         {
-            die("ERROR: $mergedModelFile not writable, please make sure the " . dirname($mergedModelFile) . ' directory exists and writable');
+            if($count <= 1) unset($conflics[$functionName]);
         }
-        if(!class_exists($extTmpModelClass))include $mergedModelFile;
+        if($conflics)
+        {
+            $modelLines = explode("\n", $modelLines);
+            $startDel   = false;
+            foreach($modelLines as $line => $code)
+            {
+                if($startDel and preg_match('/.* function\s+(\w+)\s*\(.*\)/Ui', $code)) $startDel = false;
+                if($startDel)
+                {
+                    unset($modelLines[$line]);
+                }
+                else
+                {
+                    foreach($conflics as $functionName => $count)
+                    {
+                        if($count <= 1) continue;
+                        if(preg_match('/.* function\s+' . $functionName . '\s*\(.*\)/Ui', $code)) 
+                        {
+                            $conflics[$functionName] = $count - 1;
+                            $startDel = true;
+                            unset($modelLines[$line]);
+                        }
+                    }
+                }
+            }
+
+            $modelLines = join("\n", $modelLines);
+        }
+
+        $tmpMergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . 'tmp.' . $moduleName . '.php';
+        if(!@file_put_contents($tmpMergedModelFile, $modelLines))
+        {
+            die("ERROR: $tmpMergedModelFile not writable, please make sure the " . dirname($tmpMergedModelFile) . ' directory exists and writable');
+        }
+        if(!class_exists($extTmpModelClass)) include $tmpMergedModelFile;
 
         /* Get hook codes need to merge. */
         $hookCodes = array();
@@ -217,7 +256,7 @@ class helper
         /* Cycle the hook methods and merge hook codes. */
         $hookedMethods    = array_keys($hookCodes);
         $mainModelCodes   = file($mainModelFile);
-        $mergedModelCodes = file($mergedModelFile);
+        $mergedModelCodes = file($tmpMergedModelFile);
         foreach($hookedMethods as $method)
         {
             /* Reflection the hooked method to get it's defined position. */
@@ -227,13 +266,13 @@ class helper
             $endLine     = $methodRelfection->getEndLine() . ' ';
 
             /* Merge hook codes. */
-            $oldCodes = $definedFile == $mergedModelFile ? $mergedModelCodes : $mainModelCodes;
+            $oldCodes = $definedFile == $tmpMergedModelFile ? $mergedModelCodes : $mainModelCodes;
             $oldCodes = join("", array_slice($oldCodes, $startLine - 1, $endLine - $startLine + 1));
             $openBrace = strpos($oldCodes, '{');
             $newCodes = substr($oldCodes, 0, $openBrace + 1) . "\n" . join("\n", $hookCodes[$method]) . substr($oldCodes, $openBrace + 1);
 
             /* Replace it. */
-            if($definedFile == $mergedModelFile)
+            if($definedFile == $tmpMergedModelFile)
             {
                 $modelLines = str_replace($oldCodes, $newCodes, $modelLines);
             }
@@ -242,6 +281,7 @@ class helper
                 $modelLines = str_replace($replaceMark, $newCodes . "\n$replaceMark", $modelLines);
             }
         }
+        unlink($tmpMergedModelFile);
         
         /* Save it. */
         $modelLines = str_replace($extTmpModelClass, $extModelClass, $modelLines);
