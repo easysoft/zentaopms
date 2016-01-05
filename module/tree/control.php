@@ -332,13 +332,12 @@ class tree extends control
      */
     public function ajaxGetSonModules($moduleID, $rootID = 0, $type = 'story')
     {
-        if($moduleID) die(json_encode($this->dao->findByParent($moduleID)->from(TABLE_MODULE)->fetchPairs('id', 'name')));
+        if($moduleID) die(json_encode($this->dao->select('id,name')->from(TABLE_MODULE)->where('parent')->eq($moduleID)->andWhere('type')->eq($type)->fetchPairs('id', 'name')));
         $modules = $this->dao->select('id, name')->from(TABLE_MODULE)
             ->where('root')->eq($rootID)
             ->andWhere('parent')->eq('0')
             ->andWhere('type')->eq($type)
             ->fetchPairs();
-        foreach($modules as $key => $name) $modules[$key] = str_replace(" ","&nbsp;","$name");
         die(json_encode($modules));
     }
 }
