@@ -126,7 +126,7 @@ class file extends control
             }
             elseif(function_exists('iconv'))
             {
-                $output = @iconv('utf-8', $this->post->encode, $output);
+                $output = @iconv('utf-8', $this->post->encode . '//TRANSLIT', $output);
             }
         }
 
