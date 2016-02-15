@@ -56,6 +56,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
       </fieldset>
       <div class='actions'>
         <?php 
+        echo html::hidden('lastEditedDate', $bug->lastEditedDate);
         echo html::submitButton();
         $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
         echo html::linkButton($lang->goback, $browseLink);

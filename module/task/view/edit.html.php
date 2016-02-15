@@ -48,6 +48,7 @@
         <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
       </fieldset>
       <div class='actions actions-form'>
+        <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
         <?php echo html::submitButton($lang->save) . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id")) .html::hidden('consumed', $task->consumed);?>
       </div>
       <?php include '../../common/view/action.html.php';?>

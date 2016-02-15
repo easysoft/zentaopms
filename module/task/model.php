@@ -187,6 +187,13 @@ class taskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
+        if($oldTask->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->hasEdited;
+            return false;
+        }
+        unset($_POST['lastEditedDate']);
+
         $now     = helper::now();
         $task    = fixer::input('post')
             ->setDefault('story, estimate, left, consumed', 0)

@@ -222,10 +222,7 @@ class project extends control
 
         /* team member pairs. */
         $memberPairs = array();
-        foreach($this->view->teamMembers as $key => $member)
-        {
-            $memberPairs[$key] = $member->realname;
-        }
+        foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
         /* Assign. */
         $this->view->tasks       = $tasks;

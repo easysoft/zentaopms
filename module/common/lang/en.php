@@ -364,6 +364,7 @@ $lang->error->passwordrule    = "Password should more than six letters.";
 $lang->error->accessDenied    = 'No purview';
 $lang->error->pasteImg        = 'Your browser does not support the paste image!';
 $lang->error->noData          = 'No data';
+$lang->error->hasEdited       = 'The record may have been changed. Please refresh and re edit!';
 
 /* Pager. */
 $lang->pager = new stdclass();

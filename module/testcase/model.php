@@ -226,6 +226,13 @@ class testcaseModel extends model
     public function update($caseID)
     {
         $oldCase     = $this->getById($caseID);
+        if($oldCase->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->hasEdited;
+            return false;
+        }
+        unset($_POST['lastEditedDate']);
+
         $now         = helper::now();
         $stepChanged = false;
         $steps       = array();

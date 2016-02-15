@@ -342,7 +342,14 @@ class storyModel extends model
     {
         $specChanged = false;
         $oldStory    = $this->getById($storyID);
-        $story       = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
+        if($oldStory->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->hasEdited;
+            return false;
+        }
+        unset($_POST['lastEditedDate']);
+
+        $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
         if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
 
         $now   = helper::now();
@@ -399,6 +406,12 @@ class storyModel extends model
     {
         $now      = helper::now();
         $oldStory = $this->getById($storyID);
+        if($oldStory->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->hasEdited;
+            return false;
+        }
+        unset($_POST['lastEditedDate']);
 
         $story = fixer::input('post')
             ->cleanInt('product,module,pri')
@@ -1192,14 +1205,13 @@ class storyModel extends model
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
+            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('stage')->in('developed,released')
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('stage')->notIN('released')->fetchPairs('story', 'story');
-        foreach($stages as $storyID) unset($stories[$storyID]);
         return $this->mergePlanTitle($productID, $stories, $branch);
     }
 

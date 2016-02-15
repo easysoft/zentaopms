@@ -393,6 +393,13 @@ class bugModel extends model
     public function update($bugID)
     {
         $oldBug = $this->getById($bugID);
+        if($oldBug->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->hasEdited;
+            return false;
+        }
+        unset($_POST['lastEditedDate']);
+
         $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')

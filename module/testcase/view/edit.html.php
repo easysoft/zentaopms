@@ -76,8 +76,9 @@
         <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
       </fieldset>
       <div class='text-center mgb-20'>
-       <?php echo html::submitButton();?>
-       <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+        <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
+        <?php echo html::submitButton();?>
+        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>
