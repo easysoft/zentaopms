@@ -36,7 +36,6 @@ var browseType = '<?php echo $browseType;?>';
         <?php echo $moduleTree;?>
         <div class='text-right'>
           <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
-          <?php if(is_numeric($libID)) common::printLink('tree', 'fix', "root=$libID&type=customdoc", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </div>

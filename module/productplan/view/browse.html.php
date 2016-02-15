@@ -32,7 +32,7 @@
     <?php if($this->session->currentProductType != 'normal'):?>
     <th class='w-100px'> <?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
     <?php endif;?>
-    <th class='w-p50'>   <?php common::printOrderLink('desc',  $orderBy, $vars, $lang->productplan->desc);?></th>
+    <th class='w-p50'>   <?php echo $lang->productplan->desc;?></th>
     <th class='w-100px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
     <th class='w-100px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
     <th class="w-110px {sorter: false}"><?php echo $lang->actions;?></th>

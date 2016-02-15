@@ -63,7 +63,6 @@
         <?php echo $moduleTree;?>
         <div class='text-right'>
           <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage);?>
-          <?php common::printLink('tree', 'fix',    "root=$productID&type=story", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </div>

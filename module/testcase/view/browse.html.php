@@ -29,7 +29,6 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
         <?php echo $moduleTree;?>
         <div class='text-right'>
           <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage);?>
-          <?php common::printLink('tree', 'fix',    "root=$productID&type=case", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </div>

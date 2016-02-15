@@ -31,11 +31,16 @@ class story extends control
      * Create a story.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @param  int    $moduleID 
+     * @param  int    $storyID 
+     * @param  int    $projectID 
+     * @param  int    $bugID 
+     * @param  int    $planID 
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0)
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0)
     {
         if(!empty($_POST))
         {
@@ -112,7 +117,6 @@ class story extends control
         $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
-        $planID     = 0;
         $source     = '';
         $pri        = 0;
         $estimate   = '';
