@@ -31,7 +31,6 @@
           <?php common::printLink('project', 'edit',    "projectID=$projectID", $lang->edit);?>
           <?php common::printLink('project', 'delete',  "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin');?>
           <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage);?>
-          <?php common::printLink('tree', 'fix',        "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </div>
