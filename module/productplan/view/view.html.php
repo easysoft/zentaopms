@@ -44,7 +44,7 @@
   ?>
   </div>
 </div>
-<div class='row-table'>
+<div class='row-table <?php echo $this->cookie->productPlanSide == 'hide' ? 'hide-side' : ''?>'>
   <div class='col-main'>
     <div class='main'>
       <div class='tabs'>
@@ -55,7 +55,13 @@
         <div class='tab-content'>
           <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
             <?php if(common::hasPriv('productplan', 'linkStory')):?>
-            <div class='action'><?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
+            <div class='action'>
+            <?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?>
+              <span class='side-handle-btn'>
+              <?php $class = $this->cookie->productPlanSide == 'hide' ? 'icon-collapse-full' : 'icon-expand-full'?>
+              <?php echo html::a('###', "<i class='$class'></i>", '', "class='btn btn-sm'")?>
+              </span>
+            </div>
             <div class='linkBox'></div>
             <?php endif;?>
             <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
@@ -154,7 +160,13 @@
           </div>
           <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
             <?php if(common::hasPriv('productplan', 'linkBug')):?>
-            <div class='action'><?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
+            <div class='action'>
+            <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?>
+              <span class='side-handle-btn'>
+              <?php $class = $this->cookie->productPlanSide == 'hide' ? 'icon-collapse-full' : 'icon-expand-full'?>
+              <?php echo html::a('###', "<i class='$class'></i>", '', "class='btn btn-sm'")?>
+              </span>
+            </div>
             <div class='linkBox'></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
