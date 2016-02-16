@@ -159,7 +159,7 @@ class user extends control
         $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager);
         $this->view->type       = $type;
         $this->view->account    = $account;
-        $this->view->user       = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->user       = $this->user->getById($account);
         $this->view->pager      = $pager;
 
         $this->display();
@@ -199,7 +199,7 @@ class user extends control
         $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
         $this->view->account    = $account;
         $this->view->type       = $type;
-        $this->view->user       = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->user       = $this->user->getById($account);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->pager      = $pager;
 
@@ -280,19 +280,11 @@ class user extends control
         $cases = array();
         if($type == 'case2Him')
         {
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-                ->Where('t1.assignedTo')->eq($account)
-                ->andWhere('t1.status')->ne('done')
-                ->andWhere('t3.status')->ne('done')
-                ->orderBy($sort)->page($pager)->fetchAll();
+            $cases = $this->loadModel('testcase')->getByAssigento($account, $sort, $pager);
         }
         elseif($type == 'caseByHim')
         {
-            $cases = $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($sort)->page($pager)->fetchAll();
+            $cases = $this->loadModel('testcase')->getByOpened($account, $sort, $pager);
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         
@@ -332,7 +324,7 @@ class user extends control
         $this->view->tabID      = 'project';
         $this->view->projects   = $this->user->getProjects($account);
         $this->view->account    = $account;
-        $this->view->user       = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->user       = $this->user->getById($account);
 
         $this->display();
     }
@@ -894,7 +886,7 @@ class user extends control
         $this->view->period  = $period;
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $this->view->account = $account;
-        $this->view->user    = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->user    = $this->user->getById($account);
         $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
         $this->display();
     }

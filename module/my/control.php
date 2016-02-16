@@ -290,30 +290,11 @@ class my extends control
         $cases = array();
         if($type == 'assigntome')
         {
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-                ->Where('t1.assignedTo')->eq($this->app->user->account)
-                ->andWhere('t1.status')->ne('done')
-                ->andWhere('t3.status')->ne('done')
-                ->andWhere('t3.deleted')->eq(0)
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($sort)->page($pager)->fetchAll();
-        }
-        elseif($type == 'donebyme')
-        {
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->Where('t1.assignedTo')->eq($this->app->user->account)
-                ->andWhere('t1.status')->eq('done')
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($sort)->page($pager)->fetchAll();
+            $cases = $this->loadModel('testcase')->getByAssigento($this->app->user->account, $sort, $pager);
         }
         elseif($type == 'openedbyme')
         {
-            $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($sort)->page($pager)->fetchAll();
+            $cases = $this->loadModel('testcase')->getByOpened($this->app->user->account, $sort, $pager);
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         

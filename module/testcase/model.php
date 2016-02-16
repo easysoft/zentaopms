@@ -217,6 +217,44 @@ class testcaseModel extends model
     }
 
     /**
+     * Get cases by assigento.
+     * 
+     * @param  string $account 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByAssigento($account, $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
+            ->Where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.status')->ne('done')
+            ->andWhere('t3.status')->ne('done')
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get cases by openedBy
+     * 
+     * @param  string $account 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByOpened($account, $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
      * Update a case.
      * 
      * @param  int    $caseID 
