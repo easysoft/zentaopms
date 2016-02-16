@@ -3,6 +3,9 @@
 .tabs .tab-content .tab-pane #querybox{margin:0px}
 .tabs .tab-content .tab-pane #querybox form{padding-left:0px;}
 
+.hide-side .col-main {width: 100%;}
+.hide-side .col-side .main-side {width: 0; display: none;}
+
 #unlinkBugList, #unlinkStoryList{margin-bottom:5px;}
 input[type=checkbox].ml-10px{margin-left:10px;}
 
