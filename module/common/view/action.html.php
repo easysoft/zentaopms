@@ -146,7 +146,7 @@ $(function()
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
         <?php if($canEditComment):?>
-        <span class='pull-right comment<?php echo $action->id;?>'><?php echo html::a('javascript:toggleComment(' . $action->id . ')', '<i class="icon-pencil"></i>', '', "class='btn btn-mini'")?></span>
+        <span class='pull-right comment<?php echo $action->id;?>'><?php echo html::a('javascript:toggleComment(' . $action->id . ')', '<i class="icon-pencil"></i>', '', "class='btn btn-mini' style='border:none'")?></span>
         <?php endif;?>
         <?php 
         if($action->comment) 
