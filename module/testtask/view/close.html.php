@@ -32,6 +32,15 @@
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->testtask->mailto;?></th>
+        <td colspan='2'>
+          <div class='input-group'>
+            <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $testtask->mailto), "multiple class='form-control'");?>
+            <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
+          </div>
+        </td>
+      </tr>
+      <tr>
         <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
       </tr>
     </table>

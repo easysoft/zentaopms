@@ -41,7 +41,7 @@ class testtaskModel extends model
      */
     function create()
     {
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->join('mailto', ',')->get();
         $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->create['id']);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
             ->autoCheck($skipFields = 'begin,end')
@@ -170,7 +170,7 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->get();
         $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->edit['id']);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
@@ -215,6 +215,7 @@ class testtaskModel extends model
         $testtask = fixer::input('post')
             ->setDefault('status', 'done')
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
+            ->join('mailto', ',')
             ->remove('comment')->get();
 
         $testtask = $this->loadModel('file')->processEditor($testtask, $this->config->testtask->editor->close['id']);

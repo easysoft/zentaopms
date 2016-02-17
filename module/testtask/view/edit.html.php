@@ -65,6 +65,15 @@
         <td colspan='2'><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='form-control'");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->testtask->mailto;?></th>
+        <td colspan='2'>
+          <div class='input-group'>
+            <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control'");?>
+            <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
+          </div>
+        </td>
+      </tr>
+      <tr>
         <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton();?> </td>
       </tr>
     </table>

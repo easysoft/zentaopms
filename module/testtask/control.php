@@ -95,10 +95,7 @@ class testtask extends control
             $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            if($this->post->owner)
-            {
-                $this->sendmail($taskID, $actionID, 'opened');
-            }
+            $this->sendmail($taskID, $actionID, 'opened');
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -152,10 +149,11 @@ class testtask extends control
             $this->view->products  = $products;
             $this->view->projectID = $projectID;
         }
-        $this->view->projects  = $projects;
-        $this->view->productID = $productID;
-        $this->view->builds    = $builds; 
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
+        $this->view->projects     = $projects;
+        $this->view->productID    = $productID;
+        $this->view->builds       = $builds;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
+        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
         $this->display();
     }
@@ -417,10 +415,11 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->edit;
 
-        $this->view->task      = $task;
-        $this->view->projects  = $this->product->getProjectPairs($productID);
-        $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
-        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
+        $this->view->task         = $task;
+        $this->view->projects     = $this->product->getProjectPairs($productID);
+        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
+        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
+        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
         $this->display();
     }
@@ -486,6 +485,7 @@ class testtask extends control
             {
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID, 'closed');
             }
 
             if(isonlybody()) die(js::reload('parent.parent'));
@@ -499,11 +499,13 @@ class testtask extends control
         /* Set menu. */
         $this->testtask->setMenu($this->products, $productID, $testtask->branch);
 
-        $this->view->testtask   = $this->testtask->getById($taskID);
-        $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->close;
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->close;
-        $this->view->actions    = $actions;
+        $this->view->testtask     = $this->testtask->getById($taskID);
+        $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
+        $this->view->position[]   = $this->lang->testtask->common;
+        $this->view->position[]   = $this->lang->close;
+        $this->view->actions      = $actions;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
+        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->display();
     }
 
@@ -868,25 +870,55 @@ class testtask extends control
         /* Reset $this->output. */
         $this->clear();
 
+        /* Set toList and ccList. */
         $testtask = $this->testtask->getByID($testtaskID);
-        $action   = $this->action->getById($actionID);
         $users    = $this->loadModel('user')->getPairs('noletter');
+        $toList   = $testtask->owner;
+        $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
+        if($toList == '')
+        {
+            if($ccList == '') return;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
 
+        /* Get action info. */
+        $action          = $this->loadModel('action')->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+
+        /* Create the email content. */
         $this->view->testtask = $testtask;
         $this->view->action   = $action;
         $this->view->users    = $users;
 
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
+        /* Set email title. */
         if($actionType == 'opened')
         {
             $mailTitle = sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+        elseif($actionType == 'closed')
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtaskID, $testtask->name);
         }
         else
         {
             $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
         }
-        $this->loadModel('mail')->send($this->post->owner, $mailTitle, $mailContent); 
+
+        /* Send mail. */
+        $this->loadModel('mail')->send($toList, $mailTitle, $mailContent, $ccList); 
         if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 }
