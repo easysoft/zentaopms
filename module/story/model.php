@@ -942,6 +942,7 @@ class storyModel extends model
             ->andWhere('story')->eq($storyID)
             ->andWhere('type')->in('devel,test')
             ->andWhere('status')->ne('cancel')
+            ->andWhere('closedReason')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
