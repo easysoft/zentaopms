@@ -337,7 +337,7 @@ class treeModel extends model
             $extra['tip'] = false;
             return $this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra); 
         }
-        
+
         /* createdVersion > 4.1. */
         $menu = "<ul class='tree'>";
 
@@ -657,7 +657,7 @@ class treeModel extends model
             }
         }
 
-       if(!empty($projects[0])) $products[0] = $this->lang->project->noProduct;
+        if(!empty($projects[0])) $products[0] = $this->lang->project->noProduct;
 
         foreach($products as $productID => $productName)
         {
@@ -901,7 +901,7 @@ class treeModel extends model
             ->orderBy('type desc,`order`')
             ->fetchAll();
     }
-    
+
     /**
      * Get sons of a task module.
      * 
@@ -1026,7 +1026,7 @@ class treeModel extends model
         {
             $module = $this->dao->select('id,type,parent')->from(TABLE_MODULE)->where('id')->eq($module->parent)->fetch();
         }
-       
+
         return empty($module) ? 0 : $module->id;
     }
 
@@ -1099,6 +1099,7 @@ class treeModel extends model
      */
     public function manageChild($rootID, $type, $parentModuleID, $childs)
     {
+        $this->checkUnique($rootID, $type, $parentModuleID, $childs);
         $parentModule = $this->getByID($parentModuleID);
         $branches     = $this->post->branch;
         if($parentModule)
@@ -1152,6 +1153,7 @@ class treeModel extends model
     {
         $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
+        $this->checkUnique($self->root, $self->type, $self->parent, array("id{$self->id}" => $module->name), array("id{$self->id}" => $self->branch));
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
         $module->grade = $parent ? $parent->grade + 1 : 1;
@@ -1164,7 +1166,7 @@ class treeModel extends model
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
         if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);
     }
-   
+
     /**
      * Change root.
      * 
@@ -1304,5 +1306,51 @@ class treeModel extends model
 
         /* Save modules to database. */
         foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
+    }
+
+    /**
+     * Check unique module name.
+     * 
+     * @param  int    $rootID 
+     * @param  string $viewType 
+     * @param  int    $parentModuleID 
+     * @param  array  $modules 
+     * @param  array  $branches 
+     * @access public
+     * @return bool
+     */
+    public function checkUnique($rootID, $viewType, $parentModuleID, $modules = array(), $branches = array())
+    {
+        if(empty($branches)) $branches = $this->post->branch;
+
+        if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
+        {
+            /* Get createdVersion. */
+            $table = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
+            $createdVersion = $this->dao->select('createdVersion')->from($table)->where('id')->eq($rootID)->fetch('createdVersion');
+            if($createdVersion and version_compare($createdVersion, '4.1', '>')) $viewType .= ',story';
+        }
+
+        $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->fetchAll();
+        $repeatName    = '';
+        foreach($modules as $id => $name)
+        {
+            $existed = false;
+            if(strpos($id, 'id') === 0)
+            {
+                $existed  = true;
+                $moduleID = substr($id, 2);
+            }
+            foreach($existsModules as $existsModule)
+            {
+                if($name == $existsModule->name and (!$existed or $moduleID != $existsModule->id) and (!isset($branches[$id]) or $branches[$id] == $existsModule->branch))
+                {
+                    $repeatName = $name;
+                    break 2;
+                }
+            }
+        }
+        if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        return true;
     }
 }

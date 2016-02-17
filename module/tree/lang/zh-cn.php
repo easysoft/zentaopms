@@ -38,6 +38,7 @@ $lang->tree->confirmDelete = '该模块及其子模块都会被删除，您确�
 $lang->tree->confirmRoot   = "模块的所属{$lang->productCommon}修改，会关联修改该模块下的需求、Bug、用例的所属{$lang->productCommon}，以及{$lang->projectCommon}和{$lang->productCommon}的关联关系。该操作比较危险，请谨慎操作。是否确认修改？";
 $lang->tree->successSave   = '成功保存';
 $lang->tree->successFixed  = '成功修正数据！';
+$lang->tree->repeatName    = '模块名“%s”已经存在！';
 
 $lang->tree->name       = '模块名称';
 $lang->tree->parent     = '上级模块';

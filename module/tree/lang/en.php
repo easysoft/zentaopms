@@ -38,6 +38,7 @@ $lang->tree->confirmDelete = 'Are you sure to delete this module and its childre
 $lang->tree->confirmRoot   = "Modify the module {$lang->productCommon}s, modified the {$lang->productCommon}s belong to the needs of the module, bug, use case, and {$lang->projectCommon} and {$lang->productCommon} relationship. This is dangerous, please be careful. To confirm the change?";
 $lang->tree->successSave   = 'Successfully saved';
 $lang->tree->successFixed  = 'Successfully fixed.';
+$lang->tree->repeatName    = 'The name "%s" has exists!';
 
 $lang->tree->name       = 'Name';
 $lang->tree->parent     = 'Parent';
