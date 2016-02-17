@@ -246,11 +246,12 @@ class fileModel extends model
             $realPathName= $this->savePath . $pathName;
             if(!is_dir(dirname($realPathName)))mkdir(dirname($realPathName));
             move_uploaded_file($file['tmpname'], $realPathName);
-            $this->compressImage($pathName);
+            $compressImage = $this->compressImage($pathName);
+            if($compressImage) $file['size'] = $compressedImage['size'];
 
             $fileInfo->addedBy   = $this->app->user->account;
             $fileInfo->addedDate = helper::now();
-            $fileInfo->size      = filesize($realPathName);
+            $fileInfo->size      = $file['size'];
             $this->dao->update(TABLE_FILE)->data($fileInfo)->where('id')->eq($fileID)->exec();
             return true;
         }
