@@ -6,4 +6,5 @@ tr, th, td {padding:5px}
 .history {border:1px solid gray; padding:10px; margin-top:10px; margin-bottom:10px}
 .header  {background:#efefef}
 p{margin:0px}
+.w-id {width:45px}
 </style>

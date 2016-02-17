@@ -1,12 +1,5 @@
 <?php $url = $this->report->getSysURL();?>
-<style>
-del  {background:#fcc}
-ins  {background:#cfc; text-decoration:none}
-table, tr, th, td {border:1px solid gray; font-size:12px; border-collapse:collapse}
-tr, th, td {padding:5px}
-.w-id      {width:45px}
-.header    {background:#efefef}
-</style>
+<?php include '../../common/view/mail.css.php'?>
 <?php if(isset($mail->bugs)):?>
 <table width='66%' align='center'>
   <tr class='header'>
