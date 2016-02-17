@@ -51,13 +51,21 @@ class file extends control
             if($file['size'] == 0) die(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
             {
-                $url =  $this->file->webPath . $file['pathname'];
+                /* Compress image for jpg and bmp. */
+                $compressedImage = $this->file->compressImage($file['pathname']);
+                if($compressedImage)
+                {
+                    $file['pathname']   = $compressedImage['pathname'];
+                    $file['extension']  = $compressedImage['extension'];
+                    $file['size']       = $compressedImage['size'];
+                }
 
                 $file['addedBy']    = $this->app->user->account;
                 $file['addedDate']  = helper::today();
                 unset($file['tmpname']);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
+                $url = $this->file->webPath . $file['pathname'];
                 die(json_encode(array('error' => 0, 'url' => $url)));
             }
             else
