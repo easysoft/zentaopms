@@ -14,6 +14,7 @@
 $onlybody = isonlybody() ? true : false;
 if($onlybody) $_GET['onlybody'] = 'no';
 ?>
+<?php include '../../common/view/mail.css.php';?>
 <table width='98%' align='center'>
   <tr class='header'>
     <td>
