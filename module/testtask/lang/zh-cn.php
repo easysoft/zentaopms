@@ -45,6 +45,7 @@ $lang->testtask->name           = '名称';
 $lang->testtask->begin          = '开始日期';
 $lang->testtask->end            = '结束日期';
 $lang->testtask->desc           = '描述';
+$lang->testtask->mailto         = '抄送给';
 $lang->testtask->status         = '当前状态';
 $lang->testtask->assignedTo     = '指派给';
 $lang->testtask->linkVersion    = '版本';
@@ -99,8 +100,10 @@ $lang->testtask->placeholder->end   = '结束日期';
 $lang->testtask->mail = new stdclass();
 $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
+$lang->testtask->mail->close  = new stdclass();
 $lang->testtask->mail->create->title = "%s创建了版本 #%s:%s";
 $lang->testtask->mail->edit->title   = "%s编辑了版本 #%s:%s";
+$lang->testtask->mail->close->title  = "%s关闭了版本 #%s:%s";
 
 $lang->testtask->testScope = '测试范畴';
 

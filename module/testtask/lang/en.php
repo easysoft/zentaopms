@@ -45,6 +45,7 @@ $lang->testtask->name           = 'Name';
 $lang->testtask->begin          = 'Begin';
 $lang->testtask->end            = 'End';
 $lang->testtask->desc           = 'Desc';
+$lang->testtask->mailto         = 'Mailto';
 $lang->testtask->status         = 'Status';
 $lang->testtask->assignedTo     = 'Assign';
 $lang->testtask->linkVersion    = 'Version';
@@ -99,8 +100,10 @@ $lang->testtask->placeholder->end   = 'end date';
 $lang->testtask->mail = new stdclass();
 $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
+$lang->testtask->mail->close  = new stdclass();
 $lang->testtask->mail->create->title = "%s created testtask #%s:%s";
 $lang->testtask->mail->edit->title   = "%s finished testtask #%s:%s";
+$lang->testtask->mail->close->title  = "%s closed testtask #%s:%s";
 
 $lang->testtask->testScope = 'Test scope';
 

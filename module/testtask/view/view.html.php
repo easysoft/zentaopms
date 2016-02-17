@@ -84,6 +84,10 @@
             <td><?php echo $users[$task->owner];?></td>
           </tr>  
           <tr>
+            <th><?php echo $lang->testtask->mailto;?></th>
+            <td><?php $mailto = explode(',', str_replace(' ', '', $task->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account, $account);?></td> 
+          </tr>
+          <tr>
             <th><?php echo $lang->testtask->pri;?></th>
             <td><?php echo $task->pri;?></td>
           </tr>  
