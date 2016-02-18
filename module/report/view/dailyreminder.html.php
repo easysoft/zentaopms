@@ -63,20 +63,20 @@
 </table>
 <?php endif;?>
 
-<?php if(isset($mail->testtasks)):?>
+<?php if(isset($mail->testTasks)):?>
 <table width='66%' align='center'>
   <tr class='header'>
     <th class='w-id'><?php echo $lang->report->idAB;?></th>
-    <th><?php echo $lang->report->testtaskName;?></th>
+    <th><?php echo $lang->report->testTaskName;?></th>
   </tr>
-  <?php foreach($mail->testtasks as $testtask):?>
+  <?php foreach($mail->testTasks as $testTask):?>
   <tr>
-    <td><?php echo $testtask->id;?></td>
+    <td><?php echo $testTask->id;?></td>
     <td>
     <?php
-    $link = $this->createLink('testtask', 'view', "testtask=$testtask->id");
+    $link = $this->createLink('testTask', 'view', "testTask=$testTask->id");
     if($config->requestType == 'GET' and strpos($link, 'ztcli') !== false) $link = str_replace($this->server->php_self, $config->webRoot, $link);
-    echo html::a($url . $link, $testtask->name);
+    echo html::a($url . $link, $testTask->name);
     ?>
     </td>
   </tr>

@@ -87,13 +87,13 @@ $lang->report->idAB         = 'ID';
 $lang->report->bugTitle     = 'Bug標題';
 $lang->report->taskName     = '任務名稱';
 $lang->report->todoName     = '待辦名稱';
-$lang->report->testtaskName = '版本名稱';
+$lang->report->testTaskName = '版本名稱';
 
 $lang->report->mailtitle           = new stdclass();
 $lang->report->mailtitle->begin    = '提醒：您有';
 $lang->report->mailtitle->bug      = " Bugs(%s),";
 $lang->report->mailtitle->task     = " 任務(%s),";
 $lang->report->mailtitle->todo     = " 待辦(%s),";
-$lang->report->mailtitle->testtask = " 測試版本(%s),";
+$lang->report->mailtitle->testTask = " 測試版本(%s),";
 
 $lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';

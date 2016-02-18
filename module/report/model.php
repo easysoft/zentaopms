@@ -377,23 +377,19 @@ class reportModel extends model
     }
 
     /**
-     * Get user testtasks.
+     * Get user testTasks.
      * 
      * @access public
      * @return array
      */
-    public function getUserTesttasks()
+    public function getUserTestTasks()
     {
-        $stmt = $this->dao->select('t1.*, t2.account as user')->from(TABLE_TESTTASK)->alias('t1')
+        return $this->dao->select('t1.*, t2.account as user')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.owner = t2.account')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere("(t1.status='wait' OR t1.status='doing')")
-            ->query();
-
-        $testtasks = array();
-        while($testtask = $stmt->fetch()) $testtasks[$testtask->user][] = $testtask;
-        return $testtasks;
+            ->fetchGroup('user');
     }
 }
 
