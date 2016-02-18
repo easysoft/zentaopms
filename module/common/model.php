@@ -571,10 +571,7 @@ class commonModel extends model
     {
         if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false)
         {
-            global $app, $lang;
-            $notifyFile = $app->getBasePath() . 'www/data/notify/notify.zip';
-
-            if(!file_exists($notifyFile)) return false;
+            global $lang;
             echo html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i>", '', "title='$lang->downNotify'") . ' &nbsp; ';
         }
     }

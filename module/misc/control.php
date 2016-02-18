@@ -92,14 +92,17 @@ class misc extends control
      */
     public function downNotify()
     {
-        $notifyDir   = $this->app->getBasePath() . 'www/data/notify/';
-        $packageFile = $notifyDir . 'notify.zip';
+        $notifyDir = $this->app->getBasePath() . 'tmp/cache/notify/';
+        if(!is_dir($notifyDir))mkdir($notifyDir, 0755, true);
+
+        $account     = $this->app->user->account;
+        $packageFile = $notifyDir . $account . 'notify.zip';
         $loginFile   = $notifyDir . 'config.json';
 
         /* write login info into tmp file. */
         $loginInfo = new stdclass();
         $userInfo  = new stdclass();
-        $userInfo->Account        = $this->app->user->account;
+        $userInfo->Account        = $account;
         $userInfo->Url            = common::getSysURL() . $this->config->webRoot;
         $userInfo->PassMd5        = '';
         $userInfo->Role           = $this->app->user->role;
@@ -109,6 +112,7 @@ class misc extends control
         $loginInfo->LastLoginTime = time() / 86400 + 25569;
         $loginInfo = json_encode($loginInfo);
 
+        file_put_contents($packageFile, file_get_contents("http://dl.cnezsoft.com/notify/newest/zentaonotify.win_32.zip"));
         file_put_contents($loginFile, $loginInfo);
 
         define('PCLZIP_TEMPORARY_DIR', $notifyDir);
@@ -119,14 +123,13 @@ class misc extends control
         $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
         if($result == 0) die("Error : " . $archive->errorInfo(true));
 
-        $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH);
+        $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'notify');
         if($result == 0) die("Error : " . $archive->errorInfo(true));
         
+        $zipContent = file_get_contents($packageFile);
         unlink($loginFile);
-
-        $this->fetch('file', 'sendDownHeader', array('fileName' => 'notify.zip', 'zip', file_get_contents($packageFile)));
-        $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
-        if($result == 0) die("Error : " . $archive->errorInfo(true));
+        unlink($packageFile);
+        $this->fetch('file', 'sendDownHeader', array('fileName' => 'notify.zip', 'zip', $zipContent));
     }
 
     /**
