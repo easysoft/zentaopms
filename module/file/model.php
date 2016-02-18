@@ -431,6 +431,7 @@ class fileModel extends model
         $files = $zip->listContent();
         foreach($files as $i => $uploadFile)
         {
+            if($uploadFile['folder']) continue;
             $extension = strtolower(substr(strrchr($uploadFile['filename'], '.'), 1));
             if(empty($extension) or !in_array($extension, $this->config->file->imageExtensions)) return false;
         }
@@ -438,7 +439,9 @@ class fileModel extends model
         $extractedFiles = array();
         foreach($files as $i => $uploadFile)
         {
-            $fileName = mb_convert_encoding($uploadFile['filename'], 'UTF-8', 'gb2312');
+            if($uploadFile['folder']) continue;
+            $fileName = mb_convert_encoding($uploadFile['filename'], 'UTF-8', 'gbk');
+            $fileName = substr($fileName, strrpos($fileName, '/') + 1);
 
             $file = array();
             $file['extension'] = $this->getExtension($fileName);
@@ -448,7 +451,7 @@ class fileModel extends model
 
             $fileName = basename($file['pathname']);
             $file['realpath']  = $filePath . $fileName;
-            $list = $zip->extract(PCLZIP_OPT_BY_NAME, $uploadFile['filename'], PCLZIP_OPT_EXTRACT_AS_STRING);
+            $list = $zip->extract(PCLZIP_OPT_BY_INDEX, $i, PCLZIP_OPT_EXTRACT_AS_STRING);
             if($list)
             {
                 file_put_contents($file['realpath'], $list[0]['content']);
