@@ -76,4 +76,5 @@ include '../../common/view/header.lite.html.php';
     <?php endif;?>
   </div>
 </div>
+<?php js::set('browser', $lang->user->browser)?>
 <?php include '../../common/view/footer.lite.html.php';?>
