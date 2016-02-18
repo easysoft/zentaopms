@@ -862,7 +862,8 @@ class bugModel extends model
     {
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->andWhere("(project = '" . (int)$projectID . "' " . (empty($build) ? '' : "AND CONCAT(',', openedBuild, ',') like '%,$build,%'") . ")")
+            ->beginIF(empty($build))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
