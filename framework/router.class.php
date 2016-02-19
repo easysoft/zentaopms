@@ -18,14 +18,6 @@
 class router
 {
     /**
-     * The directory seperator.
-     * 
-     * @var string
-     * @access private
-     */
-    private $pathFix;
-
-    /**
      * The base path of the ZenTaoPMS framework.
      *
      * @var string
@@ -345,7 +337,7 @@ class router
      */
     protected function setPathFix()
     {
-        $this->pathFix = DIRECTORY_SEPARATOR;
+        define('DS', DIRECTORY_SEPARATOR);
     }
     
     /**
@@ -356,7 +348,7 @@ class router
      */
     protected function setBasePath()
     {
-        $this->basePath = realpath(dirname(dirname(__FILE__))) . $this->pathFix;
+        $this->basePath = realpath(dirname(dirname(__FILE__))) . DS;
     }
     
     /**
@@ -367,7 +359,7 @@ class router
      */
     protected function setFrameRoot()
     {
-        $this->frameRoot = $this->basePath . 'framework' . $this->pathFix;
+        $this->frameRoot = $this->basePath . 'framework' . DS;
     }
 
     /**
@@ -378,7 +370,7 @@ class router
      */
     protected function setCoreLibRoot()
     {
-        $this->coreLibRoot = $this->basePath . 'lib' . $this->pathFix;
+        $this->coreLibRoot = $this->basePath . 'lib' . DS;
     }
 
     /**
@@ -393,11 +385,11 @@ class router
     {
         if(empty($appRoot))
         {
-            $this->appRoot = $this->basePath . 'app' . $this->pathFix . $appName . $this->pathFix;
+            $this->appRoot = $this->basePath . 'app' . DS . $appName . DS;
         }
         else
         {
-            $this->appRoot = realpath($appRoot) . $this->pathFix;
+            $this->appRoot = realpath($appRoot) . DS;
         }
         if(!is_dir($this->appRoot)) $this->triggerError("The app you call not found in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
     }
@@ -410,7 +402,7 @@ class router
      */
     protected function setTmpRoot()
     {
-        $this->tmpRoot = $this->appRoot . 'tmp' . $this->pathFix;
+        $this->tmpRoot = $this->appRoot . 'tmp' . DS;
     }
 
     /**
@@ -421,7 +413,7 @@ class router
      */
     protected function setCacheRoot()
     {
-        $this->cacheRoot = $this->tmpRoot . 'cache' . $this->pathFix;
+        $this->cacheRoot = $this->tmpRoot . 'cache' . DS;
     }
 
     /**
@@ -432,7 +424,7 @@ class router
      */
     protected function setLogRoot()
     {
-        $this->logRoot = $this->tmpRoot . 'log' . $this->pathFix;
+        $this->logRoot = $this->tmpRoot . 'log' . DS;
     }
 
     /**
@@ -443,7 +435,7 @@ class router
      */
     protected function setConfigRoot()
     {
-        $this->configRoot = $this->appRoot . 'config' . $this->pathFix;
+        $this->configRoot = $this->appRoot . 'config' . DS;
     }
 
     /**
@@ -454,7 +446,7 @@ class router
      */
     protected function setModuleRoot()
     {
-        $this->moduleRoot = $this->appRoot . 'module' . $this->pathFix;
+        $this->moduleRoot = $this->appRoot . 'module' . DS;
     }
 
     /**
@@ -465,7 +457,7 @@ class router
      */
     protected function setThemeRoot()
     {
-        $this->themeRoot = $this->appRoot . 'www' . $this->pathFix . 'theme' . $this->pathFix;
+        $this->themeRoot = $this->appRoot . 'www' . DS . 'theme' . DS;
     }
 
     /**
@@ -563,17 +555,6 @@ class router
     public function setTimezone()
     {
         if(isset($this->config->timezone)) date_default_timezone_set($this->config->timezone);
-    }
-
-    /**
-     * Get the $pathFix var
-     * 
-     * @access public
-     * @return string
-     */
-    public function getPathFix()
-    {
-        return $this->pathFix;
     }
 
     /**
@@ -995,7 +976,7 @@ class router
      */
     public function setControlFile($exitIfNone = true)
     {
-        $this->controlFile = $this->moduleRoot . $this->moduleName . $this->pathFix . 'control.php';
+        $this->controlFile = $this->moduleRoot . $this->moduleName . DS . 'control.php';
         if(!is_file($this->controlFile))
         {
             $this->triggerError("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
@@ -1026,7 +1007,7 @@ class router
     public function getModulePath($moduleName = '')
     {
         if($moduleName == '') $moduleName = $this->moduleName;
-        return $this->getModuleRoot() . strtolower(trim($moduleName)) . $this->pathFix;
+        return $this->getModuleRoot() . strtolower(trim($moduleName)) . DS;
     }
 
     /**
@@ -1039,7 +1020,7 @@ class router
      */
     public function getModuleExtPath($moduleName, $ext)
     {
-        return $this->getModuleRoot() . strtolower(trim($moduleName)) . $this->pathFix . 'ext' . $this->pathFix . $ext . $this->pathFix;
+        return $this->getModuleRoot() . strtolower(trim($moduleName)) . DS . 'ext' . DS . $ext . DS;
     }
 
     /**
@@ -1351,7 +1332,7 @@ class router
 
         /* Search in $coreLibRoot. */
         $classFile = $this->coreLibRoot . $className;
-        if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
+        if(is_dir($classFile)) $classFile .= DS . $className;
         $classFile .= '.class.php';
         if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, $exit = true);
 
@@ -1476,7 +1457,7 @@ class router
     public function loadLang($moduleName)
     {
         $modulePath   = $this->getModulePath($moduleName);
-        $mainLangFile = $modulePath . 'lang' . $this->pathFix . $this->clientLang . '.php';
+        $mainLangFile = $modulePath . 'lang' . DS . $this->clientLang . '.php';
         $extLangPath  = $this->getModuleExtPath($moduleName, 'lang');
         $extLangFiles = helper::ls($extLangPath . $this->clientLang, '.php');
 

@@ -11,8 +11,6 @@
  */
 class editorModel extends model
 {
-    private $pathFix = DIRECTORY_SEPARATOR;
-
     /**
      * Get all modules 
      * 
@@ -48,7 +46,7 @@ class editorModel extends model
         foreach($moduleFiles as $moduleFile)
         {
             if($moduleFile == '.' or $moduleFile == '..' or $moduleFile == '.svn') continue;
-            $moduleFullFile = $moduleFullDir . $this->pathFix . $moduleFile;
+            $moduleFullFile = $moduleFullDir . DS . $moduleFile;
             if($moduleFile == 'control.php' or $moduleFile == 'model.php')
             {
                 $allModules[$moduleFullDir][$moduleFullFile] = $this->analysis($moduleFullFile);
@@ -60,7 +58,7 @@ class editorModel extends model
             elseif(is_dir($moduleFullFile)) 
             {
                 $ext = ($moduleFile == 'js' or $moduleFile == 'css') ? $moduleFile : 'php';
-                $extFiles = glob($moduleFullFile . $this->pathFix . "*.$ext");
+                $extFiles = glob($moduleFullFile . DS . "*.$ext");
                 if(!empty($extFiles))
                 {
                     foreach($extFiles as $fileName) $allModules[$moduleFullDir][$moduleFullFile][$fileName] = basename($fileName);
@@ -89,7 +87,7 @@ class editorModel extends model
         foreach($extensionDirs as $extensionDir)
         {
             if($extensionDir == '.' or $extensionDir == '..' or $extensionDir == '.svn') continue;
-            $extensionFullDir = $extPath . $this->pathFix . $extensionDir;
+            $extensionFullDir = $extPath . DS . $extensionDir;
             if(is_dir($extensionFullDir))
             {
                 $extensionList[$extensionFullDir] = array();
@@ -104,7 +102,7 @@ class editorModel extends model
                 foreach($extensionFiles as $extensionFile)
                 {
                     if($extensionFile == '.' or $extensionFile == '..' or $extensionFile == '.svn') continue;
-                    $extensionFullFile = $extensionFullDir . $this->pathFix . $extensionFile;
+                    $extensionFullFile = $extensionFullDir . DS . $extensionFile;
                     $extensionList[$extensionFullDir][$extensionFullFile] = $extensionFile;
                 }
             }
@@ -129,7 +127,7 @@ class editorModel extends model
         if(!$isExtension) $moduleFiles = $moduleFiles[$filePath];
         foreach($this->config->editor->$sort as $sort)
         {
-            $sortKey = empty($sort) ? $filePath : $filePath . $this->pathFix . $sort;
+            $sortKey = empty($sort) ? $filePath : $filePath . DS . $sort;
             if(array_key_exists($sortKey, $moduleFiles)) $sortModules[$sortKey] = $moduleFiles[$sortKey];
         }
         return $sortModules;
@@ -149,7 +147,7 @@ class editorModel extends model
         foreach($langDirs as $langDir)
         {
             if($langDir == '.' or $langDir == '..' or $langDir == '.svn') continue;
-            $langFullDir = $extensionFullDir . $this->pathFix . $langDir;
+            $langFullDir = $extensionFullDir . DS . $langDir;
             $fileList[$langFullDir] = array();
             if(is_dir($langFullDir))
             {
@@ -157,7 +155,7 @@ class editorModel extends model
                 foreach($langFiles as $langFile)
                 {
                     if($langFile == '.' or $langFile == '..' or $langFile == '.svn') continue;
-                    $langFullFile = $langFullDir . $this->pathFix . $langFile;
+                    $langFullFile = $langFullDir . DS . $langFile;
                     $fileList[$langFullDir][$langFullFile] = $langFile;
                 }
             }
@@ -175,8 +173,8 @@ class editorModel extends model
     public function analysis($fileName)
     {
         $classMethod = array();
-        $class = strstr($fileName, $this->pathFix . 'module' . $this->pathFix);
-        $class = substr($class, 0, strpos($class, $this->pathFix, 9));
+        $class = strstr($fileName, DS . 'module' . DS);
+        $class = substr($class, 0, strpos($class, DS, 9));
         $class = basename($class);
         if(strpos($fileName, 'model.php') !== false) $class .= 'Model';
         if(!class_exists($class)) include $fileName;
@@ -186,7 +184,7 @@ class editorModel extends model
             $methodName = $method->name;
             if($method->getFileName() != $fileName) continue;
             if($methodName == '__construct') continue;
-            $classMethod[$fileName . $this->pathFix . $methodName] = $methodName;
+            $classMethod[$fileName . DS . $methodName] = $methodName;
         }
         return $classMethod;
     }
@@ -206,7 +204,7 @@ class editorModel extends model
         {
             $module = basename(dirname(key($files)));
 
-            $langFile = dirname(key($files)) . $this->pathFix . 'lang' . $this->pathFix . $this->cookie->lang. '.php';
+            $langFile = dirname(key($files)) . DS . 'lang' . DS . $this->cookie->lang. '.php';
             if(file_exists($langFile))
             {
                 if(!isset($lang)) $lang = new stdclass();
@@ -268,7 +266,7 @@ class editorModel extends model
         {
             $file = "<span title='$fileName'>$fileName</span>";
         }
-        if(strpos($filePath, $this->pathFix . 'ext' . $this->pathFix) !== false)
+        if(strpos($filePath, DS . 'ext' . DS) !== false)
         {
             switch($fileName)
             {
@@ -305,7 +303,7 @@ class editorModel extends model
     {
         $tree = '';
         $file = "<span title='$file'>$file</span>";
-        if(strpos($filePath, $this->pathFix . 'ext' . $this->pathFix) !== false)
+        if(strpos($filePath, DS . 'ext' . DS) !== false)
         {
             $tree .= "$file " . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit, 'editWin');
             $tree .= html::a(inlink('delete', 'path=' . helper::safe64Encode($filePath)), $this->lang->delete, 'hiddenwin') . "\n";
@@ -370,7 +368,7 @@ class editorModel extends model
         $fileContent = $this->post->fileContent;
         if(get_magic_quotes_gpc()) $fileContent = stripslashes($fileContent);
         $dirPath = dirname($filePath);
-        $extFilePath = substr($filePath, 0, strpos($filePath, $this->pathFix . 'ext' . $this->pathFix) + 4);
+        $extFilePath = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS) + 4);
         if(!is_dir($dirPath) and is_writable($extFilePath)) mkdir($dirPath, 0777, true);
         if(is_writable($dirPath))
         {
@@ -453,8 +451,8 @@ EOD;
      */
     public function newControl($filePath)
     {
-        $className = strstr($filePath, $this->pathFix . 'module' . $this->pathFix);
-        $className = substr($className, 0, strpos($className, $this->pathFix, 9));
+        $className = strstr($filePath, DS . 'module' . DS);
+        $className = substr($className, 0, strpos($className, DS, 9));
         $className = basename($className);
         $methodName = basename($filePath, '.php');
         return $fileContent = <<<EOD
@@ -534,37 +532,37 @@ EOD;
     public function getSavePath($filePath, $action)
     {
         $fileName   = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
-        $moduleName = strstr($filePath, $this->pathFix . 'module' . $this->pathFix);
-        $moduleName = substr($moduleName, 0, strpos($moduleName, $this->pathFix, 9));
+        $moduleName = strstr($filePath, DS . 'module' . DS);
+        $moduleName = substr($moduleName, 0, strpos($moduleName, DS, 9));
         $moduleName = basename($moduleName);
-        $extPath    = $this->app->getModuleRoot() . $moduleName . $this->pathFix . 'ext' . $this->pathFix;
+        $extPath    = $this->app->getModuleRoot() . $moduleName . DS . 'ext' . DS;
         switch($action)
         {
         case 'extendModel':
             $fileName = empty($fileName) ? strtolower(basename($filePath)) . '.php' : $fileName;
-            return $extPath . 'model' . $this->pathFix . $fileName;
+            return $extPath . 'model' . DS . $fileName;
         case 'extendControl':
             $fileName = strtolower(basename($filePath)) . '.php';
-            return $extPath . 'control' . $this->pathFix . $fileName;
+            return $extPath . 'control' . DS . $fileName;
         case 'override':
             $fileName = basename($filePath);
-            return $extPath . 'view' . $this->pathFix . $fileName;
+            return $extPath . 'view' . DS . $fileName;
         case 'extendOther':
             $editName = basename($filePath);
             $fileName = empty($fileName) ? $editName: $fileName;
-            if($editName == 'config.php') return $extPath . 'config' .$this->pathFix . $fileName;
-            elseif(strpos($editName, '.php') !== false) return $extPath . 'lang' . $this->pathFix . str_replace('.php', '', $editName) . $this->pathFix . $fileName;
-            else return $extPath . substr($editName, strrpos($editName, '.') + 1) . $this->pathFix . substr($editName, 0, strrpos($editName, '.')) . $this->pathFix . $fileName;
+            if($editName == 'config.php') return $extPath . 'config' .DS . $fileName;
+            elseif(strpos($editName, '.php') !== false) return $extPath . 'lang' . DS . str_replace('.php', '', $editName) . DS . $fileName;
+            else return $extPath . substr($editName, strrpos($editName, '.') + 1) . DS . substr($editName, 0, strrpos($editName, '.')) . DS . $fileName;
         default:
             if(empty($fileName)) die(js::error($this->lang->editor->emptyFileName));
             $action = strtolower(str_replace('new', '', $action));
-            if($action == 'hook') return $extPath . 'view' . $this->pathFix . $fileName;
-            elseif($action == 'method') return $extPath . basename($filePath, '.php') . $this->pathFix . $fileName;
-            elseif($action == 'extend') return $filePath . $this->pathFix . $fileName;
-            elseif($action == 'config') return $extPath . 'config' . $this->pathFix . $fileName;
-            elseif($action == 'js') return $extPath . 'js' . $this->pathFix . substr($fileName, 0, strrpos($fileName, '.')) . $this->pathFix . $fileName;
-            elseif($action == 'css') return $extPath . 'css' . $this->pathFix . substr($fileName, 0, strrpos($fileName, '.')) . $this->pathFix . $fileName;
-            else return $extPath . 'lang' . $this->pathFix . str_replace('_', '-', $action) . $this->pathFix . $fileName;
+            if($action == 'hook') return $extPath . 'view' . DS . $fileName;
+            elseif($action == 'method') return $extPath . basename($filePath, '.php') . DS . $fileName;
+            elseif($action == 'extend') return $filePath . DS . $fileName;
+            elseif($action == 'config') return $extPath . 'config' . DS . $fileName;
+            elseif($action == 'js') return $extPath . 'js' . DS . substr($fileName, 0, strrpos($fileName, '.')) . DS . $fileName;
+            elseif($action == 'css') return $extPath . 'css' . DS . substr($fileName, 0, strrpos($fileName, '.')) . DS . $fileName;
+            else return $extPath . 'lang' . DS . str_replace('_', '-', $action) . DS . $fileName;
         }
     }
 }

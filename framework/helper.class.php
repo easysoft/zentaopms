@@ -162,7 +162,7 @@ class helper
 
         /* Else, judge whether needed update or not .*/
         $needUpdate      = false;
-        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $moduleName . '.php';
+        $mergedModelFile = $app->getTmpRoot() . 'model' . DS . $moduleName . '.php';
         $lastTime        = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
 
         while(!$needUpdate)
@@ -237,7 +237,7 @@ class helper
             $modelLines = join("\n", $modelLines);
         }
 
-        $tmpMergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . 'tmp.' . $moduleName . '.php';
+        $tmpMergedModelFile = $app->getTmpRoot() . 'model' . DS . 'tmp.' . $moduleName . '.php';
         if(!@file_put_contents($tmpMergedModelFile, $modelLines))
         {
             die("ERROR: $tmpMergedModelFile not writable, please make sure the " . dirname($tmpMergedModelFile) . ' directory exists and writable');

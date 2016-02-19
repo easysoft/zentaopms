@@ -138,14 +138,6 @@ class control
     private $output;
 
     /**
-     * The directory seperator.
-     * 
-     * @var string
-     * @access protected
-     */
-    protected $pathFix;
-
-    /**
      * The prefix of view file for mobile or PC. 
      * 
      * @var string   
@@ -171,7 +163,6 @@ class control
         $this->config   = $config;
         $this->lang     = $lang;
         $this->dbh      = $dbh;
-        $this->pathFix  = $this->app->getPathFix();
         $this->viewType = $this->app->getViewType();
 
         /* Load the model file auto. */
@@ -295,7 +286,7 @@ class control
         if(isset($this->config->viewPrefix[$this->viewType])) $viewType = 'html';
 
         /* The main view file, extension view file and hook file. */
-        $mainViewFile = $modulePath . 'view' . $this->pathFix . $this->viewPrefix . $methodName . '.' . $viewType . '.php';
+        $mainViewFile = $modulePath . 'view' . DS . $this->viewPrefix . $methodName . '.' . $viewType . '.php';
         $extViewFile  = $viewExtPath . $this->viewPrefix . $methodName . ".{$viewType}.php";
         $extHookFiles = glob($viewExtPath . $this->viewPrefix . $methodName . ".*.{$viewType}.hook.php");
 
@@ -337,12 +328,12 @@ class control
         $moduleName   = strtolower(trim($moduleName));
         $methodName   = strtolower(trim($methodName));
         $modulePath   = $this->app->getModulePath($moduleName);
-        $cssMethodExt = $this->app->getModuleExtPath($moduleName, 'css') . $methodName . $this->pathFix;
-        $cssCommonExt = $this->app->getModuleExtPath($moduleName, 'css') . 'common' . $this->pathFix;
+        $cssMethodExt = $this->app->getModuleExtPath($moduleName, 'css') . $methodName . DS;
+        $cssCommonExt = $this->app->getModuleExtPath($moduleName, 'css') . 'common' . DS;
 
         $css = '';
-        $mainCssFile   = $modulePath . 'css' . $this->pathFix . $this->viewPrefix . 'common.css';
-        $methodCssFile = $modulePath . 'css' . $this->pathFix . $this->viewPrefix . $methodName . '.css';
+        $mainCssFile   = $modulePath . 'css' . DS . $this->viewPrefix . 'common.css';
+        $methodCssFile = $modulePath . 'css' . DS . $this->viewPrefix . $methodName . '.css';
         if(file_exists($mainCssFile))   $css .= file_get_contents($mainCssFile);
         if(is_file($methodCssFile))     $css .= file_get_contents($methodCssFile);
 
@@ -379,12 +370,12 @@ class control
         $moduleName  = strtolower(trim($moduleName));
         $methodName  = strtolower(trim($methodName));
         $modulePath  = $this->app->getModulePath($moduleName);
-        $jsMethodExt = $this->app->getModuleExtPath($moduleName, 'js') . $methodName . $this->pathFix;
-        $jsCommonExt = $this->app->getModuleExtPath($moduleName, 'js') . 'common' . $this->pathFix;
+        $jsMethodExt = $this->app->getModuleExtPath($moduleName, 'js') . $methodName . DS;
+        $jsCommonExt = $this->app->getModuleExtPath($moduleName, 'js') . 'common' . DS;
 
         $js = '';
-        $mainJsFile   = $modulePath . 'js' . $this->pathFix . $this->viewPrefix . 'common.js';
-        $methodJsFile = $modulePath . 'js' . $this->pathFix . $this->viewPrefix . $methodName . '.js';
+        $mainJsFile   = $modulePath . 'js' . DS . $this->viewPrefix . 'common.js';
+        $methodJsFile = $modulePath . 'js' . DS . $this->viewPrefix . $methodName . '.js';
         if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile))     $js .= file_get_contents($methodJsFile);
 

@@ -58,7 +58,7 @@ class bugfreeConvertModel extends convertModel
      */
     public function setPath()
     {
-        $this->filePath = realpath($this->post->installPath) . $this->app->getPathFix() . 'BugFile' . $this->app->getPathFix();
+        $this->filePath = realpath($this->post->installPath) . DS . 'BugFile' . DS;
     }
 
     /**

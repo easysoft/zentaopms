@@ -127,7 +127,7 @@ class devModel extends model
      */
     public function getAPIs($module)
     {
-        $fileName = $this->app->getModuleRoot() . $module . $this->app->getPathFix() . 'control.php';
+        $fileName = $this->app->getModuleRoot() . $module . DS . 'control.php';
         if($module != 'common' and $module != 'dev')
         {
             include $fileName;

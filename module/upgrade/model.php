@@ -638,7 +638,7 @@ class upgradeModel extends model
      */
     public function getUpgradeFile($version)
     {
-        return $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'update' . $version . '.sql';
+        return $this->app->getAppRoot() . 'db' . DS . 'update' . $version . '.sql';
     }
 
     /**
