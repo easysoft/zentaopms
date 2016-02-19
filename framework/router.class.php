@@ -951,13 +951,22 @@ class router
     public function loadCommon()
     {
         $this->setModuleName('common');
-        if($this->setControlFile($exitIfNone = false))
+        $commonModelFile = helper::setModelFile('common');
+        if(file_exists($commonModelFile))
         {
-            include $this->controlFile;
-            if(class_exists('common'))
+            helper::import($commonModelFile);
+            if(class_exists('extcommonModel'))
             {
-                return new common();
-            }    
+                $commonClass = 'class common extends extcommonModel{}';
+                eval($commonClass);
+                return new extcommonModel();
+            }
+            elseif(class_exists('commonModel'))
+            {
+                $commonClass = 'class common extends commonModel{}';
+                eval($commonClass);
+                return new commonModel();
+            }
             else
             {
                 return false;
