@@ -1756,13 +1756,15 @@ class project extends control
      * AJAX: get team members of the project.
      *
      * @param  int    $projectID
+     * @param  string $assignedTo
      * @access public
      * @return void
      */
-    public function ajaxGetMembers($projectID)
+    public function ajaxGetMembers($projectID, $assignedTo = '')
     {
-        $users = $this->project->getTeamMemberPairs($projectID);
-        die(html::select('assignedTo', $users, '', "class='form-control'"));
+        $users      = $this->project->getTeamMemberPairs($projectID);
+        $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
+        die(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
     }
 
     /**

@@ -14,6 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('oldStoryID', $task->story); ?>
+<?php js::set('oldAssignedTo', $task->assignedTo); ?>
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject); ?>
 <?php js::set('changeProjectConfirmed', false); ?>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
