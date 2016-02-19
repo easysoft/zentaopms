@@ -76,6 +76,7 @@
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
         <td class='text-left' title="<?php echo $task->name?>">
+          <?php if(isset($branchGroups[$task->storyProduct][$task->storyBranch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->storyProduct][$task->storyBranch] . '</span>';?>
           <?php 
           if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
           if($task->fromBug) echo html::a($this->createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");

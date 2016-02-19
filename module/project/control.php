@@ -135,6 +135,7 @@ class project extends control
         $productID  = ($browseType == 'byproduct') ? (int)$param : 0;
         $project    = $this->commonAction($projectID, $status);
         $projectID  = $project->id;
+        $products   = $this->loadModel('product')->getProductsByProject($projectID);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -225,24 +226,25 @@ class project extends control
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
         /* Assign. */
-        $this->view->tasks       = $tasks;
-        $this->view->summary     = $this->project->summary($tasks);
-        $this->view->tabID       = 'task';
-        $this->view->pager       = $pager;
-        $this->view->recTotal    = $pager->recTotal;
-        $this->view->recPerPage  = $pager->recPerPage;
-        $this->view->orderBy     = $orderBy;
-        $this->view->browseType  = $browseType;
-        $this->view->status      = $status;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->param       = $param;
-        $this->view->projectID   = $projectID;
-        $this->view->project     = $project;
-        $this->view->productID   = $productID;
-        $this->view->moduleID    = $moduleID;
-        $this->view->moduleTree  = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
-        $this->view->projectTree = $this->project->tree();
-        $this->view->memberPairs = $memberPairs;
+        $this->view->tasks        = $tasks;
+        $this->view->summary      = $this->project->summary($tasks);
+        $this->view->tabID        = 'task';
+        $this->view->pager        = $pager;
+        $this->view->recTotal     = $pager->recTotal;
+        $this->view->recPerPage   = $pager->recPerPage;
+        $this->view->orderBy      = $orderBy;
+        $this->view->browseType   = $browseType;
+        $this->view->status       = $status;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param        = $param;
+        $this->view->projectID    = $projectID;
+        $this->view->project      = $project;
+        $this->view->productID    = $productID;
+        $this->view->moduleID     = $moduleID;
+        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
+        $this->view->projectTree  = $this->project->tree();
+        $this->view->memberPairs  = $memberPairs;
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
 
         $this->display();
     }
