@@ -366,7 +366,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 #searchbox {position: absolute; right: 0; top: 1px; width: 200px;}
 #searchbox .form-control, #searchbox .btn {padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}
-#typeSelector .btn{padding-left: 10px;}
+#typeSelector .btn{padding-left: 10px; border-right: none}
 #objectSwitcher .btn{padding-right: 10px; margin-left: -1px\0;}
 #searchbox .dropdown-menu {margin-top: -1px; width: 212px; padding: 0;}
 #searchbox .dropdown-menu > li {float: left; width: 105px; border-bottom: 1px dotted #ddd; border-right: 1px dotted #ddd}
