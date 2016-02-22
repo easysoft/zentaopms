@@ -1,5 +1,8 @@
-.tabs{position:relative;}
-.tabs .tab-content{padding:0px;border:0px;}
-.tabs .tab-content .tab-pane .action{position: absolute; right: 0px; top: 0px;}
-.tabs .tab-content .tab-pane #querybox{margin:0px; border-right:1px solid #ddd; border-left:1px solid #ddd;}
-.tabs .tab-content .tab-pane #querybox form{padding-left:0px;}
+.tabs {position:relative;}
+
+.tabs .tab-content {padding: 0; border: none; padding-top: 10px;}
+.tabs .tab-content .tab-pane .action {position: absolute; right: 0; top: -1px;}
+.tabs .tab-content .tab-pane #querybox {margin:-10px 0 0px; border-top: none;}
+.tabs .tab-content .tab-pane #querybox form {padding-left:0px;}
+
+.table-actions {padding-left: 8px;}
