@@ -13,5 +13,6 @@
 .card a:hover {color: #000;}
 
 #notice {margin: -20px -20px 0}
-#titlebar {margin-top: 0; border-top: 1px solid #e5e5e5}
+#titlebar {margin-top: -20px; border-top: none}
+#notice + #titlebar {margin-top: 0; border-top: 1px solid #e5e5e5}
 #proversion, #zentaotrain{color:#D2322D}
