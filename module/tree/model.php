@@ -306,7 +306,7 @@ class treeModel extends model
         }
 
         if(!$firstBranch) $lastMenu .= '</li></ul>';
-        $lastMenu = "<ul class='tree'>$lastMenu</ul>\n";
+        $lastMenu = "<ul class='tree tree-lines'>$lastMenu</ul>\n";
         return $lastMenu; 
     }
 
@@ -339,7 +339,7 @@ class treeModel extends model
         }
 
         /* createdVersion > 4.1. */
-        $menu = "<ul class='tree'>";
+        $menu = "<ul class='tree tree-lines'>";
 
         /* Set the start module. */
         $startModulePath = '';
@@ -427,7 +427,7 @@ class treeModel extends model
     public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
     {
         $extra['projectID'] = $rootID;
-        $menu = "<ul class='tree'>";
+        $menu = "<ul class='tree tree-lines'>";
         $startModulePath = '';
         if($startModule > 0)
         {
@@ -600,7 +600,7 @@ class treeModel extends model
      */
     public function getProductDocTreeMenu()
     {
-        $menu     = "<ul class='tree'>";
+        $menu     = "<ul class='tree tree-lines'>";
         $products = $this->loadModel('product')->getPairs('nocode');
 
         $productModules = $this->getTreeMenu(0, 'productdoc', 0, array('treeModel', 'createDocLink'), 'product');
@@ -641,7 +641,7 @@ class treeModel extends model
      */
     public function getProjectDocTreeMenu()
     {
-        $menu     = "<ul class='tree'>";
+        $menu     = "<ul class='tree tree-lines'>";
         $products = $this->loadModel('product')->getPairs('nocode');
         $projects = $this->loadModel('project')->getProductGroupList();
 

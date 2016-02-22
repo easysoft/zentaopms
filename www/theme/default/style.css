@@ -473,7 +473,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .sub-featurebar > .nav > li.active > a {color: #333; font-weight: bold;}
 
 #featurebar.with-sub > .nav > li.active > a {border: 1px solid #ddd; position: relative; border-bottom: none; background: #fff; padding: 2px 15px 5px}
-.treeview li > a.active { font-weight:bold;}
 
 /* Title bar. */
 #titlebar {margin: -20px -20px 20px; background: #F8FAFE; border-bottom: 1px solid #e5e5e5; min-height: 46px; min-height: 20px\0; padding: 13px 20px; vertical-align: bottom; position: relative;}
@@ -638,16 +637,9 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .modal-loading .loader{position: absolute; display: block; text-align: center; font-size: 56px; color: #fff; top: 35%; width: 100%}
 
 /* Tree menu. */
-.tree {padding: 0; margin: 0;}
-.tree li,.tree ul {margin: 0; padding: 0; display: block; position: relative;}
-.tree > li {margin-right: 20px; font-weight: 400; padding-bottom: 6px;}
-.tree > li > ul li {padding: 6px 5px 0 15px; margin: 0;}
-.tree li:before {display: inline-block; margin-right: 6px; position: relative; top: 0; left: 0; content: ' '; width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px}
-.tree > li ul {border-left: 1px dotted #aaa; margin-left: 3px; font-weight: normal;}
-.tree > li ul > li:before {margin-right: 4px;}
-.tree > li ul > li:hover:before {content: ' ';}
-.tree > li ul > li:after {position: absolute; display: block; content: ""; width: 15px; left: -1px; top: 16px; height: 20px; border-top: 1px dotted #aaa;}
-.tree > li > ul li:last-child:after {border-left: 1px solid #fff;}
+.tree-lines li.has-list.open > ul:after {bottom: 13px;}
+.tree li:before {width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px; top: 7px;left: 6px;}
+.tree-lines ul>li:after {width: 15px}
 
 /* Select all and select reverse. */
 #allchecker, #reversechecker {padding-right: 5px;padding-left: 5px;}
