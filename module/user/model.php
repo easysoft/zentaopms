@@ -92,7 +92,7 @@ class userModel extends model
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
             if(strpos($params, 'noletter') !== false) $firstLetter =  '';
-            $users[$account] =  $firstLetter . (($user->deleted == 1) ? $account : ($user->realname ? $user->realname : $account));
+            $users[$account] =  $firstLetter . ($user->deleted ? $account : ($user->realname ? $user->realname : $account));
         }
 
         /* Append empty, closed, and guest users. */
