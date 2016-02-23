@@ -70,6 +70,9 @@ $lang->duplicate    = '已有相同标题的%s';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
+$lang->preShortcutKey  = '[快捷键:←]';
+$lang->nextShortcutKey = '[快捷键:→]';
+
 $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
