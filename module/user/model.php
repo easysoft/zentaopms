@@ -71,7 +71,7 @@ class userModel extends model
          * If there's xxfirst in the params, use INSTR function to get the position of role fields in a order string,
          * thus to make sure users of this role at first.
          */
-        $fields = 'account, realname';
+        $fields = 'account, realname, deleted';
         if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',pd,po,', role) AS roleOrder";
         if(strpos($params, 'pdfirst') !== false) $fields .= ", INSTR(',po,pd,', role) AS roleOrder";
         if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qd,qa,', role) AS roleOrder";
@@ -92,7 +92,7 @@ class userModel extends model
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
             if(strpos($params, 'noletter') !== false) $firstLetter =  '';
-            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $account);
+            $users[$account] =  $firstLetter . (($user->deleted == 1) ? $account : ($user->realname ? $user->realname : $account));
         }
 
         /* Append empty, closed, and guest users. */
