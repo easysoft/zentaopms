@@ -18,7 +18,15 @@
     <small class='text-muted'> <?php echo $lang->group->manageMember;?> <?php echo html::icon($lang->icons['manage']);?></small>
   </div>
 </div>
-
+<div class='side'>
+  <a class='side-handle' data-id='groupTree'><i class='icon-caret-left'></i></a>
+  <div class='side-body'>
+    <div class='panel panel-sm'>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
+      <div class='panel-body'><?php echo $deptTree;?></div>
+    </div>
+  </div>
+</div>
 <form class='form-condensed pdb-20' method='post' target='hiddenwin'>
   <table align='center' class='table table-form'> 
     <?php if($groupUsers):?>
