@@ -182,7 +182,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .actionbox #historyItem {margin:0}
 .actionbox blockquote {margin:0}
 .actionbox > legend > i, .actionbox > .panel-heading > i {display: none}
-.actionbox .history {background: #fbfbfb; padding: 4px 10px 6px; min-height: 20px; border: 1px solid #f5f5f5; border-left: 1px dashed #ddd}
+.actionbox .history {background: #fbfbfb; padding: 4px 10px 6px; min-height: 20px; border: 1px solid #f5f5f5;}
 fieldset.actionbox {padding-bottom: 10px;}
 
 /* actionbox, hack for ie8 */
