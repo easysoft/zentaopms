@@ -2,6 +2,7 @@
 #actionbox a{font-weight:normal}
 .col-side fieldset#actionbox{padding-right:5px;}
 .col-side #actionbox #historyItem li span.item{white-space:nowrap}
+.changes blockquote{font-family: monospace, serif;}
 </style>
 <script language='Javascript'>
 var fold   = '<?php echo $lang->fold;?>';
@@ -29,15 +30,15 @@ function switchChange(historyID)
 function toggleStripTags(obj)
 {
     var btn = $(obj);
-    var diffTag = btn.find('.diff-all');
+    var diffTag = btn.find('.icon-file-code');
     if(diffTag.length)
     {
-        diffTag.removeClass('diff-all').addClass('diff-short');
+        diffTag.removeClass('icon-file-code').addClass('diff-short');
         btn.attr('title', '<?php echo $lang->action->textDiff?>');
     }
     else
     {
-        btn.find('.diff-short').removeClass('diff-short').addClass('diff-all');
+        btn.find('.diff-short').removeClass('diff-short').addClass('icon-file-code');
         btn.attr('title', '<?php echo $lang->action->original?>');
     }
     var boxObj  = $(obj).next();
@@ -89,7 +90,7 @@ function toggleComment(actionID)
 
 $(function()
 {
-    var diffButton = "<a href='javascript:;' onclick='toggleStripTags(this)' class='changeDiff btn-icon' style='display:none;' title='<?php echo $lang->action->original?>'><i class='icon- diff-all'></i></a>";
+    var diffButton = "<a href='javascript:;' onclick='toggleStripTags(this)' class='changeDiff btn-icon' style='display:none;' title='<?php echo $lang->action->original?>'><i class='icon- icon-file-code'></i></a>";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function()

@@ -70,6 +70,9 @@ $lang->duplicate    = '%s has the same title';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
+$lang->preShortcutKey  = '[Shortcut key:←]';
+$lang->nextShortcutKey = '[Shortcut key:→]';
+
 $lang->selectAll     = 'All';
 $lang->selectReverse = 'Inverse';
 $lang->notFound      = 'Sorry, the object not found.';
