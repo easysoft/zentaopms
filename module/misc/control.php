@@ -152,4 +152,38 @@ class misc extends control
         $this->app->loadClass('qrcode');
         QRcode::png($loginAPI . $session, false, 4, 9);
     }
+
+    /**
+     * Check and repair database table.
+     * 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function checkTable($type = 'check')
+    {
+        if($type != 'check' and $type != 'repair') die();
+        if(!isset($_SESSION['checkFileName']))
+        {
+            $checkFileName = $this->app->getBasePath() . 'www' . DS . uniqid('repair_') . '.txt';
+            $this->session->set('checkFileName', $checkFileName);
+        }
+
+        $checkFileName = $this->session->checkFileName;
+        $this->view->title = $this->lang->misc->checkTable;
+
+        $status = '';
+        if(!file_exists($checkFileName) or (time() - filemtime($checkFileName)) > 60 * 10) $status = 'createFile';
+
+        if($status == 'createFile')
+        {
+            $this->app->loadLang('user');
+            $this->view->status = $status;
+            die($this->display());
+        }
+
+        $this->view->tables = $this->misc->getTableAndStatus($type);
+        $this->view->status = 'check';
+        $this->display();
+    }
 }
