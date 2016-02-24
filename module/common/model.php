@@ -216,7 +216,7 @@ class commonModel extends model
         $user->groups = $this->user->getGroups($user->account);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
-        if(common::hasPriv($module, $method)) return true;
+        if(commonModel::hasPriv($module, $method)) return true;
 
         $vars = "module=$module&method=$method";
         if(isset($this->server->http_referer))
@@ -427,7 +427,7 @@ class commonModel extends model
             list($menuLabel, $module, $method) = $link;
             $vars = isset($link[3]) ? $link[3] : '';
 
-            if(common::hasPriv($module, $method))
+            if(commonModel::hasPriv($module, $method))
             {
                 $link  = helper::createLink($module, $method, $vars);
                 echo "<li $active><a href='$link' $active id='menu$menuKey'>$menuLabel</a></li>\n";
@@ -549,7 +549,7 @@ class commonModel extends model
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
                 $vars = isset($link[3]) ? $link[3] : '';
-                if(common::hasPriv($module, $method))
+                if(commonModel::hasPriv($module, $method))
                 {
                     /* Is the currentModule active? */
                     $subModules = explode(',', $subModule);
@@ -694,7 +694,7 @@ class commonModel extends model
      */
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false)
     {
-        if(!common::hasPriv($module, $method)) return false;
+        if(!commonModel::hasPriv($module, $method)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -725,7 +725,7 @@ class commonModel extends model
 
         global $lang;
 
-        if(!common::hasPriv($module, 'edit')) return false;
+        if(!commonModel::hasPriv($module, 'edit')) return false;
         echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
     }
 
@@ -768,7 +768,7 @@ class commonModel extends model
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if(!common::hasPriv($module, $method)) return false;
+        if(!commonModel::hasPriv($module, $method)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
@@ -1163,12 +1163,12 @@ class commonModel extends model
 
         if(isset($this->app->user))
         {
-            if(!common::hasPriv($module, $method)) $this->deny($module, $method);
+            if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
         else
         {
             $referer  = helper::safe64Encode($this->app->getURI(true));
-            $this->locate($this->createLink('user', 'login', "referer=$referer"));
+            die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
         }
     }
 
