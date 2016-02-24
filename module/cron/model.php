@@ -168,10 +168,15 @@ class cronModel extends model
             ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
-        $this->dao->insert(TABLE_CRON)->data($cron)
-            ->autoCheck()
-            ->batchCheck($this->config->cron->create->requiredFields, 'notempty')
-            ->exec();
+
+        $checkRule = $this->checkRule($cron);
+        if(!empty($checkRule))
+        {
+            dao::$errors[] = $checkRule;
+            return false;
+        }
+
+        $this->dao->insert(TABLE_CRON)->data($cron)->autoCheck()->exec();
 
         return $this->dao->lastInsertID();
     }
@@ -189,11 +194,34 @@ class cronModel extends model
             ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
-        $this->dao->update(TABLE_CRON)->data($cron)
-            ->autoCheck()
-            ->batchCheck($this->config->cron->create->requiredFields, 'notempty')
-            ->where('id')->eq($cronID)->exec();
+
+        $checkRule = $this->checkRule($cron);
+        if(!empty($checkRule))
+        {
+            dao::$errors[] = $checkRule;
+            return false;
+        }
+
+        $this->dao->update(TABLE_CRON)->data($cron)->autoCheck()->where('id')->eq($cronID)->exec();
         return dao::isError() ? false : true;
+    }
+
+    /**
+     * Check cron rule.
+     * 
+     * @param  object $cron 
+     * @access public
+     * @return string
+     */
+    public function checkRule($cron)
+    {
+        if($cron->m === '' or preg_match('/[^0-9\*\-\/]/', $cron->m))    return sprintf($this->lang->cron->error['rule'], $this->lang->cron->m);
+        if($cron->h === '' or preg_match('/[^0-9\*\-\/]/', $cron->h))    return sprintf($this->lang->cron->error['rule'], $this->lang->cron->h);
+        if($cron->dom === '' or preg_match('/[^0-9\*\-\/]/', $cron->dom))return sprintf($this->lang->cron->error['rule'], $this->lang->cron->dom);
+        if($cron->mon === '' or preg_match('/[^0-9\*\-\/]/', $cron->mon))return sprintf($this->lang->cron->error['rule'], $this->lang->cron->mon);
+        if($cron->dow === '' or preg_match('/[^0-9\*\-\/]/', $cron->dow))return sprintf($this->lang->cron->error['rule'], $this->lang->cron->dow);
+        if(empty($cron->command))return sprintf($this->lang->error->notempty, $this->lang->cron->command);
+        return null;
     }
 
     public function markCronStatus($status, $configID = 0)
