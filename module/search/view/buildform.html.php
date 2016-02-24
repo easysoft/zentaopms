@@ -47,6 +47,7 @@ include '../../common/view/chosen.html.php';
 #searchform .chosen-container .chosen-drop{min-width: 300px;}
 #searchform .chosen-container .chosen-drop ul.chosen-results li{white-space:nowrap}
 #searchmore > i, #searchlite > i {font-size: 28px;}
+#searchmore > i {position: relative; top: 4px;}
 #searchmore:hover, #searchlite:hover {color: #145CCD; background: #e5e5e5}
 
 .bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}

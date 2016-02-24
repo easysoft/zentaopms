@@ -21,7 +21,6 @@
 <script>
 $(function()
 {
-    $("#extendTree").treeview();
     $('.hitarea').click(function()
     {
         var $this  = $(this);

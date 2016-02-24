@@ -10,27 +10,24 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php
-$onlybody = isonlybody() ? true : false;
-if($onlybody) $_GET['onlybody'] = 'no';
-?>
-<?php include '../../common/view/mail.css.php';?>
-<table width='98%' align='center'>
-  <tr class='header'>
-    <td>
-      STORY #<?php echo $story->id . "=>$story->assignedTo " . html::a(common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
-    </td>
-  </tr>
-  <tr>
-    <td>
-    <fieldset>
-      <legend><?php echo $lang->story->legendSpec;?></legend>
+<?php $mailTitle = 'STORY #' . $story->id . ' ' . $story->title;?>
+<?php include '../../common/view/mail.header.html.php';?>
+<tr>
+  <td>
+    <table cellpadding='0' cellspacing='0' width='600' style='border: none; border-collapse: collapse;'>
+      <tr>
+        <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'><?php echo 'STORY #' . $story->id . ' &nbsp;' . html::a(common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', "style='color: #333; text-decoration: none;'");?></td>
+        <td style='width: 40px; text-align: right; background-color: #F8FAFE; border: none; vertical-align: top; padding: 10px; border-bottom: 1px solid #e5e5e5;'><?php echo html::a(common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id"), '[+]', 'target="_blank"');?></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td style='padding: 10px; border: none;'>
+    <fieldset style='border: 1px solid #e5e5e5'>
+      <legend style='color: #114f8e'><?php echo $lang->story->legendSpec;?></legend>
       <div class='content'><?php echo $story->spec;?></div>
     </fieldset>
-    </td>
-  </tr>
-  <tr>
-    <td><?php include '../../common/view/mail.html.php';?></td>
-  </tr>
-</table>
-<?php if($onlybody) $_GET['onlybody'] = 'yes';?>
+  </td>
+</tr>
+<?php include '../../common/view/mail.footer.html.php';?>

@@ -1,2 +1,4 @@
 .table.table-form {width: auto;}
 .table-form > tbody > tr > td .form-control + .form-control {margin-top: 5px;}
+
+.tree-lines li.has-list.open > ul:after {bottom: 20px;}

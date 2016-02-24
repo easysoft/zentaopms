@@ -115,16 +115,17 @@ class deptModel extends model
      * 
      * @param  int    $rootDeptID 
      * @param  string $userFunc 
+     * @param  int    $groupID
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootDeptID = 0, $userFunc)
+    public function getTreeMenu($rootDeptID = 0, $userFunc, $groupID = 0)
     {
         $deptMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
-            $linkHtml = call_user_func($userFunc, $dept);
+            $linkHtml = call_user_func($userFunc, $dept, $groupID);
 
             if(isset($deptMenu[$dept->id]) and !empty($deptMenu[$dept->id]))
             {
@@ -146,7 +147,7 @@ class deptModel extends model
             $deptMenu[$dept->parent] .= "</li>\n"; 
         }
 
-        $lastMenu = "<ul class='tree'>" . @array_pop($deptMenu) . "</ul>\n";
+        $lastMenu = "<ul class='tree tree-lines'>" . @array_pop($deptMenu) . "</ul>\n";
         return $lastMenu; 
     }
 
@@ -200,6 +201,19 @@ class deptModel extends model
     {
         $linkHtml = html::a(helper::createLink('company', 'browse', "dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
         return $linkHtml;
+    }
+
+    /**
+     * Create the group Link.
+     * 
+     * @param  int    $dept 
+     * @param  int    $groupID
+     * @access public
+     * @return string 
+     */
+    public function createGroupLink($dept, $groupID)
+    {
+        return html::a(helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
     }
 
     /**

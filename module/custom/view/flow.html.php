@@ -35,8 +35,12 @@
         <td class='w-300px'><?php echo html::radio('productproject', $lang->custom->productproject->relation, isset($config->custom->productproject) ? $config->custom->productproject : '0_0');?></td>
         <td><?php echo html::submitButton()?></td>
       </tr>
+      <tr>
+        <td colspan='3' class='pd-0'>
+          <div class='alert alert-info alert-block'><strong><?php echo $lang->custom->productproject->notice?></strong></div>
+        </td>
+      </tr>
     </table>
-    <div class='alert alert-info'><strong><?php echo $lang->custom->productproject->notice?></strong></div>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

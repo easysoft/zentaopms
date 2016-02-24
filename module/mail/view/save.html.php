@@ -19,7 +19,7 @@ include '../../common/view/header.html.php';
       <small class='text-success'> <?php echo $lang->mail->save;?> <?php echo html::icon('ok-sign');?></small>
     </div>
   </div>
-  <div class='alert alert-success'>
+  <div class='alert alert-success alert-block with-icon'>
     <i class='icon-ok-sign'></i>
     <div class='content'>
       <?php echo $lang->mail->successSaved;?>

@@ -1460,6 +1460,9 @@ $(document).ready(function()
 
     fixStyle();
 
+    // Init tree menu
+    $('.tree').tree();
+
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 
     if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.

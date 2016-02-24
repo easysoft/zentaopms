@@ -182,7 +182,7 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .actionbox #historyItem {margin:0}
 .actionbox blockquote {margin:0}
 .actionbox > legend > i, .actionbox > .panel-heading > i {display: none}
-.actionbox .history {background: #fbfbfb; padding: 4px 10px 6px; min-height: 20px; border: 1px solid #f5f5f5; border-left: 1px dashed #ddd}
+.actionbox .history {background: #fbfbfb; padding: 4px 10px 6px; min-height: 20px; border: 1px solid #f5f5f5;}
 fieldset.actionbox {padding-bottom: 10px;}
 
 /* actionbox, hack for ie8 */
@@ -282,8 +282,8 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .table-fixed .form-control {padding: 5px 6px}
 .form-condensed .table-fixed select.form-control {padding: 5px}
 .form-condensed .chosen-container {font-size: 13px}
+.chosen-container-single .chosen-single abbr {top: 6px;}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
-.form-condensed .chosen-container-single .chosen-single abbr {top: 3px; right: 18px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
 
 @-moz-document url-prefix(){.form-condensed textarea.form-control {height: 30px;min-height: 30px;}}
@@ -366,7 +366,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 #searchbox {position: absolute; right: 0; top: 1px; width: 200px;}
 #searchbox .form-control, #searchbox .btn {padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}
-#typeSelector .btn{padding-left: 10px;}
+#typeSelector .btn{padding-left: 10px; border-right: none}
 #objectSwitcher .btn{padding-right: 10px; margin-left: -1px\0;}
 #searchbox .dropdown-menu {margin-top: -1px; width: 212px; padding: 0;}
 #searchbox .dropdown-menu > li {float: left; width: 105px; border-bottom: 1px dotted #ddd; border-right: 1px dotted #ddd}
@@ -428,6 +428,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 .icon-zentao, a .icon-zentao {background: url(images/main/icon.png) center no-repeat; display: inline-block; width: 16px; height: 16px; position: relative; top: 2px}
+.icon-pro-version {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOAQMAAADDr3TWAAAABlBMVEUAAADSMi2DxVCVAAAAAXRSTlMAQObYZgAAACJJREFUCNdjYGFg4GNgkGdgsG9gqD/A8P8BkI2OpBkYBBkAfZQE9VhZ0IgAAAAASUVORK5CYII=") center no-repeat; display: inline-block!important; width: 14px; height: 14px; position: relative; top: 2px}
 
 /* Feature bar. */
 #featurebar {margin: -20px -20px 20px; padding: 8px 10px 7px; font-size: 14px; background: #F8FAFE; border-bottom: 1px solid #ddd; line-height: 30px; min-height: 46px; min-height: 30px\0;}
@@ -472,7 +473,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .sub-featurebar > .nav > li.active > a {color: #333; font-weight: bold;}
 
 #featurebar.with-sub > .nav > li.active > a {border: 1px solid #ddd; position: relative; border-bottom: none; background: #fff; padding: 2px 15px 5px}
-.treeview li > a.active { font-weight:bold;}
 
 /* Title bar. */
 #titlebar {margin: -20px -20px 20px; background: #F8FAFE; border-bottom: 1px solid #e5e5e5; min-height: 46px; min-height: 20px\0; padding: 13px 20px; vertical-align: bottom; position: relative;}
@@ -637,16 +637,9 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .modal-loading .loader{position: absolute; display: block; text-align: center; font-size: 56px; color: #fff; top: 35%; width: 100%}
 
 /* Tree menu. */
-.tree {padding: 0; margin: 0;}
-.tree li,.tree ul {margin: 0; padding: 0; display: block; position: relative;}
-.tree > li {margin-right: 20px; font-weight: 400; padding-bottom: 6px;}
-.tree > li > ul li {padding: 6px 5px 0 15px; margin: 0;}
-.tree li:before {display: inline-block; margin-right: 6px; position: relative; top: 0; left: 0; content: ' '; width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px}
-.tree > li ul {border-left: 1px dotted #aaa; margin-left: 3px; font-weight: normal;}
-.tree > li ul > li:before {margin-right: 4px;}
-.tree > li ul > li:hover:before {content: ' ';}
-.tree > li ul > li:after {position: absolute; display: block; content: ""; width: 15px; left: -1px; top: 16px; height: 20px; border-top: 1px dotted #aaa;}
-.tree > li > ul li:last-child:after {border-left: 1px solid #fff;}
+.tree-lines li.has-list.open > ul:after {bottom: 13px;}
+.tree li:before {width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px; top: 7px;left: 6px;}
+.tree-lines ul>li:after {width: 15px}
 
 /* Select all and select reverse. */
 #allchecker, #reversechecker {padding-right: 5px;padding-left: 5px;}

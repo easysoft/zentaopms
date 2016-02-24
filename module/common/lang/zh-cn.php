@@ -70,6 +70,9 @@ $lang->duplicate    = '已有相同标题的%s';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
+$lang->preShortcutKey  = '[快捷键:←]';
+$lang->nextShortcutKey = '[快捷键:→]';
+
 $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
@@ -381,7 +384,7 @@ $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
 $lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
 $lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠 </a>";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 专业版！</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-pro-version'></i> 专业版！</a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";

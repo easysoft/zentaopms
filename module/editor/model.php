@@ -199,7 +199,7 @@ class editorModel extends model
     public function printTree($files, $isRoot = true)
     {
         if(empty($files) or !is_array($files)) return false;
-        $tree = $isRoot ? "<ul id='extendTree' class='tree treeview'>\n" : "<ul>\n";
+        $tree = $isRoot ? "<ul id='extendTree' class='tree tree-lines'>\n" : "<ul>\n";
         if($isRoot)
         {
             $module = basename(dirname(key($files)));
