@@ -38,9 +38,9 @@ pms:
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
 	# change mode.
-	chmod 777 -R zentaopms/tmp/
-	chmod 777 -R zentaopms/www/data
-	chmod 777 -R zentaopms/config
+	chmod -R 777 zentaopms/tmp/
+	chmod -R 777 zentaopms/www/data
+	chmod -R 777 zentaopms/config
 	chmod 777 zentaopms/module
 	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
