@@ -91,8 +91,7 @@ class bug extends control
         $projects = $this->loadModel('project')->getPairs() + array('0' => '');
 
         /* Get bugs. */
-        $childModuleIds = ($browseType == 'bymodule') ? $this->tree->getAllChildId($moduleID) : array();
-        $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $childModuleIds, $queryID, $sort, $pager);
+        $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);

@@ -207,18 +207,18 @@ class bugModel extends model
      * @param  array  $projects
      * @param  int    $branch
      * @param  string $browseType
-     * @param  array  $childModuleIds
+     * @param  int    $moduleID
      * @param  int    $queryID
      * @param  string $sort
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugs($productID, $projects, $branch, $browseType, $childModuleIds, $queryID, $sort, $pager)
+    public function getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager)
     {
         /* Get bugs by browse type. */
         if($browseType == 'all')               $bugs = $this->getAllBugs($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'bymodule')      $bugs = $this->getModuleBugs($productID, $branch, $childModuleIds, $projects, $sort, $pager);
+        elseif($browseType == 'bymodule')      $bugs = $this->getModuleBugs($productID, $branch, $this->loadModel('tree')->getAllChildId($moduleID), $projects, $sort, $pager);
         elseif($browseType == 'assigntome')    $bugs = $this->getByAssigntome($productID, $branch, $projects, $sort, $pager);
         elseif($browseType == 'openedbyme')    $bugs = $this->getByOpenedbyme($productID, $branch, $projects, $sort, $pager);
         elseif($browseType == 'resolvedbyme')  $bugs = $this->getByResolvedbyme($productID, $branch, $projects, $sort, $pager);
