@@ -65,35 +65,15 @@ class company extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Build the search form. */
-        $queryID = $type == 'bydept' ? 0 : (int)$param;
-        $this->config->company->browse->search['actionURL'] = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
-        $this->config->company->browse->search['queryID']   = $queryID;
-        $this->config->company->browse->search['params']['dept']['values'] = array('' => '') + $this->dept->getOptionMenu();
+        $queryID   = $type == 'bydept' ? 0 : (int)$param;
+        $actionURL = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
+        $this->company->buildSearchForm($queryID, $actionURL);
         $this->loadModel('search')->setSearchParams($this->config->company->browse->search);
 
-        if($type == 'bydept')
-        {
-            $childDeptIds = $this->dept->getAllChildID($deptID);
-            $users        = $this->dept->getUsers($childDeptIds, $pager, $sort);
-        }
-        else
-        {
-            if($queryID)
-            {
-                $query = $this->search->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('userQuery', $query->sql);
-                    $this->session->set('userForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('userQuery', ' 1 = 1');
-                }
-            }
-            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $sort);
-        }
+        /* Get users. */
+        $users = $this->company->getUsers($type, $queryID, $deptID, $sort, $pager);
 
+        /* Set view. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $this->view->position[]  = $this->lang->dept->common;
         $this->view->users       = $users;
