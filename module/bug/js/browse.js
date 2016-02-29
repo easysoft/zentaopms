@@ -20,4 +20,5 @@ $(document).ready(function()
         });
     });
     setTimeout(function(){fixedTfootAction('#bugForm')}, 100);
+    setTimeout(function(){fixedTheadOfList('#bugList')}, 100);
 });

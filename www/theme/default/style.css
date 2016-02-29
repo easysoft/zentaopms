@@ -677,6 +677,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 }
 
 .fixedTfootAction{position: fixed; bottom: 40px; background: #fff;}
+.fixedTheadOfList{position: fixed; top: 0px; z-index:10;}
 #passwordStrength{display:none;}
 .warning{color:red;}
 .nofixed td{white-space:normal;}

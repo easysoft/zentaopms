@@ -1434,6 +1434,48 @@ function fixedTableHead(boxObj)
     });
 }
 
+/**
+ * Fixed table head in list when scrolling.
+ * 
+ * @param  string $tableID 
+ * @access public
+ * @return void
+ */
+function fixedTheadOfList(tableID)
+{
+    if($(tableID).size() == 0) return false;
+    var $table = $(tableID);
+    var $thead = $table.find('thead');
+    if($thead.size() == 0) return false;
+    $table.parent().find('.fixedTheadOfList').remove();
+
+    var theadOffset = $thead.offset().top;
+    var tableWidth  = $table.width();
+    var fixedThead  = "<table class='fixedTheadOfList'><thead>" + $thead.html() + '</thead></table>';
+
+    if(theadOffset < $(window).scrollTop())
+    {
+        $table.before(fixedThead);
+        $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
+    }
+    $(window).scroll(function()
+    {    
+        var hasFixed  = $table.parent().find('.fixedTheadOfList').size() > 0;
+        if(!hasFixed)
+        {
+            if(theadOffset < $(window).scrollTop())
+            {
+                $table.before(fixedThead);
+                $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
+            }
+        }
+        else if(theadOffset >= $(window).scrollTop())
+        {
+            $table.parent().find('.fixedTheadOfList').remove();
+        }
+    });
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
