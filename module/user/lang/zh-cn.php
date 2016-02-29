@@ -111,6 +111,7 @@ $lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是
 $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
+$lang->user->ipLimited    = "登录失败，管理员限制当前IP登录。";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';

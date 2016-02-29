@@ -111,6 +111,7 @@ $lang->user->loginFailed  = "Login failed, please check your account and passwor
 $lang->user->lockWarning  = "You only have %s times to try.";
 $lang->user->loginLocked  = "You try the password too many times, please contact the administrator or try again after %s minutes.";
 $lang->user->weakPassword = "Your password strength is less than the system settings.";
+$lang->user->ipLimited    = "Login failed, this ip is limited.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
