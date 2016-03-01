@@ -175,9 +175,7 @@ js::set('moduleID', $moduleID);
           <td colspan='<?php echo $columns;?>'>
             <?php if(!empty($bugs)):?>
             <div class='table-actions clearfix'>
-              <div class='btn-group'>
               <?php echo html::selectButton();?>
-              </div>
               <div class='btn-group dropup'>
                 <?php
                 $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");

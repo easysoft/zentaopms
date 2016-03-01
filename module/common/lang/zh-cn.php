@@ -75,6 +75,7 @@ $lang->nextShortcutKey = '[快捷键:→]';
 
 $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
+$lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
 $lang->showAll       = '[[全部显示]]';
 $lang->hideClosed    = '[[显示进行中]]';

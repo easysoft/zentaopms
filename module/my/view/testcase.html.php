@@ -86,7 +86,7 @@
           <?php if($cases):?>
           <div class='table-actions clearfix'>
           <?php
-          if($canBatchEdit or $canBatchRun) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+          if($canBatchEdit or $canBatchRun) echo html::selectButton();
           if($canBatchEdit) 
           {
               $actionLink = $this->createLink('testcase', 'batchEdit');

@@ -18,7 +18,8 @@ error_reporting(0);
 ob_start();
 
 /* Load the framework. */
-include '../framework/router.class.php';
+//include '../framework/router.class.php';
+include '../framework/myrouter.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
@@ -27,7 +28,7 @@ include '../framework/helper.class.php';
 $startTime = getTime();
 
 /* Instance the app. */
-$app = router::createApp('pms', dirname(dirname(__FILE__)));
+$app = router::createApp('pms', dirname(dirname(__FILE__)), 'myrouter');
 
 /* installed or not. */
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));

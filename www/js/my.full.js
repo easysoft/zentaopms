@@ -17,19 +17,13 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
         vars = vars.split('&');
         for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
     }
-    if(config.requestType == 'PATH_INFO')
+    if(config.requestType != 'GET')
     {
-        link = config.webRoot + moduleName + config.requestFix + methodName;
+        if(config.requestType == 'PATH_INFO')  link = config.webRoot + moduleName + config.requestFix + methodName;
+        if(config.requestType == 'PATH_INFO2') link = config.webRoot + 'index.php/'  + moduleName + config.requestFix + methodName;
         if(vars)
         {
-            if(config.pathType == "full")
-            {
-                for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][0] + config.requestFix + vars[i][1];
-            }
-            else
-            {
-                for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][1];
-            }
+            for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][1];
         }
         link += '.' + viewType;
     }
@@ -42,7 +36,7 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     /* if page has onlybody param then add this param in all link. the param hide header and footer. */
     if((typeof(onlybody) != 'undefined' && onlybody == 'yes') || isOnlyBody)
     {
-        var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
+        var onlybody = config.requestType != 'GET' ? "?onlybody=yes" : '&onlybody=yes';
         link = link + onlybody;
     }
     return link;

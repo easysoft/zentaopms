@@ -89,7 +89,7 @@
         <td colspan='<?php echo $canOrder ? 12 : 11?>'>
           <div class='table-actions clearfix'>
             <?php if($canBatchEdit and !empty($productStats)):?>
-            <?php echo "<div class='btn-group'>" . html::selectButton() . '</div>';?>
+            <?php echo html::selectButton();?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
             <?php endif;?>
             <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('index', "locate=no&productID=$productID&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>

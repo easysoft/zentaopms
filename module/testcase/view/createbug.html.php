@@ -42,7 +42,7 @@
       <tr>
         <td colspan='5'>
           <?php
-          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+          echo html::selectButton();
           echo html::submitButton();
           ?>
         </td>

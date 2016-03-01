@@ -55,7 +55,7 @@
         <?php
         if(count($queueList))
         {
-            echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+            echo html::selectButton();
             if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete);
         }
         $pager->show();

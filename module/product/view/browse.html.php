@@ -141,7 +141,7 @@
         <td colspan='11'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
-            <div class='btn-group'><?php echo html::selectButton();?></div>
+            <?php echo html::selectButton();?>
             <?php
             $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";

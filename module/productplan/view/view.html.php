@@ -124,7 +124,7 @@
                       <?php 
                       if(count($planStories) and ($canBatchUnlink or $canBatchChangePlan))
                       {
-                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+                          echo html::selectButton();
                           echo "<div class='btn-group dropup'>";
                           $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");
                           echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', '', this)\"");
@@ -217,7 +217,7 @@
                       <?php 
                       if(count($planBugs) and $canBatchUnlink)
                       {
-                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+                          echo html::selectButton();
                           echo html::submitButton($lang->productplan->batchUnlink);
                       }
                       ?>

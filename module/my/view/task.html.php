@@ -82,7 +82,7 @@
         <?php if(count($tasks)):?>
         <div class='table-actions clearfix'>
         <?php 
-        if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+        if($canBatchEdit or $canBatchClose) echo html::selectButton();
         echo "<div class='btn-group'>";
         if($canBatchEdit)
         {

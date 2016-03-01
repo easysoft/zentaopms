@@ -22,13 +22,13 @@ if(!file_exists($myConfig))
 error_reporting(0);
 
 /* Load the framework. */
-include '../framework/router.class.php';
+include '../framework/myrouter.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
 
 /* Instance the app. */
-$app = router::createApp('pms', dirname(dirname(__FILE__)));
+$app = router::createApp('pms', dirname(dirname(__FILE__)), 'myrouter');
 $common = $app->loadCommon();
 
 /* Reset the config params to make sure the install program will be lauched. */

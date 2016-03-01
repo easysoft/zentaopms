@@ -101,6 +101,11 @@ $config->slaveDB->encoding   = 'UTF8';
 $config->slaveDB->strictMode = false;      
 $config->slaveDB->checkCentOS= true;       
 
+/* Framework config. */
+$config->framework = new stdclass();
+$config->framework->jsWithPrefix      = false;
+$config->framework->autoRepairTable   = true;
+
 /* Include the custom config file. */
 $configRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $myConfig   = $configRoot . 'my.php';
@@ -109,6 +114,7 @@ if(file_exists($myConfig)) include $myConfig;
 /* Set default table prefix. */
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
+define('LANG_CREATED', false);
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');

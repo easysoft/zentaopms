@@ -73,7 +73,7 @@
           $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
           if(count($bugs))
           {
-              echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+              echo html::selectButton();
               if($canBatchAssignTo)
               {
                   $withSearch = count($memberPairs) > 10;
