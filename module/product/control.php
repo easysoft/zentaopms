@@ -117,7 +117,7 @@ class product extends control
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->session->branch;
+        $branch    = ($branch === '') ? $this->session->branch : $branch;
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -131,61 +131,26 @@ class product extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* Set header and position. */
-        $this->view->title      = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
-        $this->view->position[] = $this->products[$productID];
-        $this->view->position[] = $this->lang->product->browse;
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories. */
-        $stories = array();
-        if($browseType == 'unclosed')
-        {
-            $unclosedStatus = $this->lang->story->statusList;
-            unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, $branch, 0, array_keys($unclosedStatus), $sort, $pager);
-        }
-        if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, $branch, 0, 'all', $sort, $pager);
-        if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $branch, $this->tree->getAllChildID($moduleID), 'all', $sort, $pager);
-        if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch);
-        if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'closedbyme')  $stories = $this->story->getByClosedBy($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, $branch, 'draft', $sort, $pager);
-        if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, $branch, 'active', $sort, $pager);
-        if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, $branch, 'changed', $sort, $pager);
-        if($browseType == 'willclose')   $stories = $this->story->getWillClose($productID, $branch, $sort, $pager);
-        if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, $branch, 'closed', $sort, $pager);
+        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         /* Build search form. */
-        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
-        $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
-        $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
-        $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
+        $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
-        $storyIdList = array();
-        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
-
+        /* Set view. */
+        $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
+        $this->view->position[]    = $this->products[$productID];
+        $this->view->position[]    = $this->lang->product->browse;
         $this->view->productID     = $productID;
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
@@ -201,7 +166,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->storyStages   = $this->story->getStoryStages($storyIdList);
+        $this->view->storyStages   = $this->product->getStoryStages($stories);
         $this->display();
     }
 
