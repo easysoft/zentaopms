@@ -367,10 +367,10 @@ class router
         $this->setWwwRoot();
         $this->setDataRoot();
 
-        $this->filterSuperVars();
         $this->setSuperVars();
-
         $this->loadConfig('common');
+        $this->filterSuperVars();
+
         $this->setDebug();
         $this->setErrorHandler();
 

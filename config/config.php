@@ -107,8 +107,9 @@ $config->slaveDB->checkCentOS= true;
 
 /* Framework config. */
 $config->framework = new stdclass();
-$config->framework->jsWithPrefix      = false;
-$config->framework->autoRepairTable   = true;
+$config->framework->jsWithPrefix    = false;
+$config->framework->autoRepairTable = true;
+$config->framework->logDays         = 14;
 
 /* Include the custom config file. */
 $configRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
