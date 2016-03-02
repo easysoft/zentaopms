@@ -76,72 +76,15 @@ class doc extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
  
-        /* Get docs. */
-        $modules = 0;
-        $docs=array();
-        if($browseType == "bymodule")
-        {
-            if($moduleID) $modules = $this->tree->getAllChildID($moduleID);
-            $docs = $this->doc->getDocs($libID, $productID, $projectID, $modules, $sort, $pager);
-        }
-        elseif($browseType == "bysearch")
-        {
-            if($queryID)
-            {
-                $query = $this->search->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('docQuery', $query->sql);
-                    $this->session->set('docForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('docQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->docQuery == false) $this->session->set('docQuery', ' 1 = 1');
-            }
-            $docQuery = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
-            $docQuery = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
-            $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($sort)->page($pager)->fetchAll();
-        }
+        /* Get docs by browse type. */
+        $docs = $this->doc->getDocsByBrowseType($productID, $projectID, $browseType, $libID, $queryID, $moduleID, $sort, $pager);
 
         /* Get the tree menu. */
-        if($libID == 'product')
-        {
-            $moduleTree = $this->tree->getProductDocTreeMenu();
-        }
-        elseif($libID == 'project')
-        {
-            $moduleTree = $this->tree->getProjectDocTreeMenu();
-        }
-        else
-        {
-            $moduleTree = $this->tree->getTreeMenu($libID, $viewType = 'customdoc', $startModuleID = 0, array('treeModel', 'createDocLink'));
-        }
+        $moduleTree = $this->doc->getDocTreeMenu($libID);
        
         /* Build the search form. */
-        $this->config->doc->search['actionURL'] = $this->createLink('doc', 'browse', "libID=$libID&moduleID=$moduleID&procuctID=$productID&projectID=$projectID&browseType=bySearch&queryID=myQueryID");
-        $this->config->doc->search['queryID']   = $queryID;
-        $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->product->getPairs('nocode') + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->project->getPairs('nocode') + array('all'=>$this->lang->doc->allProject);
-        $this->config->doc->search['params']['lib']['values']     = array(''=>'') + $this->libs;
-        $this->config->doc->search['params']['type']['values']    = array(''=>'') + $this->config->doc->search['params']['type']['values'];
-
-        /* Get the modules. */
-        if($libID == 'product' or $libID == 'project')
-        {
-            $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
-        }
-        else
-        {
-            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
-        }
-        $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
+        $actionURL = $this->createLink('doc', 'browse', "libID=$libID&moduleID=$moduleID&procuctID=$productID&projectID=$projectID&browseType=bySearch&queryID=myQueryID");
+        $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL);
         $this->search->setSearchParams($this->config->doc->search);
 
         $this->view->libID         = $libID;
