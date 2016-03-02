@@ -1124,7 +1124,8 @@ class bug extends control
         }
 
         /* Get action info. */
-        $action          = $this->action->getById($actionID);
+        $actions         = $this->action->getList('bug', $bugID);
+        $action          = zget($actions, $actionID, null);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;

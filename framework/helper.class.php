@@ -176,6 +176,7 @@ class helper
         $extFiles  = array();
         foreach($modelExtPaths as $modelExtPath)
         {
+            if(empty($modelExtPath)) continue;
             $hookFiles = array_merge($hookFiles, helper::ls($modelExtPath . 'hook/', '.php'));
             $extFiles  = array_merge($extFiles, helper::ls($modelExtPath, '.php'));
         }
@@ -843,12 +844,15 @@ class helper
             {
                 if(!is_object($record))
                 {
-                    $config2Merge->{$item->key} = $item->value;
+                    if($item->section and !isset($config2Merge->{$item->section})) $config2Merge->{$item->section} = new stdclass();
+                    $configItem = $item->section ? $config2Merge->{$item->section} : $config2Merge;
+                    if($item->key) $configItem->{$item->key} = $item->value;
                     break;
                 }
 
-                if(!isset($config2Merge->{$record->section})) $config2Merge->{$record->section} = new stdclass();
-                if($record->key) $config2Merge->{$record->section}->{$record->key} = $record->value;
+                if($record->section and !isset($config2Merge->{$record->section})) $config2Merge->{$record->section} = new stdclass();
+                $configItem = $record->section ? $config2Merge->{$record->section} : $config2Merge;
+                if($record->key) $configItem->{$record->key} = $record->value;
             }
         }
     }

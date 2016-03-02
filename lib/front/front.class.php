@@ -456,7 +456,7 @@ class html
         $label = empty($label) ? $lang->save : $label;
         $misc .= strpos($misc, 'data-loading') === false ? " data-loading='$lang->loading'" : '';
 
-        return " <input type='submit' id='submit' class='$class' value='$label' $misc /> ";
+        return " <button type='submit' id='submit' class='$class' $misc />$label</button>";
     }
 
     /**
@@ -517,7 +517,7 @@ class html
      public static function commonButton($label = '', $misc = '', $class = 'btn btn-default', $icon = '')
     {
         if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
-        return " <input type='button' value='$label' class='$class' $misc /> ";
+        return " <button type='button' class='$class' $misc />$label</button>";
     }
 
     /**
@@ -545,7 +545,7 @@ class html
             $onlybody = strpos($link, '?') === false ? "?onlybody=yes" : "&onlybody=yes";
             $link .= $onlybody;
         }
-        return " <input type='button' value='$label' class='$class' $misc onclick='$target.location.href=\"$link\"' /> ";
+        return " <button type='button' class='$class' $misc onclick='$target.location.href=\"$link\"' />$label</button>";
     }
 
     /**
@@ -762,8 +762,10 @@ class js
         $pathInfo = parse_url($url);
         $mark  = !empty($pathInfo['query']) ? '&' : '?';
 
-        if(empty($ieParam)) echo "<script src='$url{$mark}v={$config->version}' type='text/javascript'></script>\n";
-        echo "<!--[if $ieParam]>\n <script src='$url{$mark}v={$config->version}'></script>\n<![endif]-->\n";
+        $hasLimit = ($ieParam and stripos($ieParam, 'ie') !== false);
+        if($hasLimit) echo "<!--[if $ieParam]>\n";
+        echo "<script src='$url{$mark}v={$config->version}' type='text/javascript'></script>\n";
+        if($hasLimit) echo "<![endif]-->\n";
     }
 
     /**
