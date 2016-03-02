@@ -39,7 +39,7 @@ class release extends control
     public function browse($productID, $branch = 0)
     {
         $this->commonAction($productID, $branch);
-        $products                  = $this->product->getPairs();
+        $products = $this->product->getPairs();
         $this->session->set('releaseList', $this->app->getURI(true));
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;

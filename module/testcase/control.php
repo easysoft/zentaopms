@@ -56,10 +56,10 @@ class testcase extends control
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
-        $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->session->branch;
-        $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $productID  = $this->product->saveState($productID, $this->products);
+        $branch     = ($branch === '') ? $this->session->branch : $branch;
+        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
         $this->testcase->setMenu($this->products, $productID, $branch);
@@ -77,62 +77,8 @@ class testcase extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* By module or all cases. */
-        if($browseType == 'bymodule' or $browseType == 'all')
-        {
-            $childModuleIds    = $this->tree->getAllChildId($moduleID);
-            $cases = $this->testcase->getModuleCases($productID, $branch, $childModuleIds, $sort, $pager);
-        }
-        /* Cases need confirmed. */
-        elseif($browseType == 'needconfirm')
-        {
-            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where("t2.status = 'active'")
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t2.version > t1.storyVersion')
-                ->orderBy($sort)
-                ->page($pager)
-                ->fetchAll();
-        }
-        /* By search. */
-        elseif($browseType == 'bysearch')
-        {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('testcaseQuery', $query->sql);
-                    $this->session->set('testcaseForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('testcaseQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-            }
-
-            $queryProductID = $productID;
-            $allProduct     = "`product` = 'all'";
-
-            $caseQuery      = '(' . $this->session->testcaseQuery;
-            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
-            {
-                $products  = array_keys($this->loadModel('product')->getPrivProducts());
-                $caseQuery = str_replace($allProduct, '1', $caseQuery);
-                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN($products);
-                $queryProductID = 'all';
-            }
-            $caseQuery .= ')';
-
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
-                ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($sort)->page($pager)->fetchAll();
-        }
+        /* Get test cases. */
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
@@ -141,38 +87,26 @@ class testcase extends control
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         /* Build the search form. */
-        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->testcase->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
-        $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
-        $this->config->testcase->search['queryID']   = $queryID;
+        $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Assign. */
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->testcase->common;
-        $this->view->productID     = $productID;
-        $this->view->productName   = $this->products[$productID];
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
-        $this->view->moduleID      = $moduleID;
-        $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->orderBy       = $orderBy;
-        $this->view->browseType    = $browseType;
-        $this->view->param         = $param;
-        $this->view->cases         = $cases;
-        $this->view->branch        = $branch;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[]  = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+        $this->view->position[]  = $this->lang->testcase->common;
+        $this->view->productID   = $productID;
+        $this->view->productName = $this->products[$productID];
+        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        $this->view->moduleID    = $moduleID;
+        $this->view->pager       = $pager;
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->orderBy     = $orderBy;
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->cases       = $cases;
+        $this->view->branch      = $branch;
+        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }
