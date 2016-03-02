@@ -217,6 +217,81 @@ class testcaseModel extends model
     }
 
     /**
+     * Get test cases.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  int    $sort
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager)
+    {
+        /* By module or all cases. */
+        if($browseType == 'bymodule' or $browseType == 'all')
+        {
+            $cases = $this->getModuleCases($productID, $branch, $this->loadModel('tree')->getAllChildId($moduleID), $sort, $pager);
+        }
+        /* Cases need confirmed. */
+        elseif($browseType == 'needconfirm')
+        {
+            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where("t2.status = 'active'")
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.version > t1.storyVersion')
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
+        }
+        /* By search. */
+        elseif($browseType == 'bysearch')
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('testcaseQuery', $query->sql);
+                    $this->session->set('testcaseForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('testcaseQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+            }
+
+            $queryProductID = $productID;
+            $allProduct     = "`product` = 'all'";
+            $caseQuery      = '(' . $this->session->testcaseQuery;
+            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
+            {
+                $products  = array_keys($this->loadModel('product')->getPrivProducts());
+                $caseQuery = str_replace($allProduct, '1', $caseQuery);
+                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN($products);
+                $queryProductID = 'all';
+            }
+            $caseQuery .= ')';
+
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
+                ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($sort)->page($pager)->fetchAll();
+        }
+
+        if($cases) return $cases;
+
+        return array();
+    }
+
+    /**
      * Get cases by assigento.
      * 
      * @param  string $account 
@@ -650,5 +725,33 @@ class testcaseModel extends model
         }
 
         return $fields;
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    {
+        $this->config->testcase->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->testcase->allProduct);
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->testcase->search['fields']['branch']);
+            unset($this->config->testcase->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        }
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
     }
 }
