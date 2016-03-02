@@ -44,7 +44,7 @@
       $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
       ?>
     </td>
-    <td><?php echo $users[$task->owner];?></td>
+    <td><?php echo zget($users, $task->owner);?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
     <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>

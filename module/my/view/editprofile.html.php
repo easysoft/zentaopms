@@ -110,7 +110,7 @@
         </tr>
       </table>
     </fieldset>
-    <div class='text-center'><?php echo html::submitButton('', '', 'btn-primary') . ' &nbsp; ' . html::backButton();?></div>
+    <div class='text-center'><?php echo html::submitButton() . ' &nbsp; ' . html::backButton();?></div>
   </form>
 </div>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>

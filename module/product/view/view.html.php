@@ -71,15 +71,15 @@
           </tr>  
           <tr>
             <th><?php echo $lang->product->PO;?></th>
-            <td><?php echo $users[$product->PO];?></td>
+            <td><?php echo zget($users, $product->PO);?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->QD;?></th>
-            <td><?php echo $users[$product->QD];?></td>
+            <td><?php echo zget($users, $product->QD);?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->RD;?></th>
-            <td><?php echo $users[$product->RD];?></td>
+            <td><?php echo zget($users, $product->RD);?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->type;?></th>
@@ -104,7 +104,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->story->openedBy?></th>
-            <td><?php echo $users[$product->createdBy];?></td>
+            <td><?php echo zget($users, $product->createdBy);?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->story->openedDate?></th>

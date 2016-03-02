@@ -32,7 +32,7 @@
       <td></td>
       <td colspan='2'>
         <?php 
-        echo html::submitButton(html::icon($lang->icons['activate']) . ' ' . $lang->story->activate, '', 'btn-success');
+        echo html::submitButton(html::icon($lang->icons['activate']) . ' ' . $lang->story->activate, '', 'btn btn-success');
         echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
         ?>
       </td>

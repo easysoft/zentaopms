@@ -402,11 +402,11 @@ foreach($fieldParams as $fieldName => $param)
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
       echo "<div class='btn-group'>";
-      echo html::submitButton($lang->search->common, '', 'btn-primary');
+      echo html::submitButton($lang->search->common);
       if($style != 'simple')
       {
-          echo html::commonButton($lang->search->reset, 'onclick=resetForm(this) class=btn');
-          echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
+          echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)');
+          echo html::commonButton($lang->save, 'onclick=saveQuery()');
       }
       echo '</div>';
       ?>

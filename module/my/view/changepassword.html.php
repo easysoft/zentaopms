@@ -40,7 +40,7 @@
       </tr>
       <tr>
         <td></td>
-        <td><?php echo html::submitButton('', '', 'btn-primary') . html::backButton();?></td>
+        <td><?php echo html::submitButton() . html::backButton();?></td>
       </tr>
     </table>
   </form>  
