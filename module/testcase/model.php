@@ -225,7 +225,7 @@ class testcaseModel extends model
      * @param  int    $queryID
      * @param  int    $moduleID
      * @param  int    $sort
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
      * @return array
      */

@@ -276,11 +276,22 @@
           <div class='tab-pane' id='legendRelated'>
             <table class='table table-data table-condensed table-borderless'>
               <tr class='text-top'>
+                <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
+                <td class='pd-0'>
+                  <ul class='list-unstyled'>
+                  <?php if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
+                  </ul>
+                </td>
+              </tr>
+              <tr class='text-top'>
                 <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
                 <td class='pd-0'>
                   <ul class='list-unstyled'>
                   <?php
-                  if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . " <span class='label label-warning'>{$lang->story->legendFromBug}</span></li>";
+                  foreach($bugs as $bug)
+                  {
+                      echo "<li title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title") . '</li>';
+                  }
                   ?>
                   </ul>
                 </td>
@@ -308,10 +319,19 @@
                     {
                         if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
                     }
+                    ?>
+                  </ul>
+                </td>
+              </tr>
+              <tr class='text-top'>
+                <th><?php echo $lang->story->legendChildStories;?></th>
+                <td class='pd-0'>
+                  <ul class='list-unstyled'>
+                    <?php
                     $childStories = explode(',', $story->childStories) ;    
                     foreach($childStories as $childStoryID)
                     {
-                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . " <span class='label label-info'>{$lang->story->legendChildStories}</span></li>";
+                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
                     }
                     ?>
                   </ul>

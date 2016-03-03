@@ -281,7 +281,7 @@
             <table class='table table-data table-condensed table-borderless table-fixed'>
               <tr>
                 <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
-                <td><?php if($bug->case) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), $bug->caseTitle);?></td>
+                <td><?php if($bug->case) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->toCase;?></th>
@@ -307,10 +307,6 @@
                   }
                   ?>
                 </td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->case;?></th>
-                <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->toStory;?></th>
