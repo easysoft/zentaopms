@@ -42,6 +42,8 @@ class userModel extends model
      */
     public function setUserList($users, $account)
     {
+        $user = $this->getById($account);
+        if($user->deleted) $users[$account] = zget($user, 'realname', $account);
         return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\" class='form-control chosen'");
     }
 
