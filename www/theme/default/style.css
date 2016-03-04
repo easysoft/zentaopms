@@ -32,6 +32,7 @@
 .pdt-20 {padding-top: 20px !important}
 
 /* borders */
+.br-0 {border-radius: 0!important}
 .bd-0, .borderless, .bd-none {border: none !important;}
 
 /* backgrounds */
@@ -147,14 +148,20 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 .btn-icon.text-danger:hover {color: #7e0501!important}
 
 /* priority icons. */
-.pri1,.pri0,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 18px;height: 18px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #272d68; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #272d68; font-family: arial, helvetica, clean, sans-serif;}
-.pri,.pri0{border-color: #ccc;color: #ccc;}
-.pri:before{content: '?'}
-.pri2{border-color: #25367e;color: #25367e}
-.pri3{border-color: #2c4a9b;color: #2c4a9b}
-.pri4{border-color: #475da8;color: #475da8}
-.pri5{border-color: #6989c5;color: #6989c5}
-.pri6{border-color: #9ebee5;color: #9ebee5}
+.pri1,.pri0,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 18px;height: 18px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #ccc; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #ccc; font-family: arial, helvetica, clean, sans-serif; background-color: #fff}
+.pri:before, .pri0:before{content: '?'}
+.pri1{border-color: #EA644A;color: #EA644A;}
+.pri2{border-color: #F1A325;color: #F1A325;}
+.pri3{border-color: #BD7B46;color: #BD7B46;}
+.pri4{border-color: #8666B8;color: #8666B8;}
+.pri5{border-color: #03B8CF;color: #03B8CF}
+.pri6{border-color: #38B03F;color: #38B03F}
+.dropdown-pris > .dropdown-menu {padding: 0 5px;}
+.dropdown-pris > .dropdown-menu > li {display: table-cell;}
+.dropdown-pris > .dropdown-menu > li > a {opacity: 0.6; transition: all .2s; padding: 6px 5px; display: block}
+.dropdown-pris > .dropdown-menu > li.active > a {opacity: 1}
+.dropdown-pris > .dropdown-menu > li.active > a:before {display: none}
+.dropdown-pris > .dropdown-menu > li > a:hover {background-color: #f5f5f5; opacity: 1}
 
 /* bug severity icons. */
 .severity,.severity1,.severity2,.severity3,.severity4,.severity5,.severity6{display:inline-block;width: 16px;height: 16px;line-height: 16px;font-weight: bold; text-align: center; font-size: 12px; color: #fff; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;font-family: arial, helvetica, clean, sans-serif;}

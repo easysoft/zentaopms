@@ -1434,6 +1434,46 @@ function fixedTableHead(boxObj)
     });
 }
 
+/**
+ * Init prioprity selectors
+ * @return void
+ */
+function initPrioritySelector()
+{
+    $('.dropdown-pris').each(function()
+    {
+        var $dropdown = $(this);
+        var $select = $dropdown.find('select');
+        var selectVal = parseInt($select.val());
+        var $menu = $dropdown.children('.dropdown-menu');
+        if(!$menu.length)
+        {
+            $menu = $('<ul class="dropdown-menu"></ul>');
+            $dropdown.append($menu);
+        }
+        if(!$menu.children('li').length)
+        {
+            var set = $dropdown.data('set').split(',') || [0,1,2,3,4];
+            for(var i = 0; i < set.length; ++i)
+            {
+                $menu.append('<li><a href="###" data-pri="' + i + '"><span class="pri' + i + '">' + (i ? i : '') + '</span></a></li>');
+            }
+        }
+        $menu.find('a[data-pri="' + selectVal + '"]').parent().addClass('active');
+        $dropdown.find('.pri-text').html('<span class="pri' + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
+
+        $dropdown.on('click', '.dropdown-menu > li > a', function()
+        {
+            var $a = $(this);
+            $menu.children('li.active').removeClass('active');
+            $a.parent().addClass('active');
+            selectVal = $a.data('pri');
+            $select.val(selectVal);
+            $dropdown.find('.pri-text').html('<span class="pri' + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
+        });
+    });
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1481,6 +1521,8 @@ $(document).ready(function()
         if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
         $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
     });
+
+    initPrioritySelector();
 });
 
 /* CTRL+g, auto focus on the search box. */
