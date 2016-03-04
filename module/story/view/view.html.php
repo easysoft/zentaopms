@@ -185,7 +185,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
-                <td><?php echo $lang->story->priList[$story->pri];?></td>
+                <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->estimate;?></th>

@@ -154,11 +154,11 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->severity;?></th>
-                <td><strong><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></strong></td>
+                <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->pri;?></th>
-                <td><strong><?php echo $lang->bug->priList[$bug->pri];?></strong></td>
+                <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->status;?></th>

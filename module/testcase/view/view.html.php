@@ -183,7 +183,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->pri;?></th>
-            <td><?php echo zget($lang->testcase->priList, $case->pri);?></td>
+            <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri)?></span></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->status;?></th>
