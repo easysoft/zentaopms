@@ -607,6 +607,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `begin` date NOT NULL,
   `end` date NOT NULL,
+  `mailto` varchar(255) NOT NULL default '',
   `desc` text NOT NULL,
   `report` text NOT NULL,
   `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
