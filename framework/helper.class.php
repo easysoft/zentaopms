@@ -787,10 +787,9 @@ class helper
     public static function setViewType()
     {
         global $config, $app;
-        if($config->requestType == 'PATH_INFO')
+        if($config->requestType != 'GET')
         {
-            $pathInfo = $app->getPathInfo('PATH_INFO');
-            if(empty($pathInfo)) $pathInfo = $app->getPathInfo('ORIG_PATH_INFO');
+            $pathInfo = $app->getPathInfo();
             if(!empty($pathInfo))
             {
                 $dotPos = strrpos($pathInfo, '.');
