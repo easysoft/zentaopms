@@ -63,7 +63,7 @@ js::set('refresh', $lang->refresh);
             <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
             <span class='input-group-addon' id='buildBoxActions'></span>
-            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick='loadAllBuilds()'")?></span>
+            <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}' style='border-left: none'")?></span>
           </div>
         </td>
       </tr>
@@ -72,7 +72,7 @@ js::set('refresh', $lang->refresh);
         <td>
           <div class='input-group'>
             <span id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></span>
-            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()'");?></span>
+            <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip' title='{$lang->bug->allUsers}'");?></span>
           </div>
         </td>
       </tr>
@@ -97,14 +97,26 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th><?php echo $lang->bug->title;?></th>
         <td colspan='2'>
-          <div class='row'>
-            <div class='col-sm-8'><?php echo html::input('title', $bugTitle, "class='form-control'");?></div>
-            <div class='col-sm-4'>
+          <div class='row-table'>
+            <div class='col-table w-p100'><?php echo html::input('title', $bugTitle, "class='form-control'");?></div>
+            <div class='col-table'>
               <div class='input-group'>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->severity?></span>
-                <?php echo html::select('severity', $lang->bug->severityList, $severity, "class='form-control'");?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->pri?></span>
-                <?php echo html::select('pri', $lang->bug->priList, $severity, "class='form-control'");?>
+                <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
+                <div class='input-group-btn dropdown-pris' data-prefix='severity'>
+                  <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
+                    <span class='pri-text'></span> &nbsp;<span class='caret'></span>
+                  </button>
+                  <ul class='dropdown-menu pull-right'></ul>
+                  <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='hide'");?>
+                </div>
+                <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->pri;?></span>
+                <div class='input-group-btn dropdown-pris'>
+                  <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
+                    <span class='pri-text'></span> &nbsp;<span class='caret'></span>
+                  </button>
+                  <ul class='dropdown-menu pull-right'></ul>
+                  <?php echo html::select('pri', (array)$lang->bug->priList, $pri, "class='hide'");?>
+                </div>
               </div>
             </div>
           </div>
@@ -142,17 +154,15 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th><?php echo $lang->bug->lblMailto;?></th>
         <td>
-          <div class='input-group'>
+          <div class='input-group' id='contactListGroup'>
           <?php 
           echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
-          if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
+          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' style='min-width: 100px; margin-left: -1px' onchange=\"setMailto('mailto', this.value)\"");
           if(empty($contactLists))
           {
-              echo '<span class="input-group-addon">';
-              echo '<a href="' . $this->createLink('company', 'browse') . '" target="_blank">' . $lang->user->contacts->manage . '</a>';
-              echo '</span>';
-              echo '<span class="input-group-addon">';
-              echo '<a href="###" onclick="ajaxGetContacts(this)">' . $lang->refresh . '</a>';
+              echo '<span class="input-group-btn">';
+              echo '<a href="' . $this->createLink('company', 'browse') . '" target="_blank" data-toggle="tooltip" class="btn" title="' . $lang->user->contacts->manage . '"><i class="icon icon-cog"></i></a>';
+              echo '<a href="###" onclick="ajaxGetContacts(this)" data-toggle="tooltip" class="btn" title="' . $lang->refresh . '"><i class="icon icon-refresh"></i></a>';
               echo '</span>';
           }
           ?>
@@ -160,7 +170,7 @@ js::set('refresh', $lang->refresh);
         </td>
         <td>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->bug->keywords;?></span>
+            <span class='input-group-addon' id='keywordsAddonLabel'><?php echo $lang->bug->keywords;?></span>
             <?php echo html::input('keywords', $keywords, "class='form-control'");?>
           </div>
         </td>

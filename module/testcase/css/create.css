@@ -18,3 +18,12 @@
 
 .row .col-sm-10{width:89%;}
 .row .col-sm-2{padding-left:0px; width:11%;}
+
+#module + .chosen-container-single .chosen-single,
+#stage + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px;}
+#module + .chosen-container-single .chosen-single {border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: -1px;}
+
+.dropdown-pris > .btn {background-color: #fff; text-shadow: none}
+
+#moduleIdBox .input-group-btn > .btn {margin-left: -1px!important;}
+#moduleIdBox .input-group-btn > .btn:first-child {border-left: none}

@@ -55,8 +55,7 @@ function setPreview()
     if(!$('#story').val())
     {
         $('#preview').addClass('hidden');
-        $('#copyButton').addClass('hidden');
-        $('input#name').css('padding-right', $('input#name').css('padding-left'));
+        $('#copyButton').parent().addClass('hidden');
     }
     else
     {
@@ -65,8 +64,7 @@ function setPreview()
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
-        $('#copyButton').removeClass('hidden');
-        $('input#name').css('padding-right', '60px');
+        $('#copyButton').parent().removeClass('hidden');
     }
 
     setAfter();
@@ -138,4 +136,14 @@ $(document).ready(function()
             $assignedTo.trigger('chosen:updated');
         }
     });
+
+    $('[data-toggle=tooltip]').tooltip();
+
+    // ajust style for file box
+    var ajustFilebox = function()
+    {
+        applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#dataPlanGroup').width() - 2) + 'px}', 'filebox')
+    };
+    ajustFilebox();
+    $(window).resize(ajustFilebox);
 });

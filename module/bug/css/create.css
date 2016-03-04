@@ -16,6 +16,15 @@
 
 #module_chosen.chosen-container .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
 #openedBuild_chosen.chosen-container .chosen-drop {min-width: 450px; border-top: 1px solid #ddd!important}
+#module + .chosen-container-single .chosen-single,
+#openedBuild + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px;}
+#openedBuild + .chosen-container-multi .chosen-choices,
+#mailto + .chosen-container-multi .chosen-choices {border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: -1px;}
 
-.row .col-sm-8{width:75%;}
-.row .col-sm-4{padding-left:0px; width:25%;}
+.dropdown-pris > .btn {background-color: #fff; text-shadow: none}
+
+/* Keep label has same width as relative task label*/
+#keywordsAddonLabel:before {content: '空'; color: transparent} 
+
+#contactListGroup .input-group-btn > .btn {margin-left: -1px!important;}
+#contactListGroup .input-group-btn > .btn:first-child {border-left: none}

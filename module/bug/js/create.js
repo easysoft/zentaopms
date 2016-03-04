@@ -55,47 +55,6 @@ function setAssignedTo(moduleID, productID)
     });
 }
 
-$(function()
-{
-    if($('#project').val()) loadProjectRelated($('#project').val());
-    $('#saveTplBtn').on('click', function()
-    {
-        var content = $('#steps').val();
-        bootbox.prompt(setTemplateTitle, function(r)
-        {
-            if(!r || !content) return;
-            saveTemplateLink = createLink('bug', 'saveTemplate');
-            $.post(saveTemplateLink, {title:r, content:content}, function(data)
-            {
-                $('#tplBox').html(data);
-            });
-        });
-    });
-});
-
-// /* Save template. */
-// KindEditor.plugin('savetemplate', function(K) 
-// {
-//     var self = this, name = 'savetemplate';
-//     self.plugin.savetemplate = 
-//     {
-//         click: function(id) 
-//         {
-//             content = self.html();
-//             bootbox.prompt(setTemplateTitle, function(r)
-//             {
-//                 if(!r || !content) return;
-//                 saveTemplateLink = createLink('bug', 'saveTemplate');
-//                 $.post(saveTemplateLink, {title:r, content:content}, function(data)
-//                 {
-//                     $('#tplBox').html(data);
-//                 });
-//             });
-//         }
-//     };
-//     self.clickToolbar(name, self.plugin.savetemplate.click);
-// });
-
 /* Set template. */
 function setTemplate(templateID)
 {
@@ -112,3 +71,31 @@ function deleteTemplate(templateID)
     hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
     $('#tplBox' + templateID).addClass('hidden');
 }
+
+$(function()
+{
+    if($('#project').val()) loadProjectRelated($('#project').val());
+    $('#saveTplBtn').on('click', function()
+    {
+        var content = $('#steps').val();
+        bootbox.prompt(setTemplateTitle, function(r)
+        {
+            if(!r || !content) return;
+            saveTemplateLink = createLink('bug', 'saveTemplate');
+            $.post(saveTemplateLink, {title:r, content:content}, function(data)
+            {
+                $('#tplBox').html(data);
+            });
+        });
+    });
+
+    $('[data-toggle=tooltip]').tooltip();
+
+    // ajust style for file box
+    var ajustFilebox = function()
+    {
+        applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#contactListGroup').width() - 2) + 'px}', 'filebox')
+    };
+    ajustFilebox();
+    $(window).resize(ajustFilebox);
+});

@@ -1479,8 +1479,9 @@ function initPrioritySelector()
     $('.dropdown-pris').each(function()
     {
         var $dropdown = $(this);
+        var prefix = $dropdown.data('prefix') || 'pri';
         var $select = $dropdown.find('select');
-        var selectVal = parseInt($select.val());
+        var selectVal = parseInt($select.hide().val());
         var $menu = $dropdown.children('.dropdown-menu');
         if(!$menu.length)
         {
@@ -1489,14 +1490,21 @@ function initPrioritySelector()
         }
         if(!$menu.children('li').length)
         {
-            var set = $dropdown.data('set').split(',') || [0,1,2,3,4];
+            var set = $select.children('option').map(function() {return parseInt($(this).val());}).get();
+            if(!set || !set.length)
+            {
+                set = $dropdown.data('set');
+                set = set ? set.split(',') : [0,1,2,3,4];
+            }
+            set.sort();
             for(var i = 0; i < set.length; ++i)
             {
-                $menu.append('<li><a href="###" data-pri="' + i + '"><span class="pri' + i + '">' + (i ? i : '') + '</span></a></li>');
+                var v = set[i];
+                $menu.append('<li><a href="###" data-pri="' + v + '"><span class="' + prefix + v + '">' + (v ? v : '') + '</span></a></li>');
             }
         }
         $menu.find('a[data-pri="' + selectVal + '"]').parent().addClass('active');
-        $dropdown.find('.pri-text').html('<span class="pri' + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
+        $dropdown.find('.pri-text').html('<span class="' + prefix + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
 
         $dropdown.on('click', '.dropdown-menu > li > a', function()
         {
@@ -1505,9 +1513,27 @@ function initPrioritySelector()
             $a.parent().addClass('active');
             selectVal = $a.data('pri');
             $select.val(selectVal);
-            $dropdown.find('.pri-text').html('<span class="pri' + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
+            $dropdown.find('.pri-text').html('<span class="' + prefix + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
         });
     });
+}
+
+/**
+ * Apply cs style to page
+ * @return void
+ */
+function applyCssStyle(css, tag)
+{
+    tag = tag || 'default';
+    var name = 'applyStyle-' + tag;
+    var $style = $('style#' + name);
+    if(!$style.length)
+    {
+        $style = $('<style id="' + name + '">').appendTo('body');
+    }
+    var styleTag = $style.get(0);
+    if (styleTag.styleSheet) styleTag.styleSheet.cssText = css;
+    else styleTag.innerHTML = css;
 }
 
 /* Ping the server every some minutes to keep the session. */

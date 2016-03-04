@@ -150,12 +150,12 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 /* priority icons. */
 .pri1,.pri0,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 18px;height: 18px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #ccc; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #ccc; font-family: arial, helvetica, clean, sans-serif; background-color: #fff}
 .pri:before, .pri0:before{content: '?'}
-.pri1{border-color: #EA644A;color: #EA644A;}
-.pri2{border-color: #F1A325;color: #F1A325;}
+.pri1{border-color: #d71319;color: #d71319;}
+.pri2{border-color: #EA644A;color: #EA644A;}
 .pri3{border-color: #BD7B46;color: #BD7B46;}
-.pri4{border-color: #8666B8;color: #8666B8;}
-.pri5{border-color: #03B8CF;color: #03B8CF}
-.pri6{border-color: #38B03F;color: #38B03F}
+.pri4{border-color: #dcbe1a;color: #dcbe1a;}
+.pri5{border-color: #d0d836;color: #d0d836}
+.pri6{border-color: #99c323;color: #99c323}
 .dropdown-pris > .dropdown-menu {padding: 0 5px;}
 .dropdown-pris > .dropdown-menu > li {display: table-cell;}
 .dropdown-pris > .dropdown-menu > li > a {opacity: 0.6; transition: all .2s; padding: 6px 5px; display: block}

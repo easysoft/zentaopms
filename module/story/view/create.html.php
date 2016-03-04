@@ -115,15 +115,15 @@
       <tr>
         <th><?php echo $lang->story->mailto;?></th>
         <td>
-          <div class='input-group'>
+          <div class='input-group' id='mailtoGroup'>
             <?php 
             echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "multiple"); 
             if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
             if(empty($contactLists))
             {
                 echo '<span class="input-group-btn">';
-                echo '<a data-toggle="tooltip" title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('company', 'browse') . '" target="_blank" class="btn"><i class="icon icon-cog"></i></a>';
                 echo '<a data-toggle="tooltip" title="' . $lang->refresh . '" href="###" class="btn" onclick="ajaxGetContacts(this)"><i class="icon icon-refresh"></i></a>';
+                echo '<a data-toggle="tooltip" title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('company', 'browse') . '" target="_blank" class="btn"><i class="icon icon-cog"></i></a>';
                 echo '</span>';
             }
             ?>

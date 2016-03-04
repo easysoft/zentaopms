@@ -53,6 +53,7 @@ $lang->task->consumedAB        = 'Use';
 $lang->task->hour              = 'Hour';
 $lang->task->consumedThisTime  = 'Hours';
 $lang->task->leftThisTime      = 'Left';
+$lang->task->datePlan          = 'Date plan';
 $lang->task->estStarted        = 'Estimate start';
 $lang->task->realStarted       = 'Real start';
 $lang->task->date              = 'Date';

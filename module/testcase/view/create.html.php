@@ -39,10 +39,9 @@
           echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
           {
-              echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch"), $lang->tree->manage, '_blank');
-              echo '&nbsp; ';
-              echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+              echo "<span class='input-group-btn'>";
+              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch"), "<i class='icon icon-cog'></i>", '_blank', "data-toggle='tooltip' class='btn' title='{$lang->tree->manage}'");
+              echo html::a("javascript:loadProductModules($productID)", "<i class='icon icon-refresh'></i>", '', "data-toggle='tooltip' class='btn' title='{$lang->refresh}'");
               echo '</span>';
           }
           ?>
@@ -77,19 +76,23 @@
       <tr>
         <th><?php echo $lang->testcase->title;?></th>
         <td colspan='2'>
-          <div class='row'>
-            <div class='col-sm-10'>
-              <?php echo html::input('title', $caseTitle, "class='form-control'");?>
-            </div>
-            <div class='col-sm-2'>
+           <div class='row-table'>
+            <div class='col-table w-p100'><?php echo html::input('title', $caseTitle, "class='form-control'");?></div>
+            <div class='col-table'>
               <div class='input-group'>
-                <span class='input-group-addon fix-border'><?php echo $lang->testcase->pri;?></span>
-                <?php echo html::select('pri', $lang->testcase->priList, $pri, "class='form-control'");?>
+                <span class='input-group-addon fix-border br-0'><?php echo $lang->testcase->pri;?></span>
+                <div class='input-group-btn dropdown-pris'>
+                  <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
+                    <span class='pri-text'></span> &nbsp;<span class='caret'></span>
+                  </button>
+                  <ul class='dropdown-menu pull-right'></ul>
+                  <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='hide'");?>
+                </div>
               </div>
             </div>
           </div>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->testcase->precondition;?></th>
         <td colspan='2'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>

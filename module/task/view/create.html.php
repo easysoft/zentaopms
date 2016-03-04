@@ -51,21 +51,25 @@
       <tr>
         <th><?php echo $lang->task->name;?></th>
         <td colspan='3'>
-          <div class='row'>
-            <div class='col-sm-8'>
-              <?php echo html::input('name', $task->name, "class='form-control'");?>
-              <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
-            </div>
-            <div class='col-sm-2'>
-              <div class="input-group">
-                <span class='input-group-addon fix-border'><?php echo $lang->task->pri;?></span>
-                <?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?>
+          <div class='row-table'>
+            <div class='col-table'>
+              <div class="input-group w-p100">
+                <?php echo html::input('name', $task->name, "class='form-control'");?>
+                <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
               </div>
             </div>
-            <div class='col-sm-2'>
+            <div class='col-table w-250px'>
               <div class="input-group">
-                <span class='input-group-addon fix-border'><?php echo $lang->task->estimate;?></span>
-                <?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
+                <div class='input-group-btn dropdown-pris'>
+                  <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
+                    <span class='pri-text'></span> &nbsp;<span class='caret'></span>
+                  </button>
+                  <ul class='dropdown-menu pull-right'></ul>
+                  <?php echo html::select('pri', (array)$lang->task->priList, $pri, "class='hide'");?>
+                </div>
+                <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
+                <?php echo html::input('estimate', $estimate, "class='form-control' placeholder='{$lang->task->hour}'");?>
               </div>
             </div>
           </div>
@@ -76,19 +80,17 @@
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
       </tr>  
       <tr>
-        <th><?php echo $lang->task->estStarted;?></th>
-        <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
+        <th><?php echo $lang->task->datePlan;?></th>
         <td>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->task->deadline;?></span>
-            <?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?>
+          <div class='input-group' id='dataPlanGroup'>
+            <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+            <span class='input-group-addon fix-border'>~</span>
+            <?php echo html::input('deadline', $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
           </div>
         </td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->task->mailto;?></th>
-        <td colspan='3'>
+        <td colspan='2'>
           <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->task->mailto;?></span>
             <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?>
             <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
           </div>

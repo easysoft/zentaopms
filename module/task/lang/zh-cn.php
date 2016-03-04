@@ -53,6 +53,7 @@ $lang->task->consumedAB        = '消耗';
 $lang->task->hour              = '小时';
 $lang->task->consumedThisTime  = '工时';
 $lang->task->leftThisTime      = '剩余';
+$lang->task->datePlan          = '日程规划';
 $lang->task->estStarted        = '预计开始';
 $lang->task->realStarted       = '实际开始';
 $lang->task->date              = '日期';

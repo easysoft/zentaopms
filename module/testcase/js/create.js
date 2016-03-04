@@ -151,4 +151,6 @@ $(function()
     });
 
     $("#preview").modalTrigger({width:960, type:'iframe'});
+
+    $('[data-toggle=tooltip]').tooltip();
 })
