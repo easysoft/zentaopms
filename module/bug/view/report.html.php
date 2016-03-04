@@ -31,7 +31,7 @@
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts, '', 'block');?>
           <?php echo html::selectAll('', "button", false, 'btn-sm')?>
-          <?php echo html::submitButton($lang->bug->report->create, '', "btn-primary btn-sm");?>
+          <?php echo html::submitButton($lang->bug->report->create, '', "btn btn-primary btn-sm");?>
         </form>
       </div>
     </div>

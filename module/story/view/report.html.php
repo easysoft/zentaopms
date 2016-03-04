@@ -30,8 +30,8 @@
       <div class='panel-body' style='padding-top:0'>
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->story->report->charts, $checkedCharts, '', 'block');?>
-          <?php echo html::selectAll('', "button", false, 'btn-sm')?>
-          <?php echo html::submitButton($lang->story->report->create, '', 'btn-sm btn-primary');?>
+          <?php echo html::selectAll('', "button", false, 'btn btn-sm')?>
+          <?php echo html::submitButton($lang->story->report->create, '', 'btn btn-sm btn-primary');?>
         </form>
       </div>
     </div>

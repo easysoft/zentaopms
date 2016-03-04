@@ -201,6 +201,43 @@ class bugModel extends model
     }
 
     /**
+     * Get bugs.
+     *
+     * @param  int    $productID
+     * @param  array  $projects
+     * @param  int    $branch
+     * @param  string $browseType
+     * @param  int    $moduleID
+     * @param  int    $queryID
+     * @param  string $sort
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager)
+    {
+        /* Get bugs by browse type. */
+        if($browseType == 'all')               $bugs = $this->getAllBugs($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'bymodule')      $bugs = $this->getModuleBugs($productID, $branch, $this->loadModel('tree')->getAllChildId($moduleID), $projects, $sort, $pager);
+        elseif($browseType == 'assigntome')    $bugs = $this->getByAssigntome($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'openedbyme')    $bugs = $this->getByOpenedbyme($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'resolvedbyme')  $bugs = $this->getByResolvedbyme($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'assigntonull')  $bugs = $this->getByAssigntonull($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'unconfirmed')   $bugs = $this->getUnconfirmed($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'unresolved')    $bugs = $this->getByStatus($productID, $branch, $projects, 'unresolved', $sort, $pager);
+        elseif($browseType == 'unclosed')      $bugs = $this->getByStatus($productID, $branch, $projects, 'unclosed', $sort, $pager);
+        elseif($browseType == 'toclosed')      $bugs = $this->getByStatus($productID, $branch, $projects, 'toclosed', $sort, $pager);
+        elseif($browseType == 'longlifebugs')  $bugs = $this->getByLonglifebugs($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'postponedbugs') $bugs = $this->getByPostponedbugs($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productID, $branch, $projects, $sort, $pager);
+        elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
+
+        if($bugs) return $bugs;
+
+        return array();
+    }
+
+    /**
      * Get bugs of a module.
      * 
      * @param  int             $productID 
@@ -755,6 +792,68 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    {
+        $this->config->bug->search['actionURL'] = $actionURL;
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['params']['product']['values']       = array($productID => $products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->bug->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        }
+    }
+
+    /**
+     * Process the openedBuild and resolvedBuild fields for bugs.
+     *
+     * @param  array  $bugs
+     * @access public
+     * @return array
+     */
+    public function processBuildForBugs($bugs)
+    {
+        $productIdList = array();
+        foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
+        $builds = $this->loadModel('build')->getProductBuildPairs(array_unique($productIdList), 0, $params = '');
+
+        /* Process the openedBuild and resolvedBuild fields. */
+        foreach($bugs as $key => $bug)
+        {
+            $openBuildIdList = explode(',', $bug->openedBuild);
+            $openedBuild = '';
+            foreach($openBuildIdList as $buildID)
+            {
+                $openedBuild .= isset($builds[$buildID]) ? $builds[$buildID] : $buildID;
+                $openedBuild .= ',';
+            }
+            $bug->openedBuild   = rtrim($openedBuild, ',');
+            $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
+        }
+
+        return $bugs;
     }
 
     /**

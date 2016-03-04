@@ -15,4 +15,5 @@ $(document).ready(function()
         });
     });
     fixedTfootAction('#projectBugForm');
+    fixedTheadOfList('#bugList');
 });

@@ -98,8 +98,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <td colspan='12'>
       <div class='table-actions clearfix'>
       <?php
-      if($canBatchEdit or $canManageContacts) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
-      if($canBatchEdit) echo html::submitButton($lang->edit, 'onclick=batchEdit()', 'btn-default');
+      if($canBatchEdit or $canManageContacts) echo html::selectButton();
+      if($canBatchEdit) echo html::submitButton($lang->edit, 'onclick=batchEdit()', 'btn btn-default');
       if($canManageContacts) echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
       ?>
       </div>

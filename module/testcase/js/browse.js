@@ -27,6 +27,7 @@ $(document).ready(function()
     $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();
     setTimeout(function(){fixedTfootAction('#batchForm')}, 100);
+    setTimeout(function(){fixedTheadOfList('#caseList')}, 100);
 
     setModal4List('runCase', 'caseList');
 });

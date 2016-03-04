@@ -62,6 +62,48 @@ class companyModel extends model
     }
 
     /**
+     * Get users.
+     *
+     * @param  string $type
+     * @param  int    $queryID
+     * @param  int    $deptID
+     * @param  string $sort
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getUsers($type, $queryID, $deptID, $sort, $pager)
+    {
+        /* Get users. */
+        if($type == 'bydept')
+        {
+            $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
+            $users        = $this->dept->getUsers($childDeptIds, $pager, $sort);
+        }
+        else
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('userQuery', $query->sql);
+                    $this->session->set('userForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('userQuery', ' 1 = 1');
+                }
+            }
+            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $sort);
+        }
+
+        if($users) return $users;
+
+        return array();
+    }
+
+    /**
      * Update a company.
      * 
      * @access public
@@ -80,5 +122,20 @@ class companyModel extends model
             ->batchCheck('name', 'unique', "id != '$companyID'")
             ->where('id')->eq($companyID)
             ->exec();
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($queryID, $actionURL)
+    {
+        $this->config->company->browse->search['actionURL'] = $actionURL;
+        $this->config->company->browse->search['queryID']   = $queryID;
+        $this->config->company->browse->search['params']['dept']['values'] = array('' => '') + $this->loadModel('dept')->getOptionMenu();
     }
 }

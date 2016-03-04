@@ -8,7 +8,7 @@ function setPreview()
     else
     {
         storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
-        var concat = config.requestType == 'PATH_INFO' ? '?'  : '&';
+        var concat = config.requestType != 'GET' ? '?'  : '&';
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);

@@ -145,7 +145,7 @@
             $canBatchAssignTo = common::hasPriv('task', 'batchAssignTo');
             if(count($tasks))
             {
-                echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+                echo html::selectButton();
 
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
                 $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";

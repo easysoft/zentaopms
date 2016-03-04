@@ -96,7 +96,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <div class='table-actions clearfix'>
 
             <?php 
-            if($canBatchEdit or $canBatchAssign or $canBatchRun) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+            if($canBatchEdit or $canBatchAssign or $canBatchRun) echo html::selectButton();
             if($canBatchEdit)
             {
                 $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");

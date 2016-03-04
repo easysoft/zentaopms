@@ -123,7 +123,7 @@
             <?php
             if(count($stories))
             {
-              if($canBatchEdit or $canBatchClose) echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+              if($canBatchEdit or $canBatchClose) echo html::selectButton();
 
                 echo "<div class='btn-group dropup'>";
                 if($canBatchEdit)

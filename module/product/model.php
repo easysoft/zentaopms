@@ -343,6 +343,93 @@ class productModel extends model
     }
 
     /**
+     * Get stories.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $sort
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager)
+    {
+        $this->loadModel('story');
+
+        /* Get stories by browseType. */
+        if($browseType == 'unclosed')
+        {
+            $unclosedStatus = $this->lang->story->statusList;
+            unset($unclosedStatus['closed']);
+            $stories = $this->story->getProductStories($productID, $branch, 0, array_keys($unclosedStatus), $sort, $pager);
+        }
+        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, 0, 'all', $sort, $pager);
+        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $this->loadModel('tree')->getAllChildID($moduleID), 'all', $sort, $pager);
+        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch);
+        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $this->app->user->account, $sort, $pager);
+        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, 'draft', $sort, $pager);
+        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, 'active', $sort, $pager);
+        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, 'changed', $sort, $pager);
+        if($browseType == 'willclose')    $stories = $this->story->getWillClose($productID, $branch, $sort, $pager);
+        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, 'closed', $sort, $pager);
+
+        if($stories) return $stories;
+
+        return array();
+    }
+
+    /**
+     * Get story stages.
+     *
+     * @param  array  $stories.
+     * @access public
+     * @return array
+     */
+    public function getStoryStages($stories)
+    {
+        /* Set story id list. */
+        $storyIdList = array();
+        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+
+        return $this->loadModel('story')->getStoryStages($storyIdList);
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  int    $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    {
+        $this->config->product->search['actionURL'] = $actionURL;
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->product->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->product->allProduct);
+        $this->config->product->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        }
+    }
+
+    /**
      * Get projects of a product in pairs.
      * 
      * @param  int    $productID 

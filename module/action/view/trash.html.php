@@ -37,7 +37,7 @@
   <tr class='text-center'>
     <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
     <td><?php echo $action->objectID;?></td>
-    <td class='text-left'><?php echo html::a($this->createLink($module, 'view', "id=$action->objectID"), $action->objectName);?></td>
+    <td class='text-left'><?php echo html::a($this->createLink($module, 'view', $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}"), $action->objectName);?></td>
     <td><?php echo $users[$action->actor];?></td>
     <td><?php echo $action->date;?></td>
     <td>

@@ -1054,7 +1054,8 @@ class story extends control
         $productName = $this->product->getById($story->product)->name;
 
         /* Get actions. */
-        $action          = $this->action->getById($actionID);
+        $actions         = $this->action->getList('story', $storyID);
+        $action          = zget($actions, $actionID, null);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $story->spec;

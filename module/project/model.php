@@ -727,6 +727,84 @@ class projectModel extends model
     }
 
     /**
+     * Get tasks.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  array  $projects
+     * @param  string $status
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $sort
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getTasks($productID, $projectID, $projects, $status, $browseType, $queryID, $moduleID, $sort, $pager)
+    {
+        $this->loadModel('task');
+
+        /* Get tasks. */
+        if($status == 'byProduct')
+        {
+            $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
+            $tasks   = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
+        }
+        elseif($status == 'byModule')
+        {
+            $tasks = $this->task->getTasksByModule($projectID, $this->loadModel('tree')->getAllChildID($moduleID), $sort, $pager);
+        }
+        elseif($browseType != "bysearch")
+        {
+            $qureyStatus = $status == 'byProject' ? 'all' : $status;
+            if($qureyStatus == 'unclosed')
+            {
+                $qureyStatus = $this->lang->task->statusList;
+                unset($qureyStatus['closed']);
+                $qureyStatus = array_keys($qureyStatus);
+            }
+            $tasks = $this->task->getProjectTasks($projectID, $qureyStatus, $sort, $pager);
+        }
+        else
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('taskQuery', $query->sql);
+                    $this->session->set('taskForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('taskQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
+            }
+
+            /* Limit current project when no project. */
+            if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
+            if(strpos($this->session->taskQuery, "deleted =") === false)   $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
+
+            $projectQuery = "`project`" . helper::dbIN(array_keys($projects));
+            $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
+            $this->session->set('taskQueryCondition', $taskQuery);
+            $this->session->set('taskOnlyCondition', true);
+            $this->session->set('taskOrderBy', $sort);
+
+            $tasks = $this->getSearchTasks($taskQuery, $pager, $sort);
+        }
+
+        if($tasks) return $tasks;
+
+        return array();
+    }
+
+    /**
      * Get project by id.
      * 
      * @param  int    $projectID 
@@ -1678,5 +1756,23 @@ class projectModel extends model
         return $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
             ->fetchPairs();
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $projectID
+     * @param  array  $projects
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($projectID, $projects, $queryID, $actionURL)
+    {
+        $this->config->project->search['actionURL'] = $actionURL;
+        $this->config->project->search['queryID']   = $queryID;
+        $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $projects[$projectID], 'all' => $this->lang->project->allProject);
+        $this->config->project->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($projectID, $startModuleID = 0);
     }
 }

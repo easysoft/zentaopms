@@ -17,19 +17,13 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
         vars = vars.split('&');
         for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
     }
-    if(config.requestType == 'PATH_INFO')
+    if(config.requestType != 'GET')
     {
-        link = config.webRoot + moduleName + config.requestFix + methodName;
+        if(config.requestType == 'PATH_INFO')  link = config.webRoot + moduleName + config.requestFix + methodName;
+        if(config.requestType == 'PATH_INFO2') link = config.webRoot + 'index.php/'  + moduleName + config.requestFix + methodName;
         if(vars)
         {
-            if(config.pathType == "full")
-            {
-                for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][0] + config.requestFix + vars[i][1];
-            }
-            else
-            {
-                for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][1];
-            }
+            for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][1];
         }
         link += '.' + viewType;
     }
@@ -42,7 +36,7 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     /* if page has onlybody param then add this param in all link. the param hide header and footer. */
     if((typeof(onlybody) != 'undefined' && onlybody == 'yes') || isOnlyBody)
     {
-        var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
+        var onlybody = config.requestType != 'GET' ? "?onlybody=yes" : '&onlybody=yes';
         link = link + onlybody;
     }
     return link;
@@ -1435,42 +1429,44 @@ function fixedTableHead(boxObj)
 }
 
 /**
- * Init prioprity selectors
+ * Fixed table head in list when scrolling.
+ * 
+ * @param  string $tableID 
+ * @access public
  * @return void
  */
-function initPrioritySelector()
+function fixedTheadOfList(tableID)
 {
-    $('.dropdown-pris').each(function()
+    if($(tableID).size() == 0) return false;
+    var $table = $(tableID);
+    var $thead = $table.find('thead');
+    if($thead.size() == 0) return false;
+    $table.parent().find('.fixedTheadOfList').remove();
+
+    var theadOffset = $thead.offset().top;
+    var tableWidth  = $table.width();
+    var fixedThead  = "<table class='fixedTheadOfList'><thead>" + $thead.html() + '</thead></table>';
+
+    if(theadOffset < $(window).scrollTop())
     {
-        var $dropdown = $(this);
-        var $select = $dropdown.find('select');
-        var selectVal = parseInt($select.val());
-        var $menu = $dropdown.children('.dropdown-menu');
-        if(!$menu.length)
+        $table.before(fixedThead);
+        $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
+    }
+    $(window).scroll(function()
+    {    
+        var hasFixed  = $table.parent().find('.fixedTheadOfList').size() > 0;
+        if(!hasFixed)
         {
-            $menu = $('<ul class="dropdown-menu"></ul>');
-            $dropdown.append($menu);
-        }
-        if(!$menu.children('li').length)
-        {
-            var set = $dropdown.data('set').split(',') || [0,1,2,3,4];
-            for(var i = 0; i < set.length; ++i)
+            if(theadOffset < $(window).scrollTop())
             {
-                $menu.append('<li><a href="###" data-pri="' + i + '"><span class="pri' + i + '">' + (i ? i : '') + '</span></a></li>');
+                $table.before(fixedThead);
+                $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
             }
         }
-        $menu.find('a[data-pri="' + selectVal + '"]').parent().addClass('active');
-        $dropdown.find('.pri-text').html('<span class="pri' + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
-
-        $dropdown.on('click', '.dropdown-menu > li > a', function()
+        else if(theadOffset >= $(window).scrollTop())
         {
-            var $a = $(this);
-            $menu.children('li.active').removeClass('active');
-            $a.parent().addClass('active');
-            selectVal = $a.data('pri');
-            $select.val(selectVal);
-            $dropdown.find('.pri-text').html('<span class="pri' + selectVal + '">' + (selectVal ? selectVal : '') + '</span>');
-        });
+            $table.parent().find('.fixedTheadOfList').remove();
+        }
     });
 }
 
@@ -1521,8 +1517,6 @@ $(document).ready(function()
         if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
         $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
     });
-
-    initPrioritySelector();
 });
 
 /* CTRL+g, auto focus on the search box. */

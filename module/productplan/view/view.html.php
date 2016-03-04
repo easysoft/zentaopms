@@ -100,8 +100,8 @@
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
-                    <td><?php echo $users[$story->openedBy];?></td>
-                    <td><?php echo $users[$story->assignedTo];?></td>
+                    <td><?php echo zget($users, $story->openedBy);?></td>
+                    <td><?php echo zget($users, $story->assignedTo);?></td>
                     <td><?php echo $story->estimate;?></td>
                     <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -124,7 +124,7 @@
                       <?php 
                       if(count($planStories) and ($canBatchUnlink or $canBatchChangePlan))
                       {
-                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+                          echo html::selectButton();
                           echo "<div class='btn-group dropup'>";
                           $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");
                           echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', '', this)\"");
@@ -195,8 +195,8 @@
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
                     <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
-                    <td><?php echo $users[$bug->openedBy];?></td>
-                    <td><?php echo $users[$bug->assignedTo];?></td>
+                    <td><?php echo zget($users, $bug->openedBy);?></td>
+                    <td><?php echo zget($users, $bug->assignedTo);?></td>
                     <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
                     <td>
                       <?php
@@ -217,7 +217,7 @@
                       <?php 
                       if(count($planBugs) and $canBatchUnlink)
                       {
-                          echo "<div class='btn-group'>" . html::selectButton() . '</div>';
+                          echo html::selectButton();
                           echo html::submitButton($lang->productplan->batchUnlink);
                       }
                       ?>

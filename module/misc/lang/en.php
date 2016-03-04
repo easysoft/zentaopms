@@ -51,6 +51,11 @@ $lang->misc->zentao->service['install']    = 'Install service';
 $lang->misc->zentao->service['fixissue']   = 'Issue support';
 $lang->misc->zentao->service['servicemore']= 'More...';
 
-$lang->misc->mobile    = "Mobile access";
-$lang->misc->noGDLib   = "Please visit：<strong>%s</strong>.";
-$lang->misc->copyright = "&copy; 2009-2015 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>  4006-8899-23  <a href='mailto:co@zentao.net'>co@zentao.net</a>";
+$lang->misc->mobile      = "Mobile access";
+$lang->misc->noGDLib     = "Please visit：<strong>%s</strong>.";
+$lang->misc->copyright   = "&copy; 2009-2015 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>  4006-8899-23  <a href='mailto:co@zentao.net'>co@zentao.net</a>";
+$lang->misc->checkTable  = "Check and repair table";
+$lang->misc->needRepair  = "Repair Table";
+$lang->misc->repairTable = "The database table can cause of damage because of power failure, need to check and repair!!";
+$lang->misc->tableName   = "Table name";
+$lang->misc->tableStatus = "Table status";

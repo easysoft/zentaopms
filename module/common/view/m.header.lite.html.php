@@ -19,22 +19,22 @@ $clientTheme  = $this->app->getClientTheme();
   js::exportConfigVars();
   if($config->debug)
   {
-      js::import($jsRoot . 'jquery/mobile/jquery-1.10.1.min.js', $config->version);
-      js::import($jsRoot . 'm.my.full.js', $config->version);
-      js::import($jsRoot . 'jquery/mobile/jquery.mobile.min.js', $config->version);
-      js::import($jsRoot . 'jquery/jquery.pjax.js', $config->version);
+      js::import($jsRoot . 'jquery/mobile/jquery-1.10.1.min.js');
+      js::import($jsRoot . 'm.my.full.js');
+      js::import($jsRoot . 'jquery/mobile/jquery.mobile.min.js');
+      js::import($jsRoot . 'jquery/jquery.pjax.js');
 
-      css::import($defaultTheme . 'jquery.mobile.css', $config->version);
-      css::import($defaultTheme . 'm.style.css', $config->version);
-      css::import($langTheme, $config->version);
+      css::import($defaultTheme . 'jquery.mobile.css');
+      css::import($defaultTheme . 'm.style.css');
+      css::import($langTheme);
   }
   else
   {
-      js::import($jsRoot . 'm.all.js', $config->version);
-      css::import($defaultTheme . 'm.' . $this->cookie->lang . '.default.css', $config->version);
+      js::import($jsRoot . 'm.all.js');
+      css::import($defaultTheme . 'm.' . $this->cookie->lang . '.default.css');
   }
 
-  if(isset($pageCss)) css::internal($pageCss);
+  if(isset($pageCSS)) css::internal($pageCSS);
 
   echo html::favicon($webRoot . 'favicon.ico');
   ?>

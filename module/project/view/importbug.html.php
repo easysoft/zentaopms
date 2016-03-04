@@ -59,7 +59,7 @@ var browseType = '<?php echo $browseType;?>';
     <tfoot>
       <tr>
         <td colspan='8'>
-          <div class='table-actions clearfix'><?php echo "<div class='btn-group'>" . html::selectButton() . '</div>' . html::submitButton($lang->import) . html::backButton();?>
+          <div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton($lang->import) . html::backButton();?>
           </div>
           <?php $pager->show();?>
         </td>

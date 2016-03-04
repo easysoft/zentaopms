@@ -183,6 +183,7 @@ class commonModel extends model
         if($module == 'user' and strpos('login|logout|deny|reset', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
         if($module == 'misc' and $method == 'ping')  return true;
+        if($module == 'misc' and $method == 'checktable') return true;
         if($module == 'block' and $method == 'main') return true;
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;

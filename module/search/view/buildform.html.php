@@ -245,7 +245,7 @@ function saveQuery()
         saveQueryLink = createLink('search', 'saveQuery');
         $.post(saveQueryLink, {title: r, module: module}, function(data)
         {
-            if(data == 'success') location.reload();
+            if(data == 'success') $('#queryBox').load(createLink('search', 'ajaxGetQuery'));
         });
     });
 }
@@ -273,7 +273,8 @@ function deleteQuery()
 {
     queryID = $('#queryID').val();
     if(!queryID) return;
-    hiddenwin.location.href = createLink('search', 'deleteQuery', 'queryID=' + queryID);
+    deleteLink = createLink('search', 'deleteQuery', 'queryID=' + queryID);
+    $('#queryBox').load(deleteLink);
 }
 </script>
 
@@ -401,11 +402,11 @@ foreach($fieldParams as $fieldName => $param)
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
       echo "<div class='btn-group'>";
-      echo html::submitButton($lang->search->common, '', 'btn-primary');
+      echo html::submitButton($lang->search->common);
       if($style != 'simple')
       {
-          echo html::commonButton($lang->search->reset, 'onclick=resetForm(this) class=btn');
-          echo html::commonButton($lang->save, 'onclick=saveQuery() class=btn');
+          echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)');
+          echo html::commonButton($lang->save, 'onclick=saveQuery()');
       }
       echo '</div>';
       ?>
@@ -413,10 +414,8 @@ foreach($fieldParams as $fieldName => $param)
     <?php if($style != 'simple'):?>
     <td class='w-120px'>
       <div class='input-group'>
-      <?php
-      echo html::select('queryID', $queries, $queryID, 'onchange=executeQuery(this.value) class=form-control');
-      if(common::hasPriv('search', 'deleteQuery')) echo "<span class='input-group-btn'>" . html::a('javascript:deleteQuery()', '<i class="icon-remove"></i>', '', 'class=btn') . '</span>';
-      ?>
+      <span id='queryBox'><?php echo html::select('queryID', $queries, $queryID, 'onchange=executeQuery(this.value) class=form-control');?></span>
+      <?php if(common::hasPriv('search', 'deleteQuery')) echo "<span class='input-group-btn'>" . html::a('javascript:deleteQuery()', '<i class="icon-remove"></i>', '', 'class=btn') . '</span>';?>
       </div>
     </td>
     <?php endif;?>

@@ -49,8 +49,8 @@
           if($preCase)  echo html::a(inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"), $lang->testtask->pre, '', "id='pre' class='btn'");
           if(empty($run->case->steps))
           {
-              echo html::submitButton($lang->testtask->pass, "onclick=$('#result').val('pass')", 'btn-success');
-              echo html::submitButton($lang->testtask->fail, "onclick=$('#result').val('fail')", 'btn-danger');
+              echo html::submitButton($lang->testtask->pass, "onclick=$('#result').val('pass')", 'btn btn-success');
+              echo html::submitButton($lang->testtask->fail, "onclick=$('#result').val('fail')", 'btn btn-danger');
           }
           else
           {

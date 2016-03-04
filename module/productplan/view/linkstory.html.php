@@ -43,8 +43,8 @@ include '../../common/view/tablesorter.html.php';
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td><?php echo $story->planTitle;?></td>
         <td class='text-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
-        <td><?php echo $users[$story->openedBy];?></td>
-        <td><?php echo $users[$story->assignedTo];?></td>
+        <td><?php echo zget($users, $story->openedBy);?></td>
+        <td><?php echo zget($users, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>
         <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
         <td><?php echo $lang->story->stageList[$story->stage];?></td>

@@ -42,6 +42,11 @@ class userModel extends model
      */
     public function setUserList($users, $account)
     {
+        if(!isset($users[$account]))
+        {
+            $user = $this->getById($account);
+            if($user and $user->deleted) $users[$account] = zget($user, 'realname', $account);
+        }
         return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\" class='form-control chosen'");
     }
 
@@ -524,6 +529,46 @@ class userModel extends model
             if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
         }
         return !dao::isError();
+    }
+
+    /**
+     * Check if the ip is in white list.
+     * 
+     * @access public
+     * @param  string $ip
+     * @return bool
+     */
+    public function checkIP($ip)
+    {
+        $allowIPs = $this->config->ip->whiteList;
+
+        /* If the ip white list is '*'. */
+        if($allowIPs == '*') return true;
+
+        /* The ip is same as ip in white list. */
+        if($ip == $allowIPs) return true;
+
+        /* If the ip in white list is like 192.168.1.1-192.168.1.10. */
+        if(strpos($allowIPs, '-') !== false)
+        {
+            list($min, $max) = explode('-', $allowIPs);
+            $min = ip2long(trim($min));
+            $max = ip2long(trim($max));
+            $ip  = ip2long(trim($ip));
+
+            return $ip >= $min and $ip <= $max;
+        }
+
+        /* If the ip in white list is in IP/CIDR format eg 127.0.0.1/24. Thanks to zcat. */
+        if(strpos($allowIPs, '/') == false) $allowIPs .= '/32';
+        list($allowIPs, $netmask) = explode('/', $allowIPs, 2);
+
+        $allowIPs = ip2long($allowIPs);
+        $ip       = ip2long($ip);
+        $wildcard = pow(2, (32 - $netmask)) - 1;
+        $netmask  = ~ $wildcard;
+
+        return (($ip & $netmask) == ($allowIPs & $netmask));
     }
     
     /**

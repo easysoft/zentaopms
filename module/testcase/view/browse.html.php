@@ -104,9 +104,7 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
          <td colspan='<?php echo $mergeColums?>'>
            <?php if($cases):?>
            <div class='table-actions clearfix'>
-             <div class='btn-group'>
-               <?php echo html::selectButton();?>
-             </div>
+             <?php echo html::selectButton();?>
              <div class='btn-group dropup'>
                <?php
                $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");

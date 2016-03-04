@@ -1,5 +1,6 @@
 <?php
 /**
+ * ZenTaoPHP的分页类。
  * The pager class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code.  In place of
@@ -10,6 +11,7 @@
  *  May you share freely, never taking more than you give.
  */
 /**
+ * pager类.
  * Pager class.
  * 
  * @package framework
@@ -17,13 +19,15 @@
 class pager
 {
     /**
+     * 每页的默认显示记录数。
      * The default counts of per page.
      *
      * @public int
      */
-    const DEFAULT_REC_PRE_PAGE = 20;
+    const DEFAULT_REC_PER_PAGE = 20;
 
     /**
+     * 总个数。
      * The total counts.
      * 
      * @var int
@@ -32,6 +36,7 @@ class pager
     public $recTotal;
 
     /**
+     * 每页的记录数。
      * Record count per page.
      * 
      * @var int
@@ -48,6 +53,7 @@ class pager
     public $pageCookie;
 
     /**
+     * 总页面数。
      * Page count.
      * 
      * @var string
@@ -56,6 +62,7 @@ class pager
     public $pageTotal;
 
     /**
+     * 当前页码。
      * Current page id.
      * 
      * @var string
@@ -64,6 +71,7 @@ class pager
     public $pageID;
 
     /**
+     * 全局变量$app。
      * The global $app.
      * 
      * @var object
@@ -72,6 +80,7 @@ class pager
     private $app;
 
     /**
+     * 全局变量$lang。
      * The global $lang.
      * 
      * @var object
@@ -80,6 +89,7 @@ class pager
     private $lang;
 
     /**
+     * 当前的模块名。
      * Current module name.
      * 
      * @var string
@@ -88,6 +98,7 @@ class pager
     private $moduleName;
 
     /**
+     * 当前的方法名。
      * Current method.
      * 
      * @var string
@@ -96,6 +107,7 @@ class pager
     private $methodName;
 
     /**
+     * 参数信息。
      * The params.
      *
      * @private array
@@ -103,6 +115,7 @@ class pager
     private $params;
 
     /**
+     * 构造方法。
      * The construct function.
      * 
      * @param  int    $recTotal 
@@ -125,6 +138,7 @@ class pager
     }
 
     /**
+     * 构造方法。
      * The factory function.
      * 
      * @param  int    $recTotal 
@@ -139,6 +153,7 @@ class pager
     }
 
     /**
+     * 设置总记录数。
      * Set the recTotal property.
      * 
      * @param  int    $recTotal 
@@ -151,7 +166,8 @@ class pager
     }
 
     /**
-     * Set the recTotal property.
+     * 设置每页记录数。
+     * Set the recPerPage property.
      * 
      * @param  int    $recPerPage 
      * @access public
@@ -163,10 +179,11 @@ class pager
         $this->pageCookie = 'pager' . ucfirst($this->app->getModuleName()) . ucfirst($this->app->getMethodName());
 
         if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
-        $this->recPerPage = ($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PRE_PAGE;
+        $this->recPerPage = ($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PER_PAGE;
     }
 
     /**
+     * 设置总页数。
      * Set the pageTotal property.
      * 
      * @access public
@@ -178,6 +195,7 @@ class pager
     }
 
     /**
+     * 设置页码。
      * Set the page id.
      * 
      * @param  int $pageID 
@@ -186,7 +204,7 @@ class pager
      */
     public function setPageID($pageID)
     {
-        if($pageID > 0 and $pageID <= $this->pageTotal)
+        if($pageID > 0 and ($this->pageTotal == 0 or $pageID <= $this->pageTotal))
         {
             $this->pageID = $pageID;
         }
@@ -197,6 +215,7 @@ class pager
     }
 
     /**
+     * 设置全局变量$app。
      * Set the $app property;
      * 
      * @access private
@@ -209,6 +228,7 @@ class pager
     }
 
     /**
+     * 设置全局变量$lang。
      * Set the $lang property.
      * 
      * @access private
@@ -221,6 +241,7 @@ class pager
     }
 
     /**
+     * 设置模块名。
      * Set the $moduleName property.
      * 
      * @access private
@@ -232,6 +253,7 @@ class pager
     }
 
     /**
+     * 设置方法名。
      * Set the $methodName property.
      * 
      * @access private
@@ -243,6 +265,7 @@ class pager
     }
 
     /**
+     * 从请求网址中获取记录总数、每页记录数、页码。
      * Get recTotal, recPerpage, pageID from the request params, and add them to params.
      * 
      * @access private
@@ -257,9 +280,19 @@ class pager
             if(strtolower($key) == 'recperpage') $this->params[$key] = $this->recPerPage;
             if(strtolower($key) == 'pageid')     $this->params[$key] = $this->pageID;
         }
+
+        parse_str(strip_tags(urldecode($_SERVER['QUERY_STRING'])), $query);
+
+        unset($query['m']);
+        unset($query['f']);
+        unset($query['t']);
+
+        $this->params = array_merge($this->params, $query);
+
     }
 
     /**
+     * 创建limit语句。
      * Create the limit string.
      * 
      * @access public
@@ -271,8 +304,9 @@ class pager
         if($this->pageTotal > 1) $limit = ' limit ' . ($this->pageID - 1) * $this->recPerPage . ", $this->recPerPage";
         return $limit;
     }
-   
+
     /**
+     * 向页面显示分页信息。 
      * Print the pager's html.
      * 
      * @param  string $align 
@@ -282,10 +316,48 @@ class pager
      */
     public function show($align = 'right', $type = 'full')
     {
-        echo $this->get($align, $type);
+        if($align === 'justify')
+        {
+            echo $this->getJustify($type);
+        }
+        else
+        {
+            echo $this->get($align, $type);
+        }
     }
 
     /**
+     * 获取优化后的分页。
+     * Get the justify pager html string
+     * 
+     * @access public
+     * @return [type] [description]
+     */
+    public function getJustify()
+    {
+        if($this->recTotal <= 0) return '';
+
+        $this->setParams();
+        $pager = '';
+
+        $pager .= "<li class='previous" . ($this->pageID == 1 ? ' disabled' : '') . "'>";
+        $this->params['pageID'] = 1;
+        $pager .= $this->createLink('« ' . $this->lang->pager->previousPage) . '</li>';
+
+        $pager .= "<li class='caption'>";
+        $firstId = $this->recPerPage * ($this->pageID - 1) + 1;
+        $pager .= sprintf($this->lang->pager->summery, $firstId, max(min($this->recPerPage * $this->pageID, $this->recTotal), $firstId), $this->recTotal);
+        $pager .= '</li>';
+
+        $pager .= "<li class='next" . (($this->pageID == $this->pageTotal || $this->pageTotal <= 1) ? ' disabled' : '') . "'>";
+        $this->params['pageID'] = min($this->pageTotal, $this->pageID + 1);
+        $pager .= $this->createLink($this->lang->pager->nextPage . ' »') . '</li>';
+
+        return "<ul class='pager pager-justify'>{$pager}</ul>";
+    }
+
+    /**
+     * 设置分页信息的样式。
      * Get the pager html string.
      * 
      * @param  string $align 
@@ -295,17 +367,19 @@ class pager
      */
     public function get($align = 'right', $type = 'full')
     {
+        /* 如果记录个数为0，返回没有记录。 */
         /* If the RecTotal is zero, return with no record. */
-        if($this->recTotal == 0) { return $type == 'mobile' ? '' : "<div style='float:$align; clear:none;' class='pager'>{$this->lang->pager->noRecord}</div>"; }
+        if($this->recTotal == 0) return $type == 'mobile' ? '' : "<div style='float:$align; clear:none;' class='page'>{$this->lang->pager->noRecord}</div>"; 
 
         /* Set the params. */
         $this->setParams();
-        
+
+        /* 创建前一页和后一页链接。 */
         /* Create the prePage and nextpage, all types have them. */
         $pager  = $this->createPrePage($type);
         $pager .= $this->createNextPage($type);
 
-        /* The short and full type. */
+        /* 简单和完全模式。  The short and full type. */
         if($type !== 'shortest' and $type !== 'mobile')
         {
             $pager  = $this->createFirstPage() . $pager;
@@ -322,7 +396,7 @@ class pager
             $pager = $this->pageID . '/' . $this->pageTotal . ' ' . $pager;
         }
 
-        /* Only the full type . */
+        /* 只是完全模式。   Only the full type . */
         if($type == 'full')
         {
             $pager  = $this->createDigest() . $pager;
@@ -330,10 +404,11 @@ class pager
             $pager .= $this->createRecPerPageJS();
         }
 
-        return "<div style='float:$align; clear:none;' class='pager'>$pager</div>";
+        return "<div style='float:$align; clear:none;' class='pager form-inline'>$pager</div>";
     }
 
     /**
+     * 生成分页摘要信息。
      * Create the digest code.
      * 
      * @access private
@@ -345,6 +420,7 @@ class pager
     }
 
     /**
+     * 创建首页链接。
      * Create the first page.
      * 
      * @access private
@@ -354,12 +430,14 @@ class pager
     {
         if($this->pageID == 1) return $this->lang->pager->first . ' ';
         $this->params['pageID'] = 1;
-        return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->first);
+        return $this->createLink($this->lang->pager->first);
     }
 
     /**
+     * 创建前一页链接。
      * Create the pre page html.
      * 
+     * @param  string $type 
      * @access private
      * @return string
      */
@@ -369,19 +447,21 @@ class pager
         {
             if($this->pageID == 1) return '';
             $this->params['pageID'] = $this->pageID - 1;
-            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->pre, '', 'data-role="button" data-icon="arrow-l" data-iconpos="left" data-inline="true"');
+            return $this->createLink($this->lang->pager->pre);
         }
         else
         {
             if($this->pageID == 1) return $this->lang->pager->pre . ' ';
             $this->params['pageID'] = $this->pageID - 1;
-            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->pre);
+            return $this->createLink($this->lang->pager->pre);
         }
     }    
 
     /**
+     * 创建下一页链接。
      * Create the next page html.
      * 
+     * @param  string $type 
      * @access private
      * @return string
      */
@@ -391,17 +471,18 @@ class pager
         {
             if($this->pageID == $this->pageTotal) return '';
             $this->params['pageID'] = $this->pageID + 1;
-            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->next, '', 'data-role="button" data-icon="arrow-r" data-iconpos="right" data-inline="true"');
+            return $this->createLink($this->lang->pager->next);
         }
         else
         {
             if($this->pageID == $this->pageTotal) return $this->lang->pager->next . ' ';
             $this->params['pageID'] = $this->pageID + 1;
-            return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->next);
+            return $this->createLink($this->lang->pager->next);
         }
     }
 
     /**
+     * 创建最后一页链接。
      * Create the last page 
      * 
      * @access private
@@ -411,10 +492,11 @@ class pager
     {
         if($this->pageID == $this->pageTotal) return $this->lang->pager->last . ' ';
         $this->params['pageID'] = $this->pageTotal;
-        return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $this->lang->pager->last);
+        return $this->createLink($this->lang->pager->last);
     }    
 
     /**
+     * 创建每页显示记录数的select标签。
      * Create the select object of record perpage.
      * 
      * @access private
@@ -422,7 +504,10 @@ class pager
      */
     private function createRecPerPageJS()
     {
-        /* Replace the recTotal, recPerPage, pageID to special string, and then replace them with values by JS. */
+        /* 
+         * 替换recTotal, recPerPage, pageID为特殊的字符串，然后用js代码替换掉。
+         * Replace the recTotal, recPerPage, pageID to special string, and then replace them with values by JS.
+         **/
         $params = $this->params;
         foreach($params as $key => $value)
         {
@@ -435,7 +520,7 @@ class pager
         $vars = rtrim($vars, '&');
 
         $js  = <<<EOT
-        <script>
+        <script language='Javascript'>
         vars = '$vars';
         pageCookie = '$this->pageCookie';
         function submitPage(mode, perPage)
@@ -467,6 +552,7 @@ EOT;
     }
 
     /**
+     * 生成每页显示记录数的select列表。
      * Create the select list of RecPerPage. 
      * 
      * @access private
@@ -479,6 +565,7 @@ EOT;
         $range[200]  = 200;
         $range[500]  = 500;
         $range[1000] = 1000;
+        $range[2000] = 2000;
         $html = "<div class='dropdown dropup'><a href='javascript:;' data-toggle='dropdown' id='_recPerPage' data-value='{$this->recPerPage}'>" . (sprintf($this->lang->pager->recPerPage, $this->recPerPage)) . "<span class='caret'></span></a><ul class='dropdown-menu'>";
         foreach ($range as $key => $value)
         {
@@ -489,6 +576,7 @@ EOT;
     }
 
     /**
+     * 生成跳转到指定页码的部分。
      * Create the goto part html.
      * 
      * @access private
@@ -498,8 +586,35 @@ EOT;
     {
         $goToHtml  = "<input type='hidden' id='_recTotal'  value='$this->recTotal' />\n";
         $goToHtml .= "<input type='hidden' id='_pageTotal' value='$this->pageTotal' />\n";
-        $goToHtml .= "<input type='text'   id='_pageID' value='$this->pageID' style='text-align:center;width:30px;' class='form-control' /> \n";
-        $goToHtml .= "<input type='button' id='goto' value='{$this->lang->pager->locate}' onclick='submitPage(\"changePageID\");' class='btn'/>";
+        $goToHtml .= "<input type='text'   id='_pageID'    value='$this->pageID' style='text-align:center;width:30px;' class='form-control' /> \n";
+        $goToHtml .= "<input type='button' id='goto'       value='{$this->lang->pager->locate}' onclick='submitPage(\"changePageID\");' class='btn'/>";
         return $goToHtml;
     }    
+
+    /**
+     * 创建链接。
+     * Create link.
+     * 
+     * @param  string    $title 
+     * @access private
+     * @return string
+     */
+    private function createLink($title)
+    {
+        global $config; 
+        if(helper::inSeoMode() && method_exists('uri', 'create' . $this->moduleName . $this->methodName)) 
+        {
+            $link  = strip_tags(urldecode($_SERVER['REQUEST_URI']));
+
+            if($this->params['pageID'] == 1) return html::a(preg_replace('/\/p\d+\./', '.', $link), $title);
+
+            if(preg_match('/\/p\d+/', $link)) return html::a(preg_replace('/\/p\d+\./', '/p' . $this->params['pageID'] . '.', $link), $title);
+
+            if($config->requestType == 'PATH_INFO2') $link = str_replace('index.php/', 'index_php/', $link);
+            $link = str_replace('.', "/p{$this->params['pageID']}.", $link);
+            if($config->requestType == 'PATH_INFO2') $link =  str_replace('index_php/', 'index.php/', $link);
+            return html::a($link, $title);
+        }
+        return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $title);
+    }
 }

@@ -658,6 +658,9 @@ class user extends control
                 if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
                 die(js::error($failReason));
             }
+
+            /* Check the login ip is in white list or not. */
+            if(!$this->user->checkIP($this->server->remote_addr)) die(js::error($this->lang->user->ipLimited));
             
             $user = $this->user->identify($account, $password);
 

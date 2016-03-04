@@ -52,6 +52,7 @@ class bug extends control
      * Browse bugs.
      * 
      * @param  int    $productID 
+     * @param  string $branch
      * @param  string $browseType 
      * @param  int    $param 
      * @param  string $orderBy 
@@ -63,10 +64,10 @@ class bug extends control
      */
     public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* Set browseType, productID, moduleID and queryID. */
+        /* Set browseType, productID, moduleID, queryID and branch. */
         $browseType = strtolower($browseType);
         $productID  = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->session->branch;
+        $branch     = ($branch == '') ? $this->session->branch  : $branch;
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -86,98 +87,44 @@ class bug extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $projects = $this->loadModel('project')->getPairs();
-        $projects[0] = '';
+        /* Get projects. */
+        $projects = $this->loadModel('project')->getPairs() + array('0' => '');
 
         /* Get bugs. */
-        $bugs = array();
-        if($browseType == 'all') $bugs = $this->bug->getAllBugs($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == "bymodule")
-        {
-            $childModuleIds = $this->tree->getAllChildId($moduleID);
-            $bugs = $this->bug->getModuleBugs($productID, $branch, $childModuleIds, $projects, $sort, $pager);
-        }
-        elseif($browseType == 'assigntome')    $bugs = $this->bug->getByAssigntome($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'openedbyme')    $bugs = $this->bug->getByOpenedbyme($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'resolvedbyme')  $bugs = $this->bug->getByResolvedbyme($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'assigntonull')  $bugs = $this->bug->getByAssigntonull($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'unconfirmed')   $bugs = $this->bug->getUnconfirmed($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'unresolved')    $bugs = $this->bug->getByStatus($productID, $branch, $projects, 'unresolved', $sort, $pager);
-        elseif($browseType == 'unclosed')      $bugs = $this->bug->getByStatus($productID, $branch, $projects, 'unclosed', $sort, $pager);
-        elseif($browseType == 'toclosed')      $bugs = $this->bug->getByStatus($productID, $branch, $projects, 'toclosed', $sort, $pager);
-        elseif($browseType == 'longlifebugs')  $bugs = $this->bug->getByLonglifebugs($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'postponedbugs') $bugs = $this->bug->getByPostponedbugs($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $branch, $projects, $sort, $pager);
-        elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $queryID, $sort, $pager, $branch);
+        $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
 
         /* Process bug for check story changed. */
-        $bugs  = $this->loadModel('story')->checkNeedConfirm($bugs);
-
-        /* Build the search form. */
-        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
-        $this->config->bug->search['queryID']   = $queryID;
-        $this->config->bug->search['params']['product']['values']       = array($productID => $this->products[$productID], 'all' => $this->lang->bug->allProduct);
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
-        $this->config->bug->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->bug->search['fields']['branch']);
-            unset($this->config->bug->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
-
-        $users = $this->user->getPairs('noletter');
+        $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
 
         /* Process the openedBuild and resolvedBuild fields. */
-        $productIdList = array();
-        foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
-        $builds = $this->loadModel('build')->getProductBuildPairs(array_unique($productIdList), 0, $params = '');
-        foreach($bugs as $key => $bug) 
-        {
-            $openBuildIdList = explode(',', $bug->openedBuild);
-            $openedBuild = '';
-            foreach($openBuildIdList as $buildID)
-            {
-                $openedBuild .= isset($builds[$buildID]) ? $builds[$buildID] : $buildID;
-                $openedBuild .= ',';
-            }
-            $bug->openedBuild   = rtrim($openedBuild, ',');
-            $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
-        }
+        $bugs = $this->bug->processBuildForBugs($bugs);
 
-        $memberPairs = $this->user->getPairs('noletter|nodeleted');
-       
-        $title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
-        $position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[] = $this->lang->bug->common;
+        /* Build the search form. */
+        $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->productID    = $productID;
-        $this->view->productName  = $this->products[$productID];
-        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->view->moduleTree   = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
-        $this->view->browseType   = $browseType;
-        $this->view->bugs         = $bugs;
-        $this->view->users        = $users;
-        $this->view->pager        = $pager;
-        $this->view->param        = $param;
-        $this->view->orderBy      = $orderBy;
-        $this->view->moduleID     = $moduleID;
-        $this->view->memberPairs  = $memberPairs;
-        $this->view->branch       = $branch;
-        $this->view->branches     = $this->loadModel('branch')->getPairs($productID);
+        /* Set view. */
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
+        $this->view->position[]  = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]  = $this->lang->bug->common;
+        $this->view->productID   = $productID;
+        $this->view->productName = $this->products[$productID];
+        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        $this->view->browseType  = $browseType;
+        $this->view->bugs        = $bugs;
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->pager       = $pager;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->moduleID    = $moduleID;
+        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->branch      = $branch;
+        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }
@@ -351,7 +298,7 @@ class bug extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->stories          = $stories;
-        $this->view->projects         = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
+        $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->builds           = $builds;
         $this->view->moduleID         = $moduleID;
         $this->view->projectID        = $projectID;
@@ -434,7 +381,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
         $this->view->users            = $this->user->getPairs('nodeleted,devfirst');
-        $this->view->projects         = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
+        $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->projectID        = $projectID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleID         = $moduleID;
@@ -580,7 +527,7 @@ class bug extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->projects         = $this->product->getProjectPairs($bug->product, $bug->branch);
+        $this->view->projects         = $this->product->getProjectPairs($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'nodeleted');
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
@@ -1177,7 +1124,8 @@ class bug extends control
         }
 
         /* Get action info. */
-        $action          = $this->action->getById($actionID);
+        $actions         = $this->action->getList('bug', $bugID);
+        $action          = zget($actions, $actionID, null);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
