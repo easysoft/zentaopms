@@ -298,7 +298,7 @@ class bug extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->stories          = $stories;
-        $this->view->projects         = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
+        $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->builds           = $builds;
         $this->view->moduleID         = $moduleID;
         $this->view->projectID        = $projectID;
@@ -381,7 +381,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
         $this->view->users            = $this->user->getPairs('nodeleted,devfirst');
-        $this->view->projects         = $this->product->getProjectPairs($productID, $branch, $params = 'nodeleted');
+        $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->projectID        = $projectID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleID         = $moduleID;
@@ -527,7 +527,7 @@ class bug extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->projects         = $this->product->getProjectPairs($bug->product, $bug->branch);
+        $this->view->projects         = $this->product->getProjectPairs($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'nodeleted');
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
