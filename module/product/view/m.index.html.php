@@ -14,7 +14,7 @@
 <ul data-role='listview'>
   <?php foreach($productStats as $product):?>
   <li>
-    <table class='table-1 fixed'>
+    <table class='table table-fixed'>
       <tr>
         <td><h3><?php echo $product->name?></h3></td>
         <td width='120'>

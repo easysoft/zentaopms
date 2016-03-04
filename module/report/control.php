@@ -158,6 +158,7 @@ class report extends control
      */
     public function remind()
     {
+        $bugs = $tasks = $todos = $testTasks = array();
         if($this->config->report->dailyreminder->bug)      $bugs  = $this->report->getUserBugs();
         if($this->config->report->dailyreminder->task)     $tasks = $this->report->getUserTasks();
         if($this->config->report->dailyreminder->todo)     $todos = $this->report->getUserTodos();

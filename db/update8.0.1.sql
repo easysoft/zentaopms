@@ -23,3 +23,4 @@ ALTER TABLE `zt_todo` ADD INDEX `todo` (`account`, `date`), DROP INDEX `user`;
 ALTER TABLE `zt_user` ADD INDEX `user` (`dept`, `email`, `commiter`), DROP INDEX `dept`;
 ALTER TABLE `zt_usercontact` ADD INDEX `user` (`account`);
 ALTER TABLE `zt_userquery` ADD INDEX `user` (`account`, `module`), DROP INDEX `account`, DROP INDEX `module`;
+ALTER TABLE `zt_testtask` ADD `mailto` varchar(255) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `end`;

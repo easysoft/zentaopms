@@ -19,7 +19,7 @@ $config->story->review = new stdclass();
 $config->story->create->requiredFields = 'title';
 $config->story->change->requiredFields = 'title';
 $config->story->close->requiredFields  = 'closedReason';
-$config->story->review->requiredFields = 'assignedTo,reviewedBy,result';
+$config->story->review->requiredFields = 'assignedTo,reviewedBy';
 
 $config->story->editor = new stdclass();
 $config->story->editor->create   = array('id' => 'spec,verify', 'tools' => 'simpleTools');

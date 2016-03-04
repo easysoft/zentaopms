@@ -41,7 +41,7 @@
       <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
       <td>
         <?php if(!empty($steps[$caseID])):?>
-        <table class='table fixed'>
+        <table class='table table-fixed'>
           <?php $i = 1;?>
           <?php foreach($steps[$caseID] as $stepID => $step):?>
           <tr>

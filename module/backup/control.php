@@ -77,7 +77,7 @@ class backup extends control
      */
     public function backup($reload = 'no')
     {
-        set_time_limit(0);
+        set_time_limit(7200);
         $fileName = date('YmdHis') . mt_rand(0, 9);
         $result = $this->backup->backSQL($this->backupPath . $fileName . '.sql.php');
         if(!$result->result)
@@ -149,7 +149,7 @@ class backup extends control
             die(js::confirm($this->lang->backup->confirmRestore, inlink('restore', "fileName=$fileName&confirm=yes"), inlink('index'), 'self', 'parent'));
         }
 
-        set_time_limit(0);
+        set_time_limit(7200);
 
         /* Restore database. */
         $this->backup->removeFileHeader($this->backupPath . $fileName . '.sql.php');

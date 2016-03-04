@@ -403,6 +403,9 @@ class build extends control
         $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairs($build->product);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
+        unset($this->config->bug->search['fields']['product']);
+        unset($this->config->bug->search['params']['product']);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
