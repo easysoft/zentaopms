@@ -967,7 +967,7 @@ class dao
          * 如果没数据中没有该字段，直接返回。
          * If no this field in the data, return.
          **/
-        if(!isset($this->sqlobj->data->$fieldName) && $funcName != 'notempty') return $this;
+        if(!isset($this->sqlobj->data->$fieldName)) return $this;
 
         /* 设置字段值。 */
         /* Set the field label and value. */
