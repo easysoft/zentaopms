@@ -17,7 +17,7 @@ foreach($rows as $row)
     echo '"';
     foreach($fields as $fieldName => $fieldLabel)
     {
-        isset($row->$fieldName) ? print(htmlspecialchars_decode($row->$fieldName)) : print('');
+        isset($row->$fieldName) ? print(str_replace('",', '"，', htmlspecialchars_decode(strip_tags($row->$fieldName, '<img>')))) : print('');
         echo '","';
     }
     echo '"' . "\n";
