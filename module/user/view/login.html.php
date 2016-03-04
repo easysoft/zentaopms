@@ -46,9 +46,9 @@ include '../../common/view/header.lite.html.php';
             <td>
             <?php 
             echo html::submitButton($lang->login);
-            if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
-            echo html::hidden('referer', $referer);
-            echo html::a(inlink('reset'), $lang->user->resetPassword);
+            if($app->company->guest) echo '&nbsp; ' . html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
+            echo '&nbsp; ' . html::hidden('referer', $referer);
+            echo '&nbsp; ' . html::a(inlink('reset'), $lang->user->resetPassword);
             ?>
             </td>
           </tr>

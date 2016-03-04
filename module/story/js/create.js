@@ -9,17 +9,21 @@ $(function()
         $('#assignedTo').removeAttr('disabled');
     }
     $('#assignedTo').trigger("chosen:updated");
-})
 
-$('#needNotReview').change(function()
-{
-    if($('#needNotReview').prop('checked'))
+    $('#needNotReview').change(function()
     {
-        $('#assignedTo').attr('disabled', 'disabled');
-    }
-    else
-    {
-        $('#assignedTo').removeAttr('disabled');
-    }
-    $('#assignedTo').trigger("chosen:updated");
-})
+        if($('#needNotReview').prop('checked'))
+        {
+            $('#assignedTo').attr('disabled', 'disabled');
+        }
+        else
+        {
+            $('#assignedTo').removeAttr('disabled');
+        }
+        $('#assignedTo').trigger("chosen:updated");
+    });
+
+    $('[data-toggle=tooltip]').tooltip();
+});
+
+
