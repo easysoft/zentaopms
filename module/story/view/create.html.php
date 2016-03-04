@@ -55,10 +55,10 @@
           echo html::select('plan', $plans, $planID, "class='form-control chosen'");
           if(count($plans) == 1) 
           {
-              echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), $lang->productplan->create, '_blank');
+              echo "<span class='input-group-btn'>";
+              echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn' data-toggle='tooltip' title='{$lang->productplan->create}'");
               echo '&nbsp; ';
-              echo html::a("javascript:loadProductPlans($productID)", $lang->refresh);
+              echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn' data-toggle='tooltip' title='{$lang->refresh}'");
               echo '</span>';
           }
           ?>
@@ -119,11 +119,9 @@
             if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
             if(empty($contactLists))
             {
-                echo '<span class="input-group-addon">';
-                echo '<a href="' . $this->createLink('company', 'browse') . '" target="_blank">' . $lang->user->contacts->manage . '</a>';
-                echo '</span>';
-                echo '<span class="input-group-addon">';
-                echo '<a href="###" onclick="ajaxGetContacts(this)">' . $lang->refresh . '</a>';
+                echo '<span class="input-group-btn">';
+                echo '<a data-toggle="tooltip" title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('company', 'browse') . '" target="_blank" class="btn"><i class="icon icon-cog"></i></a>';
+                echo '<a data-toggle="tooltip" title="' . $lang->refresh . '" href="###" class="btn" onclick="ajaxGetContacts(this)"><i class="icon icon-refresh"></i></a>';
                 echo '</span>';
             }
             ?>
