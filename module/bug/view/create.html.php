@@ -102,6 +102,20 @@ js::set('refresh', $lang->refresh);
             <div class='col-table'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
+                <?php
+                $isAllNumberPri = true;
+                foreach ($lang->bug->severityList as $value)
+                {
+                    if(!empty($value) && !is_numeric($value))
+                    {
+                        $isAllNumberPri = false;
+                        break;
+                    }
+                }
+                ?>
+                <?php if(!$isAllNumberPri):?>
+                <?php echo html::select('pri', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
+                <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-prefix='severity'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
@@ -109,7 +123,22 @@ js::set('refresh', $lang->refresh);
                   <ul class='dropdown-menu pull-right'></ul>
                   <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='hide'");?>
                 </div>
+                <?php endif; ?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->pri;?></span>
+                <?php
+                $isAllNumberPri = true;
+                foreach ($lang->bug->priList as $value)
+                {
+                    if(!empty($value) && !is_numeric($value))
+                    {
+                        $isAllNumberPri = false;
+                        break;
+                    }
+                }
+                ?>
+                <?php if(!$isAllNumberPri):?>
+                <?php echo html::select('pri', (array)$lang->bug->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
@@ -117,6 +146,7 @@ js::set('refresh', $lang->refresh);
                   <ul class='dropdown-menu pull-right'></ul>
                   <?php echo html::select('pri', $lang->bug->priList, '', "class='hide'");?>
                 </div>
+                <?php endif; ?>
               </div>
             </div>
           </div>

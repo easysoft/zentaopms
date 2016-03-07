@@ -61,6 +61,20 @@
             <div class='col-table w-250px'>
               <div class="input-group">
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
+                <?php
+                $isAllNumberPri = true;
+                foreach ($lang->task->priList as $value)
+                {
+                    if(!empty($value) && !is_numeric($value))
+                    {
+                        $isAllNumberPri = false;
+                        break;
+                    }
+                }
+                ?>
+                <?php if(!$isAllNumberPri):?>
+                <?php echo html::select('pri', (array)$lang->task->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
@@ -68,6 +82,7 @@
                   <ul class='dropdown-menu pull-right'></ul>
                   <?php echo html::select('pri', (array)$lang->task->priList, $pri, "class='hide'");?>
                 </div>
+                <?php endif; ?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
                 <?php echo html::input('estimate', $estimate, "class='form-control' placeholder='{$lang->task->hour}'");?>
               </div>

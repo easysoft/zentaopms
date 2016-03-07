@@ -11,3 +11,5 @@ select {border:1px solid #ccc}
 #title.form-control {border-top-right-radius: 0; border-bottom-right-radius: 0}
 
 .dropdown-pris > .btn {background-color: #fff;}
+
+.minw-80px {min-width: 80px;}
