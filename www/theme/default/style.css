@@ -518,6 +518,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table thead tr th {text-align: center;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
+.outer .table tbody > tr > td:first-child {text-align: left}
 .outer .table th {vertical-align: middle;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 10px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 10px}
@@ -530,7 +531,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
 .outer .table tfoot td {border-top: 1px solid #ddd}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
-.outer .table tfoot .btn {padding-top: 4px; padding-bottom: 4px;}
+.outer .table tfoot .btn {padding: 2px 6px; font-size: 13px; line-height: 20px;}
 .outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; opacity: 0.8}
 .outer .table tfoot .datepicker-wrapper:before {top: 5px}
 .outer .table tfoot .form-control.form-date {width: 110px}
@@ -538,10 +539,11 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table tfoot .chosen-single {padding: 4px 6px; height: 30px; }
 .outer .table tfoot .chosen-container-single .chosen-single abbr {top: 4px;}
 .table-actions {float: left;}
-.table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group, .table-actions > .text {float: left; margin-right: 10px;}
-.table-actions > .text {line-height: 30px; color: #808080}
+.table-actions > .checkbox {float: left; margin: 0}
+.table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group, .table-actions > .text {float: left; margin-right: 6px;}
+.table-actions > .text {line-height: 24px; color: #808080}
 .table-actions > .text strong {color: #333}
-.outer .table tfoot .pager {margin: 0;}
+.outer .table tfoot .pager {margin: -3px 0;}
 
 /* color of a when visited */
 .outer .table tbody td > a:visited, #crumbs > a:visited, .side > a:visited {color: #551A8B}

@@ -73,6 +73,7 @@ $lang->fold         = '-';
 $lang->preShortcutKey  = '[快捷键:←]';
 $lang->nextShortcutKey = '[快捷键:→]';
 
+$lang->select        = '选择';
 $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
 $lang->loading       = '稍候...';
