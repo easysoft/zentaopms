@@ -445,43 +445,4 @@ class installModel extends model
         $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
         return true;
     }
-
-    /**
-     * Get the mysqldump binary.
-     * 
-     * @access public
-     * @return string
-     */
-    public function getMySQLDump()
-    {
-        $mysqldump = '';
-
-        if(strpos(__FILE__, '/opt/lampp') !== false)         // linux.
-        {
-            $mysqldump = '/opt/lampp/bin/mysqldump';
-        }
-        elseif(strpos(__FILE__, '\xampp\zentao') !== false)  // windows.
-        {
-            $mysqldump = substr(__FILE__, 0, 2) . '\xampp\mysql\bin\mysqldump.exe';
-        }
-        else
-        {
-            if(strpos(PHP_OS, 'WIN') !== false)
-            {
-                $mysql = @`wmic process where name='mysqld.exe' get executablepath`;
-                if(strpos($mysql, 'mysqld.exe') !== false)
-                {
-                    $mysql = explode("\n", $mysql);
-                    if(isset($mysql[1])) $mysqldump = trim(str_replace('mysqld.exe', 'mysqldump.exe', $mysql[1]));
-                }
-            }
-            else
-            {
-                $mysqldump = trim(@`which mysqldump`);
-            }
-        }
-
-        if(file_exists($mysqldump)) return $mysqldump;
-        return '';
-    }
 }

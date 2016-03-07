@@ -115,7 +115,7 @@ js::set('refresh', $lang->refresh);
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
                   </button>
                   <ul class='dropdown-menu pull-right'></ul>
-                  <?php echo html::select('pri', (array)$lang->bug->priList, $pri, "class='hide'");?>
+                  <?php echo html::select('pri', $lang->bug->priList, '', "class='hide'");?>
                 </div>
               </div>
             </div>

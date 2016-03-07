@@ -26,7 +26,6 @@ if(!isset($error))
 \$config->db->prefix      = '$dbPrefix';
 \$config->webRoot         = getWebRoot();
 \$config->default->lang   = '$defaultLang';
-\$config->mysqldump       = '$mysqldump';
 EOT;
 }
 ?>

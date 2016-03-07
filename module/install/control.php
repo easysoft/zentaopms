@@ -110,7 +110,6 @@ class install extends control
                 $this->view->lang      = $this->lang;
                 $this->view->config    = $this->config;
                 $this->view->title     = $this->lang->install->saveConfig;
-                $this->view->mysqldump = $this->install->getMySQLDump();
                 $this->display();
             }
             else
