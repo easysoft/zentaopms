@@ -159,6 +159,7 @@ $lang->task->error->consumedThisTime = '请填写"工时"';
 $lang->task->error->left             = '请填写"剩余"';
 $lang->task->error->work             = '"备注"必须小于255个字符';
 $lang->task->error->skipClose        = '任务：%s 不是“已完成”或“已取消”状态，不能关闭！';
+$lang->task->error->consumed         = '任务：%s总消耗小于0，忽略该任务工时的改动';
 
 /* 统计报表。*/
 $lang->task->report = new stdclass();

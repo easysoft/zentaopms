@@ -228,7 +228,7 @@ class taskModel extends model
         {
             die(js::error($this->lang->task->error->consumedSmall));
         }
-        else if($task->consumed != $oldTask->consumed or $task->left != $oldTask->left)
+        elseif($task->consumed != $oldTask->consumed or $task->left != $oldTask->left)
         {
             $estimate = new stdClass();
             $estimate->consumed = $task->consumed - $oldTask->consumed;
@@ -236,10 +236,7 @@ class taskModel extends model
             $estimate->task     = $taskID;
             $estimate->account  = $this->app->user->account;
             $estimate->date     = helper::now();
-
-            $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
-                ->autoCheck()
-                ->exec();
+            $this->addTaskEstimate($estimate);
         }
 
         $task = $this->loadModel('file')->processEditor($task, $this->config->task->editor->edit['id']);
@@ -300,7 +297,7 @@ class taskModel extends model
             $task->estimate       = $data->estimates[$taskID];
             $task->left           = $data->lefts[$taskID];
             $task->finishedBy     = $data->finishedBys[$taskID];
-            $task->canceledBy     = $data->canceledBys[$taskID];
+            $task->canceledBy     = $oldTask->canceledBy;
             $task->closedBy       = $data->closedBys[$taskID];
             $task->closedReason   = $data->closedReasons[$taskID];
             $task->finishedDate   = $oldTask->finishedDate;
@@ -316,15 +313,22 @@ class taskModel extends model
 
             if($data->consumeds[$taskID])
             {
-                $record = new stdclass();
-                $record->account  = $this->app->user->account;
-                $record->task     = $taskID;
-                $record->date     = $today;
-                $record->left     = $task->left;
-                $record->consumed = $data->consumeds[$taskID];
-                $this->dao->insert(TABLE_TASKESTIMATE)->data($record)->autoCheck()->exec();
+                if(($oldTask->consumed + $data->consumeds[$taskID]) < 0)
+                {
+                    echo js::alert(sprintf($this->lang->task->error->consumed, $taskID));
+                }
+                else
+                {
+                    $record = new stdclass();
+                    $record->account  = $this->app->user->account;
+                    $record->task     = $taskID;
+                    $record->date     = $today;
+                    $record->left     = $task->left;
+                    $record->consumed = $data->consumeds[$taskID];
+                    $this->addTaskEstimate($record);
 
-                $task->consumed = $oldTask->consumed + $record->consumed;
+                    $task->consumed = $oldTask->consumed + $record->consumed;
+                }
             }
 
             switch($task->status)
@@ -513,9 +517,7 @@ class taskModel extends model
             $consumed += $estimate->consumed;
             $left      = $estimate->left;
             $work      = $estimate->work;
-            $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate) 
-                ->autoCheck()
-                ->exec();
+            $this->addTaskEstimate($estimate);
             $estimateID = $this->dao->lastInsertID();
             $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
         }
