@@ -71,6 +71,10 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->task->taskFiles;?></legend>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false'));?>
+      </fieldset>
       <?php if($task->fromBug != 0):?>
       <fieldset>
         <legend><?php echo $lang->bug->steps;?></legend>
@@ -81,8 +85,26 @@
         <legend><?php echo $lang->task->storySpec;?></legend>
         <div class='article-content'><?php echo $task->storySpec;?></div>
       </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->task->storyFiles;?></legend>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
+      </fieldset>
+      <fieldset class='actionbox'>
+        <legend><?php echo $lang->task->storyComment;?></legend>
+        <?php
+        foreach($task->storyComments as $item => $commentAction)
+        {
+            if(isset($users[$commentAction->actor])) $commentAction->actor = $users[$commentAction->actor];
+            if(strpos($commentAction->actor, ':') !== false) $commentAction->actor = substr($commentAction->actor, strpos($commentAction->actor, ':') + 1);
+            printf($lang->task->commentActions, $item + 1, $commentAction->date, $commentAction->actor);
+
+            echo "<div class='history article-content'>";
+            echo strip_tags($commentAction->comment) == $commentAction->comment ? nl2br($commentAction->comment) : $commentAction->comment;
+            echo "</div>";
+        }
+        ?>
+      </fieldset>
       <?php endif;?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>
       <fieldset id='commentBox' class='hide'>
