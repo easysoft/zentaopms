@@ -27,10 +27,11 @@ class custom extends control
      * 
      * @param  string $module 
      * @param  string $field 
+     * @param  string $lang 
      * @access public
      * @return void
      */
-    public function set($module = 'story', $field = 'priList')
+    public function set($module = 'story', $field = 'priList', $lang = 'zh_cn')
     {
         if($module == 'user' and $field == 'priList') $field = 'roleList';
         $currentLang = $this->app->getClientLang();
@@ -69,7 +70,23 @@ class custom extends control
                 }
             }
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            die(js::locate($this->createLink('custom', 'set', "module=$module&field=$field&lang=" . str_replace('-', '_', $lang)), 'parent'));
+        }
+
+        $lang = str_replace('_', '-', $lang);
+        $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field");
+        if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=" . ($lang == $currentLang ? 'all' : $currentLang) . "&module=$module&section=$field");
+        if($dbFields)
+        {
+            $dbField = reset($dbFields);
+            if($lang != $dbField->lang)
+            {
+                $lang = str_replace('-', "_", $dbField->lang);
+                foreach($fieldList as $key => $value)
+                {
+                    if(isset($dbFields[$key]) and $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
+                }
+            }
         }
 
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
@@ -77,8 +94,9 @@ class custom extends control
         $this->view->position[]  = $this->lang->$module->common;
         $this->view->needReview  = $this->config->story->needReview;
         $this->view->fieldList   = $fieldList;
-        $this->view->dbFields    = $this->custom->getItems("lang=$currentLang,all&module=$module&section=$field");
+        $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
+        $this->view->setLang     = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
