@@ -672,38 +672,15 @@ EOT;
      * Create select buttons include 'selectAll' and 'selectReverse'.
      * 
      * @param  string $scope  the scope of select reverse.
-     * @param  bool   $asGroup 
      * @param  string $appendClass 
      * @static
      * @access public
      * @return string
      */
-    static public function selectButton($scope = "", $asGroup = true, $appendClass = '')
+    static public function selectButton($scope = "", $appendClass = 'btn')
     {
-        $string = <<<EOT
-<script>
-$(function()
-{
-    if($('body').data('bindSelectBtn')) return;
-    $('body').data('bindSelectBtn', true);
-    $(document).on('click', '.check-all, .check-inverse, #allchecker, #reversechecker', function()
-    {
-        var e = $(this);
-        if(e.closest('.datatable').length) return;
-        scope = e.data('scope');
-        scope = scope ? $('#' + scope) : e.closest('.table');
-        if(!scope.length) scope = e.closest('form');
-        scope.find('input:checkbox').each(e.hasClass('check-inverse') ? function() { $(this).prop("checked", !$(this).prop("checked"));} : function() { $(this).prop("checked", true);});
-    });
-});
-</script>
-EOT;
         global $lang;
-        if($asGroup) $string .= "<div class='btn-group'>";
-        $string .= "<a id='allchecker' class='btn btn-select-all check-all $appendClass' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
-        $string .= "<a id='reversechecker' class='btn btn-select-reverse check-inverse $appendClass' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
-        if($asGroup) $string .= "</div>";
-        return  $string;
+        return "<div class='checkbox $appendClass'><label><input type='checkbox' data-scope='$scope' class='rows-selector'> $lang->select</label></div>";
     }
 
     /**

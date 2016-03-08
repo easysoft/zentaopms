@@ -649,28 +649,33 @@ function setComment()
  */
 function autoCheck()
 {
-    $(document).on('click', '.tablesorter tr :checkbox', function(){clickInCheckbox = 1;});
-
-    $(document).on('click', '.tablesorter:not(.table-datatable) tr', function()
+    var checkRow = function()
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
-            if(typeof(clickInCheckbox) != 'undefined' && clickInCheckbox == 1)
+            var $this = $(this);
+            var $tr = $(this).closest('tr');
+            var $checkbox = $tr.find(':checkbox');
+            var isChecked = $checkbox.prop('checked');
+            if(!$this.is(':checkbox'))
             {
-                clickInCheckbox = 0;
+                isChecked = !isChecked;
+                $checkbox.prop('checked', isChecked);
             }
-            else
-            {
-                if($(this).find(':checkbox').attr('checked'))
-                {
-                    $(this).find(':checkbox').attr('checked', false);
-                }
-                else
-                {
-                    $(this).find(':checkbox').attr('checked', true);
-                }
-            }
+            if(!$tr.hasClass('.active-disabled')) $tr.toggleClass('active', isChecked);
+            $tr.closest('.table').find('.rows-selector').prop('checked', false);
         }
+    };
+    $('.tablesorter:not(.table-datatable)').on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'tbody > tr', checkRow);
+
+    $(document).on('change', '.rows-selector:checkbox', function()
+    {
+        var $checkbox = $(this);
+        if($checkbox.closest('.datatable').length) return;
+        var scope = $checkbox.data('scope');
+        var $target = scope ? $('#' + scope) : $checkbox.closest('.table');
+        var isChecked = $checkbox.prop('checked');
+        $target.find('tbody > tr').toggleClass('active', isChecked).find('td :checkbox').prop('checked', isChecked);
     });
 }
 
@@ -1264,7 +1269,7 @@ function setModal4List(triggerClass, replaceID, callback, width)
  */
 function setTableBehavior()
 {
-    $('#wrap .table:not(.table-data, .table-form, .active-disabled)').on('click', 'tbody tr:not(.active-disabled) td', function(){$(this).closest('tr').toggleClass('active');});
+    $('#wrap .table:not(.table-data, .table-form, .active-disabled, .tablesorter)').on('click', 'tbody tr:not(.active-disabled) td', function(){$(this).closest('tr').toggleClass('active');});
     $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
 }
 

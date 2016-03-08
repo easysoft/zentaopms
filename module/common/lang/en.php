@@ -73,6 +73,7 @@ $lang->fold         = '-';
 $lang->preShortcutKey  = '[Shortcut key:←]';
 $lang->nextShortcutKey = '[Shortcut key:→]';
 
+$lang->select        = 'Select';
 $lang->selectAll     = 'All';
 $lang->selectReverse = 'Inverse';
 $lang->notFound      = 'Sorry, the object not found.';

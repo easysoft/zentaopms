@@ -1115,6 +1115,22 @@ class taskModel extends model
     }
     
     /**
+     * Get story comments.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryComments($storyID)
+    {
+        return $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('story')
+            ->andWhere('objectID')->eq($storyID)
+            ->andWhere('comment')->ne('')
+            ->fetchAll();
+    }
+
+    /**
      * Merge the default chart settings and the settings of current chart.
      * 
      * @param  string    $chartType 

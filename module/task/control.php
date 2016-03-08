@@ -455,7 +455,9 @@ class task extends control
         else
         {
             $story = $this->story->getById($task->story);
-            $task->storySpec = empty($story) ? '' : $story->spec;
+            $task->storySpec     = empty($story) ? '' : $story->spec;
+            $task->storyComments = empty($story) ? array() : $this->task->getStoryComments($task->story);
+            $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
         }
 
         /* Update action. */
