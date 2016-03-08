@@ -1,6 +1,6 @@
 ALTER TABLE `zt_action` ADD INDEX `action` (`objectID`, `product`, `project`, `action`, `date`);
 ALTER TABLE `zt_branch` ADD INDEX `branch` (`product`);
-ALTER TABLE `zt_bug` ADD INDEX `bug` (`product`,`module`,`project`,`assignedTo`)
+ALTER TABLE `zt_bug` ADD INDEX `bug` (`product`,`module`,`project`,`assignedTo`);
 ALTER TABLE `zt_build` ADD INDEX `build` (`product`, `project`);
 ALTER TABLE `zt_case` ADD INDEX `case` (`product`, `module`, `story`);
 ALTER TABLE `zt_cron` ADD INDEX `cron` (`lastTime`);

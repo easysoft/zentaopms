@@ -131,6 +131,8 @@ class upgradeModel extends model
             case '7_4_beta':
                 $this->execSQL($this->getUpgradeFile('7.4.beta'));
             case '8_0':
+            case '8_0_1':
+                $this->execSQL($this->getUpgradeFile('8.0.1'));
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -203,6 +205,7 @@ class upgradeModel extends model
         case '7_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.3'));
         case '7_4_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('7.4.beta'));
         case '8_0':
+        case '8_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -651,7 +654,7 @@ class upgradeModel extends model
     public function execSQL($sqlFile)
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-        $ignoreCode   = '|1050|1060|1062|1091|1169|';
+        $ignoreCode   = '|1050|1060|1062|1091|1169|1061|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls = explode("\n", file_get_contents($sqlFile));
