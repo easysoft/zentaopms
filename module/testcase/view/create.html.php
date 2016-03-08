@@ -83,14 +83,7 @@
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->testcase->pri;?></span>
                 <?php
                 $isAllNumberPri = true;
-                foreach ($lang->testcase->priList as $value)
-                {
-                    if(!empty($value) && !is_numeric($value))
-                    {
-                        $isAllNumberPri = false;
-                        break;
-                    }
-                }
+                if(!is_numeric(join($lang->testcase->priList))) $isAllNumberPri = false;
                 ?>
                 <?php if(!$isAllNumberPri):?>
                 <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px'");?> 

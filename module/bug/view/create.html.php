@@ -103,17 +103,10 @@ js::set('refresh', $lang->refresh);
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
                 <?php
-                $isAllNumberPri = true;
-                foreach ($lang->bug->severityList as $value)
-                {
-                    if(!empty($value) && !is_numeric($value))
-                    {
-                        $isAllNumberPri = false;
-                        break;
-                    }
-                }
+                $isAllNumberSeverity = true;
+                if(!is_numeric(join($lang->bug->severityList))) $isAllNumberSeverity = false;
                 ?>
-                <?php if(!$isAllNumberPri):?>
+                <?php if(!$isAllNumberSeverity):?>
                 <?php echo html::select('pri', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-prefix='severity'>
@@ -127,17 +120,10 @@ js::set('refresh', $lang->refresh);
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->pri;?></span>
                 <?php
                 $isAllNumberPri = true;
-                foreach ($lang->bug->priList as $value)
-                {
-                    if(!empty($value) && !is_numeric($value))
-                    {
-                        $isAllNumberPri = false;
-                        break;
-                    }
-                }
+                if(!is_numeric(join($lang->bug->priList))) $isAllNumberPri = false;
                 ?>
                 <?php if(!$isAllNumberPri):?>
-                <?php echo html::select('pri', (array)$lang->bug->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php echo html::select('pri', (array)$lang->bug->priList, '', "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
