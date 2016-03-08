@@ -317,6 +317,7 @@ class html
     {
         $id = "id='$name'";
         if(strpos($attrib, 'id=') !== false) $id = '';
+        $value = str_replace("'", '&#039;', $value);
         return "<input type='text' name='$name' {$id} value='$value' $attrib />\n";
     }
 

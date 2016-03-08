@@ -1204,12 +1204,25 @@ function header301($url)
  */
 function processEvil($value)
 {
+    global $config;
     if(strpos(htmlspecialchars_decode($value), '<?') !== false)
     {
         $value       = (string) $value;
         $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert');
         $gibbedEvils = array('e v a l', 'e x e c', ' p a s s t h r u', ' p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
-        return str_ireplace($evils, $gibbedEvils, $value);
+        $value       = str_ireplace($evils, $gibbedEvils, $value);
+    }
+    if(isset($config->framework->stripXSS) and $config->framework->stripXSS)
+    {
+        if(stripos($value, '<script') !== false)
+        {
+            $value       = (string) $value;
+            $evils       = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'before(', 'replaceWith(');
+            $gibbedEvils = array('a p p e n d c h i l d (', 'c r e a t e E l e  m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'b e f o r e (', 'r e p l a c e W i t h (');
+            $value       = str_ireplace($evils, $gibbedEvils, $value);
+        }
+        /* Process like 'javascript:' */
+        $value = preg_replace('/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/Ui', 'j a v a s c r i p t :', $value);
     }
     return $value;
 }

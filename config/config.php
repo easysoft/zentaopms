@@ -110,6 +110,7 @@ $config->framework = new stdclass();
 $config->framework->jsWithPrefix    = false;
 $config->framework->autoRepairTable = true;
 $config->framework->logDays         = 14;
+$config->framework->purifier        = true;
 
 /* Include the custom config file. */
 $configRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;

@@ -163,7 +163,7 @@ $lang->task->error->consumedThisTime = 'Please input "hours"';
 $lang->task->error->left             = 'Please input "left"';
 $lang->task->error->work             = '"Comment" must be less than 255 characters';
 $lang->task->error->skipClose        = 'The status of Tasks : %s are not finished or canceled, can not close.';
-$lang->task->error->consumed         = 'The consumed of task %s is less than zero, ignore it.';
+$lang->task->error->consumed         = 'The estimate of task %s is less than zero, ignore it.';
 
 /* Report. */
 $lang->task->report = new stdclass();

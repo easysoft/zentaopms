@@ -313,7 +313,7 @@ class taskModel extends model
 
             if($data->consumeds[$taskID])
             {
-                if(($oldTask->consumed + $data->consumeds[$taskID]) < 0)
+                if($data->consumeds[$taskID] < 0)
                 {
                     echo js::alert(sprintf($this->lang->task->error->consumed, $taskID));
                 }

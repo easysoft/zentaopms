@@ -696,19 +696,24 @@ class fixer
      * @access public
      * @return object fixer object
      */
-    public function stripTags($fieldName, $allowedTags)
+    public function stripTags($fieldName, $allowedTags = '')
     {
-        global $app;
-        $app->loadClass('purifier', true);
-        $config = HTMLPurifier_Config::createDefault();
-        $config->set('Filter.YouTube', 1);
+        global $app, $config;
+        if(empty($allowedTags) and isset($config->allowedTags)) $allowedTags = $config->allowedTags;
+        $usePurifier = isset($config->framework->purifier) ? $config->framework->purifier : false;
+        if($usePurifier)
+        {
+            $app->loadClass('purifier', true);
+            $purifierConfig = HTMLPurifier_Config::createDefault();
+            $purifierConfig->set('Filter.YouTube', 1);
 
-        /* Disable caching. */
-        $config->set('Cache.DefinitionImpl', null);
+            /* Disable caching. */
+            $purifierConfig->set('Cache.DefinitionImpl', null);
 
-        $purifier = new HTMLPurifier($config);
-        $def = $config->getHTMLDefinition(true);
-        $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+            $purifier = new HTMLPurifier($purifierConfig);
+            $def = $purifierConfig->getHTMLDefinition(true);
+            $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+        }
 
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
@@ -717,7 +722,16 @@ class fixer
 
             if(!in_array($fieldName, $this->stripedFields))
             {
-                if(!defined('RUN_MODE') or RUN_MODE != 'admin') $this->data->$fieldName = $purifier->purify($this->data->$fieldName);
+                if(!defined('RUN_MODE') or RUN_MODE != 'admin')
+                {
+                    /*
+                     * purifier会把&nbsp;替换空格，kindeditor在会吧行首的空格去掉。
+                     * purifier will change &nbsp; to ' ', and edit it will no space in line head use kindeditor. 
+                     **/
+                    if($usePurifier) $this->data->$fieldName = str_replace('&nbsp;', '&spnb;', $this->data->$fieldName);
+                    $this->data->$fieldName = $usePurifier ? $purifier->purify($this->data->$fieldName) : strip_tags($this->data->$fieldName, $allowedTags);
+                    if($usePurifier) $this->data->$fieldName = str_replace('&amp;spnb;', '&nbsp;', $this->data->$fieldName);
+                }
             }
             $this->stripedFields[] = $fieldName;
         }

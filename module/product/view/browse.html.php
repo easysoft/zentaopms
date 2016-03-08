@@ -113,7 +113,7 @@
           <?php
           echo "<div" . (isset($storyStages[$story->id]) ? " class='popoverStage' data-toggle='popover' data-placement='bottom' data-target='\$next'" : '') . "'>";
           echo $lang->story->stageList[$story->stage];
-          if(isset($storyStages[$story->id])) echo "<span class='pull-right'><i class='icon icon-caret-down'></i></span>";
+          if(isset($storyStages[$story->id])) echo "<span class='pl-5px'><i class='icon icon-caret-down'></i></span>";
           echo '</div>';
           if(isset($storyStages[$story->id]))
           {
