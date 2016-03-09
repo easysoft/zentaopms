@@ -196,6 +196,10 @@ $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
 $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectCommon . ' <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . ' <strong>$extra</strong> 移除。'); 
+$lang->story->action->linkstories         = array('main' => '$date, 由 <strong>$actor</strong> 关联相关需求 <strong>$extra</strong>。');
+$lang->story->action->childstories        = array('main' => '$date, 由 <strong>$actor</strong> 细分为需求 <strong>$extra</strong>。');
+$lang->story->action->mvchildstories      = array('main' => '$date, 由 <strong>$actor</strong> 移除细分需求 <strong>$extra</strong>。');
+$lang->story->action->mvlinkstories       = array('main' => '$date, 由 <strong>$actor</strong> 移除相关需求 <strong>$extra</strong>。');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

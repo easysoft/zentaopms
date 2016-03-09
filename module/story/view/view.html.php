@@ -275,14 +275,16 @@
           </div>
           <div class='tab-pane' id='legendRelated'>
             <table class='table table-data table-condensed table-borderless'>
+            <?php if(!empty($fromBug)):?>
               <tr class='text-top'>
                 <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
                 <td class='pd-0'>
                   <ul class='list-unstyled'>
-                  <?php if(!empty($fromBug)) echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
+                  <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
                   </ul>
                 </td>
               </tr>
+            <?php endif;?>
               <tr class='text-top'>
                 <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
                 <td class='pd-0'>

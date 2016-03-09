@@ -196,6 +196,10 @@ $lang->story->action->linked2plan         = array('main' => '$date, linked to pl
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
 $lang->story->action->linked2project      = array('main' => '$date, linked to ' . $lang->projectCommon . ' <strong>$extra</strong> by <strong>$actor</strong>.'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, removed from ' . $lang->projectCommon . ' <strontg>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->linkstories         = array('main' => '$date, linked stories <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->childstories        = array('main' => '$date, subdivied to <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->mvchildstories      = array('main' => '$date, removed child stories <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->mvlinkstories       = array('main' => '$date, removed link stories <strong>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
 $lang->story->report = new stdclass();
