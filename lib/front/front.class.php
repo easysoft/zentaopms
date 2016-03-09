@@ -116,7 +116,7 @@ class html
         /* if page has onlybody param then add this param in all link. the param hide header and footer. */
         if(strpos($href, 'onlybody=yes') === false and isonlybody())
         {
-            $onlybody = $config->requestType != 'GET' ? "?onlybody=yes" : "&onlybody=yes";
+            $onlybody = strpos($link, '?') === false ? "?onlybody=yes" : "&onlybody=yes";
             $href .= $onlybody;
         }
 
@@ -169,7 +169,7 @@ class html
 
         /* The begin. */
         $id = $name;
-        if($pos = strpos($name, '[')) $id = substr($name, 0, $pos);
+        if(strpos($name, '[') !== false) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
         $id = "id='{$id}'";
         if(strpos($attrib, 'id=') !== false) $id = '';
 
@@ -207,7 +207,7 @@ class html
 
         /* The begin. */
         $id = $name;
-        if($pos = strpos($name, '[')) $id = substr($name, 0, $pos);
+        if(strpos($name, '[') !== false) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
         $string = "<select name='$name' id='$id' $attrib>\n";
 
         /* The options. */
