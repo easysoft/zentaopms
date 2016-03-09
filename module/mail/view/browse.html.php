@@ -55,8 +55,10 @@
         <?php
         if(count($queueList))
         {
+            echo "<div class='table-actions'>";
             echo html::selectButton();
             if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete);
+            echo '</div>';
         }
         $pager->show();
         ?>

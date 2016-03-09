@@ -44,12 +44,14 @@
         <tfoot>
           <tr>
             <td colspan='3'>
+              <div class='table-actions'>
               <?php
               echo html::selectButton();
               echo html::submitButton($lang->mail->sync);
               echo html::hidden('action', 'sync');
               ?>
-             </td>
+              </div>
+            </td>
           </tr>
         </tfoot>
       </table>

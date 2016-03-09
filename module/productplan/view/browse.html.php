@@ -71,8 +71,10 @@
   <tfoot>
     <tr>
       <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '6' : '7';?>'>
-        <?php echo html::selectButton();?>
-        <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
+        <div class='table-actions clearfix'>
+          <?php echo html::selectButton();?>
+          <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
+        </div>
         <?php $pager->show();?>
       </td>
     </tr>

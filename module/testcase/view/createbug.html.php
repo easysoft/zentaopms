@@ -41,10 +41,7 @@
     <tfoot>
       <tr>
         <td colspan='5'>
-          <?php
-          echo html::selectButton();
-          echo html::submitButton();
-          ?>
+          <div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton();?></div>
         </td>
       </tr>
     </tfoot>
