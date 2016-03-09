@@ -1375,10 +1375,11 @@ function fixedTfootAction(formID)
     if($inputgroup.size() > 0)var $inputwidth = $inputgroup.width();
 
 
-    var tfootOffset = $tfoot.offset().top + $tfoot.height() + 20;
-    var windowH     = $(window).height();
+    var documentH   = $(document).height();
+    var tfootHeight = $tfoot.height();
+    var tfootOffset = documentH - $tfoot.offset().top - $('#footer').height() - tfootHeight;
     var tableWidth  = $table.width();
-    if(tfootOffset >= windowH + $(window).scrollTop())
+    if(documentH - $(window).height() - $(window).scrollTop() >= tfootOffset)
     {
         $tfoot.addClass('fixedTfootAction');
         $tfoot.width(tableWidth);
@@ -1387,13 +1388,15 @@ function fixedTfootAction(formID)
     }
     $(window).scroll(function()
     {
-        if(tfootOffset < windowH + $(window).scrollTop())
+        $hasFixed = $tfoot.hasClass('fixedTfootAction');
+        documentH = $(document).height() + ($hasFixed ? tfootHeight : 0);
+        if(documentH - $(window).height() - $(window).scrollTop() < tfootOffset)
         {
             $tfoot.removeClass('fixedTfootAction');
             $tfoot.removeAttr('style');
             $tfoot.find('td').removeAttr('style');
         }
-        else if(!$tfoot.hasClass('fixedTfootAction'))
+        else if(!$hasFixed)
         {
             tableWidth  = $table.width();
             $tfoot.addClass('fixedTfootAction');
@@ -1443,6 +1446,7 @@ function fixedTableHead(boxObj)
 function fixedTheadOfList(tableID)
 {
     if($(tableID).size() == 0) return false;
+    if($(tableID).css('display') == 'none') return false;
     var $table = $(tableID);
     var $thead = $table.find('thead');
     if($thead.size() == 0) return false;
@@ -1462,6 +1466,7 @@ function fixedTheadOfList(tableID)
         var hasFixed  = $table.parent().find('.fixedTheadOfList').size() > 0;
         if(!hasFixed)
         {
+            theadOffset = $thead.offset().top;
             if(theadOffset < $(window).scrollTop())
             {
                 $table.before(fixedThead);
