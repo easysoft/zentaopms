@@ -11,6 +11,7 @@ function showLink(releaseID, type, param)
 
         var formID = type == 'story' ? '#unlinkedStoriesForm' : (type == 'leftBug' ? '#unlinkedLeftBugsForm' : '#unlinkedBugsForm');
         setTimeout(function(){fixedTfootAction(formID)}, 100);
+        autoCheck();
     });
 }
 $(function()
