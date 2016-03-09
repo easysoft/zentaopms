@@ -972,7 +972,7 @@ class story extends control
      * @param  string $type
      * @param  string $linkedStories
      * @access public
-     * @return void
+     * @return string
      */
     public function ajaxGetLinkedStories($storyID, $type = '', $linkedStories = '')
     {
@@ -1000,7 +1000,7 @@ class story extends control
      * @param  string $type
      * @param  int    $deleteStory
      * @access public
-     * @return void
+     * @return string
      */
     public function ajaxDeleteLinkedStory($storyID, $type = '', $deleteStory = 0)
     {

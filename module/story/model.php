@@ -1042,7 +1042,7 @@ class storyModel extends model
      * @param  string $type
      * @param  string $stories
      * @access public
-     * @return void
+     * @return string
      */
     public function linkStories($storyID, $type = 'linkStories', $stories = '')
     {
@@ -1063,7 +1063,7 @@ class storyModel extends model
      * @param  string $type
      * @param  int    $deleteStory
      * @access public
-     * @return void
+     * @return array
      */
     public function deleteLinkedStory($storyID, $type, $deleteStory)
     {
@@ -1089,7 +1089,7 @@ class storyModel extends model
      *
      * @param  string $stories
      * @access public
-     * @return void
+     * @return array
      */
     public function getLinkedStories($stories)
     {
