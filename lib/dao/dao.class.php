@@ -258,14 +258,7 @@ class dao
         $this->setAlias('');
         $this->setMode('');
         $this->setMethod('');
-        if(defined('LANG_CREATED') and LANG_CREATED == false)
-        {
-            $this->setAutoLang(false);
-        }
-        else
-        {
-            $this->setAutoLang(true);
-        }
+        $this->setAutoLang(isset($this->config->framework->autoLang) and $this->config->framework->autoLang);
     }
 
     //-----根据请求的方式，调用sql类相应的方法(Call according method of sql class by query method. -----//

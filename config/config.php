@@ -86,7 +86,7 @@ $config->ip = new stdclass();
 $config->ip->whiteList = '*';
 
 /* View type settings. */ 
-$config->viewPrefix['mhtml'] = 'm.';
+$config->devicePrefix['mhtml'] = 'm.';
 
 /* Master database settings. */
 $config->db = new stdclass();
@@ -111,6 +111,7 @@ $config->framework->jsWithPrefix    = false;
 $config->framework->autoRepairTable = true;
 $config->framework->logDays         = 14;
 $config->framework->purifier        = true;
+$config->framework->autoLang        = false;
 
 /* Include the custom config file. */
 $configRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
@@ -120,7 +121,6 @@ if(file_exists($myConfig)) include $myConfig;
 /* Set default table prefix. */
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
-define('LANG_CREATED', false);
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
