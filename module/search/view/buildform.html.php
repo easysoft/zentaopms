@@ -245,7 +245,7 @@ function saveQuery()
         saveQueryLink = createLink('search', 'saveQuery');
         $.post(saveQueryLink, {title: r, module: module}, function(data)
         {
-            if(data == 'success') $('#queryBox').load(createLink('search', 'ajaxGetQuery'));
+            if(data == 'success') $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module));
         });
     });
 }
@@ -273,8 +273,11 @@ function deleteQuery()
 {
     queryID = $('#queryID').val();
     if(!queryID) return;
-    deleteLink = createLink('search', 'deleteQuery', 'queryID=' + queryID);
-    $('#queryBox').load(deleteLink);
+    deleteQueryLink = createLink('search', 'deleteQuery', 'queryID=' + queryID);
+    $.get(deleteQueryLink, function(data)
+    {
+        if(data == 'success') $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module));
+    });
 }
 </script>
 

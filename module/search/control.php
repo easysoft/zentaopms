@@ -69,27 +69,29 @@ class search extends control
     }
 
     /**
-     * Delete a query 
-     * 
-     * @param  int    $queryID 
+     * Delete current search query.
+     *
+     * @param  int    $queryID
      * @access public
      * @return void
      */
     public function deleteQuery($queryID)
     {
-        $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
-        $this->ajaxGetQuery();
+        $this->search->deleteQuery($queryID);
+        if(dao::isError()) die(js::error(dao::getError()));
+        die('success');
     }
 
     /**
-     * Ajax get query.
-     * 
+     * AJAX: get search query.
+     *
+     * @param  string $module
      * @access public
      * @return void
      */
-    public function ajaxGetQuery()
+    public function ajaxGetQuery($module = '')
     {
-        $module  = $this->session->searchParams['module'];
+        $module  = empty($module) ? $this->session->searchParams['module'] : $module;
         $queries = $this->search->getQueryPairs($module);
         die(html::select('queryID', $queries, '', 'onchange=executeQuery(this.value) class=form-control'));
     }
