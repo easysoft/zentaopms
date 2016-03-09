@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `name` varchar(255) NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
-  KEY `branch` (`product`)
+  KEY `product` (`product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_bug`;
 CREATE TABLE IF NOT EXISTS `zt_bug` (
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
   `status` varchar(20) NOT NULL,
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `cron` (`lastTime`)
+  KEY `lastTime` (`lastTime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_lang`;
 CREATE TABLE IF NOT EXISTS `zt_lang` (
@@ -375,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `order` mediumint(8) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `product` (`order`)
+  KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_productplan`;
 CREATE TABLE IF NOT EXISTS `zt_productplan` (
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `status` varchar(20) NOT NULL default 'normal',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `release` (`build`)
+  KEY `build` (`build`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
@@ -613,7 +613,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `testtask` (`build`)
+  KEY `build` (`build`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_todo`;
 CREATE TABLE IF NOT EXISTS `zt_todo` (
@@ -674,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `listName` varchar(60) NOT NULL,
   `userList` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user` (`account`)
+  KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usergroup`;
 CREATE TABLE IF NOT EXISTS `zt_usergroup` (
@@ -691,7 +691,7 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `form` text NOT NULL,
   `sql` text NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `user` (`account`, `module`)
+  KEY `query` (`account`, `module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usertpl`;
 CREATE TABLE IF NOT EXISTS `zt_usertpl` (
