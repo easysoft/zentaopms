@@ -173,12 +173,18 @@
             <th><?php echo $lang->story->linkStories;?></th>
             <td id='linkStoriesBox'>
               <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&linkType=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
               <?php
               $linkStories = explode(',', $story->linkStories);
               foreach($linkStories as $linkStoryID)
               {
-                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . html::a("javascript:deleteLinkedStory($story->id, \"linkStories\", $linkStoryID)", '<i class="icon-remove"></i>', '', "style='float:right'");
+                  if(isset($story->extraStories[$linkStoryID]))
+                  {
+                      echo '<li>';
+                      echo html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]);
+                      echo html::a("javascript:deleteLinkedStory($story->id, \"linkStories\", $linkStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo '</li>';
+                  }
               }
               ?>
               </ul>
@@ -188,12 +194,18 @@
             <th><?php echo $lang->story->childStories;?></th>
             <td id='childStoriesBox'>
               <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&linkType=childStories&stories=$story->childStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories&stories=$story->childStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
               <?php
               $childStories = explode(',', $story->childStories);
               foreach($childStories as $childStoryID)
               {
-                  if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID" . $story->extraStories[$childStoryID]) . html::a("javascript:deleteLinkedStory($story->id, \"childStories\", $childStoryID)", '<i class="icon-remove"></i>', '', "style='float:right'") . '</li>';
+                  if(isset($story->extraStories[$childStoryID]))
+                  {
+                      echo '<li>';
+                      echo html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID" . $story->extraStories[$childStoryID]);
+                      echo html::a("javascript:deleteLinkedStory($story->id, \"childStories\", $childStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo '</li>';
+                  }
               }
               ?>
               </ul>

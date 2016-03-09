@@ -73,7 +73,7 @@ class company extends control
         /* Get users. */
         $users = $this->company->getUsers($type, $queryID, $deptID, $sort, $pager);
 
-        /* Set view. */
+        /* Assign. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $this->view->position[]  = $this->lang->dept->common;
         $this->view->users       = $users;
