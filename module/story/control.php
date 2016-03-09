@@ -556,8 +556,8 @@ class story extends control
 
     /**
      * Delete a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -901,6 +901,136 @@ class story extends control
         $this->view->productID = $productID;
         $this->view->orderBy   = $orderBy;
         $this->display();
+    }
+
+    /**
+     * Link stories.
+     *
+     * @param  int    $storyID
+     * @param  string $linkType
+     * @param  string $stories
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function linkStory($storyID, $linkType = '', $stories = '', $browseType = '', $param = 0)
+    {
+        /* Get story, product, and products. */
+        $story    = $this->story->getById($storyID);
+        $product  = $this->product->getById($story->product);
+        $products = $this->product->getPairs();
+
+        /* Set menu. */
+        $this->product->setMenu($products, $product->id, $story->branch);
+
+        $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
+        $browseLink = $this->createLink('story', 'edit', "storyID=$storyID");
+        $branches   = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($story->product) : array();
+
+        /* Link stories. */
+        if(!empty($_POST))
+        {
+            $linkedStories = $this->story->linkStories($storyID, $linkType, $stories);
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkedStories('$storyID', '$linkType', '$linkedStories')}"));
+            die(js::locate($browseLink, 'parent'));
+        }
+
+        /* Build search form. */
+        unset($this->config->product->search['fields']['module']);
+        $this->config->product->search['actionURL'] = $this->createLink('story', 'linkStory', "storyID=$storyID&linkType=$linkType&stories=$stories&browseType=bySearch&queryID=myQueryID", '', true);
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['params']['product']['values'] = array($story->product => $products[$story->product], 'all' => $this->lang->product->allProduct); 
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts($products);
+        unset($this->lang->story->statusList['draft']);
+        if($product->type != 'normal')
+        {
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $this->config->product->search['params']['branch']['values'] = array('' => '') + $branches;
+        }
+        else
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+
+        /* Get stories to link. */
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->story->getBySearch($story->product, $queryID, 'id', null);
+        }
+        else
+        {
+            $allStories = $this->story->getProductStories($story->product, 0, $moduleID = '0');
+        }
+
+        $title      = $this->lang->story->linkStory;
+        $position[] = html::a($browseLink, $story->title);
+        $position[] = $this->lang->story->linkStory;
+
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->product      = $product;
+        $this->view->products     = $products;
+        $this->view->branches     = $branches;
+        $this->view->linkType     = $linkType;
+        $this->view->story        = $story;
+        $this->view->allStories   = $allStories;
+        $this->view->browseType   = $browseType;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * AJAX: Get linked story.
+     *
+     * @param  int    $storyID
+     * @param  string $type
+     * @param  string $linkedStories
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLinkedStories($storyID, $type = '', $linkedStories)
+    {
+        $stories = $this->story->getLinkedStories($linkedStories);
+        $story   = $this->story->getById($storyID);
+        $output  = "<ul class='list-unstyled'>";
+        if($type == 'linkStories')  $output .= html::a($this->createLink('story', 'linkStory', "storyID=$storyID&linkType=$type&stories=$story->linkStories", '', true), $this->lang->story->linkStory, '', "class='iframe' data-width='85%'");
+        if($type == 'childStories') $output .= html::a($this->createLink('story', 'linkStory', "storyID=$storyID&linkType=$type&stories=$story->childStories", '', true), $this->lang->story->linkStory, '', "class='iframe' data-width='85%'");
+        foreach($stories as $storyId => $title)
+        {
+            $output .= '<li>' . html::a(inlink('view', "storyID=$storyId"), "#$storyId " . $title) . html::a("javascript:deleteLinkedStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "style='float:right'");
+        }
+        $output .= '</ul>';
+
+        die($output);
+    }
+
+    /**
+     * AJAX: delete linked story.
+     *
+     * @param  int    $storyID
+     * @param  string $type
+     * @param  int    $deleteStory
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteLinkedStory($storyID, $type = '', $deleteStory)
+    {
+        $stories = $this->story->deleteLinkedStory($storyID, $type, $deleteStory);
+        $story   = $this->story->getById($storyID);
+        $output  = "<ul class='list-unstyled'>";
+        if($type == 'linkStories')  $output .= html::a($this->createLink('story', 'linkStory', "storyID=$storyID&linkType=$type&stories=$story->linkStories", '', true), $this->lang->story->linkStory, '', "class='iframe' data-width='85%'");
+        if($type == 'childStories') $output .= html::a($this->createLink('story', 'linkStory', "storyID=$storyID&linkType=$type&stories=$story->childStories", '', true), $this->lang->story->linkStory, '', "class='iframe' data-width='85%'");
+        foreach($stories as $storyId => $title)
+        {
+            $output .= '<li>' . html::a(inlink('view', "storyID=$storyId"), "#$storyId " . $title) . html::a("javascript:deleteLinkedStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "style='float:right'");
+        }
+        $output .= '</ul>';
+
+        die($output);
     }
 
     /**

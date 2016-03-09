@@ -234,10 +234,12 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
             <td><?php echo html::input('linkBug', $bug->linkBug, 'class="form-control"');?></td>
           </tr>
+          <?php if($bug->case):?>
           <tr>
-            <th><?php echo $lang->bug->case;?></th>
+            <th><?php echo $lang->bug->fromCase;?></th>
             <td><?php echo html::input('case', $bug->case, 'class="form-control"');?></td>
           </tr>
+          <?php endif;?>
         </table>
       </fieldset>
     </div>

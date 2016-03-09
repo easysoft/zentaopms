@@ -1036,6 +1036,67 @@ class storyModel extends model
     }
 
     /**
+     * Link stories.
+     *
+     * @param  int    $storyID
+     * @param  string $linkType
+     * @param  string $stories
+     * @access public
+     * @return void
+     */
+    public function linkStories($storyID, $linkType, $linkedStories)
+    {
+        if($this->post->stories == false) return false;
+        $stories = implode(',', $this->post->stories) . ',' . trim($linkedStories, ',');
+        $this->dao->update(TABLE_STORY)->set($linkType)->eq($stories)->where('id')->eq($storyID)->exec();
+
+        if(dao::isError()) die(js::error(dao::getError()));
+        $this->loadModel('action')->create('story', $storyID, $linkType, '', implode(',', $this->post->stories));
+
+        return $stories;
+    }
+
+    /**
+     * Delete linked story.
+     *
+     * @param  int    $storyID
+     * @param  string $type
+     * @param  int    $deleteStory
+     * @access public
+     * @return void
+     */
+    public function deleteLinkedStory($storyID, $type, $deleteStory)
+    {
+        $story   = $this->getById($storyID);
+        $stories = explode(',', trim($story->$type, ','));
+        foreach($stories as $key => $storyId)
+        {
+            if($storyId == $deleteStory) unset($stories[$key]);
+        }
+        $stories = implode(',', $stories);
+
+        $this->dao->update(TABLE_STORY)->set($type)->eq($stories)->where('id')->eq($storyID)->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
+
+        $action = 'mv' . $type;
+        $this->loadModel('action')->create('story', $storyID, $action, '', $deleteStory);
+
+        return $this->getLinkedStories($stories);
+    }
+
+    /**
+     * Get linked stories.
+     *
+     * @param  string $stories
+     * @access public
+     * @return void
+     */
+    public function getLinkedStories($stories)
+    {
+        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
+    }
+
+    /**
      * Get stories list of a product.
      * 
      * @param  int           $productID 
