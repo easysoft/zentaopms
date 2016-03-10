@@ -107,7 +107,7 @@ class baseHTML
      * @access public
      * @return string
      */
-    static public function a($href = '', $title = '', $target = "_self", $misc = '', $newline = true)
+    static public function a($href = '', $title = '', $misc = '', $newline = true)
     {
         global $config;
         if(empty($title)) $title = $href;
@@ -120,8 +120,7 @@ class baseHTML
             $href .= $onlybody;
         }
 
-        if($target == '_self') return "<a href='$href' $misc>$title</a>$newline";
-        return "<a href='$href' target='$target' $misc>$title</a>$newline";
+        return "<a href='$href' $misc>$title</a>$newline";
     }
 
     /**
@@ -450,7 +449,7 @@ class baseHTML
      * @access public
      * @return string the submit button tag.
      */
-     public static function submitButton($label = '', $misc = '', $class = 'btn btn-primary')
+    public static function submitButton($label = '', $class = 'btn btn-primary', $misc = '')
     {
         global $lang;
 
@@ -515,7 +514,7 @@ class baseHTML
      * @access public
      * @return string the common button tag.
      */
-     public static function commonButton($label = '', $misc = '', $class = 'btn btn-default', $icon = '')
+    public static function commonButton($label = '', $class = 'btn btn-default', $misc = '', $icon = '')
     {
         if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
         return " <button type='button' class='$class' $misc>$label</button>";
@@ -534,7 +533,7 @@ class baseHTML
      * @access public
      * @return string
      */
-     public static function linkButton($label = '', $link = '', $target = 'self', $misc = '', $class = 'btn btn-default')
+    public static function linkButton($label = '', $link = '', $class='btn btn-default', $misc = '', $target = 'self')
     {
         global $config, $lang;
 
@@ -673,15 +672,38 @@ EOT;
      * Create select buttons include 'selectAll' and 'selectReverse'.
      * 
      * @param  string $scope  the scope of select reverse.
+     * @param  bool   $asGroup 
      * @param  string $appendClass 
      * @static
      * @access public
      * @return string
      */
-    static public function selectButton($scope = "", $appendClass = 'btn')
+    static public function selectButton($scope = "", $asGroup = true, $appendClass = '')
     {
+        $string = <<<EOT
+<script>
+$(function()
+{
+    if($('body').data('bindSelectBtn')) return;
+    $('body').data('bindSelectBtn', true);
+    $(document).on('click', '.check-all, .check-inverse, #allchecker, #reversechecker', function()
+    {
+        var e = $(this);
+        if(e.closest('.datatable').length) return;
+        scope = e.data('scope');
+        scope = scope ? $('#' + scope) : e.closest('.table');
+        if(!scope.length) scope = e.closest('form');
+        scope.find('input:checkbox').each(e.hasClass('check-inverse') ? function() { $(this).prop("checked", !$(this).prop("checked"));} : function() { $(this).prop("checked", true);});
+    });
+});
+</script>
+EOT;
         global $lang;
-        return "<div class='checkbox $appendClass'><label><input type='checkbox' data-scope='$scope' class='rows-selector'> $lang->select</label></div>";
+        if($asGroup) $string .= "<div class='btn-group'>";
+        $string .= "<a id='allchecker' class='btn btn-select-all check-all $appendClass' data-scope='$scope' href='javascript:;' >{$lang->selectAll}</a>";
+        $string .= "<a id='reversechecker' class='btn btn-select-reverse check-inverse $appendClass' data-scope='$scope' href='javascript:;'>{$lang->selectReverse}</a>";
+        if($asGroup) $string .= "</div>";
+        return  $string;
     }
 
     /**

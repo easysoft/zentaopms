@@ -1,53 +1,36 @@
 <?php
+/**
+ * 此文件包括ZenTaoPHP框架的三个类：router, config, lang。
+ * The router, config and lang class file of ZenTaoPHP framework.
+ *
+ * The author disclaims copyright to this source code. In place of 
+ * a legal notice, here is a blessing:
+ *
+ *  May you do good and not evil.
+ *  May you find forgiveness for yourself and forgive others.
+ *  May you share freely, never taking more than you give.
+ */
+
 include dirname(__FILE__) . '/base/router.class.php';
+/**
+ * router类。
+ * The router class.
+ *
+ * @package framework
+ */
 class router extends baseRouter
 {
-    public function loadCommon()
-    {
-        $this->setModuleName('common');
-        $commonModelFile = helper::setModelFile('common');
-        if(file_exists($commonModelFile))
-        {
-            helper::import($commonModelFile);
-            if(class_exists('extcommonModel'))
-            {
-                $commonClass = 'class common extends extcommonModel{}';
-                eval($commonClass);
-                return new extcommonModel();
-            }
-            elseif(class_exists('commonModel'))
-            {
-                $commonClass = 'class common extends commonModel{}';
-                eval($commonClass);
-                return new commonModel();
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-
+    /**
+     * 加载语言文件，返回全局$lang对象。
+     * Load lang and return it as the global lang object.
+     * 
+     * @param   string $moduleName     the module name
+     * @param   string $appName     the app name
+     * @access  public
+     * @return  bool|ojbect the lang object or false.
+     */
     public function loadLang($moduleName, $appName = '')
     {
-        $modulePath   = $this->getModulePath($appName, $moduleName);
-        $mainLangFile = $modulePath . 'lang' . DS . $this->clientLang . '.php';
-        $extLangPath        = $this->getModuleExtPath($appName, $moduleName, 'lang');
-        $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
-        $siteExtLangFiles   = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
-        $extLangFiles       = array_merge($commonExtLangFiles, $siteExtLangFiles);
-
-        /* Set the files to includ. */
-        if(!is_file($mainLangFile))
-        {
-            if(empty($extLangFiles)) return false;  // also no extension file.
-            $langFiles = $extLangFiles;
-        }
-        else
-        {
-            $langFiles = array_merge(array($mainLangFile), $extLangFiles);
-        }
-
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
@@ -67,28 +50,6 @@ class router extends baseRouter
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['zh-cn'][0];
         }
 
-        static $loadedLangs = array();
-        foreach($langFiles as $langFile)
-        {
-            if(in_array($langFile, $loadedLangs)) continue;
-            include $langFile;
-            $loadedLangs[] = $langFile;
-        }
-
-        /* Merge from the db lang. */
-        if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
-        {
-            foreach($lang->db->custom[$moduleName] as $section => $fields)
-            {
-                foreach($fields as $key => $value)
-                {
-                    unset($lang->{$moduleName}->{$section}[$key]);
-                    $lang->{$moduleName}->{$section}[$key] = $value;
-                }
-            }
-        }
-
-        $this->lang = $lang;
-        return $lang;
+        return parent::loadLang($moduleName, $appName);
     }
 }

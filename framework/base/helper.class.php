@@ -1,7 +1,7 @@
 <?php
 /**
- * ZenTaoPHP的helper类。
- * The helper class file of ZenTaoPHP framework.
+ * ZenTaoPHP的baseHelper类。
+ * The baseHelper class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code. In place of
  * a legal notice, here is a blessing:
@@ -13,7 +13,7 @@
 
 /**
  * 该类实现了一些常用的方法
- * The helper class, contains the tool functions.
+ * The baseHelper class, contains the tool functions.
  *
  * @package framework
  */

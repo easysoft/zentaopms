@@ -1,7 +1,7 @@
 <?php
 /**
- * ZenTaoPHP的control类。
- * The control class file of ZenTaoPHP framework.
+ * ZenTaoPHP的baseControl类。
+ * The baseControl class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
@@ -12,7 +12,7 @@
  */
 
 /**
- * control基类，所有模块的control类都派生于它。
+ * baseControl基类，所有模块的control类都派生于它。
  * The base class of control.
  *
  * @package framework

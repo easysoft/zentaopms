@@ -1,6 +1,6 @@
 <?php
 /**
- * 此文件包括ZenTaoPHP框架的三个类：router, config, lang。
+ * 此文件包括ZenTaoPHP框架的三个类：baseRouter, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code. In place of 
@@ -12,8 +12,8 @@
  */
 
 /**
- * router类。
- * The router class.
+ * baseRouter类。
+ * The baseRouter class.
  *
  * @package framework
  */

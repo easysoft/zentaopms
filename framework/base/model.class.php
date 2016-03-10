@@ -1,7 +1,7 @@
 <?php
 /**
- * ZenTaoPHP的model类。
- * The model class file of ZenTaoPHP framework.
+ * ZenTaoPHP的baseModel类。
+ * The baseModel class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
@@ -12,7 +12,7 @@
  */
 
 /**
- * model基类。
+ * baseModel基类。
  * The base class of model.
  * 
  * @package framework

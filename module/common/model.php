@@ -1267,3 +1267,7 @@ class commonModel extends model
         return "$httpType://$httpHost";
     }
 }
+
+class common extends commonModel
+{
+}
