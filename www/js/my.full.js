@@ -1375,11 +1375,11 @@ function fixedTfootAction(formID)
     if($inputgroup.size() > 0)var $inputwidth = $inputgroup.width();
 
 
-    var documentH   = $(document).height();
-    var tfootHeight = $tfoot.height();
-    var tfootOffset = documentH - $tfoot.offset().top - $('#footer').height() - tfootHeight / 5;
+    var fixHeight   = $tfoot.height() / 5;
+    var tableHeight = $table.height();
     var tableWidth  = $table.width();
-    if(documentH - $(window).height() - $(window).scrollTop() >= tfootOffset)
+    var tableOffset = $table.offset().top + tableHeight - fixHeight;
+    if($(window).height() + $(window).scrollTop() <= tableOffset)
     {
         $tfoot.addClass('fixedTfootAction');
         $tfoot.width(tableWidth);
@@ -1389,8 +1389,8 @@ function fixedTfootAction(formID)
     $(window).scroll(function()
     {
         $hasFixed = $tfoot.hasClass('fixedTfootAction');
-        documentH = $(document).height() + ($hasFixed ? tfootHeight : 0);
-        if(documentH - $(window).height() - $(window).scrollTop() < tfootOffset)
+        tableOffset = $table.offset().top + tableHeight - fixHeight;
+        if($(window).height() + $(window).scrollTop() > tableOffset)
         {
             $tfoot.removeClass('fixedTfootAction');
             $tfoot.removeAttr('style');
