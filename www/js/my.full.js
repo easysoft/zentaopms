@@ -1390,7 +1390,8 @@ function fixedTfootAction(formID)
     {
         $hasFixed = $tfoot.hasClass('fixedTfootAction');
         tableOffset = $table.offset().top + tableHeight - fixHeight;
-        if($(window).height() + $(window).scrollTop() > tableOffset)
+        offsetHeight = $(window).height() + $(window).scrollTop();
+        if(offsetHeight > tableOffset || $(document).height() == offsetHeight)
         {
             $tfoot.removeClass('fixedTfootAction');
             $tfoot.removeAttr('style');
