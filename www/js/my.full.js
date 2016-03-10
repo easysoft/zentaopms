@@ -1377,7 +1377,7 @@ function fixedTfootAction(formID)
 
     var documentH   = $(document).height();
     var tfootHeight = $tfoot.height();
-    var tfootOffset = documentH - $tfoot.offset().top - $('#footer').height() - tfootHeight;
+    var tfootOffset = documentH - $tfoot.offset().top - $('#footer').height() - tfootHeight / 5;
     var tableWidth  = $table.width();
     if(documentH - $(window).height() - $(window).scrollTop() >= tfootOffset)
     {
