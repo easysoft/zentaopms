@@ -54,3 +54,31 @@ function loadModuleRelated()
     productID = $('#product').val();
     setStories(moduleID, productID);
 }
+
+/**
+ * Delete a linked bug.
+ *
+ * @param  int $bugID
+ * @param  int $deleteBug
+ * @access public
+ * @return void
+ */
+function deleteLinkedBug(bugID, deleteBug)
+{
+    deleteLink = createLink('bug', 'ajaxDeleteLinkedBug', 'bugID=' + bugID + '&deleteBug=' + deleteBug);
+    $('#linkBugBox').load(deleteLink);
+}
+
+/**
+ * Load linked bugs.
+ *
+ * @param  int    $bugID
+ * @param  string $linkedBugs
+ * @access public
+ * @return void
+ */
+function loadLinkedBugs(bugID, linkedBugs)
+{
+    bugLink = createLink('bug', 'ajaxGetLinkedBugs', 'bugID=' + bugID + '&linkedBugs=' + linkedBugs);
+    $('#linkBugBox').load(bugLink);
+}

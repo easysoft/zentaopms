@@ -60,6 +60,7 @@ $lang->bug->duplicateBug     = 'Duplicate';
 $lang->bug->lastEditedBy     = 'Last Edited By';
 $lang->bug->lastEditedDate   = 'Last Edited Date';
 $lang->bug->linkBug          = 'Related';
+$lang->bug->linkBugs         = 'Link bugs';
 $lang->bug->case             = 'Case';
 $lang->bug->files            = 'Files';
 $lang->bug->keywords         = 'Keywords';
@@ -359,6 +360,8 @@ $lang->bug->action->tostory          = array('main' => '$date, To story by <stro
 $lang->bug->action->totask           = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 $lang->bug->action->linked2plan      = array('main' => '$date, Link to plan by <strong>$actor</strong>,ID is <strong>$extra</strong>。'); 
 $lang->bug->action->unlinkedfromplan = array('main' => '$date, Unlink from plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
+$lang->bug->action->linked2bug       = array('main' => '$date, linked related bugs <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->bug->action->unlinkedbug      = array('main' => '$date, removed related bugs <strong>$extra</strong> by <strong>$actor</strong>.');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose builds...';

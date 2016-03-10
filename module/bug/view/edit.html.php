@@ -230,9 +230,25 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
       <fieldset>
         <legend><?php echo $lang->bug->legendMisc;?></legend>
         <table class='table table-form'>
-          <tr>
+          <tr class='text-top'>
             <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
-            <td><?php echo html::input('linkBug', $bug->linkBug, 'class="form-control"');?></td>
+            <td id='linkBugBox'>
+              <ul class='list-unstyled'>
+              <?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id&bugs=$bug->linkBug", '', true), $lang->bug->linkBugs, '', "class='iframe' data-width='85%'");?>
+              <?php
+              if(isset($bug->linkBugTitles))
+              {
+                  foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                  {
+                      echo '<li>';
+                      echo html::a(inlink('view', "bugID=$linkBugID"), "#$linkBugID " . $linkBugTitle);
+                      echo html::a("javascript:deleteLinkedBug($bug->id, $linkBugID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo '</li>';
+                  }
+              }
+              ?>
+              </ul>
+            </td>
           </tr>
           <?php if($bug->case):?>
           <tr>
