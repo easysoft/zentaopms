@@ -224,7 +224,7 @@ class testcaseModel extends model
      * @param  string $browseType
      * @param  int    $queryID
      * @param  int    $moduleID
-     * @param  int    $sort
+     * @param  string $sort
      * @param  object $pager
      * @access public
      * @return array
@@ -243,6 +243,8 @@ class testcaseModel extends model
                 ->where("t2.status = 'active'")
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($branch)->andWhere('t1.branch')->eq($branch)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
@@ -250,45 +252,62 @@ class testcaseModel extends model
         /* By search. */
         elseif($browseType == 'bysearch')
         {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('testcaseQuery', $query->sql);
-                    $this->session->set('testcaseForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('testcaseQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-            }
-
-            $queryProductID = $productID;
-            $allProduct     = "`product` = 'all'";
-            $caseQuery      = '(' . $this->session->testcaseQuery;
-            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
-            {
-                $products  = array_keys($this->loadModel('product')->getPrivProducts());
-                $caseQuery = str_replace($allProduct, '1', $caseQuery);
-                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN($products);
-                $queryProductID = 'all';
-            }
-            $caseQuery .= ')';
-
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
-                ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($sort)->page($pager)->fetchAll();
+            $cases = $this->getBySearch($productID, $queryID, $sort, $pager);
         }
 
         if($cases) return $cases;
 
         return array();
+    }
+
+    /**
+     * Get cases by search.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('testcaseQuery', $query->sql);
+                $this->session->set('testcaseForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('testcaseQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        }
+
+        $queryProductID = $productID;
+        $allProduct     = "`product` = 'all'";
+        $caseQuery      = '(' . $this->session->testcaseQuery;
+        if(strpos($this->session->testcaseQuery, $allProduct) !== false)
+        {
+            $products  = array_keys($this->loadModel('product')->getPrivProducts());
+            $caseQuery = str_replace($allProduct, '1', $caseQuery);
+            $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN($products);
+            $queryProductID = 'all';
+        }
+        $caseQuery .= ')';
+
+        $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
+            ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+
+        return $cases;
     }
 
     /**
