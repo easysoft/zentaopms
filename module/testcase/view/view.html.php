@@ -231,10 +231,13 @@
       <fieldset>
         <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
         <table class='table table-data table-condensed table-borderless'>
+          <?php if($case->fromBug):?>
           <tr>
             <th class='w-60px'><?php echo $lang->testcase->fromBug;?></th>
-            <td><?php if($case->fromBug) echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugTitle);?></td>
+            <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugTitle);?></td>
           </tr>
+          <?php endif;?>
+          <?php if($case->toBugs):?>
           <tr>
             <th valign="top"><?php echo $lang->testcase->toBug;?></th>
             <td>
@@ -246,6 +249,7 @@
             ?>
             </td>
           </tr>
+          <?php endif;?>
         </table>
       </fieldset>
 

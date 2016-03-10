@@ -438,6 +438,64 @@ class testcaseModel extends model
     }
 
     /**
+     * Link cases.
+     *
+     * @param  int    $caseID
+     * @param  string $cases
+     * @access public
+     * @return array
+     */
+    public function linkCases($caseID, $cases = '')
+    {
+        if($this->post->cases == false) return $cases;
+
+        $cases = implode(',', $this->post->cases) . ',' . trim($cases, ',');
+        $this->dao->update(TABLE_CASE)->set('linkCase')->eq(trim($cases, ','))->where('id')->eq($caseID)->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
+        $this->loadModel('action')->create('case', $caseID, 'linked2Case', '', implode(',', $this->post->cases));
+
+        return $cases;
+    }
+
+    /**
+     * Delete linked case.
+     *
+     * @param  int    $caseID
+     * @param  int    $deleteCase
+     * @access public
+     * @return array
+     */
+    public function deleteLinkedCase($caseID, $deleteCase = 0)
+    {
+        $case = $this->getById($caseID);
+
+        $cases = explode(',', trim($case->linkCase, ','));
+        foreach($cases as $key => $caseId)
+        {
+            if($caseId == $deleteCase) unset($cases[$key]);
+        }
+        $cases = implode(',', $cases);
+
+        $this->dao->update(TABLE_CASE)->set('linkCase')->eq($cases)->where('id')->eq($caseID)->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
+        $this->loadModel('action')->create('case', $caseID, 'unLinkedCase', '', $deleteCase);
+
+        return $this->getLinkedCases($cases);
+    }
+
+    /**
+     * Get linked cases.
+     *
+     * @param  string $cases
+     * @access public
+     * @return array
+     */
+    public function getLinkedCases($cases)
+    {
+        return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($cases)->fetchPairs();
+    }
+
+    /**
      * Batch update testcases.
      * 
      * @access public
