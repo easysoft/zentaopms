@@ -1039,19 +1039,19 @@ class storyModel extends model
      * Link stories.
      *
      * @param  int    $storyID
-     * @param  string $linkType
+     * @param  string $type
      * @param  string $stories
      * @access public
-     * @return void
+     * @return string
      */
-    public function linkStories($storyID, $linkType, $linkedStories)
+    public function linkStories($storyID, $type = 'linkStories', $stories = '')
     {
-        if($this->post->stories == false) return false;
-        $stories = implode(',', $this->post->stories) . ',' . trim($linkedStories, ',');
-        $this->dao->update(TABLE_STORY)->set($linkType)->eq($stories)->where('id')->eq($storyID)->exec();
+        if($this->post->stories == false) return $stories;
 
+        $stories = implode(',', $this->post->stories) . ',' . trim($stories, ',');
+        $this->dao->update(TABLE_STORY)->set($type)->eq(trim($stories,','))->where('id')->eq($storyID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('story', $storyID, $linkType, '', implode(',', $this->post->stories));
+        $this->loadModel('action')->create('story', $storyID, $type, '', implode(',', $this->post->stories));
 
         return $stories;
     }
@@ -1063,11 +1063,12 @@ class storyModel extends model
      * @param  string $type
      * @param  int    $deleteStory
      * @access public
-     * @return void
+     * @return array
      */
     public function deleteLinkedStory($storyID, $type, $deleteStory)
     {
         $story   = $this->getById($storyID);
+
         $stories = explode(',', trim($story->$type, ','));
         foreach($stories as $key => $storyId)
         {
@@ -1077,8 +1078,7 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORY)->set($type)->eq($stories)->where('id')->eq($storyID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-
-        $action = 'mv' . $type;
+        $action = ($type == 'linkStories') ? 'mvLinkStories' : 'mvChildStories';
         $this->loadModel('action')->create('story', $storyID, $action, '', $deleteStory);
 
         return $this->getLinkedStories($stories);
@@ -1089,7 +1089,7 @@ class storyModel extends model
      *
      * @param  string $stories
      * @access public
-     * @return void
+     * @return array
      */
     public function getLinkedStories($stories)
     {

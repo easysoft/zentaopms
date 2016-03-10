@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Fei Chen <chenfei@cnezsoft.com>
- * @package     project
+ * @package     story
  * @version     $Id: linkstory.html.php 4129 2016-03-09 08:58:13Z chenfei $
  * @link        http://www.zentao.net
  */
@@ -38,17 +38,17 @@
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $storyDetail):?>
-      <?php if(in_array($storyDetail->id, explode(',', $story->$linkType))) continue;?>
+      <?php if(in_array($storyDetail->id, explode(',', $story->$type))) continue;?>
       <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyDetail->id");?>
       <tr class='text-center'>
         <td class='text-left'>
           <input type='checkbox' name='stories[]'  value='<?php echo $storyDetail->id;?>'/> 
-          <input type='hidden'   name='products[]' value='<?php echo $storyDetail->product;?>' />
+          <input type='hidden'   name='products[]' value='<?php echo $storyDetail->product;?>'/>
           <?php echo html::a($storyLink, sprintf('%03d', $storyDetail->id));?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $storyDetail->pri, $storyDetail->pri)?>'><?php echo zget($lang->story->priList, $storyDetail->pri, $storyDetail->pri);?></span></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$storyDetail->product&branch=$storyDetail->branch"), $products[$storyDetail->product], '_blank');?></td>
-        <td class='text-left nobr' title="<?php echo $storyDetail->title?>"><?php echo html::a($storyLink, $storyDetail->title);?></td>
+        <td class='text-left nobr' title="<?php echo $storyDetail->title?>"><?php echo html::a($storyLink, $storyDetail->title, '_blank');?></td>
         <td><?php echo $storyDetail->planTitle;?></td>
         <?php if($product->type != 'normal'):?>
         <td><?php if(isset($branches[$storyDetail->branch])) echo $branches[$storyDetail->branch];?></td>
@@ -63,10 +63,7 @@
         <tr>
           <td colspan='<?php echo $product->type == 'normal' ? '7' :'8';?>' class='text-left'>
             <div class='table-actions clearfix'>
-            <?php 
-            if($storyCount) echo html::selectButton() . html::submitButton();
-            else echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
-            ?>
+            <?php if($storyCount) echo html::selectButton() . html::submitButton();?>
             </div>
           </td>
         </tr>
@@ -75,6 +72,6 @@
   </form>
 </div>
 <script type='text/javascript'>
-$(function(){ajaxGetSearchForm()});
+$(function(){ajaxGetSearchForm();});
 </script>
 <?php include '../../common/view/footer.html.php';?>

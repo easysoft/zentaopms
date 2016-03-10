@@ -256,6 +256,18 @@ class searchModel extends model
     }
 
     /**
+     * Delete current query from db.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function deleteQuery($queryID)
+    {
+        $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
+    }
+
+    /**
      * Get title => id pairs of a user.
      * 
      * @param  string    $module 
