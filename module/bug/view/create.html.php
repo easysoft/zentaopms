@@ -63,7 +63,8 @@ js::set('refresh', $lang->refresh);
             <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
             <span class='input-group-addon' id='buildBoxActions'></span>
-            <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}' style='border-left: none'")?></span>
+            <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}'")?></span>
+          </div>
           </div>
         </td>
       </tr>

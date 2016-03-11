@@ -28,6 +28,5 @@
 #keywordsAddonLabel:before {content: '空'; color: transparent} 
 
 #contactListGroup .input-group-btn > .btn {margin-left: -1px!important;}
-#contactListGroup .input-group-btn > .btn:first-child {border-left: none}
 
 .minw-80px {min-width: 80px;}
