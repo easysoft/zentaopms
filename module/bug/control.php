@@ -942,8 +942,7 @@ class bug extends control
         $bugs = $this->bug->getLinkedBugs($linkedBugs);
 
         /* Build linkBug list.*/
-        $output  = "<ul class='list-unstyled'>";
-        $output .= html::a(inlink('linkBugs', "bugID=$bugID&bugs=$bug->linkBug", '', true), $this->lang->bug->linkBugs, '', "class='iframe' data-width='85%'");
+        $output  = '';
         foreach($bugs as $bugId => $title)
         {
             $output .= '<li>';
@@ -951,7 +950,6 @@ class bug extends control
             $output .= html::a("javascript:deleteLinkedBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
-        $output .= '</ul>';
 
         die($output);
     }
@@ -971,13 +969,11 @@ class bug extends control
         $bugs = $this->bug->deleteLinkedBug($bugID, $deleteBug);
 
         /* Build linkBug list. */
-        $output  = "<ul class='list-unstyled'>";
-        $output .= html::a(inlink('linkBugs', "bugID=$bugID&bugs=$bug->linkBug", '', true), $this->lang->bug->linkBugs, '', "class='iframe' data-width='85%'");
+        $output  = '';
         foreach($bugs as $bugId => $title)
         {
             $output .= '<li>' . html::a(inlink('view', "bugID=$bugId"), "#$bugId " . $title) . html::a("javascript:deleteLinkedBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "style='float:right'");
         }
-        $output .= '</ul>';
 
         die($output);
     }

@@ -30,10 +30,6 @@ class searchModel extends model
         $searchParams['style']        = zget($searchConfig, 'style', 'full');
         $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
-        /* remove onlybody for url*/
-        $onlybodyParam = $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-        $searchParams['actionURL'] = str_replace($onlybodyParam, '', $searchParams['actionURL']);
-
         $this->session->set('searchParams', $searchParams);
     }
 

@@ -142,9 +142,9 @@
           </tr>
           <tr class='text-top'>
             <th><?php echo $lang->testcase->linkCase;?></th>
-            <td id='linkCaseBox'>
-              <ul class='list-unstyled'>
+            <td>
               <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id&case=$case->linkCase", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='85%'");?>
+              <ul class='list-unstyled' id='linkCaseBox'>
               <?php
               if(isset($case->linkCaseTitles))
               {
