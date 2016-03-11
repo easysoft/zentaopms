@@ -1000,6 +1000,7 @@ function setModal()
                 /* Save the href to rel attribute thus we can save it. */
                 $('#ajaxModal').attr('rel', url);
 
+                event.preventDefault();
                 return false;
             });
         });
