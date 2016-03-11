@@ -727,12 +727,12 @@ function toggleSearch()
  */
 function ajaxGetSearchForm(querybox)
 {
-    querybox = typeof(querybox) == 'undefined' ? '#querybox' : querybox;
-    if($(querybox).html() == '')
+    var $querybox = $(querybox || '#querybox');
+    if($querybox.html() == '')
     {
         $.get(createLink('search', 'buildForm'), function(data)
         {
-            $(querybox).html(data);
+            $querybox.html(data);
         });
     }
 }
