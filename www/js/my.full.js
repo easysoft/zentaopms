@@ -284,14 +284,17 @@ function setPing()
  */
 function setRequiredFields()
 {
-    if(!config.requiredFields) return false;
-    requiredFields = config.requiredFields.split(',');
-    for(i = 0; i < requiredFields.length; i++)
+    if(config.requiredFields)
     {
-        $('#' + requiredFields[i]).closest('td,th').prepend("<div class='required required-wrapper'></div>");
-        var colEle = $('#' + requiredFields[i]).closest('[class*="col-"]');
-        if(colEle.parent().hasClass('form-group')) colEle.addClass('required');
+        requiredFields = config.requiredFields.split(',');
+        for(i = 0; i < requiredFields.length; i++)
+        {
+            $('#' + requiredFields[i]).closest('td,th').prepend("<div class='required required-wrapper'></div>");
+            var colEle = $('#' + requiredFields[i]).closest('[class*="col-"]');
+            if(colEle.parent().hasClass('form-group')) colEle.addClass('required');
+        }
     }
+    $('.required').closest('td,th').next().css('padding-left', '15px');
 }
 
 /**
