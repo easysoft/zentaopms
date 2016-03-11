@@ -173,7 +173,7 @@
             <th><?php echo $lang->story->linkStories;?></th>
             <td id='linkStoriesBox'>
               <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
               <?php
               $linkStories = explode(',', $story->linkStories);
               foreach($linkStories as $linkStoryID)

@@ -144,7 +144,7 @@
             <th><?php echo $lang->testcase->linkCase;?></th>
             <td id='linkCaseBox'>
               <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id&case=$case->linkCase", '', true), $lang->testcase->linkCases, '', "class='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id&case=$case->linkCase", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='85%'");?>
               <?php
               if(isset($case->linkCaseTitles))
               {
