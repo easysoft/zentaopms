@@ -16,8 +16,7 @@
   <td>
     <table cellpadding='0' cellspacing='0' width='600' style='border: none; border-collapse: collapse;'>
       <tr>
-        <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'><?php echo 'TESTTASK #' . $testtask->id . ' &nbsp;' . html::a(common::getSysURL() . $this->createLink('testtask', 'view', "testtaskID=$testtask->id"), $testtask->name, '', "style='color: #333; text-decoration: none;'");?></td>
-        <td style='width: 40px; text-align: right; background-color: #F8FAFE; border: none; vertical-align: top; padding: 10px; border-bottom: 1px solid #e5e5e5;'><?php echo html::a(common::getSysURL() . $this->createLink('testtask', 'view', "testtaskID=$testtask->id"), '[+]', 'target="_blank"');?></td>
+        <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'><?php echo html::a(common::getSysURL() . $this->createLink('testtask', 'view', "testtaskID=$testtask->id"), $mailTitle, '', "style='color: #333; text-decoration: none;'");?></td>
       </tr>
     </table>
   </td>
@@ -26,7 +25,7 @@
   <td style='padding: 10px; border: none;'>
     <fieldset style='border: 1px solid #e5e5e5'>
       <legend style='color: #114f8e'><?php echo $lang->testtask->desc;?></legend>
-      <div class='content'><?php echo $testtask->desc;?></div>
+      <div style='padding:5px;'><?php echo $testtask->desc;?></div>
     </fieldset>
   </td>
 </tr>

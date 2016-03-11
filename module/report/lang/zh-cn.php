@@ -89,11 +89,11 @@ $lang->report->taskName     = '任务名称';
 $lang->report->todoName     = '待办名称';
 $lang->report->testTaskName = '版本名称';
 
-$lang->report->mailtitle           = new stdclass();
-$lang->report->mailtitle->begin    = '提醒：您有';
-$lang->report->mailtitle->bug      = " Bugs(%s),";
-$lang->report->mailtitle->task     = " 任务(%s),";
-$lang->report->mailtitle->todo     = " 待办(%s),";
-$lang->report->mailtitle->testTask = " 测试版本(%s),";
+$lang->report->mailTitle           = new stdclass();
+$lang->report->mailTitle->begin    = '提醒：您有';
+$lang->report->mailTitle->bug      = " Bug(%s),";
+$lang->report->mailTitle->task     = " 任务(%s),";
+$lang->report->mailTitle->todo     = " 待办(%s),";
+$lang->report->mailTitle->testTask = " 测试版本(%s),";
 
 $lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
