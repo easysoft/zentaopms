@@ -27,18 +27,6 @@ class commonModel extends model
             $this->setCompany();
             $this->setUser();
             $this->loadConfigFromDB();
-            if(isset($this->config->custom->productproject))
-            {
-                $productCommon = $projectCommon = 0;
-                list($productCommon, $projectCommon) = explode('_', $this->config->custom->productproject);
-                if($productCommon != 0 or $projectCommon != 0)
-                {
-                    $this->lang->productCommon = $this->lang->productCommonList[$productCommon];
-                    $this->lang->projectCommon = $this->lang->projectCommonList[$projectCommon];
-                    $this->app->loadLang('common');
-                }
-            }
-
             $this->loadCustomFromDB();
             if($this->app->getViewType() == 'mhtml') $this->setMobileMenu();
             $this->app->loadLang('company');
@@ -343,30 +331,18 @@ class commonModel extends model
         $bug     = $this->lang->my->menu->bug['link'];
         $project = $this->lang->menu->project . '|locate=no&&status=isdoing';
         $product = $this->lang->menu->product . '|locate=no';
+        $menu    = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'project' => $project, 'product' => $product);
 
-        if($role == 'dev' or $role == 'td' or $role == 'pm')
-        {
-            $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
-        }
-        elseif($role == 'pd' or $role == 'po')
-        {
-            $menu = array('todo' => $todo, 'story' => $story, 'bug' => $bug, 'product' => $product, 'project' => $project);
-        }
-        elseif($role == 'qa' or $role == 'qd')
-        {
-            $menu = array('todo' => $todo, 'bug' => $bug, 'project' => $project, 'product' => $product);
-        }
-        elseif($role == 'top')
-        {
-            $menu = array('project' => $project, 'product' => $product, 'todo' => $todo);
+        if(strpos('dev,td,pm', $role) !== false) $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
+        if(strpos('pd,po',     $role) !== false) $menu = array('todo' => $todo, 'story' => $story, 'bug' => $bug, 'product' => $product, 'project' => $project);
+        if(strpos('qa,qd',     $role) !== false) $menu = array('todo' => $todo, 'bug' => $bug, 'project' => $project, 'product' => $product);
+        if(strpos('top',       $role) !== false) $menu = array('project' => $project, 'product' => $product, 'todo' => $todo);
 
+        if($role == 'top')
+        {
             $this->config->locate->module = 'project';
             $this->config->locate->method = 'index';
             $this->config->locate->params = 'locate=no&status=doing';
-        }
-        else
-        {
-            $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'project' => $project, 'product' => $product);
         }
 
         unset($this->lang->menuOrder);
