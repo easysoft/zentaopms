@@ -727,12 +727,12 @@ function toggleSearch()
  */
 function ajaxGetSearchForm(querybox)
 {
-    querybox = typeof(querybox) == 'undefined' ? '#querybox' : querybox;
-    if($(querybox).html() == '')
+    var $querybox = $(querybox || '#querybox');
+    if($querybox.html() == '')
     {
         $.get(createLink('search', 'buildForm'), function(data)
         {
-            $(querybox).html(data);
+            $querybox.html(data);
         });
     }
 }
@@ -1000,6 +1000,7 @@ function setModal()
                 /* Save the href to rel attribute thus we can save it. */
                 $('#ajaxModal').attr('rel', url);
 
+                event.preventDefault();
                 return false;
             });
         });

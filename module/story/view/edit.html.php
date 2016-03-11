@@ -171,9 +171,9 @@
           </tr>
           <tr class='text-top'>
             <th><?php echo $lang->story->linkStories;?></th>
-            <td id='linkStoriesBox'>
-              <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
+            <td>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
+              <ul class='list-unstyled' id='linkStoriesBox'>
               <?php
               $linkStories = explode(',', $story->linkStories);
               foreach($linkStories as $linkStoryID)
@@ -192,9 +192,9 @@
           </tr>
           <tr class='text-top'>
             <th><?php echo $lang->story->childStories;?></th>
-            <td id='childStoriesBox'>
-              <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories&stories=$story->childStories", '', true), $lang->story->linkStory, '', "class='iframe' data-width='85%'");?>
+            <td>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories&stories=$story->childStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
+              <ul class='list-unstyled' id='childStoriesBox'>
               <?php
               $childStories = explode(',', $story->childStories);
               foreach($childStories as $childStoryID)

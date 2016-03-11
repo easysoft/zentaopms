@@ -683,8 +683,7 @@ class testcase extends control
         $cases = $this->testcase->getLinkedCases($linkedCases);
 
         /* Build linkCase list. */
-        $output  = "<ul class='list-unstyled'>";
-        $output .= html::a($this->createLink('testcase', 'linkCases', "caseID=$caseID&cases=$case->linkCase", '', true), $this->lang->testcase->linkCases, '', "class='iframe' data-width='85%'");
+        $output = '';
         foreach($cases as $caseId => $caseTitle)
         {
             $output .= '<li>';
@@ -692,7 +691,6 @@ class testcase extends control
             $output .= html::a("javascript:deleteLinkedCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
-        $output .= '</ul>';
 
         die($output);
     }
@@ -712,8 +710,7 @@ class testcase extends control
         $cases = $this->testcase->deleteLinkedCase($caseID, $deleteCase);
 
         /* Build linkCase list. */
-        $output  = "<ul class='list-unstyled'>";
-        $output .= html::a($this->createLink('testcase', 'linkCases', "caseID=$caseID&cases=$cases", '', true), $this->lang->testcase->linkCases, '', "class='iframe' data-width='85%'");
+        $output  = '';
         foreach($cases as $caseId => $caseTitle)
         {
             $output .= '<li>';
@@ -721,7 +718,6 @@ class testcase extends control
             $output .= html::a("javascript:deleteLinkedCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
-        $output .= '</ul>';
 
         die($output);
     }

@@ -232,9 +232,9 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <table class='table table-form'>
           <tr class='text-top'>
             <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
-            <td id='linkBugBox'>
-              <ul class='list-unstyled'>
-              <?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id&bugs=$bug->linkBug", '', true), $lang->bug->linkBugs, '', "class='iframe' data-width='85%'");?>
+            <td>
+              <?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id&bugs=$bug->linkBug", '', true), $lang->bug->linkBugs, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
+              <ul class='list-unstyled' id='linkBugBox'>
               <?php
               if(isset($bug->linkBugTitles))
               {

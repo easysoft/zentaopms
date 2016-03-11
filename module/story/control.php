@@ -946,6 +946,7 @@ class story extends control
         $this->view->type       = $type;
         $this->view->allStories = $allStories;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actionURL = $this->config->product->search;
 
         $this->display();
     }
@@ -964,8 +965,7 @@ class story extends control
         $stories = $this->story->getLinkedStories($linkedStories);
         $story   = $this->story->getById($storyID);
 
-        $output  = "<ul class='list-unstyled'>";
-        $output .= html::a($this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&stories={$story->$type}", '', true), $this->lang->story->linkStory, '', "class='iframe' data-width='85%'");
+        $output = '';
         foreach($stories as $storyId => $storyTitle)
         {
             $output .= '<li>';
@@ -973,7 +973,6 @@ class story extends control
             $output .= html::a("javascript:deleteLinkedStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
-        $output .= '</ul>';
 
         die($output);
     }
@@ -992,8 +991,7 @@ class story extends control
         $stories = $this->story->deleteLinkedStory($storyID, $type, $deleteStory);
         $story   = $this->story->getById($storyID);
 
-        $output  = "<ul class='list-unstyled'>";
-        $output .= html::a($this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&stories={$story->$type}", '', true), $this->lang->story->linkStory, '', "class='iframe' data-width='85%'");
+        $output  = "";
         foreach($stories as $storyId => $storyTitle)
         {
             $output .= '<li>';
@@ -1001,7 +999,6 @@ class story extends control
             $output .= html::a("javascript:deleteLinkedStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
-        $output .= '</ul>';
 
         die($output);
     }
