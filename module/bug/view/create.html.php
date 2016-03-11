@@ -102,10 +102,7 @@ js::set('refresh', $lang->refresh);
             <div class='col-table'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
-                <?php
-                $isAllNumberSeverity = true;
-                if(!is_numeric(join($lang->bug->severityList))) $isAllNumberSeverity = false;
-                ?>
+                <?php $isAllNumberSeverity = is_numeric(join($lang->bug->severityList));?>
                 <?php if(!$isAllNumberSeverity):?>
                 <?php echo html::select('pri', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
                 <?php else: ?>
@@ -118,10 +115,7 @@ js::set('refresh', $lang->refresh);
                 </div>
                 <?php endif; ?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->pri;?></span>
-                <?php
-                $isAllNumberPri = true;
-                if(!is_numeric(join($lang->bug->priList))) $isAllNumberPri = false;
-                ?>
+                <?php $isAllNumberPri = is_numeric(join($lang->bug->priList));?>
                 <?php if(!$isAllNumberPri):?>
                 <?php echo html::select('pri', (array)$lang->bug->priList, '', "class='form-control minw-80px'");?> 
                 <?php else: ?>

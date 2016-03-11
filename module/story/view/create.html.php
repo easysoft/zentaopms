@@ -90,10 +90,7 @@
             <div class='col-table w-250px'>
               <div class="input-group">
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->pri;?></span>
-                <?php
-                $isAllNumberPri = true;
-                if(!is_numeric(join('', $lang->story->priList))) $isAllNumberPri = false;
-                ?>
+                <?php $isAllNumberPri = is_numeric(join('', $lang->story->priList)); ?>
                 <?php if(!$isAllNumberPri):?>
                 <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control minw-80px'");?> 
                 <?php else: ?>

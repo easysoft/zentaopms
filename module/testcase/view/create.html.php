@@ -81,10 +81,7 @@
             <div class='col-table'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->testcase->pri;?></span>
-                <?php
-                $isAllNumberPri = true;
-                if(!is_numeric(join($lang->testcase->priList))) $isAllNumberPri = false;
-                ?>
+                <?php $isAllNumberPri = is_numeric(join($lang->testcase->priList));?>
                 <?php if(!$isAllNumberPri):?>
                 <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px'");?> 
                 <?php else: ?>

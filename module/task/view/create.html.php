@@ -61,10 +61,7 @@
             <div class='col-table w-250px'>
               <div class="input-group">
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
-                <?php
-                $isAllNumberPri = true;
-                if(!is_numeric(join($lang->task->priList))) $isAllNumberPri = false;
-                ?>
+                <?php $isAllNumberPri = is_numeric(join($lang->task->priList));?>
                 <?php if(!$isAllNumberPri):?>
                 <?php echo html::select('pri', $lang->task->priList, '', "class='form-control minw-80px'");?> 
                 <?php else: ?>
