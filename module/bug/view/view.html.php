@@ -279,10 +279,13 @@
           </div>
           <div class='tab-pane' id='legendMisc'>
             <table class='table table-data table-condensed table-borderless table-fixed'>
+              <?php if($bug->case):?>
               <tr>
                 <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
-                <td><?php if($bug->case) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
+                <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
               </tr>
+              <?php endif;?>
+              <?php if($bug->toCases):?>
               <tr>
                 <th><?php echo $lang->bug->toCase;?></th>
                 <td>
@@ -294,8 +297,9 @@
                 ?>
                 </td>
               </tr>
-              <tr>
-                <th><?php echo $lang->bug->linkBug;?></th>
+              <?php endif;?>
+              <tr class='text-top'>
+                <th class='w-60px'><?php echo $lang->bug->linkBug;?></th>
                 <td>
                   <?php
                   if(isset($bug->linkBugTitles))
@@ -308,14 +312,18 @@
                   ?>
                 </td>
               </tr>
+              <?php if($bug->toStory != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toStory;?></th>
-                <td><?php if($bug->toStory != 0) echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory"), "#$bug->toStory $bug->toStoryTitle", '_blank');?></td>
+                <td><?php echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory"), "#$bug->toStory $bug->toStoryTitle", '_blank');?></td>
               </tr>
+              <?php endif;?>
+              <?php if($bug->toTask != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toTask;?></th>
-                <td><?php if($bug->toTask != 0) echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
+                <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
               </tr>
+              <?php endif;?>
             </table>
           </div>
         </div>

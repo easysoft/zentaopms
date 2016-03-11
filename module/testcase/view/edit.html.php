@@ -140,9 +140,25 @@
             <th><?php echo $lang->testcase->keywords;?></th>
             <td><?php echo html::input('keywords', $case->keywords, 'class=form-control');?></td>
           </tr>
-          <tr>
+          <tr class='text-top'>
             <th><?php echo $lang->testcase->linkCase;?></th>
-            <td><?php echo html::input('linkCase', $case->linkCase, 'class=form-control');?></td>
+            <td id='linkCaseBox'>
+              <ul class='list-unstyled'>
+              <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id&case=$case->linkCase", '', true), $lang->testcase->linkCases, '', "class='iframe' data-width='85%'");?>
+              <?php
+              if(isset($case->linkCaseTitles))
+              {
+                  foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                  {
+                      echo '<li>';
+                      echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank');
+                      echo html::a("javascript:deleteLinkedCase($case->id, $linkCaseID)", '<i class="icon-remove"></i>', '', "style='float:right'");
+                      echo '</li>';
+                  }
+              }
+              ?>
+              </ul>
+            </td>
           </tr>
         </table>
       </fieldset>

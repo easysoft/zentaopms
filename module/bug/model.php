@@ -795,6 +795,64 @@ class bugModel extends model
     }
 
     /**
+     * Link bugs.
+     *
+     * @param  int    $bugID
+     * @param  string $bugs
+     * @access public
+     * @return string
+     */
+    public function linkBugs($bugID, $bugs = '')
+    {
+        if($this->post->bugs == false) return $bugs;
+
+        $bugs = implode(',', $this->post->bugs) . ',' . trim($bugs, ',');
+        $this->dao->update(TABLE_BUG)->set('linkBug')->eq(trim($bugs, ','))->where('id')->eq($bugID)->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
+        $this->loadModel('action')->create('bug', $bugID, 'linked2Bug', '', implode(',', $this->post->bugs));
+
+        return $bugs;
+    }
+
+    /**
+     * Delete a linked bug.
+     *
+     * @param  int    $bugID
+     * @param  int    $deleteBug
+     * @access public
+     * @return array
+     */
+    public function deleteLinkedBug($bugID, $deleteBug = 0)
+    {
+        $bug  = $this->getById($bugID);
+
+        $bugs = explode(',', trim($bug->linkBug, ','));
+        foreach($bugs as $key => $bugId)
+        {
+            if($bugId == $deleteBug) unset($bugs[$key]);
+        }
+        $bugs = implode(',', $bugs);
+
+        $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugs)->where('id')->eq($bugID)->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
+        $this->loadModel('action')->create('bug', $bugID, 'unLinkedBug', '', $deleteBug);
+
+        return $this->getLinkedBugs($bugs);
+    }
+
+    /**
+     * Get linked bugs.
+     *
+     * @param  string $bugs
+     * @access public
+     * @return array
+     */
+    public function getLinkedBugs($bugs)
+    {
+        return $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($bugs)->fetchPairs();
+    }
+
+    /**
      * Build search form.
      *
      * @param  int    $productID

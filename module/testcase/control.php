@@ -621,6 +621,112 @@ class testcase extends control
     }
 
     /**
+     * Link related cases.
+     *
+     * @param  int    $caseID
+     * @param  string $cases
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function linkCases($caseID, $cases, $browseType = '', $param = 0)
+    {
+        /* Link cases. */
+        if(!empty($_POST))
+        {
+            $cases = $this->testcase->linkCases($caseID, $cases);
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkedCases('$caseID', '$cases')}"));
+            die($this->locate(inlink('edit', "caseID=$caseID"), 'parent'));
+        }
+
+        /* Get test cases, and queryID. */
+        $case    = $this->testcase->getById($caseID);
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Set menu. */
+        $this->testcase->setMenu($this->products, $case->product, $case->branch);
+
+        /* Get cases to link. */
+        $allCases = array();
+        $allCases = $this->testcase->getBySearch($case->product, $queryID, 'id', null);
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&cases=$cases&browseType=bySearch&queryID=myQueryID"     );
+        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL);
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+
+        /* Assign. */
+        $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
+        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), $this->products[$case->product]);
+        $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
+        $this->view->position[] = $this->lang->testcase->linkCases;
+        $this->view->case       = $case;
+        $this->view->allCases   = $allCases;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    /**
+     * AJAX: Get linked cases.
+     *
+     * @param  int    $caseID
+     * @param  string $cases
+     * @access public
+     * @return string
+     */
+    public function ajaxGetLinkedCases($caseID, $linkedCases = '')
+    {
+        /* Get case and linked cases. */
+        $case  = $this->testcase->getById($caseID);
+        $cases = $this->testcase->getLinkedCases($linkedCases);
+
+        /* Build linkCase list. */
+        $output  = "<ul class='list-unstyled'>";
+        $output .= html::a($this->createLink('testcase', 'linkCases', "caseID=$caseID&cases=$case->linkCase", '', true), $this->lang->testcase->linkCases, '', "class='iframe' data-width='85%'");
+        foreach($cases as $caseId => $caseTitle)
+        {
+            $output .= '<li>';
+            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle);
+            $output .= html::a("javascript:deleteLinkedCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
+
+        die($output);
+    }
+
+    /**
+     * AJAX: Delete linked case.
+     *
+     * @param  int    $caseID
+     * @param  int    $deleteCase
+     * @access public
+     * @return string
+     */
+    public function ajaxDeleteLinkedCase($caseID, $deleteCase = 0)
+    {
+        /* Get case and linked cases. */
+        $case  = $this->testcase->getById($caseID);
+        $cases = $this->testcase->deleteLinkedCase($caseID, $deleteCase);
+
+        /* Build linkCase list. */
+        $output  = "<ul class='list-unstyled'>";
+        $output .= html::a($this->createLink('testcase', 'linkCases', "caseID=$caseID&cases=$cases", '', true), $this->lang->testcase->linkCases, '', "class='iframe' data-width='85%'");
+        foreach($cases as $caseId => $caseTitle)
+        {
+            $output .= '<li>';
+            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle);
+            $output .= html::a("javascript:deleteLinkedCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
+
+        die($output);
+    }
+
+    /**
      * Confirm testcase changed. 
      * 
      * @param  int    $caseID 

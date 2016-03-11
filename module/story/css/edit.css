@@ -1,2 +1,3 @@
 .col-side .chosen-container .chosen-drop {width: 216px!important}
 .col-side .chosen-container {width: 218px!important}
+#linkStoriesBox > .list-unstyled > li ,#childStoriesBox > .list-unstyled > li {margin-left:-56px}

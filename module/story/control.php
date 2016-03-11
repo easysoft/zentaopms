@@ -916,25 +916,20 @@ class story extends control
      */
     public function linkStory($storyID, $type = '', $stories = '', $browseType = '', $param = 0)
     {
-        /* Get story, product, and products. */
-        $story    = $this->story->getById($storyID);
-        $product  = $this->product->getById($story->product);
-        $products = $this->product->getPairs();
-
-        /* Set menu. */
-        $this->product->setMenu($products, $product->id, $story->branch);
-
-        $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
-        $browseLink = $this->createLink('story', 'edit', "storyID=$storyID");
-        $branches   = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($story->product) : array();
+        $this->commonAction($storyID);
 
         /* Link stories. */
         if(!empty($_POST))
         {
             $stories = $this->story->linkStories($storyID, $type, $stories);
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkedStories('$storyID', '$type', '$stories')}"));
-            die(js::locate($browseLink, 'parent'));
+            die(js::locate($this->createLink('story', 'edit', "storyID=$storyID"), 'parent'));
         }
+
+        /* Get story, product, products, and queryID. */
+        $story    = $this->story->getById($storyID);
+        $products = $this->product->getPairs();
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&stories=$stories&browseType=bySearch&queryID=myQueryID", '', true);
@@ -942,26 +937,16 @@ class story extends control
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         /* Get stories to link. */
-        if($browseType == 'bySearch')
-        {
-            $allStories = $this->story->getBySearch($story->product, $queryID, 'id', null);
-        }
-        else
-        {
-            $allStories = $this->story->getProductStories($story->product);
-        }
+        $allStories = array();
+        if($browseType == 'bySearch') $allStories = $this->story->getBySearch($story->product, $queryID, 'id', null);
 
         /* Assign. */
-        $this->view->title        = $this->lang->story->linkStory;
-        $this->view->position[]   = html::a($browseLink, $story->title);
-        $this->view->position[]   = $this->lang->story->linkStory;
-        $this->view->product      = $product;
-        $this->view->products     = $products;
-        $this->view->branches     = $branches;
-        $this->view->type         = $type;
-        $this->view->story        = $story;
-        $this->view->allStories   = $allStories;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title      = $this->lang->story->linkStory . "STORY" . $this->lang->colon .$this->lang->story->linkStory;
+        $this->view->position[] = $this->lang->story->linkStory;
+        $this->view->type       = $type;
+        $this->view->allStories = $allStories;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 

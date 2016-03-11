@@ -686,13 +686,20 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
   #searchbox {display: none}
 }
 
-.fixedTfootAction{position: fixed; bottom: 40px; background: #fff; border-top: 1px solid #bbb}
-.fixedTheadOfList{position: fixed; top: 0px; z-index:10;}
+
 
 .warning{color:red;}
 .nofixed td{white-space:normal;}
 
 #passwordStrength{display:none;}
 
-.datatable.head-fixed > .datatable-head .table > thead > tr > th {background-color: #fff; border-bottom-color: #bbb}
-
+.fixedTfootAction {position: fixed; bottom: 40px; box-shadow: 0 -3px 4px rgba(0,0,0,0.05)}
+.table > .fixedTfootAction > tr > td {background: #F8FAFE; border-top-color: #bbb}
+.fixedTheadOfList {position: fixed; top: 0px; z-index:10;}
+.datatable.head-fixed > .datatable-head .table > thead > tr > th, .fixedTheadOfList > thead > tr > th {background-color: #114f8e; border-bottom-color: #bbb; color: #aaa}
+.tablesorter.fixedTheadOfList thead tr .headerSortUp > a:after,
+.tablesorter.fixedTheadOfList thead tr .headerSortDown > a:after,
+.tablesorter.datatable.head-fixed thead tr .headerSortUp > a:after,
+.tablesorter.datatable.head-fixed thead tr .headerSortDown > a:after,
+.datatable.head-fixed > .datatable-head .table > thead > tr > th a, .fixedTheadOfList > thead > tr > th a {color: #fff}
+.datatable.head-fixed > .datatable-head .table > thead > tr > th .header a, .fixedTheadOfList > thead > tr > th .header a {color: #ccc}

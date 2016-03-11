@@ -17,3 +17,32 @@ $(document).ready(function()
 {
     $("#story").chosen(defaultChosenOptions);
 });
+
+
+/**
+ * Delete linked case.
+ *
+ * @param  int $caseID
+ * @param  int $deleteCase
+ * @access public
+ * @return void
+ */
+function deleteLinkedCase(caseID, deleteCase)
+{
+    deleteLink = createLink('testcase', 'ajaxDeleteLinkedCase', 'caseID=' + caseID + '&deleteCase=' + deleteCase);
+    $('#linkCaseBox').load(deleteLink);
+}
+
+/**
+ * Load linked cases.
+ *
+ * @param  int    $caseID
+ * @param  string $linkedCases
+ * @access public
+ * @return void
+ */
+function loadLinkedCases(caseID, linkedCases)
+{
+    caseLink = createLink('testcase', 'ajaxGetLinkedCases', 'caseID=' + caseID + '&linkedCases=' + linkedCases);
+    $('#linkCaseBox').load(caseLink);
+}

@@ -38,6 +38,7 @@ $lang->testcase->scriptedDate     = '编写日期';
 $lang->testcase->scriptedStatus   = '脚本状态';
 $lang->testcase->scriptedLocation = '脚本位置';
 $lang->testcase->linkCase         = '相关用例';
+$lang->testcase->linkCases        = '关联用例';
 $lang->testcase->stage            = '适用阶段';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
@@ -164,3 +165,7 @@ $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding转码方法
 $lang->testcase->noRequire   = "%s行的“%s”是必填字段，不能为空";
 
 $lang->testcase->searchStories = '键入来搜索需求';
+
+$lang->testcase->action = new stdclass();
+$lang->testcase->action->linked2case  = array('main' => '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedcase = array('main' => '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。');
