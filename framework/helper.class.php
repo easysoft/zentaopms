@@ -11,13 +11,13 @@
  *  May you share freely, never taking more than you give.
  */
 
-include dirname(__FILE__) . '/base/helper.class.php';
 /**
  * 该类实现了一些常用的方法
  * The helper class, contains the tool functions.
  *
  * @package framework
  */
+include dirname(__FILE__) . '/base/helper.class.php';
 class helper extends baseHelper
 {
 }

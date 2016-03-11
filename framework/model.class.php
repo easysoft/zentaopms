@@ -11,13 +11,13 @@
  *  May you share freely, never taking more than you give.
  */
 
-include dirname(__FILE__) . '/base/model.class.php';
 /**
  * model基类。
  * The base class of model.
  * 
  * @package framework
  */
+include dirname(__FILE__) . '/base/model.class.php';
 class model extends baseModel
 {
     /**

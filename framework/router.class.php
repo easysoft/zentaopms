@@ -11,13 +11,13 @@
  *  May you share freely, never taking more than you give.
  */
 
-include dirname(__FILE__) . '/base/router.class.php';
 /**
  * router类。
  * The router class.
  *
  * @package framework
  */
+include dirname(__FILE__) . '/base/router.class.php';
 class router extends baseRouter
 {
     /**

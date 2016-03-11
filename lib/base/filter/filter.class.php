@@ -198,7 +198,7 @@ class baseValidater
      * IP checking.
      * 
      * @param  ip $var 
-     * @param  string $range all|public|static|public
+     * @param  string $range all|public|static|private
      * @static
      * @access public
      * @return bool
@@ -207,7 +207,7 @@ class baseValidater
     {
         if($range == 'all') return filter_var($var, FILTER_VALIDATE_IP);
         if($range == 'public static') return filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE);
-        if($range == 'public')
+        if($range == 'private')
         {
             if($var == '127.0.0.1' or filter_var($var, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false) return true;
             return false;
