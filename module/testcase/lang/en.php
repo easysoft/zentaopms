@@ -165,7 +165,3 @@ $lang->testcase->noFunction  = 'Iconv and mb_convert_encoding does not exist, yo
 $lang->testcase->noRequire   = "In the row of %s, the %s is a required field";
 
 $lang->testcase->searchStories = 'Type to search stories';
-
-$lang->testcase->action = new stdclass();
-$lang->testcase->action->linked2case  = array('main' => '$date, linked related cases <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->testcase->action->unlinkedcase = array('main' => '$date, removed related cases <strong>$extra</strong> by <strong>$actor</strong>.');

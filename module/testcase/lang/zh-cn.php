@@ -165,7 +165,3 @@ $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding转码方法
 $lang->testcase->noRequire   = "%s行的“%s”是必填字段，不能为空";
 
 $lang->testcase->searchStories = '键入来搜索需求';
-
-$lang->testcase->action = new stdclass();
-$lang->testcase->action->linked2case  = array('main' => '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedcase = array('main' => '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。');
