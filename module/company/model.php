@@ -78,7 +78,7 @@ class companyModel extends model
         if($type == 'bydept')
         {
             $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
-            $users        = $this->dept->getUsers($childDeptIds, $pager, $sort);
+            return $this->dept->getUsers($childDeptIds, $pager, $sort);
         }
         else
         {
@@ -95,12 +95,8 @@ class companyModel extends model
                     $this->session->set('userQuery', ' 1 = 1');
                 }
             }
-            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $sort);
+            return $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $sort);
         }
-
-        if($users) return $users;
-
-        return array();
     }
 
     /**
