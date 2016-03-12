@@ -22,7 +22,7 @@
   </div>
   <form method='post' class='form-condensed' target='hiddenwin' id='linkBugsForm'>
     <table class='table table-condensed table-hover table-striped tablesorter' id='bugList'>
-      <?php if($allBugs):?>
+      <?php if($bugs2Link):?>
       <thead>
       <tr>
         <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -36,21 +36,19 @@
       </thead>
       <tbody>
       <?php $bugCount = 0;?>
-      <?php foreach($allBugs as $bugDetail):?>
-      <?php if(in_array($bugDetail->id, explode(',', $bug->linkBug))) continue;?>
-      <?php if($bugDetail->id == $bug->id) continue;?>
-      <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bugDetail->id");?>
+      <?php foreach($bugs2Link as $bug2Link):?>
+      <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug2Link->id");?>
       <tr class='text-center'>
         <td class='text-left'>
-          <input type='checkbox' name='bugs[]'  value='<?php echo $bugDetail->id;?>'/> 
-          <?php echo html::a($bugLink, sprintf('%03d', $bugDetail->id));?>
+          <input type='checkbox' name='bugs[]'  value='<?php echo $bug2Link->id;?>'/> 
+          <?php echo html::a($bugLink, sprintf('%03d', $bug2Link->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bugDetail->pri, $bugDetail->pri)?>'><?php echo zget($lang->bug->priList, $bugDetail->pri, $bugDetail->pri);?></span></td>
-        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bugDetail->product&branch=$bugDetail->branch"), $products[$bugDetail->product], '_blank');?></td>
-        <td class='text-left nobr' title="<?php echo $bugDetail->title?>"><?php echo html::a($bugLink, $bugDetail->title);?></td>
+        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri)?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?></span></td>
+        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
+        <td class='text-left nobr' title="<?php echo $bug2Link->title?>"><?php echo html::a($bugLink, $bug2Link->title);?></td>
         <td><?php echo $lang->bug->statusList[$bug->status];?></td>
-        <td><?php echo $users[$bugDetail->openedBy];?></td>
-        <td><?php echo $users[$bugDetail->assignedTo];?></td>
+        <td><?php echo $users[$bug2Link->openedBy];?></td>
+        <td><?php echo $users[$bug2Link->assignedTo];?></td>
       </tr>
       <?php $bugCount ++;?>
       <?php endforeach;?>
@@ -62,6 +60,9 @@
           <?php if($bugCount) echo html::selectButton() . html::submitButton();?>
           </div>
         </td>
+      </tr>
+      <tr>
+        <td class='hidden'><?php echo html::input('bug', $bug->id);?></td>
       </tr>
       </tfoot>
       <?php endif;?>
