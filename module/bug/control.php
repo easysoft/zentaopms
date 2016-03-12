@@ -105,7 +105,6 @@ class bug extends control
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Set view. */
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;

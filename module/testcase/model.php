@@ -857,5 +857,7 @@ class testcaseModel extends model
         }
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 }

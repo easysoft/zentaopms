@@ -145,7 +145,6 @@ class product extends control
         /* Build search form. */
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         /* Assign. */
         $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;

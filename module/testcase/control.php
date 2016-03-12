@@ -89,7 +89,6 @@ class testcase extends control
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Assign. */
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -649,7 +648,6 @@ class testcase extends control
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Get cases to link. */
         $cases2Link = $this->testcase->getCases2Link($caseID, $browseType, $queryID);

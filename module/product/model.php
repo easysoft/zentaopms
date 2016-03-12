@@ -427,6 +427,8 @@ class productModel extends model
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
             $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
+
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 
     /**

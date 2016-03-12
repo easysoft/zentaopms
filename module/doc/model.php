@@ -324,6 +324,8 @@ class docModel extends model
             $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
+
+        $this->search->setSearchParams($this->config->doc->search);
     }
  
     /**
