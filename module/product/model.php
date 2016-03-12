@@ -385,19 +385,19 @@ class productModel extends model
     }
 
     /**
-     * Get story stages.
+     * Batch get story stage.
      *
      * @param  array  $stories.
      * @access public
      * @return array
      */
-    public function getStoryStages($stories)
+    public function batchGetStoryStage($stories)
     {
         /* Set story id list. */
         $storyIdList = array();
         foreach($stories as $story) $storyIdList[$story->id] = $story->id;
 
-        return $this->loadModel('story')->getStoryStages($storyIdList);
+        return $this->loadModel('story')->batchGetStoryStage($storyIdList);
     }
 
     /**

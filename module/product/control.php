@@ -166,7 +166,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->storyStages   = $this->product->getStoryStages($stories);
+        $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
         $this->display();
     }
 

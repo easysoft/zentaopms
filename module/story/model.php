@@ -1598,13 +1598,13 @@ class storyModel extends model
     }
 
     /**
-     * Get story stages.
+     * Batch get story stage.
      * 
      * @param  array    $stories 
      * @access public
      * @return array
      */
-    public function getStoryStages($stories)
+    public function batchGetStoryStage($stories)
     {
         return $this->dao->select('*')->from(TABLE_STORYSTAGE)
             ->where('story')->in($stories)
