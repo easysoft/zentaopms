@@ -245,7 +245,7 @@ function saveQuery()
         saveQueryLink = createLink('search', 'saveQuery');
         $.post(saveQueryLink, {title: r, module: module}, function(data)
         {
-            if(data == 'success') $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module));
+            if(data) $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + data));
         });
     });
 }

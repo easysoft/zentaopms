@@ -249,6 +249,15 @@ class searchModel extends model
             ->skipSpecial('sql,form')
             ->get();
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
+
+        if(!dao::isError())
+        {
+            return $this->dao->lastInsertID();
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
