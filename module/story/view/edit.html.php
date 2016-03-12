@@ -156,7 +156,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->closedReason;?></th>
-            <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, 'class="form-control"');?></td>
+            <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, "class='form-control'  onchange='setStory(this.value)'");?></td>
           </tr>
           <?php endif;?>
         </table>
@@ -165,14 +165,16 @@
       <fieldset>
         <legend><?php echo $lang->story->legendMisc;?></legend>
         <table class='table table-form'>
-          <tr>
+          <?php if($story->status == 'closed'):?>
+          <tr id='duplicateStoryBox'>
             <th class='w-70px'><?php echo $lang->story->duplicateStory;?></th>
             <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
           </tr>
+          <?php endif;?>
           <tr class='text-top'>
-            <th><?php echo $lang->story->linkStories;?></th>
+            <th class='w-70px'><?php echo $lang->story->linkStories;?></th>
             <td>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&stories=$story->linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
               <ul class='list-unstyled' id='linkStoriesBox'>
               <?php
               $linkStories = explode(',', $story->linkStories);
@@ -181,8 +183,8 @@
                   if(isset($story->extraStories[$linkStoryID]))
                   {
                       echo '<li>';
-                      echo html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]);
-                      echo html::a("javascript:deleteLinkedStory($story->id, \"linkStories\", $linkStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID], '_blank');
+                      echo html::a("javascript:unlinkStory($story->id, \"linkStories\", $linkStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
                       echo '</li>';
                   }
               }
@@ -190,10 +192,11 @@
               </ul>
             </td>
           </tr>
+          <?php if($story->status == 'closed'):?>
           <tr class='text-top'>
             <th><?php echo $lang->story->childStories;?></th>
             <td>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories&stories=$story->childStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
               <ul class='list-unstyled' id='childStoriesBox'>
               <?php
               $childStories = explode(',', $story->childStories);
@@ -202,8 +205,8 @@
                   if(isset($story->extraStories[$childStoryID]))
                   {
                       echo '<li>';
-                      echo html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID" . $story->extraStories[$childStoryID]);
-                      echo html::a("javascript:deleteLinkedStory($story->id, \"childStories\", $childStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID" . $story->extraStories[$childStoryID], '_blank');
+                      echo html::a("javascript:unlinkStory($story->id, \"childStories\", $childStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
                       echo '</li>';
                   }
               }
@@ -211,6 +214,7 @@
               </ul>
             </td>
           </tr>
+          <?php endif;?>
        </table>
       </fieldset>
     </div>

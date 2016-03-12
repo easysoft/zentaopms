@@ -177,6 +177,7 @@ $lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->confirmBatchClose     = "您确认关闭这些需求吗?";
 $lang->story->errorFormat           = '需求数据有误';
 $lang->story->errorEmptyTitle       = '标题不能为空';
+$lang->story->errorEmptyChildStory  = '『细分需求』不能为空。';
 $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->ajaxGetProjectStories = "接口:获取{$lang->projectCommon}需求列表";
@@ -196,10 +197,10 @@ $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
 $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectCommon . ' <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . ' <strong>$extra</strong> 移除。'); 
-$lang->story->action->linkstories         = array('main' => '$date, 由 <strong>$actor</strong> 关联相关需求 <strong>$extra</strong>。');
-$lang->story->action->childstories        = array('main' => '$date, 由 <strong>$actor</strong> 细分为需求 <strong>$extra</strong>。');
-$lang->story->action->mvchildstories      = array('main' => '$date, 由 <strong>$actor</strong> 移除细分需求 <strong>$extra</strong>。');
-$lang->story->action->mvlinkstories       = array('main' => '$date, 由 <strong>$actor</strong> 移除相关需求 <strong>$extra</strong>。');
+$lang->story->action->linkrelatedstory    = array('main' => '$date, 由 <strong>$actor</strong> 关联相关需求 <strong>$extra</strong>。');
+$lang->story->action->subdividestory      = array('main' => '$date, 由 <strong>$actor</strong> 细分为需求 <strong>$extra</strong>。');
+$lang->story->action->unlinkrelatedstory  = array('main' => '$date, 由 <strong>$actor</strong> 移除相关需求 <strong>$extra</strong>。');
+$lang->story->action->unlinkchildstory    = array('main' => '$date, 由 <strong>$actor</strong> 移除细分需求 <strong>$extra</strong>。');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

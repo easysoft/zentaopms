@@ -177,6 +177,7 @@ $lang->story->confirmDelete         = "Are you sure to delete this story?";
 $lang->story->confirmBatchClose     = "Are you sure to close those stories?";
 $lang->story->errorFormat           = 'Error format';
 $lang->story->errorEmptyTitle       = "Title can't be empty";
+$lang->story->errorEmptyChildStory  = '『Child story』can not be empty.';
 $lang->story->mustChooseResult      = 'Must choose s result';
 $lang->story->mustChoosePreVersion  = 'Must select an version to revert';
 $lang->story->ajaxGetProjectStories = "API:{$lang->projectCommon} stories";
@@ -196,10 +197,10 @@ $lang->story->action->linked2plan         = array('main' => '$date, linked to pl
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
 $lang->story->action->linked2project      = array('main' => '$date, linked to ' . $lang->projectCommon . ' <strong>$extra</strong> by <strong>$actor</strong>.'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, removed from ' . $lang->projectCommon . ' <strontg>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->linkstories         = array('main' => '$date, linked stories <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->childstories        = array('main' => '$date, subdivied to <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->mvchildstories      = array('main' => '$date, removed child stories <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->mvlinkstories       = array('main' => '$date, removed link stories <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->linkrelatedstory    = array('main' => '$date, link related story <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->subdividestory      = array('main' => '$date, subdivide to <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->unlinkrelatedstory  = array('main' => '$date, unlink related story <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->unlinkchildstory    = array('main' => '$date, unlink child story <strong>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
 $lang->story->report = new stdclass();
