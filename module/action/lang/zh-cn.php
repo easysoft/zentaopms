@@ -99,6 +99,10 @@ $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 
+/* 关联用例和移除用例时的历史操作记录。*/
+$lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->created             = '创建';
@@ -131,6 +135,14 @@ $lang->action->label->changestatus        = '修改状态';
 $lang->action->label->marked              = '编辑了';
 $lang->action->label->linked2project      = "关联{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->projectCommon}";
+$lang->action->label->linkrelatedbug      = "关联了相关Bug";
+$lang->action->label->unlinkrelatedbug    = "移除了相关Bug";
+$lang->action->label->linkrelatedcase     = "关联了相关用例";
+$lang->action->label->unlinkrelatedcase   = "移除了相关用例";
+$lang->action->label->linkrelatedstory    = "关联了相关需求";
+$lang->action->label->unlinkrelatedstory  = "移除了相关需求";
+$lang->action->label->subdividestory      = "细分了需求";
+$lang->action->label->unlinkchildstory    = "移除了细分需求";
 $lang->action->label->started             = '开始了';
 $lang->action->label->restarted           = '继续了';
 $lang->action->label->recordestimate      = '记录了工时';
