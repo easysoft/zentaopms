@@ -11,13 +11,8 @@
  */
 /* Fields. */
 $lang->project->common        = $lang->projectCommon;
-$lang->project->id            = 'ID';
-$lang->project->company       = 'Company';
-$lang->project->fromproject   = 'From' . $lang->projectCommon;
 $lang->project->allProjects   = 'All';
-$lang->project->iscat         = 'Is category';
 $lang->project->type          = 'Type';
-$lang->project->parent        = 'Parent';
 $lang->project->name          = 'Name';
 $lang->project->code          = 'Code';
 $lang->project->begin         = 'Begin';
@@ -27,15 +22,7 @@ $lang->project->to            = 'To';
 $lang->project->days          = 'Workdays';
 $lang->project->day           = 'day';
 $lang->project->status        = 'Status';
-$lang->project->statge        = 'Stage';
-$lang->project->pri           = 'Priority';
 $lang->project->desc          = 'Desc';
-$lang->project->openedBy      = 'Opened by';
-$lang->project->openedDate    = 'Opened date';
-$lang->project->closedBy      = 'Closed by';
-$lang->project->closedDate    = 'Closed date';
-$lang->project->canceledBy    = 'Canceled by';
-$lang->project->canceledDate  = 'Canceled date';
 $lang->project->owner         = 'Owner';
 $lang->project->PO            = $lang->productCommon . ' owner';
 $lang->project->PM            = $lang->projectCommon . ' manager';
@@ -45,7 +32,6 @@ $lang->project->acl           = 'Access limitation';
 $lang->project->teamname      = 'Team name';
 $lang->project->order         = "{$lang->projectCommon} order";
 $lang->project->products      = "{$lang->productCommon}s";
-$lang->project->childProjects = "Child {$lang->projectCommon}s";
 $lang->project->whitelist     = 'Whitelist';
 $lang->project->totalEstimate = 'Est';
 $lang->project->totalConsumed = 'Done';
@@ -54,7 +40,6 @@ $lang->project->Left          = 'Left';
 $lang->project->progess       = 'Progess';
 $lang->project->viewBug       = 'View bug';
 $lang->project->noProduct     = "No {$lang->productCommon}";
-$lang->project->select        = "Select {$lang->projectCommon}";
 $lang->project->createStory   = "Create story";
 $lang->project->all           = 'All';
 $lang->project->undone        = 'Undone';
@@ -134,7 +119,6 @@ $lang->project->unlinkStory      = 'Remove story';
 $lang->project->batchUnlinkStory = 'Batch remove story';
 $lang->project->importTask       = 'Transfer task';
 $lang->project->importBug        = 'Import bug';
-$lang->project->ajaxGetProducts  = "API: get {$lang->projectCommon}'s {$lang->productCommon}s";
 $lang->project->updateOrder      = 'Order';
 
 /* Browse. */
@@ -165,7 +149,6 @@ $lang->project->groups['left']       = 'Group by left';
 $lang->project->groups['type']       = 'Group by type';
 $lang->project->groups['deadline']   = 'Group by deadline';
 
-$lang->project->moduleTask           = 'Module';
 $lang->project->byQuery              = 'Search';
 
 /* Browse tabs. */
@@ -178,17 +161,14 @@ $lang->project->selectProject   = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd     = 'Begin and end';
 $lang->project->lblStats        = 'Stats';
 $lang->project->stats           = 'Total work hours is 『%s』hours, <br />Total estimate is『%s』hours,<br />Total confused is『%s』hours<br />Total left is『%s』hours';
-$lang->project->oneLineStats    = "{$lang->projectCommon}『%s』, code is『%s』, {$lang->productCommon}s is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
 $lang->project->taskSummary     = "<strong>%s</strong> tasks in this page. Pending: <strong>%s</strong>. doing: <strong>%s</strong>. Est: <strong>%s</strong> h. Consumed: <strong>%s</strong> h. Left: <strong>%s</strong>.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";
 $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
 $lang->project->wbs             = "WBS";
 $lang->project->batchWBS        = "Batch WBS";
-$lang->project->largeBurnChart  = 'View large';
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' title='How to update burndown?' target='_blank' class='btn btn-sm'>Help</a>";
 $lang->project->whyNoStories    = "There no active stories to added to this {$lang->projectCommon}. Please check the linked {$lang->productCommon}.";
 $lang->project->doneProjects    = 'Done';
-$lang->project->unDoneProjects  = 'Undone';
 $lang->project->copyTeam        = 'Copy a team';
 $lang->project->copyFromTeam    = 'Copy form team: <strong>%s</strong>';
 $lang->project->noMatched       = "No matched {$lang->projectCommon} including '%s'";
@@ -196,7 +176,6 @@ $lang->project->copyTitle       = "Choose A {$lang->projectCommon} To Copy";
 $lang->project->copyTeamTitle   = 'Choose A Team To Copy';
 $lang->project->copyNoProject   = "No {$lang->projectCommon} To Copy";
 $lang->project->copyFromProject = 'Copy from: <strong>%s</strong>';
-$lang->project->reCopy          = 'recopy';
 $lang->project->cancelCopy      = 'cancel copy';
 $lang->project->byPeriod        = 'By period';
 $lang->project->byUser          = 'By user';
@@ -213,7 +192,6 @@ $lang->project->setTeam               = 'Set team';
 $lang->project->linkStory             = 'Link story';
 $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back';
-$lang->project->linkProduct           = "Select {$lang->productCommon} to link...";
 $lang->project->noweekend             = 'No weekend';
 $lang->project->withweekend           = 'With weekend';
 $lang->project->interval              = 'Interval';
@@ -236,8 +214,4 @@ $lang->project->placeholder->code      = "{$lang->projectCommon} code";
 $lang->project->placeholder->totalLeft = 'Total left when start project';
 
 $lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->doing     = '(doing)';
-$lang->project->selectGroup->suspended = '(suspended)';
-$lang->project->selectGroup->done      = '(done)';
-
-$lang->project->projectTasks = "{$lang->projectCommon}s";
+$lang->project->selectGroup->done = '(done)';

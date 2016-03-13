@@ -17,7 +17,6 @@ $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Name';
 $lang->action->actor      = 'Actor';
 $lang->action->action     = 'Action';
-$lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 
 $lang->action->trash       = 'Trash';

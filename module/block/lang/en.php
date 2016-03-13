@@ -13,8 +13,6 @@ $lang->block = new stdclass();
 $lang->block->num      = 'Number';
 $lang->block->type     = 'Type';
 $lang->block->orderBy  = 'Order';
-$lang->block->status   = 'Status';
-$lang->block->actions  = 'Action';
 
 $lang->block->availableBlocks = new stdclass();
 

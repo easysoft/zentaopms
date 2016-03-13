@@ -12,18 +12,11 @@
 $lang->admin->common  = 'Admin';
 $lang->admin->index   = 'Index';
 $lang->admin->checkDB = 'Repair data';
-$lang->admin->company = 'Company';
-$lang->admin->user    = 'User';
-$lang->admin->group   = 'Group';
 $lang->admin->sso     = 'Integrate RanZhi';
 $lang->admin->safeIndex = 'Safe';
 $lang->admin->checkWeak = 'Check weak';
-$lang->admin->welcome   = 'Welcome to ZenTaoPMS.';
-
-$lang->admin->browseCompany = 'Browse Company';
 
 $lang->admin->info = new stdclass();
-$lang->admin->info->caption = 'zentao information';
 $lang->admin->info->version = 'The current version of the system is %s,';
 $lang->admin->info->links   = 'You can visit the following link:';
 $lang->admin->info->account = 'Your account in zentao community is %s. ';
@@ -43,7 +36,6 @@ $lang->admin->register->success    = "Register success";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Bind with community account';
-$lang->admin->bind->action  = 'bind';
 $lang->admin->bind->success = "Bind success";
 
 $lang->admin->safe = new stdclass();

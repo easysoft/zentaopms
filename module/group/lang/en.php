@@ -21,8 +21,6 @@ $lang->group->managePrivByGroup  = 'Privilege';
 $lang->group->managePrivByModule = 'Manage privilege by module';
 $lang->group->byModuleTips       = '<span class="tips"> (Press shift or control to multiple select)</span>';
 $lang->group->manageMember       = 'Members';
-$lang->group->linkMember         = 'Add members';
-$lang->group->unlinkMember       = 'Remove member';
 $lang->group->confirmDelete      = 'Are you sure to delete this group?';
 $lang->group->successSaved       = 'Success saved.';
 $lang->group->errorNotSaved      = 'Not saved, please make sure you have selected some actions and groups.';

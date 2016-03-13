@@ -37,7 +37,6 @@ $lang->install->links = <<<EOT
 EOT;
 
 $lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官网网站已有最新版本<strong class='text-danger'>%s</strong>, 发布日期于 %s。";
-$lang->install->choice     = '您可以选择：';
 $lang->install->or         = '或者';
 $lang->install->checking   = '系统检查';
 $lang->install->ok         = '检查通过(√)';
@@ -70,9 +69,6 @@ $lang->install->sessionFail  = '修改PHP配置文件，设置session.save_path'
 $lang->install->mkdir        = '<p>需要创建目录%s。<br /> linux下面命令为：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目录 "%s" 的权限。<br />linux下面命令为：<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB      = '设置数据库';
-$lang->install->webRoot        = 'PMS所在网站目录';
-$lang->install->requestType    = 'URL方式';
 $lang->install->defaultLang    = '默认语言';
 $lang->install->dbHost         = '数据库服务器';
 $lang->install->dbHostNote     = '如果127.0.0.1无法访问，尝试使用localhost';
@@ -81,7 +77,6 @@ $lang->install->dbUser         = '数据库用户名';
 $lang->install->dbPassword     = '数据库密码';
 $lang->install->dbName         = 'PMS使用的库';
 $lang->install->dbPrefix       = '建表使用的前缀';
-$lang->install->createDB       = '自动创建数据库';
 $lang->install->clearDB        = '清空现有数据';
 $lang->install->importDemoData = '导入demo数据';
 

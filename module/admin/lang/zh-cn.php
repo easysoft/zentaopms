@@ -12,18 +12,11 @@
 $lang->admin->common  = '后台管理';
 $lang->admin->index   = '后台管理首页';
 $lang->admin->checkDB = '检查数据库';
-$lang->admin->company = '公司管理';
-$lang->admin->user    = '用户管理';
-$lang->admin->group   = '分组管理';
 $lang->admin->sso     = '然之集成';
 $lang->admin->safeIndex = '安全';
 $lang->admin->checkWeak = '弱口令检查';
-$lang->admin->welcome   = '欢迎使用禅道管理软件后台管理系统';
-
-$lang->admin->browseCompany = '浏览公司';
 
 $lang->admin->info = new stdclass();
-$lang->admin->info->caption = '禅道系统信息';
 $lang->admin->info->version = '当前系统的版本是%s，';
 $lang->admin->info->links   = '您可以访问以下链接：';
 $lang->admin->info->account = "您的禅道社区账户为%s。";
@@ -42,7 +35,6 @@ $lang->admin->register->bind       = "如果您已经拥有社区账号，%s关�
 $lang->admin->register->success    = "登记账户成功";
 
 $lang->admin->bind = new stdclass();
-$lang->admin->bind->caption  = '关联社区账号';
 $lang->admin->bind->action   = '关联';
 $lang->admin->bind->success  = "关联账户成功";
 
