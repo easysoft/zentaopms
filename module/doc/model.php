@@ -325,7 +325,7 @@ class docModel extends model
         }
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
-        $this->search->setSearchParams($this->config->doc->search);
+        $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
  
     /**
