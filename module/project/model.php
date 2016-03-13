@@ -522,6 +522,7 @@ class projectModel extends model
             if(strpos($mode, 'noclosed') !== false and $project->status == 'done') continue;
             if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
         }
+        if(strpos($mode, 'empty') !== false) $pairs[0] = '';
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */
         if(empty($pairs) and isset($projects[0]) and $this->checkPriv($projects[0]))
