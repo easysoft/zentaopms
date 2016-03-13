@@ -179,22 +179,6 @@ class groupModel extends model
     }
 
     /**
-     * Get user pairs of a dept.
-     * 
-     * @param  int    $deptID 
-     * @access public
-     * @return array
-     */
-    public function getDeptUserPairs($deptID = 0)
-    {
-        return $this->dao->select('account, realname')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
-            ->beginIF($deptID)->andWhere('dept')->eq((int)$deptID)
-            ->orderBy('account')
-            ->fetchPairs();
-    }
-
-    /**
      * Delete a group.
      * 
      * @param  int    $groupID 
