@@ -13,7 +13,6 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';
-include '../../common/view/treeview.html.php';
 include './caseheader.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID'  , $moduleID);

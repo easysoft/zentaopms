@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
 <div id='featurebar'>
   <div class='heading'><i class='icon-cogs'></i> <?php echo $lang->tree->common;?>  </div>
 </div>

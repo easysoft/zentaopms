@@ -12,7 +12,6 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
-include '../../common/view/treeview.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
 ?>

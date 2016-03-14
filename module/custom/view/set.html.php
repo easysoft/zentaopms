@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
 <?php 
 $itemRow = <<<EOT
   <tr class='text-center'>

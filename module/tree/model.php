@@ -604,9 +604,11 @@ class treeModel extends model
         $products = $this->loadModel('product')->getPairs('nocode');
 
         $productModules = $this->getTreeMenu(0, 'productdoc', 0, array('treeModel', 'createDocLink'), 'product');
-        $productModules = substr($productModules, 17, strlen($productModules) - 23);
+        $startPos       = strpos($productModules, '<li');
+        $productModules = substr($productModules, $startPos, strrpos($productModules, '</ul') - $startPos);
         $projectModules = $this->getTreeMenu(0, 'projectdoc', 0, array('treeModel', 'createDocLink'), 'product');
-        $projectModules = substr($projectModules, 17, strlen($projectModules) - 23);
+        $startPos       = strpos($projectModules, '<li');
+        $projectModules = substr($projectModules, $startPos, strrpos($projectModules, '</ul>') - $startPos);
 
         foreach($products as $productID =>$productName)
         {
@@ -646,7 +648,8 @@ class treeModel extends model
         $projects = $this->loadModel('project')->getProductGroupList();
 
         $projectModules = $this->getTreeMenu(0, 'projectdoc', 0, array('treeModel', 'createDocLink'), 'project');
-        $projectModules = substr($projectModules, 17, strlen($projectModules) - 23);
+        $startPos       = strpos($projectModules, '<li');
+        $projectModules = substr($projectModules, $startPos, strrpos($projectModules, '</ul') - $startPos);
 
         foreach($projects as $id => $project)
         {

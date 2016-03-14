@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';

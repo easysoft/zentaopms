@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id='titlebar'>
   <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
