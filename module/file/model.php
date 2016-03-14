@@ -78,13 +78,7 @@ class fileModel extends model
         {
             if($file['size'] == 0) continue;
             move_uploaded_file($file['tmpname'], $this->savePath . $file['pathname']);
-            $compressedImage = $this->compressImage($file['pathname']);
-            if($compressedImage)
-            {
-                $file['pathname']  = $compressedImage['pathname'];
-                $file['extension'] = $compressedImage['extension'];
-                $file['size']      = $compressedImage['size'];
-            }
+            $file = $this->compressImage($file);
 
             $file['objectType'] = $objectType;
             $file['objectID']   = $objectID;
@@ -246,9 +240,11 @@ class fileModel extends model
             $realPathName= $this->savePath . $pathName;
             if(!is_dir(dirname($realPathName)))mkdir(dirname($realPathName));
             move_uploaded_file($file['tmpname'], $realPathName);
-            $compressImage = $this->compressImage($pathName);
-            if($compressImage) $file['size'] = $compressedImage['size'];
 
+            $file['pathname'] = $pathName;
+            $file = $this->compressImage($file);
+
+            $fileInfo = new stdclass();
             $fileInfo->addedBy   = $this->app->user->account;
             $fileInfo->addedDate = helper::now();
             $fileInfo->size      = $file['size'];
@@ -483,39 +479,33 @@ class fileModel extends model
     /**
      * Compress image 
      * 
-     * @param  string    $pathName 
+     * @param  array    $file 
      * @access public
      * @return array
      */
-    public function compressImage($pathName)
+    public function compressImage($file)
     {
-        if(!extension_loaded('gd')) return false;
+        if(!extension_loaded('gd')) return $file;
 
+        $pathName    = $file['pathname'];
         $fileName    = $this->savePath . $pathName;
         $suffix      = strrchr($fileName, '.');
         $lowerSuffix = strtolower($suffix);
 
-        if(!in_array($lowerSuffix, $this->config->file->imageFmt)) return false;
+        if(!in_array($lowerSuffix, $this->config->file->image2Compress)) return $file;
 
         $quality        = 85;
         $newSuffix      = '.jpg';
         $compressedName = str_replace($suffix, $newSuffix, $pathName);
 
-        $res  = '';
-        if($lowerSuffix == '.bmp')
-        {
-            $res = $this->imagecreatefrombmp($fileName);
-        }
-        else
-        {
-            $res = imagecreatefromjpeg($fileName);
-        }
-
+        $res  = $lowerSuffix == '.bmp' ? $this->imagecreatefrombmp($fileName) : imagecreatefromjpeg($fileName);
         imagejpeg($res, $this->savePath . $compressedName, $quality);
         if($fileName != $this->savePath . $compressedName) unlink($fileName);
 
-
-        return array('pathname' => $compressedName, 'extension' => ltrim($newSuffix, '.'), 'size' => filesize($this->savePath . $compressedName));
+        $file['pathname']   = $compressedName;
+        $file['extension']  = ltrim($newSuffix, '.');
+        $file['size']       = filesize($this->savePath . $compressedName);
+        return $file;
     }
 
     /**

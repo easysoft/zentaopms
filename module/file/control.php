@@ -52,13 +52,7 @@ class file extends control
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
             {
                 /* Compress image for jpg and bmp. */
-                $compressedImage = $this->file->compressImage($file['pathname']);
-                if($compressedImage)
-                {
-                    $file['pathname']   = $compressedImage['pathname'];
-                    $file['extension']  = $compressedImage['extension'];
-                    $file['size']       = $compressedImage['size'];
-                }
+                $file = $this->file->compressImage($file);
 
                 $file['addedBy']    = $this->app->user->account;
                 $file['addedDate']  = helper::today();
