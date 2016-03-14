@@ -447,7 +447,7 @@ class task extends control
             $task->bugSteps = '';
             if($bug)
             {
-                $task->bugSteps = $bug->steps;
+                $task->bugSteps = $this->loadModel('file')->setImgSize($bug->steps);
                 foreach($bug->files as $file) $task->files[] = $file;
             }
             $this->view->fromBug = $bug;
