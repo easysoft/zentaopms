@@ -80,11 +80,11 @@ $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'Todo Name';
 $lang->report->testTaskName = 'Testtask Name';
 
-$lang->report->mailtitle           = new stdclass();
-$lang->report->mailtitle->begin    = 'Notice : Your';
-$lang->report->mailtitle->bug      = " Bugs(%s),";
-$lang->report->mailtitle->task     = " Tasks(%s),";
-$lang->report->mailtitle->todo     = " Todos(%s),";
-$lang->report->mailtitle->testTask = " Testtask(%s),";
+$lang->report->mailTitle           = new stdclass();
+$lang->report->mailTitle->begin    = 'Notice : Your';
+$lang->report->mailTitle->bug      = " Bug(%s),";
+$lang->report->mailTitle->task     = " Tasks(%s),";
+$lang->report->mailTitle->todo     = " Todos(%s),";
+$lang->report->mailTitle->testTask = " Testtask(%s),";
 
 $lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';
