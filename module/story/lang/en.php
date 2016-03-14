@@ -25,6 +25,7 @@ $lang->story->view        = "Info";
 $lang->story->tasks       = "Tasks";
 $lang->story->taskCount   = 'Tasks count';
 $lang->story->linkStory   = 'Related story';
+$lang->story->unlinkStory = 'Unlink related story';
 $lang->story->export      = "Export data";
 $lang->story->zeroCase    = "Story of zero case";
 $lang->story->reportChart = "Report";

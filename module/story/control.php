@@ -974,7 +974,7 @@ class story extends control
     }
 
     /**
-     * AJAX: unlink story.
+     * Unlink story.
      *
      * @param  int    $storyID
      * @param  string $type
@@ -982,25 +982,12 @@ class story extends control
      * @access public
      * @return string
      */
-    public function ajaxUnlinkStory($storyID, $type = '', $story2Unlink = 0)
+    public function unlinkStory($storyID, $type = '', $story2Unlink = 0)
     {
         /* Unlink related story if type is linkStories else unlink child story. */
         $this->story->unlinkStory($storyID, $type, $story2Unlink);
 
-        /* Get linkStories if type is linkStories else get childStories. */
-        $stories = $this->story->getLinkedStories($storyID, $type);
-
-        /* Build linked stories list from. */
-        $output  = '';
-        foreach($stories as $storyId => $storyTitle)
-        {
-            $output .= '<li>';
-            $output .= html::a(inlink('view', "storyID=$storyId"), "#$storyId " . $storyTitle, '_blank');
-            $output .= html::a("javascript:unlinkStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
-            $output .= '</li>';
-        }
-
-        die($output);
+        die('success');
     }
 
     /**

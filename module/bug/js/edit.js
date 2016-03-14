@@ -65,8 +65,11 @@ function loadModuleRelated()
  */
 function unlinkBug(bugID, bug2Unlink)
 {
-    link = createLink('bug', 'ajaxUnlinkBug', 'bugID=' + bugID + '&bug2Unlink=' + bug2Unlink);
-    $('#linkBugBox').load(link);
+    link = createLink('bug', 'unlinkBug', 'bugID=' + bugID + '&bug2Unlink=' + bug2Unlink);
+    $.get(link, function(data)
+    {
+        if(data == 'success') $('#linkBugBox').load(createLink('bug', 'ajaxGetLinkBugs', 'bugID=' + bugID));
+    });
 }
 
 /**

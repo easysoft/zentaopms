@@ -690,32 +690,19 @@ class testcase extends control
     }
 
     /**
-     * AJAX: unlink related case.
+     * Unlink related case.
      *
      * @param  int    $caseID
      * @param  int    $case2Unlink
      * @access public
      * @return string
      */
-    public function ajaxUnlinkCase($caseID, $case2Unlink = 0)
+    public function unlinkCase($caseID, $case2Unlink = 0)
     {
         /* Unlink related case. */
         $this->testcase->unlinkCase($caseID, $case2Unlink);
 
-        /* Get current linkCases. */
-        $cases = $this->testcase->getLinkCases($caseID);
-
-        /* Build linkCase list. */
-        $output  = '';
-        foreach($cases as $caseId => $caseTitle)
-        {
-            $output .= '<li>';
-            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle, '_blank');
-            $output .= html::a("javascript:unlinkCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
-            $output .= '</li>';
-        }
-
-        die($output);
+        die('success');
     }
 
     /**

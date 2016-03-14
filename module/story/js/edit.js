@@ -9,9 +9,16 @@
  */
 function unlinkStory(storyID, linkType, story2Unlink)
 {
-    link = createLink('story', 'ajaxUnlinkStory', 'storyID=' + storyID + '&type=' + linkType + '&story2Unlink=' + story2Unlink);
-    if(linkType == 'linkStories')  $('#linkStoriesBox').load(link);
-    if(linkType == 'childStories') $('#childStoriesBox').load(link);
+    link = createLink('story', 'unlinkStory', 'storyID=' + storyID + '&type=' + linkType + '&story2Unlink=' + story2Unlink);
+
+    $.get(link, function(data)
+    {
+        if(data == 'success')
+        {
+            if(linkType == 'linkStories')  $('#linkStoriesBox').load(createLink('story', 'ajaxGetLinkedStories', 'storyID=' + storyID + '&type=' + linkType));
+            if(linkType == 'childStories') $('#childStoriesBox').load(createLink('story', 'ajaxGetLinkedStories', 'storyID=' + storyID + '&type=' + linkType));
+        }
+    });
 }
 
 /**
