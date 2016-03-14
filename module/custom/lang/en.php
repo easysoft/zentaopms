@@ -6,7 +6,7 @@ $lang->custom->restore   = 'restore';
 $lang->custom->key       = 'Key';
 $lang->custom->value     = 'Value';
 $lang->custom->flow      = 'Flow';
-$lang->custom->select    = 'Select:';
+$lang->custom->select    = 'Select flow:';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';

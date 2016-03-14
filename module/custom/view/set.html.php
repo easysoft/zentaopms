@@ -96,7 +96,7 @@ EOT;
           <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
           <?php 
           $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
-          echo html::radio('lang', $appliedTo, $setLang);
+          echo html::radio('lang', $appliedTo, $lang2Set);
           echo html::submitButton();
           if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin');
           ?>

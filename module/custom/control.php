@@ -73,6 +73,7 @@ class custom extends control
             die(js::locate($this->createLink('custom', 'set', "module=$module&field=$field&lang=" . str_replace('-', '_', $lang)), 'parent'));
         }
 
+        /* Check whether the current language has been customized. */
         $lang = str_replace('_', '-', $lang);
         $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field");
         if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=" . ($lang == $currentLang ? 'all' : $currentLang) . "&module=$module&section=$field");
@@ -96,7 +97,7 @@ class custom extends control
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
-        $this->view->setLang     = str_replace('_', '-', $lang);
+        $this->view->lang2Set     = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
