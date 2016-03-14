@@ -436,8 +436,16 @@ class fileModel extends model
         foreach($files as $i => $uploadFile)
         {
             if($uploadFile['folder']) continue;
-            $fileName = mb_convert_encoding($uploadFile['filename'], 'UTF-8', 'gbk');
-            $fileName = substr($fileName, strrpos($fileName, '/') + 1);
+            $fileName = $uploadFile['filename'];
+            if(function_exists('iconv'))
+            {
+                $fileName = iconv('gbk', 'utf-8//TRANSLIT', $fileName);
+            }
+            elseif(function_exists('mb_convert_encoding'))
+            {
+                $fileName = mb_convert_encoding($fileName, 'utf-8', 'gbk');
+            }
+            if(($pos = strrpos($fileName, '/')) !== false) $fileName = substr($fileName, $pos + 1);
 
             $file = array();
             $file['extension'] = $this->getExtension($fileName);
