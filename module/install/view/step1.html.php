@@ -79,6 +79,7 @@
             ?>
           </td>
         </tr>
+        <?php if($checkSession):?>
         <tr>
           <th><?php echo $lang->install->session;?></th>
           <td>
@@ -102,6 +103,7 @@
             ?>
           </td>
         </tr>
+        <?php endif;?>
       </table>
     </div>
     <div class='modal-footer'>
