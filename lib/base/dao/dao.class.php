@@ -1897,6 +1897,8 @@ class baseSQL
      */
     public function orderBy($order)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+
         $order = str_replace(array('|', '', '_'), ' ', $order);
 
         /* Add "`" in order string. */
@@ -1941,6 +1943,7 @@ class baseSQL
      */
     public function limit($limit)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
         if(empty($limit)) return $this;
         stripos($limit, 'limit') !== false ? $this->sql .= " $limit " : $this->sql .= ' ' . DAO::LIMIT . " $limit ";
         return $this;
@@ -1956,6 +1959,7 @@ class baseSQL
      */
     public function groupBy($groupBy)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= ' ' . DAO::GROUPBY . " $groupBy";
         return $this;
     }
@@ -1970,6 +1974,7 @@ class baseSQL
      */
     public function having($having)
     {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= ' ' . DAO::HAVING . " $having";
         return $this;
     }

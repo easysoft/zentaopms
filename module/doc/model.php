@@ -152,6 +152,7 @@ class docModel extends model
             $docs     = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)->andWhere('deleted')->eq(0)->orderBy($sort)->page($pager)->fetchAll();
         }
 
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
         if($docs) return $docs;
 
         return array();
