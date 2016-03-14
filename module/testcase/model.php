@@ -363,7 +363,6 @@ class testcaseModel extends model
             dao::$errors[] = $this->lang->error->hasEdited;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $now         = helper::now();
         $stepChanged = false;

@@ -435,7 +435,6 @@ class bugModel extends model
             dao::$errors[] = $this->lang->error->hasEdited;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $now = helper::now();
         $bug = fixer::input('post')

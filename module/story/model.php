@@ -347,7 +347,6 @@ class storyModel extends model
             dao::$errors[] = $this->lang->error->hasEdited;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
         if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
@@ -411,7 +410,6 @@ class storyModel extends model
             dao::$errors[] = $this->lang->error->hasEdited;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $story = fixer::input('post')
             ->cleanInt('product,module,pri')

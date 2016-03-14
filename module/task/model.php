@@ -192,7 +192,6 @@ class taskModel extends model
             dao::$errors[] = $this->lang->error->hasEdited;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $now     = helper::now();
         $task    = fixer::input('post')
