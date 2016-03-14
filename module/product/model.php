@@ -376,7 +376,7 @@ class productModel extends model
         if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, 'draft', $sort, $pager);
         if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, 'active', $sort, $pager);
         if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, 'changed', $sort, $pager);
-        if($browseType == 'willclose')    $stories = $this->story->getWillClose($productID, $branch, $sort, $pager);
+        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $sort, $pager);
         if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, 'closed', $sort, $pager);
 
         if($stories) return $stories;

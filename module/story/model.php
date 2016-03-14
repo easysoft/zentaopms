@@ -1287,7 +1287,7 @@ class storyModel extends model
     }
 
     /**
-     * Get will close stories.
+     * Get to be closed stories.
      * 
      * @param  int    $productID 
      * @param  string $orderBy 
@@ -1295,7 +1295,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getWillClose($productID, $branch, $orderBy, $pager)
+    public function get2BeClosed($productID, $branch, $orderBy, $pager)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
