@@ -25,6 +25,7 @@ $lang->story->view        = "需求详情";
 $lang->story->tasks       = "相关任务";
 $lang->story->taskCount   = '任务数';
 $lang->story->linkStory   = '关联需求';
+$lang->story->unlinkStory = '移除相关需求';
 $lang->story->export      = "导出数据";
 $lang->story->zeroCase    = "零用例需求";
 $lang->story->reportChart = "统计报表";

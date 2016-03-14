@@ -29,8 +29,11 @@ $(document).ready(function()
  */
 function unlinkCase(caseID, case2Unlink)
 {
-    link = createLink('testcase', 'ajaxUnlinkCase', 'caseID=' + caseID + '&case2Unlink=' + case2Unlink);
-    $('#linkCaseBox').load(link);
+    link = createLink('testcase', 'unlinkCase', 'caseID=' + caseID + '&case2Unlink=' + case2Unlink);
+    $.get(link, function(data)
+    {
+        if(data == 'success') $('#linkCaseBox').load(createLink('testcase', 'ajaxGetLinkCases', 'caseID=' + caseID));
+    });
 }
 
 /**
