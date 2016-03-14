@@ -13,7 +13,6 @@ $lang->task->index              = "任务一览";
 $lang->task->create             = "建任务";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量编辑";
-$lang->task->import             = "导入之前未完任务";
 $lang->task->edit               = "编辑";
 $lang->task->delete             = "删除";
 $lang->task->deleted            = "已删除";
@@ -39,7 +38,6 @@ $lang->task->project           = '所属' . $lang->projectCommon;
 $lang->task->module            = '所属模块';
 $lang->task->story             = '相关需求';
 $lang->task->storySpec         = '需求描述';
-$lang->task->storyVersion      = '需求版本';
 $lang->task->storyFiles        = '需求附件';
 $lang->task->storyComment      = '需求备注';
 $lang->task->name              = '任务名称';
@@ -71,7 +69,6 @@ $lang->task->assignedTo        = '指派给';
 $lang->task->assignedToAB      = '指派给';
 $lang->task->assignedDate      = '指派日期';
 $lang->task->openedBy          = '由谁创建';
-$lang->task->openedByAB        = '创建者';
 $lang->task->openedDate        = '创建日期';
 $lang->task->openedDateAB      = '创建';
 $lang->task->finishedBy        = '由谁完成';
@@ -125,24 +122,11 @@ $lang->task->afterChoices['continueAdding'] = '继续为该需求添加任务';
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = '返回需求列表';
 
-$lang->task->buttonEdit       = '编辑';
-$lang->task->buttonClose      = '关闭';
-$lang->task->buttonCancel     = '取消';
-$lang->task->buttonActivate   = '激活';
-$lang->task->buttonLogEfforts = '记录工时';
-$lang->task->buttonDelete     = '删除';
-$lang->task->buttonBackToList = '返回';
-$lang->task->buttonStart      = '开始';
-$lang->task->buttonDone       = '完成';
-
 $lang->task->legendBasic  = '基本信息';
 $lang->task->legendEffort = '工时信息';
 $lang->task->legendLife   = '任务的一生';
 $lang->task->legendDesc   = '任务描述';
-$lang->task->legendAction = '操作';
 
-$lang->task->ajaxGetUserTasks      = "接口:我的任务";
-$lang->task->ajaxGetProjectTasks   = "接口:{$lang->projectCommon}任务";
 $lang->task->confirmDelete         = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate = "您确定要删除这个记录吗？";
 $lang->task->copyStoryTitle        = "同需求";
@@ -249,5 +233,3 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = '关闭原因';
 
 $lang->task->report->finishedTasksPerDay->type               = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
-
-$lang->task->estimateTip = '对该任务最初的预计';

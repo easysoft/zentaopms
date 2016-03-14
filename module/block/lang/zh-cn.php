@@ -13,8 +13,6 @@ $lang->block = new stdclass();
 $lang->block->num      = '数量';
 $lang->block->type     = '类型';
 $lang->block->orderBy  = '排序';
-$lang->block->status   = '状态';
-$lang->block->actions  = '操作';
 
 $lang->block->availableBlocks = new stdclass();
 

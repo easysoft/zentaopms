@@ -1,2 +1,5 @@
-$(function(){fixedTfootAction('#projectStoryForm');});
-$(function(){fixedTheadOfList('#storyList');});
+$(function()
+{
+    fixedTfootAction('#projectStoryForm');
+    fixedTheadOfList('#storyList');
+});

@@ -279,6 +279,20 @@
           </div>
           <div class='tab-pane' id='legendMisc'>
             <table class='table table-data table-condensed table-borderless table-fixed'>
+              <tr class='text-top'>
+                <th class='w-60px'><?php echo $lang->bug->linkBug;?></th>
+                <td>
+                  <?php
+                  if(isset($bug->linkBugTitles))
+                  {
+                      foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                      {
+                          echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID"), "#$linkBugID $linkBugTitle", '_blank') . '<br />';
+                      }
+                  }
+                  ?>
+                </td>
+              </tr>
               <?php if($bug->case):?>
               <tr>
                 <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
@@ -298,20 +312,6 @@
                 </td>
               </tr>
               <?php endif;?>
-              <tr class='text-top'>
-                <th class='w-60px'><?php echo $lang->bug->linkBug;?></th>
-                <td>
-                  <?php
-                  if(isset($bug->linkBugTitles))
-                  {
-                      foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
-                      {
-                          echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID"), "#$linkBugID $linkBugTitle", '_blank') . '<br />';
-                      }
-                  }
-                  ?>
-                </td>
-              </tr>
               <?php if($bug->toStory != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toStory;?></th>

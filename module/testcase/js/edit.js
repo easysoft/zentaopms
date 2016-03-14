@@ -20,29 +20,28 @@ $(document).ready(function()
 
 
 /**
- * Delete linked case.
+ * Unlink related case.
  *
  * @param  int $caseID
- * @param  int $deleteCase
+ * @param  int $case2Unlink
  * @access public
  * @return void
  */
-function deleteLinkedCase(caseID, deleteCase)
+function unlinkCase(caseID, case2Unlink)
 {
-    deleteLink = createLink('testcase', 'ajaxDeleteLinkedCase', 'caseID=' + caseID + '&deleteCase=' + deleteCase);
-    $('#linkCaseBox').load(deleteLink);
+    link = createLink('testcase', 'ajaxUnlinkCase', 'caseID=' + caseID + '&case2Unlink=' + case2Unlink);
+    $('#linkCaseBox').load(link);
 }
 
 /**
- * Load linked cases.
+ * Load linkCases.
  *
  * @param  int    $caseID
- * @param  string $linkedCases
  * @access public
  * @return void
  */
-function loadLinkedCases(caseID, linkedCases)
+function loadLinkCases(caseID)
 {
-    caseLink = createLink('testcase', 'ajaxGetLinkedCases', 'caseID=' + caseID + '&linkedCases=' + linkedCases);
+    caseLink = createLink('testcase', 'ajaxGetLinkCases', 'caseID=' + caseID);
     $('#linkCaseBox').load(caseLink);
 }

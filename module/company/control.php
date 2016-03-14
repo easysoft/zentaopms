@@ -68,7 +68,6 @@ class company extends control
         $queryID   = $type == 'bydept' ? 0 : (int)$param;
         $actionURL = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
         $this->company->buildSearchForm($queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->company->browse->search);
 
         /* Get users. */
         $users = $this->company->getUsers($type, $queryID, $deptID, $sort, $pager);

@@ -17,7 +17,6 @@ $lang->product->view        = "{$lang->productCommon}概况";
 $lang->product->edit        = "编辑{$lang->productCommon}";
 $lang->product->batchEdit   = "批量编辑";
 $lang->product->create      = "新增{$lang->productCommon}";
-$lang->product->read        = "{$lang->productCommon}详情";
 $lang->product->delete      = "删除{$lang->productCommon}";
 $lang->product->deleted     = "已删除";
 $lang->product->close       = "关闭";
@@ -41,20 +40,11 @@ $lang->product->roadmap  = '路线图';
 $lang->product->doc      = '文档列表';
 $lang->product->project  = $lang->projectCommon . '列表';
 
-$lang->product->selectProduct   = "请选择{$lang->productCommon}";
-$lang->product->saveButton      = " 保存 (S) ";
 $lang->product->confirmDelete   = " 您确定删除该{$lang->productCommon}吗？";
-$lang->product->ajaxGetProjects = "接口:{$lang->projectCommon}列表";
-$lang->product->ajaxGetPlans    = "接口:计划列表";
 
-$lang->product->errorFormat    = "{$lang->productCommon}数据格式不正确";
-$lang->product->errorEmptyName = "{$lang->productCommon}名称不能为空";
-$lang->product->errorEmptyCode = "{$lang->productCommon}代号不能为空";
 $lang->product->errorNoProduct = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied   = "您无权访问该{$lang->productCommon}";
 
-$lang->product->id        = '编号';
-$lang->product->company   = '所属公司';
 $lang->product->name      = "{$lang->productCommon}名称";
 $lang->product->code      = "{$lang->productCommon}代号";
 $lang->product->order     = '排序';
@@ -68,7 +58,6 @@ $lang->product->acl       = '访问控制';
 $lang->product->whitelist = '分组白名单';
 $lang->product->branch    = '所属%s';
 
-$lang->product->moduleStory  = '按模块';
 $lang->product->searchStory  = '搜索';
 $lang->product->assignedToMe = '指派给我';
 $lang->product->openedByMe   = '由我创建';

@@ -13,30 +13,19 @@ $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
 $lang->testcase->module           = '所属模块';
 $lang->testcase->story            = '相关需求';
-$lang->testcase->storyVersion     = '需求版本';
 $lang->testcase->title            = '用例标题';
 $lang->testcase->precondition     = '前置条件';
 $lang->testcase->pri              = '优先级';
 $lang->testcase->type             = '用例类型';
 $lang->testcase->status           = '用例状态';
 $lang->testcase->steps            = '用例步骤';
-$lang->testcase->frequency        = '执行频率';
-$lang->testcase->order            = '排序';
 $lang->testcase->openedBy         = '由谁创建 ';
 $lang->testcase->openedDate       = '创建日期';
 $lang->testcase->lastEditedBy     = '最后修改者';
-$lang->testcase->lastEditedDate   = '最后修改日期';
-$lang->testcase->version          = '用例版本';
 $lang->testcase->result           = '测试结果';
-$lang->testcase->lastRunResult    = '结果';
 $lang->testcase->real             = '实际情况';
 $lang->testcase->keywords         = '关键词';
 $lang->testcase->files            = '附件';
-$lang->testcase->howRun           = '执行方式';
-$lang->testcase->scriptedBy       = '由谁编写';
-$lang->testcase->scriptedDate     = '编写日期';
-$lang->testcase->scriptedStatus   = '脚本状态';
-$lang->testcase->scriptedLocation = '脚本位置';
 $lang->testcase->linkCase         = '相关用例';
 $lang->testcase->linkCases        = '关联用例';
 $lang->testcase->stage            = '适用阶段';
@@ -63,11 +52,9 @@ $lang->testcase->edit               = "编辑";
 $lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->delete             = "删除";
 $lang->testcase->batchDelete        = "批量删除 ";
-$lang->testcase->deleted            = "已删除";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->groupCase          = "分组浏览用例";
 $lang->testcase->import             = "导入";
-$lang->testcase->importID           = "行号";
 $lang->testcase->showImport         = "显示导入内容";
 $lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出数据";
@@ -77,45 +64,28 @@ $lang->testcase->confirmStoryChange = '确认需求变动';
 $lang->testcase->new = '新增';
 
 $lang->testcase->num    = '用例记录数：';
-$lang->testcase->insert = '全新插入';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
 $lang->testcase->insertAfter  = '之后添加';
 
-$lang->testcase->selectProduct = "请选择{$lang->productCommon}";
-$lang->testcase->byModule      = '按模块';
 $lang->testcase->assignToMe    = '给我的用例';
 $lang->testcase->openedByMe    = '我建的用例';
 $lang->testcase->allCases      = '所有';
 $lang->testcase->needConfirm   = '需求变动';
-$lang->testcase->moduleCases   = '按模块';
 $lang->testcase->bySearch      = '搜索';
-$lang->testcase->doneByMe      = '我完成的用例';
 
-$lang->testcase->lblProductAndModule         = "{$lang->productCommon}模块";
-$lang->testcase->lblTypeAndPri               = '类型&优先级';
-$lang->testcase->lblSystemBrowserAndHardware = '系统::浏览器';
-$lang->testcase->lblAssignAndMail            = '指派给::抄送给';
 $lang->testcase->lblStory                    = '相关需求';
 $lang->testcase->lblLastEdited               = '最后编辑';
 $lang->testcase->lblTypeValue                = '类型可选值列表';
 $lang->testcase->lblStageValue               = '阶段可选值列表';
 $lang->testcase->lblStatusValue              = '状态可选值列表';
 
-$lang->testcase->legendRelated      = '相关信息';
 $lang->testcase->legendBasicInfo    = '基本信息';
-$lang->testcase->legendMailto       = '抄送给';
 $lang->testcase->legendAttatch      = '附件';
 $lang->testcase->legendLinkBugs     = '相关Bug';
 $lang->testcase->legendOpenAndEdit  = '创建编辑';
-$lang->testcase->legendStoryAndTask = '需求::任务';
-$lang->testcase->legendCases        = '相关用例';
-$lang->testcase->legendSteps        = '用例步骤';
-$lang->testcase->legendAction       = '操作';
-$lang->testcase->legendHistory      = '历史记录';
 $lang->testcase->legendComment      = '备注';
-$lang->testcase->legendProduct      = $lang->productCommon . '模块';
 
 $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
@@ -157,7 +127,6 @@ $lang->testcase->resultList['pass']    = '通过';
 $lang->testcase->resultList['fail']    = '失败';
 $lang->testcase->resultList['blocked'] = '阻塞';
 
-$lang->testcase->buttonEdit   = '编辑';
 $lang->testcase->buttonToList = '返回';
 
 $lang->testcase->errorEncode = '无数据，请选择正确的编码重新上传！';
@@ -165,7 +134,3 @@ $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding转码方法
 $lang->testcase->noRequire   = "%s行的“%s”是必填字段，不能为空";
 
 $lang->testcase->searchStories = '键入来搜索需求';
-
-$lang->testcase->action = new stdclass();
-$lang->testcase->action->linked2case  = array('main' => '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedcase = array('main' => '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。');

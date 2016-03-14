@@ -21,8 +21,6 @@ $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住shift或者control键进行多选）</span>';
 $lang->group->manageMember       = '成员维护';
-$lang->group->linkMember         = '关联用户';
-$lang->group->unlinkMember       = '移除用户';
 $lang->group->confirmDelete      = '您确定删除该用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';

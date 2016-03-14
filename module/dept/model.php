@@ -333,6 +333,22 @@ class deptModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * Get user pairs of a department.
+     *
+     * @param  int    $deptID
+     * @access public
+     * @return array
+     */
+    public function getDeptUserPairs($deptID = 0)
+    {
+        return $this->dao->select('account, realname')->from(TABLE_USER)
+            ->where('deleted')->eq(0)
+            ->beginIF($deptID)->andWhere('dept')->eq((int)$deptID)->fi()
+            ->orderBy('account')
+            ->fetchPairs();
+    }
     
     /**
      * Delete a department.

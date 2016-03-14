@@ -37,7 +37,6 @@ The version of current release is <strong class='red'>%s</strong>。
 EOT;
 
 $lang->install->newReleased= "<strong class='red'>Notice</strong>：There is a new version <strong class='red'>%s</strong>, released on %s。";
-$lang->install->choice     = 'You can ';
 $lang->install->or         = 'or';
 $lang->install->checking   = 'System checking';
 $lang->install->ok         = 'OK(√)';
@@ -70,9 +69,6 @@ $lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path';
 $lang->install->mkdir        = '<p>Should creat the directory %s。<br /> Under linux, can try<br /> mkdir -p %s</p>';
 $lang->install->chmod        = 'Should change the permission of "%s".<br />Under linux, can try<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB      = 'Set database';
-$lang->install->webRoot        = 'ZenTaoPMS path';
-$lang->install->requestType    = 'URL type';
 $lang->install->defaultLang    = 'Default Language';
 $lang->install->dbHost         = 'Database host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 can not connect, try localhost';
@@ -81,7 +77,6 @@ $lang->install->dbUser         = 'Database user';
 $lang->install->dbPassword     = 'Database password';
 $lang->install->dbName         = 'Database name';
 $lang->install->dbPrefix       = 'Table prefix';
-$lang->install->createDB       = 'Auto create database';
 $lang->install->clearDB        = 'Clear data if database exists.';
 $lang->install->importDemoData = 'Import demo data if database exists.';
 

@@ -11,10 +11,6 @@
  */
 $lang->convert->common  = '从其他系统导入';
 $lang->convert->index   = '首页';
-$lang->convert->next    = '下一步';
-$lang->convert->pre     = '返回';
-$lang->convert->reload  = '刷新';
-$lang->convert->error   = '错误 ';
 
 $lang->convert->start   = '开始转换';
 $lang->convert->desc    = <<<EOT
@@ -31,8 +27,6 @@ $lang->convert->convertRedmine = '转换Redmine';
 $lang->convert->convertBugFree = '转换BugFree';
 
 $lang->convert->selectSource     = '选择来源系统及版本';
-$lang->convert->source           = '来源系统';
-$lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必须选择一个来源。";
 
 $lang->convert->direction             = "请选择{$lang->projectCommon}问题转换方向";
@@ -52,7 +46,6 @@ $lang->convert->checkConfig = '检查配置';
 $lang->convert->ok          = '<span class="text-success"><i class="icon-ok-sign"></i> 检查通过</span>';
 $lang->convert->fail        = '<span class="text-danger"><i class="icon-remove-sign"></i> 检查失败</span>';
 
-$lang->convert->settingDB   = '设置数据库';
 $lang->convert->dbHost      = '数据库服务器';
 $lang->convert->dbPort      = '服务器端口';
 $lang->convert->dbUser      = '数据库用户名';
@@ -97,7 +90,6 @@ $lang->convert->redmine->docLibs      = '文档库';
 $lang->convert->redmine->docs         = '文档';
 $lang->convert->redmine->files        = '附件';
 
-$lang->convert->errorConnectDB     = '数据库连接失败 ';
 $lang->convert->errorFileNotExits  = '文件 %s 不存在';
 $lang->convert->errorUserExists    = '用户 %s 已存在';
 $lang->convert->errorGroupExists   = '分组 %s 已存在';

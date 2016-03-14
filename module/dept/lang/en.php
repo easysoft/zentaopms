@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 $lang->dept->common      = 'Department';
-$lang->dept->add         = "Add";
-$lang->dept->addChild    = "Add child department";
 $lang->dept->manageChild = "Child deprtment";
 $lang->dept->edit        = "Edit";
 $lang->dept->delete      = "Delete";
@@ -21,9 +19,7 @@ $lang->dept->name        = "Name";
 $lang->dept->browse      = "Manage";
 $lang->dept->manage      = "Manage";
 $lang->dept->updateOrder = "Update order";
-$lang->dept->users       = "Users";
 
-$lang->dept->saveButton    = " Save (S) ";
 $lang->dept->confirmDelete = "Are you sure to delete this department?"; 
 $lang->dept->successSave   = "Success save.";
 

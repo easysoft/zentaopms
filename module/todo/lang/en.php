@@ -16,23 +16,17 @@ $lang->todo->batchCreate  = "Batch create";
 $lang->todo->edit         = "Edit";
 $lang->todo->batchEdit    = "Batch edit";
 $lang->todo->view         = "Info";
-$lang->todo->viewAB       = "Info";
 $lang->todo->finish       = "Finish";
 $lang->todo->batchFinish  = "Batch finish";
 $lang->todo->export       = "Export";
 $lang->todo->delete       = "Delete";
-$lang->todo->browse       = "Browse";
 $lang->todo->import2Today = "Import to today";
 $lang->todo->import       = "Import to";
-$lang->todo->changeStatus = "Change";
 $lang->todo->legendBasic  = "Basic Info";
 
-$lang->todo->id          = 'ID';
 $lang->todo->account     = 'Owner';
 $lang->todo->date        = 'Date';
-$lang->todo->begin       = 'Begin time';
 $lang->todo->beginAB     = 'Begin';
-$lang->todo->end         = 'End time';
 $lang->todo->endAB       = 'End';
 $lang->todo->beginAndEnd = 'Begin and End';
 $lang->todo->type        = 'Type';
@@ -41,7 +35,6 @@ $lang->todo->name        = 'Name';
 $lang->todo->status      = 'Status';
 $lang->todo->desc        = 'Desc';
 $lang->todo->private     = 'Private';
-$lang->todo->idvalue     = 'Task or bug';
 
 $lang->todo->confirmBug   = 'This todo linked to bug #%s，chang it also?';
 $lang->todo->confirmTask  = 'This todo linked to task #%s，chang it also?';
@@ -62,7 +55,6 @@ $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = 'Task';
 
 $lang->todo->confirmDelete  = "Are you sure to delete this todo?";
-$lang->todo->successMarked  = "Successfully changed status";;
 $lang->todo->thisIsPrivate  = 'This is a private todo。:)';
 $lang->todo->lblDisableDate = 'Set time lately';
 
@@ -81,4 +73,3 @@ $lang->todo->periods['all']        = 'All';
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, Finished by <strong>$actor</strong>');
 $lang->todo->action->marked   = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => 'statusList');
-

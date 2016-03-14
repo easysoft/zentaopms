@@ -20,8 +20,6 @@ $lang->ellipsis     = '...';
 
 $lang->zentaoPMS      = 'zentao';
 $lang->welcome        = "%s PMS";
-$lang->myControl      = "Dashboard";
-$lang->currentPos     = 'Current';
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->aboutZenTao    = 'About';
@@ -31,25 +29,20 @@ $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar
 $lang->agreement      = "I Agree to the <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z PUBLIC LICENSE 1.2</a>, <span class='text-danger'>and promise to keep the logo, link of ZenTao.</span>";
 
 $lang->reset        = 'Reset';
-$lang->cancel       = 'Cancel';
 $lang->refresh      = 'Refresh';
 $lang->edit         = 'Edit';
-$lang->copy         = 'Copy';
 $lang->delete       = 'Delete';
 $lang->close        = 'Close';
-$lang->link         = 'Link';
 $lang->unlink       = 'Unlink';
 $lang->import       = 'Import';
 $lang->export       = 'Export';
 $lang->setFileName  = 'Filename:';
-$lang->activate     = 'Activate';
 $lang->submitting   = 'Saving...';
 $lang->save         = 'Save';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'View';
 $lang->goback       = 'Back';
 $lang->goPC         = 'PC';
-$lang->go           = 'GO';
 $lang->more         = 'More';
 $lang->day          = 'Day';
 
@@ -59,7 +52,6 @@ $lang->history      = 'History';
 $lang->attatch      = 'Attatch';
 $lang->reverse      = 'Reverse';
 $lang->switchDisplay= 'Toggle Show';
-$lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
 $lang->pasteText    = 'Paste text';
@@ -76,9 +68,9 @@ $lang->nextShortcutKey = '[Shortcut key:→]';
 $lang->select        = 'Select';
 $lang->selectAll     = 'All';
 $lang->selectReverse = 'Inverse';
+$lang->loading       = 'Wait...';
 $lang->notFound      = 'Sorry, the object not found.';
 $lang->showAll       = "[[Show all {$lang->projectCommon}s]]";
-$lang->hideClosed    = "[[Show {$lang->projectCommon}s going]]";
 
 $lang->future       = 'Future';
 $lang->year         = 'Year';
@@ -381,10 +373,6 @@ $lang->pager->next      = "<i class='icon-play' title='Next'></i>";
 $lang->pager->last      = "<i class='icon-step-forward' title='Last'></i>";
 $lang->pager->locate    = "GO!";
 
-$lang->zentaoSite     = "Official Site";
-$lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum community</a> ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>Training</a> ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>Donate</a> ";
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'><i class='text-danger icon-pro-version'></i> PRO</a> &nbsp; ";
 $lang->downNotify     = "Down notify";
 
@@ -394,8 +382,6 @@ $lang->noticeImport  = "<p style='font-size:14px'>Import data, containing the ex
 
 $lang->noResultsMatch    = "No results match";
 $lang->searchMore        = "Search more results with the key:";
-$lang->selectAnOption    = "Select an option";
-$lang->selectSomeOptions = "Select some options";
 $lang->chooseUsersToMail = "Choose users to mail...";
 
 /* Date times. */

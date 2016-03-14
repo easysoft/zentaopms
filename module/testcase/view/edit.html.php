@@ -143,7 +143,7 @@
           <tr class='text-top'>
             <th><?php echo $lang->testcase->linkCase;?></th>
             <td>
-              <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id&case=$case->linkCase", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='85%'");?>
+              <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?>
               <ul class='list-unstyled' id='linkCaseBox'>
               <?php
               if(isset($case->linkCaseTitles))
@@ -151,8 +151,8 @@
                   foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                   {
                       echo '<li>';
-                      echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank');
-                      echo html::a("javascript:deleteLinkedCase($case->id, $linkCaseID)", '<i class="icon-remove"></i>', '', "style='float:right'");
+                      echo html::a(inlink('view', "caseID=$linkCaseID"), "#$linkCaseID " . $linkCaseTitle, '_blank');
+                      echo html::a("javascript:unlinkCase($case->id, $linkCaseID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
                       echo '</li>';
                   }
               }

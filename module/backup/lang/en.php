@@ -8,7 +8,6 @@ $lang->backup->restore  = 'Restore';
 $lang->backup->change   = 'Change hold days';
 $lang->backup->changeAB = 'change';
 
-$lang->backup->name  = 'Name';
 $lang->backup->time  = 'Time';
 $lang->backup->files = 'Files';
 $lang->backup->size  = 'Size';

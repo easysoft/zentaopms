@@ -16,23 +16,17 @@ $lang->todo->batchCreate  = "批量添加";
 $lang->todo->edit         = "更新待办";
 $lang->todo->batchEdit    = "批量编辑";
 $lang->todo->view         = "待办详情";
-$lang->todo->viewAB       = "详情";
 $lang->todo->finish       = "完成";
 $lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "导出";
 $lang->todo->delete       = "删除待办";
-$lang->todo->browse       = "浏览待办";
 $lang->todo->import2Today = "导入到今天";
 $lang->todo->import       = "导入";
-$lang->todo->changeStatus = "更改";
 $lang->todo->legendBasic  = "基本信息";
 
-$lang->todo->id          = '编号';
 $lang->todo->account     = '所有者';
 $lang->todo->date        = '日期';
-$lang->todo->begin       = '开始时间';
 $lang->todo->beginAB     = '开始';
-$lang->todo->end         = '结束时间';
 $lang->todo->endAB       = '结束';
 $lang->todo->beginAndEnd = '起止时间';
 $lang->todo->type        = '类型';
@@ -41,7 +35,6 @@ $lang->todo->name        = '名称';
 $lang->todo->status      = '状态';
 $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
-$lang->todo->idvalue     = '任务或Bug';
 
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
@@ -62,7 +55,6 @@ $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . '任务';
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
-$lang->todo->successMarked  = "成功切换状态！";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
 
@@ -81,4 +73,3 @@ $lang->todo->periods['all']        = '所有';
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished  = array('main' => '$date, 由 <strong>$actor</strong>完成');
 $lang->todo->action->marked    = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => 'statusList');
-

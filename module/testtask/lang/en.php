@@ -12,12 +12,10 @@
 $lang->testtask->index          = "Index";
 $lang->testtask->create         = "Create";
 $lang->testtask->delete         = "Delete";
-$lang->testtask->deleted        = "Deleted";
 $lang->testtask->view           = "Info";
 $lang->testtask->edit           = "Edit";
 $lang->testtask->browse         = "Browse";
 $lang->testtask->linkCase       = "Link case";
-$lang->testtask->linkCaseAB     = "Link";
 $lang->testtask->unlinkCase     = "Del";
 $lang->testtask->batchAssign    = "Batch Assign";
 $lang->testtask->runCase        = "Run";
@@ -35,7 +33,6 @@ $lang->testtask->wait           = "Testing build";
 $lang->testtask->done           = "Tested build";
 
 $lang->testtask->common         = 'Test build';
-$lang->testtask->id             = 'ID';
 $lang->testtask->product        = $lang->productCommon;
 $lang->testtask->project        = $lang->projectCommon;
 $lang->testtask->build          = 'Build';
@@ -53,8 +50,6 @@ $lang->testtask->lastRunAccount = "Run";
 $lang->testtask->lastRunTime    = 'Time';
 $lang->testtask->lastRunResult  = 'Result';
 $lang->testtask->report         = 'Report';
-$lang->testtask->stories        = 'Stories';
-$lang->testtask->bugs           = 'Bugs';
 
 $lang->testtask->legendDesc      = 'Desc';
 $lang->testtask->legendReport    = 'Report';
@@ -72,7 +67,6 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = 'Unlinked';
-$lang->testtask->linkedCases   = 'Linked';
 $lang->testtask->linkByStory   = 'Link by story';
 $lang->testtask->linkByBug     = 'Link by bug';
 $lang->testtask->passAll       = 'Pass all';
@@ -84,7 +78,6 @@ $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span time
 $lang->testtask->confirmDelete     = 'Are you sure to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Are you sure to unlink this case?';
 
-$lang->testtask->byModule      = 'By module';
 $lang->testtask->assignedToMe  = 'Assgined to me';
 $lang->testtask->allCases      = 'All Cases';
 
@@ -104,8 +97,6 @@ $lang->testtask->mail->close  = new stdclass();
 $lang->testtask->mail->create->title = "%s created testtask #%s:%s";
 $lang->testtask->mail->edit->title   = "%s finished testtask #%s:%s";
 $lang->testtask->mail->close->title  = "%s closed testtask #%s:%s";
-
-$lang->testtask->testScope = 'Test scope';
 
 $lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> opened test task. <strong>$extra</strong>。' . "\n";

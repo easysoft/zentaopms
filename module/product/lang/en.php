@@ -17,7 +17,6 @@ $lang->product->view        = "Info";
 $lang->product->edit        = "Edit";
 $lang->product->batchEdit   = "Batch Edit";
 $lang->product->create      = "Create";
-$lang->product->read        = "Info";
 $lang->product->delete      = "Delete";
 $lang->product->deleted     = "Deleted";
 $lang->product->close       = "Close";
@@ -41,20 +40,11 @@ $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Doc';
 $lang->product->project  = "{$lang->projectCommon}s";
 
-$lang->product->selectProduct   = "Select {$lang->productCommon}";
-$lang->product->saveButton      = " Save (S) ";
 $lang->product->confirmDelete   = " Are you sure to delete this {$lang->productCommon}?";
-$lang->product->ajaxGetProjects = "API: {$lang->projectCommon}s of {$lang->productCommon}";
-$lang->product->ajaxGetPlans    = "API: plans of {$lang->productCommon}";
 
-$lang->product->errorFormat    = 'Error format.';
-$lang->product->errorEmptyName = 'Name can not be empty.';
-$lang->product->errorEmptyCode = 'Code can not be empty';
 $lang->product->errorNoProduct = "No {$lang->productCommon} in system yet.";
 $lang->product->accessDenied   = "Access to this {$lang->productCommon} denined.";
 
-$lang->product->id        = 'ID';
-$lang->product->company   = 'Company';
 $lang->product->name      = 'Name';
 $lang->product->code      = 'Code';
 $lang->product->order     = 'Order';
@@ -68,7 +58,6 @@ $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 $lang->product->branch    = '%s';
 
-$lang->product->moduleStory  = 'Module';
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'To me';
 $lang->product->openedByMe   = 'My opened';

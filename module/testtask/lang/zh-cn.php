@@ -12,12 +12,10 @@
 $lang->testtask->index          = "版本首页";
 $lang->testtask->create         = "提交测试";
 $lang->testtask->delete         = "删除版本";
-$lang->testtask->deleted        = "已删除";
 $lang->testtask->view           = "概况";
 $lang->testtask->edit           = "编辑版本";
 $lang->testtask->browse         = "版本列表";
 $lang->testtask->linkCase       = "关联用例";
-$lang->testtask->linkCaseAB     = "关联";
 $lang->testtask->unlinkCase     = "移除";
 $lang->testtask->batchAssign    = "批量指派";
 $lang->testtask->runCase        = "执行";
@@ -35,7 +33,6 @@ $lang->testtask->wait           = "待测版本";
 $lang->testtask->done           = "已测版本";
 
 $lang->testtask->common         = '测试视图版本';
-$lang->testtask->id             = '编号';
 $lang->testtask->product        = '所属' . $lang->productCommon;
 $lang->testtask->project        = '所属' . $lang->projectCommon;
 $lang->testtask->build          = '版本';
@@ -53,8 +50,6 @@ $lang->testtask->lastRunAccount = '执行人';
 $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
 $lang->testtask->report         = '测试总结';
-$lang->testtask->stories        = '相关需求';
-$lang->testtask->bugs           = '相关Bug';
 
 $lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '测试总结';
@@ -72,7 +67,6 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
-$lang->testtask->linkedCases   = '已关联';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->passAll       = '全部通过';
@@ -84,7 +78,6 @@ $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 $lang->testtask->confirmDelete     = '您确认要删除该版本吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 
-$lang->testtask->byModule      = '按模块';
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '所有用例';
 
@@ -104,8 +97,6 @@ $lang->testtask->mail->close  = new stdclass();
 $lang->testtask->mail->create->title = "%s创建了版本 #%s:%s";
 $lang->testtask->mail->edit->title   = "%s编辑了版本 #%s:%s";
 $lang->testtask->mail->close->title  = "%s关闭了版本 #%s:%s";
-
-$lang->testtask->testScope = '测试范畴';
 
 $lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";

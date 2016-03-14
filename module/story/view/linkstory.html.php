@@ -22,7 +22,7 @@
   </div>
   <form method='post' class='form-condensed' target='hiddenwin' id='linkStoryForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
-      <?php if($allStories):?>
+      <?php if($stories2Link):?>
       <thead>
       <tr>
         <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -36,21 +36,19 @@
       </thead>
       <tbody>
       <?php $storyCount = 0;?>
-      <?php foreach($allStories as $storyDetail):?>
-      <?php if(in_array($storyDetail->id, explode(',', $story->$type))) continue;?>
-      <?php if($storyDetail->id == $story->id) continue;?>
-      <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyDetail->id");?>
+      <?php foreach($stories2Link as $story2Link):?>
+      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story2Link->id");?>
       <tr class='text-center'>
         <td class='text-left'>
-          <input type='checkbox' name='stories[]'  value='<?php echo $storyDetail->id;?>'/> 
-          <?php echo html::a($storyLink, sprintf('%03d', $storyDetail->id));?>
+          <input type='checkbox' name='stories[]'  value='<?php echo $story2Link->id;?>'/> 
+          <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $storyDetail->pri, $storyDetail->pri)?>'><?php echo zget($lang->story->priList, $storyDetail->pri, $storyDetail->pri);?></span></td>
-        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$storyDetail->product&branch=$storyDetail->branch"), $products[$storyDetail->product], '_blank');?></td>
-        <td class='text-left nobr' title="<?php echo $storyDetail->title?>"><?php echo html::a($storyLink, $storyDetail->title, '_blank');?></td>
-        <td><?php echo $storyDetail->planTitle;?></td>
-        <td><?php echo $users[$storyDetail->openedBy];?></td>
-        <td><?php echo $storyDetail->estimate;?></td>
+        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story2Link->pri, $story2Link->pri)?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
+        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
+        <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title, '_blank');?></td>
+        <td><?php echo $story2Link->planTitle;?></td>
+        <td><?php echo $users[$story2Link->openedBy];?></td>
+        <td><?php echo $story2Link->estimate;?></td>
       </tr>
       <?php $storyCount ++;?>
       <?php endforeach;?>
@@ -62,6 +60,9 @@
           <?php if($storyCount) echo html::selectButton() . html::submitButton();?>
           </div>
         </td>
+      </tr>
+      <tr>
+        <td class='hidden'><?php echo html::input('story', $story->id);?></td>
       </tr>
       </tfoot>
       <?php endif;?>

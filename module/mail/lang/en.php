@@ -16,7 +16,6 @@ $lang->mail->turnon      = 'Turnon';
 $lang->mail->async       = 'Asynchronous';
 $lang->mail->fromAddress = 'From email';
 $lang->mail->fromName    = 'From title';
-$lang->mail->mta         = 'MTA';
 $lang->mail->host        = 'SMTP host';
 $lang->mail->port        = 'SMTP port';
 $lang->mail->auth        = 'Authentication';
@@ -42,7 +41,6 @@ $lang->mail->addedBy     = 'Sender';
 $lang->mail->addedDate   = 'Added date';
 $lang->mail->sendTime    = 'Send time';
 $lang->mail->status      = 'Status';
-$lang->mail->ccList      = 'Copy to';
 $lang->mail->failReason  = 'Fail Reason';
 
 $lang->mail->statusList['send'] = 'Success';

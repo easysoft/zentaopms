@@ -88,7 +88,7 @@ class bug extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
-        $projects = $this->loadModel('project')->getPairs() + array('0' => '');
+        $projects = $this->loadModel('project')->getPairs('empty');
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);
@@ -105,7 +105,6 @@ class bug extends control
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Set view. */
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
@@ -882,72 +881,66 @@ class bug extends control
      * Link related bugs.
      *
      * @param  int    $bugID
-     * @param  string $bugs
      * @param  string $browseType
      * @param  int    $param
      * @access public
      * @return void
      */
-    public function linkBugs($bugID, $bugs = '', $browseType = '', $param = 0)
+    public function linkBugs($bugID, $browseType = '', $param = 0)
     {
         /* Link bugs. */
         if(!empty($_POST))
         {
-            $bugs = $this->bug->linkBugs($bugID, $bugs);
-            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkedBugs('$bugID', '$bugs')}"));
+            $this->bug->linkBugs($bugID);
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkBugs('$bugID')}"));
             die(js::locate($this->createLink('bug', 'edit', "bugID=$bugID"), 'parent'));
         }
 
-        /* Get bug, productID and queryID. */
-        $bug       = $this->bug->getById($bugID);
-        $productID = $this->product->saveState($bug->product, $this->products);
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        /* Get bug and queryID. */
+        $bug     = $this->bug->getById($bugID);
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set the menu. */
-        $this->bug->setMenu($this->products, $productID, $bug->branch);
+        $this->bug->setMenu($this->products, $bug->product, $bug->branch);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&bugs=$bugs&browseType=bySearch&queryID=myQueryID", '', true);
-        $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&queryID=myQueryID", '', true);
+        $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
 
         /* Get bugs to link. */
-        $allBugs = array();
-        if($browseType == 'bySearch') $allBugs = $this->bug->getBySearch($bug->product, $quueryID, 'id', null);
+        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID);
 
         /* Assign. */
-        $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$productID];
-        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$productID"), $this->products[$productID]);
+        $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
+        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$bug->product"), $this->products[$bug->product]);
         $this->view->position[] = html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title);
         $this->view->position[] = $this->lang->bug->linkBugs;
         $this->view->bug        = $bug;
-        $this->view->allBugs    = $allBugs;
+        $this->view->bugs2Link  = $bugs2Link;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
 
     /**
-     * AJAX: get linked bugs.
+     * AJAX: get linkBugs.
      *
      * @param  int    $bugID
-     * @param  string $linkedBugs
      * @access public
      * @return string
      */
-    public function ajaxGetLinkedBugs($bugID, $linkedBugs = '')
+    public function ajaxGetLinkBugs($bugID)
     {
-        /* Get bug and linked bugs. */
-        $bug  = $this->bug->getById($bugID);
-        $bugs = $this->bug->getLinkedBugs($linkedBugs);
+        /* Get linkbugs. */
+        $bugs = $this->bug->getLinkBugs($bugID);
 
         /* Build linkBug list.*/
         $output  = '';
-        foreach($bugs as $bugId => $title)
+        foreach($bugs as $bugId => $bugTitle)
         {
             $output .= '<li>';
-            $output .= html::a(inlink('view', "bugID=$bugId"), "#$bugId " . $title);
-            $output .= html::a("javascript:deleteLinkedBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
+            $output .= html::a(inlink('view', "bugID=$bugId"), "#$bugId " . $bugTitle, '_blank');
+            $output .= html::a("javascript:unlinkBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
 
@@ -955,24 +948,29 @@ class bug extends control
     }
 
     /**
-     * AJAX: delete a linked bug.
+     * AJAX: unlink related bug.
      *
      * @param  int    $bugID
-     * @param  int    $deleteBug
+     * @param  int    $bug2Unlink
      * @access public
      * @return string
      */
-    public function ajaxDeleteLinkedBug($bugID, $deleteBug)
+    public function ajaxUnlinkBug($bugID, $bug2Unlink = 0)
     {
-        /* Get bug and bugs. */
-        $bug  = $this->bug->getById($bugID);
-        $bugs = $this->bug->deleteLinkedBug($bugID, $deleteBug);
+        /* Unlink related bug. */
+        $this->bug->unlinkBug($bugID, $bug2Unlink);
+
+        /* Get current linkbugs. */
+        $bugs = $this->bug->getLinkBugs($bugID);
 
         /* Build linkBug list. */
-        $output  = '';
-        foreach($bugs as $bugId => $title)
+        $output = '';
+        foreach($bugs as $bugId => $bugTitle)
         {
-            $output .= '<li>' . html::a(inlink('view', "bugID=$bugId"), "#$bugId " . $title) . html::a("javascript:deleteLinkedBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "style='float:right'");
+            $output .= '<li>';
+            $output .= html::a(inlink('view', "bugID=$bugId"), "#$bugId " . $bugTitle, '_blank');
+            $output .= html::a("javascript:unlinkBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
+            $output .= '</li>';
         }
 
         die($output);

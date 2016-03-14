@@ -89,7 +89,6 @@ class testcase extends control
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Assign. */
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -624,37 +623,34 @@ class testcase extends control
      * Link related cases.
      *
      * @param  int    $caseID
-     * @param  string $cases
      * @param  string $browseType
      * @param  int    $param
      * @access public
      * @return void
      */
-    public function linkCases($caseID, $cases, $browseType = '', $param = 0)
+    public function linkCases($caseID, $browseType = '', $param = 0)
     {
         /* Link cases. */
         if(!empty($_POST))
         {
-            $cases = $this->testcase->linkCases($caseID, $cases);
-            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkedCases('$caseID', '$cases')}"));
-            die($this->locate(inlink('edit', "caseID=$caseID"), 'parent'));
+            $this->testcase->linkCases($caseID);
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkCases('$caseID')}"));
+            die(js::locate($this->createLink('testcase', 'edit', "caseID=$caseID"), 'parent'));
         }
 
-        /* Get test cases, and queryID. */
+        /* Get case and queryID. */
         $case    = $this->testcase->getById($caseID);
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. */
         $this->testcase->setMenu($this->products, $case->product, $case->branch);
 
-        /* Get cases to link. */
-        $allCases = array();
-        $allCases = $this->testcase->getBySearch($case->product, $queryID, 'id', null);
-
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&cases=$cases&browseType=bySearch&queryID=myQueryID"     );
+        $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+
+        /* Get cases to link. */
+        $cases2Link = $this->testcase->getCases2Link($caseID, $browseType, $queryID);
 
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
@@ -662,33 +658,31 @@ class testcase extends control
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
-        $this->view->allCases   = $allCases;
+        $this->view->cases2Link = $cases2Link;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
 
     /**
-     * AJAX: Get linked cases.
+     * AJAX: get linkCases.
      *
      * @param  int    $caseID
-     * @param  string $cases
      * @access public
      * @return string
      */
-    public function ajaxGetLinkedCases($caseID, $linkedCases = '')
+    public function ajaxGetLinkCases($caseID)
     {
-        /* Get case and linked cases. */
-        $case  = $this->testcase->getById($caseID);
-        $cases = $this->testcase->getLinkedCases($linkedCases);
+        /* Get linkCases. */
+        $cases = $this->testcase->getLinkCases($caseID);
 
         /* Build linkCase list. */
         $output = '';
         foreach($cases as $caseId => $caseTitle)
         {
             $output .= '<li>';
-            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle);
-            $output .= html::a("javascript:deleteLinkedCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
+            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle, '_blank');
+            $output .= html::a("javascript:unlinkCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
 
@@ -696,26 +690,28 @@ class testcase extends control
     }
 
     /**
-     * AJAX: Delete linked case.
+     * AJAX: unlink related case.
      *
      * @param  int    $caseID
-     * @param  int    $deleteCase
+     * @param  int    $case2Unlink
      * @access public
      * @return string
      */
-    public function ajaxDeleteLinkedCase($caseID, $deleteCase = 0)
+    public function ajaxUnlinkCase($caseID, $case2Unlink = 0)
     {
-        /* Get case and linked cases. */
-        $case  = $this->testcase->getById($caseID);
-        $cases = $this->testcase->deleteLinkedCase($caseID, $deleteCase);
+        /* Unlink related case. */
+        $this->testcase->unlinkCase($caseID, $case2Unlink);
+
+        /* Get current linkCases. */
+        $cases = $this->testcase->getLinkCases($caseID);
 
         /* Build linkCase list. */
         $output  = '';
         foreach($cases as $caseId => $caseTitle)
         {
             $output .= '<li>';
-            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle);
-            $output .= html::a("javascript:deleteLinkedCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
+            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle, '_blank');
+            $output .= html::a("javascript:unlinkCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
             $output .= '</li>';
         }
 

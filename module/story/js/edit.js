@@ -1,17 +1,17 @@
 /**
- * Delete linked story. 
+ * Unlink story.
  *
  * @param  int    $storyID
  * @param  string $linkType 
- * @param  int    deleteStory
+ * @param  int    story2Unlink
  * @access public
  * @return void
  */
-function deleteLinkedStory(storyID, linkType, deleteStory)
+function unlinkStory(storyID, linkType, story2Unlink)
 {
-    deleteLink = createLink('story', 'ajaxDeleteLinkedStory', 'storyID=' + storyID + '&type=' + linkType + '&deleteStory=' + deleteStory);
-    if(linkType == 'linkStories') $('#linkStoriesBox').load(deleteLink);
-    if(linkType == 'childStories') $('#childStoriesBox').load(deleteLink);
+    link = createLink('story', 'ajaxUnlinkStory', 'storyID=' + storyID + '&type=' + linkType + '&story2Unlink=' + story2Unlink);
+    if(linkType == 'linkStories')  $('#linkStoriesBox').load(link);
+    if(linkType == 'childStories') $('#childStoriesBox').load(link);
 }
 
 /**
@@ -19,13 +19,12 @@ function deleteLinkedStory(storyID, linkType, deleteStory)
  * 
  * @param  int    $storyID 
  * @param  string $linkType 
- * @param  string $linkedStories 
  * @access public
  * @return void
  */
-function loadLinkedStories(storyID, linkType, linkedStories)
+function loadLinkedStories(storyID, linkType)
 {
-    storyLink = createLink('story', 'ajaxGetLinkedStories', 'storyID=' + storyID + '&type=' + linkType + '&linkedStories=' + linkedStories);
-    if(linkType == 'linkStories') $('#linkStoriesBox').load(storyLink);
+    storyLink = createLink('story', 'ajaxGetLinkedStories', 'storyID=' + storyID + '&type=' + linkType);
+    if(linkType == 'linkStories')  $('#linkStoriesBox').load(storyLink);
     if(linkType == 'childStories') $('#childStoriesBox').load(storyLink);
 }

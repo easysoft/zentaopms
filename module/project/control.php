@@ -166,7 +166,6 @@ class project extends control
        /* Build the search form. */
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->project->buildSearchForm($projectID, $this->projects, $queryID, $actionURL);
-        $this->search->setSearchParams($this->config->project->search);
 
         /* team member pairs. */
         $memberPairs = array();

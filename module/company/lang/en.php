@@ -11,20 +11,12 @@
  */
 $lang->company->common   = 'Company';
 $lang->company->index    = "Index";
-$lang->company->create   = "Create";
 $lang->company->edit     = "Edit";
 $lang->company->view     = "Info";
-$lang->company->read     = "Info";
-$lang->company->update   = "Update";
-$lang->company->delete   = "Delete";
 $lang->company->browse   = "User";
 $lang->company->dynamic  = "Dynamic";
-$lang->company->depts    = "Dept";
 $lang->company->orgView  = 'Company';
 
-$lang->company->confirmDelete = "Are you sure to delete this company?";
-
-$lang->company->id       = 'ID';
 $lang->company->name     = 'Name';
 $lang->company->phone    = 'Phone';
 $lang->company->fax      = 'Fax';
@@ -32,7 +24,6 @@ $lang->company->address  = 'Address';
 $lang->company->zipcode  = 'Zipcode';
 $lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
-$lang->company->pms      = 'Zentao';
 $lang->company->guest    = 'Guest';
 
 $lang->company->product = $lang->productCommon;
