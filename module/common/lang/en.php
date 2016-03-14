@@ -360,7 +360,7 @@ $lang->error->passwordrule    = "Password should more than six letters.";
 $lang->error->accessDenied    = 'No purview';
 $lang->error->pasteImg        = 'Your browser does not support the paste image!';
 $lang->error->noData          = 'No data';
-$lang->error->hasEdited       = 'The record may have been changed. Please refresh and re edit!';
+$lang->error->editedByOther   = 'The record may have been changed. Please refresh and re edit!';
 
 /* Pager. */
 $lang->pager = new stdclass();
@@ -373,7 +373,7 @@ $lang->pager->next      = "<i class='icon-play' title='Next'></i>";
 $lang->pager->last      = "<i class='icon-step-forward' title='Last'></i>";
 $lang->pager->locate    = "GO!";
 
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'><i class='text-danger icon-pro-version'></i> PRO</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'>PRO <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Down notify";
 
 $lang->suhosinInfo   = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";

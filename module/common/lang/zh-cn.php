@@ -360,7 +360,7 @@ $lang->error->passwordrule    = "密码应该符合规则，长度至少为六�
 $lang->error->accessDenied    = '您没有访问权限';
 $lang->error->pasteImg        = '您的浏览器不支持粘贴图片！';
 $lang->error->noData          = '没有数据';
-$lang->error->hasEdited       = '该记录可能已经被改动。请刷新页面重新编辑！';
+$lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -373,7 +373,7 @@ $lang->pager->next      = "<i class='icon-play' title='下一页'></i>";
 $lang->pager->last      = "<i class='icon-step-forward' title='末页'></i>";
 $lang->pager->locate    = "GO!";
 
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-pro-version'></i> 专业版！</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";

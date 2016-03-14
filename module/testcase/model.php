@@ -360,7 +360,7 @@ class testcaseModel extends model
         $oldCase     = $this->getById($caseID);
         if($oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
 

@@ -344,7 +344,7 @@ class storyModel extends model
         $oldStory    = $this->getById($storyID);
         if($oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
 
@@ -407,7 +407,7 @@ class storyModel extends model
         $oldStory = $this->getById($storyID);
         if($oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
 
