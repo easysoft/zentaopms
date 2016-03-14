@@ -133,6 +133,7 @@ class upgradeModel extends model
             case '8_0':
             case '8_0_1':
                 $this->execSQL($this->getUpgradeFile('8.0.1'));
+                $this->addPriv8_0_1();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -754,6 +755,73 @@ class upgradeModel extends model
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('tree')
                 ->set('method')->eq('browseTask')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Add priv for version 8.0.1
+     *
+     * @access public
+     * @return bool
+     */
+    public function addPriv8_0_1()
+    {
+        $privTable = $this->config->db->prefix . 'groupPriv';
+
+        $oldPriv = $this->dao->select('*')->from($privTable)
+            ->where('module')->eq('bug')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+        foreach($oldPriv as $item)
+        {
+            $this->dao->insert($privTable)
+                ->set('module')->eq('bug')
+                ->set('method')->eq('linkBugs')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+            $this->dao->insert($privTable)
+                ->set('module')->eq('bug')
+                ->set('method')->eq('unlinkBug')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+        }
+
+        $oldPriv = $this->dao->select('*')->from($privTable)
+            ->where('module')->eq('story')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+        foreach($oldPriv as $item)
+        {
+            $this->dao->insert($privTable)
+                ->set('module')->eq('story')
+                ->set('method')->eq('linkStory')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+            $this->dao->insert($privTable)
+                ->set('module')->eq('story')
+                ->set('method')->eq('unlinkStory')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+        }
+
+        $oldPriv = $this->dao->select('*')->from($privTable)
+            ->where('module')->eq('testcase')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+        foreach($oldPriv as $item)
+        {
+            $this->dao->insert($privTable)
+                ->set('module')->eq('testcase')
+                ->set('method')->eq('linkCases')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+            $this->dao->insert($privTable)
+                ->set('module')->eq('testcase')
+                ->set('method')->eq('unlinkCase')
                 ->set('`group`')->eq($item->group)
                 ->exec();
         }
