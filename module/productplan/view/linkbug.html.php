@@ -53,9 +53,10 @@ include '../../common/view/tablesorter.html.php';
         <td colspan='6' class='text-left'>
           <?php if(count($allBugs))
           {
-              echo "<div class='table-actions clearfix'>";
-              echo "<div class='btn-group'>" .  html::selectAll('unlinkedBugsForm') . html::selectReverse('unlinkedBugsForm') . '</div>';
-              echo html::submitButton($lang->productplan->linkBug) . html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'") . '</div>';
+              echo "<div class='table-actions clearfix' style='padding-left:8px;'>";
+              echo html::selectButton() . html::submitButton($lang->productplan->linkBug);
+              echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");
+              echo '</div>';
           }
           ?>
         </td>
