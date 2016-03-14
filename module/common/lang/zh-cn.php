@@ -59,6 +59,7 @@ $lang->uploadImages = '多图上传 ';
 $lang->timeout      = '连接超时，请检查网络环境，或重试！';
 $lang->repairTable  = '数据库表可能损坏，请用phpmyadmin或myisamchk检查修复。';
 $lang->duplicate    = '已有相同标题的%s';
+$lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>抱歉，管理员限制当前IP登录，请联系管理员解除限制。</body></html>";
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
