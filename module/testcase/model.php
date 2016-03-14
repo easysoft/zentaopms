@@ -311,7 +311,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get cases by assigento.
+     * Get cases by assignedTo.
      * 
      * @param  string $account 
      * @param  string $orderBy 
@@ -319,7 +319,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByAssigento($account, $orderBy = 'id_desc', $pager = null)
+    public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -341,7 +341,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByOpened($account, $orderBy = 'id_desc', $pager = null)
+    public function getByOpenedBy($account, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
             ->andWhere('deleted')->eq(0)
