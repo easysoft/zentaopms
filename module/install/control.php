@@ -68,8 +68,6 @@ class install extends control
         $this->view->phpVersion     = $this->install->getPhpVersion();
         $this->view->phpResult      = $this->install->checkPHP();
         $this->view->pdoResult      = $this->install->checkPDO();
-        $this->view->sessionResult  = $this->install->checkSessionSavePath();
-        $this->view->sessionInfo    = $this->install->getSessionSavePath();
         $this->view->pdoMySQLResult = $this->install->checkPDOMySQL();
         $this->view->jsonResult     = $this->install->checkJSON();
         $this->view->tmpRootInfo    = $this->install->getTmpRoot();
@@ -77,6 +75,16 @@ class install extends control
         $this->view->dataRootInfo   = $this->install->getDataRoot();
         $this->view->dataRootResult = $this->install->checkDataRoot();
         $this->view->iniInfo        = $this->install->getIniInfo();
+
+        $checkSession = ini_get('session.save_handler') == 'files';
+        $this->view->sessionResult = 'ok';
+        $this->view->checkSession  = $checkSession;
+        if($checkSession)
+        {
+            $this->view->sessionResult  = $this->install->checkSessionSavePath();
+            $this->view->sessionInfo    = $this->install->getSessionSavePath();
+        }
+
         $this->display();
     }
 

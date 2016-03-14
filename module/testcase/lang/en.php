@@ -13,32 +13,22 @@ $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
 $lang->testcase->module           = 'Module';
 $lang->testcase->story            = 'Story';
-$lang->testcase->storyVersion     = 'Story version';
 $lang->testcase->title            = 'Title';
 $lang->testcase->precondition     = 'precondition';
 $lang->testcase->pri              = 'Priority';
 $lang->testcase->type             = 'Type';
 $lang->testcase->status           = 'Status';
 $lang->testcase->steps            = 'Steps';
-$lang->testcase->frequency        = 'Frequency';
-$lang->testcase->order            = 'Order';
 $lang->testcase->openedBy         = 'Opened by ';
 $lang->testcase->openedDate       = 'Opened date';
 $lang->testcase->lastEditedBy     = 'Last edited by';
-$lang->testcase->lastEditedDate   = 'Last edited date';
-$lang->testcase->version          = 'Version';
 $lang->testcase->result           = 'Result';
-$lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->real             = 'Real';
 $lang->testcase->keywords         = 'Keywords';
 $lang->testcase->files            = 'Files';
-$lang->testcase->howRun           = 'How run';
-$lang->testcase->scriptedBy       = 'Scripted by';
-$lang->testcase->scriptedDate     = 'Scripted date';
-$lang->testcase->scriptedStatus   = 'Scripted status';
-$lang->testcase->scriptedLocation = 'Script location';
 $lang->testcase->linkCase         = 'Related cases';
-$lang->testcase->linkCases        = 'Link cases';
+$lang->testcase->linkCases        = 'Link related cases';
+$lang->testcase->unlinkCase       = 'unlink related case';
 $lang->testcase->stage            = 'Stage';
 $lang->testcase->lastEditedByAB   = 'Last edited by';
 $lang->testcase->lastEditedDateAB = 'Last edited date';
@@ -63,11 +53,9 @@ $lang->testcase->edit               = "Edit";
 $lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->batchDelete        = "Batch delete ";
-$lang->testcase->deleted            = "Deleted";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->groupCase          = "View case by group";
 $lang->testcase->import             = "Import";
-$lang->testcase->importID           = "Linenum";
 $lang->testcase->showImport         = "Show import";
 $lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export data";
@@ -77,45 +65,28 @@ $lang->testcase->confirmStoryChange = 'Confirm story change';
 $lang->testcase->new = 'New';
   
 $lang->testcase->num    = 'The number of cases';
-$lang->testcase->insert = 'New insertion';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Insert before';
 $lang->testcase->insertAfter  = 'Insert after';
 
-$lang->testcase->selectProduct = "Select {$lang->productCommon}";
-$lang->testcase->byModule      = 'By module';
 $lang->testcase->assignToMe    = 'Cases to me';
 $lang->testcase->openedByMe    = 'My Opened cases';
 $lang->testcase->allCases      = 'All case';
 $lang->testcase->needConfirm   = 'Story changed';
-$lang->testcase->moduleCases   = 'By module';
 $lang->testcase->bySearch      = 'By search';
-$lang->testcase->doneByMe      = 'My runed cases';
 
-$lang->testcase->lblProductAndModule         = "{$lang->productCommon} & module";
-$lang->testcase->lblTypeAndPri               = 'Type & priority';
-$lang->testcase->lblSystemBrowserAndHardware = 'OS & browser';
-$lang->testcase->lblAssignAndMail            = 'Assigned & mailto';
 $lang->testcase->lblStory                    = 'Story';
 $lang->testcase->lblLastEdited               = 'Last edited';
 $lang->testcase->lblTypeValue                = 'List of type';
 $lang->testcase->lblStageValue               = 'List of stage';
 $lang->testcase->lblStatusValue              = 'List of status';
 
-$lang->testcase->legendRelated      = 'Related info';
 $lang->testcase->legendBasicInfo    = 'Basic info';
-$lang->testcase->legendMailto       = 'Mailto';
 $lang->testcase->legendAttatch      = 'Files';
 $lang->testcase->legendLinkBugs     = 'Bug';
 $lang->testcase->legendOpenAndEdit  = 'Open & edit';
-$lang->testcase->legendStoryAndTask = 'Story';
-$lang->testcase->legendCases        = 'Related cases';
-$lang->testcase->legendSteps        = 'Steps';
-$lang->testcase->legendAction       = 'Action';
-$lang->testcase->legendHistory      = 'History';
 $lang->testcase->legendComment      = 'Comment';
-$lang->testcase->legendProduct      = "{$lang->productCommon} & module";
 
 $lang->testcase->confirmDelete      = 'Are you sure to delete this case?';
 $lang->testcase->confirmBatchDelete = 'Are you sure to batch delete there cases?';
@@ -157,7 +128,6 @@ $lang->testcase->resultList['pass']    = 'Pass';
 $lang->testcase->resultList['fail']    = 'Fail';
 $lang->testcase->resultList['blocked'] = 'Blocked';
 
-$lang->testcase->buttonEdit   = 'Edit';
 $lang->testcase->buttonToList = 'Back';
 
 $lang->testcase->errorEncode = 'No data, please select right encode and upload again!';
@@ -165,7 +135,3 @@ $lang->testcase->noFunction  = 'Iconv and mb_convert_encoding does not exist, yo
 $lang->testcase->noRequire   = "In the row of %s, the %s is a required field";
 
 $lang->testcase->searchStories = 'Type to search stories';
-
-$lang->testcase->action = new stdclass();
-$lang->testcase->action->linked2case  = array('main' => '$date, linked related cases <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->testcase->action->unlinkedcase = array('main' => '$date, removed related cases <strong>$extra</strong> by <strong>$actor</strong>.');

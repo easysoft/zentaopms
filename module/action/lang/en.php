@@ -17,7 +17,6 @@ $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Name';
 $lang->action->actor      = 'Actor';
 $lang->action->action     = 'Action';
-$lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 
 $lang->action->trash       = 'Trash';
@@ -99,6 +98,10 @@ $lang->action->desc->diff1          = 'changed <strong><i>%s</i></strong>, old i
 $lang->action->desc->diff2          = 'changed <strong><i>%s</i></strong>, the diff is:' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = "changed file's name %s to %s.";
 
+/* The desc of actions for link and unlink related case. */
+$lang->action->desc->linkrelatedcase   = '$date, linked related case <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, unlinked related case <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+
 /* The action labels. */
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'created';
@@ -131,6 +134,14 @@ $lang->action->label->changestatus        = 'change status';
 $lang->action->label->marked              = 'edited';
 $lang->action->label->linked2project      = "link to {$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "unlik from {$lang->projectCommon}";
+$lang->action->label->linkrelatedbug      = "linked related Bug";
+$lang->action->label->unlinkrelatedbug    = "unlinked related Bug";
+$lang->action->label->linkrelatedcase     = "linked related case";
+$lang->action->label->unlinkrelatedcase   = "unlinked related case";
+$lang->action->label->linkrelatedstory    = "linked related story";
+$lang->action->label->unlinkrelatedstory  = "unlinked related story";
+$lang->action->label->subdividestory      = "subdivided story";
+$lang->action->label->unlinkchildstory    = "unlinked child story";
 $lang->action->label->started             = 'started';
 $lang->action->label->restarted           = 'continued';
 $lang->action->label->recordestimate      = 'Hours';

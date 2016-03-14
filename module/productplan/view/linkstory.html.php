@@ -56,9 +56,10 @@ include '../../common/view/tablesorter.html.php';
           <td colspan='9' class='text-left'>
             <?php if(count($allStories))
             {
-                echo "<div class='table-actions clearfix'>";
-                echo "<div class='btn-group'>" . html::selectAll('unlinkedStoriesForm') . html::selectReverse('unlinkedStoriesForm') . '</div>';
-                echo html::submitButton($lang->story->linkStory) . html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'") . '</div>';
+                echo "<div class='table-actions clearfix' style='padding-left:8px;'>";
+                echo html::selectButton() . html::submitButton($lang->story->linkStory);
+                echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");
+                echo '</div>';
             }
             ?>
           </td>

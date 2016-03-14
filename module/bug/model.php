@@ -432,10 +432,9 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         if($oldBug->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $now = helper::now();
         $bug = fixer::input('post')
@@ -795,61 +794,88 @@ class bugModel extends model
     }
 
     /**
-     * Link bugs.
+     * Link related bugs.
      *
      * @param  int    $bugID
-     * @param  string $bugs
      * @access public
-     * @return string
+     * @return void
      */
-    public function linkBugs($bugID, $bugs = '')
+    public function linkBugs($bugID)
     {
-        if($this->post->bugs == false) return $bugs;
+        if($this->post->bugs == false) return;
 
-        $bugs = implode(',', $this->post->bugs) . ',' . trim($bugs, ',');
+        $bug       = $this->getById($bugID);
+        $bugs2Link = $this->post->bugs;
+
+        $bugs = implode(',', $bugs2Link) . ',' . trim($bug->linkBug, ',');
         $this->dao->update(TABLE_BUG)->set('linkBug')->eq(trim($bugs, ','))->where('id')->eq($bugID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('bug', $bugID, 'linked2Bug', '', implode(',', $this->post->bugs));
-
-        return $bugs;
+        $this->loadModel('action')->create('bug', $bugID, 'linkRelatedBug', '', implode(',', $bugs2Link));
     }
 
     /**
-     * Delete a linked bug.
+     * Get bugs to link.
      *
      * @param  int    $bugID
-     * @param  int    $deleteBug
+     * @param  string $browseType
+     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function deleteLinkedBug($bugID, $deleteBug = 0)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID)
     {
-        $bug  = $this->getById($bugID);
+        if($browseType == 'bySearch')
+        {
+            $bug       = $this->getById($bugID);
+            $bugs2Link = $this->getBySearch($bug->product, $queryID, 'id', null);
+            foreach($bugs2Link as $key => $bug2Link)
+            {
+                if($bug2Link->id == $bugID) unset($bugs2Link[$key]);
+                if(in_array($bug2Link->id, explode(',', $bug->linkBug))) unset($bugs2Link[$key]);
+            }
+            return $bugs2Link;
+        }
+        else
+        {
+            return array();
+        }
+    }
+
+    /**
+     * Unlink related bug.
+     *
+     * @param  int    $bugID
+     * @param  int    $bug2Unlink
+     * @access public
+     * @return void
+     */
+    public function unlinkBug($bugID, $bug2Unlink = 0)
+    {
+        $bug = $this->getById($bugID);
 
         $bugs = explode(',', trim($bug->linkBug, ','));
         foreach($bugs as $key => $bugId)
         {
-            if($bugId == $deleteBug) unset($bugs[$key]);
+            if($bugId == $bug2Unlink) unset($bugs[$key]);
         }
         $bugs = implode(',', $bugs);
 
         $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugs)->where('id')->eq($bugID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('bug', $bugID, 'unLinkedBug', '', $deleteBug);
-
-        return $this->getLinkedBugs($bugs);
+        $this->loadModel('action')->create('bug', $bugID, 'unlinkRelatedBug', '', $bug2Unlink);
     }
 
     /**
-     * Get linked bugs.
+     * Get linkBugs.
      *
-     * @param  string $bugs
+     * @param  int    $bugID
      * @access public
      * @return array
      */
-    public function getLinkedBugs($bugs)
+    public function getLinkBugs($bugID)
     {
-        return $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($bugs)->fetchPairs();
+        $bug = $this->getById($bugID);
+        return $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($bug->linkBug)->fetchPairs();
     }
 
     /**
@@ -882,6 +908,8 @@ class bugModel extends model
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
             $this->config->bug->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
+
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 
     /**

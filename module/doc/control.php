@@ -85,7 +85,6 @@ class doc extends control
         /* Build the search form. */
         $actionURL = $this->createLink('doc', 'browse', "libID=$libID&moduleID=$moduleID&procuctID=$productID&projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL);
-        $this->search->setSearchParams($this->config->doc->search);
 
         $this->view->libID         = $libID;
         $this->view->libName       = $this->libs[$libID];

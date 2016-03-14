@@ -12,7 +12,6 @@
 ?>
 <?php 
 include '../../common/view/header.html.php';
-include '../../common/view/treeview.html.php';
 js::set('deptID', $deptID);
 js::set('confirmDelete', $lang->user->confirmDelete);
 ?>

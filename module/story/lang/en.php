@@ -9,9 +9,7 @@
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->story->browse      = "Browse";
 $lang->story->create      = "Create";
-$lang->story->createCase  = "Create case";
 $lang->story->batchCreate = "Batch";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Changed';
@@ -24,11 +22,10 @@ $lang->story->batchClose  = 'Batch close';
 $lang->story->activate    = 'Activate';
 $lang->story->delete      = "Delete";
 $lang->story->view        = "Info";
-$lang->story->legend      = "Related";
 $lang->story->tasks       = "Tasks";
 $lang->story->taskCount   = 'Tasks count';
-$lang->story->bugs        = "Bug";
 $lang->story->linkStory   = 'Related story';
+$lang->story->unlinkStory = 'Unlink related story';
 $lang->story->export      = "Export data";
 $lang->story->zeroCase    = "Story of zero case";
 $lang->story->reportChart = "Report";
@@ -43,12 +40,9 @@ $lang->story->product        = $lang->productCommon;
 $lang->story->module         = 'Module';
 $lang->story->source         = 'Source';
 $lang->story->fromBug        = 'From bug';
-$lang->story->release        = 'Release';
-$lang->story->bug            = 'Related Bug';
 $lang->story->title          = 'Title';
 $lang->story->spec           = 'Spec';
 $lang->story->verify         = 'Verify';
-$lang->story->type           = 'Type ';
 $lang->story->pri            = 'Priority';
 $lang->story->estimate       = 'Estimate';
 $lang->story->estimateAB     = 'Estimate';
@@ -63,7 +57,6 @@ $lang->story->assignedTo     = 'Assigned to';
 $lang->story->assignedDate   = 'Assigned date';
 $lang->story->lastEditedBy   = 'Last edited by';
 $lang->story->lastEditedDate = 'Last edited date';
-$lang->story->lastEdited     = 'Last edited';
 $lang->story->closedBy       = 'Closed by';
 $lang->story->closedDate     = 'Closed date';
 $lang->story->closedReason   = 'Closed reason';
@@ -71,7 +64,6 @@ $lang->story->rejectedReason = 'Reject reason';
 $lang->story->reviewedBy     = 'Reviewed by';
 $lang->story->reviewedDate   = 'Reviewed date';
 $lang->story->version        = 'Version';
-$lang->story->project        = $lang->projectCommon;
 $lang->story->plan           = 'Plan';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Comment';
@@ -156,7 +148,6 @@ $lang->story->legendLinkStories    = 'Related story';
 $lang->story->legendChildStories   = 'Child story';
 $lang->story->legendSpec           = 'Spec';
 $lang->story->legendVerify         = 'Verify standard';
-$lang->story->legendHistory        = 'History';
 $lang->story->legendMisc           = 'Misc';
 
 $lang->story->lblChange            = 'Change';
@@ -171,19 +162,13 @@ $lang->story->affectedCases        = 'Affected cases';
 
 $lang->story->specTemplate          = "Recommend template:：As <<i class='red'>a type of user</i>>,I want <<i class='red'>some goals</i>>,so that <<i class='red'>some reason</i>>.";
 $lang->story->needNotReview         = "needn't review";
-$lang->story->afterSubmit           = "After created";
 $lang->story->successSaved          = "Successfully saved";
 $lang->story->confirmDelete         = "Are you sure to delete this story?";
-$lang->story->confirmBatchClose     = "Are you sure to close those stories?";
-$lang->story->errorFormat           = 'Error format';
-$lang->story->errorEmptyTitle       = "Title can't be empty";
+$lang->story->errorEmptyChildStory  = '『Child story』can not be empty.';
 $lang->story->mustChooseResult      = 'Must choose s result';
 $lang->story->mustChoosePreVersion  = 'Must select an version to revert';
-$lang->story->ajaxGetProjectStories = "API:{$lang->projectCommon} stories";
-$lang->story->ajaxGetProductStories = "API:{$lang->productCommon} stories";
 
 $lang->story->form = new stdclass();
-$lang->story->form->titleNote = 'A word to briefly express story content';
 $lang->story->form->area      = 'The story of their respective range';
 $lang->story->form->desc      = 'Description and standards, what stories? How to acceptance?';
 $lang->story->form->resource  = 'Allocation of resources, who completed? How long does it take?';
@@ -196,10 +181,10 @@ $lang->story->action->linked2plan         = array('main' => '$date, linked to pl
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
 $lang->story->action->linked2project      = array('main' => '$date, linked to ' . $lang->projectCommon . ' <strong>$extra</strong> by <strong>$actor</strong>.'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, removed from ' . $lang->projectCommon . ' <strontg>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->linkstories         = array('main' => '$date, linked stories <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->childstories        = array('main' => '$date, subdivied to <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->mvchildstories      = array('main' => '$date, removed child stories <strong>$extra</strong> by <strong>$actor</strong>.');
-$lang->story->action->mvlinkstories       = array('main' => '$date, removed link stories <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->linkrelatedstory    = array('main' => '$date, link related story <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->subdividestory      = array('main' => '$date, subdivide to <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->unlinkrelatedstory  = array('main' => '$date, unlink related story <strong>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->unlinkchildstory    = array('main' => '$date, unlink child story <strong>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
 $lang->story->report = new stdclass();

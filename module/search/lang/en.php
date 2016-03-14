@@ -11,8 +11,6 @@
  */
 $lang->search->common        = 'Search';
 $lang->search->reset         = 'Reset';
-$lang->search->more          = 'More';
-$lang->search->lite          = 'Lite';
 $lang->search->saveQuery     = 'Save';
 $lang->search->myQuery       = 'My queries';
 $lang->search->group1        = '1';
@@ -22,8 +20,6 @@ $lang->search->buildQuery    = 'Execute query';
 $lang->search->saveQuery     = 'Save query';
 $lang->search->deleteQuery   = 'Delete query';
 $lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
-$lang->search->storyTitle    = 'Story title';
-$lang->search->taskTitle     = 'Task title';
 $lang->search->select        = 'Stories/Tasks filter';
 $lang->search->me            = 'Me';
 
@@ -42,9 +38,3 @@ $lang->search->andor['and']         = 'And';
 $lang->search->andor['or']          = 'Or';
 
 $lang->search->null = 'Null';
-
-$lang->userquery = new stdclass();
-$lang->userquery->title     = 'Title';
-$lang->userquery->myQueries = 'My queries';
-$lang->userquery->execut    = 'Execute';
-$lang->userquery->delete    = 'Delete';

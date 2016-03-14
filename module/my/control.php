@@ -290,11 +290,11 @@ class my extends control
         $cases = array();
         if($type == 'assigntome')
         {
-            $cases = $this->loadModel('testcase')->getByAssigento($this->app->user->account, $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, $sort, $pager);
         }
         elseif($type == 'openedbyme')
         {
-            $cases = $this->loadModel('testcase')->getByOpened($this->app->user->account, $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByOpenedBy($this->app->user->account, $sort, $pager);
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         

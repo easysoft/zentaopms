@@ -100,7 +100,7 @@
                 <tr>
                   <td colspan='8'>
                     <div class='table-actions clearfix'>
-                      <?php if($countStories and $canBatchUnlink) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm') . '</div>' . html::submitButton($lang->build->batchUnlink) . '</div>';?>
+                      <?php if($countStories and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->build->batchUnlink);?>
                       <div class='text'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
                     </div>
                   </td>
@@ -158,7 +158,7 @@
                 <tr>
                   <td colspan='8'>
                     <div class='table-actions clearfix'>
-                      <?php if($countBugs and $canBatchUnlink) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>' . html::submitButton($lang->build->batchUnlink) . '</div>';?>
+                      <?php if($countBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->build->batchUnlink);?>
                       <div class='text'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
                     </div>
                   </td>

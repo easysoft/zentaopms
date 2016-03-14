@@ -311,7 +311,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get cases by assigento.
+     * Get cases by assignedTo.
      * 
      * @param  string $account 
      * @param  string $orderBy 
@@ -319,7 +319,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByAssigento($account, $orderBy = 'id_desc', $pager = null)
+    public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -341,7 +341,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByOpened($account, $orderBy = 'id_desc', $pager = null)
+    public function getByOpenedBy($account, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
             ->andWhere('deleted')->eq(0)
@@ -360,10 +360,9 @@ class testcaseModel extends model
         $oldCase     = $this->getById($caseID);
         if($oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $now         = helper::now();
         $stepChanged = false;
@@ -438,61 +437,88 @@ class testcaseModel extends model
     }
 
     /**
-     * Link cases.
+     * Link related cases.
      *
      * @param  int    $caseID
-     * @param  string $cases
      * @access public
-     * @return array
+     * @return void
      */
-    public function linkCases($caseID, $cases = '')
+    public function linkCases($caseID)
     {
-        if($this->post->cases == false) return $cases;
+        if($this->post->cases == false) return;
 
-        $cases = implode(',', $this->post->cases) . ',' . trim($cases, ',');
+        $case       = $this->getById($caseID);
+        $cases2Link = $this->post->cases;
+
+        $cases = implode(',', $cases2Link) . ',' . trim($case->linkCase, ',');
         $this->dao->update(TABLE_CASE)->set('linkCase')->eq(trim($cases, ','))->where('id')->eq($caseID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('case', $caseID, 'linked2Case', '', implode(',', $this->post->cases));
-
-        return $cases;
+        $this->loadModel('action')->create('case', $caseID, 'linkRelatedCase', '', implode(',', $cases2Link));
     }
 
     /**
-     * Delete linked case.
+     * Get cases to link.
      *
      * @param  int    $caseID
-     * @param  int    $deleteCase
+     * @param  string $browseType
+     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function deleteLinkedCase($caseID, $deleteCase = 0)
+    public function getCases2Link($caseID, $browseType = 'bySearch', $queryID)
+    {
+        if($browseType == 'bySearch')
+        {
+            $case       = $this->getById($caseID);
+            $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null);
+            foreach($cases2Link as $key => $case2Link)
+            {
+                if($case2Link->id == $caseID) unset($cases2Link[$key]);
+                if(in_array($case2Link->id, explode(',', $case->linkCase))) unset($cases2Link[$key]);
+            }
+            return $cases2Link;
+        }
+        else
+        {
+            return array();
+        }
+    }
+
+    /**
+     * Unlink related case.
+     *
+     * @param  int    $caseID
+     * @param  int    $case2Unlink
+     * @access public
+     * @return void
+     */
+    public function unlinkCase($caseID, $case2Unlink = 0)
     {
         $case = $this->getById($caseID);
 
         $cases = explode(',', trim($case->linkCase, ','));
         foreach($cases as $key => $caseId)
         {
-            if($caseId == $deleteCase) unset($cases[$key]);
+            if($caseId == $case2Unlink) unset($cases[$key]);
         }
         $cases = implode(',', $cases);
 
         $this->dao->update(TABLE_CASE)->set('linkCase')->eq($cases)->where('id')->eq($caseID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('case', $caseID, 'unLinkedCase', '', $deleteCase);
-
-        return $this->getLinkedCases($cases);
+        $this->loadModel('action')->create('case', $caseID, 'unlinkRelatedCase', '', $case2Unlink);
     }
 
     /**
-     * Get linked cases.
+     * Get linkCases.
      *
-     * @param  string $cases
+     * @param  int    $caseID
      * @access public
      * @return array
      */
-    public function getLinkedCases($cases)
+    public function getLinkCases($caseID)
     {
-        return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($cases)->fetchPairs();
+        $case = $this->getById($caseID);
+        return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->fetchPairs();
     }
 
     /**
@@ -830,5 +856,7 @@ class testcaseModel extends model
         }
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 }

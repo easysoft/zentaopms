@@ -56,29 +56,31 @@ function loadModuleRelated()
 }
 
 /**
- * Delete a linked bug.
+ * Unlink related bug.
  *
  * @param  int $bugID
- * @param  int $deleteBug
+ * @param  int $bug2Unlink
  * @access public
  * @return void
  */
-function deleteLinkedBug(bugID, deleteBug)
+function unlinkBug(bugID, bug2Unlink)
 {
-    deleteLink = createLink('bug', 'ajaxDeleteLinkedBug', 'bugID=' + bugID + '&deleteBug=' + deleteBug);
-    $('#linkBugBox').load(deleteLink);
+    link = createLink('bug', 'unlinkBug', 'bugID=' + bugID + '&bug2Unlink=' + bug2Unlink);
+    $.get(link, function(data)
+    {
+        if(data == 'success') $('#linkBugBox').load(createLink('bug', 'ajaxGetLinkBugs', 'bugID=' + bugID));
+    });
 }
 
 /**
- * Load linked bugs.
+ * Load linkBugs.
  *
  * @param  int    $bugID
- * @param  string $linkedBugs
  * @access public
  * @return void
  */
-function loadLinkedBugs(bugID, linkedBugs)
+function loadLinkBugs(bugID)
 {
-    bugLink = createLink('bug', 'ajaxGetLinkedBugs', 'bugID=' + bugID + '&linkedBugs=' + linkedBugs);
+    bugLink = createLink('bug', 'ajaxGetLinkBugs', 'bugID=' + bugID);
     $('#linkBugBox').load(bugLink);
 }

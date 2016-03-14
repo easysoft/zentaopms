@@ -518,7 +518,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer .table thead tr th {text-align: center;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
-.outer .table tbody > tr > td:first-child {text-align: left}
 .outer .table th {vertical-align: middle;}
 .outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 10px}
 .outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 10px}

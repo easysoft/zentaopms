@@ -376,7 +376,7 @@ class productModel extends model
         if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, 'draft', $sort, $pager);
         if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, 'active', $sort, $pager);
         if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, 'changed', $sort, $pager);
-        if($browseType == 'willclose')    $stories = $this->story->getWillClose($productID, $branch, $sort, $pager);
+        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $sort, $pager);
         if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, 'closed', $sort, $pager);
 
         if($stories) return $stories;
@@ -385,19 +385,19 @@ class productModel extends model
     }
 
     /**
-     * Get story stages.
+     * Batch get story stage.
      *
      * @param  array  $stories.
      * @access public
      * @return array
      */
-    public function getStoryStages($stories)
+    public function batchGetStoryStage($stories)
     {
         /* Set story id list. */
         $storyIdList = array();
         foreach($stories as $story) $storyIdList[$story->id] = $story->id;
 
-        return $this->loadModel('story')->getStoryStages($storyIdList);
+        return $this->loadModel('story')->batchGetStoryStage($storyIdList);
     }
 
     /**
@@ -427,6 +427,8 @@ class productModel extends model
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
             $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
+
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 
     /**

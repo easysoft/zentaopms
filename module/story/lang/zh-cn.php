@@ -9,9 +9,7 @@
  * @version     $Id: zh-cn.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->story->browse      = "需求列表";
 $lang->story->create      = "提需求";
-$lang->story->createCase  = "建用例";
 $lang->story->batchCreate = "批量添加";
 $lang->story->change      = "变更";
 $lang->story->changed     = '需求变更';
@@ -24,11 +22,10 @@ $lang->story->batchClose  = '批量关闭';
 $lang->story->activate    = '激活';
 $lang->story->delete      = "删除";
 $lang->story->view        = "需求详情";
-$lang->story->legend      = "相关";
 $lang->story->tasks       = "相关任务";
 $lang->story->taskCount   = '任务数';
-$lang->story->bugs        = "Bug";
 $lang->story->linkStory   = '关联需求';
+$lang->story->unlinkStory = '移除相关需求';
 $lang->story->export      = "导出数据";
 $lang->story->zeroCase    = "零用例需求";
 $lang->story->reportChart = "统计报表";
@@ -43,12 +40,9 @@ $lang->story->product        = "所属{$lang->productCommon}";
 $lang->story->module         = '所属模块';
 $lang->story->source         = '需求来源';
 $lang->story->fromBug        = '来源Bug';
-$lang->story->release        = '发布计划';
-$lang->story->bug            = '相关bug';
 $lang->story->title          = '需求名称';
 $lang->story->spec           = '需求描述';
 $lang->story->verify         = '验收标准';
-$lang->story->type           = '需求类型 ';
 $lang->story->pri            = '优先级';
 $lang->story->estimate       = '预计工时';
 $lang->story->estimateAB     = '预计';
@@ -63,7 +57,6 @@ $lang->story->assignedTo     = '指派给';
 $lang->story->assignedDate   = '指派日期';
 $lang->story->lastEditedBy   = '最后修改';
 $lang->story->lastEditedDate = '最后修改日期';
-$lang->story->lastEdited     = '最后修改';
 $lang->story->closedBy       = '由谁关闭';
 $lang->story->closedDate     = '关闭日期';
 $lang->story->closedReason   = '关闭原因';
@@ -71,7 +64,6 @@ $lang->story->rejectedReason = '拒绝原因';
 $lang->story->reviewedBy     = '由谁评审';
 $lang->story->reviewedDate   = '评审时间';
 $lang->story->version        = '版本号';
-$lang->story->project        = '所属' . $lang->projectCommon;
 $lang->story->plan           = '所属计划';
 $lang->story->planAB         = '计划';
 $lang->story->comment        = '备注';
@@ -156,7 +148,6 @@ $lang->story->legendLinkStories    = '相关需求';
 $lang->story->legendChildStories   = '细分需求';
 $lang->story->legendSpec           = '需求描述';
 $lang->story->legendVerify         = '验收标准';
-$lang->story->legendHistory        = '历史记录';
 $lang->story->legendMisc           = '其他相关';
 
 $lang->story->lblChange            = '变更需求';
@@ -171,19 +162,13 @@ $lang->story->affectedCases        = '影响的用例';
 
 $lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='text-important'>某种类型的用户</i>>，我希望<<i class='text-important'>达成某些目的</i>>，这样可以<<i class='text-important'>开发的价值</i>>。";
 $lang->story->needNotReview         = '不需要评审';
-$lang->story->afterSubmit           = "添加之后";
 $lang->story->successSaved          = "需求成功添加，";
 $lang->story->confirmDelete         = "您确认删除该需求吗?";
-$lang->story->confirmBatchClose     = "您确认关闭这些需求吗?";
-$lang->story->errorFormat           = '需求数据有误';
-$lang->story->errorEmptyTitle       = '标题不能为空';
+$lang->story->errorEmptyChildStory  = '『细分需求』不能为空。';
 $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
-$lang->story->ajaxGetProjectStories = "接口:获取{$lang->projectCommon}需求列表";
-$lang->story->ajaxGetProductStories = "接口:获取{$lang->productCommon}需求列表";
 
 $lang->story->form = new stdclass();
-$lang->story->form->titleNote = '一句话简要表达需求内容';
 $lang->story->form->area      = '该需求所属范围';
 $lang->story->form->desc      = '描述及标准，什么需求？如何验收？';
 $lang->story->form->resource  = '资源分配，有谁完成？需要多少时间？';
@@ -196,10 +181,10 @@ $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
 $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectCommon . ' <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . ' <strong>$extra</strong> 移除。'); 
-$lang->story->action->linkstories         = array('main' => '$date, 由 <strong>$actor</strong> 关联相关需求 <strong>$extra</strong>。');
-$lang->story->action->childstories        = array('main' => '$date, 由 <strong>$actor</strong> 细分为需求 <strong>$extra</strong>。');
-$lang->story->action->mvchildstories      = array('main' => '$date, 由 <strong>$actor</strong> 移除细分需求 <strong>$extra</strong>。');
-$lang->story->action->mvlinkstories       = array('main' => '$date, 由 <strong>$actor</strong> 移除相关需求 <strong>$extra</strong>。');
+$lang->story->action->linkrelatedstory    = array('main' => '$date, 由 <strong>$actor</strong> 关联相关需求 <strong>$extra</strong>。');
+$lang->story->action->subdividestory      = array('main' => '$date, 由 <strong>$actor</strong> 细分为需求 <strong>$extra</strong>。');
+$lang->story->action->unlinkrelatedstory  = array('main' => '$date, 由 <strong>$actor</strong> 移除相关需求 <strong>$extra</strong>。');
+$lang->story->action->unlinkchildstory    = array('main' => '$date, 由 <strong>$actor</strong> 移除细分需求 <strong>$extra</strong>。');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

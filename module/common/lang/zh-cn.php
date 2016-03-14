@@ -20,8 +20,6 @@ $lang->ellipsis  = '…';
 
 $lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";
-$lang->myControl      = "我的地盘";
-$lang->currentPos     = '当前位置：';
 $lang->logout         = '退出';
 $lang->login          = '登录';
 $lang->aboutZenTao    = '关于';
@@ -31,25 +29,20 @@ $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar
 $lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 
 $lang->reset        = '重填';
-$lang->cancel       = '取消';
 $lang->refresh      = '刷新';
 $lang->edit         = '编辑';
-$lang->copy         = '复制';
 $lang->delete       = '删除';
 $lang->close        = '关闭';
-$lang->link         = '关联';
 $lang->unlink       = '移除';
 $lang->import       = '导入';
 $lang->export       = '导出';
 $lang->setFileName  = '文件名：';
-$lang->activate     = '激活';
 $lang->submitting   = '稍候...';
 $lang->save         = '保存';
 $lang->confirm      = '确认';
 $lang->preview      = '查看';
 $lang->goback       = '返回';
 $lang->goPC         = 'PC版';
-$lang->go           = 'GO';
 $lang->more         = '更多';
 $lang->day          = '天';
 
@@ -59,7 +52,6 @@ $lang->history      = '历史记录';
 $lang->attatch      = '附件';
 $lang->reverse      = '切换顺序';
 $lang->switchDisplay= '切换显示';
-$lang->switchHelp   = '切换帮助';
 $lang->addFiles     = '上传了附件 ';
 $lang->files        = '附件 ';
 $lang->pasteText    = '粘贴文本 ';
@@ -79,7 +71,6 @@ $lang->selectReverse = '反选';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
 $lang->showAll       = '[[全部显示]]';
-$lang->hideClosed    = '[[显示进行中]]';
 
 $lang->future       = '未来';
 $lang->year         = '年';
@@ -369,7 +360,7 @@ $lang->error->passwordrule    = "密码应该符合规则，长度至少为六�
 $lang->error->accessDenied    = '您没有访问权限';
 $lang->error->pasteImg        = '您的浏览器不支持粘贴图片！';
 $lang->error->noData          = '没有数据';
-$lang->error->hasEdited       = '该记录可能已经被改动。请刷新页面重新编辑！';
+$lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -382,11 +373,7 @@ $lang->pager->next      = "<i class='icon-play' title='下一页'></i>";
 $lang->pager->last      = "<i class='icon-step-forward' title='末页'></i>";
 $lang->pager->locate    = "GO!";
 
-$lang->zentaoSite     = "官方网站";
-$lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a>&nbsp; ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐赠 </a>";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-pro-version'></i> 专业版！</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
 $lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
@@ -395,8 +382,6 @@ $lang->noticeImport  = "<p style='font-size:14px'>导入数据中，含有已经
 
 $lang->noResultsMatch     = "没有匹配结果";
 $lang->searchMore         = "搜索此关键字的更多结果：";
-$lang->selectAnOption     = "选择一个选项";
-$lang->selectSomeOptions  = "选择一些选项";
 $lang->chooseUsersToMail  = "选择要发信通知的用户...";
 
 /* 时间格式设置。*/

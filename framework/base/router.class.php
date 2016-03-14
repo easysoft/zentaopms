@@ -1961,8 +1961,8 @@ class baseRouter
         $errorFile = $this->getLogRoot() . 'php.' . date('Ymd') . '.log.php';
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?>\n");
 
-        $fh = @fopen($errorFile, 'a');
-        if($fh) fwrite($fh, strip_tags($errorLog)) && fclose($fh);
+        $fh = fopen($errorFile, 'a');
+        if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
 
         /* 
          * 如果debug > 1，显示warning, notice级别的错误。

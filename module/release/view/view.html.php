@@ -122,7 +122,7 @@
                 <tr>
                   <td colspan='8'>
                     <div class='table-actions clearfix'>
-                      <?php if($countStories and $canBatchUnlink) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedStoriesForm') . html::selectReverse('linkedStoriesForm') . '</div>' . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                      <?php if($countStories and $canBatchUnlink) echo "<div class='table-actions clearfix pdl-8px'>" . html::selectButton() . html::submitButton($lang->release->batchUnlink) . '</div>';?>
                       <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
                     </div>
                   </td>
@@ -181,7 +181,7 @@
                 <tr>
                   <td colspan='8'>
                     <div class='table-actions clearfix'>
-                      <?php if($countBugs and $canBatchUnlink) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>' . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                      <?php if($countBugs and $canBatchUnlink) echo "<div class='table-actions clearfix pdl-8px'>" . html::selectButton() . html::submitButton($lang->release->batchUnlink) . '</div>';?>
                       <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
                     </div>
                   </td>
@@ -239,7 +239,7 @@
                   <td colspan='7'>
                     <div class='table-actions clearfix'>
                       <div class='text'>
-                        <?php if($countLeftBugs and $canBatchUnlink) echo "<div class='table-actions clearfix'><div class='btn-group'>" . html::selectAll('linkedBugsForm') . html::selectReverse('linkedBugsForm') . '</div>' . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                        <?php if($countLeftBugs and $canBatchUnlink) echo "<div class='table-actions clearfix pdl-8px'>" . html::selectButton() . html::submitButton($lang->release->batchUnlink) . '</div>';?>
                         <?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?>
                       </div>
                     </div>

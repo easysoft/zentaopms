@@ -609,6 +609,9 @@ class baseControl
         unset($this->view->header);
         unset($this->view->position);
         unset($this->view->moduleTree);
+        unset($this->view->common);
+        unset($this->view->pager->app);
+        unset($this->view->pager->lang);
 
         $output['status'] = is_object($this->view) ? 'success' : 'fail';
         $output['data']   = json_encode($this->view);
@@ -752,7 +755,7 @@ class baseControl
         if($type != 'json') die();
 
         $data = (array) $data;
-        if(helper::isAjaxRequest()) print(json_encode($data)) && die(helper::removeUTF8Bom(ob_get_clean()));
+        if(helper::isAjaxRequest()) print(json_encode($data)) and die(helper::removeUTF8Bom(ob_get_clean()));
 
         /**
          * 响应非ajax的请求。

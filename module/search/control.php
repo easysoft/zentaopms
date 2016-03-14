@@ -63,9 +63,11 @@ class search extends control
      */
     public function saveQuery()
     {
-        $this->search->saveQuery();
-        if(dao::isError()) die(js::error(dao::getError()));
-        die('success');
+        $queryID = $this->search->saveQuery();
+
+        if(!$queryID) die(js::error(dao::getError()));
+
+        die($queryID);
     }
 
     /**
@@ -86,13 +88,15 @@ class search extends control
      * AJAX: get search query.
      *
      * @param  string $module
+     * @param  int    $queryID
      * @access public
      * @return void
      */
-    public function ajaxGetQuery($module = '')
+    public function ajaxGetQuery($module = '', $queryID = 0)
     {
+        $query   = $queryID ? $queryID : '';
         $module  = empty($module) ? $this->session->searchParams['module'] : $module;
         $queries = $this->search->getQueryPairs($module);
-        die(html::select('queryID', $queries, '', 'onchange=executeQuery(this.value) class=form-control'));
+        die(html::select('queryID', $queries, $query, 'onchange=executeQuery(this.value) class=form-control'));
     }
 }

@@ -11,10 +11,6 @@
  */
 $lang->convert->common  = 'Import';
 $lang->convert->index   = 'Index';
-$lang->convert->next    = 'Next';
-$lang->convert->pre     = 'Back';
-$lang->convert->reload  = 'Reload';
-$lang->convert->error   = 'Error ';
 
 $lang->convert->start   = 'Begin import';
 $lang->convert->desc    = <<<EOT
@@ -31,8 +27,6 @@ $lang->convert->convertRedmine = 'Convert Redmine';
 $lang->convert->convertBugFree = 'Convert BugFree';
 
 $lang->convert->selectSource     = 'Select source system and version';
-$lang->convert->source           = 'Source system';
-$lang->convert->version          = 'Version';
 $lang->convert->mustSelectSource = "Must select a source system";
 
 $lang->convert->direction              = 'Please select the direction of issue in Redmine';
@@ -52,7 +46,6 @@ $lang->convert->checkConfig = 'Check setting';
 $lang->convert->ok         = 'Check passed(√)';
 $lang->convert->fail       = 'Check failed(×)';
 
-$lang->convert->settingDB   = 'Set database';
 $lang->convert->dbHost      = 'Database server';
 $lang->convert->dbPort      = 'Server port';
 $lang->convert->dbUser      = 'Database user';
@@ -97,7 +90,6 @@ $lang->convert->redmine->docLibs      = 'DocLibs';
 $lang->convert->redmine->docs         = 'Docs';
 $lang->convert->redmine->files        = 'files';
 
-$lang->convert->errorConnectDB     = 'Connect to database server failed.';
 $lang->convert->errorFileNotExits  = 'File %s not exits.';
 $lang->convert->errorUserExists    = 'User %s exits already.';
 $lang->convert->errorGroupExists   = 'Group %s exits already.';

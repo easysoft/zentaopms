@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and $root->type != 'normal') ? true : false;?>
 <div id='titlebar'>
   <div class='heading'><i class='icon-cogs'></i> <?php echo $lang->tree->common;?>  </div>

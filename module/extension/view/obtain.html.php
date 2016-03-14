@@ -11,7 +11,6 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
 <div class='side'>
   <form class='side-search mgb-20' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
     <div class="input-group">

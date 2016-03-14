@@ -11,9 +11,7 @@
  */
 $lang->tree = new stdclass();
 $lang->tree->common            = '模块维护';
-$lang->tree->add               = '添加';
 $lang->tree->edit              = '编辑';
-$lang->tree->addChild          = '添加子模块';
 $lang->tree->delete            = '删除模块';
 $lang->tree->browse            = '通用模块维护';
 $lang->tree->browseTask        = '任务模块维护';
@@ -31,8 +29,6 @@ $lang->tree->manageBugChild    = '维护Bug子模块';
 $lang->tree->manageCaseChild   = '维护用例子模块';
 $lang->tree->manageTaskChild   = "维护{$lang->projectCommon}子模块";
 $lang->tree->syncFromProduct   = '复制';
-$lang->tree->ajaxGetOptionMenu = '接口:获取下拉列表';
-$lang->tree->ajaxGetSonModules = '接口:获得子菜单列表';
 
 $lang->tree->confirmDelete = '该模块及其子模块都会被删除，您确定删除吗？';
 $lang->tree->confirmRoot   = "模块的所属{$lang->productCommon}修改，会关联修改该模块下的需求、Bug、用例的所属{$lang->productCommon}，以及{$lang->projectCommon}和{$lang->productCommon}的关联关系。该操作比较危险，请谨慎操作。是否确认修改？";

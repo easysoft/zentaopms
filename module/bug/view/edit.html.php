@@ -233,7 +233,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           <tr class='text-top'>
             <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
             <td>
-              <?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id&bugs=$bug->linkBug", '', true), $lang->bug->linkBugs, '', "data-toggle='modal' data-type='iframe' data-width='85%'");?>
+              <?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
               <ul class='list-unstyled' id='linkBugBox'>
               <?php
               if(isset($bug->linkBugTitles))
@@ -241,8 +241,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
                   {
                       echo '<li>';
-                      echo html::a(inlink('view', "bugID=$linkBugID"), "#$linkBugID " . $linkBugTitle);
-                      echo html::a("javascript:deleteLinkedBug($bug->id, $linkBugID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo html::a(inlink('view', "bugID=$linkBugID"), "#$linkBugID " . $linkBugTitle, '_blank');
+                      echo html::a("javascript:unlinkBug($bug->id, $linkBugID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
                       echo '</li>';
                   }
               }

@@ -50,9 +50,10 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <td colspan='6' class='text-left'>
           <?php if(count($allBugs))
           {
-              echo "<div class='table-actions clearfix'>";
-              echo "<div class='btn-group'>" .  html::selectAll($formID) . html::selectReverse($formID) . '</div>';
-              echo html::submitButton($lang->release->linkBug) . html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'") . '</div>';
+              echo "<div class='table-actions clearfix pdl-8px'>";
+              echo html::selectButton() . html::submitButton($lang->release->linkBug);
+              echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");
+              echo '</div>';
           }
           ?>
         </td>

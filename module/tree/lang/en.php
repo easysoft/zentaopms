@@ -11,9 +11,7 @@
  */
 $lang->tree = new stdclass();
 $lang->tree->common            = 'Module manage';
-$lang->tree->add               = 'Add';
 $lang->tree->edit              = 'Edit';
-$lang->tree->addChild          = 'Add child';
 $lang->tree->delete            = 'Delete';
 $lang->tree->browse            = 'Manage general module';
 $lang->tree->browseTask        = 'Manage task module';
@@ -31,8 +29,6 @@ $lang->tree->manageBugChild    = 'Manage bug child';
 $lang->tree->manageCaseChild   = 'Manage case child';
 $lang->tree->manageTaskChild   = "Manage {$lang->projectCommon} child";
 $lang->tree->syncFromProduct   = 'Copy';
-$lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
-$lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
 $lang->tree->confirmDelete = 'Are you sure to delete this module and its children?';
 $lang->tree->confirmRoot   = "Modify the module {$lang->productCommon}s, modified the {$lang->productCommon}s belong to the needs of the module, bug, use case, and {$lang->projectCommon} and {$lang->productCommon} relationship. This is dangerous, please be careful. To confirm the change?";

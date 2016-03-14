@@ -13,7 +13,6 @@ $lang->task->index              = "Index";
 $lang->task->create             = "Create";
 $lang->task->batchCreate        = "Batch create";
 $lang->task->batchEdit          = "Batch edit";
-$lang->task->import             = "Import undone";
 $lang->task->edit               = "Update";
 $lang->task->delete             = "Delete";
 $lang->task->deleted            = "Deleted";
@@ -39,7 +38,6 @@ $lang->task->project           = $lang->projectCommon;
 $lang->task->module            = 'Module';
 $lang->task->story             = 'Story';
 $lang->task->storySpec         = 'Story desc';
-$lang->task->storyVersion      = 'Version';
 $lang->task->storyFiles        = 'Story Files';
 $lang->task->storyComment      = 'Story comment';
 $lang->task->name              = 'Name';
@@ -71,7 +69,6 @@ $lang->task->assignedTo        = 'Assigned To';
 $lang->task->assignedToAB      = 'Assign';
 $lang->task->assignedDate      = 'Assigned Date';
 $lang->task->openedBy          = 'Opened By';
-$lang->task->openedByAB        = 'Open';
 $lang->task->openedDate        = 'Opened Date';
 $lang->task->openedDateAB      = 'Open';
 $lang->task->finishedBy        = 'Finished By';
@@ -125,24 +122,11 @@ $lang->task->afterChoices['continueAdding'] = 'Continue to add task for this sto
 $lang->task->afterChoices['toTaskList']     = 'To task list. ';
 $lang->task->afterChoices['toStoryList']    = 'To story list. ';
 
-$lang->task->buttonEdit       = 'Edit';
-$lang->task->buttonClose      = 'Close';
-$lang->task->buttonCancel     = 'Cancel';
-$lang->task->buttonActivate   = 'Activate';
-$lang->task->buttonLogEfforts = 'Efforts';
-$lang->task->buttonDelete     = 'Delete';
-$lang->task->buttonBackToList = 'Back';
-$lang->task->buttonStart      = 'Start';
-$lang->task->buttonDone       = 'Done';
-
 $lang->task->legendBasic  = 'Basic info';
 $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Lifetime';
 $lang->task->legendDesc   = 'Desc';
-$lang->task->legendAction = 'Action';
 
-$lang->task->ajaxGetUserTasks      = "API:My tasks";
-$lang->task->ajaxGetProjectTasks   = "API:{$lang->projectCommon} tasks";
 $lang->task->confirmDelete         = "Are you sure you want to delete this task?";
 $lang->task->confirmDeleteEstimate = "Are you sure you want to delete this hour?";
 $lang->task->copyStoryTitle        = "Same as story";
@@ -249,5 +233,3 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Closed Reason';
 
 $lang->task->report->finishedTasksPerDay->type               = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = 'Date';
-
-$lang->task->estimateTip = 'The estimated time for this task';

@@ -24,7 +24,6 @@ $lang->doc->content        = 'Content';
 $lang->doc->keywords       = 'Keywords';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
-$lang->doc->views          = 'Views';
 $lang->doc->addedBy        = 'Added by';
 $lang->doc->addedDate      = 'Added date';
 $lang->doc->editedBy       = 'Edited by';
@@ -35,9 +34,6 @@ $lang->doc->deleted        = 'Deleted';
 $lang->doc->moduleDoc      = 'By module';
 $lang->doc->searchDoc      = 'By search';
 //$lang->doc->allDoc         = 'All document';
-
-$lang->doc->moduleName     = 'Module name';
-$lang->doc->moduleOrder    = 'Module order';
 
 /* Actions. */
 $lang->doc->index          = 'Index';

@@ -344,10 +344,9 @@ class storyModel extends model
         $oldStory    = $this->getById($storyID);
         if($oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
         if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
@@ -408,10 +407,9 @@ class storyModel extends model
         $oldStory = $this->getById($storyID);
         if($oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->hasEdited;
+            dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
-        unset($_POST['lastEditedDate']);
 
         $story = fixer::input('post')
             ->cleanInt('product,module,pri')
@@ -426,9 +424,14 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
-            ->remove('files,labels,comment')
+            ->remove('linkStories,childStories,files,labels,comment')
             ->get();
         if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
+        if($story->closedReason == 'subdivided' and $oldStory->childStories == '')
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyChildStory;
+            return false;
+        }
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -436,7 +439,7 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
+            //->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldStory, $story);
@@ -1040,60 +1043,90 @@ class storyModel extends model
      *
      * @param  int    $storyID
      * @param  string $type
-     * @param  string $stories
      * @access public
-     * @return string
+     * @return void
      */
-    public function linkStories($storyID, $type = 'linkStories', $stories = '')
+    public function linkStories($storyID, $type = 'linkStories')
     {
-        if($this->post->stories == false) return $stories;
+        if($this->post->stories == false) return;
 
-        $stories = implode(',', $this->post->stories) . ',' . trim($stories, ',');
-        $this->dao->update(TABLE_STORY)->set($type)->eq(trim($stories,','))->where('id')->eq($storyID)->exec();
+        $story        = $this->getById($storyID);
+        $stories2Link = $this->post->stories;
+
+        $stories = implode(',', $stories2Link) . ',' . trim($story->$type, ',');
+        $this->dao->update(TABLE_STORY)->set($type)->eq(trim($stories, ','))->where('id')->eq($storyID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('story', $storyID, $type, '', implode(',', $this->post->stories));
-
-        return $stories;
+        $action = ($type == 'linkStories') ? 'linkRelatedStory' : 'subdivideStory';
+        $this->loadModel('action')->create('story', $storyID, $action, '', implode(',', $stories2Link));
     }
 
     /**
-     * Delete linked story.
+     * Get stories to link.
      *
      * @param  int    $storyID
      * @param  string $type
-     * @param  int    $deleteStory
+     * @param  string $browseType
+     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function deleteLinkedStory($storyID, $type, $deleteStory)
+    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0)
     {
-        $story   = $this->getById($storyID);
-
-        $stories = explode(',', trim($story->$type, ','));
-        foreach($stories as $key => $storyId)
+        if($browseType == 'bySearch')
         {
-            if($storyId == $deleteStory) unset($stories[$key]);
+            $story        = $this->getById($storyID);
+            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null);
+            foreach($stories2Link as $key => $story2Link)
+            {
+                if($story2Link->id == $storyID) unset($stories2Link[$key]);
+                if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
+            }
+            return $stories2Link;
         }
-        $stories = implode(',', $stories);
+        else
+        {
+            return array();
+        }
+    }
+
+    /**
+     * Unlink story.
+     *
+     * @param  int    $storyID
+     * @param  string $type
+     * @param  int    $story2Unlink
+     * @access public
+     * @return void
+     */
+    public function unlinkStory($storyID, $type = 'linkStories', $story2Unlink = 0)
+    {
+        $story = $this->getById($storyID);
+
+        $oldLinkedStories = explode(',', trim($story->$type, ','));
+        foreach($oldLinkedStories as $key => $storyId)
+        {
+            if($storyId == $story2Unlink) unset($oldLinkedStories[$key]);
+        }
+        $stories = implode(',', $oldLinkedStories);
 
         $this->dao->update(TABLE_STORY)->set($type)->eq($stories)->where('id')->eq($storyID)->exec();
         if(dao::isError()) die(js::error(dao::getError()));
-        $action = ($type == 'linkStories') ? 'mvLinkStories' : 'mvChildStories';
-        $this->loadModel('action')->create('story', $storyID, $action, '', $deleteStory);
-
-        return $this->getLinkedStories($stories);
+        $action = ($type == 'linkStories') ? 'unlinkRelatedStory' : 'unlinkChildStory';
+        $this->loadModel('action')->create('story', $storyID, $action, '', $story2Unlink);
     }
 
     /**
      * Get linked stories.
      *
-     * @param  string $stories
+     * @param  string $storyID
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getLinkedStories($stories)
+    public function getLinkedStories($storyID, $type = 'linkStories')
     {
-        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
+        $story = $this->getById($storyID);
+        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($story->$type)->fetchPairs();
     }
 
     /**
@@ -1254,7 +1287,7 @@ class storyModel extends model
     }
 
     /**
-     * Get will close stories.
+     * Get to be closed stories.
      * 
      * @param  int    $productID 
      * @param  string $orderBy 
@@ -1262,7 +1295,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getWillClose($productID, $branch, $orderBy, $pager)
+    public function get2BeClosed($productID, $branch, $orderBy, $pager)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
@@ -1598,13 +1631,13 @@ class storyModel extends model
     }
 
     /**
-     * Get story stages.
+     * Batch get story stage.
      * 
      * @param  array    $stories 
      * @access public
      * @return array
      */
-    public function getStoryStages($stories)
+    public function batchGetStoryStage($stories)
     {
         return $this->dao->select('*')->from(TABLE_STORYSTAGE)
             ->where('story')->in($stories)
