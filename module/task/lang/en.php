@@ -38,7 +38,6 @@ $lang->task->project           = $lang->projectCommon;
 $lang->task->module            = 'Module';
 $lang->task->story             = 'Story';
 $lang->task->storySpec         = 'Story desc';
-$lang->task->storyFiles        = 'Story Files';
 $lang->task->storyVerify       = 'Story Verify';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';
