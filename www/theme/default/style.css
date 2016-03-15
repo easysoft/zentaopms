@@ -514,7 +514,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* table in outer */
 .outer .table {margin-bottom: 0; border: 1px solid #ddd;}
-@-moz-document url-prefix(){.outer .table {box-shadow: 1px 0 0 #ddd, -1px 0 0 #ddd; border-left: none; border-right: none; border-bottom: none} .panel .table, #querybox .table, .outer > .container .table-form, .outer > .container .table-data, .outer .main-side .table {box-shadow: none}}
+@-moz-document url-prefix(){.outer .table {box-shadow: 1px 1px 0 #ddd, -1px 0 0 #ddd; border-left: none; border-right: none; border-bottom: none} .panel .table, #querybox .table, .outer > .container .table-form, .outer > .container .table-data, .outer .main-side .table {box-shadow: none}}
 .outer .table thead tr th {text-align: center;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}

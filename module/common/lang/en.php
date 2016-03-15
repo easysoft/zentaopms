@@ -59,6 +59,7 @@ $lang->uploadImages = 'Upload images ';
 $lang->timeout      = 'Timed out, please check the network, or retry!';
 $lang->repairTable  = 'The table may be damaged, please repair by phpmyadmin or myisamchk!';
 $lang->duplicate    = '%s has the same title';
+$lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP is limited by Administrator. Please contact the Administrator to lift the restrictions.</body></html>";
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
@@ -478,6 +479,7 @@ $lang->icons['close']          = 'off';
 $lang->icons['activate']       = 'off';
 $lang->icons['review']         = 'search';
 $lang->icons['confirm']        = 'search';
+$lang->icons['confirmBug']     = 'search';
 $lang->icons['putoff']         = 'calendar';
 $lang->icons['suspend']        = 'pause';
 $lang->icons['pause']          = 'pause';

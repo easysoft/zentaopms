@@ -28,6 +28,7 @@ class commonModel extends model
             $this->setUser();
             $this->loadConfigFromDB();
             $this->loadCustomFromDB();
+            if(!$this->checkIP()) die($this->lang->ipLimited);
             if($this->app->getViewType() == 'mhtml') $this->setMobileMenu();
             $this->app->loadLang('company');
             define('FIRST_RUN', true);
@@ -1171,6 +1172,47 @@ class commonModel extends model
             return true;
         }
         return false;
+    }
+
+    /**
+     * Check whether IP in white list.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkIP()
+    {
+        $ip = $this->server->remote_addr;
+
+        $ipWhiteList = $this->config->ipWhiteList;
+
+        /* If the ip white list is '*'. */
+        if($ipWhiteList == '*') return true;
+
+        /* The ip is same as ip in white list. */
+        if($ip == $ipWhiteList) return true;
+
+        /* If the ip in white list is like 192.168.1.1-192.168.1.10. */
+        if(strpos($ipWhiteList, '-') !== false)
+        {
+            list($min, $max) = explode('-', $ipWhiteList);
+            $min = ip2long(trim($min));
+            $max = ip2long(trim($max));
+            $ip  = ip2long(trim($ip));
+
+            return $ip >= $min and $ip <= $max;
+        }
+
+        /* If the ip in white list is in IP/CIDR format eg 127.0.0.1/24. Thanks to zcat. */
+        if(strpos($ipWhiteList, '/') == false) $ipWhiteList .= '/32';
+        list($ipWhiteList, $netmask) = explode('/', $ipWhiteList, 2);
+
+        $ip          = ip2long($ip);
+        $ipWhiteList = ip2long($ipWhiteList);
+        $wildcard    = pow(2, (32 - $netmask)) - 1;
+        $netmask     = ~ $wildcard;
+
+        return (($ip & $netmask) == ($ipWhiteList & $netmask));
     }
 
     /**
