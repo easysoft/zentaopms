@@ -71,7 +71,6 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php if($task->fromBug != 0):?>
       <fieldset>
         <legend><?php echo $lang->bug->steps;?></legend>
@@ -79,21 +78,16 @@
       </fieldset>
       <?php else:?>
       <fieldset>
-        <legend><?php echo $lang->task->story;?></legend>
-        <fieldset>
-          <legend><?php echo $lang->task->storySpec;?></legend>
-          <div class='article-content'><?php echo $task->storySpec;?></div>
-        </fieldset>
-        <fieldset>
-          <legend><?php echo $lang->task->storyVerify;?></legend>
-          <div class='article-content'><?php echo $task->storyVerify;?></div>
-        </fieldset>
-        <fieldset>
-          <legend><?php echo $lang->task->storyFiles;?></legend>
-          <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
-        </fieldset>
+        <legend><?php echo $lang->task->storySpec;?></legend>
+        <div class='article-content'><?php echo $task->storySpec;?></div>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
+      </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->task->storyVerify;?></legend>
+        <div class='article-content'><?php echo $task->storyVerify;?></div>
       </fieldset>
       <?php endif;?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>
       <fieldset id='commentBox' class='hide'>
