@@ -404,7 +404,7 @@ class installModel extends model
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
-            $admin->gender   = '';
+            $admin->gender   = 'f';
             $this->dao->insert(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
 
             /* Update group name and desc on dafault lang. */
