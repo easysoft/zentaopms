@@ -478,6 +478,7 @@ $lang->icons['close']          = 'off';
 $lang->icons['activate']       = 'off';
 $lang->icons['review']         = 'search';
 $lang->icons['confirm']        = 'search';
+$lang->icons['confirmBug']     = 'search';
 $lang->icons['putoff']         = 'calendar';
 $lang->icons['suspend']        = 'pause';
 $lang->icons['pause']          = 'pause';
