@@ -72,9 +72,8 @@ class baseHelper
     {
         global $app, $config;
         $appName = $app->getAppName();
-        $appName = empty($appName) ? '' : $appName . '/';
-
         if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
+        $appName = empty($appName) ? '' : $appName . '/';
 
         $link = $config->requestType == 'PATH_INFO' ? $config->webRoot . $appName : $config->webRoot . $appName . basename($_SERVER['SCRIPT_NAME']);
         if($config->requestType == 'PATH_INFO2') $link .= '/';
@@ -950,21 +949,13 @@ class baseHelper
      */
     public static function getClientDevice()
     {
-        global $app, $config;
-
-        $viewType = $app->getViewType();
-        if($viewType == 'mhtml') return 'mobile';
+        global $config;
 
         if(isset($_COOKIE['visualDevice'])) return $_COOKIE['visualDevice'];
 
         /* Detect mobile. */
-        $mobile = $app->loadClass('mobile');
-        if($mobile->isMobile())
-        {
-            if(!isset($config->template->mobile)) return 'desktop';
-            if(isset($config->site->mobileTemplate) and $config->site->mobileTemplate == 'close') return 'desktop';
-            return 'mobile';
-        }
+        $mobile = new mobile();
+        if(!$mobile->isTablet() and $mobile->isMobile()) return 'mobile';
         return 'desktop';
     }
 }

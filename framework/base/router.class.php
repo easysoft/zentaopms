@@ -384,6 +384,9 @@ class baseRouter
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
         $this->loadClass('dao',    $static = true);
+        $this->loadClass('mobile', $static = true);
+
+        $this->setClientDevice();
     }
 
     /**
@@ -676,6 +679,18 @@ class baseRouter
     public function setSiteCode()
     {
         return $this->siteCode = helper::getSiteCode($this->server->http_host);
+    }
+
+    /**
+     * 设置客户端的设备类型
+     * Set client device.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setClientDevice()
+    {
+        $this->clientDevice = helper::getClientDevice();
     }
 
     /**

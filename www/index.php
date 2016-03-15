@@ -32,9 +32,7 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 /* installed or not. */
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
-/* Detect mobile. */
-$mobile = $app->loadClass('mobile');
-if(!$mobile->isTablet() and $mobile->isMobile() and $config->default->view == 'html')
+if($app->clientDevice == 'mobile' and $config->default->view == 'html')
 {
     $config->default->view = 'mhtml';
     helper::setViewType();
