@@ -1120,3 +1120,10 @@ $lang->changelog['7.4.beta'][] = 'branch-delete';
 $lang->changelog['7.4.beta'][] = 'my-unbind';
 
 $lang->changelog['8.0'][] = 'story-batchChangeBranch';
+
+$lang->changelog['8.0.1'][] = 'bug-linkBugs';
+$lang->changelog['8.0.1'][] = 'bug-unlinkBug';
+$lang->changelog['8.0.1'][] = 'story-linkStory';
+$lang->changelog['8.0.1'][] = 'story-unlinkStory';
+$lang->changelog['8.0.1'][] = 'testcase-linkCases';
+$lang->changelog['8.0.1'][] = 'testcase-unlinkCase';
