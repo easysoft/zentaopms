@@ -1084,7 +1084,7 @@ class baseDAO
         $funcArgs = func_get_args();
         for($i = 0; $i < VALIDATER::MAX_ARGS; $i ++)
         {
-            ${"arg$i"} = isset($funcArgs[$i + 2]) ? $funcArgs[$i + 2] : null;
+            ${"arg$i"} = isset($funcArgs[$i + 3]) ? $funcArgs[$i + 3] : null;
         }
         foreach($fields as $fieldName) $this->check($fieldName, $funcName, $arg0, $arg1, $arg2);
         return $this;
