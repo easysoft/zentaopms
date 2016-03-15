@@ -383,6 +383,7 @@ $lang->noticeImport  = "<p style='font-size:14px'>Import data, containing the ex
 $lang->noResultsMatch    = "No results match";
 $lang->searchMore        = "Search more results with the key:";
 $lang->chooseUsersToMail = "Choose users to mail...";
+$lang->browserNotice     = 'Using the browser may not be able to get the best browsing effect, it is recommended to use chrome, Firefox, IE9 +, opera, Safari browser.';
 
 /* Date times. */
 define('DT_DATETIME1',  'Y-m-d H:i:s');

@@ -168,5 +168,3 @@ $lang->user->noticeResetFile = '<h5>为了安全起见，系统需要确认您�
     <li>文件内容为空。</li>
     <li>如果之前文件存在，删除之后重新创建。</li>
     </ol>'; 
-$lang->user->browser['incompatible'] = '禅道不兼容IE6、IE7浏览器，请更换其他浏览器！';
-$lang->user->browser['notice']       = '您可能使用的是杂牌浏览器，页面显示及功能可能会有问题，建议使用Chrome浏览器';

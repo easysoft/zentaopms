@@ -168,5 +168,3 @@ $lang->user->noticeResetFile = "<h5>For security reason, system need to confirm 
     <li>Keep the ok.txt content empty.</li>
     <li>If the file exists already, remove and recreate it again.</li>
     </ol>"; 
-$lang->user->browser['incompatible'] = 'ZenTao is not compatible with IE7,IE6 browser, please replace other browsers!';
-$lang->user->browser['notice']       = 'Use the browser, display and function may have problems, recommend the use of Chrome browser';

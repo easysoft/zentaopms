@@ -186,4 +186,15 @@ class misc extends control
         $this->view->status = 'check';
         $this->display();
     }
+
+    /**
+     * Ajax ignore browser.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxIgnoreBrowser()
+    {
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.browserNotice', 'true');
+    }
 }

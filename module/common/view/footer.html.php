@@ -19,6 +19,15 @@
   </div>
 </div>
 <?php endif;?>
+
+<?php if(!isset($config->global->browserNotice)):?>
+<script>
+browserNotice = '<?php echo $lang->browserNotice?>'
+function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
+$(function(){showBrowserNotice()});
+</script>
+<?php endif;?>
+
 <?php 
 js::set('onlybody', $onlybody);           // set the onlybody var.
 if($this->loadModel('cron')->runable()) js::execute('startCron()');
