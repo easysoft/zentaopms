@@ -1403,7 +1403,7 @@ class storyModel extends model
         {
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
-            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
+            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
             $stories[] = $story;
         }
         return $stories;
@@ -2013,7 +2013,7 @@ class storyModel extends model
         {
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
-            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID) . ' ';
+            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
             if(empty($story->branch) and isset($stages[$story->id][$branch])) $story->stage = $stages[$story->id][$branch]->stage;
         }
 

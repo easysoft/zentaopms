@@ -43,7 +43,7 @@
         <td><?php echo zget($users, $queue->addedBy, $queue->addedBy)?></td>
         <td><?php echo $queue->addedDate?></td>
         <td><?php echo $queue->sendTime?></td>
-        <td><?php echo zget($lang->mail->statusList, $queue->status)?></td>
+        <td><?php echo zget($lang->mail->statusList, $queue->status, '')?></td>
         <td class='text-left'><?php echo $queue->failReason?></td>
         <td><?php if(common::hasPriv('mail', 'delete')) echo html::a(inlink('delete', "id=$queue->id"), $lang->delete, 'hiddenwin');?></td>
       </tr>

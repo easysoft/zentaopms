@@ -32,8 +32,8 @@
         </td>
         <td><?php echo $stepResult['desc']?></td>
         <td><?php echo $stepResult['expect']?></td>
-        <td class='<?php echo zget($stepResult, 'result');?> text-center'><?php echo zget($lang->testcase->resultList, zget($stepResult, 'result'));?></td>
-        <td><?php echo zget($stepResult, 'real');?></td>
+        <td class='<?php echo zget($stepResult, 'result', '');?> text-center'><?php echo zget($lang->testcase->resultList, zget($stepResult, 'result'), '');?></td>
+        <td><?php echo zget($stepResult, 'real', '');?></td>
       </tr>
       <?php $i++;?>
       <?php endforeach;?>

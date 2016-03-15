@@ -125,21 +125,8 @@ class commonModel extends model
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
         /* Overide the items defined in config/config.php and config/my.php. */
-        if(isset($this->config->system->common))
-        {
-            foreach($this->config->system->common as $record)
-            {
-                if($record->section)
-                {
-                    if(!isset($this->config->{$record->section})) $this->config->{$record->section} = new stdclass();
-                    $this->config->{$record->section}->{$record->key} = $record->value;
-                }
-                else
-                {
-                    if(!$record->section) $this->config->{$record->key} = $record->value;
-                }
-            }
-        }
+        if(isset($this->config->system->common)) helper::mergeConfig($this->config->system->common, 'common');
+        if(isset($this->config->personal->common)) helper::mergeConfig($this->config->personal->common, 'common');
     }
 
     /**
@@ -333,10 +320,10 @@ class commonModel extends model
         $product = $this->lang->menu->product . '|locate=no';
         $menu    = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'project' => $project, 'product' => $product);
 
-        if(strpos('dev,td,pm', $role) !== false) $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
-        if(strpos('pd,po',     $role) !== false) $menu = array('todo' => $todo, 'story' => $story, 'bug' => $bug, 'product' => $product, 'project' => $project);
-        if(strpos('qa,qd',     $role) !== false) $menu = array('todo' => $todo, 'bug' => $bug, 'project' => $project, 'product' => $product);
-        if(strpos('top',       $role) !== false) $menu = array('project' => $project, 'product' => $product, 'todo' => $todo);
+        if($role and strpos('dev,td,pm', $role) !== false) $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
+        if($role and strpos('pd,po',     $role) !== false) $menu = array('todo' => $todo, 'story' => $story, 'bug' => $bug, 'product' => $product, 'project' => $project);
+        if($role and strpos('qa,qd',     $role) !== false) $menu = array('todo' => $todo, 'bug' => $bug, 'project' => $project, 'product' => $product);
+        if($role and strpos('top',       $role) !== false) $menu = array('project' => $project, 'product' => $product, 'todo' => $todo);
 
         if($role == 'top')
         {

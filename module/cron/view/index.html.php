@@ -53,7 +53,7 @@
         <td class='text-left' title='<?php echo $cron->command?>'><?php echo $cron->command;?></td>
         <td class='text-left' title='<?php echo $cron->remark?>'><?php echo $cron->remark;?></td>
         <td><?php echo substr($cron->lastTime, 2);?></td>
-        <td><?php echo zget($lang->cron->statusList, $cron->status);?></td>
+        <td><?php echo zget($lang->cron->statusList, $cron->status, '');?></td>
         <td class='text-left'>
           <?php
           if(common::hasPriv('cron', 'toggle') and !empty($cron->command)) echo html::a(inlink('toggle', "id=$cron->id&status=" . ($cron->status == 'stop' ? 'normal' :  'stop')), $cron->status == 'stop' ? $lang->cron->toggleList['start'] : $lang->cron->toggleList['stop'], 'hiddenwin');
