@@ -8,7 +8,6 @@ $lang->backup->restore  = '還原';
 $lang->backup->change   = '修改保留時間';
 $lang->backup->changeAB = '修改';
 
-$lang->backup->name  = '檔案名稱';
 $lang->backup->time  = '備份時間';
 $lang->backup->files = '備份檔案';
 $lang->backup->size  = '大小';

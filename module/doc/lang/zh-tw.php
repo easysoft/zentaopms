@@ -24,7 +24,6 @@ $lang->doc->content        = '文檔正文';
 $lang->doc->keywords       = '關鍵字';
 $lang->doc->url            = '文檔URL';
 $lang->doc->files          = '附件';
-$lang->doc->views          = '查閲次數';
 $lang->doc->addedBy        = '由誰添加';
 $lang->doc->addedDate      = '添加時間';
 $lang->doc->editedBy       = '由誰編輯';
@@ -35,9 +34,6 @@ $lang->doc->deleted        = '已刪除';
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
 //$lang->doc->allDoc         = '所有文檔';
-
-$lang->doc->moduleName     = '模組名稱';
-$lang->doc->moduleOrder    = '模組排序';
 
 /* 方法列表。*/
 $lang->doc->index          = '首頁';

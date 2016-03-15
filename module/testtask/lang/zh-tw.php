@@ -12,12 +12,10 @@
 $lang->testtask->index          = "版本首頁";
 $lang->testtask->create         = "提交測試";
 $lang->testtask->delete         = "刪除版本";
-$lang->testtask->deleted        = "已刪除";
 $lang->testtask->view           = "概況";
 $lang->testtask->edit           = "編輯版本";
 $lang->testtask->browse         = "版本列表";
 $lang->testtask->linkCase       = "關聯用例";
-$lang->testtask->linkCaseAB     = "關聯";
 $lang->testtask->unlinkCase     = "移除";
 $lang->testtask->batchAssign    = "批量指派";
 $lang->testtask->runCase        = "執行";
@@ -35,7 +33,6 @@ $lang->testtask->wait           = "待測版本";
 $lang->testtask->done           = "已測版本";
 
 $lang->testtask->common         = '測試視圖版本';
-$lang->testtask->id             = '編號';
 $lang->testtask->product        = '所屬' . $lang->productCommon;
 $lang->testtask->project        = '所屬' . $lang->projectCommon;
 $lang->testtask->build          = '版本';
@@ -45,6 +42,7 @@ $lang->testtask->name           = '名稱';
 $lang->testtask->begin          = '開始日期';
 $lang->testtask->end            = '結束日期';
 $lang->testtask->desc           = '描述';
+$lang->testtask->mailto         = '抄送給';
 $lang->testtask->status         = '當前狀態';
 $lang->testtask->assignedTo     = '指派給';
 $lang->testtask->linkVersion    = '版本';
@@ -52,8 +50,6 @@ $lang->testtask->lastRunAccount = '執行人';
 $lang->testtask->lastRunTime    = '執行時間';
 $lang->testtask->lastRunResult  = '結果';
 $lang->testtask->report         = '測試總結';
-$lang->testtask->stories        = '相關需求';
-$lang->testtask->bugs           = '相關Bug';
 
 $lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '測試總結';
@@ -71,7 +67,6 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未關聯';
-$lang->testtask->linkedCases   = '已關聯';
 $lang->testtask->linkByStory   = '按需求關聯';
 $lang->testtask->linkByBug     = '按Bug關聯';
 $lang->testtask->passAll       = '全部通過';
@@ -83,7 +78,6 @@ $lang->testtask->showFail      = '失敗<span class="text-danger">%s</span>次';
 $lang->testtask->confirmDelete     = '您確認要刪除該版本嗎？';
 $lang->testtask->confirmUnlinkCase = '您確認要移除該用例嗎？';
 
-$lang->testtask->byModule      = '按模組';
 $lang->testtask->assignedToMe  = '指派給我';
 $lang->testtask->allCases      = '所有用例';
 
@@ -99,10 +93,10 @@ $lang->testtask->placeholder->end   = '結束日期';
 $lang->testtask->mail = new stdclass();
 $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
+$lang->testtask->mail->close  = new stdclass();
 $lang->testtask->mail->create->title = "%s創建了版本 #%s:%s";
 $lang->testtask->mail->edit->title   = "%s編輯了版本 #%s:%s";
-
-$lang->testtask->testScope = '測試範疇';
+$lang->testtask->mail->close->title  = "%s關閉了版本 #%s:%s";
 
 $lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$extra</strong>。' . "\n";

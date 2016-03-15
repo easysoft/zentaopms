@@ -20,8 +20,6 @@ $lang->ellipsis  = '…';
 
 $lang->zentaoPMS      = '禪道';
 $lang->welcome        = "%s項目管理系統";
-$lang->myControl      = "我的地盤";
-$lang->currentPos     = '當前位置：';
 $lang->logout         = '退出';
 $lang->login          = '登錄';
 $lang->aboutZenTao    = '關於';
@@ -31,25 +29,20 @@ $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar
 $lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
 
 $lang->reset        = '重填';
-$lang->cancel       = '取消';
 $lang->refresh      = '刷新';
 $lang->edit         = '編輯';
-$lang->copy         = '複製';
 $lang->delete       = '刪除';
 $lang->close        = '關閉';
-$lang->link         = '關聯';
 $lang->unlink       = '移除';
 $lang->import       = '導入';
 $lang->export       = '導出';
 $lang->setFileName  = '檔案名：';
-$lang->activate     = '激活';
 $lang->submitting   = '稍候...';
 $lang->save         = '保存';
 $lang->confirm      = '確認';
 $lang->preview      = '查看';
 $lang->goback       = '返回';
 $lang->goPC         = 'PC版';
-$lang->go           = 'GO';
 $lang->more         = '更多';
 $lang->day          = '天';
 
@@ -59,7 +52,6 @@ $lang->history      = '歷史記錄';
 $lang->attatch      = '附件';
 $lang->reverse      = '切換順序';
 $lang->switchDisplay= '切換顯示';
-$lang->switchHelp   = '切換幫助';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
 $lang->pasteText    = '粘貼文本 ';
@@ -67,14 +59,19 @@ $lang->uploadImages = '多圖上傳 ';
 $lang->timeout      = '連接超時，請檢查網絡環境，或重試！';
 $lang->repairTable  = '資料庫表可能損壞，請用phpmyadmin或myisamchk檢查修復。';
 $lang->duplicate    = '已有相同標題的%s';
+$lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>抱歉，管理員限制當前IP登錄，請聯繫管理員解除限制。</body></html>";
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
+$lang->preShortcutKey  = '[快捷鍵:←]';
+$lang->nextShortcutKey = '[快捷鍵:→]';
+
+$lang->select        = '選擇';
 $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';
+$lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象並不存在！';
 $lang->showAll       = '[[全部顯示]]';
-$lang->hideClosed    = '[[顯示進行中]]';
 
 $lang->future       = '未來';
 $lang->year         = '年';
@@ -364,6 +361,7 @@ $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六�
 $lang->error->accessDenied    = '您沒有訪問權限';
 $lang->error->pasteImg        = '您的瀏覽器不支持粘貼圖片！';
 $lang->error->noData          = '沒有數據';
+$lang->error->editedByOther   = '該記錄可能已經被改動。請刷新頁面重新編輯！';
 
 /* 分頁信息。*/
 $lang->pager = new stdclass();
@@ -376,11 +374,7 @@ $lang->pager->next      = "<i class='icon-play' title='下一頁'></i>";
 $lang->pager->last      = "<i class='icon-step-forward' title='末頁'></i>";
 $lang->pager->locate    = "GO!";
 
-$lang->zentaoSite     = "官方網站";
-$lang->chinaScrum     = "<a href='http://api.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a>&nbsp; ";
-$lang->agileTraining  = "<a href='http://api.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a> ";
-$lang->donate         = "<a href='http://api.zentao.net/goto.php?item=donate' target='_blank'>捐贈 </a>";
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'><i class='text-danger icon-reply icon-rotate-90'></i> 專業版！</a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>專業版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下載桌面提醒";
 
 $lang->suhosinInfo   = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（設置更大的數）。 保存並重新啟動apache，否則會造成部分數據無法保存。";
@@ -389,9 +383,8 @@ $lang->noticeImport  = "<p style='font-size:14px'>導入數據中，含有已經
 
 $lang->noResultsMatch     = "沒有匹配結果";
 $lang->searchMore         = "搜索此關鍵字的更多結果：";
-$lang->selectAnOption     = "選擇一個選項";
-$lang->selectSomeOptions  = "選擇一些選項";
 $lang->chooseUsersToMail  = "選擇要發信通知的用戶...";
+$lang->browserNotice      = '你目前使用的瀏覽器可能無法得到最佳瀏覽效果，建議使用Chrome、火狐、IE9+、Opera、Safari瀏覽器。';
 
 /* 時間格式設置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -486,6 +479,7 @@ $lang->icons['close']          = 'off';
 $lang->icons['activate']       = 'off';
 $lang->icons['review']         = 'search';
 $lang->icons['confirm']        = 'search';
+$lang->icons['confirmBug']     = 'search';
 $lang->icons['putoff']         = 'calendar';
 $lang->icons['suspend']        = 'pause';
 $lang->icons['pause']          = 'pause';

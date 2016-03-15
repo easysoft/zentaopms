@@ -50,3 +50,4 @@ $lang->cron->notice->dom  = '取值範圍:1-31';
 $lang->cron->notice->mon  = '取值範圍:1-12';
 $lang->cron->notice->dow  = '取值範圍:0-6';
 $lang->cron->notice->help = '註：如果伺服器重啟，或者發現計劃任務沒有正常工作，那麼計劃任務已經停止工作。需要手動點擊【創建進程】按鈕，或者一分鐘後刷新頁面，來開啟計劃任務。如果任務列表中第一條記錄的最後執行時間改變，說明任務開啟成功。';
+$lang->cron->notice->errorRule = '"%s" 填寫的不是合法的值';

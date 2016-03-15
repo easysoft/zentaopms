@@ -37,7 +37,6 @@ $lang->install->links = <<<EOT
 EOT;
 
 $lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官網網站已有最新版本<strong class='text-danger'>%s</strong>, 發佈日期于 %s。";
-$lang->install->choice     = '您可以選擇：';
 $lang->install->or         = '或者';
 $lang->install->checking   = '系統檢查';
 $lang->install->ok         = '檢查通過(√)';
@@ -70,9 +69,6 @@ $lang->install->sessionFail  = '修改PHP配置檔案，設置session.save_path'
 $lang->install->mkdir        = '<p>需要創建目錄%s。<br /> linux下面命令為：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目錄 "%s" 的權限。<br />linux下面命令為：<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB      = '設置資料庫';
-$lang->install->webRoot        = 'PMS所在網站目錄';
-$lang->install->requestType    = 'URL方式';
 $lang->install->defaultLang    = '預設語言';
 $lang->install->dbHost         = '資料庫伺服器';
 $lang->install->dbHostNote     = '如果127.0.0.1無法訪問，嘗試使用localhost';
@@ -81,7 +77,6 @@ $lang->install->dbUser         = '資料庫用戶名';
 $lang->install->dbPassword     = '資料庫密碼';
 $lang->install->dbName         = 'PMS使用的庫';
 $lang->install->dbPrefix       = '建表使用的首碼';
-$lang->install->createDB       = '自動創建資料庫';
 $lang->install->clearDB        = '清空現有數據';
 $lang->install->importDemoData = '導入demo數據';
 

@@ -21,8 +21,6 @@ $lang->group->managePrivByGroup  = '權限維護';
 $lang->group->managePrivByModule = '按模組分配權限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住shift或者control鍵進行多選）</span>';
 $lang->group->manageMember       = '成員維護';
-$lang->group->linkMember         = '關聯用戶';
-$lang->group->unlinkMember       = '移除用戶';
 $lang->group->confirmDelete      = '您確定刪除該用戶分組嗎？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '沒有保存，請確認選擇了權限數據。';
@@ -48,6 +46,7 @@ $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
 
 $lang->group->versions['']          = '修改歷史';
+$lang->group->versions['8_0_1']     = '禪道8.0.1';
 $lang->group->versions['8_0']       = '禪道8.0';
 $lang->group->versions['7_4_beta']  = '禪道7.4.beta';
 $lang->group->versions['7_3']       = '禪道7.3';

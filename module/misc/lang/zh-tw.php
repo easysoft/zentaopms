@@ -51,6 +51,11 @@ $lang->misc->zentao->service['install']    = '禪道安裝服務';
 $lang->misc->zentao->service['fixissue']   = '禪道問題解決';
 $lang->misc->zentao->service['servicemore']= '更多服務...';
 
-$lang->misc->mobile    = "手機訪問";
-$lang->misc->noGDLib   = "請用手機瀏覽器訪問：<strong>%s</strong>";
-$lang->misc->copyright = "&copy; 2009 - 2015 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->mobile      = "手機訪問";
+$lang->misc->noGDLib     = "請用手機瀏覽器訪問：<strong>%s</strong>";
+$lang->misc->copyright   = "&copy; 2009 - 2016 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->checkTable  = "檢查修復數據表";
+$lang->misc->needRepair  = "修復表";
+$lang->misc->repairTable = "資料庫表可以因為斷電原因損壞，需要檢查修復！！";
+$lang->misc->tableName   = "表名";
+$lang->misc->tableStatus = "狀態";

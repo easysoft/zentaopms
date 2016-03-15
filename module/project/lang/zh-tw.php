@@ -11,13 +11,8 @@
  */
 /* 欄位列表。*/
 $lang->project->common        = $lang->projectCommon . '視圖';
-$lang->project->id            = $lang->projectCommon . '編號';
-$lang->project->company       = '所屬公司';
-$lang->project->fromproject   = '所屬' . $lang->projectCommon;
 $lang->project->allProjects   = '全部';
-$lang->project->iscat         = '作為目錄';
 $lang->project->type          = $lang->projectCommon . '類型';
-$lang->project->parent        = '上級' . $lang->projectCommon;
 $lang->project->name          = $lang->projectCommon . '名稱';
 $lang->project->code          = $lang->projectCommon . '代號';
 $lang->project->begin         = '開始日期';
@@ -27,15 +22,7 @@ $lang->project->to            = '至';
 $lang->project->days          = '可用工作日';
 $lang->project->day           = '天';
 $lang->project->status        = $lang->projectCommon . '狀態';
-$lang->project->statge        = '所處階段';
-$lang->project->pri           = '優先順序';
 $lang->project->desc          = $lang->projectCommon . '描述';
-$lang->project->openedBy      = '由誰創建';
-$lang->project->openedDate    = '創建日期';
-$lang->project->closedBy      = '由誰關閉';
-$lang->project->closedDate    = '關閉日期';
-$lang->project->canceledBy    = '由誰取消';
-$lang->project->canceledDate  = '取消日期';
 $lang->project->owner         = '負責人';
 $lang->project->PO            = $lang->productCommon . '負責人';
 $lang->project->PM            = $lang->projectCommon . '負責人';
@@ -45,7 +32,6 @@ $lang->project->acl           = '訪問控制';
 $lang->project->teamname      = '團隊名稱';
 $lang->project->order         = $lang->projectCommon . '排序';
 $lang->project->products      = '相關' . $lang->productCommon;
-$lang->project->childProjects = "子{$lang->projectCommon}";
 $lang->project->whitelist     = '分組白名單';
 $lang->project->totalEstimate = '總預計';
 $lang->project->totalConsumed = '總消耗';
@@ -54,7 +40,6 @@ $lang->project->Left          = '剩餘';
 $lang->project->progess       = '進度';
 $lang->project->viewBug       = '查看bug';
 $lang->project->noProduct     = "無{$lang->productCommon}{$lang->projectCommon}";
-$lang->project->select        = "請選擇{$lang->projectCommon}";
 $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
 $lang->project->undone        = '未完成';
@@ -134,7 +119,6 @@ $lang->project->unlinkStory      = '移除需求';
 $lang->project->batchUnlinkStory = '批量移除需求';
 $lang->project->importTask       = '轉入任務';
 $lang->project->importBug        = '導入Bug';
-$lang->project->ajaxGetProducts  = "介面：獲得{$lang->projectCommon}{$lang->productCommon}列表";
 $lang->project->updateOrder      = '排序';
 
 /* 分組瀏覽。*/
@@ -165,7 +149,6 @@ $lang->project->groups['left']       = '剩餘分組';
 $lang->project->groups['type']       = '類型分組';
 $lang->project->groups['deadline']   = '截止分組';
 
-$lang->project->moduleTask           = '按模組';
 $lang->project->byQuery              = '搜索';
 
 /* 查詢條件列表。*/
@@ -178,17 +161,14 @@ $lang->project->selectProject   = "請選擇{$lang->projectCommon}";
 $lang->project->beginAndEnd     = '起止時間';
 $lang->project->lblStats        = '工時統計';
 $lang->project->stats           = '可用工時<strong>%s</strong>工時<br />總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
-$lang->project->oneLineStats    = "{$lang->projectCommon}<strong>%s</strong>, 代號為<strong>%s</strong>, 相關{$lang->productCommon}為<strong>%s</strong>，<strong>%s</strong>開始，<strong>%s</strong>結束，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，預計剩餘<strong>%s</strong>工時。";
 $lang->project->taskSummary     = "本頁共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->memberHours     = "%s共有 <strong>%s</strong> 個可用工時，";
 $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->wbs             = "分解任務";
 $lang->project->batchWBS        = "批量分解";
-$lang->project->largeBurnChart  = '點擊查看大圖';
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank' title='如何更新燃盡圖？' class='btn btn-sm'>幫助</a>";
 $lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下{$lang->projectCommon}關聯的{$lang->productCommon}中有沒有需求，而且要確保它們已經審核通過。";
 $lang->project->doneProjects    = '已結束';
-$lang->project->unDoneProjects  = '未結束';
 $lang->project->copyTeam        = '複製團隊';
 $lang->project->copyFromTeam    = "複製自{$lang->projectCommon}團隊： <strong>%s</strong>";
 $lang->project->noMatched       = "找不到包含'%s'的$lang->projectCommon";
@@ -196,7 +176,6 @@ $lang->project->copyTitle       = "請選擇一個{$lang->projectCommon}來複�
 $lang->project->copyTeamTitle   = "請選擇一個{$lang->projectCommon}團隊來複制";
 $lang->project->copyNoProject   = "沒有可用的{$lang->projectCommon}來複制";
 $lang->project->copyFromProject = "複製自{$lang->projectCommon} <strong>%s</strong>";
-$lang->project->reCopy          = '重新複製';
 $lang->project->cancelCopy      = '取消複製';
 $lang->project->byPeriod        = '按時間段';
 $lang->project->byUser          = '按用戶';
@@ -213,7 +192,6 @@ $lang->project->setTeam               = '設置團隊';
 $lang->project->linkStory             = '關聯需求';
 $lang->project->createTask            = '添加任務';
 $lang->project->goback                = "返回{$lang->projectCommon}首頁";
-$lang->project->linkProduct           = "選擇{$lang->productCommon}關聯...";
 $lang->project->noweekend             = '去除周末';
 $lang->project->withweekend           = '顯示周末';
 $lang->project->interval              = '間隔';
@@ -236,8 +214,4 @@ $lang->project->placeholder->code      = '團隊內部的簡稱';
 $lang->project->placeholder->totalLeft = '項目開始時的總預計工時';
 
 $lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->doing     = '(進行中)';
-$lang->project->selectGroup->suspended = '(已掛起)';
-$lang->project->selectGroup->done      = '(已結束)';
-
-$lang->project->projectTasks = $lang->projectCommon;
+$lang->project->selectGroup->done = '(已結束)';

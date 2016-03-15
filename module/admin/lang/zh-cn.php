@@ -35,8 +35,8 @@ $lang->admin->register->bind       = "如果您已经拥有社区账号，%s关�
 $lang->admin->register->success    = "登记账户成功";
 
 $lang->admin->bind = new stdclass();
-$lang->admin->bind->action   = '关联';
-$lang->admin->bind->success  = "关联账户成功";
+$lang->admin->bind->caption = '关联社区账号';
+$lang->admin->bind->success = "关联账户成功";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common    = '安全';

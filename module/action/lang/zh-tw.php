@@ -17,7 +17,6 @@ $lang->action->objectID   = '對象ID';
 $lang->action->objectName = '對象名稱';
 $lang->action->actor      = '操作者';
 $lang->action->action     = '動作';
-$lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 
 $lang->action->trash       = '資源回收筒';
@@ -99,6 +98,10 @@ $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
 
+/* 關聯用例和移除用例時的歷史操作記錄。*/
+$lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 關聯相關用例 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相關用例 <strong>$extra</strong>。' . "\n";
+
 /* 用來顯示動態信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->created             = '創建';
@@ -131,6 +134,14 @@ $lang->action->label->changestatus        = '修改狀態';
 $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = "關聯{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->projectCommon}";
+$lang->action->label->linkrelatedbug      = "關聯了相關Bug";
+$lang->action->label->unlinkrelatedbug    = "移除了相關Bug";
+$lang->action->label->linkrelatedcase     = "關聯了相關用例";
+$lang->action->label->unlinkrelatedcase   = "移除了相關用例";
+$lang->action->label->linkrelatedstory    = "關聯了相關需求";
+$lang->action->label->unlinkrelatedstory  = "移除了相關需求";
+$lang->action->label->subdividestory      = "細分了需求";
+$lang->action->label->unlinkchildstory    = "移除了細分需求";
 $lang->action->label->started             = '開始了';
 $lang->action->label->restarted           = '繼續了';
 $lang->action->label->recordestimate      = '記錄了工時';

@@ -16,7 +16,6 @@ $lang->mail->turnon      = '是否打開';
 $lang->mail->async       = '非同步發送';
 $lang->mail->fromAddress = '發信郵箱';
 $lang->mail->fromName    = '發信人';
-$lang->mail->mta         = '發信方式';
 $lang->mail->host        = 'smtp伺服器';
 $lang->mail->port        = 'smtp連接埠號';
 $lang->mail->auth        = '是否需要驗證';
@@ -42,7 +41,6 @@ $lang->mail->addedBy     = '發送者';
 $lang->mail->addedDate   = '創建時間';
 $lang->mail->sendTime    = '發送時間';
 $lang->mail->status      = '狀態';
-$lang->mail->ccList      = '抄送給';
 $lang->mail->failReason  = '失敗原因';
 
 $lang->mail->statusList['send'] = '成功';

@@ -12,18 +12,11 @@
 $lang->admin->common  = '後台管理';
 $lang->admin->index   = '後台管理首頁';
 $lang->admin->checkDB = '檢查資料庫';
-$lang->admin->company = '公司管理';
-$lang->admin->user    = '用戶管理';
-$lang->admin->group   = '分組管理';
 $lang->admin->sso     = '然之整合';
 $lang->admin->safeIndex = '安全';
 $lang->admin->checkWeak = '弱口令檢查';
-$lang->admin->welcome   = '歡迎使用禪道管理軟件後台管理系統';
-
-$lang->admin->browseCompany = '瀏覽公司';
 
 $lang->admin->info = new stdclass();
-$lang->admin->info->caption = '禪道系統信息';
 $lang->admin->info->version = '當前系統的版本是%s，';
 $lang->admin->info->links   = '您可以訪問以下連結：';
 $lang->admin->info->account = "您的禪道社區賬戶為%s。";
@@ -42,9 +35,8 @@ $lang->admin->register->bind       = "如果您已經擁有社區賬號，%s關�
 $lang->admin->register->success    = "登記賬戶成功";
 
 $lang->admin->bind = new stdclass();
-$lang->admin->bind->caption  = '關聯社區賬號';
-$lang->admin->bind->action   = '關聯';
-$lang->admin->bind->success  = "關聯賬戶成功";
+$lang->admin->bind->caption = '關聯社區賬號';
+$lang->admin->bind->success = "關聯賬戶成功";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common    = '安全';

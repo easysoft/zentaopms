@@ -15,10 +15,8 @@ $lang->bug->id               = 'Bug編號';
 $lang->bug->product          = '所屬' . $lang->productCommon;
 $lang->bug->productplan      = '所屬計劃';
 $lang->bug->module           = '所屬模組';
-$lang->bug->path             = '模組路徑';
 $lang->bug->project          = '所屬' . $lang->projectCommon;
 $lang->bug->story            = '相關需求';
-$lang->bug->storyVersion     = '需求版本';
 $lang->bug->task             = '相關任務';
 $lang->bug->title            = 'Bug標題';
 $lang->bug->severity         = '嚴重程度';
@@ -26,22 +24,16 @@ $lang->bug->severityAB       = '級別';
 $lang->bug->pri              = '優先順序';
 $lang->bug->type             = 'Bug類型';
 $lang->bug->os               = '操作系統';
-$lang->bug->plan             = '所屬計劃';
-$lang->bug->hardware         = '硬件平台';
 $lang->bug->browser          = '瀏覽器';
-$lang->bug->machine          = '機器硬件';
-$lang->bug->found            = '如何發現';
 $lang->bug->steps            = '重現步驟';
 $lang->bug->status           = 'Bug狀態';
 $lang->bug->statusAB         = '狀態';
 $lang->bug->activatedCount   = '激活次數';
-$lang->bug->activatedCountAB = '激活次數';
 $lang->bug->confirmed        = '是否確認';
 $lang->bug->toTask           = '轉任務';
 $lang->bug->toStory          = '轉需求';
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
-$lang->bug->openedByAB       = '創建';
 $lang->bug->openedDate       = '創建日期';
 $lang->bug->openedDateAB     = '創建日期';
 $lang->bug->openedBuild      = '影響版本';
@@ -58,8 +50,9 @@ $lang->bug->closedBy         = '由誰關閉';
 $lang->bug->closedDate       = '關閉日期';
 $lang->bug->duplicateBug     = '重複ID';
 $lang->bug->lastEditedBy     = '最後修改者';
-$lang->bug->lastEditedDate   = '最後修改日期';
 $lang->bug->linkBug          = '相關Bug';
+$lang->bug->linkBugs         = '關聯相關Bug';
+$lang->bug->unlinkBug        = '移除相關Bug';
 $lang->bug->case             = '相關用例';
 $lang->bug->files            = '附件';
 $lang->bug->keywords         = '關鍵詞';
@@ -91,15 +84,9 @@ $lang->bug->delete             = '刪除';
 $lang->bug->deleted            = '已刪除';
 $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->deleteTemplate     = '刪除模板';
-$lang->bug->customFields       = '自定義欄位';
-$lang->bug->restoreDefault     = '恢復預設';
-$lang->bug->ajaxGetUserBugs    = '介面:我的Bug';
-$lang->bug->ajaxGetModuleOwner = '介面:獲得模組的預設指派人';
 $lang->bug->confirmStoryChange = '確認需求變動';
 
 /* 查詢條件列表。*/
-$lang->bug->selectProduct  = '請選擇' . $lang->productCommon;
-$lang->bug->byModule       = '按模組';
 $lang->bug->assignToMe     = '指派給我';
 $lang->bug->openedByMe     = '由我創建';
 $lang->bug->resolvedByMe   = '由我解決';
@@ -111,51 +98,30 @@ $lang->bug->unclosed       = '未關閉';
 $lang->bug->longLifeBugs   = '久未處理';
 $lang->bug->postponedBugs  = '被延期';
 $lang->bug->allBugs        = '所有';
-$lang->bug->moduleBugs     = '按模組';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求變動';
 $lang->bug->allProduct     = '所有' . $lang->productCommon;
 $lang->bug->ditto          = '同上';
 
 /* 頁面標籤。*/
-$lang->bug->lblProductAndModule         = $lang->productCommon . '模組';
-$lang->bug->lblProjectAndTask           = $lang->projectCommon . '任務';
-$lang->bug->lblStory                    = '相關需求';
-$lang->bug->lblTypeAndSeverity          = '類型/嚴重程度';
-$lang->bug->lblSystemBrowserAndHardware = '系統/瀏覽器';
 $lang->bug->lblAssignedTo               = '當前指派';
 $lang->bug->lblMailto                   = '抄送給';
 $lang->bug->lblLastEdited               = '最後修改';
 $lang->bug->lblResolved                 = '由誰解決';
-$lang->bug->lblAllFields                = '所有欄位';
-$lang->bug->lblCustomFields             = '自定義欄位';
 $lang->bug->allUsers                    = '所有用戶';
 $lang->bug->allBuilds                   = '所有';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo    = '基本信息';
-$lang->bug->legendMailto       = '抄送給';
 $lang->bug->legendAttatch      = '附件';
-$lang->bug->legendLinkBugs     = '相關Bug';
 $lang->bug->legendPrjStoryTask = $lang->projectCommon . '/需求/任務';
-$lang->bug->legendCases        = '相關用例';
 $lang->bug->legendSteps        = '重現步驟';
-$lang->bug->legendAction       = '操作';
-$lang->bug->legendHistory      = '歷史記錄';
 $lang->bug->legendComment      = '備註';
 $lang->bug->legendLife         = 'BUG的一生';
 $lang->bug->legendMisc         = '其他相關';
 
 /* 功能按鈕。*/
 $lang->bug->buttonConfirm        = '確認';
-$lang->bug->buttonCopy           = '複製';
-$lang->bug->buttonAssign         = '指派';
-$lang->bug->buttonEdit           = '編輯';
-$lang->bug->buttonActivate       = '激活';
-$lang->bug->buttonResolve        = '解決';
-$lang->bug->buttonClose          = '關閉';
-$lang->bug->buttonToList         = '返回';
-$lang->bug->buttonCreateTestcase = '轉用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = "修改{$lang->productCommon}會導致相應的{$lang->projectCommon}、需求和任務發生變化，確定嗎？";
@@ -359,6 +325,8 @@ $lang->bug->action->tostory          = array('main' => '$date, 由 <strong>$acto
 $lang->bug->action->totask           = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 
 $lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。'); 
+$lang->bug->action->linkrelatedbug   = array('main' => '$date, 由 <strong>$actor</strong> 關聯相關Bug <strong>$extra</strong>。');
+$lang->bug->action->unlinkrelatedbug = array('main' => '$date, 由 <strong>$actor</strong> 移除相關Bug <strong>$extra</strong>。');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '選擇相關版本...';

@@ -16,8 +16,6 @@ $lang->file->download      = '下載附件';
 $lang->file->edit          = '重命名';
 $lang->file->inputFileName = '請輸入附件名稱';
 $lang->file->delete        = '刪除附件';
-$lang->file->export2CSV    = '導出CSV';
-$lang->file->ajaxUpload    = '介面：編輯器上傳附件';
 $lang->file->label         = '標題：';
 $lang->file->maxUploadSize = "<span class='red'>%s</span>";
 

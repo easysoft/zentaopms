@@ -13,7 +13,6 @@ $lang->task->index              = "任務一覽";
 $lang->task->create             = "建任務";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量編輯";
-$lang->task->import             = "導入之前未完任務";
 $lang->task->edit               = "編輯";
 $lang->task->delete             = "刪除";
 $lang->task->deleted            = "已刪除";
@@ -39,7 +38,7 @@ $lang->task->project           = '所屬' . $lang->projectCommon;
 $lang->task->module            = '所屬模組';
 $lang->task->story             = '相關需求';
 $lang->task->storySpec         = '需求描述';
-$lang->task->storyVersion      = '需求版本';
+$lang->task->storyVerify       = '驗收標準';
 $lang->task->name              = '任務名稱';
 $lang->task->type              = '任務類型';
 $lang->task->pri               = '優先順序';
@@ -53,6 +52,7 @@ $lang->task->consumedAB        = '消耗';
 $lang->task->hour              = '小時';
 $lang->task->consumedThisTime  = '工時';
 $lang->task->leftThisTime      = '剩餘';
+$lang->task->datePlan          = '日程規劃';
 $lang->task->estStarted        = '預計開始';
 $lang->task->realStarted       = '實際開始';
 $lang->task->date              = '日期';
@@ -67,7 +67,6 @@ $lang->task->assignedTo        = '指派給';
 $lang->task->assignedToAB      = '指派給';
 $lang->task->assignedDate      = '指派日期';
 $lang->task->openedBy          = '由誰創建';
-$lang->task->openedByAB        = '創建者';
 $lang->task->openedDate        = '創建日期';
 $lang->task->openedDateAB      = '創建';
 $lang->task->finishedBy        = '由誰完成';
@@ -121,24 +120,11 @@ $lang->task->afterChoices['continueAdding'] = '繼續為該需求添加任務';
 $lang->task->afterChoices['toTaskList']     = '返回任務列表';
 $lang->task->afterChoices['toStoryList']    = '返回需求列表';
 
-$lang->task->buttonEdit       = '編輯';
-$lang->task->buttonClose      = '關閉';
-$lang->task->buttonCancel     = '取消';
-$lang->task->buttonActivate   = '激活';
-$lang->task->buttonLogEfforts = '記錄工時';
-$lang->task->buttonDelete     = '刪除';
-$lang->task->buttonBackToList = '返回';
-$lang->task->buttonStart      = '開始';
-$lang->task->buttonDone       = '完成';
-
 $lang->task->legendBasic  = '基本信息';
 $lang->task->legendEffort = '工時信息';
 $lang->task->legendLife   = '任務的一生';
 $lang->task->legendDesc   = '任務描述';
-$lang->task->legendAction = '操作';
 
-$lang->task->ajaxGetUserTasks      = "介面:我的任務";
-$lang->task->ajaxGetProjectTasks   = "介面:{$lang->projectCommon}任務";
 $lang->task->confirmDelete         = "您確定要刪除這個任務嗎？";
 $lang->task->confirmDeleteEstimate = "您確定要刪除這個記錄嗎？";
 $lang->task->copyStoryTitle        = "同需求";
@@ -149,6 +135,7 @@ $lang->task->remindBug             = "該任務為Bug轉化得到，是否更新
 $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？";
 $lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
 $lang->task->confirmRecord         = '"剩餘"為0，任務將標記為"已完成"，您確定嗎？';
+$lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"已經消耗"必須為數字';
@@ -158,6 +145,7 @@ $lang->task->error->consumedThisTime = '請填寫"工時"';
 $lang->task->error->left             = '請填寫"剩餘"';
 $lang->task->error->work             = '"備註"必須小於255個字元';
 $lang->task->error->skipClose        = '任務：%s 不是“已完成”或“已取消”狀態，不能關閉！';
+$lang->task->error->consumed         = '任務：%s工時不能小於0，忽略該任務工時的改動';
 
 /* 統計報表。*/
 $lang->task->report = new stdclass();
@@ -243,5 +231,3 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = '關閉原因';
 
 $lang->task->report->finishedTasksPerDay->type               = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
-
-$lang->task->estimateTip = '對該任務最初的預計';

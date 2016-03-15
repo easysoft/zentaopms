@@ -6,7 +6,7 @@ $lang->custom->restore   = '恢復預設';
 $lang->custom->key       = '鍵';
 $lang->custom->value     = '值';
 $lang->custom->flow      = '流程';
-$lang->custom->select    = '請選擇：';
+$lang->custom->select    = '請選擇流程：';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';

@@ -11,8 +11,6 @@
  */
 $lang->search->common        = '搜索';
 $lang->search->reset         = '重置';
-$lang->search->more          = '更多';
-$lang->search->lite          = '簡潔';
 $lang->search->saveQuery     = '保存';
 $lang->search->myQuery       = '我的查詢';
 $lang->search->group1        = '第一組';
@@ -22,8 +20,6 @@ $lang->search->buildQuery    = '執行搜索';
 $lang->search->saveQuery     = '保存查詢';
 $lang->search->deleteQuery   = '刪除查詢';
 $lang->search->setQueryTitle = '請輸入查詢標題（保存之前請先查詢）：';
-$lang->search->storyTitle    = '需求名稱';
-$lang->search->taskTitle     = '任務名稱';
 $lang->search->select        = '需求/任務篩選';
 $lang->search->me            = '自己';
 
@@ -42,9 +38,3 @@ $lang->search->andor['and']         = '並且';
 $lang->search->andor['or']          = '或者';
 
 $lang->search->null = '空';
-
-$lang->userquery = new stdclass();
-$lang->userquery->title     = '查詢標題';
-$lang->userquery->myQueries = '我的查詢';
-$lang->userquery->execut    = '執行';
-$lang->userquery->delete    = '刪除';
