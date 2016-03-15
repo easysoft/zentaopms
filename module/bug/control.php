@@ -898,7 +898,7 @@ class bug extends control
 
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Set the menu. */
         $this->bug->setMenu($this->products, $bug->product, $bug->branch);

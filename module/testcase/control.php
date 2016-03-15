@@ -640,7 +640,7 @@ class testcase extends control
 
         /* Get case and queryID. */
         $case    = $this->testcase->getById($caseID);
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Set menu. */
         $this->testcase->setMenu($this->products, $case->product, $case->branch);
