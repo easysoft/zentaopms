@@ -189,8 +189,8 @@ class baseHelper
 
         /* 通过对比合并后的缓存文件和扩展文件的修改时间，确定是否要重新生成缓存 */
         /* Else, judge whether needed update or not .*/
-        $extModelPrefix  = empty($app->siteCode) ? '' : $app->siteCode{0} . DS . $app->siteCode;
-        $mergedModelDir  = $app->getTmpRoot() . 'model' . DS . $extModelPrefix . DS;
+        $extModelPrefix  = empty($app->siteCode) ? '' : $app->siteCode{0} . DS . $app->siteCode . DS;
+        $mergedModelDir  = $app->getTmpRoot() . 'model' . DS . $extModelPrefix;
         $mergedModelFile = $mergedModelDir . (empty($app->siteCode) ? '' : $app->siteCode . '.') . $moduleName . '.php';
         $needUpdate      = false;
         $lastTime        = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;

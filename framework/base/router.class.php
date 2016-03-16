@@ -981,7 +981,7 @@ class baseRouter
         if(!empty($this->clientTheme))
         {
             $this->clientTheme = strtolower($this->clientTheme);
-            if(!isset($this->config->themes[$this->clientTheme])) $this->clientTheme = $this->config->default->theme;
+            if(!isset($this->lang->themes[$this->clientTheme])) $this->clientTheme = $this->config->default->theme;
         }    
         else
         {
