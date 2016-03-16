@@ -612,7 +612,7 @@ class baseRouter
             }
         }
 
-        if(!empty($_FILES))
+        if(!empty($_FILES) and isset($this->config->file->dangers))
         {
             foreach($_FILES as $varName => $files)
             {
@@ -621,20 +621,17 @@ class baseRouter
                     foreach($files['name'] as $i => $fileName)
                     {
                         $extension = ltrim(strrchr($fileName, '.'), '.');
-                        if(strrpos($this->config->file->dangers, $extension) !== false)
+                        if(strrpos(",{$this->config->file->dangers},", ",{$extension},") !== false)
                         {
-                            foreach($files as $fileKey => $value)
-                            {
-                                unset($_FILES);
-                                break 2;
-                            }
+                            unset($_FILES);
+                            break;
                         }
                     }
                 }
                 else
                 {
                     $extension = ltrim(strrchr($files['name'], '.'), '.');
-                    if(strrpos($this->config->file->dangers, $extension) !== false) unset($_FILES);
+                    if(strrpos(",{$this->config->file->dangers},", ",{$extension},") !== false) unset($_FILES);
                 }
             }
         }
