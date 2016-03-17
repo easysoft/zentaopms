@@ -1329,8 +1329,7 @@ class treeModel extends model
         if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
         {
             /* Get createdVersion. */
-            $table = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
-            $createdVersion = $this->dao->select('createdVersion')->from($table)->where('id')->eq($rootID)->fetch('createdVersion');
+            $createdVersion = $this->dao->select('createdVersion')->from(TABLE_PRODUCT)->where('id')->eq($rootID)->fetch('createdVersion');
             if($createdVersion and version_compare($createdVersion, '4.1', '>')) $viewType .= ',story';
         }
 
