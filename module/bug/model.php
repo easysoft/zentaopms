@@ -430,7 +430,7 @@ class bugModel extends model
     public function update($bugID)
     {
         $oldBug = $this->getById($bugID);
-        if($oldBug->lastEditedDate != $this->post->lastEditedDate)
+        if(isset($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;

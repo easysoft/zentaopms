@@ -342,7 +342,7 @@ class storyModel extends model
     {
         $specChanged = false;
         $oldStory    = $this->getById($storyID);
-        if($oldStory->lastEditedDate != $this->post->lastEditedDate)
+        if(isset($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
@@ -405,7 +405,7 @@ class storyModel extends model
     {
         $now      = helper::now();
         $oldStory = $this->getById($storyID);
-        if($oldStory->lastEditedDate != $this->post->lastEditedDate)
+        if(isset($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;

@@ -110,6 +110,7 @@ class upgrade extends control
             $this->view->errors = $this->upgrade->getError();
         }
         $this->display();
+        if($this->view->result == 'fail') die();
 
        @unlink($this->app->getAppRoot() . 'www/install.php');
        @unlink($this->app->getAppRoot() . 'www/upgrade.php');

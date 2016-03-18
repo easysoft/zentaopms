@@ -187,7 +187,7 @@ class taskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($oldTask->lastEditedDate != $this->post->lastEditedDate)
+        if(isset($_POST['lastEditedDate']) and $oldTask->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
