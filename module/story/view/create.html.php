@@ -87,7 +87,7 @@
             <div class='col-table'>
               <?php echo html::input('title', $storyTitle, "class='form-control'");?>
             </div>
-            <div class='col-table w-200px'>
+            <div class='col-table w-230px'>
               <div class="input-group">
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->pri;?></span>
                 <?php $isAllNumberPri = is_numeric(join('', $lang->story->priList)); ?>
