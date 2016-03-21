@@ -1576,27 +1576,27 @@ function showBrowserNotice()
     //if($browser.msie && $browser.version <= 7) show = true;
 
     /* Souhu */
-    if(window.clientInformation.userAgent.indexOf('MetaSr') >= 0)
+    if(navigator.userAgent.indexOf('MetaSr') >= 0)
     {
         show = true;
     }
-    else if(window.clientInformation.userAgent.indexOf('LBBROWSER') >= 0)
+    else if(navigator.userAgent.indexOf('LBBROWSER') >= 0)
     {
         show = true;
     }
-    else if(window.clientInformation.userAgent.indexOf('QQBrowser') >= 0)
+    else if(navigator.userAgent.indexOf('QQBrowser') >= 0)
     {
         show = true;
     }
-    else if(window.clientInformation.userAgent.indexOf('TheWorld') >= 0)
+    else if(navigator.userAgent.indexOf('TheWorld') >= 0)
     {
         show = true;
     }
-    else if(window.clientInformation.userAgent.indexOf('BIDUBrowser') >= 0)
+    else if(navigator.userAgent.indexOf('BIDUBrowser') >= 0)
     {
         show = true;
     }
-    else if(window.clientInformation.userAgent.indexOf('Maxthon') >= 0)
+    else if(navigator.userAgent.indexOf('Maxthon') >= 0)
     {
         show = true;
     }
