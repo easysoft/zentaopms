@@ -649,6 +649,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .tree-lines li.has-list.open > ul:after {bottom: 13px;}
 .tree li:before {width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px; top: 7px;left: 6px;}
 .tree-lines ul>li:after {width: 15px}
+.tree-lines li > a.active{font-weight: bold;}
 
 /* Select all and select reverse. */
 #allchecker, #reversechecker {padding-right: 5px;padding-left: 5px;}
