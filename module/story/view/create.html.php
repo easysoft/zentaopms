@@ -103,7 +103,7 @@
                 </div>
                 <?php endif; ?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->estimateAB;?></span>
-                <?php echo html::input('estimate', $estimate, "class='form-control'");?>
+                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px'");?>
               </div>
             </div>
           </div>

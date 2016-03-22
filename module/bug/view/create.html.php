@@ -65,7 +65,6 @@ js::set('refresh', $lang->refresh);
             <span class='input-group-addon' id='buildBoxActions'></span>
             <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}'")?></span>
           </div>
-          </div>
         </td>
       </tr>
       <tr>
@@ -105,7 +104,7 @@ js::set('refresh', $lang->refresh);
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
                 <?php $isAllNumberSeverity = is_numeric(join($lang->bug->severityList));?>
                 <?php if(!$isAllNumberSeverity):?>
-                <?php echo html::select('pri', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
+                <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-prefix='severity'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
