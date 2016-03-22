@@ -24,6 +24,7 @@ $lang->file->errorCanNotWrite = "<span class='red'>The directory '%s' is unwrita
 $lang->file->confirmDelete    = " Are you sure to delete this file?";
 $lang->file->errorFileSize    = " The file size exceeds the limit, might not be able to upload!";
 $lang->file->errorFileUpload  = " Failed to upload files, file size may exceed the limit!";
+$lang->file->dangerFile       = " The file exists security risk, will be canceled upload!";
 $lang->file->errorSuffix      = 'Compressed packet format error, can only upload zip!';
 $lang->file->errorExtract     = 'Decompression failure! The file may have been damaged';
 $lang->file->uploadImagesExplain = <<<EOD
