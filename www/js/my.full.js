@@ -1636,7 +1636,7 @@ $(document).ready(function()
     fixStyle();
 
     // Init tree menu
-    $('.tree').tree({initialState: 'preserve'});
+    $('.tree').tree({name: config.currentModule + '-' + config.currentMethod, initialState: 'preserve'});
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 
