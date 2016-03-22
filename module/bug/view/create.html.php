@@ -65,7 +65,6 @@ js::set('refresh', $lang->refresh);
             <span class='input-group-addon' id='buildBoxActions'></span>
             <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}'")?></span>
           </div>
-          </div>
         </td>
       </tr>
       <tr>
