@@ -24,6 +24,7 @@ $lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请�
 $lang->file->confirmDelete    = " 您确定删除该附件吗？";
 $lang->file->errorFileSize    = " 文件大小已经超过限制，可能不能成功上传！";
 $lang->file->errorFileUpload  = " 文件上传失败，文件大小可能超出限制";
+$lang->file->dangerFile       = " 您选择的文件存在安全风险，系统将不予上传。";
 $lang->file->errorSuffix      = '压缩包格式错误，只能上传zip压缩包！';
 $lang->file->errorExtract     = '解压缩失败！可能文件已经损坏，或压缩包里含有非法上传文件。';
 $lang->file->uploadImagesExplain = <<<EOD

@@ -7,11 +7,12 @@ table.fileBox td {padding: 0!important}
 </style>
 <div id='fileform'>
   <?php 
+  js::set('dangerFiles', $this->config->file->dangers);
   /* Define the html code of a file row. */
   $fileRow = <<<EOT
   <table class='fileBox' id='fileBox\$i'>
     <tr>
-      <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='files[]' class='fileControl'  tabindex='-1' onchange='checkSize(this)'/></div></td>
+      <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='files[]' class='fileControl'  tabindex='-1' onchange='checkSizeAndType(this)'/></div></td>
       <td class=''><input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' /></td>
       <td class='w-30px'><a href='javascript:void();' onclick='addFile(this)' class='btn btn-block'><i class='icon-plus'></i></a></td>
       <td class='w-30px'><a href='javascript:void();' onclick='delFile(this)' class='btn btn-block'><i class='icon-remove'></i></a></td>
@@ -38,13 +39,13 @@ $(function()
 });
 
 /**
- * Check file size.
+ * Check file size and type.
  * 
  * @param  obj $obj 
  * @access public
  * @return void
  */
-function checkSize(obj)
+function checkSizeAndType(obj)
 {
     if(typeof($(obj)[0].files) != 'undefined')
     {
@@ -55,9 +56,15 @@ function checkSize(obj)
         var fileSize = 0;
         $(obj).closest('#fileform').find(':file').each(function()
         {
+            /* Check file type. */
+            fileName = $(this)[0].files[0].name;
+            dotPos   = fileName.lastIndexOf('.');
+            fileType = fileName.substring(dotPos + 1);
+            if((',' + dangerFiles + ',').indexOf((',' + fileType + ',')) != -1) alert('<?php echo $lang->file->dangerFile?>');
+
             if($(this).val()) fileSize += $(this)[0].files[0].size;
         })
-        if(fileSize > maxUploadSize) alert('<?php echo $lang->file->errorFileSize?>');
+        if(fileSize > maxUploadSize) alert('<?php echo $lang->file->errorFileSize?>');//Check file size.
     }
 }
 

@@ -29,4 +29,6 @@
 
 #contactListGroup .input-group-btn > .btn {margin-left: -1px!important;}
 
+.chosen-container {max-width: 533px;}
+
 .minw-80px {min-width: 80px;}

@@ -1,3 +1,4 @@
+var ajaxFormUrl = '';
 $.extend(
 {
     ajaxForm: function(formID, callback)
@@ -8,6 +9,28 @@ $.extend(
             target  : null,
             timeout : config.timeout,
             dataType:'json',
+
+            beforeSubmit:function(arr, $form, options)
+            {
+                /* Check should use frame. */
+                var feature = {};
+                feature.fileapi = $("<input type='file'/>").get(0).files !== undefined;
+                feature.formdata = window.FormData !== undefined;
+                var fileInputs = $('input[type=file]:enabled', this).filter(function() { return $(this).val() !== ''; });
+                var hasFileInputs = fileInputs.length > 0;
+                var mp = 'multipart/form-data';
+                var multipart = ($form.attr('enctype') == mp || $form.attr('encoding') == mp);
+
+                var fileAPI = feature.fileapi && feature.formdata;
+                var shouldUseFrame = (hasFileInputs || multipart) && !fileAPI;
+                /* Append HTTP_X_REQUESTED_WITH on url when shouldUseFrame is true. */
+                if(shouldUseFrame)
+                {
+                    if(ajaxFormUrl == '')ajaxFormUrl = options.url;
+                    if(options.url != ajaxFormUrl) options.url = ajaxFormUrl;
+                    options.url = options.url.indexOf('&') >= 0 ? options.url + '&HTTP_X_REQUESTED_WITH=true' : options.url + '?HTTP_X_REQUESTED_WITH=true';
+                }
+            },
 
             success:function(response)
             {

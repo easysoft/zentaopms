@@ -1,4 +1,7 @@
 .dropdown-pris > .btn {background-color: #fff;}
 #mailto + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0}
 
+.chosen-container {max-width: 980px}
+
 .minw-80px {min-width: 80px;}
+.minw-60px {min-width: 60px;}
