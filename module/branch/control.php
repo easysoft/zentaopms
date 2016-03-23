@@ -93,7 +93,7 @@ class branch extends control
         {
             $this->app->loadLang('product');
             $productType = $this->branch->getProductType($branchID);
-            die(js::confirm(str_replace('%branch%', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
+            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
         }
 
         $this->branch->delete(TABLE_BRANCH, $branchID);
