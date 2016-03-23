@@ -29,6 +29,7 @@ $lang->bug->steps            = '重现步骤';
 $lang->bug->status           = 'Bug状态';
 $lang->bug->statusAB         = '状态';
 $lang->bug->activatedCount   = '激活次数';
+$lang->bug->activatedCountAB = '激活次数';
 $lang->bug->confirmed        = '是否确认';
 $lang->bug->toTask           = '转任务';
 $lang->bug->toStory          = '转需求';
