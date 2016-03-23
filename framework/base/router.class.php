@@ -1535,6 +1535,7 @@ class baseRouter
         }
 
         unset($passedParams['onlybody']);
+        unset($passedParams['HTTP_X_REQUESTED_WITH']);
         $passedParams = array_values($passedParams);
         $i = 0;
         foreach($defaultParams as $key => $defaultValue)
