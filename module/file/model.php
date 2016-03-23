@@ -163,7 +163,7 @@ class fileModel extends model
     public function getExtension($filename)
     {
         $extension = trim(strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
-        if(empty($extension) or strpos($this->config->file->dangers, $extension) !== false) return 'txt';
+        if(empty($extension) or strpos(",{$this->config->file->dangers},", ",{$extension},") !== false) return 'txt';
         if($extension == 'php') return 'txt';
         return $extension;
     }
