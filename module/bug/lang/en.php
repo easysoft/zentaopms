@@ -29,6 +29,7 @@ $lang->bug->steps            = 'Steps';
 $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
 $lang->bug->activatedCount   = 'Activated count';
+$lang->bug->activatedCountAB = 'Activated count';
 $lang->bug->confirmed        = 'Confirmed';
 $lang->bug->toTask           = 'To task';
 $lang->bug->toStory          = 'To story';
