@@ -22,6 +22,7 @@ class commonModel extends model
         parent::__construct();
         if(!defined('FIRST_RUN'))
         {
+            define('FIRST_RUN', true);
             $this->startSession();
             $this->sendHeader();
             $this->setCompany();
@@ -31,7 +32,6 @@ class commonModel extends model
             if(!$this->checkIP()) die($this->lang->ipLimited);
             if($this->app->getViewType() == 'mhtml') $this->setMobileMenu();
             $this->app->loadLang('company');
-            define('FIRST_RUN', true);
         }
     }
 
