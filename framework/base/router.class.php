@@ -1535,6 +1535,7 @@ class baseRouter
         }
 
         unset($passedParams['onlybody']);
+        unset($passedParams['HTTP_X_REQUESTED_WITH']);
         $passedParams = array_values($passedParams);
         $i = 0;
         foreach($defaultParams as $key => $defaultValue)
@@ -1708,7 +1709,7 @@ class baseRouter
                 if(is_file($multiConfigFile)) include $multiConfigFile;
             }
 
-            if(empty($this->siteCode))
+            if(!empty($this->siteCode))
             {
                 $siteConfigFile = $this->configRoot . "sites/{$this->siteCode}.php";
                 if(is_file($siteConfigFile)) include $siteConfigFile;

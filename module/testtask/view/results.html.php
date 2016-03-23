@@ -28,7 +28,7 @@
     <div id='casesResults'>
       <table class='table table-condensed table-hover' style='border: 1px solid #ddd; word-break:break-all'>
         <?php $count = count($results);?>
-        <caption class='text-left' style='border: 1px solid #ddd; border-bottom: none;'>
+        <caption class='text-left'>
           <strong><?php echo $lang->testcase->result?> &nbsp;<span> <?php printf($lang->testtask->showResult, $count)?></span> <span class='result-tip'></span></strong>
         </caption>
         <?php $failCount = 0; ?>
@@ -81,7 +81,7 @@
         <?php endforeach;?>
       </table>
       <div id='resultTip' class='hide'><?php if($count > 0) echo $failCount > 0 ? "<span>" . sprintf($lang->testtask->showFail, $failCount) . "</span>":"<span class='text-success'>{$lang->testtask->passAll}</span>";?></div>
-      <style>.table-hover tr.result-detail:hover td {background: #fff}</style>
+      <style>.table-hover tr.result-detail:hover td {background: #fff} #casesResults > table > caption {border: 1px solid #ddd; margin-bottom: -1px}</style>
     </div>
   </div>
 </div>
