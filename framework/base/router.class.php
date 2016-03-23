@@ -1709,7 +1709,7 @@ class baseRouter
                 if(is_file($multiConfigFile)) include $multiConfigFile;
             }
 
-            if(empty($this->siteCode))
+            if(!empty($this->siteCode))
             {
                 $siteConfigFile = $this->configRoot . "sites/{$this->siteCode}.php";
                 if(is_file($siteConfigFile)) include $siteConfigFile;

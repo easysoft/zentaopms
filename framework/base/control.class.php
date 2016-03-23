@@ -592,7 +592,6 @@ class baseControl
     }
 
     /**
-    /**
      * 默认渲染方法，适用于viewType = html的时候。
      * Default parse method when viewType != json, like html.
      *
