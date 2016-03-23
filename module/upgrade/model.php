@@ -134,6 +134,8 @@ class upgradeModel extends model
             case '8_0_1':
                 $this->execSQL($this->getUpgradeFile('8.0.1'));
                 $this->addPriv8_1();
+            case '8_1':
+                $this->execSQL($this->getUpgradeFile('8.1'));
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -208,6 +210,7 @@ class upgradeModel extends model
         case '7_4_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('7.4.beta'));
         case '8_0':
         case '8_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
+        case '8_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('8.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
