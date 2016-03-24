@@ -142,7 +142,6 @@ function setField(obj, fieldNO, moduleparams)
 {
     var params    = moduleparams;
     var fieldName = $(obj).val();
-    console.log(fieldName);
     $(obj).closest('form').find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
     $(obj).closest('form').find('#valueBox' + fieldNO).html($(obj).closest('form').find('#box' + fieldName).children().clone());
     $(obj).closest('form').find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
