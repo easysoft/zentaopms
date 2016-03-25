@@ -112,20 +112,20 @@ class deptModel extends model
 
     /**
      * Get the treemenu of departments.
-     * 
-     * @param  int    $rootDeptID 
-     * @param  string $userFunc 
-     * @param  int    $groupID
+     *
+     * @param  int        $rootDeptID
+     * @param  string     $userFunc
+     * @param  array|int  $param
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootDeptID = 0, $userFunc, $groupID = 0)
+    public function getTreeMenu($rootDeptID = 0, $userFunc, $param = 0)
     {
         $deptMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
-            $linkHtml = call_user_func($userFunc, $dept, $groupID);
+            $linkHtml = call_user_func($userFunc, $dept, $param);
 
             if(isset($deptMenu[$dept->id]) and !empty($deptMenu[$dept->id]))
             {
@@ -204,16 +204,31 @@ class deptModel extends model
     }
 
     /**
-     * Create the group Link.
+     * Create the group manage members link.
      * 
      * @param  int    $dept 
      * @param  int    $groupID
      * @access public
      * @return string 
      */
-    public function createGroupLink($dept, $groupID)
+    public function createGroupManageMemberLink($dept, $groupID)
     {
         return html::a(helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+    }
+
+    /**
+     * Create project manage members link.
+     *
+     * @param  int    $dept
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function createPrjManageMemberLink($dept, $params)
+    {
+        $projectID   = $params['projectID'];
+        $team2Import = $params['team2Import'];
+        return html::a(helper::createLink('project', 'managemembers', "projectID=$projectID&team2Import=$team2Import&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
     }
 
     /**
@@ -338,16 +353,34 @@ class deptModel extends model
      * Get user pairs of a department.
      *
      * @param  int    $deptID
+     * @param  string $params
      * @access public
      * @return array
      */
-    public function getDeptUserPairs($deptID = 0)
+    public function getDeptUserPairs($deptID = 0, $params = '')
     {
-        return $this->dao->select('account, realname')->from(TABLE_USER)
+        $fields = 'account, realname';
+        if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,qd,qa,dev,', role) AS roleOrder";
+        $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
+
+        $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('deleted')->eq(0)
             ->beginIF($deptID)->andWhere('dept')->eq((int)$deptID)->fi()
-            ->orderBy('account')
-            ->fetchPairs();
+            ->orderBy($orderBy)
+            ->fetchAll('account');
+
+        /* Cycle the user records to append the first letter of his account. */
+        foreach($users as $account => $user)
+        {
+            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            if(strpos($params, 'noletter') !== false) $firstLetter =  '';
+            $users[$account] =  $firstLetter . $user->realname;
+        }
+
+        /* Append empty users. */
+        if(strpos($params, 'noempty') === false) $users[''] = '';
+
+        return $users;
     }
     
     /**

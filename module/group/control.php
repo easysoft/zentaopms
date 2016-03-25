@@ -235,7 +235,7 @@ class group extends control
         }
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->group->getUserPairs($groupID);
-        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'noempty, noletter');
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
@@ -245,7 +245,7 @@ class group extends control
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->group      = $group;
-        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupLink'), $groupID);
+        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
         $this->view->groupUsers = $groupUsers;
         $this->view->otherUsers = $otherUsers;
 

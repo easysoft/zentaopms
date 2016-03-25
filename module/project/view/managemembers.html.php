@@ -13,17 +13,25 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('roles', $roles);?>
-<div>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['team']);?></span>
-      <strong> <?php echo $lang->project->manageMembers;?></strong>
-      <small class='text-muted'><i class='icon icon-cogs'></i></small>
-    </div>
-    <div class='actions'>
-      <button class='btn' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?></button>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix'><?php echo html::icon($lang->icons['team']);?></span>
+    <strong> <?php echo $lang->project->manageMembers;?></strong>
+    <small class='text-muted'><i class='icon icon-cogs'></i></small>
+  </div>
+  <div class='actions'>
+    <button class='btn' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?></button>
+  </div>
+</div>
+<div class='side'>
+  <div class='side-body'>
+    <div class='panel panel-sm'>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
+      <div class='panel-body'><?php echo $deptTree;?></div>
     </div>
   </div>
+</div>
+<div class='main'>
   <form class='form-condensed' method='post'>
     <table class='table table-form'>
       <thead>
@@ -38,10 +46,10 @@
       </thead>
       <?php $i = 1; $memberCount = 0;?>
       <?php foreach($currentMembers as $member):?>
-      <?php if(!isset($users[$member->account])) continue; $realname = substr($users[$member->account], 2);?>
+      <?php if(!isset($allUsers[$member->account])) continue;?>
       <?php unset($users[$member->account]);?>
       <tr>
-        <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $realname;?>' readonly class='form-control' /></td>
+        <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $member->realname;?>' readonly class='form-control' /></td>
         <td><input type='text' name='roles[]'     id='role<?php echo $i;?>'    value='<?php echo $member->role;?>' class='form-control' /></td>
         <td><input type='text' name='days[] '     id='days<?php echo $i;?>'    value='<?php echo $member->days;?>' class='form-control' /></td>
         <td>
@@ -57,7 +65,7 @@
 
       <?php foreach($members2Import as $member2Import):?>
       <tr class='addedItem'>
-        <td><?php echo html::select("accounts[]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+        <td><?php echo html::select("accounts[]", $allUsers, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
         <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->role;?>' /></td>
         <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
@@ -93,6 +101,8 @@
       </tr>
     </table>
   </form>
+</div>
+<div>
   <?php $i = '%i%';?>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
