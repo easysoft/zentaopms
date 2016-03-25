@@ -605,16 +605,16 @@ class treeModel extends model
 
         $productModules = $this->getTreeMenu(0, 'productdoc', 0, array('treeModel', 'createDocLink'), 'product');
         $startPos       = strpos($productModules, '<li');
-        $productModules = substr($productModules, $startPos, strrpos($productModules, '</ul') - $startPos);
+        $productModules = $startPos === false ? '' : substr($productModules, $startPos, strrpos($productModules, '</ul') - $startPos);
         $projectModules = $this->getTreeMenu(0, 'projectdoc', 0, array('treeModel', 'createDocLink'), 'product');
         $startPos       = strpos($projectModules, '<li');
-        $projectModules = substr($projectModules, $startPos, strrpos($projectModules, '</ul>') - $startPos);
+        $projectModules = $startPos === false ? '' : substr($projectModules, $startPos, strrpos($projectModules, '</ul>') - $startPos);
 
         foreach($products as $productID =>$productName)
         {
             $menu .= '<li>';
             $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID"), $productName);
-            if(!empty($productModules))
+            if(!empty($productModules) or !empty($projectModules))
             {
                 $menu .= '<ul>';
                 $menu .= str_replace('%productID%', $productID, $productModules);
@@ -649,7 +649,7 @@ class treeModel extends model
 
         $projectModules = $this->getTreeMenu(0, 'projectdoc', 0, array('treeModel', 'createDocLink'), 'project');
         $startPos       = strpos($projectModules, '<li');
-        $projectModules = substr($projectModules, $startPos, strrpos($projectModules, '</ul') - $startPos);
+        $projectModules = $startPos === false ? '' : substr($projectModules, $startPos, strrpos($projectModules, '</ul') - $startPos);
 
         foreach($projects as $id => $project)
         {
