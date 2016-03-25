@@ -34,11 +34,12 @@
       </tr>
       <tr>
         <th><?php echo $lang->user->realname;?></th>
-        <td><?php echo html::input('realname', '', "class='form-control'");?></td>
+        <td><?php echo html::input('realname', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->password;?></th>
         <td>
+          <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
           <span class='input-group'>
             <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
