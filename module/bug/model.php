@@ -1796,15 +1796,10 @@ class bugModel extends model
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
         }
 
-        if(strpos($this->session->bugQuery, '`product`') === false) 
-        {
-            $var = $this->session->bugQuery . ' AND `product` = ' . $productID;
-            $this->session->set('bugQuery', "$var");
-        }
-
         $allProduct = "`product` = 'all'";
         $bugQuery   = $this->session->bugQuery;
-        if(strpos($this->session->bugQuery, $allProduct) !== false)
+        if(strpos($bugQuery, '`product` =') === false) $bugQuery .= ' AND `product` = ' . $productID;
+        if(strpos($bugQuery, $allProduct) !== false)
         {
             $products = array_keys($this->loadModel('product')->getPrivProducts());
             $bugQuery = str_replace($allProduct, '1', $this->session->bugQuery);

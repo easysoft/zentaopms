@@ -1383,8 +1383,9 @@ class storyModel extends model
 
         /* Get plans. */
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
-            ->beginIF($productID != 'all' and $productID != '')->where('product')->eq((int)$productID)->fi()
-            ->beginIF($productID == 'all')->where('product')->in($productIDs)->fi()
+            ->where('deleted')->eq('0')
+            ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
+            ->beginIF($productID == 'all')->andWhere('product')->in($productIDs)->fi()
             ->fetchPairs();
 
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)

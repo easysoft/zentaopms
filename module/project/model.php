@@ -787,12 +787,12 @@ class projectModel extends model
                 if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
             }
 
-            /* Limit current project when no project. */
-            if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
             if(strpos($this->session->taskQuery, "deleted =") === false)   $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
             $projectQuery = "`project`" . helper::dbIN(array_keys($projects));
             $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
+            /* Limit current project when no project. */
+            if(strpos($taskQuery, "`project` =") === false) $taskQuery = $taskQuery . " AND `project` = $projectID";
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $sort);
