@@ -332,11 +332,11 @@ class tree extends control
      */
     public function ajaxGetSonModules($moduleID, $rootID = 0, $type = 'story')
     {
-        $modules = $this->dao->select('id, name')->from(TABLE_MODULE)
+        $modules = $this->dao->select('id,name,short')->from(TABLE_MODULE)
             ->where('root')->eq($rootID)
             ->andWhere('parent')->eq((int)$moduleID)
             ->andWhere('type')->eq($type)
-            ->fetchPairs();
+            ->fetchAll('id');
         die(json_encode($modules));
     }
 }

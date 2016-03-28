@@ -6,26 +6,29 @@ function syncModule(rootID, type)
     link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + moduleID + '&rootID=' + rootID + '&type=' + type);
     $.getJSON(link, function(modules)
     {
+        if(modules.length == 0) return false;
         $('.helplink').addClass('hidden');
-        var $inputgroup = $('<div></div>').append($('.input-group .icon-remove:first').closest('.input-group').clone()).html();
-        $.each(modules, function(key, value)
+        var $inputgroup = $('<div></div>').append($('.input-group .icon-remove:first').closest('.row-table').clone()).html();
+        $.each(modules, function(key, module)
         {
-            moduleName = value;
-            $('.form-control').each(function()
+            $('.row-table').each(function()
             {
-                if(this.value == moduleName) modules[key] = null;
-                if(!this.value) $(this).parent().remove();
+               moduleName = $(this).find('input[id^=modules]').val();
+                if(moduleName == module.name) modules[key] = null;
+                if(!moduleName) $(this).closest('.row-table').remove();
             })
         });  
 
-        $.each(modules, function(key, value)
+        $.each(modules, function(key, module)
         {
-            if(value)
+            if(module)
             {
                 $('#sonModule').append($inputgroup);
-                $('#sonModule .input-group:last input').val(value);
+                $('#sonModule .row-table:last input[id^=modules]').val(module.name);
+                $('#sonModule .row-table:last input[id^=shorts]').val(module.short);
             }
         })
+        $('#sonModule').append($inputgroup);
     })
 }
 
@@ -57,14 +60,14 @@ function toggleCopy()
 
 function addItem(obj)
 {
-    var $inputgroup = $(obj).closest('.input-group');
-    $inputgroup.after($inputgroup.clone()).next('.input-group').find('input').val('');
+    var $inputgroup = $(obj).closest('.row-table');
+    $inputgroup.after($inputgroup.clone()).next('.row-table').find('input').val('');
 }
 
 function deleteItem(obj)
 {
-    if($(obj).closest('.input-group').parent().find('i.icon-remove').size() <= 1) return;
-    $(obj).closest('.input-group').remove();
+    if($(obj).closest('.row-table').parent().find('i.icon-remove').size() <= 1) return;
+    $(obj).closest('.row-table').remove();
 }
 
 $(document).ready(function()
