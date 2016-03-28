@@ -149,15 +149,14 @@ $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';
 $lang->user->contacts->listName = '列表名称';
 
-$lang->user->contacts->manage       = '维护列表';
-$lang->user->contacts->contactsList = '已有列表';
-$lang->user->contacts->selectedUsers= '选择用户';
-$lang->user->contacts->selectList   = '选择列表';
-$lang->user->contacts->appendToList = '追加至已有列表：';
-$lang->user->contacts->createList   = '创建新列表：';
-$lang->user->contacts->noListYet    = '还没有创建任何列表。';
-$lang->user->contacts->confirmDelete= '您确定要删除这个列表吗？';
-$lang->user->contacts->or           = ' 或者 ';
+$lang->user->contacts->manage        = '维护列表';
+$lang->user->contacts->contactsList  = '已有列表';
+$lang->user->contacts->selectedUsers = '选择用户';
+$lang->user->contacts->selectList    = '选择列表';
+$lang->user->contacts->createList    = '创建新列表';
+$lang->user->contacts->noListYet     = '还没有创建任何列表，请先创建联系人列表。';
+$lang->user->contacts->confirmDelete = '您确定要删除这个列表吗？';
+$lang->user->contacts->or            = ' 或者 ';
 
 $lang->user->resetFail       = "重置密码失败，检查用户名是否存在！";
 $lang->user->resetSuccess    = "重置密码成功，请用新密码登录。";
