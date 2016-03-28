@@ -379,6 +379,79 @@ class my extends control
     }
 
     /**
+     * Manage contacts.
+     *
+     * @param  int    $listID
+     * @param  string $mode
+     * @access public
+     * @return void
+     */
+    public function manageContacts($listID = 0, $mode = '')
+    {
+        if($_POST)
+        {
+            if($this->post->mode == 'new')
+            {
+                $listID = $this->user->createContactList($this->post->newList, $this->post->users);
+                die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
+            }
+            elseif($this->post->mode == 'edit')
+            {
+                $this->user->updateContactList($this->post->listID, $this->post->listName, $this->post->users);
+                die(js::locate(inlink('manageContacts', "listID={$this->post->listID}"), 'parent'));
+            }
+        }
+
+        $mode  = empty($mode) ? 'edit' : $mode;
+        $lists = $this->user->getContactLists($this->app->user->account);
+
+        /* Create or manage list according to mode. */
+        if($mode == 'new')
+        {
+            $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->createList;
+            $this->view->position[] = $this->lang->user->contacts->createList;
+        }
+        else
+        {
+            $listID = $listID ? $listID : key($lists);
+            if(!$listID) die(js::alert($this->lang->user->contacts->noListYet) . js::locate($this->createLink('my', 'managecontacts', "listID=0&mode=new"), 'parent'));
+
+            $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->manage;
+            $this->view->position[] = $this->lang->user->contacts->manage;
+            $this->view->list       = $this->user->getContactListByID($listID);
+        }
+
+        $this->view->mode   = $mode;
+        $this->view->lists  = $lists;
+        $this->view->listID = $listID;
+        $this->view->users  = $this->user->getPairs('noletter|nodeleted|noempty|noclosed');
+        $this->display();
+    }
+
+    /**
+     * Delete a contact list.
+     *
+     * @param  int    $listID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteContacts($listID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes"));
+            exit;
+        }
+        else
+        {
+            $this->user->deleteContactList($listID);
+            echo js::locate(inlink('manageContacts'), 'parent');
+            exit;
+        }
+    }
+
+    /**
      * View my profile.
      * 
      * @access public

@@ -149,15 +149,14 @@ $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';
 $lang->user->contacts->listName = 'List name';
 
-$lang->user->contacts->manage       = 'Manage List';
-$lang->user->contacts->contactsList = 'List';
-$lang->user->contacts->selectedUsers= 'Users';
-$lang->user->contacts->selectList   = 'List';
-$lang->user->contacts->appendToList = 'Append to a list';
-$lang->user->contacts->createList   = 'Createa a list';
-$lang->user->contacts->noListYet    = 'No contacts list yet.';
-$lang->user->contacts->confirmDelete= 'Are you sure to delete this list?';
-$lang->user->contacts->or           = ' or ';
+$lang->user->contacts->manage        = 'Manage List';
+$lang->user->contacts->contactsList  = 'List';
+$lang->user->contacts->selectedUsers = 'Users';
+$lang->user->contacts->selectList    = 'List';
+$lang->user->contacts->createList    = 'Create a list';
+$lang->user->contacts->noListYet     = 'No contacts list yet, please create a list first.';
+$lang->user->contacts->confirmDelete = 'Are you sure to delete this list?';
+$lang->user->contacts->or            = ' or ';
 
 $lang->user->resetFail       = "Reset fail, Check account";
 $lang->user->resetSuccess    = "Reset success.";

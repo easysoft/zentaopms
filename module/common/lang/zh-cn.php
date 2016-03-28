@@ -159,6 +159,7 @@ $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密码|my|changepassword';
+$lang->my->menu->manageContacts = '联系人|my|managecontacts';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;

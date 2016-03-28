@@ -159,6 +159,7 @@ $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Change Password|my|changepassword|';
+$lang->my->menu->manageContacts = 'Contacts|my|managecontacts|';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
