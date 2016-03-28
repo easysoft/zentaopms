@@ -33,7 +33,7 @@
     <?php foreach($productIDList as $productID):?>
     <tr class='text-center'>
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
-      <td><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
+      <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
