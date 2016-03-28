@@ -58,3 +58,9 @@ function suitEndDate()
     endDate = endDate.toString('yyyy-M-dd');
     $('#end').val(endDate);
 }
+
+/* If the mouse hover over the manage contacts button, give tip. */
+$(function()
+{
+    $('[data-toggle=tooltip]').tooltip();
+});
