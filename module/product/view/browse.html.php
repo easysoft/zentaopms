@@ -15,6 +15,19 @@
 <?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
   <ul class='nav'>
+    <li>
+      <span>
+        <?php
+        echo $moduleName;
+        if($moduleID)
+        {
+            $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        echo " <i class='icon-angle-right'></i>&nbsp; "
+        ?>
+      </span>
+    </li>
     <li id='unclosedTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=unclosed"),     $lang->product->unclosed);?></li>
     <li id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=allStory"),     $lang->product->allStory);?></li>
     <li id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=assignedtome"), $lang->product->assignedToMe);?></li>
@@ -229,6 +242,6 @@
 </div>
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active');
-$('#<?php echo $browseType;?>Tab').addClass('active');
+$('#<?php echo $this->session->storyBrowseType;?>Tab').addClass('active');
 </script>
 <?php include '../../common/view/footer.html.php';?>

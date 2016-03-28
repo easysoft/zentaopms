@@ -111,6 +111,9 @@ class product extends control
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
+        if($browseType == 'bymodule') setcookie('storyModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('storyBrowseType', $browseType);
+
         /* Load datatable. */
         $this->loadModel('datatable');
 
@@ -121,7 +124,7 @@ class product extends control
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch === '') ? $this->session->branch : $branch;
-        $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
+        $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. */
@@ -166,6 +169,7 @@ class product extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
+        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages   = $this->product->batchGetStoryStage($stories);

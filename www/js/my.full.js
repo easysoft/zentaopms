@@ -1609,6 +1609,19 @@ function showBrowserNotice()
     if(show) $('body').prepend('<div class="alert alert-info alert-dismissable" style="margin:0px;"><button type=button" onclick="ajaxIgnoreBrowser()" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"></i></button><p>' + browserNotice + '</p></div>');
 }
 
+/**
+ * Remove cookie by key
+ * 
+ * @param  cookieKey $cookieKey 
+ * @access public
+ * @return void
+ */
+function removeCookieByKey(cookieKey)
+{
+    $.cookie(cookieKey, '', {expires:config.cookieLife, path:config.webRoot});
+    location.href = location.href;
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

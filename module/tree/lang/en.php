@@ -42,5 +42,6 @@ $lang->tree->child      = 'Child';
 $lang->tree->owner      = 'Owner';
 $lang->tree->order      = 'Order';
 $lang->tree->short      = 'Short';
+$lang->tree->all        = 'All modules';
 $lang->tree->projectDoc = "{$lang->projectCommon} doc";
 $lang->tree->product    = $lang->productCommon;

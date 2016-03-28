@@ -1195,9 +1195,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByAssignedTo($productID, $branch, $account, $orderBy, $pager)
+    public function getByAssignedTo($productID, $branch, $modules, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, 'assignedTo', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'assignedTo', $account, $orderBy, $pager);
     }
 
     /**
@@ -1210,9 +1210,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByOpenedBy($productID, $branch, $account, $orderBy, $pager)
+    public function getByOpenedBy($productID, $branch, $modules, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, 'openedBy', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'openedBy', $account, $orderBy, $pager);
     }
 
     /**
@@ -1225,9 +1225,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByReviewedBy($productID, $branch, $account, $orderBy, $pager)
+    public function getByReviewedBy($productID, $branch, $modules, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, 'reviewedBy', $account, $orderBy, $pager, 'include');
+        return $this->getByField($productID, $branch, $modules, 'reviewedBy', $account, $orderBy, $pager, 'include');
     }
 
     /**
@@ -1239,9 +1239,9 @@ class storyModel extends model
      * @param  object $pager 
      * @return array
      */
-    public function getByClosedBy($productID, $branch, $account, $orderBy, $pager)
+    public function getByClosedBy($productID, $branch, $modules, $account, $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, 'closedBy', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'closedBy', $account, $orderBy, $pager);
     }
 
     /**
@@ -1254,9 +1254,9 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus($productID, $branch, $status, $orderBy, $pager)
+    public function getByStatus($productID, $branch, $modules, $status, $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, 'status', $status, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'status', $status, $orderBy, $pager);
     }
 
     /**
@@ -1271,13 +1271,14 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByField($productID, $branch, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
+    public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName)) return array();
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
             ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
             ->orderBy($orderBy)
@@ -1295,11 +1296,12 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function get2BeClosed($productID, $branch, $orderBy, $pager)
+    public function get2BeClosed($productID, $branch, $modules, $orderBy, $pager)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('stage')->in('developed,released')
             ->andWhere('status')->ne('closed')

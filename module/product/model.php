@@ -360,24 +360,25 @@ class productModel extends model
         $this->loadModel('story');
 
         /* Get stories by browseType. */
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
         if($browseType == 'unclosed')
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, $branch, 0, array_keys($unclosedStatus), $sort, $pager);
+            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $sort, $pager);
         }
-        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, 0, 'all', $sort, $pager);
-        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $this->loadModel('tree')->getAllChildID($moduleID), 'all', $sort, $pager);
+        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $sort, $pager);
+        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $sort, $pager);
         if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch);
-        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $this->app->user->account, $sort, $pager);
-        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, 'draft', $sort, $pager);
-        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, 'active', $sort, $pager);
-        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, 'changed', $sort, $pager);
-        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $sort, $pager);
-        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, 'closed', $sort, $pager);
+        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
+        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
+        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
+        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
+        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $sort, $pager);
+        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $sort, $pager);
+        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changed', $sort, $pager);
+        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $sort, $pager);
+        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $sort, $pager);
 
         if($stories) return $stories;
 
