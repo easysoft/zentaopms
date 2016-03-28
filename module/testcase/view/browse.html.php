@@ -13,6 +13,7 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';
+include '../../common/view/datatable.fix.html.php';
 include './caseheader.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID'  , $moduleID);
@@ -35,68 +36,12 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
 </div>
 <div class='main'>
   <form id='batchForm' method='post'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
-      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <thead>
-        <tr>
-          <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
-          <th>                 <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
-          <?php if($browseType == 'needconfirm'):?>
-          <th>                 <?php common::printOrderLink('story',         $orderBy, $vars, $lang->testcase->story);?></th>
-          <th class='w-50px'><?php echo $lang->actions;?></th>
-          <?php else:?>
-          <th class='w-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='w-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-          <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='w-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
-          <?php endif;?>
-        </tr>
-      </thead>
-      <?php foreach($cases as $case):?>
-      <tr class='text-center'>
-        <?php $viewLink = inlink('view', "caseID=$case->id");?>
-        <td>
-          <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
-          <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
-        </td>
-        <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-        <td class='text-left' title="<?php echo $case->title?>">
-          <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
-          <?php echo html::a($viewLink, $case->title);?>
-        </td>
-        <?php if($browseType == 'needconfirm'):?>
-        <td class='text-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
-        <td><?php $lang->testcase->confirmStoryChange = $lang->confirm; common::printIcon('testcase', 'confirmStoryChange', "caseID=$case->id", '', 'list', '', 'hiddenwin');?></td>
-        <?php else:?>
-        <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-        <td><?php echo $users[$case->openedBy];?></td>
-        <td><?php echo $users[$case->lastRunner];?></td>
-        <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-        <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-        <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'><?php echo $case->needconfirm ? "<span class='warning'>{$lang->story->changed}</span>" : $lang->testcase->statusList[$case->status];?></td>
-        <td class='text-right'>
-          <?php
-          common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
-          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe');
-          common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
-          common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
-
-          if(common::hasPriv('testcase', 'delete'))
-          {
-              $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->testcase->delete}' class='btn-icon'");
-          }
-
-          common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe');
-          ?>
-        </td>
-        <?php endif;?>
-      </tr>
-      <?php endforeach;?>
+<?php
+$datatableId  = $this->moduleName . $this->methodName;
+$useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+$vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
+?>
       <tfoot>
        <tr>
          <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 10;?>

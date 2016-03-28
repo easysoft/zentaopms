@@ -218,8 +218,10 @@ class testtask extends control
      */
     public function cases($taskID, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('datatable');
+        $this->loadModel('testcase');
+
         /* Save the session. */
-        $this->app->loadLang('testcase');
         $this->session->set('caseList', $this->app->getURI(true));
 
         /* Load pager. */

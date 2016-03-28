@@ -895,6 +895,9 @@ $lang->resource->dev->db  = 'db';
 $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
 
+$lang->resource->datatable = new stdclass();
+$lang->resource->datatable->custom = 'custom';
+
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';
 

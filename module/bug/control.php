@@ -64,6 +64,8 @@ class bug extends control
      */
     public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('datatable');
+
         /* Set browseType, productID, moduleID, queryID and branch. */
         $browseType = strtolower($browseType);
         $productID  = $this->product->saveState($productID, $this->products);

@@ -81,6 +81,7 @@ $lang->dev->tableList['tree']           = 'Tree';
 $lang->dev->tableList['upgrade']        = 'Upgrade';
 $lang->dev->tableList['cron']           = 'Cron';
 $lang->dev->tableList['mailqueue']      = 'Mail queue';
+$lang->dev->tableList['datatable']      = 'Data table';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;

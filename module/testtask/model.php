@@ -527,4 +527,92 @@ class testtaskModel extends model
 
         return true;
     }
+
+    /**
+     * Print cell data.
+     * 
+     * @param  object  $col 
+     * @param  object  $run 
+     * @param  array   $users 
+     * @param  object  $task 
+     * @param  array   $branches 
+     * @access public
+     * @return void
+     */
+    public function printCell($col, $run, $users, $task, $branches)
+    {
+        $caseLink = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
+        $account  = $this->app->user->account;
+        $id = $col->id;
+        if($col->show)
+        {
+            $class = '';
+            if($id == 'status') $class .= $run->status;
+            if($id == 'title') $class .= ' text-left';
+            if($id == 'lastRunResult') $class .= " $run->lastRunResult";
+            if($id == 'assignedTo' && $run->assignedTo == $account) $class .= ' red';
+
+            echo "<td class='" . $class . "'" . ($id=='title' ? "title='{$run->title}'":'') . ">";
+            switch ($id)
+            {
+            case 'id':
+                echo html::a($caseLink, sprintf('%03d', $run->case));
+                break;
+            case 'pri':
+                echo "<span class='pri" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";
+                echo zget($this->lang->testcase->priList, $run->pri, $run->pri);
+                echo "</span>";
+                break;
+            case 'title':
+                echo html::a($caseLink, $run->title);
+                break;
+            case 'branch':
+                echo $branches[$run->branch];
+                break;
+            case 'type':
+                echo $this->lang->testcase->typeList[$run->type];
+                break;
+            case 'stage':
+                foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
+                break;
+            case 'status':
+                echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$this->lang->testcase->changed}</span>" : $this->lang->testtask->statusList[$run->status];
+                break;
+            case 'openedBy':
+                $openedBy = zget($users, $run->openedBy, $run->openedBy);
+                echo substr($openedBy, strpos($openedBy, ':') + 1);
+                break;
+            case 'openedDate':
+                echo substr($run->openedDate, 5, 11);
+                break;
+            case 'lastRunner':
+                $lastRunner = zget($users, $run->lastRunner, $run->lastRunner);
+                echo substr($lastRunner, strpos($lastRunner, ':') + 1);
+                break;
+            case 'lastRunDate':
+                if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));
+                break;
+            case 'lastRunResult':
+                if($run->lastRunResult) echo $this->lang->testcase->resultList[$run->lastRunResult];
+                break;
+            case 'assignedTo':
+                $assignedTo = zget($users, $run->assignedTo, $run->assignedTo);
+                echo substr($assignedTo, strpos($assignedTo, ':') + 1);
+                break;
+            case 'actions':
+                common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');
+                common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
+
+                if(common::hasPriv('testtask', 'unlinkCase'))
+                {
+                    $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
+                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn-icon'");
+                }
+
+                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe');
+                break;
+            }
+            echo '</td>';
+        }
+    }
 }

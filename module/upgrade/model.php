@@ -834,6 +834,31 @@ class upgradeModel extends model
     }
 
     /**
+     * Add priv for 8.2.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addPriv8_2()
+    {
+        $privTable = $this->config->db->prefix . 'grouppriv';
+
+        $groups = $this->dao->select('`group`')->from($privTable)
+            ->where("(`module`='bug' and `method`='browse')")
+            ->orWhere("(`module`='product' and `method`='browse')")
+            ->orWhere("(`module`='project' and `method`='task')")
+            ->orWhere("(`module`='testcase' and `method`='browse')")
+            ->orWhere("(`module`='testtask' and `method`='cases')")
+            ->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('datatable')->set('method')->eq('custom')->set('`group`')->eq($group)->exec();
+        }
+
+        return true;
+    }
+
+    /**
      * To lower table.
      * 
      * @param  string $build 

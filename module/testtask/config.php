@@ -11,3 +11,6 @@ $config->testtask->editor->edit   = array('id' => 'desc,report', 'tools' => 'sim
 $config->testtask->editor->view   = array('id' => 'lastComment', 'tools' => 'simpleTools');
 $config->testtask->editor->start  = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testtask->editor->close  = array('id' => 'report,comment', 'tools' => 'simpleTools');
+
+$config->testtask->datatable = new stdclass();
+$config->testtask->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'actions');

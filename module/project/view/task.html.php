@@ -10,12 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
-<?php include './taskheader.html.php';?>
-<?php js::set('moduleID', $moduleID);?>
-<?php js::set('productID', $productID);?>
-<?php js::set('browseType', $browseType);?>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/datepicker.html.php';
+include '../../common/view/datatable.fix.html.php';
+include './taskheader.html.php';
+js::set('moduleID', $moduleID);
+js::set('productID', $productID);
+js::set('browseType', $browseType);
+?>
 
 <div class='side' id='taskTree'>
   <a class='side-handle' data-id='projectTree'><i class='icon-caret-left'></i></a>
@@ -37,102 +40,12 @@
 </div>
 <div class='main'>
   <form method='post' id='projectTaskForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList'>
-      <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
-      <thead>
-        <tr>
-          <th class='w-id'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='w-p30'>   <?php common::printOrderLink('name',         $orderBy, $vars, $lang->task->name);?></th>
-          <th class='w-status'><?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-70px'>  <?php common::printOrderLink('deadline',     $orderBy, $vars, $lang->task->deadlineAB);?></th>
-
-          <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-          <th class='w-id'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->task->openedDateAB);?></th>
-          <?php endif;?>
-
-          <th class='w-user'>  <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->task->assignedToAB);?></th>
-          <th class='w-user'>  <?php common::printOrderLink('finishedBy',   $orderBy, $vars, $lang->task->finishedByAB);?></th>
-
-          <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-          <th class='w-50px'>  <?php common::printOrderLink('finishedDate', $orderBy, $vars, $lang->task->finishedDateAB);?></th>
-          <?php endif;?>
-
-          <th class='w-35px'>  <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->task->estimateAB);?></th>
-          <th class='w-50px'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='w-40px nobr'>  <?php common::printOrderLink('left',         $orderBy, $vars, $lang->task->leftAB);?></th>
-          <?php if($project->type == 'sprint') print '<th>' and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
-          <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
-        </tr>
-      </thead>
-      <tbody>
-      <?php foreach($tasks as $task):?>
-      <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
-      <tr class='text-center'>
-        <td>
-          <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
-          <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
-        </td>
-        <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-        <td class='text-left' title="<?php echo $task->name?>">
-          <?php if(isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span>';?>
-          <?php 
-          if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
-          if($task->fromBug) echo html::a($this->createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
-          ?>
-        </td>
-        <td class="<?php echo $task->status;?>">
-          <?php
-          $storyChanged = ($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
-          $storyChanged ? print("<span class='warning'>{$lang->story->changed}</span> ") : print($lang->task->statusList[$task->status]);
-          ?>
-        </td>
-        <td class="<?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
-
-        <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-        <td><?php echo substr($task->openedDate, 5, 6);?></td>
-        <?php endif;?>
-
-        <td <?php echo $class;?>><?php echo $task->assignedTo == 'closed' ? 'Closed' : $task->assignedToRealName;?></td>
-        <td><?php echo zget($users, $task->finishedBy, $task->finishedBy);?></td>
-
-        <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
-        <td><?php echo substr($task->finishedDate, 5, 6);?></td>
-        <?php endif;?>
-
-        <td><?php echo $task->estimate;?></td>
-        <td><?php echo $task->consumed;?></td>
-        <td><?php echo $task->left;?></td>
-        <?php
-        if($project->type == 'sprint')
-        {
-            echo '<td class="text-left" title="' . $task->storyTitle . '">';
-            if($task->storyID)
-            {
-              if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
-            }
-            echo '</td>';
-        }
-        ?>
-        <td class='text-right'>
-        <?php
-        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-
-        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-        if($browseType == 'needconfirm')
-        {
-            $lang->task->confirmStoryChange = $lang->confirm;
-            common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
-        }
-        common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
-        ?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-      </tbody>
+    <?php
+    $datatableId  = $this->moduleName . $this->methodName;
+    $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+    $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
+    include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/taskdata.html.php';
+    ?>
       <tfoot>
         <tr>
           <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 14 : 12) - ($project->type == 'sprint' ? 0 : 1);?>

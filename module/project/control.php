@@ -127,6 +127,7 @@ class project extends control
         $this->loadModel('tree');
         $this->loadModel('search');
         $this->loadModel('task');
+        $this->loadModel('datatable');
 
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);

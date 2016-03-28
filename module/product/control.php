@@ -111,6 +111,9 @@ class product extends control
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
+        /* Load datatable. */
+        $this->loadModel('datatable');
+
         /* Save session. */
         $this->session->set('storyList',   $this->app->getURI(true));
         $this->session->set('productList', $this->app->getURI(true));

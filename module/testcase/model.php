@@ -859,4 +859,91 @@ class testcaseModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
+
+    /**
+     * Print cell data
+     * 
+     * @param  object $col 
+     * @param  object $case 
+     * @param  array  $users 
+     * @param  array  $branches 
+     * @access public
+     * @return void
+     */
+    public function printCell($col, $case, $users, $branches)
+    {
+        $caseLink = helper::createLink('testcase', 'view', "caseID=$case->id");
+        $account  = $this->app->user->account;
+        $id = $col->id;
+        if($col->show)
+        {
+            $class = '';
+            if($id == 'status') $class .= $case->status;
+            if($id == 'title') $class .= ' text-left';
+            if($id == 'lastRunResult') $class .= $case->lastRunResult;
+
+            echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$case->title}'":'') . ">";
+            switch ($id)
+            {
+            case 'id':
+                echo html::a($caseLink, sprintf('%03d', $case->id));
+                break;
+            case 'pri':
+                echo "<span class='pri" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
+                echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
+                echo "</span>";
+                break;
+            case 'title':
+                echo html::a($caseLink, $case->title);
+                break;
+            case 'branch':
+                echo $branches[$case->branch];
+                break;
+            case 'type':
+                echo $this->lang->testcase->typeList[$case->type];
+                break;
+            case 'stage':
+                foreach(explode(',', trim($case->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
+                break;
+            case 'status':
+                echo $this->lang->testcase->statusList[$case->status];
+                break;
+            case 'story':
+                static $stories = array();
+                if(empty($stories)) $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('product')->eq($case->product)->fetchPairs('id', 'title');
+                if($case->story and isset($stories[$case->story])) echo html::a(helper::createLink('story', 'view', "storyID=$case->story"), $stories[$case->story]);
+                break;
+            case 'openedBy':
+                echo zget($users, $case->openedBy, $case->openedBy);
+                break;
+            case 'openedDate':
+                echo substr($case->openedDate, 5, 11);
+                break;
+            case 'lastRunner':
+                echo zget($users, $case->lastRunner, $case->lastRunner);
+                break;
+            case 'lastRunDate':
+                if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));
+                break;
+            case 'lastRunResult':
+                if($case->lastRunResult) echo $this->lang->testcase->resultList[$case->lastRunResult];
+                break;
+            case 'actions':
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe');
+                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+
+                if(common::hasPriv('testcase', 'delete'))
+                {
+                    $deleteURL = helper::createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
+                }
+
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe');
+                break;
+            }
+            echo '</td>';
+        }
+    }
 }

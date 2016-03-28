@@ -54,6 +54,8 @@ class testcase extends control
      */
     public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('datatable');
+
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $productID  = $this->product->saveState($productID, $this->products);
