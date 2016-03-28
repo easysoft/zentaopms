@@ -74,20 +74,21 @@
                 {
                     if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
                     $disabled = $sonModule->type == $viewType ? '' : 'disabled';
-                    echo "<div class='input-group' style='margin-bottom:5px'>";
-                    echo html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control"' . $disabled);
-                    if($hasBranch) echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled');
-                    echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' style='width:70px' $disabled");
+                    echo "<div class='row-table' style='margin-bottom:5px'>";
+                    echo "<div class='col-table'>" . html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control"' . $disabled) . '</div>';
+                    if($hasBranch) echo "<div class='col-table'>" . html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled') . '</div>';
+                    echo "<div class='col-table' style='width:70px'>" . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled") . '</div>';
                     echo '</div>';
                 }
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
-                    echo "<div class='input-group' style='margin-bottom:5px'>";
-                    echo html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}'");
-                    if($hasBranch) echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::select("branch[]", $branches, $branch, 'class="form-control"');
-                    echo '<span class="input-group-addon fix-border" style="padding:0px"></span>' . html::input("shorts[]", '', "class='form-control' style='width:50px' placeholder='{$lang->tree->short}'");
+                    echo "<div class='row-table' style='margin-bottom:5px'>";
+                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}'") . '</div>';
+                    if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control"') . '</div>';
+                    echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'");
                     echo "<span class='input-group-addon fix-border'><a href='javascript:;' onclick='addItem(this)'><i class='icon icon-plus'></i></a></span>";
                     echo "<span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>";
+                    echo '</div></div>';
                     echo '</div>';
                 }
                 ?>
