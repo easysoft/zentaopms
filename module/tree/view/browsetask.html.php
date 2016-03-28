@@ -67,10 +67,16 @@
                 foreach($sons as $sonModule)
                 {
                     if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
-                    $disabled = $sonModule->type == 'task' ? '' : 'disabled="true"';
-                    echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=form-control ' . $disabled) . '</span>';
+                    $disabled = $sonModule->type == 'task' ? '' : 'disabled';
+                    echo "<div class='input-group' style='margin-bottom:5px;'>" . html::input("modules[id$sonModule->id]", $sonModule->name, "class='form-control' placeholder='{$lang->tree->name}' " . $disabled);
+                    echo "<span class='input-group-addon fix-border' style='padding:0px'></span>" . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' style='width:70px' " . $disabled) . '</div>';
                 }
-                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=form-control') . html::hidden('branch[]', empty($module) ? 0 : $module->branch) . '</span>';
+                for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
+                {
+                    echo "<div class='input-group' style='margin-bottom:5px;'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' " . $disabled);
+                    echo "<span class='input-group-addon fix-border' style='padding:0px'></span>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' style='width:70px' " . $disabled);
+                    echo html::hidden('branch[]', empty($module) ? 0 : $module->branch) . '</div>';
+                }
                 ?>
               </td>
             </tr>

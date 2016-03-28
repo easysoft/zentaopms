@@ -41,5 +41,6 @@ $lang->tree->parent     = '上级模块';
 $lang->tree->child      = '子模块';
 $lang->tree->owner      = '负责人';
 $lang->tree->order      = '排序';
+$lang->tree->short      = '简称';
 $lang->tree->projectDoc = "{$lang->projectCommon}文档";
 $lang->tree->product    = "所属{$lang->productCommon}";

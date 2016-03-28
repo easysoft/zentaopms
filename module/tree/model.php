@@ -1104,7 +1104,10 @@ class treeModel extends model
     {
         $this->checkUnique($rootID, $type, $parentModuleID, $childs);
         $parentModule = $this->getByID($parentModuleID);
-        $branches     = $this->post->branch;
+
+        $data     = fixer::input('post')->get();
+        $branches = $data->branch;
+        $shorts   = $data->shorts;
         if($parentModule)
         {
             $grade      = $parentModule->grade + 1;
@@ -1128,6 +1131,7 @@ class treeModel extends model
                 $module->name    = strip_tags($moduleName);
                 $module->parent  = $parentModuleID;
                 $module->branch  = $branches[$moduleID];
+                $module->short   = $shorts[$moduleID];
                 $module->grade   = $grade;
                 $module->type    = $type;
                 $module->order   = $this->post->maxOrder + $i * 10;
@@ -1139,8 +1143,9 @@ class treeModel extends model
             }
             else
             {
+                $short    = $shorts[$moduleID];
                 $moduleID = str_replace('id', '', $moduleID);
-                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags($moduleName))->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags($moduleName))->set('short')->eq($short)->where('id')->eq($moduleID)->limit(1)->exec();
             }
         }
     }

@@ -47,6 +47,10 @@ $jsRoot  = $webRoot . "js/";
         </tr>  
         <?php endif;?>
         <tr>
+          <th><?php echo $lang->tree->short;?></th>
+          <td><?php echo html::input('short', $module->short, "class='form-control'");?></td>
+        </tr>  
+        <tr>
           <td colspan='2' class='text-center'>
           <?php echo html::submitButton();?>
           </td>
