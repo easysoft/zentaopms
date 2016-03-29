@@ -574,4 +574,22 @@ class product extends control
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
     }
+
+    /**
+     * Show error no product when visit qa.
+     * 
+     * @param  string $fromModule 
+     * @access public
+     * @return void
+     */
+    public function showErrorNone($fromModule = 'bug')
+    {
+        $this->loadModel($fromModule)->setMenu($this->products, key($this->products));
+        $this->lang->set('menugroup.product', 'qa');
+        $this->lang->product->menu      = $this->lang->$fromModule->menu;
+        $this->lang->product->menuOrder = $this->lang->$fromModule->menuOrder;
+
+        $this->view->title = $this->lang->$fromModule->common;
+        $this->display();
+    }
 }

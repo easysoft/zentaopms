@@ -26,6 +26,7 @@ class testcase extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->view->products = $this->products = $this->product->getPairs('nocode');
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
     }
 
     /**

@@ -28,13 +28,8 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->products = $this->product->getPairs('nocode');
-        if(empty($this->products))
-        {
-            echo js::alert($this->lang->product->errorNoProduct);
-            die(js::locate($this->createLink('product', 'create')));
-        }
-        $this->view->products = $this->products;
+        $this->view->products = $this->products = $this->product->getPairs('nocode');
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
 
     /**
