@@ -38,6 +38,7 @@ $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
 $lang->story->product        = $lang->productCommon;
 $lang->story->module         = 'Module';
+$lang->story->moduleAB       = 'Module';
 $lang->story->source         = 'Source';
 $lang->story->fromBug        = 'From bug';
 $lang->story->title          = 'Title';
