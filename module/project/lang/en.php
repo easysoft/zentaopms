@@ -48,6 +48,7 @@ $lang->project->typeDesc      = 'No burndown and story in OPS';
 $lang->project->mine          = 'I charge : ';
 $lang->project->other         = 'Other : ';
 $lang->project->deleted       = 'Deleted';
+$lang->project->delayed       = 'Delayed';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';

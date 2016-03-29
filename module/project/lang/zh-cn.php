@@ -48,6 +48,7 @@ $lang->project->typeDesc      = "运维{$lang->projectCommon}禁用燃尽图和�
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
+$lang->project->delayed       = '已延期';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';

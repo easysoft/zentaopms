@@ -713,6 +713,13 @@ class projectModel extends model
             // Process the end time.
             $project->end = date("Y-m-d", strtotime($project->end));
 
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+
             /* Process the burns. */
             $project->burns = array();
             $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
@@ -817,6 +824,13 @@ class projectModel extends model
     {
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         if(!$project) return false;
+
+        /* Judge whether the project is delayed. */
+        if($project->status != 'done')
+        {
+            $delay = helper::diffDate(helper::today(), $project->end);
+            if($delay > 0) $project->delay = $delay;
+        }
 
         $total = $this->dao->select('
             SUM(estimate) AS totalEstimate, 

@@ -22,7 +22,7 @@
   <thead>
     <tr class='text-center'>
       <th class='w-50px'><?php echo $lang->idAB;?></th>
-      <th>        <?php echo $lang->project->name;?> <span class='required'></span></th>
+      <th><?php echo $lang->project->name;?> <span class='required'></span></th>
       <th class='w-150px'><?php echo $lang->project->code;?> <span class='required'></span></th>
       <th class='w-150px'><?php echo $lang->project->PM;?></th>
       <th class='w-100px'><?php echo $lang->project->status;?></th>
@@ -35,9 +35,9 @@
   <?php foreach($projectIDList as $projectID):?>
   <tr class='text-center'>
     <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIDList[$projectID]", $projectID);?></td>
-    <td><?php echo html::input("names[$projectID]",     $projects[$projectID]->name, "class='form-control'");?></td>
+    <td title='<?php echo $projects[$projectID]->name?>'><?php echo html::input("names[$projectID]", $projects[$projectID]->name, "class='form-control'");?></td>
     <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='form-control'");?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("PMs[$projectID]",      $pmUsers, $projects[$projectID]->PM, "class='form-control chosen'");?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("PMs[$projectID]", $pmUsers, $projects[$projectID]->PM, "class='form-control chosen'");?></td>
     <td><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
     <td><?php echo html::input("begins[$projectID]",    $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("ends[$projectID]",      $projects[$projectID]->end, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>

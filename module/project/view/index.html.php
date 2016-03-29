@@ -62,7 +62,11 @@
     <td class='text-left'><?php echo $project->code;?></td>
     <td><?php echo $users[$project->PM];?></td>
     <td><?php echo $project->end;?></td>
+    <?php if(isset($project->delay)):?>
+    <td class='status-delay'><?php echo $lang->project->delayed;?></td>
+    <?php else:?>
     <td class='status-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
+    <?php endif;?>
     <td><?php echo $project->hours->totalEstimate;?></td>
     <td><?php echo $project->hours->totalConsumed;?></td>
     <td><?php echo $project->hours->totalLeft;?></td>

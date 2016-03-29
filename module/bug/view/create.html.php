@@ -171,7 +171,7 @@ js::set('refresh', $lang->refresh);
           if(empty($contactLists))
           {
               echo '<span class="input-group-btn">';
-              echo '<a href="' . $this->createLink('company', 'browse') . '" target="_blank" data-toggle="tooltip" class="btn" title="' . $lang->user->contacts->manage . '"><i class="icon icon-cog"></i></a>';
+              echo '<a href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new") . '" target="_blank" data-toggle="tooltip" class="btn" title="' . $lang->user->contacts->manage . '"><i class="icon icon-cog"></i></a>';
               echo '<a href="###" onclick="ajaxGetContacts(this)" data-toggle="tooltip" class="btn" title="' . $lang->refresh . '"><i class="icon icon-refresh"></i></a>';
               echo '</span>';
           }

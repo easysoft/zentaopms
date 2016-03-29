@@ -54,8 +54,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <tbody>
     
     <?php 
-    $canBatchEdit      = common::hasPriv('user', 'batchEdit');
-    $canManageContacts = common::hasPriv('user', 'manageContacts');
+    $canBatchEdit = common::hasPriv('user', 'batchEdit');
     ?>
     <?php foreach($users as $user):?>
     <tr class='text-center'>
@@ -99,7 +98,6 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <?php
       if($canBatchEdit or $canManageContacts) echo html::selectButton();
       if($canBatchEdit) echo html::submitButton($lang->edit, 'onclick=batchEdit()', 'btn btn-default');
-      if($canManageContacts) echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
       ?>
       </div>
       <?php echo $pager->show();?>

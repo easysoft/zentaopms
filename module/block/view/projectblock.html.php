@@ -29,7 +29,11 @@
     <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('project', 'task', 'project=' . $project->id)); ?>' <?php echo $appid?>>
       <td class='text-left' title='<?php echo $project->name;?>'><?php echo $project->name;?></td>
       <td><?php echo $project->end;?></td>
+      <?php if(isset($project->delay)):?>
+      <td><?php echo $lang->project->delayed;?></td>
+      <?php else:?>
       <td><?php echo $lang->project->statusList[$project->status];?></td>
+      <?php endif;?>
       <td><?php echo $project->hours->totalEstimate;?></td>
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>

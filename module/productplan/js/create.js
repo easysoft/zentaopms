@@ -26,7 +26,7 @@ function computeEndDate(delta)
     if(!beginDate) return;
 
     endDate = convertStringToDate(beginDate).addDays(parseInt(delta));
-    endDate = endDate.toString('yyyy-M-dd');
+    endDate = endDate.toString('yyyy-MM-dd');
     $('#end').val(endDate);
 }
 
