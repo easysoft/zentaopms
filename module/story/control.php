@@ -771,6 +771,27 @@ class story extends control
     }
 
     /**
+     * Batch change the module of story.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function batchChangeModule($moduleID)
+    {
+        $storyIDList = !empty($_POST['storyIDList']) ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+        $allChanges  = $this->story->batchChangeModule($storyIDList, $moduleID);
+        if(dao::isError()) die(js::error(dao::getError()));
+        foreach($allChanges as $storyID => $changes)
+        {
+            $actionID = $this->action->create('story', $storyID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+            $this->sendmail($storyID, $actionID);
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
      * Batch change the plan of story.
      * 
      * @param  int    $planID 

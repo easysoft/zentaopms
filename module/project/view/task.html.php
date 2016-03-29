@@ -52,9 +52,10 @@ js::set('browseType', $browseType);
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 
-            $canBatchEdit     = common::hasPriv('task', 'batchEdit');
-            $canBatchClose    = (common::hasPriv('task', 'batchClose') && strtolower($browseType) != 'closedBy');
-            $canBatchAssignTo = common::hasPriv('task', 'batchAssignTo');
+            $canBatchEdit         = common::hasPriv('task', 'batchEdit');
+            $canBatchClose        = (common::hasPriv('task', 'batchClose') && strtolower($browseType) != 'closedBy');
+            $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule');
+            $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo');
             if(count($tasks))
             {
                 echo html::selectButton();
@@ -70,6 +71,25 @@ js::set('browseType', $browseType);
                 $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
+                if($canBatchChangeModule)
+                {
+                    $withSearch = count($modules) > 10;
+                    echo "<li class='dropdown-submenu'>";
+                    echo html::a('javascript:;', $lang->task->moduleAB, '', "id='moduleItem'");
+                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    foreach($modules as $moduleId => $module)
+                    {
+                        $actionLink = $this->createLink('task', 'batchChangeModule', "moduleID=$moduleId");
+                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                    }
+                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    echo '</ul></li>';
+                }
+                else
+                {
+                    echo '<li>' . html::a('javascript:;', $lang->task->moduleAB, '', $class) . '</li>';
+                }
+
                 /* Batch assign. */
                 if($canBatchAssignTo)
                 {
@@ -78,13 +98,13 @@ js::set('browseType', $browseType);
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript::', $lang->task->assignedTo, 'id="assignItem"');
-                    echo "<ul class='dropdown-menu assign-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                     foreach ($memberPairs as $key => $value)
                     {
                         if(empty($key)) continue;
                         echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                     }
-                    if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                     echo "</ul>";
                     echo "</li>";
                 }

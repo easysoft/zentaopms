@@ -403,6 +403,32 @@ class task extends control
     }
 
     /**
+     * Batch change the module of task.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function batchChangeModule($moduleID)
+    {
+        if($this->post->taskIDList)
+        {
+            $taskIDList = $this->post->taskIDList;
+            unset($_POST['taskIDList']);
+            $allChanges = $this->task->batchChangeModule($taskIDList, $moduleID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $taskID => $changes)
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('task', $taskID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
      * Batch update assign of task. 
      * 
      * @param  int    $project 

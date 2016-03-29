@@ -168,6 +168,7 @@ class product extends control
         $this->view->users         = $this->user->getPairs('nodeleted|noletter|pofirst');
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
+        $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
         $this->view->moduleID      = $moduleID;
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch        = $branch;

@@ -187,6 +187,7 @@ class project extends control
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
         $this->view->productID    = $productID;
+        $this->view->modules      = $this->tree->getTaskOptionMenu($projectID);
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
         $this->view->projectTree  = $this->project->tree();

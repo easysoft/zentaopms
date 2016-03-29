@@ -401,6 +401,35 @@ class taskModel extends model
     }
 
     /**
+     * Batch change the module of task.
+     *
+     * @param  array  $taskIDList
+     * @param  int    $moduleID
+     * @access public
+     * @return array
+     */
+    public function batchChangeModule($taskIDList, $moduleID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldTasks   = $this->getByList($taskIDList);
+        foreach($taskIDList as $taskID)
+        {
+            $oldTask = $oldTasks[$taskID];
+            if($moduleID == $oldTask->module) continue;
+
+            $task = new stdclass();
+            $task->lastEditedBy   = $this->app->user->account;
+            $task->lastEditedDate = $now;
+            $task->module         = $moduleID;
+
+            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+            if(!dao::isError()) $allChanges[$taskID] = common::createChanges($oldTask, $task);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Assign a task to a user again.
      * 
      * @param  int    $taskID 

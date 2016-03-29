@@ -38,6 +38,7 @@ $lang->story->common         = '需求';
 $lang->story->id             = '编号';
 $lang->story->product        = "所属{$lang->productCommon}";
 $lang->story->module         = '所属模块';
+$lang->story->moduleAB       = '模块';
 $lang->story->source         = '需求来源';
 $lang->story->fromBug        = '来源Bug';
 $lang->story->title          = '需求名称';

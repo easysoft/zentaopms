@@ -167,6 +167,25 @@
                     echo '</ul></li>';
                 }
 
+                if(common::hasPriv('story', 'batchChangeModule'))
+                {
+                    $withSearch = count($modules) > 8;
+                    echo "<li class='dropdown-submenu'>";
+                    echo html::a('javascript:;', $lang->story->moduleAB, '', "id='moduleItem'");
+                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    foreach($modules as $moduleId => $module)
+                    {
+                        $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
+                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                    }
+                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    echo '</ul></li>';
+                }
+                else
+                {
+                    echo '<li>' . html::a('javascript:;', $lang->story->moduleAB, '', $class) . '</li>';
+                }
+
                 if(common::hasPriv('story', 'batchChangePlan'))
                 {
                     unset($plans['']);
