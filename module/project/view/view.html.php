@@ -89,7 +89,11 @@
           </tr>
           <tr> 
             <th><?php echo $lang->project->status;?></th>
+            <?php if(isset($project->delay)):?>
+            <td class='delay'><?php echo $lang->project->delayed;?></td>
+            <?php else:?>
             <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
+            <?php endif;?>
           </tr>
           <tr>
             <th><?php echo $lang->project->PM;?></th>

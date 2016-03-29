@@ -746,11 +746,23 @@ class userModel extends model
      */
     public function getProjects($account)
     {
-        return $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
+        $projects = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll();
+
+        /* Judge whether the project is delayed. */
+        foreach($projects as $project)
+        {
+            if($project->status != 'done')
+            {
+                $delay = helper::diffDate(helper::today(), $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
+        }
+
+        return $projects;
     }
 
     /**

@@ -36,7 +36,11 @@
     <td><?php echo html::a($projectLink, $project->name);?></td>
     <td><?php echo $project->begin;?></td>
     <td><?php echo $project->end;?></td>
+    <?php if(isset($project->delay)):?>
+    <td class='project-delay'><?php echo $lang->project->delayed;?></td>
+    <?php else:?>
     <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
+    <?php endif;?>
     <td><?php echo $project->role;?></td>
     <td><?php echo $project->join;?></td>
     <td><?php echo $project->hours;?></td>
