@@ -1792,4 +1792,137 @@ class projectModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
     }
+
+    /**
+     * Get Kanban tasks 
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return void
+     */
+    public function getKanbanTasks($projectID, $orderBy = 'status_asc, id_desc', $pager = null)
+    {
+        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
+
+        if($tasks) return $this->loadModel('task')->processTasks($tasks);
+        return array();
+    }
+
+    /**
+     * Get kanban group data. 
+     * 
+     * @param  array  $tasks 
+     * @param  array  $bugs 
+     * @access public
+     * @return array
+     */
+    public function getKanbanGroupData($stories, $tasks, $bugs)
+    {
+        $stories['nostory'] = new stdclass();
+        foreach($tasks as $task)
+        {
+            $storyID = $task->storyID;
+            $status  = $task->status;
+            if(!empty($storyID) and isset($stories[$storyID]))
+            {
+                $stories[$storyID]->tasks[$status][] = $task;
+            }
+            else
+            {
+                $noStoryTasks[$status][] = $task;
+            }
+        }
+        if(isset($noStoryTasks)) $stories['nostory']->tasks = $noStoryTasks;
+
+        foreach($bugs as $bug)
+        {
+            $storyID = $bug->story;
+            $status  = $bug->status;
+            $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
+            if(!empty($storyID) and isset($stories[$storyID]))
+            {
+                $stories[$storyID]->bugs[$status][] = $bug;
+            }
+            else
+            {
+                $noStoryBugs[$status][] = $bug;
+            }
+        }
+        if(isset($noStoryBugs)) $stories['nostory']->bugs = $noStoryBugs;
+
+        return $stories;
+    }
+
+    /**
+     * Save Kanban Data.
+     * 
+     * @param  int    $projectID 
+     * @param  array  $kanbanDatas 
+     * @access public
+     * @return void
+     */
+    public function saveKanbanData($projectID, $kanbanDatas)
+    {
+        $data = array();
+        foreach($kanbanDatas as $type => $kanbanData) $data[$type] = array_keys($kanbanData);
+        $this->loadModel('setting')->setItem("null.project.kanban.project$projectID", json_encode($data));
+
+    }
+
+    /**
+     * Get Prev Kanban.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getPrevKanban($projectID)
+    {
+        $prevKanbans = $this->loadModel('setting')->getItem("ower=null&module=project&section=kanban&key=project$projectID");
+        return json_decode($prevKanbans, true);
+    }
+
+    /**
+     * Build burn data.
+     * 
+     * @param  int    $projectID 
+     * @param  array  $dateList 
+     * @param  string $type 
+     * @access public
+     * @return array
+     */
+    public function buildBurnData($projectID, $dateList, $type)
+    {
+        $this->loadModel('report');
+
+        $sets          = $this->getBurnDataFlot($projectID);
+        $limitJSON     = '[]';
+        $baselineJSON  = '[]';
+
+        $firstBurn    = empty($sets) ? 0 : reset($sets);
+        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
+        $days         = count($dateList) - 1;
+        $rate         = $firstTime / $days;
+        $baselineJSON = '[';
+        foreach($dateList as $i => $date) $baselineJSON .= ($days - $i) * $rate . ',';
+        $baselineJSON = rtrim($baselineJSON, ',') . ']';
+
+        $chartData['labels']   = $this->report->convertFormat($dateList, 'j/n');
+        $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
+        $chartData['baseLine'] = $baselineJSON;
+
+        return $chartData;
+    }
 }

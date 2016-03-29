@@ -691,8 +691,7 @@ class project extends control
     public function burn($projectID = 0, $type = 'noweekend', $interval = 0)
     {
         $this->loadModel('report');
-        $project     = $this->commonAction($projectID);
-        $projectInfo = $this->project->getByID($project->id);
+        $project = $this->commonAction($projectID);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->burn;
@@ -700,23 +699,9 @@ class project extends control
         $position[] = $this->lang->project->burn;
 
         /* Get date list. */
+        $projectInfo = $this->project->getByID($projectID);
         list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
-
-        $sets          = $this->project->getBurnDataFlot($project->id);
-        $limitJSON     = '[]';
-        $baselineJSON  = '[]';
-
-        $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : $this->project->getTotalEstimate($projectInfo->id);
-        $days         = count($dateList) - 1;
-        $rate         = round($firstTime / $days, 2);
-        $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= ($days - $i) * $rate . ',';
-        $baselineJSON = rtrim($baselineJSON, ',') . ']';
-
-        $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE4);
-        $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
-        $chartData['baseLine'] = $baselineJSON;
+        $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
 
         /* Set a space when assemble the string for english. */
         $space   = $this->app->getClientLang() == 'en' ? ' ' : '';
@@ -1193,6 +1178,146 @@ class project extends control
     }
 
     /**
+     * Kanban.
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function kanban($projectID, $orderBy = 'pri_asc')
+    {
+        /* Compatibility IE8*/
+        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
+
+        $this->project->setMenu($this->projects, $projectID);
+        $project = $this->loadModel('project')->getById($projectID);
+        $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
+        $tasks   = $this->project->getKanbanTasks($projectID, "id");
+        $bugs    = $this->loadModel('bug')->getProjectBugs($projectID);
+        $stories = $this->project->getKanbanGroupData($stories, $tasks, $bugs);
+
+        $this->view->title      = $this->lang->project->kanban;
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->kanban;
+        $this->view->stories    = $stories;
+        $this->view->realnames  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->orderBy    = $orderBy;
+        $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
+        $this->display(); 
+    }
+
+    /**
+     * Print kanban.
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function printKanban($projectID, $orderBy = 'id_asc')
+    {
+        $this->view->title = $this->lang->project->printKanban;
+        $contents = array('story', 'wait', 'doing', 'done', 'cancel');
+
+        if($_POST)
+        {
+            $stories    = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
+            $storySpecs = $this->story->getStorySpecs(array_keys($stories));
+
+            $order = 1;
+            foreach($stories as $story) $story->order = $order++; 
+
+            $kanbanTasks = $this->project->getKanbanTasks($projectID, "id");
+            $kanbanBugs  = $this->loadModel('bug')->getProjectBugs($projectID);
+
+            $users       = array();
+            $taskAndBugs = array();
+            foreach($kanbanTasks as $task)
+            {
+                $storyID = $task->storyID;
+                $status  = $task->status;
+                $users[] = $task->assignedTo;
+
+                $taskAndBugs[$status]["task{$task->id}"] = $task;
+            }
+            foreach($kanbanBugs as $bug)
+            {
+                $storyID = $bug->story;
+                $status  = $bug->status;
+                $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
+                $users[] = $bug->assignedTo;
+
+                $taskAndBugs[$status]["bug{$bug->id}"] = $bug;
+            }
+
+            $datas = array();
+            foreach($contents as $content)
+            {
+                if($content != 'story' and !isset($taskAndBugs[$content])) continue;
+                $datas[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
+            }
+
+            unset($this->lang->story->stageList['']);
+            unset($this->lang->story->stageList['wait']);
+            unset($this->lang->story->stageList['planned']);
+            unset($this->lang->story->stageList['projected']);
+            unset($this->lang->story->stageList['released']);
+            unset($this->lang->task->statusList['']);
+            unset($this->lang->task->statusList['wait']);
+            unset($this->lang->task->statusList['closed']);
+            unset($this->lang->bug->statusList['']);
+            unset($this->lang->bug->statusList['closed']);
+
+            $originalDatas = $datas;
+            if($this->post->content == 'increment')
+            {
+                $prevKanbans = $this->project->getPrevKanban($projectID);
+                foreach($datas as $type => $data)
+                {
+                    if(isset($prevKanbans[$type]))
+                    {
+                        $prevData = $prevKanbans[$type];
+                        foreach($prevData as $id)
+                        {
+                            if(isset($data[$id])) unset($datas[$type][$id]);
+                        }
+                    }
+                }
+            }
+
+            $this->project->saveKanbanData($projectID, $originalDatas);
+
+            $hasBurn = $this->post->content == 'all';
+            if($hasBurn)
+            {
+                /* Get date list. */
+                $projectInfo    = $this->project->getByID($projectID);
+                list($dateList) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, 'noweekend');
+                $chartData      = $this->project->buildBurnData($projectID, $dateList, 'noweekend');
+            }
+
+            $this->view->hasBurn    = $hasBurn;
+            $this->view->datas      = $datas;
+            $this->view->chartData  = $chartData;
+            $this->view->storySpecs = $storySpecs;
+            $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
+            $this->view->projectID  = $projectID;
+
+            die($this->display());
+
+        }
+
+        $this->project->setMenu($this->projects, $projectID);
+        $project = $this->project->getById($projectID);
+
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->printKanban;
+        $this->display(); 
+    }
+
+    /**
      * Delete a project.
      *
      * @param  int    $projectID
@@ -1572,15 +1697,18 @@ class project extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->project->confirmUnlinkStory, $this->createLink('project', 'unlinkstory', "projectID=$projectID&storyID=$storyID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->project->confirmUnlinkStory, $this->createLink('project', 'unlinkstory', "projectID=$projectID&storyID=$storyID&confirm=yes")));
         }
         else
         {
             $this->project->unlinkStory($projectID, $storyID);
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
+            /* if kanban then reload and if ajax request then send result. */
+            if(isonlybody()) 
+            {
+                die(js::reload('parent'));
+            }
+            elseif(helper::isAjaxRequest())
             {
                 if(dao::isError())
                 {
@@ -1594,8 +1722,7 @@ class project extends control
                 }
                 $this->send($response);
             }
-            echo js::locate($this->app->session->storyList, 'parent');
-            exit;
+            die(js::locate($this->app->session->storyList, 'parent'));
         }
     }
 
