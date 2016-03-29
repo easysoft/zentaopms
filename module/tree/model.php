@@ -186,7 +186,7 @@ class treeModel extends model
                 {
                     $parentModules = explode(',', trim($module->path, ','));
                     if($type == 'product' and isset($noProductModules[$parentModules[0]])) continue;
-                    $rootName = $productNum > 1 ? "/$rootModule" : '/';
+                    $rootName = ($productNum > 1 and $type == 'product') ? "/$rootModule/" : '/';
                     if($type == 'product' and $module->branch and isset($branchGroups[$id][$module->branch])) $rootName .= $branchGroups[$id][$module->branch] . '/';
                     $this->buildTreeArray($treeMenu, $modules, $module, $rootName);
                 }
