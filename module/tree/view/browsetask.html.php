@@ -73,8 +73,8 @@
                 }
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
-                    echo "<div class='input-group' style='margin-bottom:5px;'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' " . $disabled);
-                    echo "<span class='input-group-addon fix-border' style='padding:0px'></span>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' style='width:70px' " . $disabled);
+                    echo "<div class='input-group' style='margin-bottom:5px;'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}'");
+                    echo "<span class='input-group-addon fix-border' style='padding:0px'></span>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' style='width:70px'");
                     echo html::hidden('branch[]', empty($module) ? 0 : $module->branch) . '</div>';
                 }
                 ?>

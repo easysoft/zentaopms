@@ -1165,4 +1165,25 @@ class task extends control
 
         $this->display();
     }
+
+    /**
+     * Ajax get task by ID.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetByID($taskID)
+    {
+        $task     = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $realname = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($task->assignedTo)->fetch('realname');
+        $task->assignedTo = $realname ? $realname : ($task->assignedTo == 'closed' ? 'Closed' : $task->assignedTo);
+        if($task->story)
+        {
+            $this->app->loadLang('story');
+            $stage = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($task->story)->andWhere('version')->eq($task->storyVersion)->fetch('stage');
+            $task->storyStage = zget($this->lang->story->stageList, $stage);
+        }
+        die(json_encode($task));
+    }
 }

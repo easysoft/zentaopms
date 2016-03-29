@@ -26,7 +26,7 @@
       <th><?php echo $lang->comment;?></th>
       <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
     </tr>
-    <tr><th></th><td><?php echo html::submitButton();?></td></tr>
+    <tr><th></th><td><?php echo html::submitButton($lang->task->cancel);?></td></tr>
   </table>
 </form>
 <div class='main'>

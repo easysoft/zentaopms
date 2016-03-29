@@ -294,6 +294,8 @@ $lang->resource->project->linkStory      = 'linkStory';
 $lang->resource->project->unlinkStory    = 'unlinkStory';
 $lang->resource->project->batchUnlinkStory = 'batchUnlinkStory';
 $lang->resource->project->updateOrder      = 'updateOrder';
+$lang->resource->project->kanban           = 'kanban';
+$lang->resource->project->printKanban      = 'printKanban';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -329,6 +331,8 @@ $lang->project->methodOrder[155] = 'linkStory';
 $lang->project->methodOrder[160] = 'unlinkStory';
 $lang->project->methodOrder[165] = 'batchUnlinkStory';
 $lang->project->methodOrder[170] = 'updateOrder';
+$lang->project->methodOrder[175] = 'kanban';
+$lang->project->methodOrder[180] = 'printKanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();

@@ -43,7 +43,7 @@
       <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
     </tr>
     <tr>
-      <th></th><td colspan='2'><?php echo html::submitButton();?></td>
+      <th></th><td colspan='2'><?php echo html::submitButton($lang->task->finish);?></td>
     </tr>
   </table>
 </form>

@@ -82,6 +82,21 @@ class storyModel extends model
     }
 
     /**
+     * Get story specs.
+     * 
+     * @param  array  $storyIdList 
+     * @access public
+     * @return array
+     */
+    public function getStorySpecs($storyIdList)
+    {
+        return $this->dao->select('story,spec,verify')->from(TABLE_STORYSPEC)
+            ->where('story')->in($storyIdList)
+            ->orderBy('version')
+            ->fetchAll('story');
+    }
+
+    /**
      * Get affected things. 
      * 
      * @param  object  $story 

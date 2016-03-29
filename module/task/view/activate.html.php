@@ -42,7 +42,7 @@
     <tr>
       <td colspan='3' class='text-center'>
        <?php 
-       echo html::submitButton();
+       echo html::submitButton($lang->task->activate);
        echo html::linkButton($lang->goback, $this->session->taskList);
        ?>
       </td>

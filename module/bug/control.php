@@ -1398,4 +1398,19 @@ class bug extends control
 
         $this->display();
     }
+
+    /**
+     * Ajax get bug by ID.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetByID($bugID)
+    {
+        $bug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        $realname = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($bug->assignedTo)->fetch('realname');
+        $bug->assignedTo = $realname ? $realname : ($bug->assignedTo == 'closed' ? 'Closed' : $bug->assignedTo);
+        die(json_encode($bug));
+    }
 }

@@ -855,6 +855,12 @@ class upgradeModel extends model
             $this->dao->replace($privTable)->set('module')->eq('datatable')->set('method')->eq('custom')->set('`group`')->eq($group)->exec();
         }
 
+        $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('project')->andWhere('`method`')->eq('task')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
+        }
+
         return true;
     }
 
