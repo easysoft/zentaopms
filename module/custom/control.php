@@ -154,11 +154,15 @@ class custom extends control
      */
     public function ajaxSaveCustom($module, $section, $key)
     {
+        $account = $this->app->user->account;
         if($_POST)
         {
-            $account = $this->app->user->account;
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", join(',', $this->post->fields));
-            die(js::reload('parent'));
         }
+        else
+        {
+            $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
+        }
+        die(js::reload('parent'));
     }
 }

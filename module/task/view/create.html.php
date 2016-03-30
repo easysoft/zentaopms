@@ -20,6 +20,9 @@
       <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
       <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->task->create;?></strong>
     </div>
+    <div class='actions'>
+      <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
+    </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
@@ -39,6 +42,7 @@
           <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
         </td>
       </tr>
+      <?php if(strpos($hiddenFields, 'story') === false):?>
       <tr>
         <th><?php echo $lang->task->story;?></th>
         <td colspan='3'>
@@ -47,7 +51,8 @@
             <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
           </div>
         </td>
-      </tr>  
+      </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->task->name;?></th>
         <td colspan='3'>
@@ -58,8 +63,15 @@
                 <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
               </div>
             </div>
-            <div class='col-table w-250px'>
+            <?php
+            $hiddenPri = strpos($hiddenFields, 'pri') !== false;
+            $hiddenEst = strpos($hiddenFields, 'estimate') !== false;
+            ?>
+            <?php if(!$hiddenPri or !$hiddenEst):?>
+            <?php $widthClass = ($hiddenPri or $hiddenEst) ? 'w-120px' : 'w-250px';?>
+            <div class='col-table <?php echo $widthClass?>'>
               <div class="input-group">
+                <?php if(!$hiddenPri):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
                 <?php $isAllNumberPri = is_numeric(join($lang->task->priList));?>
                 <?php if(!$isAllNumberPri):?>
@@ -73,10 +85,14 @@
                   <?php echo html::select('pri', $lang->task->priList, '', "class='hide'");?>
                 </div>
                 <?php endif; ?>
+                <?php endif?>
+                <?php if(!$hiddenEst):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
                 <?php echo html::input('estimate', '', "class='form-control minw-60px' placeholder='{$lang->task->hour}'");?>
+                <?php endif;?>
               </div>
             </div>
+            <?php endif;?>
           </div>
         </td>
       </tr>
@@ -84,18 +100,36 @@
         <th><?php echo $lang->task->desc;?></th>
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
       </tr>  
+      <?php
+      $hiddenEstStarted = strpos($hiddenFields, 'estStarted') !== false;
+      $hiddenDeadline   = strpos($hiddenFields, 'deadline') !== false;
+      $hiddenMailto     = strpos($hiddenFields, 'mailto') !== false;
+      ?>
+      <?php if(!$hiddenEstStarted or !$hiddenDeadline or !$hiddenMailto):?>
       <tr>
-        <th><?php echo $lang->task->datePlan;?></th>
+        <th><?php echo ($hiddenEstStarted and $hiddenDeadline) ? $lang->task->mailto : $lang->task->datePlan;?></th>
+        <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
         <td>
           <div class='input-group' id='dataPlanGroup'>
+            <?php if(!$hiddenEstStarted):?>
             <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+            <?php endif;?>
+            <?php if(!$hiddenEstStarted and !$hiddenDeadline):?>
             <span class='input-group-addon fix-border'>~</span>
+            <?php endif;?>
+            <?php if(!$hiddenDeadline):?>
             <?php echo html::input('deadline', $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+            <?php endif;?>
           </div>
         </td>
-        <td colspan='2'>
+        <?php endif;?>
+        <?php if(!$hiddenMailto):?>
+        <?php $colspan = ($hiddenEstStarted and $hiddenDeadline) ? '3' : '2';?>
+        <td colspan='<?php echo $colspan?>'>
           <div id='mailtoGroup' class='input-group'>
+            <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
             <span class='input-group-addon'><?php echo $lang->task->mailto;?></span>
+            <?php endif;?>
             <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?>
             <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
             <?php
@@ -109,7 +143,9 @@
             ?>
           </div>
         </td>
+        <?php endif;?>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->files;?></th>
         <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
@@ -126,4 +162,6 @@
     <span id='responser'></span>
   </form>
 </div>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=task&section=custom&key=create')?>
+<?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

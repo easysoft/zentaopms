@@ -40,6 +40,7 @@ $config->task->exportFields = '
     closedBy, closedDate, closedReason,
     lastEditedBy, lastEditedDate,files
     ';
+$config->task->customCreateFields = 'story,estStarted,deadline,mailto,pri,estimate'; 
 
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'deadline', 'openedDate', 'assignedTo', 'finishedBy', 'finishedDate', 'estimate', 'consumed', 'left', 'story', 'actions');
