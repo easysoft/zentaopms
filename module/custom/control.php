@@ -142,4 +142,23 @@ class custom extends control
         $this->view->position[] = $this->lang->custom->flow;
         $this->display();
     }
+
+    /**
+     * Ajax save custom.
+     * 
+     * @param  string $module 
+     * @param  string $section 
+     * @param  string $key 
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveCustom($module, $section, $key)
+    {
+        if($_POST)
+        {
+            $account = $this->app->user->account;
+            $this->loadModel('setting')->setItem("$account.$module.$section.$key", join(',', $this->post->fields));
+            die(js::reload('parent'));
+        }
+    }
 }

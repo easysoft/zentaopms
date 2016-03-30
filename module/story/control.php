@@ -161,6 +161,11 @@ class story extends control
             }
         }
 
+        /* Set Custom*/
+        foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        $this->view->customFields = $customFields;
+        $this->view->hiddenFields = isset($this->config->story->custom->create) ? $this->config->story->custom->create : '';
+
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;

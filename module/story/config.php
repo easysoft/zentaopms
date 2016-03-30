@@ -39,6 +39,7 @@ $config->story->list->exportFields = '
     closedBy, closedDate, closedReason,
     lastEditedBy, lastEditedDate, 
     childStories, linkStories, duplicateStory, files';
+$config->story->list->customCreateFields = 'source,verify,pri,estimate,mailto,keywords';
 
 $config->story->datatable = new stdclass();
 $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'source', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'actions');

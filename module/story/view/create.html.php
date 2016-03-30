@@ -19,6 +19,9 @@
       <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
       <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->story->create;?></strong>
     </div>
+    <div class='actions'>
+      <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
+    </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
@@ -64,12 +67,14 @@
           ?>
           </div>
         </td>
+        <?php if(strpos($hiddenFields, 'source') === false):?>
         <td>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->story->source?></span>
             <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
           </div>
         </td>
+        <?php endif;?>
       </tr>
       <tr>
         <th><?php echo $lang->story->reviewedBy;?></th>
@@ -87,8 +92,15 @@
             <div class='col-table'>
               <?php echo html::input('title', $storyTitle, "class='form-control'");?>
             </div>
-            <div class='col-table w-230px'>
+            <?php
+            $hiddenPri = strpos($hiddenFields, 'pri') !== false;
+            $hiddenEst = strpos($hiddenFields, 'estimate') !== false;
+            ?>
+            <?php if(!$hiddenPri or !$hiddenEst):?>
+            <?php $widthClass = ($hiddenPri or $hiddenEst) ? 'w-100px' : 'w-230px';?>
+            <div class='col-table <?php echo $widthClass?>'>
               <div class="input-group">
+                <?php if(!$hiddenPri):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->pri;?></span>
                 <?php $isAllNumberPri = is_numeric(join('', $lang->story->priList)); ?>
                 <?php if(!$isAllNumberPri):?>
@@ -102,10 +114,14 @@
                   <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='hide'");?> 
                 </div>
                 <?php endif; ?>
+                <?php endif;?>
+                <?php if(!$hiddenEst):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->estimateAB;?></span>
                 <?php echo html::input('estimate', $estimate, "class='form-control minw-60px'");?>
+                <?php endif;?>
               </div>
             </div>
+            <?php endif;?>
           </div>
         </td>
       </tr>  
@@ -113,12 +129,21 @@
         <th><?php echo $lang->story->spec;?></th>
         <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control'");?><div class='help-block'><?php echo $lang->story->specTemplate;?></div></td>
       </tr>  
-         <tr>
+      <?php if(strpos($hiddenFields, 'verify') === false):?>
+      <tr>
         <th><?php echo $lang->story->verify;?></th>
         <td colspan='2'><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
-      </tr> 
+      </tr>
+      <?php endif;?>
+      <?php
+      $hiddenMailto   = strpos($hiddenFields, 'mailto') !== false;
+      $hiddenKeywords = strpos($hiddenFields, 'keywords') !== false;
+      ?>
+      <?php if(!$hiddenMailto or !$hiddenKeywords):?>
+      <?php $colspan = ($hiddenMailto or $hiddenKeywords) ? "colspan='2'" : '';?>
       <tr>
-        <th><?php echo $lang->story->mailto;?></th>
+        <th><?php echo $hiddenMailto ? $lang->story->keywords : $lang->story->mailto;?></th>
+        <?php if(!$hiddenMailto):?>
         <td>
           <div class='input-group' id='mailtoGroup'>
             <?php 
@@ -134,13 +159,19 @@
             ?>
           </div>
         </td>
-        <td>
+        <?php endif;?>
+        <?php if(!$hiddenKeywords):?>
+        <td <?php echo $colspan?>>
           <div class='input-group'>
+            <?php if(!$hiddenMailto):?>
             <span class='input-group-addon'><?php echo $lang->story->keywords;?></span>
+            <?php endif;?>
             <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
           </div>
         </td>
+        <?php endif;?>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->story->legendAttatch;?></th>
         <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
@@ -150,5 +181,7 @@
     <span id='responser'></span>
   </form>
 </div>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=story&section=custom&key=create')?>
+<?php include '../../common/view/customfield.html.php';?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php include '../../common/view/footer.html.php';?>
