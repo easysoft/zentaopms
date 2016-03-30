@@ -15,6 +15,7 @@ $lang->bug->id               = 'Bug编号';
 $lang->bug->product          = '所属' . $lang->productCommon;
 $lang->bug->productplan      = '所属计划';
 $lang->bug->module           = '所属模块';
+$lang->bug->moduleAB         = '模块';
 $lang->bug->project          = '所属' . $lang->projectCommon;
 $lang->bug->story            = '相关需求';
 $lang->bug->task             = '相关任务';

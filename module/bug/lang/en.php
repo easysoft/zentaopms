@@ -15,6 +15,7 @@ $lang->bug->id               = 'ID';
 $lang->bug->product          = $lang->productCommon;
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Module';
+$lang->bug->moduleAB         = 'Module';
 $lang->bug->project          = $lang->projectCommon;
 $lang->bug->story            = 'Story';
 $lang->bug->task             = 'Task';
