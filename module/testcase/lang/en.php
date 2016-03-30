@@ -12,6 +12,7 @@
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
 $lang->testcase->module           = 'Module';
+$lang->testcase->moduleAB         = 'Module';
 $lang->testcase->story            = 'Story';
 $lang->testcase->title            = 'Title';
 $lang->testcase->precondition     = 'precondition';

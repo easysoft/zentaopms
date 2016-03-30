@@ -99,6 +99,7 @@ class testcase extends control
         $this->view->position[]  = $this->lang->testcase->common;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
+        $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
         $this->view->moduleID    = $moduleID;
         $this->view->pager       = $pager;
@@ -109,6 +110,7 @@ class testcase extends control
         $this->view->cases       = $cases;
         $this->view->branch      = $branch;
         $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
+
 
         $this->display();
     }
@@ -605,6 +607,32 @@ class testcase extends control
             }
             die(js::locate($this->session->caseList, 'parent'));
         }
+    }
+
+    /**
+     * Batch change the module of case.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function batchChangeModule($moduleID)
+    {
+        if($this->post->caseIDList)
+        {
+            $caseIDList = $this->post->caseIDList;
+            unset($_POST['caseIDList']);
+            $allChanges = $this->testcase->batchChangeModule($caseIDList, $moduleID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $caseID => $changes)
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('case', $caseID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        die(js::locate($this->session->caseList, 'parent'));
     }
 
     /**

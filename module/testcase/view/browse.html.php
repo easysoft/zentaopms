@@ -36,45 +36,65 @@ js::set('batchDelete', $lang->testcase->confirmBatchDelete);
 </div>
 <div class='main'>
   <form id='batchForm' method='post'>
-<?php
-$datatableId  = $this->moduleName . $this->methodName;
-$useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-$vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
-?>
-      <tfoot>
-       <tr>
-         <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 10;?>
-         <td colspan='<?php echo $mergeColums?>'>
-           <?php if($cases):?>
-           <div class='table-actions clearfix'>
-             <?php echo html::selectButton();?>
-             <div class='btn-group dropup'>
-               <?php
-               $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
-               $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-               echo html::commonButton($lang->edit, $misc);
-               ?>
-               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
-               <ul class='dropdown-menu' id='moreActionMenu'>
+    <?php
+    $datatableId  = $this->moduleName . $this->methodName;
+    $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+    $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+    include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
+    ?>
+    <tfoot>
+      <tr>
+        <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 10;?>
+        <td colspan='<?php echo $mergeColums?>'>
+          <?php if($cases):?>
+          <div class='table-actions clearfix'>
+            <?php echo html::selectButton();?>
+            <div class='btn-group dropup'>
+              <?php
+              $class = "class='disabled'";
+
+              $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
+              $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+              echo html::commonButton($lang->edit, $misc);
+              ?>
+              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+              <ul class='dropdown-menu' id='moreActionMenu'>
                 <?php 
                 $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
-                $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : "class='disabled'";
+                $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
                 echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
 
                 $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-                $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
+                $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                 echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
+
+                if(common::hasPriv('testcase', 'batchChangeModule'))
+                {
+                    $withSearch = count($modules) > 8;
+                    echo "<li class='dropdown-submenu'>";
+                    echo html::a('javascript:;', $lang->testcase->moduleAB, '', "id='moduleItem'");
+                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
+                    foreach($modules as $moduleId => $module)
+                    {
+                        $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
+                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                    }
+                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                    echo '</ul></li>';
+                }
+                else
+                {
+                    echo '<li>' . html::a('javascript:;', $lang->testcase->moduleAB, '', $class) . '</li>';
+                }
                 ?>
-               </ul>
-             </div>
-           </div>
-           <?php endif?>
-           <div class='text-right'><?php $pager->show();?></div>
-         </td>
-       </tr>
-     </tfoot>
-    </table>
+              </ul>
+            </div>
+          </div>
+          <?php endif?>
+          <div class='text-right'><?php $pager->show();?></div>
+        </td>
+      </tr>
+    </tfoot>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
