@@ -12,6 +12,7 @@
 $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
 $lang->testcase->module           = '所属模块';
+$lang->testcase->moduleAB         = '模块';
 $lang->testcase->story            = '相关需求';
 $lang->testcase->title            = '用例标题';
 $lang->testcase->precondition     = '前置条件';

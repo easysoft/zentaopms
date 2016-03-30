@@ -217,6 +217,21 @@ class testcaseModel extends model
     }
 
     /**
+     * Get case list.
+     *
+     * @param  int|array|string $caseIDList
+     * @access public
+     * @return array
+     */
+    public function getByList($caseIDList = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($caseIDList)->andWhere('id')->in($caseIDList)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Get test cases.
      *
      * @param  int    $productID
@@ -579,6 +594,34 @@ class testcaseModel extends model
         return $allChanges;
     }
 
+    /**
+     * Batch change the module of case.
+     *
+     * @param  array  $caseIDList
+     * @param  int    $moduleID
+     * @access public
+     * @return array
+     */
+    public function batchChangeModule($caseIDList, $moduleID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldCases   = $this->getByList($caseIDList);
+        foreach($caseIDList as $caseID)
+        {
+            $oldCase = $oldCases[$caseID];
+            if($moduleID == $oldCase->module) continue;
+
+            $case = new stdclass();
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = $now;
+            $case->module         = $moduleID;
+
+            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
+            if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
+        }
+        return $allChanges;
+    }
 
     /**
      * Join steps to a string, thus can diff them.
