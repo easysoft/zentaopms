@@ -75,17 +75,22 @@ function deleteTemplate(templateID)
 $(function()
 {
     if($('#project').val()) loadProjectRelated($('#project').val());
-    $('#saveTplBtn').on('click', function()
+    $('#saveTplModal').on('hide.zui.modal', function(){$(this).find('#title').val('');});
+    $('#saveTplBtn').click(function(){$('#saveTplModal').modal('show');});
+    $('#saveTplModal #submit').click(function()
     {
-        var content = $('#steps').val();
-        bootbox.prompt(setTemplateTitle, function(r)
+        var $inputGroup = $('#saveTplModal div.input-group');
+        var $publicBox  = $inputGroup.find('input[id^="public"]');
+        var title       = $inputGroup.find('#title').val();
+        var content     = $('#steps').val();
+        var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
+        if(!title || !content) return;
+        saveTemplateLink = createLink('bug', 'saveTemplate');
+        $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
         {
-            if(!r || !content) return;
-            saveTemplateLink = createLink('bug', 'saveTemplate');
-            $.post(saveTemplateLink, {title:r, content:content}, function(data)
-            {
-                $('#tplBox').html(data);
-            });
+            $('#tplBox').html(data);
+            // If has error then not hide.
+            if(data.indexOf('alert') == -1) $('#saveTplModal').modal('hide');
         });
     });
 

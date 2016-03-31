@@ -1069,7 +1069,14 @@ class bug extends control
     public function saveTemplate()
     {
         $this->bug->saveUserBugTemplate();
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError())
+        {
+            $error = js::error(dao::getError());
+            /* Remove html and meta tag and only get script */
+            $error = substr($error, strpos($error, '<script'));
+            $error = substr($error, 0, strpos($error, '</script') + 9);
+            echo $error;
+        }
         die($this->fetch('bug', 'buildTemplates'));
     }
 

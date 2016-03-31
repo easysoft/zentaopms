@@ -18,7 +18,7 @@
         <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->customConfig?></h4>
       </div>
       <div class="modal-body">
-        <form method='post' target='hiddenwin' action='<?php echo $customLink?>'>
+        <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
           <p><?php echo html::checkbox('fields', $customFields, $hiddenFields);?></p>
           <p><?php echo html::submitButton() . ' ' . $lang->checked2Hide?></p>
         </form>
