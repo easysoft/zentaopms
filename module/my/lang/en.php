@@ -36,7 +36,7 @@ $lang->my->home->projects      = $lang->projectCommon;
 $lang->my->home->products      = $lang->productCommon;
 $lang->my->home->createProject = "create a {$lang->projectCommon}?";
 $lang->my->home->createProduct = "create a {$lang->productCommon}?";
-$lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>Help Book</a>";
+$lang->my->home->help          = "<a href='http://www.zentao.pm/book/zentaohelp/46.html' target='_blank'>Help Book</a>";
 $lang->my->home->noProductsTip = "There is no {$lang->productCommon}.";
 
 $lang->my->form = new stdclass();
