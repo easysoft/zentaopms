@@ -87,7 +87,7 @@ $lang->bug->deleted            = '已删除';
 $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->deleteTemplate     = '删除模板';
 $lang->bug->confirmStoryChange = '确认需求变动';
-$lang->bug->setPubic           = '设为公共模板';
+$lang->bug->setPublic          = '设为公共模板';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe     = '指派给我';
