@@ -3,15 +3,15 @@
     <?php if(isset($moduleID)):?>
     <li>
       <span>
-      <?php
-      echo $moduleName;
-      if($moduleID)
-      {
-          $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskModule")';
-          echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
-      }
-      echo " <i class='icon-angle-right'></i>&nbsp; ";
-      ?>
+        <?php
+        echo $moduleName;
+        if($moduleID)
+        {
+            $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskModule")';
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        echo " <i class='icon-angle-right'></i>&nbsp; ";
+        ?>
       </span>
     </li>
     <?php endif;?>
