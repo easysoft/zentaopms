@@ -15,10 +15,11 @@ include '../../common/view/header.html.php';
 include '../../common/view/datepicker.html.php';
 include '../../common/view/datatable.fix.html.php';
 include './caseheader.html.php';
-js::set('browseType', $browseType);
-js::set('moduleID'  , $moduleID);
-js::set('confirmDelete', $lang->testcase->confirmDelete);
-js::set('batchDelete', $lang->testcase->confirmBatchDelete);
+js::set('browseType',     $browseType);
+js::set('caseBrowseType', $this->session->caseBrowseType);
+js::set('moduleID'  ,     $moduleID);
+js::set('confirmDelete',  $lang->testcase->confirmDelete);
+js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 ?>
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>

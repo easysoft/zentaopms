@@ -246,10 +246,15 @@ class testcaseModel extends model
      */
     public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager)
     {
+        /* Set modules and browse type. */
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $browseType = (($browseType == 'bymodule') and ($this->session->caseBrowseType) and ($this->session->caseBrowseType != 'bysearch')) ? $this->session->caseBrowseType : $browseType;
+
         /* By module or all cases. */
+        $cases = array();
         if($browseType == 'bymodule' or $browseType == 'all')
         {
-            $cases = $this->getModuleCases($productID, $branch, $this->loadModel('tree')->getAllChildId($moduleID), $sort, $pager);
+            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager);
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
@@ -260,6 +265,7 @@ class testcaseModel extends model
                 ->andWhere('t2.version > t1.storyVersion')
                 ->andWhere('t1.product')->eq($productID)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)
+                ->beginIF($modules)->andWhere('t1.module')->in($modules)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
@@ -270,9 +276,7 @@ class testcaseModel extends model
             $cases = $this->getBySearch($productID, $queryID, $sort, $pager);
         }
 
-        if($cases) return $cases;
-
-        return array();
+        return $cases;
     }
 
     /**

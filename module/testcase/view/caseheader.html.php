@@ -1,6 +1,21 @@
 <?php if(!isset($branch)) $branch = 0;?>
 <div id='featurebar'>
   <ul class='nav'>
+    <?php if(isset($moduleID)):?>
+    <li>
+      <span>
+        <?php
+        echo $moduleName;
+        if($moduleID)
+        {
+            $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        echo " <i class='icon-angle-right'></i>&nbsp; ";
+        ?>
+      </span>
+    </li>
+    <?php endif;?>
     <?php
     echo "<li id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=all"), $lang->testcase->allCases) . "</li>";
     echo "<li id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=needconfirm"), $lang->testcase->needConfirm) . "</li>";

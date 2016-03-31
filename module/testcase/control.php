@@ -57,11 +57,16 @@ class testcase extends control
     {
         $this->loadModel('datatable');
 
-        /* Set browseType, productID, moduleID and queryID. */
+        /* Set browse type. */
         $browseType = strtolower($browseType);
+
+        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
+
+        /* Set browseType, productID, moduleID and queryID. */
         $productID  = $this->product->saveState($productID, $this->products);
         $branch     = ($branch === '') ? $this->session->branch : $branch;
-        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+        $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
@@ -101,6 +106,7 @@ class testcase extends control
         $this->view->productName = $this->products[$productID];
         $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        $this->view->moduleName  = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->moduleID    = $moduleID;
         $this->view->pager       = $pager;
         $this->view->users       = $this->user->getPairs('noletter');
