@@ -438,6 +438,7 @@ $lang->resource->bug->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->bug->delete             = 'delete';
 $lang->resource->bug->saveTemplate       = 'saveTemplate';
 $lang->resource->bug->deleteTemplate     = 'deleteTemplate';
+$lang->resource->bug->setPublic          = 'setPublic';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -461,6 +462,7 @@ $lang->bug->methodOrder[90]  = 'confirmStoryChange';
 $lang->bug->methodOrder[95]  = 'delete';
 $lang->bug->methodOrder[100] = 'saveTemplate';
 $lang->bug->methodOrder[105] = 'deleteTemplate';
+$lang->bug->methodOrder[110] = 'setPublic';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();

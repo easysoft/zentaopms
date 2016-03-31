@@ -138,7 +138,7 @@ js::set('refresh', $lang->refresh);
           <div id='tplBoxWrapper'>
             <div class='btn-toolbar'>
               <div class='btn-group'>
-                <button id='saveTplBtn' type='button' class='btn btn-mini'><?php echo $lang->bug->saveTemplate?></button>
+                <button id='saveTplBtn' type='button' class='btn btn-mini' data-toggle='saveTplModal'><?php echo $lang->bug->saveTemplate?></button>
                 <button type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->bug->applyTemplate?> <span class='caret'></span></button>
                 <ul id='tplBox' class='dropdown-menu pull-right'>
                   <?php echo $this->fetch('bug', 'buildTemplates');?>
@@ -201,6 +201,25 @@ js::set('refresh', $lang->refresh);
       </tr>
     </table>
   </form>
+</div>
+<div class="modal fade" id="saveTplModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog w-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title"><?php echo $lang->bug->setTemplateTitle;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::input('title', '' , "class='form-control'")?>
+          <?php if(common::hasPriv('bug', 'setPublic')):?>
+          <span class='input-group-addon'><?php echo html::checkbox('public', array('1' => $lang->public))?></span>
+          <?php endif;?>
+          <span class='input-group-btn'><?php echo html::submitButton()?></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
 <?php include '../../common/view/footer.html.php';?>

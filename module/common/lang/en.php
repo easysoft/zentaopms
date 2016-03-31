@@ -46,6 +46,7 @@ $lang->goPC         = 'PC';
 $lang->more         = 'More';
 $lang->day          = 'Day';
 $lang->customConfig = 'Custom';
+$lang->public       = 'Public';
 
 $lang->actions      = 'Actions';
 $lang->comment      = 'Comment';

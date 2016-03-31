@@ -1536,9 +1536,10 @@ class bugModel extends model
      */
     public function getUserBugTemplates($account)
     {
-        $templates = $this->dao->select('id, title, content')
+        $templates = $this->dao->select('id,title,content,public')
             ->from(TABLE_USERTPL)
             ->where('account')->eq($account)
+            ->orWhere('public')->eq('1')
             ->orderBy('id')
             ->fetchAll();
         return $templates;
@@ -1557,7 +1558,10 @@ class bugModel extends model
             ->add('type', 'bug')
             ->stripTags('content', $this->config->allowedTags)
             ->get();
-        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', "account='{$this->app->user->account}'")->exec();
+
+        $condition = "account='{$this->app->user->account}'";
+        if($template->public == 1) $condition .= " or `public`='1'";
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
     }
 
     /**
