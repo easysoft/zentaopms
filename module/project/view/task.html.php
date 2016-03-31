@@ -123,8 +123,8 @@ js::set('browseType', $browseType);
 <?php js::set('replaceID', 'taskList')?>
 <script language='javascript'>
 $('#project<?php echo $projectID;?>').addClass('active')
-$('#<?php echo $browseType;?>Tab').addClass('active')
-statusActive = '<?php echo isset($lang->project->statusSelects[$browseType]);?>';
+$('#<?php echo $this->session->taskBrowseType;?>Tab').addClass('active')
+statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
 if(statusActive) $('#statusTab').addClass('active')
 </script>
 <?php include '../../common/view/footer.html.php';?>

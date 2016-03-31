@@ -792,12 +792,12 @@ class taskModel extends model
 
     /**
      * Get tasks list of a project.
-     * 
-     * @param  int           $projectID 
-     * @param  array|string  $moduleIds 
-     * @param  string        $status 
-     * @param  string        $orderBy 
-     * @param  object        $pager 
+     *
+     * @param  int           $projectID
+     * @param  array|string  $moduleIds
+     * @param  string        $status
+     * @param  string        $orderBy
+     * @param  object        $pager
      * @access public
      * @return array
      */
@@ -808,7 +808,7 @@ class taskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->andWhere('t1.module')->in($moduleIds)
+            ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -822,15 +822,16 @@ class taskModel extends model
     
     /**
      * Get tasks of a project.
-     * 
-     * @param  int    $projectID 
-     * @param  string $status       all|needConfirm|wait|doing|done|cancel
-     * @param  string $type 
-     * @param  object $pager 
+     *
+     * @param  int          $projectID
+     * @param  string       $status       all|needConfirm|wait|doing|done|cancel
+     * @param  string       $type
+     * @param  array|string $modules
+     * @param  object       $pager
      * @access public
      * @return array
      */
-    public function getProjectTasks($projectID, $type = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
+    public function getProjectTasks($projectID, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $pager = null)
     {
         if(is_string($type)) $type = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
@@ -845,6 +846,7 @@ class taskModel extends model
             ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
             ->beginIF($type == 'delayed')->andWhere('deadline')->gt('1970-1-1')->andWhere('deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

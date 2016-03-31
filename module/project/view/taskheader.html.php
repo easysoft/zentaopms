@@ -1,6 +1,22 @@
 <div id='featurebar'>
   <ul class='nav'>
-  <?php
+    <?php if(isset($moduleID)):?>
+    <li>
+      <span>
+      <?php
+      echo $moduleName;
+      if($moduleID)
+      {
+          $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskModule")';
+          echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+      }
+      echo " <i class='icon-angle-right'></i>&nbsp; ";
+      ?>
+      </span>
+    </li>
+    <?php endif;?>
+
+    <?php
     echo "<li id='unclosedTab'>"; common::printLink('project', 'task', "project=$projectID&type=unclosed", $lang->project->unclosed); echo '</li>' ;
     echo "<li id='allTab'>"; common::printLink('project', 'task', "project=$projectID&type=all", $lang->project->allTasks); echo '</li>' ;
     echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban, '', '', false); echo '</li>';
@@ -8,15 +24,15 @@
     echo "<li id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</li>' ;
 
     echo "<li id='statusTab' class='dropdown'>";
-    $status = isset($status) ? $status : '';
-    $current = zget($lang->project->statusSelects, $status, '');
+    $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
+    $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
     if(empty($current)) $current = $lang->project->statusSelects[''];
     echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
     echo "<ul class='dropdown-menu'>";
     foreach ($lang->project->statusSelects as $key => $value)
     {
         if($key == '') continue;
-        echo '<li' . ($key == $status ? " class='active'" : '') . '>';
+        echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
         echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
     }
     echo '</ul></li>';

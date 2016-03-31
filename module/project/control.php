@@ -129,14 +129,19 @@ class project extends control
         $this->loadModel('task');
         $this->loadModel('datatable');
 
-        /* Set browseType, productID, moduleID and queryID. */
+        /* Set browse type. */
         $browseType = strtolower($status);
-        $queryID    = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $moduleID   = ($browseType == 'bymodule')  ? (int)$param : 0;
-        $productID  = ($browseType == 'byproduct') ? (int)$param : 0;
-        $project    = $this->commonAction($projectID, $status);
-        $projectID  = $project->id;
-        $products   = $this->loadModel('product')->getProductsByProject($projectID);
+
+        if($browseType == 'bymodule') setcookie('taskModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('taskBrowseType', $browseType);
+
+        /* Set productID, moduleID and queryID. */
+        $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
+        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskModule ? $this->cookie->taskModule : 0));
+        $productID = ($browseType == 'byproduct') ? (int)$param : 0;
+        $project   = $this->commonAction($projectID, $status);
+        $projectID = $project->id;
+        $products  = $this->loadModel('product')->getProductsByProject($projectID);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -190,6 +195,7 @@ class project extends control
         $this->view->modules      = $this->tree->getTaskOptionMenu($projectID);
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
+        $this->view->moduleName   = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->projectTree  = $this->project->tree();
         $this->view->memberPairs  = $memberPairs;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
@@ -220,7 +226,7 @@ class project extends control
         $this->view->position[] = $this->lang->project->task;
 
         /* Get tasks and group them. */
-        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy ? $groupBy : 'story');
+        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $modules = 0, $groupBy ? $groupBy : 'story');
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
         $taskLang    = $this->lang->task;
         $groupByList = array();

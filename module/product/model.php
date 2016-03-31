@@ -359,8 +359,12 @@ class productModel extends model
     {
         $this->loadModel('story');
 
+        /* Set modules and browse type. */
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
+        $browseType = (($browseType == 'bymodule') and ($this->session->storyBrowseType) and ($this->session->storyBrowseType != 'bysearch')) ? $this->session->storyBrowseType : $browseType;
+
         /* Get stories by browseType. */
-        $modules = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
+        $stories = array();
         if($browseType == 'unclosed')
         {
             $unclosedStatus = $this->lang->story->statusList;
@@ -380,9 +384,7 @@ class productModel extends model
         if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $sort, $pager);
         if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $sort, $pager);
 
-        if($stories) return $stories;
-
-        return array();
+        return $stories;
     }
 
     /**

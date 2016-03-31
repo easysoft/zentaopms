@@ -753,26 +753,31 @@ class projectModel extends model
     {
         $this->loadModel('task');
 
+        /* Set modules and $browseType. */
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
+        $browseType = (($browseType == 'bymodule') and ($this->session->taskBrowseType) and ($this->session->taskBrowseType != 'bysearch')) ? $this->session->taskBrowseType : $browseType;
+
         /* Get tasks. */
+        $tasks = array();
         if($status == 'byProduct')
         {
             $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
             $tasks   = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
         }
-        elseif($status == 'byModule')
+        elseif($browseType == 'bymodule')
         {
-            $tasks = $this->task->getTasksByModule($projectID, $this->loadModel('tree')->getAllChildID($moduleID), $sort, $pager);
+            $tasks = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
         }
         elseif($browseType != "bysearch")
         {
-            $qureyStatus = $status == 'byProject' ? 'all' : $status;
-            if($qureyStatus == 'unclosed')
+            $queryStatus = $browseType == 'byproject' ? 'all' : $browseType;
+            if($queryStatus == 'unclosed')
             {
-                $qureyStatus = $this->lang->task->statusList;
-                unset($qureyStatus['closed']);
-                $qureyStatus = array_keys($qureyStatus);
+                $queryStatus = $this->lang->task->statusList;
+                unset($queryStatus['closed']);
+                $queryStatus = array_keys($queryStatus);
             }
-            $tasks = $this->task->getProjectTasks($projectID, $qureyStatus, $sort, $pager);
+            $tasks = $this->task->getProjectTasks($projectID, $queryStatus, $modules, $sort, $pager);
         }
         else
         {
@@ -807,9 +812,7 @@ class projectModel extends model
             $tasks = $this->getSearchTasks($taskQuery, $pager, $sort);
         }
 
-        if($tasks) return $tasks;
-
-        return array();
+        return $tasks;
     }
 
     /**
