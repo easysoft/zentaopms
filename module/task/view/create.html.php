@@ -42,7 +42,7 @@
           <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
         </td>
       </tr>
-      <?php if(strpos($hiddenFields, 'story') === false):?>
+      <?php if(strpos(",$showFields,", ',story,') !== false):?>
       <tr>
         <th><?php echo $lang->task->story;?></th>
         <td colspan='3'>
@@ -64,8 +64,8 @@
               </div>
             </div>
             <?php
-            $hiddenPri = strpos($hiddenFields, 'pri') !== false;
-            $hiddenEst = strpos($hiddenFields, 'estimate') !== false;
+            $hiddenPri = strpos(",$showFields,", ',pri,') === false;
+            $hiddenEst = strpos(",$showFields,", ',estimate,') === false;
             ?>
             <?php if(!$hiddenPri or !$hiddenEst):?>
             <?php $widthClass = ($hiddenPri or $hiddenEst) ? 'w-120px' : 'w-250px';?>
@@ -101,9 +101,9 @@
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
       </tr>  
       <?php
-      $hiddenEstStarted = strpos($hiddenFields, 'estStarted') !== false;
-      $hiddenDeadline   = strpos($hiddenFields, 'deadline') !== false;
-      $hiddenMailto     = strpos($hiddenFields, 'mailto') !== false;
+      $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
+      $hiddenDeadline   = strpos(",$showFields,", ',deadline,') === false;
+      $hiddenMailto     = strpos(",$showFields,", ',mailto,') === false;
       ?>
       <?php if(!$hiddenEstStarted or !$hiddenDeadline or !$hiddenMailto):?>
       <tr>

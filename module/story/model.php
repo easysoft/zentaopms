@@ -145,7 +145,7 @@ class storyModel extends model
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
             ->callFunc('title', 'trim')
-            ->setDefault('plan', '')
+            ->setDefault('plan,verify', '')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('assignedDate', 0)

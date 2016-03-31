@@ -145,7 +145,7 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         $this->view->customFields = $customFields;
-        $this->view->hiddenFields = isset($this->config->task->custom->create) ? $this->config->task->custom->create : '';
+        $this->view->showFields   = $this->config->task->custom->create;
 
         $this->view->title            = $title;
         $this->view->position         = $position;

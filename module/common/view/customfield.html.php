@@ -19,8 +19,8 @@
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
-          <p><?php echo html::checkbox('fields', $customFields, $hiddenFields);?></p>
-          <p><?php echo html::submitButton() . ' ' . $lang->checked2Hide?></p>
+          <p><?php echo html::checkbox('fields', $customFields, $showFields);?></p>
+          <p><?php echo html::submitButton() . ' ' . $lang->hideNotCheck?></p>
         </form>
       </div>
     </div>

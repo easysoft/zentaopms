@@ -67,7 +67,7 @@
           ?>
           </div>
         </td>
-        <?php if(strpos($hiddenFields, 'source') === false):?>
+        <?php if(strpos(",$showFields,", ',source,') !== false):?>
         <td>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->story->source?></span>
@@ -93,8 +93,8 @@
               <?php echo html::input('title', $storyTitle, "class='form-control'");?>
             </div>
             <?php
-            $hiddenPri = strpos($hiddenFields, 'pri') !== false;
-            $hiddenEst = strpos($hiddenFields, 'estimate') !== false;
+            $hiddenPri = strpos(",$showFields,", ',pri,') === false;
+            $hiddenEst = strpos(",$showFields,", ',estimate,') === false;
             ?>
             <?php if(!$hiddenPri or !$hiddenEst):?>
             <?php $widthClass = ($hiddenPri or $hiddenEst) ? 'w-100px' : 'w-230px';?>
@@ -129,15 +129,15 @@
         <th><?php echo $lang->story->spec;?></th>
         <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control'");?><div class='help-block'><?php echo $lang->story->specTemplate;?></div></td>
       </tr>  
-      <?php if(strpos($hiddenFields, 'verify') === false):?>
+      <?php if(strpos(",$showFields,", ',verify,') !== false):?>
       <tr>
         <th><?php echo $lang->story->verify;?></th>
         <td colspan='2'><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
       </tr>
       <?php endif;?>
       <?php
-      $hiddenMailto   = strpos($hiddenFields, 'mailto') !== false;
-      $hiddenKeywords = strpos($hiddenFields, 'keywords') !== false;
+      $hiddenMailto   = strpos(",$showFields,", ',mailto,') === false;
+      $hiddenKeywords = strpos(",$showFields,", ',keywords,') === false;
       ?>
       <?php if(!$hiddenMailto or !$hiddenKeywords):?>
       <?php $colspan = ($hiddenMailto or $hiddenKeywords) ? "colspan='2'" : '';?>

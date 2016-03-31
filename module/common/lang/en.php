@@ -64,7 +64,7 @@ $lang->duplicate    = '%s has the same title';
 $lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP is limited by Administrator. Please contact the Administrator to lift the restrictions.</body></html>";
 $lang->unfold       = '+';
 $lang->fold         = '-';
-$lang->checked2Hide = 'Hide checked field.';
+$lang->hideNotCheck = 'Hide not checked field';
 
 $lang->preShortcutKey  = '[Shortcut key:←]';
 $lang->nextShortcutKey = '[Shortcut key:→]';

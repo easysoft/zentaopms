@@ -41,6 +41,9 @@ $config->story->list->exportFields = '
     childStories, linkStories, duplicateStory, files';
 $config->story->list->customCreateFields = 'source,verify,pri,estimate,mailto,keywords';
 
+$config->story->custom = new stdclass();
+$config->story->custom->create = $config->story->list->customCreateFields;
+
 $config->story->datatable = new stdclass();
 $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'source', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'actions');
 
