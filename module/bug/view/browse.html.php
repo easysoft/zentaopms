@@ -13,11 +13,25 @@
 <?php
 include '../../common/view/header.html.php';
 include '../../common/view/datatable.fix.html.php';
-js::set('browseType', $browseType);
-js::set('moduleID', $moduleID);
+js::set('browseType',    $browseType);
+js::set('moduleID',      $moduleID);
+js::set('bugBrowseType', $this->session->bugBrowseType);
 ?>
 <div id='featurebar'>
   <ul class='nav'>
+    <li>
+      <span>
+        <?php
+        echo $moduleName;
+        if($moduleID)
+        {
+            $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        echo " <i class='icon-angle-right'></i>&nbsp; ";
+        ?>
+      </span>
+    </li>
     <?php
     echo "<li id='unclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unclosed&param=0"),      $lang->bug->unclosed)      . "</li>";
     echo "<li id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</li>";

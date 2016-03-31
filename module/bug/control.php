@@ -61,12 +61,17 @@ class bug extends control
     {
         $this->loadModel('datatable');
 
-        /* Set browseType, productID, moduleID, queryID and branch. */
+        /* Set browse type. */
         $browseType = strtolower($browseType);
-        $productID  = $this->product->saveState($productID, $this->products);
-        $branch     = ($branch == '') ? $this->session->branch  : $branch;
-        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
+
+        /* Set productID, moduleID, queryID and branch. */
+        $productID = $this->product->saveState($productID, $this->products);
+        $branch    = ($branch == '') ? $this->session->branch  : $branch;
+        $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID, $branch);
@@ -112,6 +117,7 @@ class bug extends control
         $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        $this->view->moduleName  = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->browseType  = $browseType;
         $this->view->bugs        = $bugs;
         $this->view->users       = $this->user->getPairs('noletter');
