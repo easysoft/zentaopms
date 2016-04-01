@@ -345,4 +345,60 @@ class file extends control
 
         $this->display();
     }
+
+    /**
+     * Build export tpl.
+     * 
+     * @param  string $module 
+     * @param  int    $templateID 
+     * @access public
+     * @return void
+     */
+    public function buildExportTpl($module, $templateID = 0)
+    {
+        $templates       = $this->file->getExportTpl($module);
+        $templatePairs[] = '';
+        foreach($templates as $template) $templatePairs[$template->id] = ($template->public ? "[{$this->lang->public}] " : '') . $template->title;
+
+        $this->view->templates     = $templates;
+        $this->view->templatePairs = $templatePairs;
+        $this->view->templateID    = $templateID;
+        $this->display();
+    }
+
+    /**
+     * Ajax save template.
+     * 
+     * @param  string $module 
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveTemplate($module)
+    {
+        $templateID = $this->file->saveExportTemplate($module);
+        if(dao::isError())
+        {
+            $error = js::error(dao::getError());
+            /* Remove html and meta tag and only get script */
+            $error = substr($error, strpos($error, '<script'));
+            $error = substr($error, 0, strpos($error, '</script') + 9);
+            echo $error;
+
+            $templateID = 0;
+        }
+        die($this->fetch('file', 'buildExportTpl', "module=$module&templateID=$templateID"));
+    }
+
+    /**
+     * Ajax delete template.
+     * 
+     * @param  int    $templateID 
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteTemplate($templateID)
+    {
+        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
+        die();
+    }
 }

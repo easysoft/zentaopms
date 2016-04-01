@@ -842,11 +842,13 @@ $lang->resource->file->download     = 'download';
 $lang->resource->file->edit         = 'edit';
 $lang->resource->file->delete       = 'delete';
 $lang->resource->file->uploadImages = 'uploadImages';
+$lang->resource->file->setPublic     = 'setPublic';
 
 $lang->file->methodOrder[5]  = 'download';
 $lang->file->methodOrder[10] = 'edit';
 $lang->file->methodOrder[15] = 'delete';
 $lang->file->methodOrder[20] = 'uploadImages';
+$lang->file->methodOrder[25] = 'setPublic';
 
 $lang->resource->misc = new stdclass();
 $lang->resource->misc->ping = 'ping';

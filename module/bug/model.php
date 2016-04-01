@@ -1538,8 +1538,10 @@ class bugModel extends model
     {
         $templates = $this->dao->select('id,title,content,public')
             ->from(TABLE_USERTPL)
-            ->where('account')->eq($account)
+            ->where('type')->eq('bug')
+            ->andwhere('account', true)->eq($account)
             ->orWhere('public')->eq('1')
+            ->markRight(1)
             ->orderBy('id')
             ->fetchAll();
         return $templates;
@@ -1559,8 +1561,7 @@ class bugModel extends model
             ->stripTags('content', $this->config->allowedTags)
             ->get();
 
-        $condition = "account='{$this->app->user->account}'";
-        if($template->public == 1) $condition .= " or `public`='1'";
+        $condition = "`type`='bug' and account='{$this->app->user->account}'";
         $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
     }
 

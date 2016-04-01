@@ -18,6 +18,9 @@ $lang->file->inputFileName = '请输入附件名称';
 $lang->file->delete        = '删除附件';
 $lang->file->label         = '标题：';
 $lang->file->maxUploadSize = "<span class='red'>%s</span>";
+$lang->file->applyTemplate = "应用模板";
+$lang->file->tplTitle      = "模板名称";
+$lang->file->exportFields  = "要导出字段";
 
 $lang->file->errorNotExists   = "<span class='red'>文件夹 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令:sudo chmod -R 777 '%s'</span>";

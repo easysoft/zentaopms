@@ -1278,7 +1278,7 @@ class story extends control
             $storyConfig = $this->config->story;
 
             /* Create field lists. */
-            $fields = explode(',', $storyConfig->list->exportFields);
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
@@ -1445,6 +1445,8 @@ class story extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->view->allExportFields = $this->config->story->list->exportFields;
+        $this->view->customExport    = true;
         $this->display();
     }
 }

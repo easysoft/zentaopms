@@ -788,7 +788,7 @@ class testcase extends control
             $caseConfig = $this->config->testcase;
 
             /* Create field lists. */
-            $fields = explode(',', $caseConfig->exportFields);
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $caseConfig->exportFields);
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
@@ -920,6 +920,8 @@ class testcase extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->view->allExportFields = $this->config->testcase->exportFields;
+        $this->view->customExport    = true;
         $this->display();
     }
 

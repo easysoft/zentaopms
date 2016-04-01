@@ -1281,7 +1281,7 @@ class bug extends control
             $bugConfig = $this->config->bug;
 
             /* Create field lists. */
-            $fields = explode(',', $bugConfig->list->exportFields);
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $bugConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
@@ -1436,6 +1436,8 @@ class bug extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->view->allExportFields = $this->config->bug->list->exportFields;
+        $this->view->customExport    = true;
         $this->display();
     }
 

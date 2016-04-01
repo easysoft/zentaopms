@@ -169,6 +169,44 @@ class fileModel extends model
     }
 
     /**
+     * Get export tpl.
+     * 
+     * @param  string $module 
+     * @access public
+     * @return object
+     */
+    public function getExportTpl($module)
+    {
+        return $this->dao->select('id,title,content,public')->from(TABLE_USERTPL)
+            ->where('type')->eq("export$module")
+            ->andwhere('account', true)->eq($this->app->user->account)
+            ->orWhere('public')->eq('1')
+            ->markRight(1)
+            ->orderBy('id')
+            ->fetchAll();
+    }
+
+    /**
+     * Save export template.
+     * 
+     * @param  string $module 
+     * @access public
+     * @return int
+     */
+    public function saveExportTemplate($module)
+    {
+        $template = fixer::input('post')
+            ->add('account', $this->app->user->account)
+            ->add('type', "export$module")
+            ->join('content', ',')
+            ->get();
+
+        $condition = "`type`='export$module' and account='{$this->app->user->account}'";
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
+        return $this->dao->lastInsertId();
+    }
+
+    /**
      * Set path name of the uploaded file to be saved.
      * 
      * @param  int    $fileID 

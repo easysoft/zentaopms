@@ -60,6 +60,7 @@ $lang->bug->files            = '附件';
 $lang->bug->keywords         = '关键词';
 $lang->bug->lastEditedByAB   = '修改者';
 $lang->bug->lastEditedDateAB = '修改日期';
+$lang->bug->lastEditedDate   = '修改日期';
 $lang->bug->fromCase         = '来源用例';
 $lang->bug->toCase           = '生成用例';
 

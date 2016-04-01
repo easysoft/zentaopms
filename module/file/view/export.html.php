@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
+<?php echo $this->app->loadLang('file');?>
 <script>
 function setDownloading()
 {
@@ -39,6 +41,54 @@ function switchEncode(fileType)
         $('#encode').attr('disabled', 'disabled');
     }
 }
+
+function saveTemplate()
+{
+        var $inputGroup = $('#customFields div.input-group');
+        var $publicBox  = $inputGroup.find('input[id^="public"]');
+        var title       = $inputGroup.find('#title').val();
+        var content     = $('#customFields #exportFields').val();
+        var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
+        if(!title || !content) return;
+        saveTemplateLink = '<?php echo $this->createLink('file', 'ajaxSaveTemplate', 'module=' . $this->moduleName);?>';
+        $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
+        {
+            var defaultValue = $('#customFields #tplBox #template').val();
+            $('#customFields #tplBox').html(data);
+            if(data.indexOf('alert') >= 0) $('#customFields #tplBox #template').val(defaultValue);
+            $("#customFields #tplBox #template").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
+            {
+                var $this = $(this);
+                var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
+                var $drop = $chosen.find('.chosen-drop');
+                $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+            });
+            $inputGroup.find('#title').val('');
+        });
+}
+
+/* Set template. */
+function setTemplate(templateID)
+{
+    $template    =  $('#tplBox #template' + templateID);
+    exportFields = $template.size() > 0 ? $template.html() : defaultExportFields;
+    exportFields = exportFields.split(',');
+    $('#exportFields').val('');
+    for(i in exportFields) $('#exportFields').find('option[value="' + exportFields[i] + '"]').attr('selected', 'selected');
+    $('#exportFields').trigger("chosen:updated");
+}
+
+/* Delete template. */
+function deleteTemplate()
+{
+    templateID = $('#tplBox #template').val();
+    if(templateID == 0) return;
+    hiddenwin.location.href = createLink('file', 'ajaxDeleteTemplate', 'templateID=' + templateID);
+    $('#tplBox #template').find('option[value="'+ templateID +'"]').remove();
+    $('#tplBox #template').trigger("chosen:updated");
+    $('#tplBox #template').change();
+}
+
 $(document).ready(function()
 {
     $('#fileType').change();
@@ -56,7 +106,7 @@ $(document).ready(function()
     <strong><?php echo $lang->export;?></strong>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5% 50px'>
+<form class='form-condensed' method='post' target='hiddenwin' style='padding: 40px 5% 50px'>
   <table class='w-p100'>
     <tr>
       <td>
@@ -74,8 +124,49 @@ $(document).ready(function()
       <td class='w-100px'>
         <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
       </td>
-      <td><?php echo html::submitButton($lang->export);?></td>
+      <td><?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?></td>
     </tr>
   </table>
+  <?php if(!empty($customExport) and !empty($allExportFields)):?>
+  <?php
+  $allExportFields  = explode(',', $allExportFields);
+  $selectedFields   = array();
+  $exportFieldPairs = array();
+  $moduleName = $this->moduleName;
+  $moduleLang = $lang->$moduleName;
+  foreach($allExportFields as $key => $field)
+  {
+      $field                    = trim($field);
+      $selectedFields[]         = $field;
+      $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
+  }
+  ?>
+  <div class='panel' id='customFields'>
+    <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
+    <div class='panel-body'>
+      <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
+      <div class='row'>
+        <div class='col-xs-7'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
+            <?php echo html::input('title', '', "class='form-control'")?>
+            <?php if(common::hasPriv('file', 'setPublic')):?>
+            <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
+            <?php endif?>
+            <span class='input-group-btn'><button id='saveTpl' type='button' onclick='saveTemplate()' class='btn btn-primary'><?php echo $lang->save?></button></span>
+          </div>
+        </div>
+        <div class='col-xs-5'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->file->applyTemplate?></span>
+            <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTpl', 'module=' . $this->moduleName);?></span>
+            <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php js::set('defaultExportFields', join(',', $selectedFields));?>
+  <?php endif?>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

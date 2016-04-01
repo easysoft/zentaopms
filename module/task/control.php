@@ -1091,7 +1091,7 @@ class task extends control
             $taskConfig = $this->config->task;
 
             /* Create field lists. */
-            $fields = explode(',', $taskConfig->exportFields);
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $taskConfig->exportFields);
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
@@ -1168,6 +1168,8 @@ class task extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->view->allExportFields = $this->config->task->exportFields;
+        $this->view->customExport    = true;
         $this->display();
     }
 
