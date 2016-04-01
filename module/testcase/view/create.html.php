@@ -21,6 +21,9 @@
       <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
       <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->testcase->create;?></strong>
     </div>
+    <div class='actions'>
+      <button type='button' class='btn btn-default' data-toggle='customModal'><i class='icon icon-cog'></i></button>
+    </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
@@ -51,13 +54,16 @@
       <tr>
         <th><?php echo $lang->testcase->type;?></th>
         <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+        <?php if(strpos(",$showFields,", 'stage') !== false):?>
         <td style='padding-left:15px'>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->testcase->stage?></span>
             <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
           </div>
         </td>
-      </tr>  
+        <?php endif;?>
+      </tr>
+      <?php if(strpos(",$showFields,", ',story,') !== false):?>
       <tr>
         <th><?php echo $lang->testcase->lblStory;?></th>
         <td colspan='2'>
@@ -73,6 +79,7 @@
           </div>
         </td>
       </tr>  
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->testcase->title;?></th>
         <td colspan='2'>
@@ -133,10 +140,12 @@
           </table>
         </td> 
       </tr>
+      <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
       <tr>
         <th><?php echo $lang->testcase->keywords;?></th>
         <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
       </tr>  
+      <?php endif;?>
        <tr>
         <th><?php echo $lang->testcase->files;?></th>
         <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
@@ -164,5 +173,7 @@
     </div>
   </div>
 </div>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=testcase&section=custom&key=create');?>
+<?php include '../../common/view/customfield.html.php';?>
 <?php js::set('caseModule', $lang->testcase->module)?>
 <?php include '../../common/view/footer.html.php';?>
