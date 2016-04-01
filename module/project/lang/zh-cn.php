@@ -136,19 +136,29 @@ $lang->project->statusSelects['closed']       = '已关闭';
 $lang->project->statusSelects['delayed']      = '已延期';
 $lang->project->statusSelects['needconfirm']  = '需求变动';
 $lang->project->statusSelects['cancel']       = '已取消';
+
 $lang->project->groups['']           = '分组查看';
 $lang->project->groups['story']      = '需求分组';
 $lang->project->groups['status']     = '状态分组';
 $lang->project->groups['pri']        = '优先级分组';
-$lang->project->groups['openedby']   = '创建者分组';
 $lang->project->groups['assignedTo'] = '指派给分组';
-$lang->project->groups['finishedby'] = '完成者分组';
-$lang->project->groups['closedby']   = '关闭者分组';
-$lang->project->groups['estimate']   = '预计分组';
-$lang->project->groups['consumed']   = '已消耗分组';
-$lang->project->groups['left']       = '剩余分组';
+$lang->project->groups['finishedBy'] = '完成者分组';
+$lang->project->groups['closedBy']   = '关闭者分组';
 $lang->project->groups['type']       = '类型分组';
 $lang->project->groups['deadline']   = '截止分组';
+
+$lang->project->groupFilter['story']['all']         = $lang->project->all;
+$lang->project->groupFilter['story']['linked']      = '已关联需求';
+$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['pri']['setted']        = '已设置';
+$lang->project->groupFilter['assignedTo']['undone'] = '未完成';
+$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['done']   = '已完成';
+$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
+$lang->project->groupFilter['closedBy']['closed']   = '已关闭';
+$lang->project->groupFilter['deadline']['all']      = $lang->project->all;
+$lang->project->groupFilter['deadline']['setted']   = '已设置';
 
 $lang->project->byQuery              = '搜索';
 
@@ -165,6 +175,7 @@ $lang->project->stats           = '可用工时<strong>%s</strong>工时<br />�
 $lang->project->taskSummary     = "本页共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
 $lang->project->memberHours     = "%s共有 <strong>%s</strong> 个可用工时，";
 $lang->project->groupSummary    = "本组共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
+$lang->project->noTimeSummary   = "本组共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>";
 $lang->project->wbs             = "分解任务";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-sm'>帮助</a>";

@@ -226,8 +226,9 @@ class project extends control
         $this->view->position[] = $this->lang->project->task;
 
         /* Get tasks and group them. */
-        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $modules = 0, $groupBy ? $groupBy : 'story');
-        $groupBy     = strtolower(str_replace('`', '', $groupBy));
+        if(empty($groupBy))$groupBy = 'story';
+        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $modules = 0, $groupBy);
+        $groupBy     = str_replace('`', '', $groupBy);
         $taskLang    = $this->lang->task;
         $groupByList = array();
         $groupTasks  = array();
@@ -236,12 +237,7 @@ class project extends control
         $users = $this->loadModel('user')->getPairs('noletter');
         foreach($tasks as $task)
         {
-            if($groupBy == '')
-            {
-                $groupTasks[$task->story][] = $task;
-                $groupByList[$task->story]  = $task->storyTitle;
-            }
-            elseif($groupBy == 'story')
+            if($groupBy == 'story')
             {
                 $groupTasks[$task->story][] = $task;
                 $groupByList[$task->story]  = $task->storyTitle;
@@ -250,19 +246,15 @@ class project extends control
             {
                 $groupTasks[$taskLang->statusList[$task->status]][] = $task;
             }
-            elseif($groupBy == 'assignedto')
+            elseif($groupBy == 'assignedTo')
             {
                 $groupTasks[$task->assignedToRealName][] = $task;
             }
-            elseif($groupBy == 'openedby')
-            {
-                $groupTasks[$users[$task->openedBy]][] = $task;
-            }
-            elseif($groupBy == 'finishedby')
+            elseif($groupBy == 'finishedBy')
             {
                 $groupTasks[$users[$task->finishedBy]][] = $task;
             }
-            elseif($groupBy == 'closedby')
+            elseif($groupBy == 'closedBy')
             {
                 $groupTasks[$users[$task->closedBy]][] = $task;
             }
@@ -277,6 +269,7 @@ class project extends control
         }
 
         /* Assign. */
+        $this->app->loadLang('tree');
         $this->view->members     = $this->project->getTeamMembers($projectID);
         $this->view->tasks       = $groupTasks;
         $this->view->tabID       = 'task';
@@ -286,6 +279,8 @@ class project extends control
         $this->view->orderBy     = $groupBy;
         $this->view->projectID   = $projectID;
         $this->view->users       = $users;
+        $this->view->moduleID    = 0;
+        $this->view->moduleName  = $this->lang->tree->all;
         $this->display();
     }
 

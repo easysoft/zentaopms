@@ -1,6 +1,6 @@
-.table-borderless td.groupdivider, .groupdivider{border-bottom:1px solid #ccc}
 .highlight-warning {background: #FBF5C6!important}
-.outer .table tr > td.group-name, .outer .table tr > td.group-name:first-child{padding-left: 30px;}
-.group-title td {background: #f1f1f1!important; border-bottom: 1px solid #ddd!important}
-.groupdivider > .text {color: #808080}
-.groupdivider > .text strong {color: #333}
+.group-title td {background: #f1f1f1!important; border-bottom: 1px solid #ccc!important}
+tr.groupdivider td {background: #fff!important;}
+.groupdivider  .text {color: #808080}
+.groupdivider  .text strong {color: #333}
+.groupby{background:#f1f1f1!important; border-right:1px solid #ddd;cursor: pointer;}

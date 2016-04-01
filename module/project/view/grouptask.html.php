@@ -11,12 +11,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/treetable.html.php';?>
 <?php include './taskheader.html.php';?>
-<table class='table table-fixed' id='treetable'>
+<?php if(isset($lang->project->groupFilter[$groupBy])):?>
+<?php $currentFilter = isset($_COOKIE["groupFilter_$groupBy"]) ? $_COOKIE["groupFilter_$groupBy"] : key($lang->project->groupFilter[$groupBy]);?>
+<style>
+.nav-tabs{border-bottom:0px!important;}
+.nav-tabs>li{margin-bottom:0px!important;}
+#featurebar{margin-bottom:5px!important;}
+</style>
+<ul class="nav nav-tabs">
+  <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
+  <li <?php if($filterKey == $currentFilter) echo "class='active'"?>><a href="javascript:setFilter('<?php echo $groupBy?>', '<?php echo $filterKey?>')"><?php echo $name?></a></li>
+  <?php endforeach;?>
+</ul>
+<?php endif;?>
+<table class='table active-disabled table-condensed table-fixed table-striped table-custom' id='groupTable'>
   <thead>
     <tr>
-      <th class='w-120px'></th>
+      <th class='w-120px'>
+        <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $lang->task->$groupBy, '', "class='expandAll' data-action='expand'")?>
+        <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $lang->task->$groupBy, '', "class='collapseAll hidden' data-action='collapse'")?>
+      </th>
       <th><?php echo $lang->task->name;?></th>
       <th class='w-pri'> <?php echo $lang->priAB;?></th>
       <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
@@ -40,13 +55,8 @@
     $totalConsumed = 0.0;
     $totalLeft     = 0.0;
   ?>
-  <?php $i = 0;?>
   <?php foreach($tasks as $groupKey => $groupTasks):?>
-  <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i ++;?>
-  <tr id='node-<?php echo $groupKey;?>' class='actie-disabled group-title'>
-    <td class='<?php echo $groupClass;?> text-left large strong group-name'><?php echo $groupKey;?></td>
-    <td colspan='11'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
-  </tr>
+  <?php $i = 0;?>
   <?php
     $groupWait     = 0;
     $groupDone     = 0;
@@ -55,9 +65,24 @@
     $groupEstimate = 0.0;
     $groupConsumed = 0.0;
     $groupLeft     = 0.0;
+
+    $groupName = $groupKey;
+    if(!empty($groupByList[$groupKey])) $groupName .= '::' . $groupByList[$groupKey];
   ?>
+  <tbody>
   <?php foreach($groupTasks as $task):?>
-  <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
+  <?php
+  if(isset($currentFilter) and $currentFilter != 'all')
+  {
+      if($groupBy == 'story' and $currentFilter == 'linked' and empty($task->story)) continue;
+      if($groupBy == 'pri'   and $currentFilter == 'setted' and empty($task->pri)) continue;
+      if($groupBy == 'assignedTo' and $currentFilter == 'undone' and $task->status != 'wait' and $task->status != 'doing') continue;
+      if($groupBy == 'finishedBy' and $currentFilter == 'done' and $task->status != 'done') continue;
+      if($groupBy == 'closedBy' and $currentFilter == 'closed' and $task->status != 'closed') continue;
+      if($groupBy == 'deadline' and $currentFilter == 'setted' and $task->deadline == '0000-00-00') continue;
+  }
+  ?>
+  <?php $assignedToClass = $task->assignedTo == $app->user->account ? "style='color:red'" : '';?>
   <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id"); ?>
   <?php  
     $totalEstimate  += $task->estimate;
@@ -91,8 +116,12 @@
     $groupSum = count($groupTasks);
     $taskSum += count($tasks);
    ?>
-    <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
-      <td class='<?php echo $groupClass;?>'></td>
+    <tr class='text-center'>
+      <?php if($i == 0):?>
+      <td rowspan='<?php echo count($groupTasks) + 1?>' class='groupby text-left'>
+        <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='expandGroup' data-action='expand' title='$groupName'");?>
+      </td>
+      <?php endif;?>
       <td class='text-left'>&nbsp;<?php echo $task->id . $lang->colon; if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
@@ -108,14 +137,32 @@
         <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', '', 'hiddenwin');?>
       </td>
     </tr>
+    <?php $i++;?>
     <?php endforeach;?>
-    <tr class='child-of-node-<?php echo $groupKey;?> <?php echo $groupClass;?>'>
-      <td colspan='12' class='a-right groupdivider'>
+    <?php if($i != 0):?>
+    <tr class='text-center groupdivider'>
+      <td colspan='4' class='text-left'>
         <div class='text'>
-        <?php if($groupBy == 'assignedto' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
-        <?php printf($lang->project->groupSummary, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></div>
+        <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
+        <?php printf($lang->project->noTimeSummary, $groupSum, $groupWait, $groupDoing);?></div>
       </td>
+      <td><?php echo $groupEstimate;?></td>
+      <td><?php echo $groupConsumed;?></td>
+      <td><?php echo $groupLeft;?></td>
+      <td colspan='4'></td>
     </tr>
+    <tr class='actie-disabled group-collapse hidden text-center group-title'>
+      <td colspan='5' class='text-left'>
+        <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $groupName, '', "class='collapseGroup' data-action='collapse' title='$groupName'");?>
+        <span class='groupdivider' style='margin-left:10px;'><span class='text'> <?php printf($lang->project->noTimeSummary, $groupSum, $groupWait, $groupDoing);?></span></span>
+      </td>
+      <td><?php echo $groupEstimate;?></td>
+      <td><?php echo $groupConsumed;?></td>
+      <td><?php echo $groupLeft;?></td>
+      <td colspan='4'></td>
+    </tr>
+    <?php endif;?>
+  </tbody>
   <?php endforeach;?>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
