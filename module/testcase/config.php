@@ -24,6 +24,11 @@ $config->testcase->exportFields = '
     pri, type, stage, status, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version,linkCase';
 
+$config->testcase->customCreateFields = 'stage,story,keywords';
+
+$config->testcase->custom = new stdclass();
+$config->testcase->custom->create = $config->testcase->customCreateFields;
+
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
 $config->testcase->search['fields']['title']          = $lang->testcase->title;

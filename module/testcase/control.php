@@ -286,6 +286,11 @@ class testcase extends control
         }
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50);
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->testcase->custom->create;
+
         $this->view->title            = $title;
         $this->view->caseTitle        = $caseTitle;
         $this->view->position         = $position;
