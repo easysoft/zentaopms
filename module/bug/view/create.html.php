@@ -26,6 +26,9 @@ js::set('refresh', $lang->refresh);
       <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
       <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->bug->create;?></strong>
     </div>
+    <div class='actions'>
+      <button type='button' class='btn btn-default' data-toggle='customModal'><i class='icon icon-cog'></i></button>
+    </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-form'> 
@@ -55,12 +58,17 @@ js::set('refresh', $lang->refresh);
         </td>
         <td></td>
       </tr>
+      <?php $showProject = strpos(",$showFields,", ',project,') !== false;?>
       <tr>
-        <th><?php echo $lang->bug->project;?></th>
+        <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->openedBuild;?></th>
+        <?php if($showProject):?>
         <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
+        <?php endif;?>
         <td>
           <div class='input-group'>
+            <?php if($showProject):?>
             <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
+            <?php endif;?>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
             <span class='input-group-addon' id='buildBoxActions'></span>
             <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-refresh"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}'")?></span>
@@ -76,6 +84,8 @@ js::set('refresh', $lang->refresh);
           </div>
         </td>
       </tr>
+      <?php $showOs      = strpos(",$showFields,", ',os,')      !== false;?>
+      <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
       <tr>
         <th><?php echo $lang->bug->type;?></th>
         <td>
@@ -87,10 +97,14 @@ js::set('refresh', $lang->refresh);
             unset($lang->bug->typeList['trackthings']);
             echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
             ?>
+            <?php if($showOs):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
             <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+            <?php endif;?>
+            <?php if($showBrowser):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
             <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+            <?php endif;?>
           </div>
         </td>
       </tr>
@@ -149,20 +163,39 @@ js::set('refresh', $lang->refresh);
           <?php echo html::textarea('steps', $steps, "rows='5' class='form-control'");?>
         </td>
       </tr>
+      <?php
+      $showStory = strpos(",$showFields,", ',story,') !== false;
+      $showTask  = strpos(",$showFields,", ',task,')  !== false;
+      ?>
+      <?php if($showStory or $showTask):?>
       <tr>
-        <th><?php echo $lang->bug->story;?></th>
+        <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
+        <?php if($showStory):?>
         <td>
           <span id='storyIdBox'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></span>
         </td>
+        <?php endif;?>
+        <?php if($showTask):?>
         <td>
           <div class='input-group'>
+            <?php if($showStory):?>
             <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+            <?php endif;?>
             <span id='taskIdBox'> <?php echo html::select('task', '', $taskID, "class='form-control chosen'");?></span>
           </div>
         </td>
+        <?php endif;?>
       </tr>
+      <?php endif;?>
+      <?php
+      $showMailto   = strpos(",$showFields,", ',mailto,')   !== false;
+      $showKeywords = strpos(",$showFields,", ',keywords,') !== false;
+      ?>
+      <?php if($showMailto or $showKeywords):?>
+      <?php $colspan = ($showMailto and $showKeywords) ? '' : "colspan='2'";?>
       <tr>
-        <th><?php echo $lang->bug->lblMailto;?></th>
+        <th><?php echo ($showMailto) ? $lang->bug->lblMailto : $lang->bug->keywords;?></th>
+        <?php if($showMailto):?>
         <td>
           <div class='input-group' id='contactListGroup'>
           <?php 
@@ -178,13 +211,19 @@ js::set('refresh', $lang->refresh);
           ?>
           </div>
         </td>
-        <td>
+        <?php endif;?>
+        <?php if($showKeywords):?>
+        <td <?php echo $colspan?>>
           <div class='input-group'>
+            <?php if($showMailto):?>
             <span class='input-group-addon' id='keywordsAddonLabel'><?php echo $lang->bug->keywords;?></span>
+            <?php endif;?>
             <?php echo html::input('keywords', $keywords, "class='form-control'");?>
           </div>
         </td>
+        <?php endif;?>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->bug->files;?></th>
         <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>
@@ -222,4 +261,6 @@ js::set('refresh', $lang->refresh);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=bug&section=custom&key=create');?>
+<?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
