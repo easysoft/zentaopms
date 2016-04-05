@@ -917,7 +917,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $case, $users, $branches)
+    public function printCell($col, $case, $users, $branches, $modulePairs = array())
     {
         $caseLink = helper::createLink('testcase', 'view', "caseID=$case->id");
         $account  = $this->app->user->account;
@@ -941,6 +941,8 @@ class testcaseModel extends model
                 echo "</span>";
                 break;
             case 'title':
+                if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>";
+                if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span>";
                 echo html::a($caseLink, $case->title);
                 break;
             case 'branch':

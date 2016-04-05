@@ -19,11 +19,6 @@ if($config->debug)
 .datatable .table>tbody>tr>td.col-hover, .datatable .table>tbody>tr.hover>td {background-color: #ebf2f9 !important;}
 .datatable-span.flexarea .scroll-slide {bottom: -30px}
 
-.datatable-menu-wrapper {position: relative;}
-.datatable-menu {position: absolute; right: 0; top: 0; border: 1px solid #ddd; background: #fff; z-index: 999;}
-.datatable-menu > .btn {padding: 5px 6px 6px; outline: none; color: #4d90fe!important}
-.datatable-menu > .btn:hover {color: #002563!important}
-
 .panel > .datatable, .panel-body > .datatable {margin-bottom: 0;}
 </style>
 <script> 
@@ -68,14 +63,15 @@ $(document).ready(function()
 
             var $dropdown = $("<div class='datatable-menu-wrapper'><div class='dropdown datatable-menu'><button type='button' class='btn btn-link' data-toggle='dropdown'><i class='icon-cogs'></i> <span class='caret'></span></button></div></div>");
             var $dropmenu = $("<ul class='dropdown-menu pull-right'></ul>");
-            if(customMenu)
-            {
-                $dropmenu.append("<li><a id='customBtn' href='<?php echo $this->createLink('datatable', 'custom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
-            }
+            <?php if(!empty($setShowModule)):?>
+            $dropmenu.append("<li><a href='javascript:;' data-toggle='showModuleModal'><?php echo $lang->datatable->showModule?></a></li>");
+            <?php endif;?>
+            if(customMenu) $dropmenu.append("<li><a id='customBtn' href='<?php echo $this->createLink('datatable', 'custom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             $dropmenu.append("<li><a href='javascript:;' id='switchToTable'><?php echo $lang->datatable->switchToTable?></a></li>");
             $dropdown.children('.dropdown').append($dropmenu);
             this.$datatable.before($dropdown);
             this.$datatable.find('[data-toggle=modal], a.iframe').modalTrigger();
+            $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
 
             $('#customBtn').modalTrigger();
 

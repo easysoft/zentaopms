@@ -564,6 +564,7 @@ class testtaskModel extends model
                 echo "</span>";
                 break;
             case 'title':
+                if($run->branch) echo "<span class='label label-info label-badge'>{$branches[$run->branch]}</span>";
                 echo html::a($caseLink, $run->title);
                 break;
             case 'branch':

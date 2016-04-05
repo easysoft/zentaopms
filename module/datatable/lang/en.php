@@ -13,3 +13,8 @@ $lang->datatable->required          = 'Required';
 
 $lang->datatable->branch   = 'Branch';
 $lang->datatable->platform = 'Platform';
+
+$lang->datatable->showModule             = 'Show module in title';
+$lang->datatable->showModuleList[]       = 'Not show';
+$lang->datatable->showModuleList['base'] = 'Base node';
+$lang->datatable->showModuleList['end']  = 'End node';

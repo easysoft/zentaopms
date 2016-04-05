@@ -13,3 +13,8 @@ $lang->datatable->required          = '必选';
 
 $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
+
+$lang->datatable->showModule             = '标题是否显示模块';
+$lang->datatable->showModuleList[]       = '不显示';
+$lang->datatable->showModuleList['base'] = '根节点';
+$lang->datatable->showModuleList['end']  = '终极节点';

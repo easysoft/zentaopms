@@ -44,24 +44,16 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        if($type == 'bug' or $type == 'case' or $type == 'task')
+        if($this->isMergeModule($rootID, $type))
         {
-            /* Get createdVersion. */
-            $createdVersion = $this->dao->select('createdVersion')->from(TABLE_PRODUCT) 
-                ->where('id')->eq($rootID)
-                ->fetch('createdVersion');
-
-            if($createdVersion and version_compare($createdVersion, '4.1', '>'))
-            {
-                return $this->dao->select('*')->from(TABLE_MODULE)
-                    ->where('root')->eq((int)$rootID)
-                    ->andWhere('type')->in("story,$type")
-                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                    ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-                    ->beginIF((!empty($branch) and $branch != 'null'))->andWhere("branch")->eq($branch)->fi()
-                    ->orderBy('grade desc, type desc, `order`')
-                    ->get();
-            }
+            return $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq((int)$rootID)
+                ->andWhere('type')->in("story,$type")
+                ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
+                ->beginIF((!empty($branch) and $branch != 'null'))->andWhere("branch")->eq($branch)->fi()
+                ->orderBy('grade desc, type desc, `order`')
+                ->get();
         }
 
         /* $createdVersion < 4.1 or $type == 'story'. */
@@ -127,6 +119,30 @@ class treeModel extends model
     }
 
     /**
+     * Get module pairs.
+     * 
+     * @param  int    $rootID 
+     * @param  string $viewType 
+     * @param  string $showModule 
+     * @access public
+     * @return array
+     */
+    public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end')
+    {
+        if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
+        $modules     = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->fetchAll('id');
+        $modulePairs = array();
+        foreach($modules as $moduleID => $module)
+        {
+            list($baseModule) = explode(',', trim($module->path, ','));
+            if($showModule == 'base' and isset($modules[$baseModule])) $module = $modules[$baseModule];
+            $modulePairs[$moduleID] = $module->short ? $module->short : $module->name;
+        }
+
+        return $modulePairs;
+    }
+
+    /**
      * Create an option menu of task in html.
      * 
      * @param  int    $rootID 
@@ -137,11 +153,10 @@ class treeModel extends model
     public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0)
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
-        $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT)->where('id')->eq($rootID)->fetch('openedVersion');
         $products       = $this->loadModel('product')->getProductsByProject($rootID);
         $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products));
 
-        if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products) return $this->getOptionMenu($rootID, 'task', $startModule); 
+        if(!$this->isMergeModule($rootID, 'task') or !$products) return $this->getOptionMenu($rootID, 'task', $startModule); 
 
         /* createdVersion > 4.1. */
         $startModulePath = '';
@@ -326,13 +341,10 @@ class treeModel extends model
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
-        $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
-            ->where('id')->eq($rootID)
-            ->fetch('openedVersion');
         $products      = $this->loadModel('product')->getProductsByProject($rootID);
         $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
 
-        if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products)
+        if(!$this->isMergeModule($rootID, 'task') or !$products)
         {
             $extra['tip'] = false;
             return $this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra); 
@@ -878,12 +890,8 @@ class treeModel extends model
      */
     public function getSons($rootID, $moduleID, $type = 'root', $branch = 0)
     {
-        $createdVersion = $this->dao->select('createdVersion')->from(TABLE_PRODUCT) 
-            ->where('id')->eq($rootID)
-            ->fetch('createdVersion');
-
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
-        if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or $type == 'story')
+        if(!$this->isMergeModule($rootID, $type) or $type == 'story')
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
@@ -1331,12 +1339,7 @@ class treeModel extends model
     {
         if(empty($branches)) $branches = $this->post->branch;
 
-        if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
-        {
-            /* Get createdVersion. */
-            $createdVersion = $this->dao->select('createdVersion')->from(TABLE_PRODUCT)->where('id')->eq($rootID)->fetch('createdVersion');
-            if($createdVersion and version_compare($createdVersion, '4.1', '>')) $viewType .= ',story';
-        }
+        if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
 
         $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->fetchAll();
         $repeatName    = '';
@@ -1359,5 +1362,26 @@ class treeModel extends model
         }
         if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
         return true;
+    }
+
+    /**
+     * Check merge module version.
+     * 
+     * @param  int    $rootID 
+     * @param  string $viewType 
+     * @access public
+     * @return bool
+     */
+    public function isMergeModule($rootID, $viewType)
+    {
+        if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
+        {
+            /* Get createdVersion. */
+            $table        = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
+            $versionField = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
+            $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
+            return ($createdVersion and version_compare($createdVersion, '4.1', '>'));
+        }
+        return false;
     }
 }

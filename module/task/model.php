@@ -1495,7 +1495,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType)
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array())
     {
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
         $account  = $this->app->user->account;
@@ -1520,6 +1520,8 @@ class taskModel extends model
                 echo "</span>";
                 break;
             case 'name':
+                if(isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span>';
+                if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span>';
                 echo html::a($taskLink, $task->name);
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
                 break;

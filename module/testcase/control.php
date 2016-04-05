@@ -98,24 +98,28 @@ class testcase extends control
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
+        $showModule = !empty($this->config->datatable->testcasebrowse->showModule) ? $this->config->datatable->testcasebrowse->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+
         /* Assign. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[]  = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->testcase->common;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
-        $this->view->moduleName  = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->moduleID    = $moduleID;
-        $this->view->pager       = $pager;
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->orderBy     = $orderBy;
-        $this->view->browseType  = $browseType;
-        $this->view->param       = $param;
-        $this->view->cases       = $cases;
-        $this->view->branch      = $branch;
-        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->testcase->common;
+        $this->view->productID     = $productID;
+        $this->view->productName   = $this->products[$productID];
+        $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->moduleID      = $moduleID;
+        $this->view->pager         = $pager;
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->param         = $param;
+        $this->view->cases         = $cases;
+        $this->view->branch        = $branch;
+        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->setShowModule = true;
 
 
         $this->display();

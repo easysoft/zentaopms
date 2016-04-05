@@ -108,26 +108,30 @@ class bug extends control
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
+        $showModule = !empty($this->config->datatable->bugbrowse->showModule) ? $this->config->datatable->bugbrowse->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+
         /* Set view. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
-        $this->view->position[]  = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->bug->common;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->view->modules     = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
-        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
-        $this->view->moduleName  = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->browseType  = $browseType;
-        $this->view->bugs        = $bugs;
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->pager       = $pager;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->moduleID    = $moduleID;
-        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted');
-        $this->view->branch      = $branch;
-        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->bug->common;
+        $this->view->productID     = $productID;
+        $this->view->productName   = $this->products[$productID];
+        $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
+        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->browseType    = $browseType;
+        $this->view->bugs          = $bugs;
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->pager         = $pager;
+        $this->view->param         = $param;
+        $this->view->orderBy       = $orderBy;
+        $this->view->moduleID      = $moduleID;
+        $this->view->memberPairs   = $this->user->getPairs('noletter|nodeleted');
+        $this->view->branch        = $branch;
+        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->setShowModule = true;
 
         $this->display();
     }

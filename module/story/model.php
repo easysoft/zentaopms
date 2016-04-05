@@ -2080,7 +2080,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages)
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array())
     {
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
@@ -2108,6 +2108,8 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
+                if($story->branch) echo "<span class='label label-info label-badge'>{$branches[$story->branch]}</span>";
+                if($modulePairs and $story->module) echo "<span class='label label-info label-badge'>{$modulePairs[$story->module]}</span>";
                 echo html::a($storyLink, $story->title);
                 break;
             case 'plan':

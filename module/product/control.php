@@ -152,6 +152,9 @@ class product extends control
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
+        $showModule = !empty($this->config->datatable->productbrowse->showModule) ? $this->config->datatable->productbrowse->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+
         /* Assign. */
         $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
         $this->view->position[]    = $this->products[$productID];
@@ -174,6 +177,7 @@ class product extends control
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
+        $this->view->setShowModule = true;
         $this->display();
     }
 

@@ -23,7 +23,7 @@ extract($widths);
       <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='text-center' data-id='<?php echo $bug->id?>'>
-          <?php foreach ($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches);?>
+          <?php foreach ($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs);?>
         </tr>
         <?php endforeach;?>
       </tbody>
