@@ -43,13 +43,13 @@
 
     <?php
     unset($lang->testcase->typeList['']);
-    $moduleOptionMenu['same'] = $lang->testcase->same;
+    $moduleOptionMenu['ditto'] = $lang->testcase->ditto;
     ?>
     <?php for($i = 0; $i < $config->testcase->batchCreate; $i++):?>
     <?php
-    if($i != 0) $currentModuleID = 'same';
-    if($i != 0) $lang->testcase->typeList['same'] = $lang->testcase->same;
-    $type = $i == 0 ? 'feature' : 'same';
+    if($i != 0) $currentModuleID = 'ditto';
+    if($i != 0) $lang->testcase->typeList['ditto'] = $lang->testcase->ditto;
+    $type = $i == 0 ? 'feature' : 'ditto';
     $pri  = 3;
     ?>
     <tr class='text-center'>

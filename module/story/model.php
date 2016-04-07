@@ -249,9 +249,9 @@ class storyModel extends model
         $pri    = 0;
         for($i = 0; $i < $batchNum; $i++)
         {
-            $module = $stories->module[$i] == 'same' ? $module : $stories->module[$i];
-            $plan   = $stories->plan[$i]   == 'same' ? $plan   : $stories->plan[$i];
-            $pri    = $stories->pri[$i]    == 'same' ? $pri   : $stories->pri[$i];
+            $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
+            $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
+            $pri    = $stories->pri[$i]    == 'ditto' ? $pri   : $stories->pri[$i];
             $stories->module[$i] = (int)$module;
             $stories->plan[$i]   = (int)$plan;
             $stories->pri[$i]    = (int)$pri;

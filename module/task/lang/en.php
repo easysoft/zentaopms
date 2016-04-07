@@ -31,7 +31,6 @@ $lang->task->export             = "Export data";
 $lang->task->reportChart        = "Report chart";
 $lang->task->fromBug            = 'From Bug';
 $lang->task->confirmStoryChange = "Confirm story change";
-$lang->task->editNotice         = "Current task and task above it do not belong to same project!";
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -88,6 +87,7 @@ $lang->task->editEstimate      = 'Edit Hour';
 $lang->task->deleteEstimate    = 'Delete Hour';
 
 $lang->task->ditto         = 'Ditto';
+$lang->task->dittoNotice   = "Current task and task above it do not belong to same project!";
 $lang->task->selectAllUser = 'All';
 
 $lang->task->statusList['']        = '';

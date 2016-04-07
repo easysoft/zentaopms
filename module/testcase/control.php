@@ -554,11 +554,16 @@ class testcase extends control
         /* The cases of a product. */
         if($productID)
         {
-            $this->testcase->setMenu($this->products, $productID, $branch);
             $product = $this->product->getByID($productID);
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-            $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-            $this->view->title            = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+            $this->testcase->setMenu($this->products, $productID, $branch);
+
+            /* Set modules. */
+            $modules          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+            $modules['ditto'] = $this->lang->testcase->ditto;
+
+            $this->view->modules    = $modules;
+            $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
         }
         /* The cases of my. */
         else
@@ -577,11 +582,16 @@ class testcase extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
+        /* Set pri and type list. */
+        $this->lang->testcase->priList['ditto']  = $this->lang->testcase->ditto;
+        $this->lang->testcase->typeList['ditto'] = $this->lang->testcase->ditto;
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->batchEdit;
         $this->view->caseIDList = $caseIDList;
         $this->view->productID  = $productID;
+        $this->view->priList    = (array)$this->lang->testcase->priList;
+        $this->view->typeList   = $this->lang->testcase->typeList;
         $this->view->cases      = $cases;
 
         $this->display();

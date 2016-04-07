@@ -1,7 +1,7 @@
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');
-    if($(select).val() == 'same')
+    if($(select).val() == 'ditto')
     {
         var index = $(select).closest('td').index();
         var row   = $(select).closest('tr').index();
@@ -10,7 +10,7 @@ $(document).on('click', '.chosen-with-drop', function()
         for(i = row - 1; i >= 0; i--)
         {
             value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
-            if(value != 'same') break;
+            if(value != 'ditto') break;
         }
         $(select).val(value);
         $(select).trigger("chosen:updated");
@@ -18,7 +18,7 @@ $(document).on('click', '.chosen-with-drop', function()
 });
 $(document).on('mousedown', 'select', function()
 {
-    if($(this).val() == 'same')
+    if($(this).val() == 'ditto')
     {
         var index = $(this).closest('td').index();
         var row   = $(this).closest('tr').index();
@@ -27,7 +27,7 @@ $(document).on('mousedown', 'select', function()
         for(i = row - 1; i >= 0; i--)
         {
             value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
-            if(value != 'same') break;
+            if(value != 'ditto') break;
         }
         $(this).val(value);
     }

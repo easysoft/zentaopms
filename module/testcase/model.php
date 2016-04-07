@@ -105,9 +105,9 @@ class testcaseModel extends model
         $type   = '';
         for($i = 0; $i < $batchNum; $i++)
         {
-            $module = $cases->module[$i] == 'same' ? $module : $cases->module[$i];
-            $story  = $cases->story[$i] == 'same'  ? $story  : $cases->story[$i];
-            $type   = $cases->type[$i] == 'same'   ? $type   : $cases->type[$i];
+            $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
+            $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
+            $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
             $cases->module[$i] = (int)$module;
             $cases->story[$i]  = (int)$story;        
             $cases->type[$i]   = $type;

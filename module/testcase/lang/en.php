@@ -97,7 +97,8 @@ $lang->testcase->legendComment      = 'Comment';
 
 $lang->testcase->confirmDelete      = 'Are you sure to delete this case?';
 $lang->testcase->confirmBatchDelete = 'Are you sure to batch delete there cases?';
-$lang->testcase->same               = 'Ditto';
+$lang->testcase->ditto              = 'Ditto';
+$lang->testcase->dittoNotice        = 'Current case and case above it do not belong to same product!';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

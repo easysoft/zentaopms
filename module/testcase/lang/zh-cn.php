@@ -97,7 +97,8 @@ $lang->testcase->legendComment      = '备注';
 
 $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
-$lang->testcase->same               = '同上';
+$lang->testcase->ditto              = '同上';
+$lang->testcase->dittoNotice        = '该用例与上一用例不属于同一产品！';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
