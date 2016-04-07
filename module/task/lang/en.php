@@ -31,6 +31,7 @@ $lang->task->export             = "Export data";
 $lang->task->reportChart        = "Report chart";
 $lang->task->fromBug            = 'From Bug';
 $lang->task->confirmStoryChange = "Confirm story change";
+$lang->task->editNotice         = "Current task and task above it do not belong to same project!";
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';

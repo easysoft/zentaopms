@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('editNotice', $this->lang->task->editNotice);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
@@ -41,8 +42,11 @@
     <?php 
     if(!isset($project))
     {
-        $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task'); 
-        $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
+        $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
+        $prjInfo = $this->project->getById($tasks[$taskID]->project);
+        foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
+        $modules = array(0 => '/', 'ditto' => $this->lang->task->ditto) + $modules;
+        $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
     }
     ?>
     <tr class='text-center'>
@@ -50,9 +54,9 @@
       <td title='<?php echo $tasks[$taskID]->name?>'><?php echo html::input("names[$taskID]",        $tasks[$taskID]->name, 'class=form-control');?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $members, $tasks[$taskID]->assignedTo, "class='form-control chosen'");?></td>
-      <td><?php echo html::select("types[$taskID]",    $lang->task->typeList, $tasks[$taskID]->type, 'class=form-control');?></td>
-      <td><?php echo html::select("statuses[$taskID]", $lang->task->statusList, $tasks[$taskID]->status, 'class=form-control');?></td>
-      <td><?php echo html::select("pris[$taskID]",     (array)$lang->task->priList, $tasks[$taskID]->pri, 'class=form-control');?></td>
+      <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, 'class=form-control');?></td>
+      <td><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, 'class=form-control');?></td>
+      <td><?php echo html::select("pris[$taskID]",     $priList, $tasks[$taskID]->pri, 'class=form-control');?></td>
       <td><?php echo html::input("estimates[$taskID]", $tasks[$taskID]->estimate, "class='form-control text-center' autocomplete='off'");?></td>
       <td><?php echo html::input("consumeds[$taskID]", '', "class='form-control text-center' autocomplete='off'");?></td>
       <td><?php echo html::input("lefts[$taskID]",     $tasks[$taskID]->left, "class='form-control text-center' autocomplete='off'");?></td>

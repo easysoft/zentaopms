@@ -297,6 +297,11 @@ class bug extends control
             $projectMembers = $this->view->users; 
         }
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->bug->custom->create;
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;

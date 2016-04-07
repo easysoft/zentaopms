@@ -38,6 +38,11 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedBy,
     lastEditedDate, files';
 
+$config->bug->list->customCreateFields = 'project,story,task,os,browser,mailto,keywords';
+
+$config->bug->custom = new stdclass();
+$config->bug->custom->create = $config->bug->list->customCreateFields;
+
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
 $config->bug->editor->edit       = array('id' => 'steps,comment', 'tools' => 'bugTools');
