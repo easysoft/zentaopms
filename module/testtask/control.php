@@ -768,12 +768,12 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase')
+    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0)
     {
         $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
         if($this->post->results)
         {
-            $this->testtask->batchRun($from);
+            $this->testtask->batchRun($from, $taskID);
             die(js::locate($url, 'parent'));
         }
 

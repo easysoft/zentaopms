@@ -392,12 +392,18 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    public function batchRun($runCaseType = 'testcase')
+    public function batchRun($runCaseType = 'testcase', $taskID = 0)
     {
         $runs = array();
         $postData   = fixer::input('post')->get();
         $caseIdList = array_keys($postData->results);
-        if($runCaseType == 'testtask') $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs('case', 'id');
+        if($runCaseType == 'testtask')
+        {
+            $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
+                ->where('`case`')->in($caseIdList)
+                ->beginIF($taskID)->andWhere('task')->eq($taskID)
+                ->fetchPairs('case', 'id');
+        }
 
         $stepGroups = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')

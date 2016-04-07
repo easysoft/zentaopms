@@ -65,7 +65,7 @@ include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(
             }
             if($canBatchRun)
             {
-                $actionLink = inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");
+                $actionLink = inLink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$taskID");
                 echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
             }
             ?>
