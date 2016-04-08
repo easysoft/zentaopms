@@ -531,7 +531,7 @@ class fileModel extends model
      */
     public function compressImage($file)
     {
-        if(!extension_loaded('gd')) return $file;
+        if(!extension_loaded('gd') or !function_exists('imagecreatefromjpeg')) return $file;
 
         $pathName    = $file['pathname'];
         $fileName    = $this->savePath . $pathName;
