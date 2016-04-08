@@ -50,25 +50,6 @@ class product extends control
     public function index($locate = 'yes', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
-        
-        $this->session->set('productList', $this->app->getURI(true));
-        if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
-
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $this->app->loadLang('my');
-        $this->view->title        = $this->lang->product->allProduct;
-        $this->view->position[]   = $this->lang->product->allProduct;
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status);
-        $this->view->productID    = $productID;
-        $this->view->pager        = $pager;
-        $this->view->recTotal     = $pager->recTotal;
-        $this->view->recPerPage   = $pager->recPerPage;
-        $this->view->orderBy      = $orderBy;
-        $this->view->status       = $status;
-        $this->display();
     }
 
     /**
@@ -595,6 +576,28 @@ class product extends control
         $this->lang->product->menuOrder = $this->lang->$fromModule->menuOrder;
 
         $this->view->title = $this->lang->$fromModule->common;
+        $this->display();
+    }
+
+    public function all($productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    {
+        $this->session->set('productList', $this->app->getURI(true));
+        if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->app->loadLang('my');
+        $this->view->title        = $this->lang->product->allProduct;
+        $this->view->position[]   = $this->lang->product->allProduct;
+        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status);
+        $this->view->productID    = $productID;
+        $this->view->pager        = $pager;
+        $this->view->recTotal     = $pager->recTotal;
+        $this->view->recPerPage   = $pager->recPerPage;
+        $this->view->orderBy      = $orderBy;
+        $this->view->status       = $status;
         $this->display();
     }
 }

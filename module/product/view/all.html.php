@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of index method of index module of ZenTaoPMS.
+ * The html template file of all method of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -10,17 +10,15 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->product->index;?>  </div>
   <div class='actions'>
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>
   <ul class='nav'>
-    <?php echo "<li id='noclosedTab'>" . html::a(inlink("index", "locate=no&productID=$productID&status=noclosed"), $lang->product->unclosed) . '</li>';?>
-    <?php echo "<li id='closedTab'>" . html::a(inlink("index", "locate=no&productID=$productID&status=closed"), $lang->product->statusList['closed']) . '</li>';?>
-    <?php echo "<li id='allTab'>" . html::a(inlink("index", "locate=no&productID=$productID&status=all"), $lang->product->allProduct) . '</li>';?>
+    <?php echo "<li id='noclosedTab'>" . html::a(inlink("all", "productID=$productID&status=noclosed"), $lang->product->unclosed) . '</li>';?>
+    <?php echo "<li id='closedTab'>" . html::a(inlink("all", "productID=$productID&status=closed"), $lang->product->statusList['closed']) . '</li>';?>
+    <?php echo "<li id='allTab'>" . html::a(inlink("all", "productID=$productID&status=all"), $lang->product->allProduct) . '</li>';?>
   </ul>
 </div>
 
@@ -92,7 +90,7 @@
             <?php echo html::selectButton();?>
             <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
             <?php endif;?>
-            <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('index', "locate=no&productID=$productID&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
+            <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
           </div>
           <div class='text-right'><?php $pager->show();?></div>
         </td>
