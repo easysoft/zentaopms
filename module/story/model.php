@@ -236,12 +236,13 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0)
     {
+        $branch   = (int)$branch;
         $now      = helper::now();
         $mails    = array();
         $stories  = fixer::input('post')->get();
         $batchNum = count(reset($stories));
 
-        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}&branch=$branch");
+        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID} and branch={$branch}");
         $stories = $result['data'];
 
         $module = 0;

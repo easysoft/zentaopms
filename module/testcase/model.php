@@ -88,11 +88,12 @@ class testcaseModel extends model
      */
     function batchCreate($productID, $branch, $storyID)
     {
+        $branch      = (int)$branch;
         $now         = helper::now();
         $cases       = fixer::input('post')->get();
         $batchNum    = count(reset($cases));
 
-        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product=$productID&branch=$branch");
+        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID} and branch={$branch}");
         $cases  = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
