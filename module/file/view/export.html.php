@@ -141,7 +141,7 @@ $(document).ready(function()
       $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
   }
   ?>
-  <div class='panel' id='customFields'>
+  <div class='panel' id='customFields'style='margin-bottom:150px'>
     <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
     <div class='panel-body'>
       <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
