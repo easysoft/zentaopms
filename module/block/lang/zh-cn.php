@@ -10,6 +10,100 @@
  * @link        http://www.ranzhi.org
  */
 $lang->block = new stdclass();
+$lang->block->common = '区块';
+$lang->block->name   = '区块名称';
+$lang->block->style  = '外观';
+$lang->block->grid   = '宽度';
+$lang->block->color  = '颜色';
+
+$lang->block->lblModule = '模块';
+$lang->block->lblBlock  = '区块';
+$lang->block->lblNum    = '条数';
+$lang->block->lblHtml   = 'HTML内容';
+$lang->block->dynamic   = '最新动态';
+
+$lang->block->params = new stdclass();
+$lang->block->params->name  = '参数名称';
+$lang->block->params->value = '参数值';
+
+$lang->block->createBlock        = '添加区块';
+$lang->block->editBlock          = '编辑区块';
+$lang->block->ordersSaved        = '排序已保存';
+$lang->block->confirmRemoveBlock = '确定移除区块【{0}】吗？';
+
+$lang->block->default['product']['1']['title'] = '指派给我的需求';
+$lang->block->default['product']['1']['block'] = 'story';
+$lang->block->default['product']['1']['grid']  = 4;
+
+$lang->block->default['product']['1']['params']['num']     = 15;
+$lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
+$lang->block->default['product']['1']['params']['type']    = 'assignedTo';
+
+$lang->block->default['product']['2']['title'] = $lang->productCommon . '列表';
+$lang->block->default['product']['2']['block'] = 'list';
+$lang->block->default['product']['2']['grid']  = 4;
+
+$lang->block->default['product']['2']['params']['num']     = 15;
+$lang->block->default['product']['2']['params']['type']  = 'noclosed';
+
+$lang->block->default['project']['1']['title'] = '指派给我的任务';
+$lang->block->default['project']['1']['block'] = 'task';
+$lang->block->default['project']['1']['grid']  = 4;
+
+$lang->block->default['project']['1']['params']['num']     = 15;
+$lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
+$lang->block->default['project']['1']['params']['type']    = 'assignedTo';
+
+$lang->block->default['project']['2']['title'] = $lang->projectCommon . '列表';
+$lang->block->default['project']['2']['block'] = 'list';
+$lang->block->default['project']['2']['grid']  = 4;
+
+$lang->block->default['project']['2']['params']['num']     = 15;
+$lang->block->default['project']['2']['params']['orderBy'] = 'id_desc';
+$lang->block->default['project']['2']['params']['type']  = 'undone';
+
+$lang->block->default['qa']['1']['title'] = '指派给我的Bug';
+$lang->block->default['qa']['1']['block'] = 'bug';
+$lang->block->default['qa']['1']['grid']  = 4;
+
+$lang->block->default['qa']['1']['params']['num']     = 15;
+$lang->block->default['qa']['1']['params']['orderBy'] = 'id_desc';
+$lang->block->default['qa']['1']['params']['type']  = 'assignedTo';
+
+$lang->block->default['qa']['2']['title'] = '指派给我的用例';
+$lang->block->default['qa']['2']['block'] = 'case';
+$lang->block->default['qa']['2']['grid']  = 4;
+
+$lang->block->default['qa']['2']['params']['num']     = 15;
+$lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
+$lang->block->default['qa']['2']['params']['type']  = 'assignedTo';
+
+$lang->block->default['qa']['3']['title'] = '待测版本列表';
+$lang->block->default['qa']['3']['block'] = 'testtask';
+$lang->block->default['qa']['3']['grid']  = 4;
+
+$lang->block->default['qa']['3']['params']['num']     = 15;
+$lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
+$lang->block->default['qa']['3']['params']['type']    = 'wait';
+
+$lang->block->default['my']['1'] = $lang->block->default['project']['2'];
+$lang->block->default['my']['1']['source'] = 'project';
+$lang->block->default['my']['2']['title']  = '最新动态';
+$lang->block->default['my']['2']['block']  = 'dynamic';
+$lang->block->default['my']['2']['grid']   = 6;
+$lang->block->default['my']['2']['source'] = '';
+$lang->block->default['my']['3'] = $lang->block->default['product']['2'];
+$lang->block->default['my']['3']['source'] = 'product';
+$lang->block->default['my']['4']['title']  = '我的待办';
+$lang->block->default['my']['4']['block']  = 'list';
+$lang->block->default['my']['4']['grid']   = 6;
+$lang->block->default['my']['4']['source'] = 'todo';
+$lang->block->default['my']['4']['params']['num'] = '20';
+$lang->block->default['my']['5'] = $lang->block->default['project']['1'];
+$lang->block->default['my']['5']['source'] = 'project';
+$lang->block->default['my']['6'] = $lang->block->default['qa']['1'];
+$lang->block->default['my']['6']['source'] = 'qa';
+
 $lang->block->num      = '数量';
 $lang->block->type     = '类型';
 $lang->block->orderBy  = '排序';
@@ -23,6 +117,31 @@ $lang->block->availableBlocks->case    = '我的用例';
 $lang->block->availableBlocks->story   = '我的需求';
 $lang->block->availableBlocks->product = $lang->productCommon . '列表';
 $lang->block->availableBlocks->project = $lang->projectCommon . '列表';
+
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = $lang->projectCommon;
+$lang->block->moduleList['qa']      = '测试';
+$lang->block->moduleList['todo']    = '待办';
+
+$lang->block->modules['product'] = new stdclass();
+$lang->block->modules['product']->availableBlocks = new stdclass();
+$lang->block->modules['product']->availableBlocks->list    = $lang->productCommon . '列表';
+$lang->block->modules['product']->availableBlocks->story   = '需求列表';
+$lang->block->modules['product']->availableBlocks->plan    = '计划列表';
+$lang->block->modules['product']->availableBlocks->release = '发布列表';
+$lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks = new stdclass();
+$lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . '列表';
+$lang->block->modules['project']->availableBlocks->task  = '任务列表';
+$lang->block->modules['project']->availableBlocks->build = '版本列表';
+$lang->block->modules['qa']      = new stdclass();
+$lang->block->modules['qa']->availableBlocks = new stdclass();
+$lang->block->modules['qa']->availableBlocks->bug      = 'Bug列表';
+$lang->block->modules['qa']->availableBlocks->case     = '用例列表';
+$lang->block->modules['qa']->availableBlocks->testtask = '版本列表';
+$lang->block->modules['todo'] = new stdclass();
+$lang->block->modules['todo']->availableBlocks = new stdclass();
+$lang->block->modules['todo']->availableBlocks->list = '待办列表';
 
 $lang->block->orderByList = new stdclass();
 
@@ -82,3 +201,14 @@ $lang->block->typeList->story['assignedTo'] = '指派给我';
 $lang->block->typeList->story['openedBy']   = '由我创建';
 $lang->block->typeList->story['reviewedBy'] = '由我评审';
 $lang->block->typeList->story['closedBy']   = '由我关闭';
+
+$lang->block->typeList->product['noclosed'] = '未关闭';
+$lang->block->typeList->product['all']      = '全部';
+
+$lang->block->typeList->project['undone']  = '未完成';
+$lang->block->typeList->project['isdoing'] = '进行中';
+$lang->block->typeList->project['all']     = '全部';
+
+$lang->block->typeList->testtask['wait'] = '待测版本';
+$lang->block->typeList->testtask['done'] = '已测版本';
+$lang->block->typeList->testtask['all']  = '全部';

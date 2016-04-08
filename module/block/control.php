@@ -20,7 +20,81 @@ class block extends control
     public function __construct()
     {
         parent::__construct();
-        if(!$this->loadModel('sso')->checkKey()) die('');
+        $this->blockModule = strpos($this->server->http_referer, common::getSysURL()) === 0 ? $this->session->blockModule : '';
+        if($this->methodName != 'admin' and empty($this->blockModule) and !$this->loadModel('sso')->checkKey()) die('');
+    }
+
+    /**
+     * Block admin. 
+     * 
+     * @param  int    $index 
+     * @param  string $module 
+     * @access public
+     * @return void
+     */
+    public function admin($index = 0, $module = 'my')
+    {
+        $this->session->set('blockModule', $module);
+
+        $title = $index == 0 ? $this->lang->block->createBlock : $this->lang->block->editBlock;
+
+        if(!$index) $index = $this->block->getLastKey($module) + 1;
+
+        $modules = $this->lang->block->moduleList;
+        foreach($modules as $moduleKey => $moduleName)
+        {
+            if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
+            if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
+        }
+
+        $modules['dynamic'] = $this->lang->block->dynamic;
+        $modules['html']    = 'HTML';
+        $modules = array('' => '') + $modules;
+
+        $hiddenBlocks = $this->block->getHiddenBlocks();
+        foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
+
+        $this->view->block      = $this->block->getBlock($index);
+        $this->view->modules    = $modules;
+        $this->view->index      = $index;
+        $this->view->title      = $title;
+        $this->display();
+    }
+
+    /**                        
+     * Set params when type is rss or html. 
+     * 
+     * @param  int    $index   
+     * @param  string $type    
+     * @param  int    $blockID 
+     * @access public          
+     * @return void            
+     */
+    public function set($index, $type, $blockID = 0)
+    {
+        if($_POST)             
+        {
+            $source = isset($this->lang->block->moduleList[$type]) ? $type : '';
+            $this->block->save($index, $source, $this->blockModule, $blockID);
+            if(dao::isError())  die(js::error(dao::geterror())); 
+            die(js::reload('parent'));
+        }
+
+        $block = $blockID ? $this->block->getByID($blockID) : $this->block->getBlock($index);                                         
+        if($block) $type = $block->block;
+
+        if(isset($this->lang->block->moduleList[$type]))
+        {
+            $func   = 'get' . ucfirst($blockID) . 'Params';
+            $params = $this->block->$func($type);
+            $this->view->params = json_decode($params, true);
+        }
+
+        $this->view->type    = $type;                                                                                                 
+        $this->view->index   = $index;  
+        $this->view->blockID = $blockID;
+        $this->view->block   = ($block) ? $block : array();
+        $this->display();      
     }
 
     /**
@@ -29,23 +103,37 @@ class block extends control
      * @access public
      * @return void
      */
-    public function main()
+    public function main($module = '', $index = 0)
     {
-        $lang = $this->get->lang;
-        $this->app->setClientLang($lang);
-        $this->app->loadLang('common');
-        $this->app->loadLang('block');
+        if(empty($this->blockModule))
+        {
+            $lang = $this->get->lang;
+            $this->app->setClientLang($lang);
+            $this->app->loadLang('common');
+            $this->app->loadLang('block');
+        }
 
         $mode = strtolower($this->get->mode);
         if($mode == 'getblocklist')
         {   
-            echo $this->block->getAvailableBlocks();
+            $blocks = $this->block->getAvailableBlocks($module);
+            if($this->blockModule)
+            {
+                $blocks     = json_decode($blocks, true);
+                $blockPairs = array('' => '') + $blocks;
+
+                $block = $this->block->getBlock($index);
+
+                echo "<th>{$this->lang->block->lblBlock}</th>";
+                echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';
+                if(isset($block->source)) echo "<script>$(function(){getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
+            }
         }   
         elseif($mode == 'getblockform')
         {   
             $code = strtolower($this->get->blockid);
             $func = 'get' . ucfirst($code) . 'Params';
-            echo $this->block->$func();
+            echo $this->block->$func($module);
         }   
         elseif($mode == 'getblockdata')
         {
@@ -69,7 +157,7 @@ class block extends control
             $this->view->code = $this->get->blockid;
 
             $func = 'print' . ucfirst($code) . 'Block';
-            $this->$func();
+            $this->$func($module);
 
             if($this->viewType == 'json')
             {

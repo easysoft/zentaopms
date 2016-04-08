@@ -168,6 +168,7 @@ define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
 define('TABLE_MAILQUEUE',     '`' . $config->db->prefix . 'mailqueue`');
+define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
