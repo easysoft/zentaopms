@@ -1,5 +1,4 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<?php js::import($jsRoot . 'zui/zui.sortable.js');?>
 <style>
 tbody.sortable > tr {position: relative; z-index: 5}
 tbody.sortable > tr.drag-shadow {display: none}

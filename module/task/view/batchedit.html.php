@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('editNotice', $this->lang->task->editNotice);?>
+<?php js::set('dittoNotice', $this->lang->task->dittoNotice);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
@@ -42,11 +42,13 @@
     <?php 
     if(!isset($project))
     {
-        $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
         $prjInfo = $this->project->getById($tasks[$taskID]->project);
+        $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
         foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
-        $modules = array(0 => '/', 'ditto' => $this->lang->task->ditto) + $modules;
-        $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
+        $modules['ditto'] = $this->lang->task->ditto;
+
+        $members          = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
+        $members['ditto'] = $this->lang->task->ditto;
     }
     ?>
     <tr class='text-center'>

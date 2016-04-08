@@ -22,6 +22,7 @@ $lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";
 $lang->logout         = '退出';
 $lang->login          = '登录';
+$lang->help           = '帮助';
 $lang->aboutZenTao    = '关于';
 $lang->profile        = '个人档案';
 $lang->changePassword = '更改密码';

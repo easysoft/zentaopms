@@ -31,7 +31,6 @@ $lang->task->export             = "导出数据";
 $lang->task->reportChart        = "报表统计";
 $lang->task->fromBug            = '来源Bug';
 $lang->task->confirmStoryChange = "确认需求变动";
-$lang->task->editNotice         = "该任务与上一任务不属于同一项目！";
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
@@ -88,6 +87,7 @@ $lang->task->editEstimate      = '编辑工时';
 $lang->task->deleteEstimate    = '删除工时';
 
 $lang->task->ditto         = '同上';
+$lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";
 $lang->task->selectAllUser = '全部';
 
 $lang->task->statusList['']        = '';

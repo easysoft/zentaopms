@@ -22,6 +22,7 @@ $lang->zentaoPMS      = 'zentao';
 $lang->welcome        = "%s PMS";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
+$lang->help           = 'Help';
 $lang->aboutZenTao    = 'About';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';

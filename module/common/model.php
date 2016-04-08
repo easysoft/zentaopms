@@ -292,8 +292,9 @@ class commonModel extends model
         }
 
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
-        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');      
+        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
 
+        echo html::a('javascript:;', $lang->help, '', "class='open-help-tab'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
     }
 

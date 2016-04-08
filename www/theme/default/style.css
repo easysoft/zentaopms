@@ -686,8 +686,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
   #searchbox {display: none}
 }
 
-
-
 .warning{color:red;}
 .nofixed td{white-space:normal;}
 
@@ -703,3 +701,14 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .tablesorter.datatable.head-fixed thead tr .headerSortDown > a:after,
 .datatable.head-fixed > .datatable-head .table > thead > tr > th a, .fixedTheadOfList > thead > tr > th a {color: #fff}
 .datatable.head-fixed > .datatable-head .table > thead > tr > th .header a, .fixedTheadOfList > thead > tr > th .header a {color: #ccc}
+
+/* Help tab iframe */
+#helpContent {display: none; position: absolute; left: 0; right: 0; top: 73px; bottom: 40px; background-color: #fff;}
+.show-help-tab #wrap {display: none}
+.show-help-tab #helpContent {display: block;}
+#mainmenu .nav > li.close-help-tab > a {background-color: #2e6dad}
+#mainmenu .nav > li > a > .icon-remove {display: none; margin-left: 10px; position: relative; margin-right: -6px; color: #999}
+.show-help-tab #mainmenu .nav > li > a > .icon-remove {display: inline-block;}
+#mainmenu .nav > li > a > .icon-remove:hover {color: #666}
+#helpContent .load-error {padding: 20px; display: none}
+#helpContent.show-error .load-error {display: block}

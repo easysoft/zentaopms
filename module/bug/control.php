@@ -621,14 +621,26 @@ class bug extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
+        /* Set ditto option for users and type, severity, pri, resolution list. */
+        $users          = $this->user->getPairs('nodeleted,devfirst');
+        $users['ditto'] = $this->lang->bug->ditto;
+        $this->lang->bug->typeList      ['ditto'] = $this->lang->bug->ditto;
+        $this->lang->bug->priList       ['ditto'] = $this->lang->bug->ditto;
+        $this->lang->bug->resolutionList['ditto'] = $this->lang->bug->ditto;
+        $this->lang->bug->severityList  ['ditto'] = $this->lang->bug->ditto;
+
         /* Assign. */
-        $this->view->position[] = $this->lang->bug->common;
-        $this->view->position[] = $this->lang->bug->batchEdit;
-        $this->view->bugIDList  = $bugIDList;
-        $this->view->productID  = $productID;
-        $this->view->bugs       = $bugs;
-        $this->view->branch     = $branch;
-        $this->view->users      = $this->user->getPairs('nodeleted,devfirst');
+        $this->view->position[]     = $this->lang->bug->common;
+        $this->view->position[]     = $this->lang->bug->batchEdit;
+        $this->view->bugIDList      = $bugIDList;
+        $this->view->productID      = $productID;
+        $this->view->typeList       = $this->lang->bug->typeList;
+        $this->view->priList        = (array)$this->lang->bug->priList;
+        $this->view->resolutionList = $this->lang->bug->resolutionList;
+        $this->view->severityList   = (array)$this->lang->bug->severityList;
+        $this->view->bugs           = $bugs;
+        $this->view->branch         = $branch;
+        $this->view->users          = $users;
 
         $this->display();
     }

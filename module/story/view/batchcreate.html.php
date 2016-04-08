@@ -42,9 +42,9 @@
     <?php $i = 0; ?>
     <?php if(!empty($titles)):?>
     <?php foreach($titles as $storyTitle => $fileName):?>
-    <?php $moduleID = $i == 0 ? $moduleID : 'same';?>
-    <?php $planID   = $i == 0 ? '' : 'same';?>
-    <?php $pri      = $i == 0 ? '' : 'same';?>
+    <?php $moduleID = $i == 0 ? $moduleID : 'ditto';?>
+    <?php $planID   = $i == 0 ? '' : 'ditto';?>
+    <?php $pri      = $i == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
@@ -66,9 +66,9 @@
     <?php endif;?>
     <?php $nextStart = $i;?>
     <?php for($i = $nextStart; $i < $config->story->batchCreate; $i++):?>
-    <?php $moduleID = $i - $nextStart == 0 ? $moduleID : 'same';?>
-    <?php $planID   = $i - $nextStart == 0 ? '' : 'same';?>
-    <?php $pri      = $i - $nextStart == 0 ? '' : 'same';?>
+    <?php $moduleID = $i - $nextStart == 0 ? $moduleID : 'ditto';?>
+    <?php $planID   = $i - $nextStart == 0 ? '' : 'ditto';?>
+    <?php $pri      = $i - $nextStart == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>

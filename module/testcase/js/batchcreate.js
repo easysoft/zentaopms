@@ -8,11 +8,11 @@ $(document).ready(function()
         {
             index  = id.substring(5);
             module = $('#module' + index).val();
-            if(module == 'same')
+            if(module == 'ditto')
             {
                 for(var i = index - 1; i >=0; i--)
                 {
-                    if($('#module' + i).val() != 'same')
+                    if($('#module' + i).val() != 'ditto')
                     {
                         module = $('#module' + i).val();
                         break;
@@ -22,7 +22,7 @@ $(document).ready(function()
             link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + module + '&storyID='+ $(select).val() + '&onlyOption=true&status=noclosed');
             $('#story' + index).load(link, function(){$(this).trigger("chosen:updated");});
         }
-        if($(select).val() == 'same')
+        if($(select).val() == 'ditto')
         {
             var index = $(select).closest('td').index();
             var row   = $(select).closest('tr').index();
@@ -31,7 +31,7 @@ $(document).ready(function()
             for(i = row - 1; i >= 0; i--)
             {
                 value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
-                if(value != 'same') break;
+                if(value != 'ditto') break;
             }
             $(select).val(value);
             $(select).trigger("chosen:updated");
@@ -40,7 +40,7 @@ $(document).ready(function()
 
     $(document).on('mousedown', 'select', function()
     {
-        if($(this).val() == 'same')
+        if($(this).val() == 'ditto')
         {
             var index = $(this).closest('td').index();
             var row   = $(this).closest('tr').index();
@@ -49,7 +49,7 @@ $(document).ready(function()
             for(i = row - 1; i >= 0; i--)
             {
                 value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
-                if(value != 'same') break;
+                if(value != 'ditto') break;
             }
             $(this).val(value);
         }

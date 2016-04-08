@@ -76,7 +76,8 @@ $lang->story->preVersion     = 'Pre version';
 $lang->story->keywords       = 'Keyword';
 $lang->story->newStory       = 'Continue to add story.';
 
-$lang->story->same = 'Ditto';
+$lang->story->ditto       = 'Ditto';
+$lang->story->dittoNotice = 'Current story and story above it do not belong to same product!';
 
 $lang->story->useList[0] = 'No use';
 $lang->story->useList[1] = 'Use';

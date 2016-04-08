@@ -76,7 +76,8 @@ $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '关键词';
 $lang->story->newStory       = '继续添加需求';
 
-$lang->story->same = '同上';
+$lang->story->ditto       = '同上';
+$lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';
 
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';

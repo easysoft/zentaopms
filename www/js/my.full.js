@@ -1622,6 +1622,108 @@ function removeCookieByKey(cookieKey)
     location.href = location.href;
 }
 
+/**
+ * Bind hotkey event
+ * @access public
+ * @return void
+ */
+function initHotKey()
+{
+    /* CTRL+g, auto focus on the search box. */
+    $(document).bind('keydown', 'Ctrl+g', function(evt)
+    {
+        $('#searchQuery').attr('value', '');
+        $('#searchQuery').focus();
+        evt.stopPropagation( );  
+        evt.preventDefault( );
+        return false;
+    });
+
+    /* left, go to pre object. */
+    $(document).bind('keydown', 'left', function(evt)
+    {
+        preLink = ($('#pre').attr("href"));
+        if(typeof(preLink) != 'undefined') location.href = preLink;
+    });
+
+    /* right, go to next object. */
+    $(document).bind('keydown', 'right', function(evt)
+    {
+        nextLink = ($('#next').attr("href"));
+        if(typeof(nextLink) != 'undefined') location.href = nextLink;
+    });
+}
+
+/**
+ * Init help link for user to open zentao help website in iframe
+ * @access public
+ * @return void
+ */
+function initHelpLink()
+{
+    var zentaoUrl = 'http://www.zentao.net/book/zentaopmshelp.html?app=zentao';
+    var $mainNav = $('#mainmenu > .nav').first();
+    var showLoadingError;
+    var timeout = 10000;
+
+    var clearLoadingError = function()
+    {
+        clearTimeout(showLoadingError);
+        $('#helpContent').removeClass('show-error');
+    };
+
+    var openHelp = function()
+    {
+        clearLoadingError();
+        var $oldActiveItem = $mainNav.children('li.active:not(#helpMenuItem)').removeClass('active').addClass('close-help-tab');
+        var $helpMenuItem = $('#helpMenuItem').addClass('active');
+        var $help = $('#helpContent');
+        if(!$help.length)
+        {
+            $help = $('<div id="helpContent"><div class="load-error text-center"><h4 class="text-danger">' + lang.timeout + '</h4><p><a href="###" class="open-help-tab"><i class="icon icon-arrow-right"></i> ' + zentaoUrl + '</a></p></div><iframe id="helpIframe" name="helpIframe" src="' + zentaoUrl + '" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" style="width: 100%; height: 100%; left: 0px;"></iframe></div>');
+            $('#header').after($help);
+            var frame = $('#helpIframe').get(0);
+            showLoadingError = setTimeout(function()
+            {
+                $('#helpContent').addClass('show-error');
+            }, timeout);
+            frame.onload = frame.onreadystatechange = function()
+            {
+                if(this.readyState && this.readyState != 'complete') return;
+                clearLoadingError();
+            }
+        } else if($('body').hasClass('show-help-tab'))
+        {
+            $('#helpIframe').get(0).contentWindow.location.replace(zentaoUrl);
+            return;
+        }
+        $('body').addClass('show-help-tab');
+    };
+
+    var closeHelp = function()
+    {
+        $('body').removeClass('show-help-tab');
+        $('#helpMenuItem').removeClass('active');
+        $mainNav.find('li.close-help-tab').removeClass('close-help-tab').addClass('active');
+    };
+
+    $(document).on('click', '.open-help-tab', function()
+    {
+        var $helpMenuItem = $('#helpMenuItem');
+        if(!$helpMenuItem.length)
+        {
+            $helpMenuItem = $('<li id="helpMenuItem"><a href="javascript:;" class="open-help-tab">' + $(this).text() + '<i class="icon icon-remove close-help-tab"></i></a></li>');
+            $mainNav.append($helpMenuItem);
+        }
+        openHelp();
+    }).on('click', '.close-help-tab', function(e)
+    {
+        closeHelp();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1671,28 +1773,8 @@ $(document).ready(function()
     });
 
     initPrioritySelector();
-});
 
-/* CTRL+g, auto focus on the search box. */
-$(document).bind('keydown', 'Ctrl+g', function(evt)
-{
-    $('#searchQuery').attr('value', '');
-    $('#searchQuery').focus();
-    evt.stopPropagation( );  
-    evt.preventDefault( );
-    return false;
-});
+    initHotKey();
 
-/* left, go to pre object. */
-$(document).bind('keydown', 'left', function(evt)
-{
-    preLink = ($('#pre').attr("href"));
-    if(typeof(preLink) != 'undefined') location.href = preLink;
-});
-
-/* right, go to next object. */
-$(document).bind('keydown', 'right', function(evt)
-{
-    nextLink = ($('#next').attr("href"));
-    if(typeof(nextLink) != 'undefined') location.href = nextLink;
+    initHelpLink();
 });

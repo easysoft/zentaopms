@@ -1,3 +1,13 @@
+$(function()
+{
+    $firstTr = $('.table-form').find('tbody tr:first');
+    $firstTr.find('td select').each(function()
+    {
+        $(this).find("option[value='ditto']").remove();
+        $(this).trigger("chosen:updated");
+    });
+})
+
 $(document).on('click', '.chosen-with-drop', function()
 {
     var $select = $(this).prev('select');
@@ -26,7 +36,7 @@ $(document).on('change', 'select', function()
         }
         else
         {
-            alert(editNotice);
+            alert(dittoNotice);
             $(this).val(oldValue);
         }
 

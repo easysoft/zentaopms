@@ -242,11 +242,11 @@ class story extends control
             $this->view->titles = $titles;
         }
 
-        $moduleOptionMenu['same'] = $this->lang->story->same;
-        $plans = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
-        $plans['same']   = $this->lang->story->same;
-        $priList         = (array)$this->lang->story->priList;
-        $priList['same'] = $this->lang->story->same;
+        $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
+        $plans = $this->loadModel('productplan')->getPairs($productID, $branch, 'unexpired');
+        $plans['ditto']   = $this->lang->story->ditto;
+        $priList          = (array)$this->lang->story->priList;
+        $priList['ditto'] = $this->lang->story->ditto;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->productName      = $product->name;
@@ -348,6 +348,9 @@ class story extends control
      */
     public function batchEdit($productID = 0, $projectID = 0, $branch = 0)
     {
+        /* Load model. */
+        $this->loadModel('productplan');
+
         if($this->post->titles)
         {
             $allChanges = $this->story->batchUpdate();
@@ -364,7 +367,6 @@ class story extends control
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
-
         }
 
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
@@ -377,8 +379,17 @@ class story extends control
         {
             $this->product->setMenu($this->product->getPairs('nodeleted'), $productID, $branch);
             $product = $this->product->getByID($productID);
-            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+
+            /* Set modules and productPlans. */
+            $modules               = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+            $modules['ditto']      = $this->lang->story->ditto;
+            $productPlans          = $this->productplan->getPairs($productID, $branch);
+            $productPlans['ditto'] = $this->lang->story->ditto;
+
+            $this->view->modules      = $modules;
+            $this->view->productPlans = $productPlans;
+            $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
+            $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
 
         }
         /* The stories of a project. */
@@ -403,15 +414,13 @@ class story extends control
             $this->view->title      = $this->lang->story->batchEdit;
         }
 
-        /* Get the module and productplan of edited stories. */
-        $moduleOptionMenus = array();
-        $productPlans      = array();
-        $this->loadModel('productplan');
-        foreach($stories as $story) 
-        {
-            $moduleOptionMenus[$story->product] = $this->tree->getOptionMenu($story->product, $viewType = 'story', 0, $branch);
-            $productPlans[$story->product]      = $this->productplan->getPairs($story->product, $branch);
-        }
+        /* Set ditto option for users and pri, source, stage list. */
+        $users          = $this->loadModel('user')->getPairs('nodeleted');
+        $users['ditto'] = $this->lang->story->ditto;
+        $this->lang->story->priList['ditto']    = $this->lang->story->ditto;
+        $this->lang->story->sourceList['ditto'] = $this->lang->story->ditto;
+        $this->lang->story->stageList['ditto']  = $this->lang->story->ditto;
+        $this->lang->story->reasonList['ditto'] = $this->lang->story->ditto;
 
         /* Judge whether the editedStories is too large and set session. */
         $showSuhosinInfo = false;
@@ -421,11 +430,14 @@ class story extends control
 
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
-        $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
-        $this->view->moduleOptionMenus = $moduleOptionMenus;
-        $this->view->productPlans      = $productPlans;
+        $this->view->users             = $users;
+        $this->view->priList           = (array)$this->lang->story->priList;
+        $this->view->sourceList        = $this->lang->story->sourceList;
+        $this->view->reasonList        = $this->lang->story->reasonList;
+        $this->view->stageList         = $this->lang->story->stageList;
         $this->view->productID         = $productID;
         $this->view->storyIDList       = $storyIDList;
+        $this->view->branch            = $branch;
         $this->view->stories           = $stories;
         $this->view->productName       = isset($product) ? $product->name : '';
         $this->display();
