@@ -50,6 +50,11 @@ class product extends control
     public function index($locate = 'yes', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
+
+        $this->product->setMenu($this->products, $productID);
+        $this->view->title         = $this->lang->product->index;
+        $this->view->position[]    = $this->lang->product->index;
+        $this->display();
     }
 
     /**

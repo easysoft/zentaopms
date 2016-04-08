@@ -29,7 +29,7 @@ $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* product menu order. */
 $lang->product->menuOrder[5]  = 'index';
-$lang->product->menuOrder[10]  = 'story';
+$lang->product->menuOrder[10] = 'story';
 $lang->product->menuOrder[15] = 'dynamic';
 $lang->product->menuOrder[20] = 'plan';
 $lang->product->menuOrder[25] = 'release';
@@ -47,6 +47,7 @@ $lang->release->menuOrder     = $lang->product->menuOrder;
 $lang->branch->menuOrder      = $lang->product->menuOrder;
 
 /* project menu order. */
+$lang->project->menuOrder[1]  = 'index';
 $lang->project->menuOrder[5]  = 'task';
 $lang->project->menuOrder[10] = 'story';
 $lang->project->menuOrder[15] = 'bug';

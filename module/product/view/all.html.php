@@ -88,7 +88,7 @@
           <div class='table-actions clearfix'>
             <?php if($canBatchEdit and !empty($productStats)):?>
             <?php echo html::selectButton();?>
-            <?php echo html::submitButton($lang->product->batchEdit, '', '');?>
+            <?php echo html::submitButton($lang->product->batchEdit);?>
             <?php endif;?>
             <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
           </div>

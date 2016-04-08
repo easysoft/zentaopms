@@ -11,5 +11,5 @@ $(function()
 
 function byProduct(productID, projectID)
 {
-    location.href = createLink('project', 'index', "locate=no&status=byproduct&project=" + projectID + "&orderBy=" + orderBy + '&productID=' + productID);
+    location.href = createLink('project', 'all', "status=byproduct&project=" + projectID + "&orderBy=" + orderBy + '&productID=' + productID);
 }
