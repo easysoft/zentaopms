@@ -111,14 +111,6 @@ class blockModel extends model
             ->orderBy('`order`')
             ->fetchAll('order');
 
-        foreach($blocks as $key => $block)
-        {
-            if(strpos('html,allEntries,dynamic', $block->block) !== false) continue;
-
-            $module = $block->block;
-            $method = 'browse';
-            if(!commonModel::hasPriv($module, $method)) unset($blocks[$key]);
-        }
         return $blocks;
     }
 

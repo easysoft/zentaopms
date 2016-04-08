@@ -43,6 +43,7 @@ class block extends control
         $modules = $this->lang->block->moduleList;
         foreach($modules as $moduleKey => $moduleName)
         {
+            if($moduleKey == 'todo') continue;
             if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
             if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
         }
@@ -95,6 +96,56 @@ class block extends control
         $this->view->blockID = $blockID;
         $this->view->block   = ($block) ? $block : array();
         $this->display();      
+    }
+
+    /**
+     * Delete block 
+     * 
+     * @param  int    $index 
+     * @param  string $sys 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function delete($index, $module = 'my', $type = 'delete')
+    {   
+        if($type == 'hidden')
+        {   
+            $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)->where('`order`')->eq($index)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
+        }
+        else
+        {   
+            $this->dao->delete()->from(TABLE_BLOCK)->where('`order`')->eq($index)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
+        }
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Sort block.
+     * 
+     * @param  string    $oldOrder 
+     * @param  string    $newOrder 
+     * @param  string    $app 
+     * @access public
+     * @return void
+     */
+    public function sort($oldOrder, $newOrder, $module = 'my')
+    {
+        $oldOrder  = explode(',', $oldOrder);
+        $newOrder  = explode(',', $newOrder);
+        $orderList = $this->block->getBlockList($module);
+
+        foreach($oldOrder as $key => $oldIndex)
+        {
+            if(!isset($orderList[$oldIndex])) continue;
+            $order = $orderList[$oldIndex];
+            $order->order = $newOrder[$key];
+            $this->dao->replace(TABLE_BLOCK)->data($order)->exec();
+        }
+
+        if(dao::isError()) $this->send(array('result' => 'fail'));
+        $this->send(array('result' => 'success'));
     }
 
     /**
