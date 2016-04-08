@@ -37,30 +37,14 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function index($locate = 'yes', $projectID = 0)
     {
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         if($this->projects) $this->commonAction($projectID);
-        $this->session->set('projectList', $this->app->getURI(true));
 
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $this->app->loadLang('my');
-        $this->view->title         = $this->lang->project->allProject;
-        $this->view->position[]    = $this->lang->project->allProject;
-        $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager);
-        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getPairs();
-        $this->view->productID     = $productID;
-        $this->view->projectID     = $projectID;
-        $this->view->pager         = $pager;
-        $this->view->recTotal      = $pager->recTotal;
-        $this->view->recPerPage    = $pager->recPerPage;
-        $this->view->orderBy       = $orderBy;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->status        = $status;
+        $this->view->title         = $this->lang->project->index;
+        $this->view->position[]    = $this->lang->project->index;
 
         $this->display();
     }
@@ -1926,5 +1910,29 @@ class project extends control
             if($id == $newID) continue;
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
+    }
+
+    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    {
+        if($this->projects) $this->commonAction($projectID);
+        $this->session->set('projectList', $this->app->getURI(true));
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->app->loadLang('my');
+        $this->view->title         = $this->lang->project->allProject;
+        $this->view->position[]    = $this->lang->project->allProject;
+        $this->view->projectStats  = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->products      = array(0 => $this->lang->product->select) + $this->loadModel('product')->getPairs();
+        $this->view->productID     = $productID;
+        $this->view->projectID     = $projectID;
+        $this->view->pager         = $pager;
+        $this->view->orderBy       = $orderBy;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status        = $status;
+
+        $this->display();
     }
 }
