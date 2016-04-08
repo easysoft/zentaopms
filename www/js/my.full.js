@@ -1601,10 +1601,10 @@ function showBrowserNotice()
         show = true;
     }
     /* 360. */
-    else if($browser.chrome && !(window.clientInformation && window.clientInformation.mediaDevices))
-    {
-        show = true;
-    }
+    //else if($browser.chrome && !(window.clientInformation && window.clientInformation.mediaDevices))
+    //{
+    //    show = true;
+    //}
 
     if(show) $('body').prepend('<div class="alert alert-info alert-dismissable" style="margin:0px;"><button type=button" onclick="ajaxIgnoreBrowser()" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"></i></button><p>' + browserNotice + '</p></div>');
 }
