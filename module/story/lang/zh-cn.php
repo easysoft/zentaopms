@@ -75,6 +75,7 @@ $lang->story->reviewResult   = '评审结果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '关键词';
 $lang->story->newStory       = '继续添加需求';
+$lang->story->colorTag       = '颜色标签';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';

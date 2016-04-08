@@ -84,7 +84,12 @@
         <th><?php echo $lang->testcase->title;?></th>
         <td colspan='2'>
            <div class='row-table'>
-            <div class='col-table w-p100'><?php echo html::input('title', $caseTitle, "class='form-control'");?></div>
+            <div class='col-table w-p100'>
+              <div class='input-group w-p100'>
+                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->testcase->colorTag ?>'>
+                <?php echo html::input('title', $caseTitle, "class='form-control'");?>
+              </div>
+            </div>
             <div class='col-table'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->testcase->pri;?></span>

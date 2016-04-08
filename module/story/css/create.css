@@ -15,3 +15,5 @@ select {border:1px solid #ccc}
 .minw-80px {min-width: 80px;}
 .minw-60px {min-width: 60px;}
 .w-230px{width:230px;}
+
+.colorpicker.input-group-btn > .btn {border-right: none}

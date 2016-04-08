@@ -75,6 +75,7 @@ $lang->story->reviewResult   = 'Reviewed result';
 $lang->story->preVersion     = 'Pre version';
 $lang->story->keywords       = 'Keyword';
 $lang->story->newStory       = 'Continue to add story.';
+$lang->story->colorTag       = 'Color tag';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'Current story and story above it do not belong to same product!';

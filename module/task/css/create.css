@@ -7,3 +7,5 @@
 
 .minw-80px {min-width: 80px;}
 .minw-60px {min-width: 60px;}
+
+.colorpicker.input-group-btn > .btn {border-right: none}

@@ -59,6 +59,7 @@
           <div class='row-table'>
             <div class='col-table'>
               <div class="input-group w-p100">
+                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>'>
                 <?php echo html::input('name', $task->name, "class='form-control'");?>
                 <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
               </div>

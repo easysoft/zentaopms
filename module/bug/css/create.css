@@ -32,3 +32,5 @@
 .chosen-container {max-width: 533px;}
 
 .minw-80px {min-width: 80px;}
+
+.colorpicker.input-group-btn > .btn {border-right: none}

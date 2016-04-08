@@ -63,6 +63,7 @@ $lang->bug->lastEditedDateAB = 'Edited Date';
 $lang->bug->lastEditedDate   = 'Edited Date';
 $lang->bug->fromCase         = 'From case';
 $lang->bug->toCase           = 'To case';
+$lang->bug->colorTag         = 'Color tag';
 
 /* Actions. */
 $lang->bug->index              = 'Index';
