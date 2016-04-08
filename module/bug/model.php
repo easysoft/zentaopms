@@ -80,12 +80,13 @@ class bugModel extends model
     public function batchCreate($productID, $branch = 0)
     {
         $this->loadModel('action');
+        $branch     = (int)$branch;
         $now        = helper::now();
         $actions    = array();
         $data       = fixer::input('post')->get();
         $batchNum   = count(reset($data));
 
-        $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product=$productID&branch=$branch");
+        $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID} and branch={$branch}");
         $data   = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
