@@ -483,6 +483,27 @@ class storyModel extends model
         if(!empty($storyIDList))
         {
             $oldStories = $this->getByList($storyIDList);
+
+            /* Process the data if the value is 'ditto'. */
+            foreach($storyIDList as $storyID)
+            {
+                if($data->pris[$storyID]    == 'ditto') $data->pris[$storyID]    = isset($prev['pri'])    ? $prev['pri']    : 0;
+                if($data->modules[$storyID] == 'ditto') $data->modules[$storyID] = isset($prev['module']) ? $prev['module'] : 0;
+                if($data->plans[$storyID]   == 'ditto') $data->plans[$storyID]   = isset($prev['plan'])   ? $prev['plan']   : 0;
+                if($data->sources[$storyID] == 'ditto') $data->sources[$storyID] = isset($prev['source']) ? $prev['source'] : '';
+                if(isset($data->stages[$storyID])        and ($data->stages[$storyID]        == 'ditto')) $data->stages[$storyID]        = isset($prev['stage'])        ? $prev['stage']        : ''; 
+                if(isset($data->closedBys[$storyID])     and ($data->closedBys[$storyID]     == 'ditto')) $data->closedBys[$storyID]     = isset($prev['closedBy'])     ? $prev['closedBy']     : ''; 
+                if(isset($data->closedReasons[$storyID]) and ($data->closedReasons[$storyID] == 'ditto')) $data->closedReasons[$storyID] = isset($prev['closedReason']) ? $prev['closedReason'] : ''; 
+
+                $prev['pri']    = $data->pris[$storyID];
+                $prev['module'] = $data->modules[$storyID];
+                $prev['plan']   = $data->plans[$storyID];
+                $prev['source'] = $data->sources[$storyID];
+                if(isset($data->stages[$storyID]))        $prev['stage']        = $data->stages[$storyID];
+                if(isset($data->closedBys[$storyID]))     $prev['closedBy']     = $data->closedBys[$storyID];
+                if(isset($data->closedReasons[$storyID])) $prev['closedReason'] = $data->closedReasons[$storyID];
+            }
+
             foreach($storyIDList as $storyID)
             {
                 $oldStory = $oldStories[$storyID];

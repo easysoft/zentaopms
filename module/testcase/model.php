@@ -558,6 +558,18 @@ class testcaseModel extends model
         /* Adjust whether the post data is complete, if not, remove the last element of $caseIDList. */
         if($this->session->showSuhosinInfo) array_pop($caseIDList);
 
+        /* Process data if the value is 'ditto'. */
+        foreach($caseIDList as $caseID)
+        {
+            if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
+            if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
+
+            $prev['pri']    = $data->pris[$caseID];
+            $prev['module'] = $data->modules[$caseID];
+            $prev['type']   = $data->types[$caseID];
+        }
+
         /* Initialize cases from the post data.*/
         foreach($caseIDList as $caseID)
         {

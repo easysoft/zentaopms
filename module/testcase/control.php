@@ -585,6 +585,7 @@ class testcase extends control
         /* Set pri and type list. */
         $this->lang->testcase->priList['ditto']  = $this->lang->testcase->ditto;
         $this->lang->testcase->typeList['ditto'] = $this->lang->testcase->ditto;
+
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->batchEdit;

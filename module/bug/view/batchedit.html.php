@@ -22,7 +22,7 @@
   <table class='table table-form table-fixed'>
     <thead>
       <tr>
-        <th class='w-30px'><?php echo $lang->idAB;?></th> 
+        <th class='w-30px'><?php echo $lang->idAB;?></th>
         <th class='w-110px'><?php echo $lang->bug->type;?></th>
         <th class='w-70px'><?php echo $lang->bug->severityAB;?></th>
         <th class='w-70px'><?php echo $lang->bug->pri;?></th>
@@ -33,43 +33,47 @@
         <th class='w-180px'><?php echo $lang->bug->resolutionAB;?></th>
       </tr>
     </thead>
-    <?php foreach($bugIDList as $bugID):?>
-    <?php
-    /**
-     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
-     * These thress types if upgrade from bugfree2.x.
-     */
-    if($bugs[$bugID]->type != 'designchange') unset($typeList['designchange']);
-    if($bugs[$bugID]->type != 'newfeature')   unset($typeList['newfeature']);
-    if($bugs[$bugID]->type != 'trackthings')  unset($typeList['trackthings']);
-    ?>
-    <tr class='text-center'>
-      <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
-      <td><?php echo html::select("types[$bugID]",      $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
-      <td><?php echo html::select("severities[$bugID]", $severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
-      <td><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
-      <td title='<?php echo $bugs[$bugID]->title?>'> <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
-      <td><?php echo html::select("statuses[$bugID]", (array)$lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
-      <td>
-        <table class='w-p100'>
-          <tr>
-            <td class='pd-0'>
-              <?php echo html::select("resolutions[$bugID]", $resolutionList, $bugs[$bugID]->resolution, "class=form-control onchange=setDuplicate(this.value,$bugID)");?>
-            </td>
-            <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bugs[$bugID]->resolution != 'duplicate') echo "style='display:none'";?>>
-              <?php echo html::input("duplicateBugs[$bugID]", '', "class=form-control placeholder='{$lang->bug->duplicateBug}'");?>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>  
-    <?php endforeach;?>
-    <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-    <?php endif;?>
-    <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tbody>
+      <?php foreach($bugIDList as $bugID):?>
+      <?php
+      /**
+       * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
+       * These thress types if upgrade from bugfree2.x.
+       */
+      if($bugs[$bugID]->type != 'designchange') unset($typeList['designchange']);
+      if($bugs[$bugID]->type != 'newfeature')   unset($typeList['newfeature']);
+      if($bugs[$bugID]->type != 'trackthings')  unset($typeList['trackthings']);
+      ?>
+      <tr class='text-center'>
+        <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
+        <td><?php echo html::select("types[$bugID]",      $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
+        <td><?php echo html::select("severities[$bugID]", $severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
+        <td><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
+        <td title='<?php echo $bugs[$bugID]->title?>'> <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?></td>
+        <td class='text-left' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
+        <td><?php echo html::select("statuses[$bugID]", (array)$lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
+        <td class='text-left' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
+        <td>
+          <table class='w-p100'>
+            <tr>
+              <td class='pd-0'>
+                <?php echo html::select("resolutions[$bugID]", $resolutionList, $bugs[$bugID]->resolution, "class=form-control onchange=setDuplicate(this.value,$bugID)");?>
+              </td>
+              <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bugs[$bugID]->resolution != 'duplicate') echo "style='display:none'";?>>
+                <?php echo html::input("duplicateBugs[$bugID]", '', "class=form-control placeholder='{$lang->bug->duplicateBug}'");?>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <?php endforeach;?>
+      <?php if(isset($suhosinInfo)):?>
+      <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
+      <?php endif;?>
+    </tbody>
+    <tfoot>
+      <tr><td colspan='<?php echo $this->config->bug->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    </tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

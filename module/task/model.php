@@ -281,6 +281,26 @@ class taskModel extends model
         /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
         if($this->session->showSuhosinInfo) array_pop($taskIDList);
 
+        /* Process data if the value is 'ditto'. */
+        foreach($taskIDList as $taskID)
+        {
+            if(isset($data->modules[$taskID]) and ($data->modules[$taskID] == 'ditto')) $data->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->types[$taskID]       == 'ditto') $data->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
+            if($data->statuses[$taskID]    == 'ditto') $data->statuses[$taskID]    = isset($prev['status'])     ? $prev['status']     : '';
+            if($data->assignedTos[$taskID] == 'ditto') $data->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
+            if($data->pris[$taskID]        == 'ditto') $data->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
+            if($data->finishedBys[$taskID] == 'ditto') $data->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
+            if($data->closedBys[$taskID]   == 'ditto') $data->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
+
+            $prev['module']     = $data->modules[$taskID];
+            $prev['type']       = $data->types[$taskID];
+            $prev['status']     = $data->statuses[$taskID];
+            $prev['assignedTo'] = $data->assignedTos[$taskID];
+            $prev['pri']        = $data->pris[$taskID];
+            $prev['finishedBy'] = $data->finishedBys[$taskID];
+            $prev['closedBy']   = $data->closedBys[$taskID];
+        }
+
         /* Initialize tasks from the post data.*/
         foreach($taskIDList as $taskID)
         {

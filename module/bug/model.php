@@ -501,6 +501,24 @@ class bugModel extends model
 
         if(!empty($bugIDList))
         {
+            /* Process the data if the value is 'ditto'. */
+            foreach($bugIDList as $bugID)
+            {
+                if($data->types[$bugID]       == 'ditto') $data->types[$bugID]       = isset($prev['type'])       ? $prev['type']       : ''; 
+                if($data->severities[$bugID]  == 'ditto') $data->severities[$bugID]  = isset($prev['severity'])   ? $prev['severity']   : 3; 
+                if($data->pris[$bugID]        == 'ditto') $data->pris[$bugID]        = isset($prev['pri'])        ? $prev['pri']        : 0; 
+                if($data->assignedTos[$bugID] == 'ditto') $data->assignedTos[$bugID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : ''; 
+                if($data->resolvedBys[$bugID] == 'ditto') $data->resolvedBys[$bugID] = isset($prev['resolvedBy']) ? $prev['resolvedBy'] : ''; 
+                if($data->resolutions[$bugID] == 'ditto') $data->resolutions[$bugID] = isset($prev['resolution']) ? $prev['resolution'] : ''; 
+
+                $prev['type']       = $data->types[$bugID];
+                $prev['severity']   = $data->severities[$bugID];
+                $prev['pri']        = $data->pris[$bugID];
+                $prev['assignedTo'] = $data->assignedTos[$bugID];
+                $prev['resolvedBy'] = $data->resolvedBys[$bugID];
+                $prev['resolution'] = $data->resolutions[$bugID];
+            }
+
             /* Initialize bugs from the post data.*/
             foreach($bugIDList as $bugID)
             {

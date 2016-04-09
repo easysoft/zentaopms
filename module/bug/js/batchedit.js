@@ -27,38 +27,29 @@ $(function()
     });
 })
 
-$(document).on('click', '.chosen-with-drop', function()
-{
-    var $select = $(this).prev('select');
-    oldValue = $select.val();
-})
-
 $(document).on('change', 'select', function()
 {
     if($(this).val() == 'ditto')
     {
-        var index = $(this).closest('td').index();
-        var row   = $(this).closest('tr').index();
-        var table = $(this).closest('tr').parent();
+        var index  = $(this).closest('td').index();
+        var row    = $(this).closest('tr').index();
+        var $tbody = $(this).closest('tr').parent();
+
+        if($(this).attr('name').indexOf('resolutions') != -1)
+        {
+            index  = $(this).closest('tr').closest('td').index();
+            row    = $(this).closest('tr').closest('td').parent().index();
+            $tbody = $(this).closest('tr').closest('td').parent().parent();
+        }
 
         var value = '';
         for(i = row - 1; i >= 0; i--)
         {
-            value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
+            value = $tbody.children('tr').eq(i).find('td').eq(index).find('select').val();
             if(value != 'ditto') break;
         }
 
-        var valueStr = ',' + $(this).find('option').map(function(){return $(this).val();}).get().join(',') + ',';
-        if(valueStr.indexOf(',' + value + ',') != -1)
-        {
-            $(this).val(value);
-        }
-        else
-        {
-            alert(dittoNotice);
-            $(this).val(oldValue);
-        }
-
+        $(this).val(value);
         $(this).trigger("chosen:updated");
         $(this).trigger("change");
     }

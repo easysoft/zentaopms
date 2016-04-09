@@ -38,66 +38,70 @@
         <th><?php echo $lang->story->closedReason;?></th>
       </tr>
     </thead>
-    <?php foreach($storyIDList as $storyID):?>
-    <?php
-    if(!$productID)
-    {
-        $product = $this->product->getByID($stories[$storyID]->product);
-        $modules = $this->tree->getOptionMenu($stories[$storyID]->product, $viewType = 'story', 0, $branch);
-        foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-        $modules['ditto'] = $this->lang->story->ditto;
+    <tbody>
+      <?php foreach($storyIDList as $storyID):?>
+      <?php
+      if(!$productID)
+      {
+          $product = $this->product->getByID($stories[$storyID]->product);
+          $modules = $this->tree->getOptionMenu($stories[$storyID]->product, $viewType = 'story', 0, $branch);
+          foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
+          $modules['ditto'] = $this->lang->story->ditto;
 
-        $productPlans          = $this->productplan->getPairs($stories[$storyID]->product, $branch);
-        $productPlans['ditto'] = $this->lang->story->ditto;
-    }
-    ?>
-    <tr class='text-center'>
-      <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
-      <td class='text-left' style='overflow:visible'>    <?php echo html::select("modules[$storyID]", $modules, $stories[$storyID]->module, "class='form-control chosen'");?></td>
-      <td class='text-left' style='overflow:visible'>    <?php echo html::select("plans[$storyID]",   $productPlans, $stories[$storyID]->plan, "class='form-control chosen'");?></td>
-      <td title='<?php echo $stories[$storyID]->title?>'><?php echo html::input("titles[$storyID]",   $stories[$storyID]->title, 'class=form-control'); ?></td>
-      <td><?php echo html::input("estimates[$storyID]", $stories[$storyID]->estimate, "class='form-control' autocomplete='off'"); ?></td>
-      <td><?php echo html::select("pris[$storyID]",     $priList, $stories[$storyID]->pri, 'class=form-control');?></td>
-      <td><?php echo html::select("sources[$storyID]",  $sourceList, $stories[$storyID]->source, 'class=form-control');?></td>
-      <td class='story-<?php echo $stories[$storyID]->status;?>'><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>
+          $productPlans          = $this->productplan->getPairs($stories[$storyID]->product, $branch);
+          $productPlans['ditto'] = $this->lang->story->ditto;
+      }
+      ?>
+      <tr class='text-center'>
+        <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
+        <td class='text-left' style='overflow:visible'>    <?php echo html::select("modules[$storyID]", $modules, $stories[$storyID]->module, "class='form-control chosen'");?></td>
+        <td class='text-left' style='overflow:visible'>    <?php echo html::select("plans[$storyID]",   $productPlans, $stories[$storyID]->plan, "class='form-control chosen'");?></td>
+        <td title='<?php echo $stories[$storyID]->title?>'><?php echo html::input("titles[$storyID]",   $stories[$storyID]->title, 'class=form-control'); ?></td>
+        <td><?php echo html::input("estimates[$storyID]", $stories[$storyID]->estimate, "class='form-control' autocomplete='off'"); ?></td>
+        <td><?php echo html::select("pris[$storyID]",     $priList, $stories[$storyID]->pri, 'class=form-control');?></td>
+        <td><?php echo html::select("sources[$storyID]",  $sourceList, $stories[$storyID]->source, 'class=form-control');?></td>
+        <td class='story-<?php echo $stories[$storyID]->status;?>'><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>
 
-      <?php if($stories[$storyID]->status != 'draft'):?> 
-      <td><?php echo html::select("stages[$storyID]", $stageList, $stories[$storyID]->stage, 'class=form-control');?></td>
-      <?php else:?>  
-      <td><?php echo html::select("stages[$storyID]", $stageList, $stories[$storyID]->stage, 'class="form-control" disabled="disabled"');?></td>
+        <?php if($stories[$storyID]->status != 'draft'):?>
+        <td><?php echo html::select("stages[$storyID]", $stageList, $stories[$storyID]->stage, 'class=form-control');?></td>
+        <?php else:?>
+        <td><?php echo html::select("stages[$storyID]", $stageList, $stories[$storyID]->stage, 'class="form-control" disabled="disabled"');?></td>
+        <?php endif;?>
+
+        <?php if($stories[$storyID]->status == 'closed'):?>
+        <td class='text-left' style='overflow:visible'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, "class='form-control chosen'");?></td>
+        <?php else:?>
+        <td class='text-left'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, 'class="form-control" disabled="disabled"');?></td>
+        <?php endif;?>
+
+        <?php if($stories[$storyID]->status == 'closed'):?>
+        <td>
+          <table class='w-p100'>
+            <tr>
+              <td class='pd-0'>
+                <?php echo html::select("closedReasons[$storyID]", $reasonList, $stories[$storyID]->closedReason, "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
+              </td>
+              <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
+              <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+              </td>
+              <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
+              <?php echo html::input("childStoriesIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <?php else:?>
+        <td><?php echo html::select("closedReasons[$storyID]", $reasonList, $stories[$storyID]->closedReason, 'class="form-control" disabled="disabled"');?></td>
+        <?php endif;?>
+      </tr>
+      <?php endforeach;?>
+      <?php if(isset($suhosinInfo)):?>
+      <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>'><div id='suhosinInfo' class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
       <?php endif;?>
-
-      <?php if($stories[$storyID]->status == 'closed'):?> 
-      <td class='text-left' style='overflow:visible'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, "class='form-control chosen'");?></td>
-      <?php else:?>  
-      <td class='text-left'><?php echo html::select("closedBys[$storyID]",     $users, $stories[$storyID]->closedBy, 'class="form-control" disabled="disabled"');?></td>
-      <?php endif;?>
-
-      <?php if($stories[$storyID]->status == 'closed'):?>  
-      <td>
-        <table class='w-p100'>
-          <tr>
-            <td class='pd-0'>
-              <?php echo html::select("closedReasons[$storyID]", $reasonList, $stories[$storyID]->closedReason, "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
-            </td>
-            <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
-            <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
-            </td>
-            <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
-            <?php echo html::input("childStoriesIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
-            </td>
-          </tr>
-        </table>
-      </td>
-      <?php else:?>  
-      <td><?php echo html::select("closedReasons[$storyID]", $reasonList, $stories[$storyID]->closedReason, 'class="form-control" disabled="disabled"');?></td>
-      <?php endif;?>
-    </tr>  
-    <?php endforeach;?>
-    <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>'><div id='suhosinInfo' class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-    <?php endif;?>
-    <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan='<?php echo $this->config->story->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    </tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

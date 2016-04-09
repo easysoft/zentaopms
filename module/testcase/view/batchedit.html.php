@@ -31,30 +31,31 @@
         <th class='w-340px'><?php echo $lang->testcase->stage;?></th>
       </tr>
     </thead>
-
-    <?php foreach($caseIDList as $caseID):?>
-    <?php
-    if(!$productID)
-    {
-        $product = $this->product->getByID($cases[$caseID]->product);
-        $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);
-        foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-        $modules['ditto'] = $this->lang->testcase->ditto;
-    }
-    ?>
-    <tr class='text-center'>
-      <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
-      <td><?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
-      <td><?php echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
-      <td class='text-left' style='overflow:visible'> <?php echo html::select("modules[$caseID]",  $modules, $cases[$caseID]->module, "class='form-control chosen'");?></td>
-      <td title='<?php echo $cases[$caseID]->title?>'><?php echo html::input("titles[$caseID]",    $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?></td>
-      <td><?php echo html::select("types[$caseID]",    $typeList, $cases[$caseID]->type, 'class=form-control');?></td>
-      <td class='text-left' style='overflow:visible'> <?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
-    </tr>  
-    <?php endforeach;?>
-    <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-    <?php endif;?>
+    <tbody>
+      <?php foreach($caseIDList as $caseID):?>
+      <?php
+      if(!$productID)
+      {
+          $product = $this->product->getByID($cases[$caseID]->product);
+          $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);
+          foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
+          $modules['ditto'] = $this->lang->testcase->ditto;
+      }
+      ?>
+      <tr class='text-center'>
+        <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
+        <td><?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
+        <td><?php echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
+        <td class='text-left' style='overflow:visible'> <?php echo html::select("modules[$caseID]",  $modules, $cases[$caseID]->module, "class='form-control chosen'");?></td>
+        <td title='<?php echo $cases[$caseID]->title?>'><?php echo html::input("titles[$caseID]",    $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?></td>
+        <td><?php echo html::select("types[$caseID]",    $typeList, $cases[$caseID]->type, 'class=form-control');?></td>
+        <td class='text-left' style='overflow:visible'> <?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
+      </tr>
+      <?php endforeach;?>
+      <?php if(isset($suhosinInfo)):?>
+      <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
+      <?php endif;?>
+    </tbody>
     <tfoot>
       <tr><td colspan='<?php echo $this->config->testcase->batchEdit->columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
