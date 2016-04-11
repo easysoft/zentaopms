@@ -30,27 +30,26 @@
     </tr>
   </thead>
   <?php $i = 0;?>
-  <?php foreach($cases as $groupKey => $groupTasks):?>
+  <?php foreach($cases as $groupKey => $groupCases):?>
   <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i ++;?>
   <tr id='node-<?php echo $groupKey;?>' class='actie-disabled group-title'>
     <td class='text-right <?php echo $groupClass;?> text-left large strong group-name'><?php echo $groupKey;?></td>
     <td colspan='9' class='text-left'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
-  <?php foreach($groupTasks as $case):?>
-  <?php $caseLink = $this->createLink('case','view',"caseID=$case->id"); ?>
-  <tr id='<?php echo $case->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
+  <?php foreach($groupCases as $run):?>
+  <tr id='<?php echo $run->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
     <td class='<?php echo $groupClass;?>'></td>
-    <td class='text-left'>&nbsp;<?php echo $case->id . $lang->colon; if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
-    <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-    <td><?php echo $lang->case->typeList[$case->type];?></td>
-    <td><?php echo $users[$case->assignedTo];?></td>
-    <td><?php echo $users[$case->lastRunner];?></td>
-    <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-    <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-    <td class='<?php echo $case->status;?>'><?php echo ($case->version < $case->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$case->status];?></td>
+    <td class='text-left'>&nbsp;<?php echo $run->case . $lang->colon; if(!common::printLink('testcase', 'view', "case=$run->case", $run->title)) echo $run->title;?></td>
+    <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $run->pri, $run->pri)?>'><?php echo zget($lang->testcase->priList, $run->pri, $run->pri);?></span></td>
+    <td><?php echo $lang->testcase->typeList[$run->type];?></td>
+    <td><?php echo $users[$run->assignedTo];?></td>
+    <td><?php echo $users[$run->lastRunner];?></td>
+    <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
+    <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
+    <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
     <td>
-      <?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?>
-      <?php common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'list', '', 'hiddenwin');?>
+      <?php common::printIcon('testcase', 'edit', "caseID=$run->case", '', 'list');?>
+      <?php common::printIcon('testcase', 'delete', "caseID=$run->case", '', 'list', '', 'hiddenwin');?>
     </td>
   </tr>
   <?php endforeach;?>

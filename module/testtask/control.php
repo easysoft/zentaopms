@@ -372,14 +372,14 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->cases;
 
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->productID     = $productID;
-        $this->view->task          = $task;
-        $this->view->taskID        = $taskID;
-        $this->view->browseType    = 'group';
-        $this->view->groupBy       = $groupBy;
-        $this->view->groupByList   = $groupByList;
-        $this->view->cases         = $groupCases;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->productID   = $productID;
+        $this->view->task        = $task;
+        $this->view->taskID      = $taskID;
+        $this->view->browseType  = 'group';
+        $this->view->groupBy     = $groupBy;
+        $this->view->groupByList = $groupByList;
+        $this->view->cases       = $groupCases;
         $this->display();
     }
 
