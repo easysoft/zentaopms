@@ -25,6 +25,6 @@
   <?php endif;?>
   <tr><?php if(!empty($blocks)) echo $blocks;?></tr>
 </table>
-<div id='blockParam'><?php if(!empty($blocks)) echo $blocks;?></div>
+<div id='blockParam'></div>
 <?php js::set('index', $index)?>
 <?php include '../../common/view/footer.lite.html.php';?>

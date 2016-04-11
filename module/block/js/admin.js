@@ -66,7 +66,7 @@ function getBlockParams(type, moduleID)
 $(function()
 {
     $('#modules').change(function(){getBlocks($(this).val())});
-    getBlocks($('#modules').val());
+    if($('#modules').size() > 0) getBlocks($('#modules').val());
 
     $(document).on('click', '.dropdown-menu.buttons .btn', function()
     {

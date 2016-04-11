@@ -260,17 +260,20 @@ class block extends control
         if($mode == 'getblocklist')
         {   
             $blocks = $this->block->getAvailableBlocks($module);
-            if($this->selfCall)
+            if(!$this->selfCall)
             {
-                $blocks     = json_decode($blocks, true);
-                $blockPairs = array('' => '') + $blocks;
-
-                $block = $this->block->getBlock($index);
-
-                echo "<th>{$this->lang->block->lblBlock}</th>";
-                echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';
-                if(isset($block->source)) echo "<script>$(function(){getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
+                echo $blocks;
+                return true;
             }
+
+            $blocks     = json_decode($blocks, true);
+            $blockPairs = array('' => '') + $blocks;
+
+            $block = $this->block->getBlock($index);
+
+            echo "<th>{$this->lang->block->lblBlock}</th>";
+            echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';
+            if(isset($block->source)) echo "<script>$(function(){getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
         }   
         elseif($mode == 'getblockform')
         {   
