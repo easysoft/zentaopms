@@ -39,7 +39,7 @@
   <?php foreach($builds as $build):?>
   <tr class='text-center'>
     <td><?php echo $build->id;?></td>
-    <td><?php echo $build->productName;?></td>
+    <td title='<?php echo $build->productName?>'><?php echo $build->productName;?></td>
     <td class='text-left'>
       <?php if($build->branchName) echo "<span class='label label-info label-badge'>{$build->branchName}</span>"?>
       <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
