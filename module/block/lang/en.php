@@ -31,36 +31,36 @@ $lang->block->editBlock          = 'Edit block';
 $lang->block->ordersSaved        = 'Sort have been saved';
 $lang->block->confirmRemoveBlock = 'Are you sure remove block [{0}] ?';
 
-$lang->block->default['product']['1']['title'] = 'Story of assigned to me';
-$lang->block->default['product']['1']['block'] = 'story';
-$lang->block->default['product']['1']['grid']  = 4;
+$lang->block->default['product']['1']['title'] = $lang->productCommon . ' list';
+$lang->block->default['product']['1']['block'] = 'list';
+$lang->block->default['product']['1']['grid']  = 8;
 
 $lang->block->default['product']['1']['params']['num']     = 15;
-$lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['product']['1']['params']['type']    = 'assignedTo';
+$lang->block->default['product']['1']['params']['type']  = 'noclosed';
 
-$lang->block->default['product']['2']['title'] = $lang->productCommon . ' list';
-$lang->block->default['product']['2']['block'] = 'list';
+$lang->block->default['product']['2']['title'] = 'Story of assigned to me';
+$lang->block->default['product']['2']['block'] = 'story';
 $lang->block->default['product']['2']['grid']  = 4;
 
 $lang->block->default['product']['2']['params']['num']     = 15;
-$lang->block->default['product']['2']['params']['type']  = 'noclosed';
+$lang->block->default['product']['2']['params']['orderBy'] = 'id_desc';
+$lang->block->default['product']['2']['params']['type']    = 'assignedTo';
 
-$lang->block->default['project']['1']['title'] = 'Task of assigned to me';
-$lang->block->default['project']['1']['block'] = 'task';
-$lang->block->default['project']['1']['grid']  = 4;
+$lang->block->default['project']['1']['title'] = $lang->projectCommon . ' list';
+$lang->block->default['project']['1']['block'] = 'list';
+$lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['num']     = 15;
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'assignedTo';
+$lang->block->default['project']['1']['params']['type']  = 'undone';
 
-$lang->block->default['project']['2']['title'] = $lang->projectCommon . ' list';
-$lang->block->default['project']['2']['block'] = 'list';
+$lang->block->default['project']['2']['title'] = 'Task of assigned to me';
+$lang->block->default['project']['2']['block'] = 'task';
 $lang->block->default['project']['2']['grid']  = 4;
 
 $lang->block->default['project']['2']['params']['num']     = 15;
 $lang->block->default['project']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['2']['params']['type']  = 'undone';
+$lang->block->default['project']['2']['params']['type']    = 'assignedTo';
 
 $lang->block->default['qa']['1']['title'] = 'Bug of assigned to me';
 $lang->block->default['qa']['1']['block'] = 'bug';
@@ -90,13 +90,13 @@ $lang->block->default['my']['1'] = $lang->block->default['project']['2'];
 $lang->block->default['my']['1']['source'] = 'project';
 $lang->block->default['my']['2']['title']  = 'Dynamic';
 $lang->block->default['my']['2']['block']  = 'dynamic';
-$lang->block->default['my']['2']['grid']   = 6;
+$lang->block->default['my']['2']['grid']   = 4;
 $lang->block->default['my']['2']['source'] = '';
 $lang->block->default['my']['3'] = $lang->block->default['product']['2'];
 $lang->block->default['my']['3']['source'] = 'product';
 $lang->block->default['my']['4']['title']  = 'My todo';
 $lang->block->default['my']['4']['block']  = 'list';
-$lang->block->default['my']['4']['grid']   = 6;
+$lang->block->default['my']['4']['grid']   = 4;
 $lang->block->default['my']['4']['source'] = 'todo';
 $lang->block->default['my']['4']['params']['num'] = '20';
 $lang->block->default['my']['5'] = $lang->block->default['project']['1'];
@@ -212,3 +212,16 @@ $lang->block->typeList->project['all']     = 'All';
 $lang->block->typeList->testtask['wait'] = 'Waiting test task';
 $lang->block->typeList->testtask['done'] = 'Done test task';
 $lang->block->typeList->testtask['all']  = 'All';
+
+$lang->block->modules['product']->moreLinkList = new stdclass();
+$lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';
+$lang->block->modules['product']->moreLinkList->story   = 'my|story|type=%s';
+$lang->block->modules['project']->moreLinkList = new stdclass();
+$lang->block->modules['project']->moreLinkList->list  = 'project|all|project=&status=%s';
+$lang->block->modules['project']->moreLinkList->task  = 'my|task|type=%s';
+$lang->block->modules['qa']->moreLinkList = new stdclass();
+$lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
+$lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
+$lang->block->modules['qa']->moreLinkList->testtask = 'my|testtask|type=%s';
+$lang->block->modules['todo']->moreLinkList = new stdclass();
+$lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
