@@ -18,7 +18,7 @@ function getBlocks(moduleID)
         getRssAndHtmlParams('html', moduleID.replace('hiddenBlock', ''));
         return true;
     }
-    if(moduleID == 'html' || moduleID == 'modules' || moduleID == 'dynamic')
+    if(moduleID == 'html' || moduleID == 'dynamic')
     {
         getRssAndHtmlParams(moduleID);
         return true;

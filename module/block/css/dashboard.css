@@ -1,0 +1,11 @@
+body {background: #fafafa;}
+
+.page-content {margin-top: -19px; border-top: 1px solid #3280fc;}
+
+.dashboard {position: relative; padding-top: 25px; z-index: 1030}
+.dashboard .row {margin: 0 auto;}
+.dashboard .panel-actions {margin-top: 0; margin-right: 0;}
+.dashboard-actions {position: absolute; top: -35px; right: 100px}
+.dashboard-actions .btn {padding: 5px 12px}
+.dashboard .table tr[data-url] td {cursor: pointer;}
+.dashboard .panel-heading {height: 30px}

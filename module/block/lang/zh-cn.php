@@ -203,6 +203,7 @@ $lang->block->typeList->story['reviewedBy'] = '由我评审';
 $lang->block->typeList->story['closedBy']   = '由我关闭';
 
 $lang->block->typeList->product['noclosed'] = '未关闭';
+$lang->block->typeList->product['closed']   = '已关闭';
 $lang->block->typeList->product['all']      = '全部';
 
 $lang->block->typeList->project['undone']  = '未完成';
@@ -212,3 +213,16 @@ $lang->block->typeList->project['all']     = '全部';
 $lang->block->typeList->testtask['wait'] = '待测版本';
 $lang->block->typeList->testtask['done'] = '已测版本';
 $lang->block->typeList->testtask['all']  = '全部';
+
+$lang->block->modules['product']->moreLinkList = new stdclass();
+$lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';
+$lang->block->modules['product']->moreLinkList->story   = 'my|story|type=%s';
+$lang->block->modules['project']->moreLinkList = new stdclass();
+$lang->block->modules['project']->moreLinkList->list  = 'project|all|project=&status=%s';
+$lang->block->modules['project']->moreLinkList->task  = 'my|task|type=%s';
+$lang->block->modules['qa']->moreLinkList = new stdclass();
+$lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
+$lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
+$lang->block->modules['qa']->moreLinkList->testtask = 'my|testtask|type=%s';
+$lang->block->modules['todo']->moreLinkList = new stdclass();
+$lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';

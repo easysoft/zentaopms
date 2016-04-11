@@ -17,11 +17,11 @@ class block extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($moduleName = '', $methodName = '')
     {
-        parent::__construct();
-        $this->blockModule = strpos($this->server->http_referer, common::getSysURL()) === 0 ? $this->session->blockModule : '';
-        if($this->methodName != 'admin' and empty($this->blockModule) and !$this->loadModel('sso')->checkKey()) die('');
+        parent::__construct($moduleName, $methodName);
+        $this->selfCall = strpos($this->server->http_referer, common::getSysURL()) === 0 || $this->session->blockModule;
+        if($this->methodName != 'admin' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) die('');
     }
 
     /**
@@ -40,23 +40,31 @@ class block extends control
 
         if(!$index) $index = $this->block->getLastKey($module) + 1;
 
-        $modules = $this->lang->block->moduleList;
-        foreach($modules as $moduleKey => $moduleName)
+        if($module == 'my')
         {
-            if($moduleKey == 'todo') continue;
-            if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
-            if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
+            $modules = $this->lang->block->moduleList;
+            foreach($modules as $moduleKey => $moduleName)
+            {
+                if($moduleKey == 'todo') continue;
+                if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
+                if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
+            }
+
+            $modules['dynamic'] = $this->lang->block->dynamic;
+            $modules['html']    = 'HTML';
+            $modules = array('' => '') + $modules;
+
+            $hiddenBlocks = $this->block->getHiddenBlocks();
+            foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
+            $this->view->modules    = $modules;
+        }
+        elseif(isset($this->lang->block->moduleList[$module]))
+        {
+            $this->get->set('mode', 'getblocklist');
+            $this->view->blocks = $this->fetch('block', 'main', "module=$module&index=$index");
         }
 
-        $modules['dynamic'] = $this->lang->block->dynamic;
-        $modules['html']    = 'HTML';
-        $modules = array('' => '') + $modules;
-
-        $hiddenBlocks = $this->block->getHiddenBlocks();
-        foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
-
         $this->view->block      = $this->block->getBlock($index);
-        $this->view->modules    = $modules;
         $this->view->index      = $index;
         $this->view->title      = $title;
         $this->display();
@@ -76,7 +84,7 @@ class block extends control
         if($_POST)             
         {
             $source = isset($this->lang->block->moduleList[$type]) ? $type : '';
-            $this->block->save($index, $source, $this->blockModule, $blockID);
+            $this->block->save($index, $source, $this->session->blockModule, $blockID);
             if(dao::isError())  die(js::error(dao::geterror())); 
             die(js::reload('parent'));
         }
@@ -126,7 +134,7 @@ class block extends control
      * 
      * @param  string    $oldOrder 
      * @param  string    $newOrder 
-     * @param  string    $app 
+     * @param  string    $module 
      * @access public
      * @return void
      */
@@ -149,6 +157,91 @@ class block extends control
     }
 
     /**
+     * Display dashboard for app.
+     * 
+     * @param  string    $module 
+     * @access public
+     * @return void
+     */
+    public function dashboard($module)
+    {
+        $blocks = $this->block->getBlockList($module);
+        $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
+
+        /* Init block when vist index first. */
+        if(empty($blocks) and !($inited and $inited->app == $module and $inited->value))
+        {
+            if($this->block->initBlock($module)) die(js::reload());
+        }
+
+        foreach($blocks as $block)
+        {
+            $params  = json_decode($block->params);
+            $blockID = $block->block;
+
+            $block->blockLink = $this->createLink('block', 'printBlock', "index=$block->order&module=$block->module");
+            $block->moreLink  = '';
+            if(isset($this->lang->block->modules[$module]->moreLinkList->{$blockID}))
+            {
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$blockID}, $params->type));
+                $block->moreLink = $this->createLink($moduleName, $method, $vars);
+            }
+        }
+
+        $this->view->blocks = $blocks;
+        $this->view->module = $module;
+        $this->display();
+    }
+
+    /**
+     * latest dynamic.
+     * 
+     * @access public
+     * @return void
+     */
+    public function dynamic()
+    {
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today');
+        $this->view->users   = $this->loadModel('user')->getPairs();
+        $this->display();
+    }
+
+    /**
+     * Print block. 
+     * 
+     * @param  int    $index 
+     * @access public
+     * @return void
+     */
+    public function printBlock($index, $module = 'my')
+    {
+        $block = $this->block->getBlock($index, $module);
+
+        if(empty($block)) return false;
+
+        $html = '';
+        if($block->block == 'html')
+        {
+            $html = "<div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div>';
+        }
+        elseif($block->source != '')
+        {
+            $this->get->set('mode', 'getblockdata');
+            $this->get->set('module', $block->module);
+            $this->get->set('source', $block->source);
+            $this->get->set('blockid', $block->block);
+            $this->get->set('param',base64_encode(json_encode($block->params)));
+            $html = $this->fetch('block', 'main');
+        }
+        elseif($block->block == 'dynamic')
+        {
+            $html = $this->fetch('block', 'dynamic');
+        }
+        
+        die($html);
+    }
+
+    /**
      * Main function.
      * 
      * @access public
@@ -156,7 +249,7 @@ class block extends control
      */
     public function main($module = '', $index = 0)
     {
-        if(empty($this->blockModule))
+        if(!$this->selfCall)
         {
             $lang = $this->get->lang;
             $this->app->setClientLang($lang);
@@ -168,7 +261,7 @@ class block extends control
         if($mode == 'getblocklist')
         {   
             $blocks = $this->block->getAvailableBlocks($module);
-            if($this->blockModule)
+            if($this->selfCall)
             {
                 $blocks     = json_decode($blocks, true);
                 $blockPairs = array('' => '') + $blocks;
@@ -192,19 +285,22 @@ class block extends control
 
             $params = $this->get->param;
             $params = json_decode(base64_decode($params));
-            $sso    = base64_decode($this->get->sso);
-
-            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
-            if(empty($this->app->user)) 
+            if(!$this->selfCall)
             {
-                $this->app->user = new stdclass();
-                $this->app->user->account = 'guest';
+                $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
+                if(empty($this->app->user)) 
+                {
+                    $this->app->user = new stdclass();
+                    $this->app->user->account = 'guest';
+                }
+
+                $sso = base64_decode($this->get->sso);
+                $this->view->sso  = $sso;
+                $this->view->sign = strpos($sso, '&') === false ? '?' : '&';
             }
 
             $this->viewType   = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
             $this->params     = $params;
-            $this->view->sso  = $sso;
-            $this->view->sign = strpos($sso, '&') === false ? '?' : '&';
             $this->view->code = $this->get->blockid;
 
             $func = 'print' . ucfirst($code) . 'Block';
@@ -314,7 +410,9 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $this->params->num, 1);
         $this->view->stories  = $this->loadModel('story')->getUserStories($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType != 'json' ? $pager : '');
-        $this->view->listLink = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('my', 'story', "type={$this->params->type}"));
+
+        $listLink = $this->createLink('my', 'story', "type={$this->params->type}");
+        $this->view->listLink = !isset($this->view->sso) ? $listLink : $this->view->sso . $this->view->sign . 'referer=' . base64_encode($listLink);
     }
 
     /**

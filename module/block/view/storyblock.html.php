@@ -22,8 +22,11 @@
   </tr>
   </thead>
   <?php foreach($stories as $story):?>
-  <?php $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : ''?>
-  <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('story', 'view', "storyID={$story->id}")); ?>' <?php echo $appid?>>
+  <?php
+  $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+  $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
+  ?>
+  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td><?php echo $story->id;?></td>
     <td><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></td>
     <td title='<?php echo $story->title?>'><?php echo $story->title?></td>

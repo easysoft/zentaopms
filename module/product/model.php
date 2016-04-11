@@ -59,7 +59,11 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0)
     {
-        if(!$productID) return;
+        if(!$productID)
+        {
+            unset($this->lang->product->menu->branch);
+            return;
+        }
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         setCookie("lastBranch",  "$productID-$branch", $this->config->cookieLife, $this->config->webRoot);

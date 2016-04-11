@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table table-form'>
+  <tr><th class='w-100px'></th><td></td></tr>
+  <?php if(!empty($modules)):?>
   <tr>
     <th class='w-100px'><?php echo $lang->block->lblModule; ?></th>
     <?php
@@ -20,8 +22,9 @@
     ?>
     <td><?php echo html::select('modules', $modules, $moduleID, "class='form-control'")?></td>
   </tr>
-  <tr></tr>
+  <?php endif;?>
+  <tr><?php if(!empty($blocks)) echo $blocks;?></tr>
 </table>
-<div id='blockParam'></div>
+<div id='blockParam'><?php if(!empty($blocks)) echo $blocks;?></div>
 <?php js::set('index', $index)?>
 <?php include '../../common/view/footer.lite.html.php';?>
