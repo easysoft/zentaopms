@@ -489,7 +489,7 @@ class baseHTML
      * @access public
      * @return string the back button tag.
      */
-    public static function backButton($label = '', $misc = '')
+    public static function backButton($label = '', $misc = '', $class = '')
     {
         if(isonlybody()) return false;
 
@@ -499,7 +499,7 @@ class baseHTML
             global $lang;
             $label = $lang->goback;
         }
-        return  "<a href='javascript:history.go(-1);' class='btn btn-back' $misc>{$label}</a>";
+        return  "<a href='javascript:history.go(-1);' class='btn btn-back $class' $misc>{$label}</a>";
     }
 
     /**
