@@ -25,8 +25,11 @@
   <tbody>
    <?php $id = 0; ?>
    <?php foreach($projectStats as $project):?>
-    <?php $appid = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'"?>
-    <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('project', 'task', 'project=' . $project->id)); ?>' <?php echo $appid?>>
+    <?php
+    $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
+    $viewLink = $this->createLink('project', 'task', 'project=' . $project->id);
+    ?>
+    <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
       <td class='text-left' title='<?php echo $project->name;?>'><?php echo $project->name;?></td>
       <td><?php echo $project->end;?></td>
       <?php if(isset($project->delay)):?>
@@ -42,8 +45,6 @@
    <?php endforeach;?>
   </tbody>
 </table>
-<p class='hide block-project-link'><?php echo $listLink;?></p>
 <script>
-$('.block-project').dataTable();
-$('.block-project-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-project-link').html());
+if(typeof(dataTable) == 'function')$('.block-project').dataTable();
 </script>

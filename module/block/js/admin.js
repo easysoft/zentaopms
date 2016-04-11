@@ -35,14 +35,12 @@ function getBlocks(moduleID)
  * Get rss and html params.
  * 
  * @param  string $type 
- * @param  int    $blockID 
  * @access public
  * @return void
  */
-function getRssAndHtmlParams(type, blockID)
+function getRssAndHtmlParams(type)
 {
-    blockID = typeof(blockID) == 'undefined' ? 0 : blockID;
-    $.get(createLink('block', 'set', 'index=' + index + '&type=' + type + '&blockID=' + blockID), function(data)
+    $.get(createLink('block', 'set', 'index=' + index + '&type=' + type), function(data)
     {
         $('#blockParam').html(data);
     });
@@ -51,17 +49,15 @@ function getRssAndHtmlParams(type, blockID)
 /**
  * Get block params.
  * 
- * @param  string $blockID 
+ * @param  string $type 
  * @param  int    $moduleID 
  * @access public
  * @return void
  */
-function getBlockParams(blockID, moduleID)
+function getBlockParams(type, moduleID)
 {
     $('#blockParam').empty();
-    if(blockID == '') return false;
-
-    $.get(createLink('block', 'set', 'index=' + index + '&type=' + moduleID + '&blockID=' + blockID), function(data)
+    $.get(createLink('block', 'set', 'index=' + index + '&type=' + type + '&source=' + moduleID), function(data)
     {
         $('#blockParam').html(data);
     });

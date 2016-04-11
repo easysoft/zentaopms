@@ -75,33 +75,32 @@ class block extends control
      * 
      * @param  int    $index   
      * @param  string $type    
-     * @param  int    $blockID 
      * @access public          
      * @return void            
      */
-    public function set($index, $type, $blockID = 0)
+    public function set($index, $type, $source = '')
     {
         if($_POST)             
         {
-            $source = isset($this->lang->block->moduleList[$type]) ? $type : '';
-            $this->block->save($index, $source, $this->session->blockModule, $blockID);
+            $source = isset($this->lang->block->moduleList[$source]) ? $source : '';
+            $this->block->save($index, $source, $type, $this->session->blockModule);
             if(dao::isError())  die(js::error(dao::geterror())); 
             die(js::reload('parent'));
         }
 
-        $block = $blockID ? $this->block->getByID($blockID) : $this->block->getBlock($index);                                         
+        $block = $this->block->getBlock($index);
         if($block) $type = $block->block;
 
-        if(isset($this->lang->block->moduleList[$type]))
+        if(isset($this->lang->block->moduleList[$source]))
         {
-            $func   = 'get' . ucfirst($blockID) . 'Params';
-            $params = $this->block->$func($type);
+            $func   = 'get' . ucfirst($type) . 'Params';
+            $params = $this->block->$func($source);
             $this->view->params = json_decode($params, true);
         }
 
-        $this->view->type    = $type;                                                                                                 
-        $this->view->index   = $index;  
-        $this->view->blockID = $blockID;
+        $this->view->source  = $source;
+        $this->view->type    = $type;
+        $this->view->index   = $index;
         $this->view->block   = ($block) ? $block : array();
         $this->display();      
     }
@@ -231,7 +230,7 @@ class block extends control
             $this->get->set('source', $block->source);
             $this->get->set('blockid', $block->block);
             $this->get->set('param',base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'main');
+            $html = $this->fetch('block', 'main', "module={$block->source}&index=$index");
         }
         elseif($block->block == 'dynamic')
         {
@@ -306,6 +305,13 @@ class block extends control
             $func = 'print' . ucfirst($code) . 'Block';
             $this->$func($module);
 
+            $this->view->moreLink = '';
+            if(isset($this->lang->block->modules[$module]->moreLinkList->{$code}))
+            {
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$code}, $params->type));
+                $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
+            }
+
             if($this->viewType == 'json')
             {
                 unset($this->view->app);
@@ -326,6 +332,20 @@ class block extends control
     }
 
     /**
+     * Print List block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printListBlock($module = 'product')
+    {
+        $func = 'print' . ucfirst($module) . 'Block';
+        $this->view->module = $module;
+        $this->$func();
+
+    }
+
+    /**
      * Print todo block.
      * 
      * @access public
@@ -334,7 +354,6 @@ class block extends control
     public function printTodoBlock()
     {
         $this->view->todos    = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $this->viewType == 'json' ? 0 : $this->params->num);
-        $this->view->listLink = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('my', 'todo', "type=all"));
     }
 
     /**
@@ -346,7 +365,6 @@ class block extends control
     public function printTaskBlock()
     {
         $this->view->tasks    = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : $this->params->num, null, $this->params->orderBy);
-        $this->view->listLink = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('my', 'task', "type={$this->params->type}"));
     }
 
     /**
@@ -358,7 +376,6 @@ class block extends control
     public function printBugBlock()
     {
         $this->view->bugs     = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : $this->params->num);
-        $this->view->listLink = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('my', 'bug', "type={$this->params->type}"));
     }
 
     /**
@@ -396,7 +413,26 @@ class block extends control
                 ->fetchAll();
         }
         $this->view->cases    = $cases;
-        $this->view->listLink = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('my', 'testcase', "type={$this->params->type}"));
+    }
+
+    /**
+     * Print testtask block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printTesttaskBlock()
+    {
+        $this->app->loadLang('testtask');
+        $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.build=t4.id')
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
+            ->fetchAll();
     }
 
     /**
@@ -410,9 +446,58 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $this->params->num, 1);
         $this->view->stories  = $this->loadModel('story')->getUserStories($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType != 'json' ? $pager : '');
+    }
 
-        $listLink = $this->createLink('my', 'story', "type={$this->params->type}");
-        $this->view->listLink = !isset($this->view->sso) ? $listLink : $this->view->sso . $this->view->sign . 'referer=' . base64_encode($listLink);
+    /**
+     * Print plan block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printPlanBlock()
+    {
+        $this->app->loadLang('productplan');
+        $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->orderBy('t1.begin desc')
+            ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
+            ->fetchAll();
+    }
+
+    /**
+     * Print releases block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printReleaseBlock()
+    {
+        $this->app->loadLang('release');
+        $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
+            ->where('t1.deleted')->eq('0')
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
+            ->fetchAll();
+    }
+
+    /**
+     * Print Build block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printBuildBlock()
+    {
+        $this->app->loadLang('build');
+        $this->view->builds = $this->dao->select('t1.*,t2.productName')->from(TABLE_BUILD)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->orderBy('t1.id desc')
+            ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
+            ->fetchAll();
     }
 
     /**
@@ -426,7 +511,6 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $this->params->num, 1);
         $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '');
-        $this->view->listLink     = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('product', 'index', "locate=no&productID=" . current($this->view->productStats)->id));
     }
 
     /**
@@ -440,6 +524,5 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $this->params->num, 1);
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
-        $this->view->listLink     = $this->view->sso . $this->view->sign . 'referer=' . base64_encode($this->createLink('my', 'project'));
     }
 }

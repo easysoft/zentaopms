@@ -21,8 +21,11 @@
   </tr>
   </thead>
   <?php foreach($todos as $id => $todo):?>
-  <?php $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : ''?>
-  <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('todo', 'view', "todoID={$todo->id}")); ?>' <?php echo $appid?>>
+  <?php
+  $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+  $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}");
+  ?>
+  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
     <td><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri)?></td>
     <td><?php echo $todo->name?></td>
@@ -31,8 +34,6 @@
   </tr>
   <?php endforeach;?>
 </table>
-<p class='hide block-todo-link'><?php echo $listLink;?></p>
 <script>
-$('.block-todo').dataTable();
-$('.block-todo-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-todo-link').html());
+if(typeof(dataTable) == 'function')$('.block-todo').dataTable();
 </script>

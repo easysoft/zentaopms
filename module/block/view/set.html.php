@@ -11,7 +11,7 @@
  */
 ?>
 <?php
-if(isset($lang->block->moduleList[$type]))
+if(isset($lang->block->moduleList[$source]))
 {
     include 'setmodule.html.php';
     die();
@@ -24,7 +24,7 @@ if($type == 'html')
     include '../../common/view/kindeditor.html.php';
 }
 ?>
-<form method='post' id='blockForm' target='hiddenwin' class='form form-horizontal' action='<?php echo $this->createLink('block', 'set', "index=$index&type=$type&blockID=$blockID")?>'>
+<form method='post' id='blockForm' target='hiddenwin' class='form form-horizontal' action='<?php echo $this->createLink('block', 'set', "index=$index&type=$type&source=$source")?>'>
   <table class='table table-form'>
     <tbody>
       <?php include 'publicform.html.php';?>

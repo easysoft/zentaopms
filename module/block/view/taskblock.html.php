@@ -25,8 +25,11 @@ td.delayed{background: #e84e0f!important; color: white;}
   </tr>
   </thead>
   <?php foreach($tasks as $task):?>
-  <?php $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : ''?>
-  <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('task', 'view', "taskID={$task->id}")); ?>' <?php echo $appid?>>
+  <?php
+  $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+  $viewLink = $this->createLink('task', 'view', "taskID={$task->id}");
+  ?>
+  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td><?php echo $task->id;?></td>
     <td><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></td>
     <td title='<?php echo $task->name?>'><?php echo $task->name?></td>
@@ -36,8 +39,6 @@ td.delayed{background: #e84e0f!important; color: white;}
   </tr>
   <?php endforeach;?>
 </table>
-<p class='hide block-task-link'><?php echo $listLink;?></p>
 <script>
-$('.block-task').dataTable();
-$('.block-task-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-task-link').html());
+if(typeof(dataTable) == 'function')$('.block-task').dataTable();
 </script>

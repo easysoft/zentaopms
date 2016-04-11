@@ -25,8 +25,11 @@
   </thead>
   <tbody>
     <?php foreach($productStats as $product):?>
-    <?php $appid = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'"?>
-    <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('product', 'browse', 'productID=' . $product->id)); ?>' <?php echo $appid?>>
+    <?php
+    $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
+    $viewLink = $this->createLink('product', 'browse', 'productID=' . $product->id);
+    ?>
+    <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
       <td class='text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
       <td><?php echo $product->stories['active']?></td>
       <td><?php echo $product->stories['changed']?></td>
@@ -39,8 +42,6 @@
     <?php endforeach;?>
   </tbody>
 </table>
-<p class='hide block-product-link'><?php echo $listLink;?></p>
 <script>
-$('.block-product').dataTable();
-$('.block-product-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-product-link').html());
+if(typeof(dataTable) == 'function')$('.block-product').dataTable();
 </script>

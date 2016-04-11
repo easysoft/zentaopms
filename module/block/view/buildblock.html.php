@@ -1,6 +1,6 @@
 <?php
 /**
- * The bug block view file of block module of RanZhi.
+ * The build block view file of block module of RanZhi.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -10,28 +10,28 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<table class='table table-data table-hover block-bug table-fixed'>
+<table class='table table-data table-hover block-build table-fixed'>
   <thead>
   <tr>
     <th width='50'><?php echo $lang->idAB?></th>
-    <th width='40'><?php echo $lang->bug->severityAB?></th>
-    <th width='40'><?php echo $lang->priAB?></th>
-    <th>           <?php echo $lang->bug->title;?></th>
+    <th>           <?php echo $lang->build->product;?></th>
+    <th>           <?php echo $lang->build->name;?></th>
+    <th width='80'><?php echo $lang->build->date;?></th>
   </tr>
   </thead>
-  <?php foreach($bugs as $bug):?>
+  <?php foreach($builds as $build):?>
   <?php
   $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-  $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
+  $viewLink = $this->createLink('build', 'view', "buildID={$build->id}");
   ?>
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-    <td><?php echo $bug->id;?></td>
-    <td><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></td>
-    <td><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></td>
-    <td title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+    <td class='text-center'><?php echo $build->id;?></td>
+    <td title='<?php echo $build->productName?>'><?php echo $build->productName?></td>
+    <td title='<?php echo $build->name?>'><?php echo $build->name?></td>
+    <td><?php echo $build->date?></td>
   </tr>
   <?php endforeach;?>
 </table>
 <script>
-if(typeof(dataTable) == 'function')$('.block-bug').dataTable();
+if(typeof(dataTable) == 'function')$('.block-build').dataTable();
 </script>

@@ -22,8 +22,11 @@
   </tr>
   </thead>
   <?php foreach($cases as $case):?>
-  <?php $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : ''?>
-  <tr data-url='<?php echo $sso . $sign . 'referer=' . base64_encode($this->createLink('testcase', 'view', "caseID={$case->id}")); ?>' <?php echo $appid?>>
+  <?php
+  $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+  $viewLink = $this->createLink('testcase', 'view', "caseID={$case->id}");
+  ?>
+  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td><?php echo $case->id;?></td>
     <td><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></td>
     <td title='<?php echo $case->title?>'><?php echo $case->title?></td>
@@ -33,8 +36,6 @@
   </tr>
   <?php endforeach;?>
 </table>
-<p class='hide block-case-link'><?php echo $listLink;?></p>
 <script>
-$('.block-case').dataTable();
-$('.block-case-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-case-link').html());
+if(typeof(dataTable) == 'function')$('.block-case').dataTable();
 </script>

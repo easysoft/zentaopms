@@ -21,16 +21,16 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function save($index, $source, $module = 'my', $blockID = 0)
+    public function save($index, $source, $type, $module = 'my')
     {
         $data = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->add('order', $index)
             ->add('module', $module)
             ->add('hidden', 0)
-            ->setIF($blockID, 'id', $blockID)
             ->setDefault('grid', '4')
             ->setDefault('source', $source)
+            ->setDefault('block', $type)
             ->setDefault('params', array())
             ->get();
 

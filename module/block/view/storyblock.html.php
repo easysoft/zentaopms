@@ -36,8 +36,6 @@
   </tr>
   <?php endforeach;?>
 </table>
-<p class='hide block-story-link'><?php echo $listLink;?></p>
 <script>
-$('.block-story').dataTable();
-$('.block-story-link').closest('.panel').find('.panel-heading .more').attr('href', $('.block-story-link').html());
+if(typeof(dataTable) == 'function')$('.block-story').dataTable();
 </script>
