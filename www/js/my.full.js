@@ -946,7 +946,7 @@ function setModal()
                 if($e.hasClass('disabled')) return false;
 
                 var url  = (setting ? setting.url : false) || $e.attr('href') || $e.data('url');
-                var type = (setting ? setting.type : false) || $e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax');
+                var type = (setting ? setting.type : false) || ($e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax'));
                 if(type == 'iframe')
                 {
                     var options = 
