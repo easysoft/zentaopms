@@ -424,11 +424,13 @@ class block extends control
     public function printTesttaskBlock()
     {
         $this->app->loadLang('testtask');
+        $products = $this->loadModel('product')->getPairs();
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.build=t4.id')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.product')->in(array_keys($products));
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
@@ -457,9 +459,11 @@ class block extends control
     public function printPlanBlock()
     {
         $this->app->loadLang('productplan');
+        $products = $this->loadModel('product')->getPairs();
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.product')->in(array_keys($products))
             ->orderBy('t1.begin desc')
             ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
             ->fetchAll();
@@ -474,10 +478,12 @@ class block extends control
     public function printReleaseBlock()
     {
         $this->app->loadLang('release');
+        $products = $this->loadModel('product')->getPairs();
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.product')->in(array_keys($products))
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
             ->fetchAll();
@@ -492,9 +498,11 @@ class block extends control
     public function printBuildBlock()
     {
         $this->app->loadLang('build');
+        $projects = $this->loadModel('project')->getPairs();
         $this->view->builds = $this->dao->select('t1.*,t2.productName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.project')->in(array_keys($projects))
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
             ->fetchAll();
