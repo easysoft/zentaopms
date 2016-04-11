@@ -19,6 +19,7 @@ $(function()
 
     if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
     {
+        oldProductID = $('#product').val();
         $("#story, #task, #mailto").chosen(defaultChosenOptions);
     }
 });
@@ -42,8 +43,15 @@ function loadAll(productID)
     {
         firstChoice = confirm(confirmChangeProduct);
         changeProductConfirmed = true;    // Only notice the user one time.
+
+        if(!firstChoice)
+        {
+            $('#product').val(oldProductID);
+            $('#product').trigger("chosen:updated");
+            $('#product').chosen(defaultChosenOptions);
+        }
     }
-    if(changeProductConfirmed || firstChoice)
+    else
     {
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen(defaultChosenOptions);
