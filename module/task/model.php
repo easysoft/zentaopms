@@ -25,25 +25,26 @@ class taskModel extends model
         $tasksID  = array();
         $taskFile = '';
         $this->loadModel('file');
+        $task = fixer::input('post')
+            ->add('project', (int)$projectID)
+            ->setDefault('estimate, left, story', 0)
+            ->setDefault('estStarted', '0000-00-00')
+            ->setDefault('deadline', '0000-00-00')
+            ->setDefault('status', 'wait')
+            ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
+            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setDefault('openedBy',   $this->app->user->account)
+            ->setDefault('openedDate', helper::now())
+            ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
+            ->remove('after,files,labels,assignedTo')
+            ->join('mailto', ',')
+            ->get();
+
         foreach($this->post->assignedTo as $assignedTo)
         {
             if($this->post->type == 'affair' and empty($assignedTo)) continue;
-            $task = fixer::input('post')
-                ->add('project', (int)$projectID)
-                ->setDefault('estimate, left, story', 0)
-                ->setDefault('estStarted', '0000-00-00')
-                ->setDefault('deadline', '0000-00-00')
-                ->setDefault('status', 'wait')
-                ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
-                ->setForce('assignedTo', $assignedTo)
-                ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-                ->setDefault('openedBy',   $this->app->user->account)
-                ->setDefault('openedDate', helper::now())
-                ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
-                ->remove('after,files,labels')
-                ->join('mailto', ',')
-                ->get();
 
+            $task->assignedTo = $assignedTo;
             if($assignedTo) $task->assignedDate = helper::now();
 
             /* Check duplicate task. */

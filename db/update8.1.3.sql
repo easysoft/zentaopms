@@ -15,3 +15,7 @@ CREATE TABLE `zt_block` (
   UNIQUE KEY `accountModuleOrder` (`account`,`module`,`order`),
   KEY `block` (`account`,`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `zt_task` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
+ALTER TABLE `zt_story` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
+ALTER TABLE `zt_bug` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
+ALTER TABLE `zt_case` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
