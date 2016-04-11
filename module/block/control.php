@@ -430,7 +430,7 @@ class block extends control
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.build=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->in(array_keys($products));
+            ->andWhere('t1.product')->in(array_keys($products))
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit($this->params->num)->fi()
