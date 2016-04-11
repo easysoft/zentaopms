@@ -445,4 +445,24 @@ class deptModel extends model
             $this->dao->update(TABLE_DEPT)->data($dept)->where('id')->eq($dept->id)->exec();
         }
     }
+
+    public function getFullTree($rootDeptID = 0) 
+    {
+        $tree = array_values($this->getSons($rootDeptID));
+        $users = $this->loadModel('user')->getPairs('nodeleted|noletter|noclosed');
+        if(count($tree))
+        {
+            foreach ($tree as $node)
+            {
+                $node->managerName = $users[$node->manager];
+                $children = $this->getFullTree($node->id);
+                if(count($children))
+                {
+                    $node->children = $children;
+                    $node->actions = array('delete' => false);
+                }
+            }
+        }
+        return $tree; 
+    }
 }

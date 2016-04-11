@@ -1,4 +1,11 @@
 .table.table-form {width: auto;}
 .table-form > tbody > tr > td .form-control + .form-control {margin-top: 5px;}
 
-.tree-lines li.has-list.open > ul:after {bottom: 20px;}
+.tree li.has-list > .tree-actions > .tree-action[data-type="delete"] {display: none}
+.tree .dept-name {font-weight: 500}
+.tree-toggle {cursor: pointer;}
+.tree li:hover > .tree-actions {opacity: 0}
+.tree li.hover > .tree-actions {opacity: 1}
+
+#addChildModal form > .form-control {margin-bottom: 8px;}
+#addChildModal .modal-dialog {max-width: 360px;}
