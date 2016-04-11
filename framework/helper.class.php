@@ -20,4 +20,39 @@
 include dirname(__FILE__) . '/base/helper.class.php';
 class helper extends baseHelper
 {
+    public static function getViewType()
+    {
+        global $config, $app;
+        if($config->requestType != 'GET')
+        {
+            $pathInfo = $app->getPathInfo();
+            if(!empty($pathInfo))
+            {
+                $dotPos = strrpos($pathInfo, '.');
+                if($dotPos)
+                {
+                    $viewType = substr($pathInfo, $dotPos + 1);
+                }
+                else
+                {
+                    $config->default->view = $config->default->view == 'mhtml' ? 'html' : $config->default->view;
+                }
+            }
+        }
+        elseif($config->requestType == 'GET')
+        {
+            if(isset($_GET[$config->viewVar]))
+            {
+                $viewType = $_GET[$config->viewVar]; 
+            }
+            else
+            {
+                /* Set default view when url has not module name. such as only domain. */
+                $config->default->view = ($config->default->view == 'mhtml' and isset($_GET[$config->moduleVar])) ? 'html' : $config->default->view;
+            }
+        }
+
+        if(isset($viewType) and strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
+        return isset($viewType) ? $viewType : $config->default->view;
+    }
 }

@@ -35,7 +35,7 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 if($app->clientDevice == 'mobile' and $config->default->view == 'html')
 {
     $config->default->view = 'mhtml';
-    helper::setViewType();
+    $app->viewType = helper::getViewType();
 }
 
 /* Run the app. */

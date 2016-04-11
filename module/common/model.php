@@ -319,8 +319,8 @@ class commonModel extends model
         $task    = $this->lang->my->menu->task['link'];
         $story   = $this->lang->my->menu->story['link'];
         $bug     = $this->lang->my->menu->bug['link'];
-        $project = $this->lang->menu->project . '|locate=no&&status=isdoing';
-        $product = $this->lang->menu->product . '|locate=no';
+        $project = $this->lang->projectCommon . '|project|all|status=isdoing';
+        $product = $this->lang->productCommon . '|product|all';
         $menu    = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'project' => $project, 'product' => $product);
 
         if($role and strpos('dev,td,pm', $role) !== false) $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
