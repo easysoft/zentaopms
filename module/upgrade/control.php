@@ -19,6 +19,10 @@ class upgrade extends control
      */
     public function index()
     {
+        /* Locate to index page of my module, if upgrade.php does not exist. */
+        $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
+        if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
+
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
     }

@@ -248,14 +248,17 @@ class storyModel extends model
         $module = 0;
         $plan   = 0;
         $pri    = 0;
+        $source = '';
         for($i = 0; $i < $batchNum; $i++)
         {
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
-            $pri    = $stories->pri[$i]    == 'ditto' ? $pri   : $stories->pri[$i];
+            $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
+            $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
             $stories->module[$i] = (int)$module;
-            $stories->plan[$i]   = (int)$plan;
+            $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
+            $stories->source[$i] = $source;
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -268,9 +271,11 @@ class storyModel extends model
                 $data->module     = $stories->module[$i];
                 $data->plan       = $stories->plan[$i];
                 $data->title      = $stories->title[$i];
-                $data->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
-                $data->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
+                $data->source     = $stories->source[$i];
+                $data->pri        = $stories->pri[$i];
+                $data->estimate   = (int)$stories->estimate[$i];
                 $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
+                $data->keywords   = $stories->keywords[$i];
                 $data->product    = $productID;
                 $data->branch     = $branch;
                 $data->openedBy   = $this->app->user->account;
@@ -294,7 +299,9 @@ class storyModel extends model
                 $specData->version = 1;
                 $specData->title   = $stories->title[$i];
                 $specData->spec    = '';
-                if(!empty($stories->spec[$i])) $specData->spec = nl2br($stories->spec[$i]);
+                $specData->verify  = '';
+                if(!empty($stories->spec[$i]))  $specData->spec   = nl2br($stories->spec[$i]);
+                if(!empty($stories->verify[$i]))$specData->verify = nl2br($stories->verify[$i]);
 
                 if(!empty($stories->uploadImage[$i]))
                 {

@@ -40,9 +40,11 @@ $config->story->list->exportFields = '
     lastEditedBy, lastEditedDate, 
     childStories, linkStories, duplicateStory, files';
 $config->story->list->customCreateFields = 'source,verify,pri,estimate,mailto,keywords';
+$config->story->list->batchCreateFields  = 'module,plan,source,spec,verify,pri,estimate,review,keywords';
 
 $config->story->custom = new stdclass();
-$config->story->custom->create = $config->story->list->customCreateFields;
+$config->story->custom->create      = $config->story->list->customCreateFields;
+$config->story->custom->batchcreate = 'module,plan,spec,pri,estimate,review';
 
 $config->story->datatable = new stdclass();
 $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'source', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'actions');
