@@ -66,6 +66,8 @@ $lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text
 $lang->unfold       = '+';
 $lang->fold         = '-';
 $lang->hideNotCheck = 'Hide not checked field';
+$lang->quitNovice   = 'Quit novice';
+$lang->enterNovice  = 'Enter novice';
 
 $lang->preShortcutKey  = '[Shortcut key:←]';
 $lang->nextShortcutKey = '[Shortcut key:→]';

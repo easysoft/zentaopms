@@ -59,3 +59,4 @@ $lang->misc->needRepair  = "Repair Table";
 $lang->misc->repairTable = "The database table can cause of damage because of power failure, need to check and repair!!";
 $lang->misc->tableName   = "Table name";
 $lang->misc->tableStatus = "Table status";
+$lang->misc->novice      = "You may use the ZenTao first, whether to enter the novice mode?";
