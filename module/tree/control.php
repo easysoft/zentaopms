@@ -104,16 +104,13 @@ class tree extends control
             $position[] = $this->lang->tree->manageCustomDoc;
         }
 
-        $parentModules = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
-        $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
-        $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
+        $this->view->tree            = $this->tree->getFullTree($rootID, $viewType, $branch);
         $this->display();
     }
 
@@ -157,10 +154,8 @@ class tree extends control
         $this->view->newModule       = $newModule;
         $this->view->currentProject  = $currentProject;
         $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
-        $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'));
-        $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->parentModules   = $parentModules;
+        $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID);
         $this->display();
     }
 

@@ -9,3 +9,14 @@
 .w-260px {width: 260px!important}
 table.copy td {padding: 0!important}
 table.copy td .form-control {border-right: 0}
+
+.tree .module-name {font-weight: 500}
+.tree-toggle {cursor: pointer;}
+.tree li:hover > .tree-actions {opacity: 0}
+.tree li.hover > .tree-actions {opacity: 1}
+
+#addChildModal form > .form-control, #addChildModal form > .row-table {margin-bottom: 8px;}
+#addChildModal .modal-dialog {max-width: 500px;}
+#addChildModal form .col-table + .col-table .form-control {border-left: transparent;}
+#addChildModal .pull-right {margin-right: 15px; margin-top: -4px;}
+#addChildModal table .chosen-container .chosen-single {border-right-color: transparent}

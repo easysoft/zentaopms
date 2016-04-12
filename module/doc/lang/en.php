@@ -43,6 +43,7 @@ $lang->doc->delete         = 'Delete doc';
 $lang->doc->browse         = 'Browse doc';
 $lang->doc->view           = 'View doc';
 $lang->doc->manageType     = 'Manage type';
+$lang->doc->addType        = 'Add type';
 
 $lang->doc->libName        = 'Library name';
 $lang->doc->createLib      = 'Create library';

@@ -446,6 +446,12 @@ class deptModel extends model
         }
     }
 
+    /**
+     * Get full department tree
+     * @param  integer $rootDeptID
+     * @access public
+     * @return object
+     */
     public function getFullTree($rootDeptID = 0) 
     {
         $tree = array_values($this->getSons($rootDeptID));
