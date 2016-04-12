@@ -31,6 +31,7 @@ class commonModel extends model
             $this->loadCustomFromDB();
             if(!$this->checkIP()) die($this->lang->ipLimited);
             if($this->app->getViewType() == 'mhtml') $this->setMobileMenu();
+            if(self::inNoviceMode()) $this->setNoviceMenu();
             $this->app->loadLang('company');
         }
     }
@@ -248,7 +249,6 @@ class commonModel extends model
         {
             $isGuest = $app->user->account == 'guest';
 
-
             echo "<div class='dropdown' id='userMenu'>";
             echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
 
@@ -258,6 +258,10 @@ class commonModel extends model
             {
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
+
+                $inNovice = self::inNoviceMode();
+                echo '<li>' . html::a(helper::createLink('misc', 'ajaxSaveNovice', "novice=" . ($inNovice ? 'false' : 'true') . '&reload=true'), $inNovice ? $lang->quitNovice : $lang->enterNovice, 'hiddenwin') . '</li>';
+
                 echo "<li class='divider'></li>";
             }
 
@@ -296,6 +300,31 @@ class commonModel extends model
 
         echo html::a('javascript:;', $lang->help, '', "class='open-help-tab'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
+    }
+
+    /**
+     * Set novice menu.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setNoviceMenu()
+    {
+        $this->lang->menuOrder[10] = 'company';
+        $this->lang->menuOrder[15] = 'product';
+        $this->lang->menuOrder[20] = 'project';
+        $this->lang->menuOrder[25] = 'qa';
+        $this->lang->menuOrder[30] = 'doc';
+        $this->lang->menuOrder[35] = 'report';
+
+        $this->lang->product->menuOrder[15] = 'plan';
+        $this->lang->product->menuOrder[20] = 'release';
+        $this->lang->product->menuOrder[25] = 'roadmap';
+        $this->lang->product->menuOrder[30] = 'dynamic';
+        $this->lang->story->menuOrder       = $this->lang->product->menuOrder;
+        $this->lang->productplan->menuOrder = $this->lang->product->menuOrder;
+        $this->lang->release->menuOrder     = $this->lang->product->menuOrder;
+        $this->lang->branch->menuOrder      = $this->lang->product->menuOrder;
     }
 
     /**
@@ -1272,6 +1301,19 @@ class commonModel extends model
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
         return "$httpType://$httpHost";
+    }
+
+    /**
+     * Check in novice mode.
+     * 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function inNoviceMode()
+    {
+        global $config;
+        return (isset($config->global->novice) and $config->global->novice == 'true');
     }
 }
 

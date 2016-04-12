@@ -59,3 +59,4 @@ $lang->misc->needRepair  = "修复表";
 $lang->misc->repairTable = "数据库表可以因为断电原因损坏，需要检查修复！！";
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "状态";
+$lang->misc->novice      = "您可能初次使用禅道，是否进入新手模式？";
