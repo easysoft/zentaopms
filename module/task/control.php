@@ -188,6 +188,11 @@ class task extends control
             die(js::locate($storyLink, 'parent'));
         }
 
+        /* Set Custom*/
+        foreach(explode(',', $this->config->task->batchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->task->custom->batchcreate;
+
         $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, 0, 'short');
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);

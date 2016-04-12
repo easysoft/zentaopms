@@ -41,9 +41,11 @@ $config->task->exportFields = '
     lastEditedBy, lastEditedDate,files
     ';
 $config->task->customCreateFields = 'story,estStarted,deadline,mailto,pri,estimate'; 
+$config->task->batchCreateFields  = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri'; 
 
 $config->task->custom = new stdclass();
-$config->task->custom->create = $config->task->customCreateFields;
+$config->task->custom->create      = $config->task->customCreateFields;
+$config->task->custom->batchcreate = 'module,story,assignedTo,estimate,desc,pri';
 
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'deadline', 'openedDate', 'assignedTo', 'finishedBy', 'finishedDate', 'estimate', 'consumed', 'left', 'story', 'actions');

@@ -151,7 +151,8 @@ class taskModel extends model
             $data[$i]->estimate     = $tasks->estimate[$i];
             $data[$i]->left         = $tasks->estimate[$i];
             $data[$i]->project      = $projectID;
-            $data[$i]->deadline     = '0000-00-00';
+            $data[$i]->estStarted   = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
+            $data[$i]->deadline     = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
             $data[$i]->status       = 'wait';
             $data[$i]->openedBy     = $this->app->user->account;
             $data[$i]->openedDate   = $now;
