@@ -15,7 +15,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
-    <strong><?php echo $story->title;?></strong>
+    <strong style='color: <?php echo $story->color; ?>'><?php echo $story->title;?></strong>
     <?php if($story->version > 1):?>
     <small class='dropdown'>
       <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>

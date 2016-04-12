@@ -40,9 +40,9 @@
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
         <td class='text-left' title="<?php echo $case->title?>">
-          <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
-          <?php if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span>"?>
-          <?php echo html::a($viewLink, $case->title);?>
+          <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span> "?>
+          <?php if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span> "?>
+          <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
         </td>
         <?php if($browseType == 'needconfirm'):?>
         <td class='text-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>

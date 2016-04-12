@@ -40,8 +40,8 @@
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class='text-left' title="<?php echo $story->title?>"><nobr>
         <?php if($story->branch) echo "<span class='label label-info label-badge'>{$branches[$story->branch]}</span>"?>
-        <?php if($modulePairs and $story->module) echo "<span class='label label-info label-badge'>{$modulePairs[$story->module]}</span>"?>
-        <?php echo html::a($viewLink, $story->title);?>
+        <?php if($modulePairs and $story->module) echo "<span class='label label-info label-badge'>{$modulePairs[$story->module]}</span> "?>
+        <?php echo html::a($viewLink, $story->title, null, "style='color: $story->color'");?>
         </nobr></td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
         <td><?php echo $lang->story->sourceList[$story->source];?></td>

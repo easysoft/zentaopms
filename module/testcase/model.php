@@ -954,9 +954,9 @@ class testcaseModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>";
-                if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span>";
-                echo html::a($caseLink, $case->title);
+                if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span> ";
+                if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";
+                echo html::a($caseLink, $case->title, null, "style='color: $case->color'");
                 break;
             case 'branch':
                 echo $branches[$case->branch];

@@ -15,7 +15,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
-    <strong><?php echo $task->name;?></strong>
+    <strong style='color: <?php echo $task->color; ?>'><?php echo $task->name;?></strong>
     <?php if($task->deleted):?>
     <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
     <?php endif; ?>

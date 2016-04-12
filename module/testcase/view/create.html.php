@@ -86,7 +86,7 @@
            <div class='row-table'>
             <div class='col-table w-p100'>
               <div class='input-group w-p100'>
-                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->testcase->colorTag ?>'>
+                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->testcase->colorTag ?>' data-update-text='#title'>
                 <?php echo html::input('title', $caseTitle, "class='form-control'");?>
               </div>
             </div>

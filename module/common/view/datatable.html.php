@@ -56,6 +56,7 @@ $(document).ready(function()
         sortable      : false,
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
+        storage       : false,
         ready: function()
         {
             if(!this.$table) return;

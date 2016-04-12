@@ -50,7 +50,7 @@
           <?php if(isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span>';?>
           <?php if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span>';?>
           <?php 
-          if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
+          if(!common::printLink('task', 'view', "task=$task->id", $task->name, null, "style='color: $task->color'")) echo $task->name;
           if($task->fromBug) echo html::a($this->createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
           ?>
         </td>

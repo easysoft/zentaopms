@@ -604,6 +604,12 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .outer form > .btn {margin-right: 10px;}
 .outer form .panel {margin-bottom: 0;}
 
+/* Color picker in form */
+.colorpicker.fix-border-right > .btn {border-right-color: transparent}
+.colorpicker.fix-border-left > .btn {border-left-color: transparent}
+.colorpicker.fix-border-right > .btn:hover {border-right-color: #bdbdbd}
+.colorpicker.fix-border-left > .btn:hover {border-left-color: #bdbdbd}
+
 /* Pager. */
 .pager {margin-bottom:0;line-height: 20px; color: #999}
 .pager .dropdown {display: inline-block;}
