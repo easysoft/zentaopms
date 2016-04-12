@@ -244,9 +244,16 @@ class story extends control
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
         $plans = $this->loadModel('productplan')->getPairs($productID, $branch, 'unexpired');
-        $plans['ditto']   = $this->lang->story->ditto;
-        $priList          = (array)$this->lang->story->priList;
-        $priList['ditto'] = $this->lang->story->ditto;
+        $plans['ditto']      = $this->lang->story->ditto;
+        $priList             = (array)$this->lang->story->priList;
+        $priList['ditto']    = $this->lang->story->ditto;
+        $sourceList          = (array)$this->lang->story->sourceList;
+        $sourceList['ditto'] = $this->lang->story->ditto;
+
+        /* Set Custom*/
+        foreach(explode(',', $this->config->story->list->batchCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->story->custom->batchcreate;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->productName      = $product->name;
@@ -259,6 +266,7 @@ class story extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $plans; 
         $this->view->priList          = $priList;
+        $this->view->sourceList       = $sourceList;
         $this->view->planID           = $planID;
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
