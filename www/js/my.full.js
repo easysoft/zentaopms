@@ -1375,24 +1375,30 @@ function fixedTfootAction(formID)
     var $table = $(formID).find('table:last');
     var $tfoot = $table.find('tfoot');
     if($tfoot.size() == 0) return false;
-    $tfoot.removeClass('fixedTfootAction');
 
+    var tableWidth;
+    var tableOffset;
+    var fixHeight   = $tfoot.height() / 5;
+    var tableHeight = $table.height();
     var $inputgroup = $tfoot.find('.table-actions').children('.input-group');
     if($inputgroup.size() > 0)var $inputwidth = $inputgroup.width();
 
-
-    var fixHeight   = $tfoot.height() / 5;
-    var tableHeight = $table.height();
-    var tableWidth  = $table.width();
-    var tableOffset = $table.offset().top + tableHeight - fixHeight;
-    if($(window).height() + $(window).scrollTop() <= tableOffset)
+    var fixTfootInitHandle = function()
     {
-        $tfoot.addClass('fixedTfootAction');
-        $tfoot.width(tableWidth);
-        $tfoot.find('td').width(tableWidth);
-        if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
+        tableWidth  = $table.width();
+        tableOffset = $table.offset().top + tableHeight - fixHeight;
+        $tfoot.removeClass('fixedTfootAction');
+        if($(window).height() + $(window).scrollTop() <= tableOffset)
+        {
+            $tfoot.addClass('fixedTfootAction');
+            $tfoot.width(tableWidth);
+            $tfoot.find('td').width(tableWidth);
+            if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
+        }
     }
-    $(window).scroll(function()
+    fixTfootInitHandle();
+
+    var fixTfootScrollHandle = function()
     {
         $hasFixed = $tfoot.hasClass('fixedTfootAction');
         tableOffset = $table.offset().top + tableHeight - fixHeight;
@@ -1411,7 +1417,10 @@ function fixedTfootAction(formID)
             $tfoot.find('td').width(tableWidth);
             if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
         }
-    });
+    };
+    $(window).scroll(fixTfootScrollHandle);//Fix table foot when scrolling.
+
+    $('.side-handle').click(function(){setTimeout(fixTfootInitHandle, 300);});//Fix table foot if module tree is hidden or displayed.
 }
 
 /**
@@ -1457,19 +1466,26 @@ function fixedTheadOfList(tableID)
     var $table = $(tableID);
     var $thead = $table.find('thead');
     if($thead.size() == 0) return false;
-    $table.parent().find('.fixedTheadOfList').remove();
 
+    var tableWidth;
     var theadOffset = $thead.offset().top;
-    var tableWidth  = $table.width();
     var fixedThead  = "<table class='fixedTheadOfList'><thead>" + $thead.html() + '</thead></table>';
 
-    if(theadOffset < $(window).scrollTop())
+    var fixTheadInitHandle = function()
     {
-        $table.before(fixedThead);
-        $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
-    }
-    $(window).scroll(function()
+        $table.parent().find('.fixedTheadOfList').remove();
+        if(theadOffset < $(window).scrollTop())
+        {
+            tableWidth = $table.width();
+            $table.before(fixedThead);
+            $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
+        }
+    };
+    fixTheadInitHandle();
+
+    var fixTheadScrollHandle = function()
     {    
+        tableWidth = $table.width();
         var hasFixed  = $table.parent().find('.fixedTheadOfList').size() > 0;
         if(!hasFixed)
         {
@@ -1484,7 +1500,10 @@ function fixedTheadOfList(tableID)
         {
             $table.parent().find('.fixedTheadOfList').remove();
         }
-    });
+    };
+    $(window).scroll(fixTheadScrollHandle);//Fix table head when scrolling.
+
+    $('.side-handle').click(function(){setTimeout(fixTheadInitHandle, 300);});//Fix table head if module tree is hidden or displayed.
 }
 
 /**
