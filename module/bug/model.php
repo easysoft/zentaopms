@@ -2039,7 +2039,7 @@ class bugModel extends model
                 break;
             case 'title':
                 $class = 'confirm' . $bug->confirmed;
-                echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>";
+                echo "<span class='$class'>[{$this->lang->bug->confirmedList[$bug->confirmed]}] </span>";
                 if($bug->branch)echo "<span class='label label-info label-badge'>{$branches[$bug->branch]}</span>";
                 if($modulePairs and $bug->module)echo "<span class='label label-info label-badge'>{$modulePairs[$bug->module]}</span>";
                 echo html::a($bugLink, $bug->title);

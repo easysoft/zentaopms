@@ -659,6 +659,8 @@ function autoCheck()
             var $this = $(this);
             var $tr = $(this).closest('tr');
             var $checkbox = $tr.find(':checkbox');
+            if($checkbox.size() == 0) return;
+
             var isChecked = $checkbox.prop('checked');
             if(!$this.is(':checkbox'))
             {
