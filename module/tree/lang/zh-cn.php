@@ -29,6 +29,8 @@ $lang->tree->manageBugChild    = '维护Bug子模块';
 $lang->tree->manageCaseChild   = '维护用例子模块';
 $lang->tree->manageTaskChild   = "维护{$lang->projectCommon}子模块";
 $lang->tree->syncFromProduct   = '复制';
+$lang->tree->dragAndSort       = "拖放排序";
+$lang->tree->addChild          = "增加子模块";
 
 $lang->tree->confirmDelete = '该模块及其子模块都会被删除，您确定删除吗？';
 $lang->tree->confirmRoot   = "模块的所属{$lang->productCommon}修改，会关联修改该模块下的需求、Bug、用例的所属{$lang->productCommon}，以及{$lang->projectCommon}和{$lang->productCommon}的关联关系。该操作比较危险，请谨慎操作。是否确认修改？";

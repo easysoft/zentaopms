@@ -428,6 +428,37 @@ class treeModel extends model
     }
 
     /**
+     * Get full task tree
+     * @param  integer $rootID, common value is project id
+     * @param  integer $productID
+     * @param  integer $moduleID
+     * @access public
+     * @return object
+     */
+    public function getFullTaskTree($rootID, $productID, $moduleID = 0) 
+    {
+        $tree = array_values($this->getTaskSons($rootID, $productID, $moduleID));
+        if(!$moduleID)
+        {
+            // TODO: get product moduels for the project
+            $productModulesTree = array();
+            $tree = array_merge($tree, $productModulesTree);
+        }
+        if(count($tree))
+        {
+            foreach ($tree as $node)
+            {
+                $children = $this->getFullTaskTree($rootID, $productID, $node->id);
+                if(count($children))
+                {
+                    $node->children = $children;
+                }
+            }
+        }
+        return $tree; 
+    }
+
+    /**
      * Get project story tree menu.
      * 
      * @param  int    $rootID 
@@ -1383,5 +1414,31 @@ class treeModel extends model
             return ($createdVersion and version_compare($createdVersion, '4.1', '>'));
         }
         return false;
+    }
+
+    /**
+     * Get full modules tree
+     * @param  integer $rootID
+     * @param  integer $currentModuleID
+     * @param  string  $viewType
+     * @param  string  $branch
+     * @access public
+     * @return object
+     */
+    public function getFullTree($rootID, $viewType, $branch, $currentModuleID) 
+    {
+        $tree = array_values($this->getSons($rootID, $currentModuleID, $viewType, $branch));
+        if(count($tree))
+        {
+            foreach ($tree as $node)
+            {
+                $children = $this->getFullTree($rootID, $viewType, $branch, $node->id);
+                if(count($children))
+                {
+                    $node->children = $children;
+                }
+            }
+        }
+        return $tree; 
     }
 }
