@@ -109,8 +109,8 @@ $(function()
             else if(action.type === 'add')
             {
                 var $modal = $('#addChildModal');
-                $modal.find('input[name="parentDeptID"]').val(item.id);
-                $modal.find('.dept-name').text(item.name);
+                $modal.find('input[name="parentDeptID"]').val(item ? item.id : 0);
+                $modal.find('.dept-name').text(item ? item.name : '<?php echo $this->app->company->name ?>');
                 $modal.modal('show');
             }
             else if(action.type === 'sort')
