@@ -11,6 +11,5 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='doc3'>
-</div>
+<?php echo $this->fetch('block', 'dashboard', 'module=qa');?>
 <?php include '../../common/view/footer.html.php';?>

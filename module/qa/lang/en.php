@@ -10,5 +10,5 @@
  * @link        http://www.zentao.net
  */
 $lang->qa = new stdclass();
-$lang->qa->common  = 'Test';
-$lang->qa->index   = "Index";
+$lang->qa->common = 'Test';
+$lang->qa->index  = "Index";

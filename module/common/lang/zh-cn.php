@@ -222,10 +222,20 @@ $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
 
 /* QA视图菜单设置。*/
+$lang->qa = new stdclass();
+$lang->qa->menu = new stdclass();
+
+$lang->qa->menu->product  = '%s';
+$lang->qa->menu->index    = '首页|qa|index|locate=no&productID=%s';
+$lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->qa->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
+$lang->qa->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
+
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
+$lang->bug->menu->index    = '首页|qa|index|locate=no&productID=%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
 $lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
@@ -234,6 +244,7 @@ $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
 $lang->testcase->menu->product  = '%s';
+$lang->testcase->menu->index    = '首页|qa|index|locate=no&productID=%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');

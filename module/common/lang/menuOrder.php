@@ -69,12 +69,14 @@ $lang->build->menuOrder       = $lang->project->menuOrder;
 
 /* bug menu order. */
 $lang->bug->menuOrder[0]  = 'product';
+$lang->bug->menuOrder[1]  = 'index';
 $lang->bug->menuOrder[5]  = 'bug';
 $lang->bug->menuOrder[10] = 'testcase';
 $lang->bug->menuOrder[15] = 'testtask';
 
 /* testcase menu order. */
 $lang->testcase->menuOrder[0]  = 'product';
+$lang->testcase->menuOrder[1]  = 'index';
 $lang->testcase->menuOrder[5]  = 'bug';
 $lang->testcase->menuOrder[10] = 'testcase';
 $lang->testcase->menuOrder[15] = 'testtask';

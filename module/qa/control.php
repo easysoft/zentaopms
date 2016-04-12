@@ -17,8 +17,17 @@ class qa extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index($locate = 'yes', $productID = 0)
     {
-        $this->locate($this->createLink('bug', 'browse'));
+        if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
+
+        $this->loadModel('product');
+        $this->products = $this->product->getPairs('nocode');
+        $this->qa->setMenu($this->products, $productID);
+
+        $this->view->title      = $this->lang->qa->index;
+        $this->view->position[] = $this->lang->qa->index;
+        $this->view->products   = $this->products;
+        $this->display();
     }
 }
