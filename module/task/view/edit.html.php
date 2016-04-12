@@ -21,7 +21,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></strong>
+    <strong><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', "class='task-title'");?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->task->edit;?></small>
   </div>
   <div class='actions'>
@@ -32,7 +32,10 @@
   <div class='col-main'>
     <div class='main'>
       <div class='form-group'>
-        <?php echo html::input('name', $task->name, 'class="form-control" placeholder="' . $lang->task->name . '"');?>
+        <div class='input-group'>
+          <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' value='<?php echo $task->color ?>' data-update-text='.task-title, #name'>
+          <?php echo html::input('name', $task->name, 'class="form-control" placeholder="' . $lang->task->name . '"');?>
+        </div>
       </div>
       <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->task->desc;?></legend>

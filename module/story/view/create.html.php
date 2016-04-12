@@ -91,7 +91,7 @@
           <div class='row-table'>
             <div class='col-table'>
               <div class="input-group w-p100">
-                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>'>
+                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' data-update-text='#title'>
                 <?php echo html::input('title', $storyTitle, "class='form-control'");?>
               </div>
             </div>

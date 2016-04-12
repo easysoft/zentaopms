@@ -29,7 +29,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?> <strong><?php echo $bug->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></strong>
+    <strong><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', 
+    'class="bug-title"');?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->bug->edit;?></small>
   </div>
   <div class='actions'>
@@ -40,7 +41,10 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
   <div class='col-main'>
     <div class='main'>
       <div class='form-group'>
-        <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class="form-control" placeholder="' . $lang->bug->title . '"');?>
+        <div class='input-group'>
+          <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->bug->colorTag ?>' value='<?php echo $bug->color ?>' data-update-text='#title, .bug-title'>
+          <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class="form-control" placeholder="' . $lang->bug->title . '"');?>
+        </div>
       </div>
       <fieldset>
         <legend><?php echo $lang->bug->legendSteps;?></legend>

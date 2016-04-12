@@ -15,7 +15,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+    <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?></strong>
     <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->story->edit;?></small>
   </div>
   <div class='actions'>
@@ -25,6 +25,12 @@
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
+      <div class='form-group'>
+        <div class='input-group'>
+          <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' value='<?php echo $story->color ?>' data-update-text='#title, .story-title'>
+          <?php echo html::input('title', $story->title, 'class="form-control disabled" disabled="disabled"');?>
+        </div>
+      </div>
       <fieldset>
         <legend><?php echo $lang->story->legendSpec;?></legend>
         <div class='article-content'><?php echo $story->spec;?></div>

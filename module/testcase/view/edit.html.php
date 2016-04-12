@@ -19,7 +19,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title);?></strong>
+    <strong><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '', 'class="case-title"');?></strong>
     <small><?php echo $lang->case->edit;?></small>
   </div>
   <div class='actions'>
@@ -30,7 +30,10 @@
   <div class='col-main'>
     <div class='main'>
       <div class='form-group'>
-        <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
+        <div class='input-group'>
+          <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->case->colorTag ?>' value='<?php echo $case->color ?>' data-update-text='#title, .case-title'>
+          <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
+        </div>
       </div>
       <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->testcase->precondition;?></legend>

@@ -15,7 +15,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
-    <strong><?php echo $case->title;?></strong>
+    <strong style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></strong>
     <?php if($case->deleted):?>
     <span class='label label-danger'><?php echo $lang->case->deleted;?></span>
     <?php endif; ?>
