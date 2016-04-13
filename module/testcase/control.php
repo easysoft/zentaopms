@@ -351,28 +351,29 @@ class testcase extends control
         /* Set menu. */
         $this->testcase->setMenu($this->products, $productID, $branch);
 
-        /* Init vars. */
-        $type         = 'feature';
-        $title        = '';
-
-        $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
-        $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $position[] = $this->lang->testcase->common;
-        $position[] = $this->lang->testcase->batchCreate;
-
+        /* Set story list. */
         $story     = $storyID ? $this->story->getByID($storyID) : '';
         $storyList = $storyID ? array($storyID => $story->id . ':' . $story->title . '(' . $this->lang->story->pri . ':' . $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')') : array('');
 
-        $this->view->title            = $title;
-        $this->view->position         = $position;
+        /* Set module option menu. */
+        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
+
+        /* Set custom. */
+        foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->testcase->custom->batchcreate;
+
+        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
+        $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+        $this->view->position[]       = $this->lang->testcase->common;
+        $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->productID        = $productID;
         $this->view->story            = $story;
         $this->view->storyList        = $storyList;
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->type             = $type;
-        $this->view->title            = $title;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
 
