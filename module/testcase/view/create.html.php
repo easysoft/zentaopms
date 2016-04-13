@@ -90,6 +90,7 @@
                 <?php echo html::input('title', $caseTitle, "class='form-control'");?>
               </div>
             </div>
+            <?php if(strpos(",$showFields,", ',pri,') !== false):?>
             <div class='col-table'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->testcase->pri;?></span>
@@ -107,6 +108,7 @@
                 <?php endif; ?>
               </div>
             </div>
+            <?php endif;?>
           </div>
         </td>
       </tr>

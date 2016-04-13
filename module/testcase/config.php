@@ -24,7 +24,7 @@ $config->testcase->exportFields = '
     pri, type, stage, status, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version,linkCase';
 
-$config->testcase->customCreateFields      = 'stage,story,keywords';
+$config->testcase->customCreateFields      = 'stage,story,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,precondition,keywords';
 
 $config->testcase->custom = new stdclass();
