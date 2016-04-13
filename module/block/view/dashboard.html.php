@@ -16,30 +16,33 @@ $themeRoot = $webRoot . "theme/";
 if(isset($pageCSS)) css::internal($pageCSS);
 ?>
 <div class='dashboard dashboard-draggable' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
+  <ul class='dashboard-actions hide'><li><a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='600'><i class='icon icon-list-alt'></i> <?php echo $lang->block->createBlock?></a></li></ul>
   <div class='row'>
     <?php foreach($blocks as $index => $block):?>
     <div class='col-sm-6 col-md-<?php echo $block->grid;?>'>
-      <div class='panel <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $index?>' data-id='<?php echo $index?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>'>
+      <div class='panel panel-block <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>'>
         <div class='panel-heading'>
           <div class='panel-actions'>
-            <?php if(isset($block->moreLink)) echo html::a($block->moreLink, $lang->more . "<i class='icon-double-angle-right'></i>", "class='app-btn'");?>
-            <button class='btn btn-mini refresh-panel'><i class='icon-repeat'></i></button>
+            <a href='javascript:;' class='refresh-panel panel-action'><i class='icon-repeat'></i></a>
             <div class='dropdown'>
-              <button class='btn btn-mini' data-toggle='dropdown'><span class='caret'></span></button>
+              <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
-                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "index=$index&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit; ?></a></li>
+                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit; ?></a></li>
                 <li><a href='javascript:;' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->delete; ?></a></li>
               </ul>
             </div>
           </div>
-          <?php echo $block->title;?>
+          <?php if(isset($block->moreLink)):?>
+          <?php echo html::a($block->moreLink, $block->title . " <i class='icon-double-angle-right'></i>", null, "class='panel-title drag-disabled' title='$lang->more'"); ?>
+          <?php else: ?>
+          <span class='panel-title'><?php echo $block->title;?></span>
+          <?php endif; ?>
         </div>
         <div class='panel-body no-padding'></div>
       </div>
     </div>
     <?php endforeach;?>
   </div>
-  <div class='dashboard-actions'><a class='btn btn-primary' href='<?php echo $this->createLink("block", "admin", "index=0&module=$module"); ?>' data-toggle='modal'><i class='icon-plus'></i> <?php echo $lang->block->createBlock?></a></div>
 </div>
 <script>
 config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';

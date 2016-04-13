@@ -24,7 +24,7 @@ if($type == 'html')
     include '../../common/view/kindeditor.html.php';
 }
 ?>
-<form method='post' id='blockForm' target='hiddenwin' class='form form-horizontal' action='<?php echo $this->createLink('block', 'set', "index=$index&type=$type&source=$source")?>'>
+<form method='post' id='blockForm' target='hiddenwin' class='form form-horizontal' action='<?php echo $this->createLink('block', 'set', "id=$id&type=$type&source=$source")?>'>
   <table class='table table-form'>
     <tbody>
       <?php include 'publicform.html.php';?>

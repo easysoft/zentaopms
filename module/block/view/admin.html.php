@@ -10,7 +10,7 @@
  * @link        http://www.ranzhico.com
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php if(isset($pageCSS)) css::internal($pageCSS); ?>
 <table class='table table-form'>
   <tr><th class='w-100px'></th><td></td></tr>
   <?php if(!empty($modules)):?>
@@ -26,5 +26,5 @@
   <tr><?php if(!empty($blocks)) echo $blocks;?></tr>
 </table>
 <div id='blockParam'></div>
-<?php js::set('index', $index)?>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php js::set('blockID', $blockID)?>
+<?php if(isset($pageJS)) js::execute($pageJS);?>

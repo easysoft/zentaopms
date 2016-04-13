@@ -27,7 +27,7 @@
             <?php echo $lang->block->color;?> <span class='caret'></span>
           </button>
           <?php echo html::hidden('params[color]', isset($block->params->color) ? $block->params->color : 'default');?>
-          <div class='dropdown-menu buttons'>
+          <div class='dropdown-menu buttons pull-right'>
             <li><button type='button' data-id='default' class='btn btn-block btn-default'>&nbsp;</li>
             <li><button type='button' data-id='primary' class='btn btn-block btn-primary'>&nbsp;</li>
             <li><button type='button' data-id='warning' class='btn btn-block btn-warning'>&nbsp;</li>

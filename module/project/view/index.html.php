@@ -10,4 +10,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php echo $this->fetch('block', 'dashboard', 'module=project');?>
 <?php include '../../common/view/footer.html.php';?>
+

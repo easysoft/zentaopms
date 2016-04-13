@@ -21,11 +21,12 @@ class blockModel extends model
      * @access public
      * @return void
      */
-    public function save($index, $source, $type, $module = 'my')
+    public function save($id, $source, $type, $module = 'my')
     {
         $data = fixer::input('post')
             ->add('account', $this->app->user->account)
-            ->add('order', $index)
+            ->setIF($id, 'id', $id)
+            ->setIF(!$id, 'order', $this->getLastKey($module) + 1)
             ->add('module', $module)
             ->add('hidden', 0)
             ->setDefault('grid', '4')
@@ -60,14 +61,14 @@ class blockModel extends model
     /**
      * Get saved block config.
      * 
-     * @param  int    $index 
+     * @param  int    $id 
      * @access public
      * @return object
      */
-    public function getBlock($index, $module = 'my')
+    public function getBlock($id, $module = 'my')
     {
         $block = $this->dao->select('*')->from(TABLE_BLOCK)
-            ->where('`order`')->eq($index)
+            ->where('`id`')->eq($id)
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
             ->fetch();
@@ -87,13 +88,13 @@ class blockModel extends model
      */
     public function getLastKey($module = 'my')
     {
-        $index = $this->dao->select('`order`')->from(TABLE_BLOCK)
+        $order = $this->dao->select('`order`')->from(TABLE_BLOCK)
             ->where('module')->eq($module)
             ->andWhere('account')->eq($this->app->user->account)
             ->orderBy('order desc')
             ->limit(1)
             ->fetch('order');
-        return $index ? $index : 0;
+        return $order ? $order : 0;
     }
 
     /**
@@ -109,7 +110,7 @@ class blockModel extends model
             ->andWhere('module')->eq($module)
             ->andWhere('hidden')->eq(0)
             ->orderBy('`order`')
-            ->fetchAll('order');
+            ->fetchAll('id');
 
         return $blocks;
     }

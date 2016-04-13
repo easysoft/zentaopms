@@ -27,18 +27,16 @@ class block extends control
     /**
      * Block admin. 
      * 
-     * @param  int    $index 
+     * @param  int    $id 
      * @param  string $module 
      * @access public
      * @return void
      */
-    public function admin($index = 0, $module = 'my')
+    public function admin($id = 0, $module = 'my')
     {
         $this->session->set('blockModule', $module);
 
-        $title = $index == 0 ? $this->lang->block->createBlock : $this->lang->block->editBlock;
-
-        if(!$index) $index = $this->block->getLastKey($module) + 1;
+        $title = $id == 0 ? $this->lang->block->createBlock : $this->lang->block->editBlock;
 
         if($module == 'my')
         {
@@ -61,11 +59,11 @@ class block extends control
         elseif(isset($this->lang->block->moduleList[$module]))
         {
             $this->get->set('mode', 'getblocklist');
-            $this->view->blocks = $this->fetch('block', 'main', "module=$module&index=$index");
+            $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
         }
 
-        $this->view->block      = $this->block->getBlock($index);
-        $this->view->index      = $index;
+        $this->view->block      = $this->block->getBlock($id);
+        $this->view->blockID    = $id;
         $this->view->title      = $title;
         $this->display();
     }
@@ -73,22 +71,22 @@ class block extends control
     /**                        
      * Set params when type is rss or html. 
      * 
-     * @param  int    $index   
+     * @param  int    $id   
      * @param  string $type    
      * @access public          
      * @return void            
      */
-    public function set($index, $type, $source = '')
+    public function set($id, $type, $source = '')
     {
         if($_POST)             
         {
             $source = isset($this->lang->block->moduleList[$source]) ? $source : '';
-            $this->block->save($index, $source, $type, $this->session->blockModule);
+            $this->block->save($id, $source, $type, $this->session->blockModule);
             if(dao::isError())  die(js::error(dao::geterror())); 
             die(js::reload('parent'));
         }
 
-        $block = $this->block->getBlock($index);
+        $block = $this->block->getBlock($id);
         if($block) $type = $block->block;
 
         if(isset($this->lang->block->moduleList[$source]))
@@ -100,7 +98,7 @@ class block extends control
 
         $this->view->source  = $source;
         $this->view->type    = $type;
-        $this->view->index   = $index;
+        $this->view->id      = $id;
         $this->view->block   = ($block) ? $block : array();
         $this->display();      
     }
@@ -108,21 +106,21 @@ class block extends control
     /**
      * Delete block 
      * 
-     * @param  int    $index 
+     * @param  int    $id 
      * @param  string $sys 
      * @param  string $type 
      * @access public
      * @return void
      */
-    public function delete($index, $module = 'my', $type = 'delete')
+    public function delete($id, $module = 'my', $type = 'delete')
     {   
         if($type == 'hidden')
         {   
-            $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)->where('`order`')->eq($index)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
+            $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
         else
         {   
-            $this->dao->delete()->from(TABLE_BLOCK)->where('`order`')->eq($index)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
+            $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->send(array('result' => 'success'));
@@ -137,18 +135,17 @@ class block extends control
      * @access public
      * @return void
      */
-    public function sort($oldOrder, $newOrder, $module = 'my')
+    public function sort($orders, $module = 'my')
     {
-        $oldOrder  = explode(',', $oldOrder);
-        $newOrder  = explode(',', $newOrder);
-        $orderList = $this->block->getBlockList($module);
-
-        foreach($oldOrder as $key => $oldIndex)
+        $orders    = explode(',', $orders);
+        $blockList = $this->block->getBlockList($module);
+        
+        foreach ($orders as $order => $blockID)
         {
-            if(!isset($orderList[$oldIndex])) continue;
-            $order = $orderList[$oldIndex];
-            $order->order = $newOrder[$key];
-            $this->dao->replace(TABLE_BLOCK)->data($order)->exec();
+            $block = $blockList[$blockID];
+            if(!isset($block)) continue;
+            $block->order = $order;
+            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
         }
 
         if(dao::isError()) $this->send(array('result' => 'fail'));
@@ -175,20 +172,26 @@ class block extends control
 
         foreach($blocks as $block)
         {
-            $params  = json_decode($block->params);
+            $block->params  = json_decode($block->params);
             $blockID = $block->block;
 
-            $block->blockLink = $this->createLink('block', 'printBlock', "index=$block->order&module=$block->module");
+            $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
             $block->moreLink  = '';
             if(isset($this->lang->block->modules[$module]->moreLinkList->{$blockID}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$blockID}, $params->type));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$blockID}, $block->params->type));
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
             }
         }
 
         $this->view->blocks = $blocks;
         $this->view->module = $module;
+
+        if($this->app->getViewType() == 'json')
+        {
+            die(json_encode($blocks));
+        }
+
         $this->display();
     }
 
@@ -208,13 +211,13 @@ class block extends control
     /**
      * Print block. 
      * 
-     * @param  int    $index 
+     * @param  int    $id 
      * @access public
      * @return void
      */
-    public function printBlock($index, $module = 'my')
+    public function printBlock($id, $module = 'my')
     {
-        $block = $this->block->getBlock($index, $module);
+        $block = $this->block->getBlock($id, $module);
 
         if(empty($block)) return false;
 
@@ -230,7 +233,7 @@ class block extends control
             $this->get->set('source', $block->source);
             $this->get->set('blockid', $block->block);
             $this->get->set('param',base64_encode(json_encode($block->params)));
-            $html = $this->fetch('block', 'main', "module={$block->source}&index=$index");
+            $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
         }
         elseif($block->block == 'dynamic')
         {
@@ -246,7 +249,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function main($module = '', $index = 0)
+    public function main($module = '', $id = 0)
     {
         if(!$this->selfCall)
         {
@@ -269,7 +272,7 @@ class block extends control
             $blocks     = json_decode($blocks, true);
             $blockPairs = array('' => '') + $blocks;
 
-            $block = $this->block->getBlock($index);
+            $block = $this->block->getBlock($id);
 
             echo "<th>{$this->lang->block->lblBlock}</th>";
             echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';

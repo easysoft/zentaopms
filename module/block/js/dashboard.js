@@ -1,6 +1,6 @@
 $(function()
 {
-    $('#dashboard').dashboard(
+    var $dashboard = $('#dashboard').dashboard(
     {
         height            : 240,
         draggable         : true,
@@ -10,6 +10,8 @@ $(function()
         sensitive         : true,
         panelRemovingTip  : config.confirmRemoveBlock
     });
+
+    $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
 });
 
 /**
@@ -40,27 +42,14 @@ function deleteBlock(index)
  */
 function sortBlocks(orders)
 {
-    var oldOrder = new Array();
-    var newOrder = new Array();
-    for(i in orders)
-    {   
-        oldOrder.push(i.replace('block', ''));
-        newOrder.push(orders[i]);
-    }
 
-    $.getJSON(createLink('block', 'sort', 'oldOrder=' + oldOrder.join(',') + '&newOrder=' + newOrder.join(',') + '&module=' + module), function(data)
+    var ordersMap = [];
+    $.each(orders, function(blockId, order) {ordersMap.push({id: blockId, order: order});});
+    ordersMap.sort(function(a, b) {return a.order - b.order;});
+    var newOrders = $.map(ordersMap, function(order, idx) {return order.id});
+
+    $.getJSON(createLink('block', 'sort', 'orders=' + newOrders.join(',') + '&module=' + module), function(data)
     {
-
-        if(data.result != 'success') return false;
-
-        $('#dashboard .panel').each(function()
-        {
-            var index = $(this).data('order');
-            /* Update new index for block id edit and delete. */
-            $(this).attr('id', 'block' + index).attr('data-id', index).data('url', createLink('block', 'printBlock', 'index=' + index));
-            $(this).find('.panel-actions .edit-block').attr('href', createLink('block', 'admin', 'index=' + index));
-        });
-
-        $.zui.messager.success(config.ordersSaved);
+        if(data.result == 'success') $.zui.messager.success(config.ordersSaved);
     });
 }

@@ -7,6 +7,7 @@
  */
 function getBlocks(moduleID)
 {
+    console.log('getBlocks', moduleID);
     var moduleBlock = $('#modules').parent().parent().next();
     $(moduleBlock).hide();
 
@@ -24,8 +25,9 @@ function getBlocks(moduleID)
         return true;
     }
 
-    $.get(createLink('block', 'main', 'module=' + moduleID + '&index=' + index), {mode:'getblocklist'}, function(data)
+    $.get(createLink('block', 'main', 'module=' + moduleID + '&id=' + blockID), {mode:'getblocklist'}, function(data)
     {
+        console.log('GET BLOCKS', moduleID, data);
         $(moduleBlock).html(data);
         $(moduleBlock).show();
     })
@@ -40,7 +42,7 @@ function getBlocks(moduleID)
  */
 function getRssAndHtmlParams(type)
 {
-    $.get(createLink('block', 'set', 'index=' + index + '&type=' + type), function(data)
+    $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type), function(data)
     {
         $('#blockParam').html(data);
     });
@@ -57,7 +59,7 @@ function getRssAndHtmlParams(type)
 function getBlockParams(type, moduleID)
 {
     $('#blockParam').empty();
-    $.get(createLink('block', 'set', 'index=' + index + '&type=' + type + '&source=' + moduleID), function(data)
+    $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type + '&source=' + moduleID), function(data)
     {
         $('#blockParam').html(data);
     });

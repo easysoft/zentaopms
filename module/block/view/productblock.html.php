@@ -10,10 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<table class='table table-data table-condensed table-hover table-striped table-fixed block-product'>
+<table class='table table-data table-hover table-fixed table-striped table-borderless block-product'>
   <thead>
     <tr class='text-center'>
-      <th class='text-left'><i class="icon icon-cube"></i> <?php echo $lang->product->name;?></th>
+      <th class='text-left'><?php echo $lang->product->name;?></th>
       <th width='35' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
       <th width='45' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
       <th width='35' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>

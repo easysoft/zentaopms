@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<table class='table table-data table-condensed table-hover table-striped table-fixed block-project'>
+<table class='table table-data table-hover table-striped table-fixed block-project'>
   <thead>
     <tr class='text-center'>
       <th><div class='text-left'><i class="icon-folder-close-alt icon"></i> <?php echo $lang->project->name;?></div></th>
