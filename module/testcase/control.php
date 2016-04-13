@@ -1023,13 +1023,15 @@ class testcase extends control
             $rows     = $this->file->parseCSV($fileName);
             $header   = $rows[0];
             unset($rows[0]);
+
+            $columnKey = array();
             foreach($header as $title)
             {
                 $field = array_search($title, $fields);
                 if(!$field) continue;
                 $columnKey[] = $field;
             }
-            if(empty($columnKey))
+            if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
             {
                 $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
