@@ -118,8 +118,13 @@ js::set('refresh', $lang->refresh);
                 <?php echo html::input('title', $bugTitle, "class='form-control'");?>
               </div>
             </div>
-            <div class='col-table'>
+            <?php $showSeverity = strpos(",$showFields,", ',severity,') !== false;?>
+            <?php $showPri      = strpos(",$showFields,", ',pri,')      !== false;?>
+            <?php if($showSeverity or $showPri):?>
+            <?php $widthClass = (!$showSeverity or !$showPri) ? 'w-100px' : 'w-230px';?>
+            <div class='col-table <?php echo $widthClass?>'>
               <div class='input-group'>
+                <?php if($showSeverity):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
                 <?php $isAllNumberSeverity = is_numeric(join($lang->bug->severityList));?>
                 <?php if(!$isAllNumberSeverity):?>
@@ -133,6 +138,8 @@ js::set('refresh', $lang->refresh);
                   <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='hide'");?>
                 </div>
                 <?php endif; ?>
+                <?php endif;?>
+                <?php if($showPri):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->pri;?></span>
                 <?php $isAllNumberPri = is_numeric(join($lang->bug->priList));?>
                 <?php if(!$isAllNumberPri):?>
@@ -145,9 +152,11 @@ js::set('refresh', $lang->refresh);
                   <ul class='dropdown-menu pull-right'></ul>
                   <?php echo html::select('pri', $lang->bug->priList, '', "class='hide'");?>
                 </div>
-                <?php endif; ?>
+                <?php endif;?>
+                <?php endif;?>
               </div>
             </div>
+            <?php endif;?>
           </div>
         </td>
       </tr>  

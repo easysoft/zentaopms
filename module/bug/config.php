@@ -38,7 +38,7 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedBy,
     lastEditedDate, files';
 
-$config->bug->list->customCreateFields = 'project,story,task,os,browser,mailto,keywords';
+$config->bug->list->customCreateFields = 'project,story,task,pri,severity,os,browser,mailto,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->create = $config->bug->list->customCreateFields;
