@@ -991,10 +991,10 @@ function setModal()
                         ajaxModal.html(data);
 
                         /* Set the width of modal dialog. */
-                        if($e.data('width'))
+                        if(options.width)
                         {
-                            var modalWidth = parseInt($e.data('width'));
-                            $(this).data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
+                            var modalWidth = parseInt(options.width);
+                            $ajaxModal.data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
                             ajustModalPosition();
                         }
 
