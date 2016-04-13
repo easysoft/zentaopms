@@ -372,9 +372,14 @@ class task extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), $this->config->task->batchEdit->columns);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), count(explode(',', $this->config->task->custom->batchedit)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        /* Set Custom*/
+        foreach(explode(',', $this->config->task->batchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->task->custom->batchedit;
 
         /* Set ditto option for pri, status and type list. */
         $this->lang->task->priList['ditto']    = $this->lang->task->ditto;

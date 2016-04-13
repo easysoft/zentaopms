@@ -14,9 +14,6 @@ $config->task->start->requiredFields       = 'estimate';
 $config->task->finish->requiredFields      = 'consumed';
 $config->task->activate->requiredFields    = 'left';
 
-$config->task->batchEdit = new stdclass();
-$config->task->batchEdit->columns = 13;
-
 $config->task->editor = new stdclass();
 $config->task->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->edit     = array('id' => 'desc,comment', 'tools' => 'simpleTools');
@@ -42,10 +39,12 @@ $config->task->exportFields = '
     ';
 $config->task->customCreateFields = 'story,estStarted,deadline,mailto,pri,estimate'; 
 $config->task->batchCreateFields  = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri'; 
+$config->task->batchEditFields    = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
 
 $config->task->custom = new stdclass();
 $config->task->custom->create      = $config->task->customCreateFields;
 $config->task->custom->batchcreate = 'module,story,assignedTo,estimate,desc,pri';
+$config->task->custom->batchedit   = 'module,assignedTo,status,pri,estimate,record,left,finishedBy,closedBy,closedReason';
 
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'deadline', 'openedDate', 'assignedTo', 'finishedBy', 'finishedDate', 'estimate', 'consumed', 'left', 'story', 'actions');

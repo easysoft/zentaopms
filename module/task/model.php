@@ -292,6 +292,7 @@ class taskModel extends model
             if($data->assignedTos[$taskID] == 'ditto') $data->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
             if($data->pris[$taskID]        == 'ditto') $data->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
             if($data->finishedBys[$taskID] == 'ditto') $data->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
+            if($data->canceledBys[$taskID] == 'ditto') $data->canceledBys[$taskID] = isset($prev['canceledBy']) ? $prev['canceledBy'] : '';
             if($data->closedBys[$taskID]   == 'ditto') $data->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
 
             $prev['module']     = $data->modules[$taskID];
@@ -300,6 +301,7 @@ class taskModel extends model
             $prev['assignedTo'] = $data->assignedTos[$taskID];
             $prev['pri']        = $data->pris[$taskID];
             $prev['finishedBy'] = $data->finishedBys[$taskID];
+            $prev['canceledBy'] = $data->canceledBys[$taskID];
             $prev['closedBy']   = $data->closedBys[$taskID];
         }
 
@@ -317,20 +319,19 @@ class taskModel extends model
             $task->pri            = $data->pris[$taskID];
             $task->estimate       = $data->estimates[$taskID];
             $task->left           = $data->lefts[$taskID];
+            $task->estStarted     = $data->estStarteds[$taskID];
+            $task->deadline       = $data->deadlines[$taskID];
             $task->finishedBy     = $data->finishedBys[$taskID];
-            $task->canceledBy     = $oldTask->canceledBy;
+            $task->canceledBy     = $data->canceledBys[$taskID];
             $task->closedBy       = $data->closedBys[$taskID];
             $task->closedReason   = $data->closedReasons[$taskID];
-            $task->finishedDate   = $oldTask->finishedDate;
-            $task->canceledDate   = $oldTask->canceledDate;
-            $task->closedDate     = $oldTask->closedDate;
+            $task->assignedDate   = $oldTask->assignedTo ==$task->assignedTo  ? $oldTask->assignedDate : $now;
+            $task->finishedDate   = $oldTask->finishedBy == $task->finishedBy ? $oldTask->finishedDate : $now;
+            $task->canceledDate   = $oldTask->canceledBy == $task->canceledBy ? $oldTask->canceledDate : $now;
+            $task->closedDate     = $oldTask->closedBy == $task->closedBy ? $oldTask->closedDate : $now;
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
-            if(isset($data->assignedTos[$taskID])) 
-            {
-                $task->assignedDate = $data->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
-            }
 
             if($data->consumeds[$taskID])
             {

@@ -5,9 +5,6 @@ $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
 $config->story->needReview = 1;
 
-$config->story->batchEdit = new stdclass();
-$config->story->batchEdit->columns = 11;
-
 $config->story->batchClose = new stdclass();
 $config->story->batchClose->columns = 10;
 
