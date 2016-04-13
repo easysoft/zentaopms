@@ -990,9 +990,7 @@ EOT;
     static public function reload($window = 'self')
     {
         $js  = self::start();
-        $js .= "var href = $window.location.href;\n";
-        $js .= "$window.location.href = href.indexOf('#') < 0 ? href : href.substring(0, href.indexOf('#'));";
-
+        $js .= "$window.location.reload();\n";
         $js .= self::end();
         return $js;
     }

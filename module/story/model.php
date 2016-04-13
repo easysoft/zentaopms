@@ -522,9 +522,12 @@ class storyModel extends model
                 $story->title          = $data->titles[$storyID];
                 $story->estimate       = $data->estimates[$storyID];
                 $story->pri            = $data->pris[$storyID];
+                $story->assignedTo     = $data->assignedTo[$storyID];
+                $story->assignedDate   = $oldStory == $data->assignedTo[$storyID] ? $oldStory->assignedDate : $now;
                 $story->module         = $data->modules[$storyID];
                 $story->plan           = $data->plans[$storyID];
                 $story->source         = $data->sources[$storyID];
+                $story->keywords       = $data->keywords[$storyID];
                 $story->stage          = isset($data->stages[$storyID])             ? $data->stages[$storyID]             : $oldStory->stage;
                 $story->closedBy       = isset($data->closedBys[$storyID])          ? $data->closedBys[$storyID]          : $oldStory->closedBy;
                 $story->closedReason   = isset($data->closedReasons[$storyID])      ? $data->closedReasons[$storyID]      : $oldStory->closedReason;

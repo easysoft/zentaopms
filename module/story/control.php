@@ -430,6 +430,11 @@ class story extends control
         $this->lang->story->stageList['ditto']  = $this->lang->story->ditto;
         $this->lang->story->reasonList['ditto'] = $this->lang->story->ditto;
 
+        /* Set Custom*/
+        foreach(explode(',', $this->config->story->list->batchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->story->custom->batchedit;
+
         /* Judge whether the editedStories is too large and set session. */
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), $this->config->story->batchEdit->columns);
