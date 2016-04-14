@@ -415,6 +415,15 @@ class userModel extends model
             $users[$id]['commiter'] = $this->post->commiter[$id];
             $users[$id]['email']    = $this->post->email[$id];
             $users[$id]['join']     = $this->post->join[$id];
+            $users[$id]['skype']    = $this->post->skype[$id];
+            $users[$id]['qq']       = $this->post->qq[$id];
+            $users[$id]['yahoo']    = $this->post->yahoo[$id];
+            $users[$id]['gtalk']    = $this->post->gtalk[$id];
+            $users[$id]['wangwang'] = $this->post->wangwang[$id];
+            $users[$id]['mobile']   = $this->post->mobile[$id];
+            $users[$id]['phone']    = $this->post->phone[$id];
+            $users[$id]['address']  = $this->post->address[$id];
+            $users[$id]['zipcode']  = $this->post->zipcode[$id];
             $users[$id]['dept']     = $this->post->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $this->post->dept[$id];
             $users[$id]['role']     = $this->post->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $this->post->role[$id];
 
