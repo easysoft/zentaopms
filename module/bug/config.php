@@ -9,9 +9,6 @@ $config->bug->create->requiredFields  = 'title,openedBuild';
 $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 
-$config->bug->batchEdit = new stdclass();
-$config->bug->batchEdit->columns = 9;
-
 $config->bug->list = new stdclass();
 $config->bug->list->allFields = 'id, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser, hardware,
@@ -39,11 +36,13 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedDate, files';
 
 $config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,mailto,keywords';
-$config->bug->list->customBatchCreateFields = 'module,project,os,browser,severity,pri,type,steps,keywords';
+$config->bug->list->customBatchCreateFields = 'module,project,steps,type,pri,severity,os,browser,keywords';
+$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,status,resolvedBy,resolution,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->create      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchcreate = $config->bug->list->customBatchCreateFields;
+$config->bug->custom->batchcreate = 'module,project,steps,type,severity,os,browser';
+$config->bug->custom->batchedit   = 'type,severity,pri,assignedTo,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');

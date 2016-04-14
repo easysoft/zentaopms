@@ -622,17 +622,27 @@ class bug extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), $this->config->bug->batchEdit->columns);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), count(explode(',', $this->config->bug->custom->batchedit)) + 2);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        /* Set Custom*/
+        foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->bug->custom->batchedit;
 
         /* Set ditto option for users and type, severity, pri, resolution list. */
         $users          = $this->user->getPairs('nodeleted,devfirst');
         $users['ditto'] = $this->lang->bug->ditto;
-        $this->lang->bug->typeList      ['ditto'] = $this->lang->bug->ditto;
-        $this->lang->bug->priList       ['ditto'] = $this->lang->bug->ditto;
+        $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
+        $plans['ditto'] = $this->lang->bug->ditto;
+        $this->lang->bug->typeList['ditto']       = $this->lang->bug->ditto;
+        $this->lang->bug->priList['ditto']        = $this->lang->bug->ditto;
         $this->lang->bug->resolutionList['ditto'] = $this->lang->bug->ditto;
-        $this->lang->bug->severityList  ['ditto'] = $this->lang->bug->ditto;
+        $this->lang->bug->severityList['ditto']   = $this->lang->bug->ditto;
+        $this->lang->bug->statusList['ditto']     = $this->lang->bug->ditto;
+        $this->lang->bug->osList['ditto']         = $this->lang->bug->ditto;
+        $this->lang->bug->browserList['ditto']    = $this->lang->bug->ditto;
 
         /* Assign. */
         $this->view->position[]     = $this->lang->bug->common;
@@ -646,6 +656,7 @@ class bug extends control
         $this->view->bugs           = $bugs;
         $this->view->branch         = $branch;
         $this->view->users          = $users;
+        $this->view->plans          = $plans;
 
         $this->display();
     }

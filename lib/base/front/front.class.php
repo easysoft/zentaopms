@@ -990,7 +990,7 @@ EOT;
     static public function reload($window = 'self')
     {
         $js  = self::start();
-        $js .= "$window.location.reload();\n";
+        $js .= "$window.location.reload(true);\n";
         $js .= self::end();
         return $js;
     }
