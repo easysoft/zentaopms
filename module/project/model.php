@@ -351,6 +351,7 @@ class projectModel extends model
             $projects[$projectID]->begin  = $this->post->begins[$projectID];
             $projects[$projectID]->end    = $this->post->ends[$projectID];
             $projects[$projectID]->team   = $this->post->teams[$projectID];
+            $projects[$projectID]->desc   = $this->post->descs[$projectID];
             $projects[$projectID]->days   = $this->post->dayses[$projectID];
             $projects[$projectID]->order  = $this->post->orders[$projectID];
         }

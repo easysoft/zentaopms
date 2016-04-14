@@ -11,7 +11,7 @@ $config->project->edit   = new stdclass();
 $config->project->create->requiredFields = 'name,code,begin,end';
 $config->project->edit->requiredFields   = 'name,code,begin,end';
 
-$config->project->customBatchEditFields = 'days,type,teamname,status,PO,QD,PM,RD';
+$config->project->customBatchEditFields = 'days,type,teamname,status,desc,PO,QD,PM,RD';
 
 $config->project->custom = new stdclass();
 $config->project->custom->batchedit = 'days,status,PM';

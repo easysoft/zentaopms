@@ -43,6 +43,7 @@ $minWidth = (count($hasFields) > 5) ? 'w-150px' : '';
       <th class='w-100px<?php echo zget($hasFields, 'status', ' hidden')?>'><?php echo $lang->project->status;?></th>
       <th class='w-110px'><?php echo $lang->project->begin;?> <span class='required'></span></th>
       <th class='w-110px'><?php echo $lang->project->end;?> <span class='required'></span></th>
+      <th class='w-150px<?php echo zget($hasFields, 'desc', ' hidden')?>'>    <?php echo $lang->project->desc;?></th>
       <th class='w-150px<?php echo zget($hasFields, 'teamname', ' hidden')?>'><?php echo $lang->project->teamname;?></th>
       <th class='w-150px<?php echo zget($hasFields, 'days',     ' hidden')?>'><?php echo $lang->project->days;?></th>
       <th class='w-80px'><?php echo $lang->project->order;?></th>
@@ -61,6 +62,7 @@ $minWidth = (count($hasFields) > 5) ? 'w-150px' : '';
     <td class='<?php echo zget($hasFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
     <td><?php echo html::input("begins[$projectID]", $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("ends[$projectID]",   $projects[$projectID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+    <td class='<?php echo zget($hasFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$projectID]",  htmlspecialchars($projects[$projectID]->desc),  "rows='1' class='form-control autosize'");?></td>
     <td class='<?php echo zget($hasFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$projectID]",  $projects[$projectID]->team,  "class='form-control'");?></td>
     <td class='<?php echo zget($hasFields, 'days',     'hidden')?>'>
       <div class='input-group'>

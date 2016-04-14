@@ -14,19 +14,31 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['product']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->product->batchEdit;?></strong>
+    <div class='actions'>
+      <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
+    </div>
   </div>
 </div>
+<?php
+$hasFields = array();
+foreach(explode(',', $showFields) as $field)
+{
+    if($field)$hasFields[$field] = '';
+}
+?>
 <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
   <table class='table table-form table-fixed'>
     <thead>
       <tr>
         <th class='w-id'>   <?php echo $lang->idAB;?></th>
-        <th>    <?php echo $lang->product->name;?> <span class='required'></span></th>
+        <th><?php echo $lang->product->name;?> <span class='required'></span></th>
         <th class='w-150px'><?php echo $lang->product->code;?> <span class='required'></span></th>
-        <th class='w-150px'><?php echo $lang->product->PO;?></th>
-        <th class='w-150px'><?php echo $lang->product->QD;?></th>
-        <th class='w-150px'><?php echo $lang->product->RD;?></th>
-        <th class='w-100px'><?php echo $lang->product->status;?></th>
+        <th class='w-150px<?php echo zget($hasFields, 'PO',     ' hidden')?>'><?php echo $lang->product->PO;?></th>
+        <th class='w-150px<?php echo zget($hasFields, 'QD',     ' hidden')?>'><?php echo $lang->product->QD;?></th>
+        <th class='w-150px<?php echo zget($hasFields, 'RD',     ' hidden')?>'><?php echo $lang->product->RD;?></th>
+        <th class='w-100px<?php echo zget($hasFields, 'type',   ' hidden')?>'><?php echo $lang->product->type;?></th>
+        <th class='w-100px<?php echo zget($hasFields, 'status', ' hidden')?>'><?php echo $lang->product->status;?></th>
+        <th class='w-200px<?php echo zget($hasFields, 'desc',   ' hidden')?>'><?php echo $lang->product->desc;?></th>
         <th class='w-80px'><?php echo $lang->product->order;?></th>
       </tr>
     </thead>
@@ -35,14 +47,18 @@
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
       <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
-      <td><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($hasFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($hasFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($hasFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
+      <td class='<?php echo zget($hasFields, 'type',   'hidden')?>'><?php echo html::select("types[$productID]",    $lang->product->typeList,   $products[$productID]->type,   "class='form-control'");?></td>
+      <td class='<?php echo zget($hasFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
+      <td class='<?php echo zget($hasFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlspecialchars($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
       <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr><td colspan='8' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo count($hasFields) + 3?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=product&section=custom&key=batchedit')?>
+<?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -301,7 +301,9 @@ class productModel extends model
             $products[$productID]->PO     = $this->post->POs[$productID];
             $products[$productID]->QD     = $this->post->QDs[$productID];
             $products[$productID]->RD     = $this->post->RDs[$productID];
+            $products[$productID]->type   = $this->post->types[$productID];
             $products[$productID]->status = $this->post->statuses[$productID];
+            $products[$productID]->desc   = $this->post->descs[$productID];
             $products[$productID]->order  = $this->post->orders[$productID];
         }
 
