@@ -1759,8 +1759,9 @@ function initHelpLink()
 function initMainMenu()
 {
     var $menu = $('#mainmenu > .nav');
-    $menu.sortable();
+    $menu.sortable({
 
+    });
 }
 
 /* Ping the server every some minutes to keep the session. */

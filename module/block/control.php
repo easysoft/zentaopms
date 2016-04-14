@@ -153,6 +153,28 @@ class block extends control
     }
 
     /**
+     * Resize block
+     * @param  integer $id
+     * @access public
+     * @return void
+     */
+    public function resize($id, $grid = 4)
+    {
+        $block = $this->block->getByID($id);
+        if($block)
+        {
+            $block->grid = $grid;
+            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
+            if(dao::isError()) $this->send(array('result' => 'fail', 'code' => 500));
+            $this->send(array('result' => 'success'));
+        }
+        else
+        {
+            $this->send(array('result' => 'fail', 'code' => 404));
+        }
+    }
+
+    /**
      * Display dashboard for app.
      * 
      * @param  string    $module 

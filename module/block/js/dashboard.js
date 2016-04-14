@@ -35,7 +35,7 @@ function sortBlocks(orders)
 
     $.getJSON(createLink('block', 'sort', 'orders=' + newOrders.join(',') + '&module=' + module), function(data)
     {
-        if(data.result == 'success') $.zui.messager.success(config.ordersSaved);
+        // if(data.result == 'success') $.zui.messager.success(config.ordersSaved);
     });
 }
 
@@ -51,6 +51,15 @@ function checkEmpty()
     $dashboard.find('.dashboard-empty-message').toggleClass('hide', hasBlocks);
 }
 
+function resizeBlock(event)
+{
+    var blockID = event.element.find('.panel').data('id');
+    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&grid=' + event.grid), function(data)
+    {
+        if(data.result !== 'success') event.revert();
+    });
+}
+
 
 $(function()
 {
@@ -62,7 +71,9 @@ $(function()
         afterOrdered      : sortBlocks,
         afterPanelRemoved : deleteBlock,
         sensitive         : true,
-        panelRemovingTip  : config.confirmRemoveBlock
+        panelRemovingTip  : config.confirmRemoveBlock,
+        resizable         : true,
+        onResize          : resizeBlock
     });
 
     $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
