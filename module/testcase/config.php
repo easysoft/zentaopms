@@ -8,9 +8,6 @@ $config->testcase->edit   = new stdclass();
 $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';
 
-$config->testcase->batchEdit = new stdclass();
-$config->testcase->batchEdit->columns = 7;
-
 $config->testcase->editor = new stdclass();
 $config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testcase->editor->view = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
