@@ -587,6 +587,11 @@ class testcase extends control
         $this->lang->testcase->priList['ditto']  = $this->lang->testcase->ditto;
         $this->lang->testcase->typeList['ditto'] = $this->lang->testcase->ditto;
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->testcase->custom->batchedit;
+
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->batchEdit;

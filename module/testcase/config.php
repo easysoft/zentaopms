@@ -26,10 +26,12 @@ $config->testcase->exportFields = '
 
 $config->testcase->customCreateFields      = 'stage,story,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords';
+$config->testcase->customBatchEditFields   = 'module,stage,precondition,status,pri,keywords';
 
 $config->testcase->custom = new stdclass();
 $config->testcase->custom->create      = $config->testcase->customCreateFields;
 $config->testcase->custom->batchcreate = $config->testcase->customBatchCreateFields;
+$config->testcase->custom->batchedit   = $config->testcase->customBatchEditFields;
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
