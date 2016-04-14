@@ -426,7 +426,7 @@ class commonModel extends model
             if(commonModel::hasPriv($module, $method))
             {
                 $link  = helper::createLink($module, $method, $vars);
-                echo "<li $active><a href='$link' $active id='menu$menuKey'>$menuLabel</a></li>\n";
+                echo "<li $active><a href='$link' $active data-id='$menuKey'>$menuLabel</a></li>\n";
             }
         }
         echo "</ul>\n";

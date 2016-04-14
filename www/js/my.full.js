@@ -1751,6 +1751,18 @@ function initHelpLink()
     });
 }
 
+/**
+ * Init main menu
+ * @access public
+ * @return void
+ */
+function initMainMenu()
+{
+    var $menu = $('#mainmenu > .nav');
+    $menu.sortable();
+
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1804,4 +1816,5 @@ $(document).ready(function()
     initHotKey();
 
     initHelpLink();
+    initMainMenu();
 });
