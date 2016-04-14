@@ -27,7 +27,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
       <div class='panel panel-block <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>'>
         <div class='panel-heading'>
           <div class='panel-actions'>
-            <a href='javascript:;' class='refresh-panel panel-action'><i class='icon-repeat'></i></a>
+            <a href='javascript:;' class='refresh-panel panel-action' data-toggle='tooltip' title='<?php echo $lang->block->refresh ?>'><i class='icon-repeat'></i></a>
             <div class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
@@ -37,7 +37,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
             </div>
           </div>
           <?php if(isset($block->moreLink)):?>
-          <?php echo html::a($block->moreLink, $block->title . " <i class='icon-double-angle-right'></i>", null, "class='panel-title drag-disabled' title='$lang->more'"); ?>
+          <?php echo html::a($block->moreLink, $block->title . " <i class='icon-double-angle-right'></i>", null, "class='panel-title drag-disabled' title='$lang->more' data-toggle='tooltip' data-placement='right'"); ?>
           <?php else: ?>
           <span class='panel-title'><?php echo $block->title;?></span>
           <?php endif; ?>

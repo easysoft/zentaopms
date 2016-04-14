@@ -5,19 +5,21 @@ body {background: #fafafa;}
 .dashboard {position: relative;}
 .dashboard .row {margin: 0 auto;}
 .dashboard .panel-actions {margin-top: 0; margin-right: 0;}
-.dashboard .table tr[data-url] td {cursor: pointer;}
 .dashboard .panel-heading {line-height: 17px; height: 30px; position: relative;}
 .dashboard .panel-actions {position: absolute; top: 0; right: 0; height: 30px;}
 .dashboard .panel-action {display: block; float: left; height: 30px; width: 26px; text-align: center; line-height: 30px;}
 .dashboard .panel-action:hover, .dashboard .panel-actions > .dropdown > a:hover {color: #333; background-color: #ddd; background-color: rgba(0,0,0,0.1)}
 .dashboard .panel-title {font-size: 13px; color: #333}
+.dashboard a.panel-title > .icon-double-angle-right {position: relative; opacity: 0; transition: opacity .2s, left .2s; left: -5px}
+.dashboard .panel:hover a.panel-title > .icon-double-angle-right {opacity: 1; left: 0}
 .dashboard a.panel-title:hover {color: #1a53ff}
-.dashboard .panel {box-shadow: none; position: relative}
+.dashboard .panel {box-shadow: 0 1px 3px rgba(0,0,0,.05); position: relative;}
 .dashboard .panel-heading + .panel-body {position: absolute; left: 0; top: 30px; right: 0; bottom: 0}
 .dashboard .panel-dragging-shadow {position: absolute;}
 .dashboard-empty-message {text-align: center; margin-top: 100px;}
 .dashboard-empty-message > h5 {margin-bottom: 20px;}
 
+.outer {background-color: #fafafa}
 .outer > .dashboard {margin-left: -10px; margin-right: -10px;}
 
 /* panel style */
@@ -28,11 +30,6 @@ body {background: #fafafa;}
 .panel-primary > .panel-heading,
 .panel-info > .panel-heading,
 .panel-danger > .panel-heading {color: #333; border: none; border-bottom: 1px solid rgba(0,0,0,.04);}
-.panel-success > .panel-body,
-.panel-warning > .panel-body,
-.panel-primary > .panel-body,
-.panel-info > .panel-body,
-.panel-danger > .panel-body {box-shadow: inset 0 1px 100px rgba(255,255,255,.6);}
 .panel-success {background: #d1fecb!important; border-color: #b0e4ac!important}
 .panel-success > .panel-heading {background: #c5f7c1!important; }
 .panel-warning {background: #fdfdc7!important; border-color: #e1e09a!important}
