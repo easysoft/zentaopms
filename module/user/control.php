@@ -510,6 +510,11 @@ class user extends control
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->user->customBatchEditFields) as $field) $customFields[$field] = $this->lang->user->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->user->custom->batchedit;
+
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
         $this->view->position[] = $this->lang->user->batchEdit;
         $this->view->depts      = $this->dept->getOptionMenu();
