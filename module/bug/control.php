@@ -385,6 +385,11 @@ class bug extends control
             $this->view->titles = $titles;
         }
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->bug->custom->batchcreate;
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;

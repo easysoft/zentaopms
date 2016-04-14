@@ -38,10 +38,12 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedBy,
     lastEditedDate, files';
 
-$config->bug->list->customCreateFields = 'project,story,task,pri,severity,os,browser,mailto,keywords';
+$config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,mailto,keywords';
+$config->bug->list->customBatchCreateFields = 'module,project,os,browser,severity,pri,type,steps,keywords';
 
 $config->bug->custom = new stdclass();
-$config->bug->custom->create = $config->bug->list->customCreateFields;
+$config->bug->custom->create      = $config->bug->list->customCreateFields;
+$config->bug->custom->batchcreate = $config->bug->list->customBatchCreateFields;
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');

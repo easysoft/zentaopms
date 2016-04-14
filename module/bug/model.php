@@ -102,6 +102,7 @@ class bugModel extends model
         $module  = 0;
         $project = 0;
         $type    = '';
+        $pri     = 0;
         $os      = '';
         $browser = '';
         for($i = 0; $i < $batchNum; $i++)
@@ -109,12 +110,14 @@ class bugModel extends model
             if($data->modules[$i]  != 'ditto') $module  = (int)$data->modules[$i];
             if($data->projects[$i] != 'ditto') $project = (int)$data->projects[$i];
             if($data->types[$i]    != 'ditto') $type    = $data->types[$i];
+            if($data->pris[$i]     != 'ditto') $pri     = $data->pris[$i];
             if($data->oses[$i]     != 'ditto') $os      = $data->oses[$i];
             if($data->browsers[$i] != 'ditto') $browser = $data->browsers[$i];
 
             $data->modules[$i]  = (int)$module;
             $data->projects[$i] = (int)$project;
             $data->types[$i]    = $type;
+            $data->pris[$i]     = $pri;
             $data->oses[$i]     = $os;
             $data->browsers[$i] = $browser;
         }
@@ -135,9 +138,11 @@ class bugModel extends model
             $bug->title       = $data->title[$i];
             $bug->steps       = nl2br($data->stepses[$i]);
             $bug->type        = $data->types[$i];
+            $bug->pri         = $data->pris[$i];
             $bug->severity    = $data->severities[$i];
             $bug->os          = $data->oses[$i];
             $bug->browser     = $data->browsers[$i];
+            $bug->keywords    = $data->keywords[$i];
 
             if(!empty($data->uploadImage[$i]))
             {
