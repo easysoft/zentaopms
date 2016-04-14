@@ -591,6 +591,8 @@ class testcaseModel extends model
             $case->status         = $data->statuses[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->title          = $data->titles[$caseID];
+            $case->precondition   = $data->precondition[$caseID];
+            $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
 
