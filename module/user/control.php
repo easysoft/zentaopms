@@ -442,6 +442,11 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->user->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->user->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->user->custom->batchcreate;
+
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
         $position[] = $this->lang->user->batchCreate;
         $this->view->title     = $title;
