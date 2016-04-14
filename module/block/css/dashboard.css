@@ -12,7 +12,11 @@ body {background: #fafafa;}
 .dashboard .panel-action:hover, .dashboard .panel-actions > .dropdown > a:hover {color: #333; background-color: #ddd; background-color: rgba(0,0,0,0.1)}
 .dashboard .panel-title {font-size: 13px; color: #333}
 .dashboard a.panel-title:hover {color: #1a53ff}
-.dashboard .panel {box-shadow: none}
+.dashboard .panel {box-shadow: none; position: relative}
+.dashboard .panel-heading + .panel-body {position: absolute; left: 0; top: 30px; right: 0; bottom: 0}
+.dashboard .panel-dragging-shadow {position: absolute;}
+.dashboard-empty-message {text-align: center; margin-top: 100px;}
+.dashboard-empty-message > h5 {margin-bottom: 20px;}
 
 .outer > .dashboard {margin-left: -10px; margin-right: -10px;}
 

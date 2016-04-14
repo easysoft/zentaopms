@@ -30,6 +30,7 @@ $lang->block->createBlock        = 'Add block';
 $lang->block->editBlock          = 'Edit block';
 $lang->block->ordersSaved        = 'Sort have been saved';
 $lang->block->confirmRemoveBlock = 'Are you sure remove block [{0}] ?';
+$lang->block->emptyMessage       = 'Nothing here, custom it now!';
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' list';
 $lang->block->default['product']['1']['block'] = 'list';

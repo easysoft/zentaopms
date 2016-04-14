@@ -14,7 +14,7 @@ class blockModel extends model
     /**
      * Save params 
      * 
-     * @param  int    $index 
+     * @param  int    $id 
      * @param  string $type 
      * @param  string $appName 
      * @param  int    $blockID 
@@ -23,10 +23,11 @@ class blockModel extends model
      */
     public function save($id, $source, $type, $module = 'my')
     {
+        $block = $id ? $this->getByID($id) : null;
         $data = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setIF($id, 'id', $id)
-            ->setIF(!$id, 'order', $this->getLastKey($module) + 1)
+            ->add('order', $block ? $block->order : ($this->getLastKey($module) + 1))
             ->add('module', $module)
             ->add('hidden', 0)
             ->setDefault('grid', '4')
@@ -65,12 +66,11 @@ class blockModel extends model
      * @access public
      * @return object
      */
-    public function getBlock($id, $module = 'my')
+    public function getBlock($id)
     {
         $block = $this->dao->select('*')->from(TABLE_BLOCK)
             ->where('`id`')->eq($id)
             ->andWhere('account')->eq($this->app->user->account)
-            ->andWhere('module')->eq($module)
             ->fetch();
         if(empty($block)) return false;
 

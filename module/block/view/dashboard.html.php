@@ -17,6 +17,10 @@ if(isset($pageCSS)) css::internal($pageCSS);
 ?>
 <div class='dashboard dashboard-draggable' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
   <ul class='dashboard-actions hide'><li><a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='600'><i class='icon icon-list-alt'></i> <?php echo $lang->block->createBlock?></a></li></ul>
+  <div class='dashboard-empty-message hide'>
+    <h5 class='text-success'><?php echo $lang->block->emptyMessage ?></h5>
+    <a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='600' class='btn btn-primary'><i class='icon icon-plus'></i> <?php echo $lang->block->createBlock?></a>
+  </div>
   <div class='row'>
     <?php foreach($blocks as $index => $block):?>
     <div class='col-sm-6 col-md-<?php echo $block->grid;?>'>
