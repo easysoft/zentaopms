@@ -87,6 +87,7 @@ hr.small {margin: 10px 0}
 /* Table */
 .table td .input[type="radio"], .table td input[type="checkbox"] {vertical-align: middle; position: relative; top: -3px}
 .table-borderless {border: none!important}
+.table tr[data-url] td {cursor: pointer;}
 
 /* Tables sorters */
 .tablesorter thead tr th {height:33px;}

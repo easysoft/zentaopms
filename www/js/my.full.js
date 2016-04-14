@@ -1277,6 +1277,12 @@ function setTableBehavior()
 {
     $('#wrap .table:not(.table-data, .table-form, .active-disabled, .tablesorter)').on('click', 'tbody tr:not(.active-disabled) td', function(){$(this).closest('tr').toggleClass('active');});
     $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
+
+    $(document).on('click', 'tr[data-url]', function()
+    {
+        var url = $(this).data('url');
+        if(url) window.location.href = url;
+    });
 }
 
 /**
