@@ -104,14 +104,17 @@ class testcaseModel extends model
         $module = 0;
         $story  = 0;
         $type   = '';
+        $pri    = 3;
         for($i = 0; $i < $batchNum; $i++)
         {
             $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
             $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
+            $pri    = $cases->pri[$i] == 'ditto'    ?  $pri   : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
             $cases->story[$i]  = (int)$story;        
             $cases->type[$i]   = $type;
+            $cases->pri[$i]    = $pri;
         }
 
         for($i = 0; $i < $batchNum; $i++)
@@ -123,6 +126,7 @@ class testcaseModel extends model
                 $data[$i]->branch       = $branch;
                 $data[$i]->module       = $cases->module[$i];
                 $data[$i]->type         = $cases->type[$i];
+                $data[$i]->pri          = $cases->pri[$i];
                 $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
                 $data[$i]->story        = $storyID ? $storyID : $cases->story[$i];
                 $data[$i]->title        = $cases->title[$i];
@@ -159,6 +163,7 @@ class testcaseModel extends model
             {
                 unset($cases->module[$i]);
                 unset($cases->type[$i]);
+                unset($cases->pri[$i]);
                 unset($cases->story[$i]);
                 unset($cases->title[$i]);
                 unset($cases->stage[$i]);
