@@ -22,17 +22,28 @@
         <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
         <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
       </div>
+      <div class='actions'>
+        <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
+      </div>
     </div>
   </div>
+  <?php
+  $hasFields = array();
+  foreach(explode(',', $showFields) as $field)
+  {
+      if($field)$hasFields[$field] = '';
+  }
+  $columns = count($hasFields) + 2;
+  ?>
   <table class='table table-form table-fixed'>
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-120px'><?php echo $lang->todo->type;?></th>
-        <th class='w-80px'><?php echo $lang->todo->pri;?></th>
+        <th class='w-120px<?php echo zget($hasFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
+        <th class='w-80px<?php echo zget($hasFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
         <th class='w-p30 red'><?php echo $lang->todo->name;?></th>
-        <th><?php echo $lang->todo->desc;?></th>
-        <th class='w-300px'><?php echo $lang->todo->beginAndEnd;?></th>
+        <th <?php echo zget($hasFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
+        <th class='w-300px<?php echo zget($hasFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
       </tr>
     </thead>
     <?php $pri = 3;?>
@@ -40,26 +51,31 @@
     <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
-      <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
+      <td <?php echo zget($hasFields, 'type', "class='hidden'")?>><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
+      <td <?php echo zget($hasFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
       <td class='text-left' style='overflow:visible'>
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
       </td>
-      <td><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
-      <td>
+      <td <?php echo zget($hasFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
+      <td <?php echo zget($hasFields, 'beginAndEnd', "class='hidden'")?>>
         <div class='input-group'>
-          <?php echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'") . html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'");?>
+          <?php
+          echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'" . (isset($hasFields['beginAndEnd']) ? '' : " disabled"));
+          echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'" . (isset($hasFields['beginAndEnd']) ? '' : " disabled"));
+          ?>
           <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'><?php echo $lang->todo->periods['future'];?></span>
         </div>
       </td>
     </tr>  
     <?php endfor;?>
     <tfoot>
-      <tr><td colspan='6'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><td colspan='<?php echo $columns?>'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=todo&section=custom&key=batchcreate')?>
+<?php include '../../common/view/customfield.html.php';?>
 <?php include './footer.html.php';?>
 <script language='Javascript'>
 var batchCreateNum = '<?php echo $config->todo->batchCreate;?>';
