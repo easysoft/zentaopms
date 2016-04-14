@@ -11,6 +11,8 @@
  */
 ?>
 <?php if(isset($pageCSS)) css::internal($pageCSS); ?>
+<?php js::set('blockID', $blockID)?>
+<?php if(isset($pageJS)) js::execute($pageJS);?>
 <table class='table table-form'>
   <tr><th class='w-100px'></th><td></td></tr>
   <?php if(!empty($modules)):?>
@@ -26,5 +28,3 @@
   <tr><?php if(!empty($blocks)) echo $blocks;?></tr>
 </table>
 <div id='blockParam'></div>
-<?php js::set('blockID', $blockID)?>
-<?php if(isset($pageJS)) js::execute($pageJS);?>

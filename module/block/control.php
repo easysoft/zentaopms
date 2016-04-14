@@ -54,7 +54,7 @@ class block extends control
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
             foreach($hiddenBlocks as $block) $modules['hiddenBlock' . $block->id] = $block->title;
-            $this->view->modules    = $modules;
+            $this->view->modules = $modules;
         }
         elseif(isset($this->lang->block->moduleList[$module]))
         {
@@ -62,7 +62,7 @@ class block extends control
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
         }
 
-        $this->view->block      = $this->block->getBlock($id);
+        $this->view->block      = $this->block->getByID($id);
         $this->view->blockID    = $id;
         $this->view->title      = $title;
         $this->display();
@@ -78,7 +78,7 @@ class block extends control
      */
     public function set($id, $type, $source = '')
     {
-        if($_POST)             
+        if($_POST)
         {
             $source = isset($this->lang->block->moduleList[$source]) ? $source : '';
             $this->block->save($id, $source, $type, $this->session->blockModule);
@@ -86,7 +86,7 @@ class block extends control
             die(js::reload('parent'));
         }
 
-        $block = $this->block->getBlock($id);
+        $block = $this->block->getByID($id);
         if($block) $type = $block->block;
 
         if(isset($this->lang->block->moduleList[$source]))
@@ -217,7 +217,7 @@ class block extends control
      */
     public function printBlock($id, $module = 'my')
     {
-        $block = $this->block->getBlock($id, $module);
+        $block = $this->block->getByID($id);
 
         if(empty($block)) return false;
 
@@ -272,11 +272,11 @@ class block extends control
             $blocks     = json_decode($blocks, true);
             $blockPairs = array('' => '') + $blocks;
 
-            $block = $this->block->getBlock($id);
+            $block = $this->block->getByID($id);
 
             echo "<th>{$this->lang->block->lblBlock}</th>";
             echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';
-            if(isset($block->source)) echo "<script>$(function(){getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
+            if(isset($block->source)) echo "<script>$(function(){console.log(1, window.getBlockParams); getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
         }   
         elseif($mode == 'getblockform')
         {   

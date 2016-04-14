@@ -7,7 +7,6 @@
  */
 function getBlocks(moduleID)
 {
-    console.log('getBlocks', moduleID);
     var moduleBlock = $('#modules').parent().parent().next();
     $(moduleBlock).hide();
 
@@ -27,7 +26,6 @@ function getBlocks(moduleID)
 
     $.get(createLink('block', 'main', 'module=' + moduleID + '&id=' + blockID), {mode:'getblocklist'}, function(data)
     {
-        console.log('GET BLOCKS', moduleID, data);
         $(moduleBlock).html(data);
         $(moduleBlock).show();
     })

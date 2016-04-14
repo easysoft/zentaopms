@@ -30,6 +30,7 @@ $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '确定移除区块【{0}】吗？';
+$lang->block->emptyMessage       = '这里什么也没有。快来定制你的页面！';
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '列表';
 $lang->block->default['product']['1']['block'] = 'list';
