@@ -58,7 +58,7 @@ include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(
             {
                 $actionLink = inLink('batchAssign', "taskID=$task->id");
                 echo "<div class='input-group w-200px'>";
-                echo html::select('assignedTo', $users, '', 'class="form-control chosen"');
+                echo html::select('assignedTo', $assignedTos, '', 'class="form-control chosen"');
                 echo "<span class='input-group-addon'>";
                 echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->testtask->assign);
                 echo '</span></div>';
