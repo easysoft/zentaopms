@@ -51,6 +51,12 @@ function checkEmpty()
     $dashboard.find('.dashboard-empty-message').toggleClass('hide', hasBlocks);
 }
 
+/**
+ * Resize block
+ * @param  object $event
+ * @access public
+ * @return void
+ */
 function resizeBlock(event)
 {
     var blockID = event.element.find('.panel').data('id');
@@ -60,6 +66,33 @@ function resizeBlock(event)
     });
 }
 
+/**
+ * Init table header
+ * @access public
+ * @return void
+ */
+function initTableHeader()
+{
+    $('#dashboard .panel-block').each(function()
+    {
+        var $panel = $(this);
+        var $table = $panel.find('.table:first');
+
+        console.log($table.length, $table.children('thead').length, this);
+        if(!$table.length || !$table.children('thead').length) return;
+        console.log('ok');
+
+        var $header = $panel.children('.table-header-fixed');
+        if(!$header.length)
+        {
+            $header = $('<div class="table-header-fixed"><table class="table table-fixed"></table></div>').css('right', $panel.width() - $table.width() - 2);
+            $header.find('.table').append($table.find('thead').clone());
+            $panel.addClass('with-fixed-header').append($header);
+            var $heading = $panel.children('.panel-heading');
+            if($heading.length) $header.css('top', $heading.outerHeight());
+        }
+    });
+}
 
 $(function()
 {
@@ -73,12 +106,14 @@ $(function()
         sensitive         : true,
         panelRemovingTip  : config.confirmRemoveBlock,
         resizable         : true,
-        onResize          : resizeBlock
+        onResize          : resizeBlock,
+        afterRefresh      : initTableHeader
     });
 
     $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
     $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
 
     checkEmpty();
+    initTableHeader();
 });
 
