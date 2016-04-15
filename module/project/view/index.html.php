@@ -11,5 +11,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php echo $this->fetch('block', 'dashboard', 'module=project');?>
+<script>
+<?php if($this->config->project->homepage != 'index'):?>
+$(function()
+{
+    $('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"project\", \"index\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
+});
+<?php endif;?>
+</script>
 <?php include '../../common/view/footer.html.php';?>
-

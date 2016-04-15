@@ -160,4 +160,25 @@ class custom extends control
         $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
         die(js::reload('parent'));
     }
+
+    /**
+     * Ajax set homepage.
+     * 
+     * @param  string $module 
+     * @param  string $page 
+     * @access public
+     * @return void
+     */
+    public function ajaxSetHomepage($module, $page = '')
+    {
+        if(empty($page))
+        {
+            $this->view->title  = $this->lang->homepage;
+            $this->view->module = $module;
+            die($this->display());
+        }
+
+        $account = $this->app->user->account;
+        $this->loadModel('setting')->setItem("$account.$module.homepage", $page);
+    }
 }

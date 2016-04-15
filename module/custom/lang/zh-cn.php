@@ -66,7 +66,8 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认语言配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole = '键的长度必须小于20个字符！';
+$lang->custom->notice->userRole  = '键的长度必须小于20个字符！';
+$lang->custom->notice->indexPage = "%s增加首页页面，是否设该页面为主页？";
 
 $lang->custom->storyReview   = '评审流程';
 $lang->custom->reviewList[1] = '开启';

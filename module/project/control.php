@@ -37,8 +37,13 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $projectID = 0)
+    public function index($locate = 'auto', $projectID = 0)
     {
+        if(!isset($this->config->project->homepage)) die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
+
+        $homepage = $this->config->project->homepage;
+        if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
+
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         if($this->projects) $this->commonAction($projectID);

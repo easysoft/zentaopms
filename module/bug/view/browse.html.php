@@ -220,5 +220,15 @@ js::set('bugBrowseType', $this->session->bugBrowseType);
     </tfoot>
   </form>
 </div>
-
+<script>
+<?php
+$this->app->loadConfig('qa', '', false);
+if($this->config->qa->homepage != 'browse'):
+?>
+$(function()
+{
+    $('#modulemenu .nav li:last').after("<li class='right'><a href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
+});
+<?php endif;?>
+</script>
 <?php include '../../common/view/footer.html.php';?>

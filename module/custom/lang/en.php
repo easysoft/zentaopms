@@ -66,7 +66,8 @@ $lang->custom->allLang     = 'For all language';
 $lang->custom->confirmRestore = 'Are you sure to restore the default lang setting?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole = 'The length of key must be less than 20!';
+$lang->custom->notice->userRole  = 'The length of key must be less than 20!';
+$lang->custom->notice->indexPage = "%s add the home page, whether to set it for the home page?";
 
 $lang->custom->storyReview   = 'Reviewed procedure';
 $lang->custom->reviewList[1] = 'Open';
