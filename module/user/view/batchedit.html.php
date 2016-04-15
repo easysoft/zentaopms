@@ -37,7 +37,7 @@ $minWidth = (count($hasFields) > 7) ? 'w-120px' : '';
         <th class='w-150px<?php echo zget($hasFields, 'dept', ' hidden')?>'>         <?php echo $lang->user->dept;?></th>
         <th class='<?php echo $minWidth?>'><?php echo $lang->user->account;?></th>
         <th class='<?php echo $minWidth?>'><?php echo $lang->user->realname;?></th>
-        <th class='w-120px<?php echo zget($hasFields, 'role', ' hidden')?>'>         <?php echo $lang->user->role;?></th>
+        <th class='w-120px'><?php echo $lang->user->role;?></th>
         <th class='<?php echo $minWidth . zget($hasFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
         <th class='<?php echo $minWidth . zget($hasFields, 'email', ' hidden')?>'>   <?php echo $lang->user->email;?></th>
         <th class='w-120px<?php echo zget($hasFields, 'join', ' hidden')?>'>         <?php echo $lang->user->join;?></th>
@@ -66,7 +66,7 @@ $minWidth = (count($hasFields) > 7) ? 'w-120px' : '';
       <td class='text-left<?php echo zget($hasFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
       <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
-      <td class='<?php echo zget($hasFields, 'role', 'hidden')?>'>    <?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
+      <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
       <td class='<?php echo zget($hasFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>
       <td class='<?php echo zget($hasFields, 'email', 'hidden')?>'>   <?php echo html::input("email[$user->id]",    $user->email, "class='form-control'");?></td>
       <td class='<?php echo zget($hasFields, 'join', 'hidden')?>'>    <?php echo html::input("join[$user->id]",     $user->join, "class='form-control form-date'");?></td>
@@ -83,13 +83,13 @@ $minWidth = (count($hasFields) > 7) ? 'w-120px' : '';
     <?php endforeach;?>
     <tr>
       <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
-      <td colspan='<?php echo count($hasFields) + 1?>'>
+      <td colspan='<?php echo count($hasFields) + 2?>'>
         <div class="required required-wrapper"></div>
         <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
         <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
       </td>
     </tr>
-    <tr><td colspan='8' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='<?php echo count($hasFields) + 4?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=user&section=custom&key=batchedit')?>

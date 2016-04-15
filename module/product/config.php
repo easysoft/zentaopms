@@ -2,6 +2,11 @@
 $config->product = new stdclass();
 $config->product->orderBy = 'isClosed,order_desc';
 
+$config->product->customBatchEditFields = 'PO,QD,RD,status,type,desc';
+
+$config->product->custom = new stdclass();
+$config->product->custom->batchedit = 'PO,QD,RD,status';
+
 global $lang, $app;
 $app->loadLang('story');
 $config->product->search['module']             = 'story';

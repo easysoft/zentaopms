@@ -968,11 +968,19 @@ class project extends control
 
         $projectIDList = $this->post->projectIDList ? $this->post->projectIDList : die(js::locate($this->session->projectList, 'parent'));
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->project->customBatchEditFields) as $field) $customFields[$field] = $this->lang->project->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->project->custom->batchedit;
+
         $this->view->title         = $this->lang->project->batchEdit;
         $this->view->position[]    = $this->lang->project->batchEdit;
         $this->view->projectIDList = $projectIDList;
         $this->view->projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchAll('id');
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed,nodeleted,pmfirst');
+        $this->view->poUsers       = $this->user->getPairs('noclosed,nodeleted,pofirst');
+        $this->view->qdUsers       = $this->user->getPairs('noclosed,nodeleted,qdfirst');
+        $this->view->rdUsers       = $this->user->getPairs('noclosed,nodeleted,devfirst');
         $this->display();
     }
 

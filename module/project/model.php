@@ -343,9 +343,15 @@ class projectModel extends model
             $projects[$projectID]->name   = $this->post->names[$projectID];
             $projects[$projectID]->code   = $this->post->codes[$projectID];
             $projects[$projectID]->PM     = $this->post->PMs[$projectID];
+            $projects[$projectID]->PO     = $this->post->POs[$projectID];
+            $projects[$projectID]->QD     = $this->post->QDs[$projectID];
+            $projects[$projectID]->RD     = $this->post->RDs[$projectID];
+            $projects[$projectID]->type   = $this->post->types[$projectID];
             $projects[$projectID]->status = $this->post->statuses[$projectID];
             $projects[$projectID]->begin  = $this->post->begins[$projectID];
             $projects[$projectID]->end    = $this->post->ends[$projectID];
+            $projects[$projectID]->team   = $this->post->teams[$projectID];
+            $projects[$projectID]->desc   = $this->post->descs[$projectID];
             $projects[$projectID]->days   = $this->post->dayses[$projectID];
             $projects[$projectID]->order  = $this->post->orders[$projectID];
         }
@@ -367,16 +373,22 @@ class projectModel extends model
                 ->limit(1)
                 ->exec();
 
-            if($project->PM and !isset($team[$project->PM]))
+            foreach($project as $fieldName => $value)
             {
-                $member = new stdClass();
-                $member->project = (int)$projectID;
-                $member->account = $project->PM;
-                $member->join    = helper::today();
-                $member->role    = $this->lang->project->PM;
-                $member->days    = 0;
-                $member->hours   = $this->config->project->defaultWorkhours;
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
+                {
+                    if(!empty($value) and !isset($team[$value]))
+                    {
+                        $member = new stdClass();
+                        $member->project = (int)$projectID;
+                        $member->account = $value;
+                        $member->join    = helper::today();
+                        $member->role    = $this->lang->project->$fieldName;
+                        $member->days    = 0;
+                        $member->hours   = $this->config->project->defaultWorkhours;
+                        $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    }
+                }
             }
 
             if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));

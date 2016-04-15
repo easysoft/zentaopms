@@ -284,6 +284,17 @@ class userModel extends model
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5($users->password[$i]); 
+                $data[$i]->commiter = $users->commiter[$i];
+                $data[$i]->join     = $users->join[$i];
+                $data[$i]->skype    = $users->skype[$i];
+                $data[$i]->qq       = $users->qq[$i];
+                $data[$i]->yahoo    = $users->yahoo[$i];
+                $data[$i]->gtalk    = $users->gtalk[$i];
+                $data[$i]->wangwang = $users->wangwang[$i];
+                $data[$i]->mobile   = $users->mobile[$i];
+                $data[$i]->phone    = $users->phone[$i];
+                $data[$i]->address  = $users->address[$i];
+                $data[$i]->zipcode  = $users->zipcode[$i];
 
                 $accounts[$i]     = $data[$i]->account;
                 $prev['dept']     = $data[$i]->dept;

@@ -266,6 +266,11 @@ class product extends control
 
         $productIDList = $this->post->productIDList ? $this->post->productIDList : die(js::locate($this->session->productList, 'parent'));
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->product->custom->batchedit;
+
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
         $this->view->productIDList = $productIDList;

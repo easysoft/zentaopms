@@ -93,6 +93,11 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
+        /* Set Custom*/
+        foreach(explode(',', $this->config->todo->list->batchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->todo->custom->batchcreate;
+
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
         $this->view->position[] = $this->lang->todo->common;
         $this->view->position[] = $this->lang->todo->batchCreate;

@@ -579,7 +579,7 @@ class testcase extends control
         
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), $this->config->testcase->batchEdit->columns);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), count(explode(',', $this->config->testcase->custom->batchedit)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
