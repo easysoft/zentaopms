@@ -9,7 +9,7 @@
 .table-datatable .checkbox-row {display: none}
 .outer .datatable {border: 1px solid #ddd;}
 .outer .datatable .table, .outer .datatable .table tfoot td {border: none; box-shadow: none}
-.datatable .table>tbody>tr>td.col-hover, .datatable .table>tbody>tr.hover>td {background-color: #ebf2f9 !important;}
+.datatable .table>tbody>tr.active>td.col-hover, .datatable .table>tbody>tr.active.hover>td {background-color: #f3eed8 !important;}
 .datatable-span.flexarea .scroll-slide {bottom: -30px}
 
 .panel > .datatable, .panel-body > .datatable {margin-bottom: 0;}

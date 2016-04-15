@@ -652,31 +652,49 @@ function setComment()
  */
 function autoCheck()
 {
-    var checkRow = function()
+    var checkRow = function(checked)
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
             var $this = $(this);
-            var $tr = $(this).closest('tr');
+            var $tr = $this.closest('tr');
             var $checkbox = $tr.find(':checkbox');
             if($checkbox.size() == 0) return;
 
             var isChecked = $checkbox.prop('checked');
             if(!$this.is(':checkbox'))
             {
-                isChecked = !isChecked;
+                isChecked = checked === true || checked === false  ? checked : !isChecked;
                 $checkbox.prop('checked', isChecked);
             }
             if(!$tr.hasClass('.active-disabled')) $tr.toggleClass('active', isChecked);
             $tr.closest('.table').find('.rows-selector').prop('checked', false);
         }
     };
-    $('.tablesorter:not(.table-datatable)').on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'tbody > tr', checkRow);
+    $('.tablesorter:not(.table-datatable)')
+        .selectable({
+            selector: 'tbody > tr',
+            trigger: 'tbody',
+            start: function(e) {
+                if($(e.target).is(':checkbox')) return false;
+            },
+            select: function(e) {
+                checkRow.call(e.target, true);
+            },
+            unselect: function(e) {
+                checkRow.call(e.target, false);
+            }
+        })
+        .on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();});
 
     $(document).on('change', '.rows-selector:checkbox', function()
     {
         var $checkbox = $(this);
-        if($checkbox.closest('.datatable').length) return;
+        var $datatable = $checkbox.closest('.datatable');
+        if($datatable.length) {
+            $datatable.find('.check-all.check-btn:first').trigger('click');
+            return;
+        }
         var scope = $checkbox.data('scope');
         var $target = scope ? $('#' + scope) : $checkbox.closest('.table');
         var isChecked = $checkbox.prop('checked');
