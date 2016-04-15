@@ -50,6 +50,7 @@ $lang->testtask->lastRunAccount = '执行人';
 $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
 $lang->testtask->report         = '测试总结';
+$lang->testtask->files          = '上传附件';
 
 $lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '测试总结';

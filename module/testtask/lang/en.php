@@ -50,6 +50,7 @@ $lang->testtask->lastRunAccount = "Run";
 $lang->testtask->lastRunTime    = 'Time';
 $lang->testtask->lastRunResult  = 'Result';
 $lang->testtask->report         = 'Report';
+$lang->testtask->files          = 'Upload Files';
 
 $lang->testtask->legendDesc      = 'Desc';
 $lang->testtask->legendReport    = 'Report';

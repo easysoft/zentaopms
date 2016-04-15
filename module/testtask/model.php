@@ -365,7 +365,28 @@ class testtaskModel extends model
             ->skipSpecial('stepResults')
             ->remove('steps,reals,result')
             ->get();
+
+        /* Remove files and labels field when uploading files for case result or step result. */
+        foreach($result as $fieldName => $field)
+        {
+            if((strpos($fieldName, 'files') !== false) or (strpos($fieldName, 'labels') !== false)) unset($result->$fieldName);
+        }
+
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+
+        /* Save upload files for case result or step result. */
+        if(!dao::isError())
+        {
+            $resultID = $this->dao->lastInsertID();
+            if(!empty($stepResults))
+            {
+                foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, array("files{$stepID}", "labels{$stepID}"));
+            }
+            else
+            {
+                $this->loadModel('file')->saveUpload('caseResult', $resultID);
+            }
+        }
         $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($postData->case)->exec();
 
         if($runID)
@@ -502,6 +523,7 @@ class testtaskModel extends model
         {
             $result->stepResults = unserialize($result->stepResults);
             $result->build       = $result->run ? zget($runs, $result->run, 0) : 0;
+            $result->files       = $this->loadModel('file')->getByObject('caseResult', $resultID);//Get files of case result.
             $results[$resultID]  = $result;
 
             foreach($relatedSteps as $key => $step)
@@ -511,6 +533,12 @@ class testtaskModel extends model
                     $result->stepResults[$step->id]['desc']   = $step->desc;
                     $result->stepResults[$step->id]['expect'] = $step->expect;
                 }
+            }
+
+            /* Get files of step result. */
+            foreach($result->stepResults as $stepID => $stepResult)
+            {
+                $result->stepResults[$stepID]['files'] = $this->loadModel('file')->getByObject('stepResult', $resultID, $stepID);
             }
         }
         return $results;

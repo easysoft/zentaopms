@@ -12,10 +12,10 @@ table.fileBox td {padding: 0!important}
   $fileRow = <<<EOT
   <table class='fileBox' id='fileBox\$i'>
     <tr>
-      <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='files[]' class='fileControl'  tabindex='-1' onchange='checkSizeAndType(this)'/></div></td>
-      <td class=''><input type='text' name='labels[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' /></td>
-      <td class='w-30px'><a href='javascript:void();' onclick='addFile(this)' class='btn btn-block'><i class='icon-plus'></i></a></td>
-      <td class='w-30px'><a href='javascript:void();' onclick='delFile(this)' class='btn btn-block'><i class='icon-remove'></i></a></td>
+      <td class='w-p45'><div class='form-control file-wrapper'><input type='file' name='{$filesName}[]' class='fileControl'  tabindex='-1' onchange='checkSizeAndType(this)'/></div></td>
+      <td class=''><input type='text' name='{$labelsName}[]' class='form-control' placeholder='{$lang->file->label}' tabindex='-1' /></td>
+      <td class='w-30px'><a href='javascript:void(0);' onclick='addFile(this)' class='btn btn-block'><i class='icon-plus'></i></a></td>
+      <td class='w-30px'><a href='javascript:void(0);' onclick='delFile(this)' class='btn btn-block'><i class='icon-remove'></i></a></td>
     </tr>
   </table>
 EOT;
@@ -100,7 +100,13 @@ function addFile(clickedButton)
 {
     fileRow = <?php echo json_encode($fileRow);?>;
     fileRow = fileRow.replace('$i', $('.fileID').size() + 1);
-    $(clickedButton).closest('.fileBox').after(fileRow);
+
+    filesName  = $(clickedButton).closest('tr').find('input[type="file"]').attr('name');
+    labelsName = $(clickedButton).closest('tr').find('input[type="text"]').attr('name');
+
+    $fileBox = $(clickedButton).closest('.fileBox').after(fileRow).next('.fileBox');
+    $fileBox.find('input[type="file"]').attr('name', filesName);
+    $fileBox.find('input[type="text"]').attr('name', labelsName);
 
     setFileFormWidth(<?php echo $percent;?>);
     updateID();
