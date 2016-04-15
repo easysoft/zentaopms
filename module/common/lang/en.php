@@ -68,6 +68,7 @@ $lang->fold         = '-';
 $lang->hideNotCheck = 'Hide not checked field';
 $lang->quitNovice   = 'Quit novice';
 $lang->enterNovice  = 'Enter novice';
+$lang->homepage     = 'Set homepage';
 
 $lang->preShortcutKey  = '[Shortcut key:←]';
 $lang->nextShortcutKey = '[Shortcut key:→]';
