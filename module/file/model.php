@@ -36,12 +36,17 @@ class fileModel extends model
      * 
      * @param  string   $objectType 
      * @param  string   $objectID 
+     * @param  string   $extra
      * @access public
      * @return array
      */
-    public function getByObject($objectType, $objectID)
+    public function getByObject($objectType, $objectID, $extra = '')
     {
-        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq($objectType)->andWhere('objectID')->eq((int)$objectID)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->beginIF($extra)->andWhere('extra')->eq($extra)
+            ->orderBy('id')->fetchAll();
     }
 
     /**
@@ -65,14 +70,24 @@ class fileModel extends model
      * @param  string $objectType 
      * @param  string $objectID 
      * @param  string $extra 
+     * @param  array  $htmlTagName
      * @access public
      * @return array
      */
-    public function saveUpload($objectType = '', $objectID = '', $extra = '')
+    public function saveUpload($objectType = '', $objectID = '', $extra = '', $htmlTagName = array())
     {
+        if(empty($htmlTagName))
+        {
+            $files = $this->getUpload();
+        }
+        else
+        {
+            list($filesName, $labelsName) = $htmlTagName;
+            $files = $this->getUpload($filesName, $labelsName);
+        }
+
         $fileTitles = array();
         $now        = helper::today();
-        $files      = $this->getUpload();
 
         foreach($files as $id => $file)
         {
@@ -107,10 +122,11 @@ class fileModel extends model
      * Get info of uploaded files.
      * 
      * @param  string $htmlTagName 
+     * @param  string $labelsName
      * @access public
      * @return array
      */
-    public function getUpload($htmlTagName = 'files')
+    public function getUpload($htmlTagName = 'files', $labelsName = 'labels')
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
@@ -130,7 +146,7 @@ class fileModel extends model
                 if(!validater::checkFileName($filename)) continue;
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = !empty($_POST['labels'][$id]) ? htmlspecialchars($_POST['labels'][$id]) : str_replace('.' . $file['extension'], '', $filename);
+                $file['title']     = !empty($_POST[$labelsName][$id]) ? htmlspecialchars($_POST[$labelsName][$id]) : str_replace('.' . $file['extension'], '', $filename);
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
@@ -144,7 +160,7 @@ class fileModel extends model
             if(!validater::checkFileName($name)) return array();;
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : substr($name, 0, strpos($name, $file['extension']) - 1);
+            $file['title']     = !empty($_POST[$labelsName][0]) ? htmlspecialchars($_POST[$labelsName][0]) : substr($name, 0, strpos($name, $file['extension']) - 1);
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
