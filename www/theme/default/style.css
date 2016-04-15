@@ -703,8 +703,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 .datatable.head-fixed > .datatable-head .table > thead > tr > th, .fixedTheadOfList > thead > tr > th {background-color: #114f8e; border-bottom-color: #bbb; color: #aaa}
 .tablesorter.fixedTheadOfList thead tr .headerSortUp > a:after,
 .tablesorter.fixedTheadOfList thead tr .headerSortDown > a:after,
-.tablesorter.datatable.head-fixed thead tr .headerSortUp > a:after,
-.tablesorter.datatable.head-fixed thead tr .headerSortDown > a:after,
+.datatable.head-fixed thead tr .headerSortUp > a:after,
+.datatable.head-fixed thead tr .headerSortDown > a:after,
 .datatable.head-fixed > .datatable-head .table > thead > tr > th a, .fixedTheadOfList > thead > tr > th a {color: #fff}
 .datatable.head-fixed > .datatable-head .table > thead > tr > th .header a, .fixedTheadOfList > thead > tr > th .header a {color: #ccc}
 
