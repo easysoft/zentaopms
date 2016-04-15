@@ -12,5 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php echo $this->fetch('block', 'dashboard', 'module=product');?>
+<script>
+<?php if($this->config->product->homepage != 'index'):?>
+$(function()
+{
+    $('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"product\", \"index\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
+});
+<?php endif;?>
+</script>
 <?php include '../../common/view/footer.html.php';?>
-

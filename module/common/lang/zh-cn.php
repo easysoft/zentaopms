@@ -68,6 +68,7 @@ $lang->fold         = '-';
 $lang->hideNotCheck = '页面隐藏取消选中字段';
 $lang->quitNovice   = '退出新手';
 $lang->enterNovice  = '进入新手';
+$lang->homepage     = '设为主页';
 
 $lang->preShortcutKey  = '[快捷键:←]';
 $lang->nextShortcutKey = '[快捷键:→]';
@@ -175,7 +176,7 @@ $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
 $lang->product->menu->list    = '%s';
-$lang->product->menu->index   = '首页|product|index|locate=no&productID=%s';
+$lang->product->menu->index   = '首页|product|index|locate=no';
 $lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
@@ -204,7 +205,7 @@ $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
 $lang->project->menu->list      = '%s';
-$lang->project->menu->index     = '首页|project|index|locate=no&prjectID=%s';
+$lang->project->menu->index     = '首页|project|index|locate=no';
 $lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban');
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';

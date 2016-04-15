@@ -336,7 +336,7 @@ class block extends control
             $this->view->moreLink = '';
             if(isset($this->lang->block->modules[$module]->moreLinkList->{$code}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$code}, $params->type));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$code}, isset($params->type) ? $params->type : ''));
                 $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
             }
 

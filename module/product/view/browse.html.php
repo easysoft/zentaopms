@@ -262,5 +262,8 @@
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active');
 $('#<?php echo $this->session->storyBrowseType;?>Tab').addClass('active');
+<?php if($this->config->product->homepage != 'browse'):?>
+$('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"product\", \"browse\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
+<?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

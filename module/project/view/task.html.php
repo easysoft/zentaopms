@@ -126,5 +126,8 @@ $('#project<?php echo $projectID;?>').addClass('active')
 $('#<?php echo $this->session->taskBrowseType;?>Tab').addClass('active')
 statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
 if(statusActive) $('#statusTab').addClass('active')
+<?php if($this->config->project->homepage != 'browse'):?>
+$('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"project\", \"browse\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
+<?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

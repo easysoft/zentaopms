@@ -1752,6 +1752,19 @@ function initHelpLink()
 }
 
 /**
+ * Set homepage.
+ * 
+ * @param  string $module 
+ * @param  string $page 
+ * @access public
+ * @return void
+ */
+function setHomepage(module, page)
+{
+    $.get(createLink('custom', 'ajaxSetHomepage', 'module=' + module + '&page=' + page), function(){location.reload(true)});
+}
+
+/**
  * Init main menu
  * @access public
  * @return void
