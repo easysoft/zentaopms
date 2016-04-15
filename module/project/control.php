@@ -1925,6 +1925,19 @@ class project extends control
         }
     }
 
+    /**
+     * All project. 
+     * 
+     * @param  string $status 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  int    $productID 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function all($status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($this->projects) $this->commonAction($projectID);

@@ -219,7 +219,7 @@ $lang->block->modules['product']->moreLinkList = new stdclass();
 $lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';
 $lang->block->modules['product']->moreLinkList->story   = 'my|story|type=%s';
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->list  = 'project|all|project=&status=%s';
+$lang->block->modules['project']->moreLinkList->list  = 'project|all|status=%s&project=';
 $lang->block->modules['project']->moreLinkList->task  = 'my|task|type=%s';
 $lang->block->modules['qa']->moreLinkList = new stdclass();
 $lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
