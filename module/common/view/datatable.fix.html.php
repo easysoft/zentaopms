@@ -1,7 +1,7 @@
 <style>
 .datatable-menu-wrapper {position: relative;}
 .datatable-menu {position: absolute; right: 0; top: 0; border: 1px solid #ddd; background: #fff; z-index: 999;}
-.datatable-menu > .btn {padding: 5px 6px 6px; outline: none; color: #4d90fe!important}
+.datatable-menu > .btn {padding: 5px 6px; outline: none; color: #4d90fe!important}
 .datatable-menu > .btn:hover {color: #002563!important}
 </style>
 <?php $datatableId = $this->moduleName . $this->methodName;?>
