@@ -1,11 +1,4 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<?php
-if($config->debug)
-{
-    css::import($jsRoot . 'datatable/min.css');
-    js::import($jsRoot . 'datatable/min.js');
-}
-?>
 <?php if(!empty($lang->datatable)):?>
 <style>
 .table-datatable tbody > tr td,
