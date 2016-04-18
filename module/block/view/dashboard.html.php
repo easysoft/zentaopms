@@ -37,7 +37,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
               </ul>
             </div>
           </div>
-          <?php if(isset($block->moreLink)):?>
+          <?php if(!empty($block->moreLink)):?>
           <?php echo html::a($block->moreLink, $block->title . " <i class='icon-double-angle-right'></i>", null, "class='panel-title drag-disabled' title='$lang->more' data-toggle='tooltip' data-placement='right'"); ?>
           <?php else: ?>
           <span class='panel-title'><?php echo $block->title;?></span>

@@ -10,6 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $jsRoot = $this->config->webRoot . 'js/';?>
+<?php include '../../common/view/sparkline.html.php';?>
 <?php $projectboxId = 'projectbox-' . rand(); ?>
 <div id='<?php echo $projectboxId ?>'>
   <table class='table table-data table-hover table-striped table-fixed block-project'>

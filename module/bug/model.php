@@ -543,7 +543,7 @@ class bugModel extends model
                 $bug->pri            = $data->pris[$bugID];
                 $bug->status         = $data->statuses[$bugID];
                 $bug->title          = $data->titles[$bugID];
-                $bug->plan           = $data->plan[$bugID];
+                $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->assignedTo     = $data->assignedTos[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
                 $bug->keywords       = $data->keywords[$bugID];

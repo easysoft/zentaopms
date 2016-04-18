@@ -602,10 +602,15 @@ class bug extends control
         {
             $product = $this->product->getByID($productID);
 
+            /* Set plans. */
+            $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
+            $plans['ditto'] = $this->lang->bug->ditto;
+
             /* Set product menu. */
             $this->bug->setMenu($this->products, $productID, $branch);
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+            $this->view->plans      = $plans;
         }
         /* The bugs of my. */
         else
@@ -631,11 +636,11 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->batchedit;
 
-        /* Set ditto option for users and type, severity, pri, resolution list. */
+        /* Set users. */
         $users          = $this->user->getPairs('nodeleted,devfirst');
         $users['ditto'] = $this->lang->bug->ditto;
-        $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
-        $plans['ditto'] = $this->lang->bug->ditto;
+
+        /* Set ditto option for users and type, severity, pri, resolution list. */
         $this->lang->bug->typeList['ditto']       = $this->lang->bug->ditto;
         $this->lang->bug->priList['ditto']        = $this->lang->bug->ditto;
         $this->lang->bug->resolutionList['ditto'] = $this->lang->bug->ditto;
@@ -656,7 +661,6 @@ class bug extends control
         $this->view->bugs           = $bugs;
         $this->view->branch         = $branch;
         $this->view->users          = $users;
-        $this->view->plans          = $plans;
 
         $this->display();
     }

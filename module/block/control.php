@@ -164,6 +164,7 @@ class block extends control
         if($block)
         {
             $block->grid = $grid;
+            $block->params = helper::jsonEncode($block->params);
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
             if(dao::isError()) $this->send(array('result' => 'fail', 'code' => 500));
             $this->send(array('result' => 'success'));
@@ -187,7 +188,7 @@ class block extends control
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !($inited and $inited->app == $module and $inited->value))
+        if(empty($blocks) and !$inited)
         {
             if($this->block->initBlock($module)) die(js::reload());
         }
@@ -199,9 +200,9 @@ class block extends control
 
             $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
             $block->moreLink  = '';
-            if(isset($this->lang->block->modules[$module]->moreLinkList->{$blockID}))
+            if(isset($this->lang->block->modules[$block->source]->moreLinkList->{$blockID}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$module]->moreLinkList->{$blockID}, $block->params->type));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$block->source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
             }
         }
@@ -559,6 +560,6 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $this->params->num, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($this->params->type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
     }
 }

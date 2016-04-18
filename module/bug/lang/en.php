@@ -107,7 +107,9 @@ $lang->bug->allBugs        = 'Allbug';
 $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'StoryChanged';
 $lang->bug->allProduct     = "All {$lang->productCommon}s";
-$lang->bug->ditto          = 'Ditto';
+
+$lang->bug->ditto       = 'Ditto';
+$lang->bug->dittoNotice = 'Current bug and bug above it do not belong to same product!';
 
 /* Labels. */
 $lang->bug->lblAssignedTo               = 'Assigned to';
@@ -336,3 +338,16 @@ $lang->bug->action->unlinkrelatedbug = array('main' => '$date, unlink related bu
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose builds...';
+
+$lang->bug->featurebar['browse']['unclosed']      = $lang->bug->unclosed;
+$lang->bug->featurebar['browse']['all']           = $lang->bug->allBugs;
+$lang->bug->featurebar['browse']['assigntome']    = $lang->bug->assignToMe;
+$lang->bug->featurebar['browse']['openedbyme']    = $lang->bug->openedByMe;
+$lang->bug->featurebar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
+$lang->bug->featurebar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
+$lang->bug->featurebar['browse']['assigntonull']  = $lang->bug->assignToNull;
+$lang->bug->featurebar['browse']['unresolved']    = $lang->bug->unResolved;
+$lang->bug->featurebar['browse']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->featurebar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->featurebar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->featurebar['browse']['needconfirm']   = $lang->bug->needConfirm;

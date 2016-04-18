@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('dittoNotice', $this->lang->bug->dittoNotice);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
@@ -40,16 +41,21 @@ $columns = count($hasFields) + 2;
         <th class='w-150px<?php echo zget($hasFields, 'productplan', ' hidden')?>'><?php echo $lang->bug->productplan;?></th>
         <th class='w-150px<?php echo zget($hasFields, 'assignedTo', ' hidden')?>'><?php echo $lang->bug->assignedTo;?></th>
         <th class='w-90px<?php echo zget($hasFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
-        <th class='w-150px<?php echo zget($hasFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
-        <th class='w-180px<?php echo zget($hasFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
         <th class='w-100px<?php echo zget($hasFields, 'os', ' hidden')?>'><?php echo $lang->bug->os;?></th>
         <th class='w-100px<?php echo zget($hasFields, 'browser', ' hidden')?>'><?php echo $lang->bug->browser;?></th>
         <th class='w-100px<?php echo zget($hasFields, 'keywords', ' hidden')?>'><?php echo $lang->bug->keywords;?></th>
+        <th class='w-150px<?php echo zget($hasFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
+        <th class='w-180px<?php echo zget($hasFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
       </tr>
     </thead>
     <tbody>
       <?php foreach($bugIDList as $bugID):?>
       <?php
+      if(!$productID)
+      {
+          $plans          = $this->loadModel('productplan')->getPairs($bugs[$bugID]->product, $branch);
+          $plans['ditto'] = $this->lang->story->ditto;
+      }
       /**
        * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
        * These thress types if upgrade from bugfree2.x.
@@ -67,6 +73,9 @@ $columns = count($hasFields) + 2;
         <td class='text-left<?php echo zget($hasFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($hasFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
         <td <?php echo zget($hasFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
+        <td <?php echo zget($hasFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $lang->bug->osList, $bugs[$bugID]->os, 'class=form-control');?></td>
+        <td <?php echo zget($hasFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $lang->bug->browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
+        <td <?php echo zget($hasFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bugs[$bugID]->keywords, 'class=form-control');?></td>
         <td class='text-left<?php echo zget($hasFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
         <td <?php echo zget($hasFields, 'resolution', "class='hidden'")?>>
           <table class='w-p100'>
@@ -80,9 +89,6 @@ $columns = count($hasFields) + 2;
             </tr>
           </table>
         </td>
-        <td <?php echo zget($hasFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $lang->bug->osList, $bugs[$bugID]->os, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $lang->bug->browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bugs[$bugID]->keywords, 'class=form-control');?></td>
       </tr>
       <?php endforeach;?>
       <?php if(isset($suhosinInfo)):?>

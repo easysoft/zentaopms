@@ -916,26 +916,6 @@ class userModel extends model
     }
 
     /**
-     * Append some users to a contact list.
-     * 
-     * @param  int    $listID 
-     * @param  string $userList 
-     * @access public
-     * @return void
-     */
-    public function append2ContactList($listID, $userList)
-    {
-        $list = $this->getContactListByID($listID);
-        if($list->userList) $userList = array_merge($userList, explode(',', $list->userList));
-
-        $userList = array_unique($userList);
-        sort($userList);
-        $userList = join(',', $userList);
-
-        $this->dao->update(TABLE_USERCONTACT)->set('userList')->eq($userList)->where('id')->eq($listID)->exec();
-    }
-
-    /**
      * Update a contact list.
      * 
      * @param  int    $listID 

@@ -597,6 +597,18 @@ class product extends control
         $this->display();
     }
 
+    /**
+     * All product.
+     * 
+     * @param  int    $productID 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function all($productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->session->set('productList', $this->app->getURI(true));

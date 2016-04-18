@@ -70,11 +70,15 @@
     <tfoot>
       <tr>
         <td colspan='10'>
-        <?php if($bugs and $canBatchEdit):?>
         <div class='table-actions clearfix'>
-        <?php echo html::selectButton() . html::submitButton($lang->edit, '', '');?>
+        <?php
+        if($bugs and $canBatchEdit)
+        {
+            $actionLink = $this->createLink('bug', 'batchEdit');
+            echo html::selectButton() . html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
+        }
+        ?>
         </div>
-        <?php endif;?>
         <?php $pager->show();?>
         </td>
       </tr>

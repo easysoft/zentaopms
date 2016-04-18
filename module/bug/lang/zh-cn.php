@@ -107,7 +107,9 @@ $lang->bug->allBugs        = '所有';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
 $lang->bug->allProduct     = '所有' . $lang->productCommon;
-$lang->bug->ditto          = '同上';
+
+$lang->bug->ditto       = '同上';
+$lang->bug->dittoNotice = '该bug与上一bug不属于同一产品！';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo               = '当前指派';
@@ -336,3 +338,16 @@ $lang->bug->action->unlinkrelatedbug = array('main' => '$date, 由 <strong>$acto
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
+
+$lang->bug->featurebar['browse']['unclosed']      = $lang->bug->unclosed;
+$lang->bug->featurebar['browse']['all']           = $lang->bug->allBugs;
+$lang->bug->featurebar['browse']['assigntome']    = $lang->bug->assignToMe;
+$lang->bug->featurebar['browse']['openedbyme']    = $lang->bug->openedByMe;
+$lang->bug->featurebar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
+$lang->bug->featurebar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
+$lang->bug->featurebar['browse']['assigntonull']  = $lang->bug->assignToNull;
+$lang->bug->featurebar['browse']['unresolved']    = $lang->bug->unResolved;
+$lang->bug->featurebar['browse']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->featurebar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->featurebar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->featurebar['browse']['needconfirm']   = $lang->bug->needConfirm;

@@ -122,4 +122,122 @@ class customModel extends model
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
+
+    public static function getCustomMenu($module, $method)
+    {
+        global $app, $lang, $config;
+        if(!isset($lang->$module->menu)) return array();
+        $allMenu['main']   = $lang->menu;
+        $allMenu['module'] = $lang->$module->menu;
+
+        /* Process main and module menu. */
+        $processedMenus = array();
+        foreach($allMenu as $type => $menu)
+        {
+            $menucustom = '';
+            $menuOrder  = array();
+            $menuStatus = array();
+            if($type == 'main')  $menucustom = isset($config->menucustom->main) ? $config->menucustom->main : '';
+            if($type == 'module')$menucustom = isset($config->menucustomModule->$module) ? $config->menucustomModule->$module : '';
+            /* Get order and status from config. */
+            if($menucustom)
+            {
+                $menuStatus = json_decode($menucustom, true);
+                $i = 1;
+                foreach($menuStatus as $menuKey => $status)
+                {
+                    $order = $i * 5;
+                    $menuOrder[$order] = $menuKey;
+                    $i++;
+                }
+            }
+            if(empty($menuOrder)) $menuOrder = $type == 'main' ? $lang->menuOrder : $lang->$module->menuOrder;
+
+            /* Merge all menu. */
+            $inOrderMenu    = ',' . join(',', $menuOrder) . ',';
+            $notInOrderMenu = array();
+            foreach($menu as $menuKey => $menuName)
+            {
+                if(strpos($inOrderMenu, ",$menuKey,") === false) $notInOrderMenu[] = $menuKey;
+            }
+            if($notInOrderMenu)
+            {
+                $order = count($menuOrder) * 5;
+                foreach($notInOrderMenu as $menuKey)
+                {
+                    $order = $order + 5;
+                    $menuOrder[$order] = $menuKey;
+                }
+            }
+            ksort($menuOrder, SORT_ASC);
+
+            /* Rebuild menu. */
+            $processedMenu = new stdclass();
+            foreach($menuOrder as $order => $menuKey)
+            {
+                if(!isset($menu->$menuKey)) continue;
+                $menuContent = $menu->$menuKey;
+                if(is_string($menuContent)) $menuContent = array('link' => $menuContent);
+                $menuContent['status'] = isset($menuStatus[$menuKey]) ? $menuStatus[$menuKey] : 'show';
+                $menuContent['order']  = $order;
+
+                if(strpos($menuContent['link'], '|') !== false)
+                {
+                    list($menuTitle, $menuModule, $menuMethod) = explode('|', $menuContent['link']);
+                    if($menuContent['status'] == 'show' and !common::hasPriv($menuModule, $menuMethod)) $menuContent['status'] = 'hide';
+                }
+
+                $processedMenu->$menuKey = $menuContent;
+            }
+            $processedMenus[$type] = $processedMenu;
+        }
+
+        /* Process featurebar. */
+        $app->loadLang($module);
+        $featurebar = '';
+        if(isset($lang->$module->featurebar[$method])) $featurebar = $lang->$module->featurebar[$method];
+        $menucustomKey = 'menucustom' . $module;
+        if($featurebar)
+        {
+            $menuOrder  = array();
+            $menuStatus = array();
+            if(isset($config->$menucustomKey->$method))
+            {
+                $menuStatus = json_decode($config->$menucustomKey->$method, true);
+                foreach($menuStatus as $menuKey => $status) $menuOrder[] = $menuKey;
+            }
+
+            /* Merge all menu. */
+            $inOrderMenu    = ',' . join(',', $menuOrder) . ',';
+            $notInOrderMenu = array();
+            foreach($featurebar as $menuKey => $menuName)
+            {
+                if(strpos($inOrderMenu, ",$menuKey,") === false) $notInOrderMenu[] = $menuKey;
+            }
+            if($notInOrderMenu)
+            {
+                $order = count($menuOrder);
+                foreach($notInOrderMenu as $menuKey)
+                {
+                    $menuOrder[$order] = $menuKey;
+                    $order++;
+                }
+            }
+            ksort($menuOrder, SORT_ASC);
+
+            $processedMenu = new stdclass();
+            foreach($menuOrder as $order => $menuKey)
+            {
+                $menuContent = $featurebar[$menuKey];
+                $menuContent = array('link' => $menuContent);
+                $menuContent['status'] = isset($menuStatus[$menuKey]) ? $menuStatus[$menuKey] : 'show';
+                $menuContent['order']  = ($order + 1) * 5;
+
+                $processedMenu->$menuKey = $menuContent;
+            }
+            $processedMenus['featurebar'] = $processedMenu;
+        }
+
+        return $processedMenus;
+    }
 }

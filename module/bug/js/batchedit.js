@@ -27,6 +27,8 @@ $(function()
     });
 })
 
+$(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})
+
 $(document).on('change', 'select', function()
 {
     if($(this).val() == 'ditto')
@@ -49,7 +51,26 @@ $(document).on('change', 'select', function()
             if(value != 'ditto') break;
         }
 
-        $(this).val(value);
+        isPlans = $(this).attr('name').indexOf('plans') != -1;
+
+        if(isPlans)
+        {
+            var valueStr = ',' + $(this).find('option').map(function(){return $(this).val();}).get().join(',') + ',';
+            if(valueStr.indexOf(',' + value + ',') != -1)
+            {
+                $(this).val(value);
+            }
+            else
+            {
+                alert(dittoNotice);
+                $(this).val(oldValue);
+            }
+        }
+        else
+        {
+            $(this).val(value);
+        }
+
         $(this).trigger("chosen:updated");
         $(this).trigger("change");
     }
