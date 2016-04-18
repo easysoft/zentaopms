@@ -78,9 +78,7 @@ function initTableHeader()
         var $panel = $(this);
         var $table = $panel.find('.table:first');
 
-        console.log($table.length, $table.children('thead').length, this);
         if(!$table.length || !$table.children('thead').length) return;
-        console.log('ok');
 
         var $header = $panel.children('.table-header-fixed');
         if(!$header.length)
