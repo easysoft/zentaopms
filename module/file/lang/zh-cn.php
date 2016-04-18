@@ -20,6 +20,7 @@ $lang->file->label         = '标题：';
 $lang->file->maxUploadSize = "<span class='red'>%s</span>";
 $lang->file->applyTemplate = "应用模板";
 $lang->file->tplTitle      = "模板名称";
+$lang->file->setPublic     = "设置公共模板";
 $lang->file->exportFields  = "要导出字段";
 
 $lang->file->errorNotExists   = "<span class='red'>文件夹 '%s' 不存在</span>";
