@@ -1152,3 +1152,10 @@ $lang->changelog['8.0.1'][] = 'story-linkStory';
 $lang->changelog['8.0.1'][] = 'story-unlinkStory';
 $lang->changelog['8.0.1'][] = 'testcase-linkCases';
 $lang->changelog['8.0.1'][] = 'testcase-unlinkCase';
+
+$lang->changelog['8.1.3'][] = 'story-batchChangeModule';
+$lang->changelog['8.1.3'][] = 'task-batchChangeModule';
+$lang->changelog['8.1.3'][] = 'bug-batchChangeModule';
+$lang->changelog['8.1.3'][] = 'testcase-batchChangeModule';
+$lang->changelog['8.1.3'][] = 'my-manageContacts';
+$lang->changelog['8.1.3'][] = 'my-deleteContacts';
