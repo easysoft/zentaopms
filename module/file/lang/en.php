@@ -20,6 +20,7 @@ $lang->file->label         = 'Title: ';
 $lang->file->maxUploadSize = "<span class='red'>%s</span>";
 $lang->file->applyTemplate = "Apply";
 $lang->file->tplTitle      = "Title";
+$lang->file->setPublic     = "Set public template";
 $lang->file->exportFields  = "To export fields";
 
 $lang->file->errorNotExists   = "<span class='red'>The directory '%s' is no exist</span>";
