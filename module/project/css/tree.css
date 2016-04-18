@@ -1,0 +1,15 @@
+.no-padding {padding: 0!important;}
+
+#projectTree {margin-bottom: 0}
+#projectTree > .tree-action-item {display: none!important}
+#projectTree li {line-height: 30px; padding-top: 0; padding-bottom: 0}
+#projectTree .item-type-product > .tree-toggle {display: block; background-color: #edf3fe; margin-left: -20px; padding-left: 20px; border-bottom: 1px solid #ddd; cursor: pointer}
+#projectTree .item-type-product > .tree-toggle:hover {background-color: #eee}
+#projectTree .item-type-product.open > .tree-toggle {border-bottom: none}
+#projectTree .item-type-module > .tree-toggle {display: block}
+#projectTree .item-type-module > .tree-toggle:hover {display: block; background-color: #edf3fe; cursor: pointer; margin-left: -20px; padding-left: 20px;}
+#projectTree.tree li>.list-toggle:before {content: '\e6bb'}
+#projectTree.tree li.open>.list-toggle:before {content: '\e6b8';}
+#projectTree.tree li>.list-toggle {top: 2px}
+#projectTree .item-type-story > ul > li {padding-left: 10px;}
+#projectTree.tree li:before {display: none}

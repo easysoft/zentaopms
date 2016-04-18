@@ -1940,4 +1940,92 @@ class projectModel extends model
 
         return $chartData;
     }
+
+    /**
+     * Build product task tree item
+     * @param  object $tree
+     * @access public
+     * @return object
+     */
+    public function buildProductTaskTree($node, $projectID)
+    {
+        $this->loadModel('story');
+        $this->loadModel('task');
+
+        if($node->children)
+        {
+            foreach ($node->children as $child)
+            {
+                $child = $this->buildProductTaskTree($child, $projectID);
+            }
+        }
+
+        if($node->type === 'product')
+        {
+            $node->actions = false;
+            // TODO: get product root storys and appent to children
+        }
+        else if($node->type === 'story')
+        {
+            $node->type = 'module';
+            $node->actions = false;
+            $stories = $this->story->getProjectStories($projectID, 'pri_asc,id_desc', 'byModule', $node->id);
+            foreach ($stories as $story)
+            {
+                $storyItem = new stdclass();
+                $storyItem->type    = 'story';
+                $storyItem->id      = 'story' . $story->id;
+                $storyItem->title   = $story->title;
+                $storyItem->color   = $story->color;
+                $storyItem->pri     = $story->pri;
+                $storyItem->storyId = $story->id;
+                $storyItem->url     = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
+
+                $storyTasks = $this->task->getStoryTasks($story->id, $projectID);
+                if(!empty($storyTasks))
+                {
+                    $taskItems = array();
+                    foreach ($storyTasks as $task)
+                    {
+                        $taskItem = new stdclass();
+                        $taskItem->type   = 'task';
+                        $taskItem->id     = $task->id;
+                        $taskItem->title  = $task->name;
+                        $taskItem->color  = $task->color;
+                        $taskItem->pri    = $task->pri;
+                        $taskItem->url    = helper::createLink('task', 'view', "task=$task->id");
+                        $taskItems[] = $taskItem;
+                    }
+
+                    $storyItem->children = $taskItems;
+                }
+
+                $node->children[] = $storyItem;
+            }
+        }
+        return $node;
+    }
+
+    /**
+     * Get projects tree data
+     * @param  int     $projectID
+     * @access public
+     * @return array
+     */
+    public function getProjectTree($projectID)
+    {
+        $tree = array();
+        $products = $this->getProducts($projectID);
+        foreach ($products as $product)
+        {
+            $productItem = new stdclass();
+            $productItem->type     = 'product';
+            $productItem->id       = 'product' . $product->id;
+            $productItem->title    = $product->name;
+            $productItem->children = $this->loadModel('tree')->getFullTree($product->id, 'story');
+
+            $tree[] = $this->buildProductTaskTree($productItem, $projectID);
+        }
+        return $tree;
+    }
 }

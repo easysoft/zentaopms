@@ -1208,6 +1208,28 @@ class project extends control
         $this->view->orderBy    = $orderBy;
         $this->view->projectID  = $projectID;
         $this->view->project    = $project;
+        $this->display();
+    }
+
+    /**
+     * Tree view.
+     * Product
+     * 
+     * @param  int    $projectID 
+     * @param  string $level 
+     * @access public
+     * @return void
+     */
+    public function tree($projectID, $level = 'pri_asc')
+    {
+        $this->project->setMenu($this->projects, $projectID);
+        $project  = $this->loadModel('project')->getById($projectID);
+
+        $this->view->title      = $this->lang->project->tree;
+        $this->view->project    = $project;
+        $this->view->projectID  = $projectID;
+        $this->view->level      = $level;
+        $this->view->tree       = $this->project->getProjectTree($projectID);
         $this->display(); 
     }
 

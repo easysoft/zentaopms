@@ -121,6 +121,7 @@ $lang->project->batchUnlinkStory = 'Batch remove story';
 $lang->project->importTask       = 'Transfer task';
 $lang->project->importBug        = 'Import bug';
 $lang->project->updateOrder      = 'Order';
+$lang->project->tree             = 'Tree';
 
 /* Browse. */
 $lang->project->allTasks             = 'All';
