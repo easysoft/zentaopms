@@ -260,3 +260,10 @@ $lang->project->featurebar['task']['group']        = $lang->project->groups[''];
 $lang->project->featurebar['grouptask']            = $lang->project->featurebar['task'];
 $lang->project->featurebar['kanban']               = $lang->project->featurebar['task'];
 $lang->project->featurebar['burn']               = $lang->project->featurebar['task'];
+
+$lang->project->treeLevel = array();
+$lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '产品视图');
+$lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => '模块视图');
+$lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => '需求视图');
+$lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => '任务视图');
+$lang->project->treeLevel['custom']  = array('icon' => 'icon-align-left', 'text' => '自定义');

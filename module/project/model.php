@@ -1973,13 +1973,14 @@ class projectModel extends model
             foreach ($stories as $story)
             {
                 $storyItem = new stdclass();
-                $storyItem->type    = 'story';
-                $storyItem->id      = 'story' . $story->id;
-                $storyItem->title   = $story->title;
-                $storyItem->color   = $story->color;
-                $storyItem->pri     = $story->pri;
-                $storyItem->storyId = $story->id;
-                $storyItem->url     = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
+                $storyItem->type          = 'story';
+                $storyItem->id            = 'story' . $story->id;
+                $storyItem->title         = $story->title;
+                $storyItem->color         = $story->color;
+                $storyItem->pri           = $story->pri;
+                $storyItem->storyId       = $story->id;
+                $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
+                $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
 
                 $storyTasks = $this->task->getStoryTasks($story->id, $projectID);
                 if(!empty($storyTasks))
@@ -1988,16 +1989,35 @@ class projectModel extends model
                     foreach ($storyTasks as $task)
                     {
                         $taskItem = new stdclass();
-                        $taskItem->type   = 'task';
-                        $taskItem->id     = $task->id;
-                        $taskItem->title  = $task->name;
-                        $taskItem->color  = $task->color;
-                        $taskItem->pri    = $task->pri;
-                        $taskItem->url    = helper::createLink('task', 'view', "task=$task->id");
+                        $taskItem->type         = 'task';
+                        $taskItem->id           = $task->id;
+                        $taskItem->title        = $task->name;
+                        $taskItem->color        = $task->color;
+                        $taskItem->pri          = $task->pri;
+                        $taskItem->status       = $task->status;
+                        $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
+                        $taskItem->storyChanged = $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
+
+                        $buttons = '';
+                        $buttons .= common::buildIconButton('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                        $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
+                        $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+                        if($browseType == 'needconfirm')
+                        {
+                            $lang->task->confirmStoryChange = $lang->confirm;
+                            $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+                        }
+                        $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                        $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                        $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
+
+                        $taskItem->buttons = $buttons;
                         $taskItems[] = $taskItem;
                     }
 
-                    $storyItem->children = $taskItems;
+                    $storyItem->children   = array();
+                    $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
                 }
 
                 $node->children[] = $storyItem;

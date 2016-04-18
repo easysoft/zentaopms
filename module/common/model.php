@@ -687,7 +687,7 @@ class commonModel extends model
     }
 
     /**
-     * Print link icon.
+     * Build icon button.
      * 
      * @param  string $module 
      * @param  string $method 
@@ -703,7 +703,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '')
+    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '')
     {
         if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
 
@@ -755,32 +755,53 @@ class commonModel extends model
         {
             if($app->getViewType() == 'mhtml')
             {
-                echo html::a($link, $title, $target, "class='$extraClass' data-role='button' data-mini='true' data-inline='true' data-theme='b'", true);
-                return;
+                return html::a($link, $title, $target, "class='$extraClass' data-role='button' data-mini='true' data-inline='true' data-theme='b'", true);
             }
             if($type == 'button')
             {
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    echo html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass' $misc", true);
+                    return html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass' $misc", true);
                 }
                 else
                 {
-                    echo html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
                 }
             }
             else
             {
-                echo html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title' $misc", false);
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title' $misc", false);
             }
         }
         else
         {
             if($type == 'list')
             {
-                echo "<button type='button' class='disabled btn-icon $extraClass'><i class='$class' title='$title' $misc></i></button>";
+                return "<button type='button' class='disabled btn-icon $extraClass'><i class='$class' title='$title' $misc></i></button>";
             }
         }
+    }
+
+    /**
+     * Print link icon.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $vars 
+     * @param  object $object 
+     * @param  string $type button|list 
+     * @param  string $icon 
+     * @param  string $target 
+     * @param  string $extraClass 
+     * @param  bool   $onlyBody 
+     * @param  string $misc 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '')
+    {
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc);
     }
 
     /**

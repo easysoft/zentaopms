@@ -249,3 +249,10 @@ $lang->project->featurebar['task']['group']        = $lang->project->groups[''];
 $lang->project->featurebar['grouptask']            = $lang->project->featurebar['task'];
 $lang->project->featurebar['kanban']               = $lang->project->featurebar['task'];
 $lang->project->featurebar['burn']               = $lang->project->featurebar['task'];
+
+$lang->project->treeLevel = array();
+$lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => 'Products view');
+$lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => 'Modules view');
+$lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => 'Stories view');
+$lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => 'Tasks view');
+$lang->project->treeLevel['custom']  = array('icon' => 'icon-align-left', 'text' => 'Custom view');

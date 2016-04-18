@@ -20,6 +20,7 @@
     $hasKanbanPriv    = common::hasPriv('project', 'kanban');
     $hasBurnPriv      = common::hasPriv('project', 'burn');
     $hasGroupTaskPriv = common::hasPriv('project', 'groupTask');
+    $hasTreePriv      = common::hasPriv('project', 'tree');
     ?>
     <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
     <?php
@@ -27,6 +28,8 @@
     if($hasBrowsePriv and ($type == 'unclosed' or $type == 'all' or $type == 'assignedtome')) echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $featurebar['link']) . '</li>' ;
     if($hasKanbanPriv and $type == 'kanban') echo "<li id='kanbanTab'>" . html::a(inlink('kanban', "projectID=$projectID"), $featurebar['link']) . '</li>';
     if($hasBurnPriv   and $type == 'burn' and ($project->type == 'sprint' or $project->type == 'waterfall')) echo "<li id='burnTab'>" . html::a(inlink('burn', "project=$projectID"), $featurebar['link']) . '</li>' ;
+    if($hasTreePriv and $type == 'tree') echo "<li id='treeTab'>"; common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree, '', '', false); echo '</li>';
+
     if($hasBrowsePriv and $type == 'status')
     {
         echo "<li id='statusTab' class='dropdown'>";
