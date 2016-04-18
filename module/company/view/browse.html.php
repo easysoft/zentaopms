@@ -60,7 +60,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <tr class='text-center'>
       <td>
         <?php 
-        if($canBatchEdit or $canManageContacts) echo "<input type='checkbox' name='users[]' value='$user->account'> ";
+        if($canBatchEdit) echo "<input type='checkbox' name='users[]' value='$user->account'> ";
         printf('%03d', $user->id);
         ?>
       </td>
@@ -96,7 +96,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <td colspan='12'>
       <div class='table-actions clearfix'>
       <?php
-      if($canBatchEdit or $canManageContacts) echo html::selectButton();
+      if($canBatchEdit) echo html::selectButton();
       if($canBatchEdit) echo html::submitButton($lang->edit, 'onclick=batchEdit()', 'btn btn-default');
       ?>
       </div>
