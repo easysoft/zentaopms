@@ -107,7 +107,9 @@ $lang->bug->allBugs        = 'Allbug';
 $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'StoryChanged';
 $lang->bug->allProduct     = "All {$lang->productCommon}s";
-$lang->bug->ditto          = 'Ditto';
+
+$lang->bug->ditto       = 'Ditto';
+$lang->bug->dittoNotice = 'Current bug and bug above it do not belong to same product!';
 
 /* Labels. */
 $lang->bug->lblAssignedTo               = 'Assigned to';

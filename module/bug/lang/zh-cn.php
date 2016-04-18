@@ -107,7 +107,9 @@ $lang->bug->allBugs        = '所有';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
 $lang->bug->allProduct     = '所有' . $lang->productCommon;
-$lang->bug->ditto          = '同上';
+
+$lang->bug->ditto       = '同上';
+$lang->bug->dittoNotice = '该bug与上一bug不属于同一产品！';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo               = '当前指派';
