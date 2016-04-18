@@ -69,6 +69,7 @@ $lang->testcase->export             = "导出数据";
 $lang->testcase->confirmChange      = '确认用例变动';
 $lang->testcase->confirmStoryChange = '确认需求变动';
 $lang->testcase->colorTag           = '颜色标签';
+$lang->testcase->batchChangeModule  = "批量修改模块";
 
 $lang->testcase->new = '新增';
 

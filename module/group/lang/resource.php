@@ -79,6 +79,8 @@ $lang->resource->my->dynamic        = 'dynamic';
 $lang->resource->my->editProfile    = 'editProfile';
 $lang->resource->my->changePassword = 'changePassword';
 $lang->resource->my->unbind         = 'unbind';
+$lang->resource->my->manageContacts = 'manageContacts';
+$lang->resource->my->deleteContacts = 'deleteContacts';
 
 $lang->my->methodOrder[0]  = 'index';
 $lang->my->methodOrder[5]  = 'todo';
@@ -93,6 +95,8 @@ $lang->my->methodOrder[45] = 'dynamic';
 $lang->my->methodOrder[50] = 'editProfile';
 $lang->my->methodOrder[55] = 'changePassword';
 $lang->my->methodOrder[60] = 'unbind';
+$lang->my->methodOrder[65] = 'manageContacts';
+$lang->my->methodOrder[75] = 'deleteContacts';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();
@@ -178,26 +182,30 @@ $lang->resource->story->batchChangePlan   = 'batchChangePlan';
 $lang->resource->story->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage  = 'batchChangeStage';
 $lang->resource->story->batchAssignTo     = 'batchAssignTo';
+$lang->resource->story->batchChangeModule = 'batchChangeModule';
 
-$lang->story->methodOrder[5]  = 'create';
-$lang->story->methodOrder[10] = 'batchCreate';
-$lang->story->methodOrder[15] = 'edit';
-$lang->story->methodOrder[20] = 'export';
-$lang->story->methodOrder[25] = 'delete';
-$lang->story->methodOrder[30] = 'view';
-$lang->story->methodOrder[35] = 'change';
-$lang->story->methodOrder[40] = 'review';
-$lang->story->methodOrder[45] = 'batchReview';
-$lang->story->methodOrder[50] = 'close';
-$lang->story->methodOrder[55] = 'batchClose';
-$lang->story->methodOrder[60] = 'batchChangePlan';
-$lang->story->methodOrder[65] = 'batchChangeStage';
-$lang->story->methodOrder[70] = 'batchAssignTo';
-$lang->story->methodOrder[75] = 'activate';
-$lang->story->methodOrder[80] = 'tasks';
-$lang->story->methodOrder[85] = 'zeroCase';
-$lang->story->methodOrder[90] = 'report';
-$lang->story->methodOrder[95] = 'batchChangeBranch';
+$lang->story->methodOrder[5]   = 'create';
+$lang->story->methodOrder[10]  = 'batchCreate';
+$lang->story->methodOrder[15]  = 'edit';
+$lang->story->methodOrder[20]  = 'export';
+$lang->story->methodOrder[25]  = 'delete';
+$lang->story->methodOrder[30]  = 'view';
+$lang->story->methodOrder[35]  = 'change';
+$lang->story->methodOrder[40]  = 'review';
+$lang->story->methodOrder[45]  = 'batchReview';
+$lang->story->methodOrder[50]  = 'close';
+$lang->story->methodOrder[55]  = 'batchClose';
+$lang->story->methodOrder[60]  = 'batchChangePlan';
+$lang->story->methodOrder[65]  = 'batchChangeStage';
+$lang->story->methodOrder[70]  = 'batchAssignTo';
+$lang->story->methodOrder[75]  = 'activate';
+$lang->story->methodOrder[80]  = 'tasks';
+$lang->story->methodOrder[85]  = 'zeroCase';
+$lang->story->methodOrder[90]  = 'report';
+$lang->story->methodOrder[95]  = 'linkStory';
+$lang->story->methodOrder[100] = 'unlinkStory';
+$lang->story->methodOrder[105] = 'batchChangeBranch';
+$lang->story->methodOrder[110] = 'batchChangeModule';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -358,6 +366,7 @@ $lang->resource->task->recordEstimate     = 'recordEstimate';
 $lang->resource->task->editEstimate       = 'editEstimate';
 $lang->resource->task->deleteEstimate     = 'deleteEstimate';
 $lang->resource->task->report             = 'reportChart';
+$lang->resource->task->batchChangeModule  = 'batchChangeModule';
 
 $lang->task->methodOrder[5]   = 'create';
 $lang->task->methodOrder[10]  = 'batchCreate';
@@ -381,6 +390,7 @@ $lang->task->methodOrder[95]  = 'recordEstimate';
 $lang->task->methodOrder[100] = 'editEstimate';
 $lang->task->methodOrder[105] = 'deleteEstimate';
 $lang->task->methodOrder[110] = 'report';
+$lang->task->methodOrder[115] = 'batchChangeModule';
 
 /* Build. */
 $lang->resource->build = new stdclass();
@@ -439,6 +449,7 @@ $lang->resource->bug->delete             = 'delete';
 $lang->resource->bug->saveTemplate       = 'saveTemplate';
 $lang->resource->bug->deleteTemplate     = 'deleteTemplate';
 $lang->resource->bug->setPublic          = 'setPublic';
+$lang->resource->bug->batchChangeModule  = 'batchChangeModule';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -463,6 +474,9 @@ $lang->bug->methodOrder[95]  = 'delete';
 $lang->bug->methodOrder[100] = 'saveTemplate';
 $lang->bug->methodOrder[105] = 'deleteTemplate';
 $lang->bug->methodOrder[110] = 'setPublic';
+$lang->bug->methodOrder[115] = 'linkBugs';
+$lang->bug->methodOrder[120] = 'unlinkBug';
+$lang->bug->methodOrder[125] = 'batchChangeModule';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -485,6 +499,7 @@ $lang->resource->testcase->import             = 'import';
 $lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
+$lang->resource->testcase->batchChangeModule  = 'batchChangeModule';
 
 $lang->testcase->methodOrder[0]  = 'index';
 $lang->testcase->methodOrder[5]  = 'browse';
@@ -500,6 +515,9 @@ $lang->testcase->methodOrder[50] = 'confirmChange';
 $lang->testcase->methodOrder[55] = 'confirmStoryChange';
 $lang->testcase->methodOrder[60] = 'batchEdit';
 $lang->testcase->methodOrder[65] = 'batchDelete';
+$lang->testcase->methodOrder[70] = 'batchChangeModule';
+$lang->testcase->methodOrder[75] = 'linkCases';
+$lang->testcase->methodOrder[80] = 'unlinkCase';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -680,8 +698,6 @@ $lang->resource->user->project        = 'project';
 $lang->resource->user->dynamic        = 'dynamic';
 $lang->resource->user->profile        = 'profile';
 $lang->resource->user->batchEdit      = 'batchEdit';
-$lang->resource->user->manageContacts = 'manageContacts';
-$lang->resource->user->deleteContacts = 'deleteContacts';
 $lang->resource->user->unbind         = 'unbind';
 
 $lang->user->methodOrder[5]  = 'create';
@@ -697,8 +713,6 @@ $lang->user->methodOrder[45] = 'project';
 $lang->user->methodOrder[50] = 'dynamic';
 $lang->user->methodOrder[55] = 'profile';
 $lang->user->methodOrder[60] = 'batchEdit';
-$lang->user->methodOrder[65] = 'manageContacts';
-$lang->user->methodOrder[70] = 'deleteContacts';
 $lang->user->methodOrder[75] = 'unbind';
 
 /* Tree. */

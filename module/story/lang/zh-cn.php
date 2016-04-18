@@ -33,6 +33,7 @@ $lang->story->batchChangePlan   = "批量修改计划";
 $lang->story->batchChangeBranch = "批量修改分支";
 $lang->story->batchChangeStage  = "批量修改阶段";
 $lang->story->batchAssignTo     = "批量指派";
+$lang->story->batchChangeModule = "批量修改模块";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';

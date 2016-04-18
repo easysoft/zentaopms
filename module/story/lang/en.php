@@ -33,6 +33,7 @@ $lang->story->batchChangePlan   = "Batch change plan";
 $lang->story->batchChangeBranch = "Batch change branch";
 $lang->story->batchChangeStage  = "Batch change stage";
 $lang->story->batchAssignTo     = "Batch assignto";
+$lang->story->batchChangeModule = "Batch change module";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';

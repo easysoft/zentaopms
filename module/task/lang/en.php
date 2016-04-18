@@ -31,6 +31,7 @@ $lang->task->export             = "Export data";
 $lang->task->reportChart        = "Report chart";
 $lang->task->fromBug            = 'From Bug';
 $lang->task->confirmStoryChange = "Confirm story change";
+$lang->task->batchChangeModule  = "Batch change module";
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
