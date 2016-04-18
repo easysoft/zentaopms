@@ -136,6 +136,9 @@ class upgradeModel extends model
                 $this->addPriv8_1();
             case '8_1':
                 $this->execSQL($this->getUpgradeFile('8.1'));
+            case '8_1_3':
+                $this->execSQL($this->getUpgradeFile('8.1.3'));
+                $this->addPriv8_2();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -859,6 +862,42 @@ class upgradeModel extends model
         foreach($groups as $group)
         {
             $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
+        }
+
+        $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('user')->andWhere('`method`')->eq('manageContacts')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('my')->set('method')->eq('manageContacts')->set('`group`')->eq($group)->exec();
+        }
+
+        $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('user')->andWhere('`method`')->eq('deleteContacts')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('my')->set('method')->eq('deleteContacts')->set('`group`')->eq($group)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from($privTable)->where('module')->eq('story')->andWhere('method')->eq('edit')->fetchAll();
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('story')->set('method')->eq('batchChangeModule')->set('`group`')->eq($group)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from($privTable)->where('module')->eq('bug')->andWhere('method')->eq('edit')->fetchAll();
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('bug')->set('method')->eq('batchChangeModule')->set('`group`')->eq($group)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from($privTable)->where('module')->eq('task')->andWhere('method')->eq('edit')->fetchAll();
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('task')->set('method')->eq('batchChangeModule')->set('`group`')->eq($group)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from($privTable)->where('module')->eq('testcase')->andWhere('method')->eq('edit')->fetchAll();
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('testcase')->set('method')->eq('batchChangeModule')->set('`group`')->eq($group)->exec();
         }
 
         return true;

@@ -19,18 +19,23 @@
   </div>
 </div>
 <div class='main'>
-  <form class='form-condensed' method='post'>
+  <form class='form-condensed' method='post' enctype='multipart/form-data'>
     <table class='table table-bordered table-form' style='word-break:break-all'>
       <thead>
         <tr>
           <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong> <?php echo $run->case->precondition;?></td>
         </tr>
-        <tr>
+        <tr class='fix-position'>
           <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
           <th class='w-p30'><?php  echo $lang->testcase->stepDesc;?></th>
           <th class='w-p30'><?php  echo $lang->testcase->stepExpect;?></th>
           <th class='w-100px'><?php echo $lang->testcase->result;?></th>
-          <th><?php echo $lang->testcase->real;?></th>
+          <th>
+            <?php echo $lang->testcase->real;?>
+            <?php if(empty($run->case->steps)):?>
+            <button type='button' class='btn-file' data-toggle='modal' data-target='#fileModal'><?php echo $lang->testtask->files;?></button>
+            <?php endif;?>
+          </th>
         </tr>
       </thead>
       <?php foreach($run->case->steps as $key => $step):?>
@@ -40,7 +45,14 @@
         <td><?php echo nl2br($step->desc);?></td>
         <td><?php echo nl2br($step->expect);?></td>
         <td class='text-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, $defaultResult, "class='form-control'");?></td>
-        <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='form-control'");?></td>
+        <td>
+          <table class='fix-border fix-position'>
+            <tr>
+              <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='form-control fix-textarea'");?></td>
+              <td><button type='button' title='<?php echo $lang->testtask->files?>' class='btn-file' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
+            </tr>
+          </table>
+        </td>
       </tr>
       <?php endforeach;?>
       <tr class='text-center'>
@@ -64,6 +76,46 @@
         </td>
       </tr>
     </table>
+    <?php if(empty($run->case->steps)):?>
+    <div class="modal fade" id="fileModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title"><?php echo $lang->testtask->files;?></h4>
+          </div>
+          <div class="modal-body">
+            <table class='table table-form'>
+              <tr>
+                <td><?php echo $this->fetch('file', 'buildform');?></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php else:?>
+    <?php foreach($run->case->steps as $key => $step):?>
+    <?php $htmlTagName = array("files{$step->id}", "labels{$step->id}");?>
+    <div class="modal fade" id="fileModal<?php echo $step->id;?>">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title"><?php echo $lang->testtask->files;?></h4>
+          </div>
+          <div class="modal-body">
+            <table class='table table-form'>
+              <tr>
+                <td><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'htmlTagName' => $htmlTagName));?></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endforeach;?>
+    <?php endif;?>
   </form>
 </div>
 <div class='main' id='resultsContainer'>

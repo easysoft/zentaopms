@@ -42,11 +42,12 @@
           <td class='w-180px'><?php echo $result->date;?></td>
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
+          <td class='w-50px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", '<i class="icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe'")?></td>
           <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
         <tr class='result-detail hide'>
-          <td colspan='6' class='pd-0'>
+          <td colspan='7' class='pd-0'>
             <table class='table table-condensed borderless mg-0'>
               <thead>
                 <tr>
@@ -61,13 +62,17 @@
               $i = 1;
               foreach($result->stepResults as $key => $stepResult):
               ?>
+              <?php $modalID = $result->id . '-' . $key;?>
               <tr>
                 <td class='w-30px text-center'><?php echo $i;?></td>
                 <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
                 <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
                 <?php if(!empty($stepResult['result'])):?>
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
-                <td><?php echo $stepResult['real'];?></td>
+                <td>
+                  <?php echo $stepResult['real'];?>
+                  <?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", '<i class="icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe' style='float:right'")?>
+                </td>
               </tr>
                 <?php else:?>
                 <td></td>
@@ -80,6 +85,32 @@
         </tr>
         <?php endforeach;?>
       </table>
+      <?php foreach($results as $result):?>
+      <div class="modal fade" id="caseResult<?php echo $result->id;?>">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title"><?php echo $lang->files;?></h4>
+            </div>
+            <div class="modal-body"><?php echo $this->fetch('file', 'printFiles', array('files' => $result->files, 'fieldset' => 'false'));?></div>
+          </div>
+        </div>
+      </div>
+        <?php foreach($result->stepResults as $stepID => $stepResult):?>
+        <div class="modal fade" id="stepResult<?php echo $result->id . '-' .$stepID;?>">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title"><?php echo $lang->files;?></h4>
+              </div>
+              <div class="modal-body"><?php echo $this->fetch('file', 'printFiles', array('files' => $stepResult['files'], 'fieldset' => 'false'));?></div>
+            </div>
+          </div>
+        </div>
+        <?php endforeach;?>
+      <?php endforeach;?>
       <div id='resultTip' class='hide'><?php if($count > 0) echo $failCount > 0 ? "<span>" . sprintf($lang->testtask->showFail, $failCount) . "</span>":"<span class='text-success'>{$lang->testtask->passAll}</span>";?></div>
       <style>.table-hover tr.result-detail:hover td {background: #fff} #casesResults > table > caption {border: 1px solid #ddd; margin-bottom: -1px}</style>
     </div>

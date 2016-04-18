@@ -69,6 +69,7 @@ $lang->testcase->export             = "Export data";
 $lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 $lang->testcase->colorTag           = 'Color tag';
+$lang->testcase->batchChangeModule  = "Batch change module";
 
 $lang->testcase->new = 'New';
   
