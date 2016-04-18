@@ -64,7 +64,6 @@
 $(function()
 {
     var data = $.parseJSON('<?php echo json_encode($tree);?>');
-    console.log('DATA', data);
     var $tree = $('#modulesTree').tree(
     {
         initialState: 'preserve',
