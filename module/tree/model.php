@@ -429,26 +429,36 @@ class treeModel extends model
 
     /**
      * Get full task tree
-     * @param  integer $rootID, common value is project id
+     * @param  integer $projectID, common value is project id
      * @param  integer $productID
      * @param  integer $moduleID
      * @access public
      * @return object
      */
-    public function getFullTaskTree($rootID, $productID, $moduleID = 0) 
+    public function getFullTaskTree($projectID, $productID, $moduleID = 0, $newModule = false) 
     {
-        $tree = array_values($this->getTaskSons($rootID, $productID, $moduleID));
+        $tree = array_values($this->getTaskSons($projectID, $productID, $moduleID));
         if(!$moduleID)
         {
+            $products = $this->loadModel('project')->getProducts($projectID);
+            if($newModule and $products)
+            {
+                $productModulesTree = array();
+                foreach ($products as $product)
+                {
+                    $productModulesTree[] = array('type' => 'product', 'name' => $product->name, 'actions' => false, 'id' => 'product' . $product->id, 'children' => $this->getFullTree($product->id, 'story'));
+                }
+                $tree = array_merge($productModulesTree, $tree);
+            }
+
             // TODO: get product moduels for the project
-            $productModulesTree = array();
-            $tree = array_merge($tree, $productModulesTree);
+            
         }
         if(count($tree))
         {
             foreach ($tree as $node)
             {
-                $children = $this->getFullTaskTree($rootID, $productID, $node->id);
+                $children = $this->getFullTaskTree($projectID, $productID, $node->id);
                 if(count($children))
                 {
                     $node->children = $children;

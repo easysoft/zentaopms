@@ -55,6 +55,11 @@
     </div>
   </div>
 </div>
+<style>
+.story-item .tree-action[data-type='sort'],
+.story-item .tree-action[data-type='edit'],
+.story-item .tree-action[data-type='delete'] {display: none!important}
+</style>
 <script>
 $(function()
 {
@@ -66,10 +71,19 @@ $(function()
         data: data,
         itemCreator: function($li, item)
         {
-            var $toggle = $('<span class="tree-toggle"><span class="module-name" data-id="' + item.id + '">' + item.name + '</span></span>');
+            var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
+            var $toggle = $('<span class="tree-toggle"><span class="module-name" data-id="' + item.id + '">' + title + '</span></span>');
             if(item.short)
             {
                 $toggle.append('&nbsp; <span class="module-manager text-muted">(' + item.short + ')</span>');
+            }
+            if(item.type === 'task')
+            {
+                $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
+            }
+            if(item.type === 'story')
+            {
+                $li.addClass('story-item');
             }
             $li.append($toggle);
             return true;

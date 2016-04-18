@@ -155,7 +155,7 @@ class tree extends control
         $this->view->currentProject  = $currentProject;
         $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID);
+        $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID, 0, $newModule);
         $this->display();
     }
 
