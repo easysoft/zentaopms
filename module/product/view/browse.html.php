@@ -28,17 +28,10 @@
         ?>
       </span>
     </li>
-    <li id='unclosedTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=unclosed"),     $lang->product->unclosed);?></li>
-    <li id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=allStory"),     $lang->product->allStory);?></li>
-    <li id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=assignedtome"), $lang->product->assignedToMe);?></li>
-    <li id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=openedByMe"),   $lang->product->openedByMe);?></li>
-    <li id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></li>
-    <li id='closedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=closedByMe"),   $lang->product->closedByMe);?></li>
-    <li id='draftstoryTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=draftStory"),   $lang->product->draftStory);?></li>
-    <li id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=activeStory"),  $lang->product->activeStory);?></li>
-    <li id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=changedStory"), $lang->product->changedStory);?></li>
-    <li id='willcloseTab'>    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=willClose"),    $lang->product->willClose);?></li>
-    <li id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=closedStory"),  $lang->product->closedStory);?></li>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php if($featurebar['status'] == 'hide') continue;?>
+    <li id='<?php echo $type?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$type"), $featurebar['link']);?></li>
+    <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
   </ul>
   <div class='actions'>

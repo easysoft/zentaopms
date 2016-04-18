@@ -93,3 +93,15 @@ $lang->product->aclList['custom']  = "Whitelist({$lang->projectCommon} team memb
 
 $lang->product->storySummary = "Total <strong>%s</strong> stories in this page, estimate <strong>%s</strong> hours, case coverage is %s ";
 $lang->product->noMatched    = "No matched {$lang->productCommon} including '%s'";
+
+$lang->product->featurebar['browse']['unclosed']     = $lang->product->unclosed;
+$lang->product->featurebar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featurebar['browse']['assignedtome'] = $lang->product->assignedToMe;
+$lang->product->featurebar['browse']['openedbyme']   = $lang->product->openedByMe;
+$lang->product->featurebar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+$lang->product->featurebar['browse']['closedbyme']   = $lang->product->closedByMe;
+$lang->product->featurebar['browse']['draftstory']   = $lang->product->draftStory;
+$lang->product->featurebar['browse']['activestory']  = $lang->product->activeStory;
+$lang->product->featurebar['browse']['changedstory'] = $lang->product->changedStory;
+$lang->product->featurebar['browse']['willclose']    = $lang->product->willClose;
+$lang->product->featurebar['browse']['closedstory']  = $lang->product->closedStory;

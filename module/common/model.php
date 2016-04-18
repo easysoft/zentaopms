@@ -381,6 +381,7 @@ class commonModel extends model
     public static function printMainmenu($moduleName, $methodName = '')
     {
         global $app, $lang;
+        if(empty($app->customMenu)) $app->customMenu = customModel::getCustomMenu($app->getModuleName(), $app->getMethodName());
         echo "<ul class='nav'>\n";
 
         /* Set the main main menu. */
@@ -395,31 +396,13 @@ class commonModel extends model
             if($moduleName == 'task'  and !isset($lang->menu->task))  $mainMenu = 'project';
         }
 
-        /* Sort menu according to menuOrder. */
-        if(isset($lang->menuOrder))
-        {
-            $menus = $lang->menu;
-            $lang->menu = new stdclass();
-
-            ksort($lang->menuOrder, SORT_ASC);
-            foreach($lang->menuOrder as $key)  
-            {
-                $menu = $menus->$key; 
-                unset($menus->$key);
-                $lang->menu->$key = $menu;
-            }
-            foreach($menus as $key => $menu)
-            {
-                $lang->menu->$key = $menu; 
-            }
-        }
-
         $activeName = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
         /* Print all main menus. */
-        foreach($lang->menu as $menuKey => $menu)
+        foreach($app->customMenu['main'] as $menuKey => $menuContent)
         {
+            if($menuContent['status'] == 'hide') continue;
             $active = $menuKey == $mainMenu ? "class='$activeName'" : '';
-            $link = explode('|', $menu);
+            $link = explode('|', $menuContent['link']);
             list($menuLabel, $module, $method) = $link;
             $vars = isset($link[3]) ? $link[3] : '';
 
@@ -494,36 +477,11 @@ class commonModel extends model
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
 
-        /* Sort the subMenu according to menuOrder. */
-        if(isset($lang->$moduleName->menuOrder))
-        {
-            $menus = json_decode(json_encode($submenus), true);
-            $submenus = new stdclass();
-
-            ksort($lang->$moduleName->menuOrder, SORT_ASC);
-            if(isset($menus['list'])) 
-            {
-                $submenus->list = $menus['list']; 
-                unset($menus['list']);
-            }
-            foreach($lang->$moduleName->menuOrder as $order)  
-            {
-                if(($order != 'list') && isset($menus[$order]))
-                {
-                    $subOrder = $menus[$order];
-                    unset($menus[$order]);
-                    $submenus->$order = $subOrder;
-                }
-            }
-
-            foreach($menus as $key => $menu) $submenus->$key = $menu; 
-        }
-
         /* The beginning of the menu. */
         echo "<ul class='nav'>\n";
 
         /* Cycling to print every sub menus. */
-        foreach($submenus as $subMenuKey => $submenu)
+        foreach($app->customMenu['module'] as $subMenuKey => $submenu)
         {
             /* Init the these vars. */
             $link      = $submenu;
@@ -532,8 +490,11 @@ class commonModel extends model
             $float     = '';
             $active    = '';
             $target    = '';
+            $status    = '';
+            $order     = '';
 
             if(is_array($submenu)) extract($submenu);   // If the sub menu is an array, extract it.
+            if($status == 'hide') continue;
 
             /* Print the menu. */
             if(strpos($link, '|') === false)

@@ -16,11 +16,14 @@
       </span>
     </li>
     <?php endif;?>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php if($featurebar['status'] == 'hide') continue;?>
     <?php
-    echo "<li id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=all"), $lang->testcase->allCases) . "</li>";
-    echo "<li id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=needconfirm"), $lang->testcase->needConfirm) . "</li>";
-
-    if(common::hasPriv('testcase', 'groupcase'))
+    if(common::hasPriv('testcase', 'browse') and ($type == 'all' or $type == 'needconfirm'))
+    {
+        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $featurebar['link']) . "</li>";
+    }
+    elseif($type == 'group' and common::hasPriv('testcase', 'groupcase'))
     {
         echo "<li id='groupTab' class='dropdown'>";
         $groupBy  = isset($groupBy) ? $groupBy : '';
@@ -36,8 +39,13 @@
         }
         echo '</ul></li>';
     }
-
-    if(common::hasPriv('story', 'zeroCase')) echo "<li id='zerocaseTab'>" . html::a($this->createLink('story', 'zeroCase', "productID=$productID"), $lang->story->zeroCase) . '</li>';
+    elseif($type == 'zerocase' and common::hasPriv('story', 'zeroCase'))
+    {
+        echo "<li id='zerocaseTab'>" . html::a($this->createLink('story', 'zeroCase', "productID=$productID"), $lang->story->zeroCase) . '</li>';
+    }
+    ?>
+    <?php endforeach;?>
+    <?php
     if($this->methodName == 'browse') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     ?>
   </ul>

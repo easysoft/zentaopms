@@ -15,43 +15,54 @@
       </span>
     </li>
     <?php endif;?>
+    <?php
+    $hasBrowsePriv    = common::hasPriv('project', 'task');
+    $hasKanbanPriv    = common::hasPriv('project', 'kanban');
+    $hasBurnPriv      = common::hasPriv('project', 'burn');
+    $hasGroupTaskPriv = common::hasPriv('project', 'groupTask');
+    ?>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php
+    if($featurebar['status'] == 'hide') continue;
+    if($hasBrowsePriv and ($type == 'unclosed' or $type == 'all' or $type == 'assignedtome')) echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $featurebar['link']) . '</li>' ;
+    if($hasKanbanPriv and $type == 'kanban') echo "<li id='kanbanTab'>" . html::a(inlink('kanban', "projectID=$projectID"), $featurebar['link']) . '</li>';
+    if($hasBurnPriv   and $type == 'burn' and ($project->type == 'sprint' or $project->type == 'waterfall')) echo "<li id='burnTab'>" . html::a(inlink('burn', "project=$projectID"), $featurebar['link']) . '</li>' ;
+    if($hasBrowsePriv and $type == 'status')
+    {
+        echo "<li id='statusTab' class='dropdown'>";
+        $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
+        $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
+        if(empty($current)) $current = $featurebar['link'];
+        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->project->statusSelects as $key => $value)
+        {
+            if($key == '') continue;
+            echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
+            echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
+        }
+        echo '</ul></li>';
+    }
+    elseif($hasGroupTaskPriv and $type == 'group')
+    {
+        echo "<li id='groupTab' class='dropdown'>";
+        $groupBy = isset($groupBy) ? $groupBy : '';
+        $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
+        if(empty($current)) $current = $featurebar['link'];
+        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->project->groups as $key => $value)
+        {
+            if($key == '') continue;
+            echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
+            echo html::a($this->createLink('project', 'groupTask', "project=$projectID&groupBy=$key"), $value);
+        }
+        echo '</ul></li>';
+    }
+    ?>
+    <?php endforeach;?>
 
     <?php
-    echo "<li id='unclosedTab'>"; common::printLink('project', 'task', "project=$projectID&type=unclosed", $lang->project->unclosed); echo '</li>' ;
-    echo "<li id='allTab'>"; common::printLink('project', 'task', "project=$projectID&type=all", $lang->project->allTasks); echo '</li>' ;
-    echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban, '', '', false); echo '</li>';
-    if($project->type == 'sprint' or $project->type == 'waterfall') print "<li id='burnTab'>" and common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); print '</li>' ;
-    echo "<li id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</li>' ;
-
-    echo "<li id='statusTab' class='dropdown'>";
-    $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
-    $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
-    if(empty($current)) $current = $lang->project->statusSelects[''];
-    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-    echo "<ul class='dropdown-menu'>";
-    foreach ($lang->project->statusSelects as $key => $value)
-    {
-        if($key == '') continue;
-        echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
-        echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
-    }
-    echo '</ul></li>';
-
-    echo "<li id='groupTab' class='dropdown'>";
-    $groupBy = isset($groupBy) ? $groupBy : '';
-    $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
-    if(empty($current)) $current = $lang->project->groups[''];
-    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-    echo "<ul class='dropdown-menu'>";
-    foreach ($lang->project->groups as $key => $value)
-    {
-        if($key == '') continue;
-        echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
-        echo html::a($this->createLink('project', 'groupTask', "project=$projectID&groupBy=$key"), $value);
-    }
-    echo '</ul></li>';
-
-
     if($this->methodName == 'task') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->project->byQuery}</a></li> ";
     ?>
   </ul>

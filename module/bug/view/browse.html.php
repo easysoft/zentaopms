@@ -32,21 +32,11 @@ js::set('bugBrowseType', $this->session->bugBrowseType);
         ?>
       </span>
     </li>
-    <?php
-    echo "<li id='unclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unclosed&param=0"),      $lang->bug->unclosed)      . "</li>";
-    echo "<li id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</li>";
-    echo "<li id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</li>";
-    echo "<li id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</li>";
-    echo "<li id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</li>";
-    echo "<li id='unconfirmedTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unconfirmed&param=0"),   $lang->bug->confirmedList[0])  . "</li>";
-    echo "<li id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</li>";
-    echo "<li id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</li>";
-    echo "<li id='toclosedTab'>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=toClosed&param=0"),      $lang->bug->toClosed)      . "</li>";
-    echo "<li id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</li>";
-    echo "<li id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</li>";
-    echo "<li id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</li>";
-    echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->bug->byQuery}</a></li> ";
-    ?>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php if($featurebar['status'] == 'hide') continue;?>
+    <li id='<?php echo $type?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=unclosed&param=0"), $featurebar['link'])?></li>
+    <?php endforeach;?>
+    <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
   </ul>
   <div class='actions'>
     <div class='btn-group'>

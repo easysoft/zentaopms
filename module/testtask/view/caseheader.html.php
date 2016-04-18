@@ -3,25 +3,32 @@
     <?php echo "<span class='prefix'>" . html::icon($lang->icons['usecase']) . '</span><strong>' . $task->name . '</strong>';?>
   </div>
   <div class='nav'>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php if($featurebar['status'] == 'hide') continue;?>
     <?php
-    echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
-    echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
-
-    echo "<li id='groupTab' class='dropdown'>";
-    $groupBy  = isset($groupBy) ? $groupBy : '';
-    $current  = zget($lang->testcase->groups, isset($groupBy) ? $groupBy : '', '');
-    if(empty($current)) $current = $lang->testcase->groups[''];
-    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-    echo "<ul class='dropdown-menu'>";
-    foreach ($lang->testcase->groups as $key => $value)
+    if(common::hasPriv('testtask', 'cases') and ($type == 'all' or $type == 'assignedtome'))
     {
-        if($key == '') continue;
-        echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
-        echo html::a($this->inlink('groupCase', "taskID=$taskID&groupBy=$key"), $value);
+        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=$type&param=0"), $featurebar['link']) . "</li>";
     }
-    echo '</ul></li>';
-
-
+    elseif(common::hasPriv('testtask', 'cases') and $type == 'group')
+    {
+        echo "<li id='groupTab' class='dropdown'>";
+        $groupBy  = isset($groupBy) ? $groupBy : '';
+        $current  = zget($lang->testcase->groups, isset($groupBy) ? $groupBy : '', '');
+        if(empty($current)) $current = $lang->testcase->groups[''];
+        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->testcase->groups as $key => $value)
+        {
+            if($key == '') continue;
+            echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
+            echo html::a($this->inlink('groupCase', "taskID=$taskID&groupBy=$key"), $value);
+        }
+        echo '</ul></li>';
+    }
+    ?>
+    <?php endforeach;?>
+    <?php
     if($this->methodName == 'cases') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     echo '<li>' . html::a(inlink('view', "taskID=$taskID"), $lang->testtask->view) . '</li>';
     ?>
