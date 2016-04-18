@@ -85,8 +85,8 @@ function initTableHeader()
         var $header = $panel.children('.table-header-fixed');
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed"><table class="table table-fixed"></table></div>').css('right', $panel.width() - $table.width() - 2);
-            $header.find('.table').append($table.find('thead').clone());
+            $header = $('<div class="table-header-fixed"><table class="table table-fixed"></table></div>').css('right', $panel.width() - $table.width());
+            $header.find('.table').addClass($table.attr('class')).append($table.find('thead').css('visibility', 'hidden').clone().css('visibility', 'visible'));
             $panel.addClass('with-fixed-header').append($header);
             var $heading = $panel.children('.panel-heading');
             if($heading.length) $header.css('top', $heading.outerHeight());
