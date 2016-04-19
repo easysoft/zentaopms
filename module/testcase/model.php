@@ -117,6 +117,8 @@ class testcaseModel extends model
             $cases->pri[$i]    = $pri;
         }
 
+        $this->loadModel('story');
+        $storyVersions = array();
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
@@ -136,13 +138,13 @@ class testcaseModel extends model
                 $data[$i]->openedDate   = $now;
                 $data[$i]->status       = 'normal';
                 $data[$i]->version      = 1;
-                if(!$data[$i]->story) 
+
+                $caseStory = $data[$i]->story;
+                $data[$i]->storyVersion = isset($storyVersions[$caseStory]) ? $storyVersions[$caseStory] : 0;
+                if($caseStory and !isset($storyVersions[$caseStory]))
                 {
-                    $data[$i]->story = 0;
-                }
-                else
-                {
-                    $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
+                    $data[$i]->storyVersion = $this->story->getVersion($caseStory);
+                    $storyVersions[$caseStory] = $data[$i]->storyVersion;
                 }
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
