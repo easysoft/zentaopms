@@ -87,6 +87,7 @@ $lang->task->recordEstimate    = 'Hours';
 $lang->task->editEstimate      = 'Edit Hour';
 $lang->task->deleteEstimate    = 'Delete Hour';
 $lang->task->colorTag          = 'Color tag';
+$lang->task->files             = 'Files';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "Current task and task above it do not belong to same project!";
