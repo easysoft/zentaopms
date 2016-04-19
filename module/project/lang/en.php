@@ -38,6 +38,7 @@ $lang->project->totalConsumed = 'Done';
 $lang->project->totalLeft     = 'Left';
 $lang->project->Left          = 'Left';
 $lang->project->progess       = 'Progess';
+$lang->project->hours         = 'Estimate %s Consumed %s Left %s';
 $lang->project->viewBug       = 'View bug';
 $lang->project->noProduct     = "No {$lang->productCommon}";
 $lang->project->createStory   = "Create story";

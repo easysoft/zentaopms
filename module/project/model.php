@@ -1952,6 +1952,9 @@ class projectModel extends model
         $this->loadModel('story');
         $this->loadModel('task');
 
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
         if($node->children)
         {
             foreach ($node->children as $child)
@@ -1995,6 +1998,10 @@ class projectModel extends model
                         $taskItem->color        = $task->color;
                         $taskItem->pri          = $task->pri;
                         $taskItem->status       = $task->status;
+                        $taskItem->estimate     = $task->estimate;
+                        $taskItem->consumed     = $task->consumed;
+                        $taskItem->left         = $task->left;
+                        $taskItem->assignedTo   = $users[$task->assignedTo];
                         $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
                         $taskItem->storyChanged = $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
 

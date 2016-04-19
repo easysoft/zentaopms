@@ -38,6 +38,7 @@ $lang->project->totalConsumed = '总消耗';
 $lang->project->totalLeft     = '总剩余';
 $lang->project->Left          = '剩余';
 $lang->project->progess       = '进度';
+$lang->project->hours         = '预计 %s 消耗 %s 剩余 %s';
 $lang->project->viewBug       = '查看bug';
 $lang->project->noProduct     = "无{$lang->productCommon}{$lang->projectCommon}";
 $lang->project->createStory   = "新增需求";
