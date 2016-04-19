@@ -92,6 +92,18 @@ function initTableHeader()
     });
 }
 
+/**
+ * Check refresh progress
+ * @param  object $dashboard
+ * @access public
+ * @return void
+ */
+function checkRefreshProgress($dashboard, doneCallback)
+{
+    if($dashboard.find('.panel-loading').length) setTimeout(function() {checkRefreshProgress($dashboard, doneCallback);}, 500);
+    else doneCallback();
+}
+
 $(function()
 {
     var $dashboard = $('#dashboard').dashboard(
