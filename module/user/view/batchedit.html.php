@@ -85,6 +85,7 @@ $minWidth = (count($hasFields) > 7) ? 'w-120px' : '';
       <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
       <td colspan='<?php echo count($hasFields) + 2?>'>
         <div class="required required-wrapper"></div>
+        <input type='text'     style="display:none"> <!-- for disable autocomplete all browser -->
         <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
         <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
       </td>
