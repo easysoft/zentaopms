@@ -1790,8 +1790,17 @@ function setHomepage(module, page)
 function initMainMenu()
 {
     var $menu = $('#mainmenu > .nav');
-    $menu.sortable({
-
+    $menu.sortable(
+    {
+        selector: 'li:not(.custom-item)',
+        finish: function(e)
+        {
+            var menu = e.list.map(function(){return $(this).data('id');}).get();
+            $.post(createLink('custom', 'menu'), {menu: menu.join(',')}, function(data)
+            {
+                console.log(data);
+            }, 'json');
+        }
     });
 }
 

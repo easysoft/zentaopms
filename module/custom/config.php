@@ -7,3 +7,7 @@ $config->custom->canAdd['testcase'] = 'priList,typeList,stageList';
 $config->custom->canAdd['testtask'] = 'priList';
 $config->custom->canAdd['todo']     = 'priList,typeList';
 $config->custom->canAdd['user']     = 'roleList';
+
+$config->menu = new stdclass();
+$config->menu->main = array();
+$config->menu->main['novice']  = 'my,product,project,qa,doc,report,company,admin';

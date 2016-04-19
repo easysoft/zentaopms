@@ -123,6 +123,57 @@ class customModel extends model
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
 
+    public static function getMainMenu($rebuild = false)
+    {
+        global $app, $lang, $config;
+        // if(empty($app->customMenu)) $app->customMenu = array();
+        // if(!$rebuild && !empty($app->customMenu['main'])) return $app->customMenu['main'];
+
+        $menuConfig = $config->menucustom->main;
+        if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->main['novice'];
+        $isSetMenuConfig = isset($menuConfig);
+
+        if($isSetMenuConfig)
+        {
+            if(is_string($menuConfig))
+            {
+                $menuConfigItems = explode(',', $menuConfig);
+                $menuConfig = array();
+                foreach($menuConfigItems as $menuConfigItem)
+                {
+                    $menuConfig[$menuConfigItem] = true;
+                }
+            }
+        }
+
+        $menu = array();
+        foreach($lang->menu as $name => $item)
+        {
+            $link = explode('|', $item);
+            list($label, $module, $method) = $link;
+
+            if(commonModel::hasPriv($module, $method))
+            {
+                $vars = isset($link[3]) ? $link[3] : '';
+
+                $menuItem = new stdclass();
+                $menuItem->name   = $name;
+                $menuItem->link   = array('module' => $module, 'method' => $method, 'vars' => $vars);
+                $menuItem->label  = $label;
+                $menuItem->hidden = $isSetMenuConfig && (!$menuConfig[$name]);
+
+                $menu[] = $menuItem;
+            }
+        }
+        // $app->customMenu['main'] = $menu;
+        return $menu;
+    }
+
+    public static function getModuleMenu()
+    {
+        
+    }
+
     public static function getCustomMenu($module, $method)
     {
         global $app, $lang, $config;
@@ -139,6 +190,7 @@ class customModel extends model
             $menuStatus = array();
             if($type == 'main')  $menucustom = isset($config->menucustom->main) ? $config->menucustom->main : '';
             if($type == 'module')$menucustom = isset($config->menucustomModule->$module) ? $config->menucustomModule->$module : '';
+
             /* Get order and status from config. */
             if($menucustom)
             {

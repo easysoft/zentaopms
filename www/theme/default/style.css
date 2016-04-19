@@ -371,8 +371,12 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #mainmenu {margin-top: 12px; width: 100%; position: relative;}
 #mainmenu .nav > li {float: left;}
 #mainmenu .nav > li > a {display: block; margin-right: 3px; white-space:nowrap; padding:7px 15px; color:#E5E5E5; font-size: 14px; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
-#mainmenu .nav > li > a:hover{background-color: #2e6dad;color: #fff;-webkit-box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
+#mainmenu .nav > li > a:hover{background-color: #2e6dad;color: #fff; box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
 #mainmenu .nav > li.active > a { background-color:#e5e5e5;color:#21841d; font-weight:bold;}
+#mainmenu .nav > li.custom-item {opacity: 0; transition: opacity .4s .6s}
+#mainmenu:hover .nav > li.custom-item {opacity: 1;}
+#mainmenu .nav > li.custom-item > a {background-color: transparent; box-shadow: none}
+#mainmenu .nav > li.custom-item > a:hover {background-color: #2e6dad;color: #fff; box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
 
 #searchbox {position: absolute; right: 0; top: 1px; width: 200px;}
 #searchbox .form-control, #searchbox .btn {padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}

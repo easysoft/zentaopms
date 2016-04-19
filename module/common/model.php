@@ -381,8 +381,6 @@ class commonModel extends model
     public static function printMainmenu($moduleName, $methodName = '')
     {
         global $app, $lang;
-        if(empty($app->customMenu)) $app->customMenu = customModel::getCustomMenu($app->getModuleName(), $app->getMethodName());
-        echo "<ul class='nav'>\n";
 
         /* Set the main main menu. */
         $mainMenu = $moduleName;
@@ -396,22 +394,20 @@ class commonModel extends model
             if($moduleName == 'task'  and !isset($lang->menu->task))  $mainMenu = 'project';
         }
 
-        $activeName = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
         /* Print all main menus. */
-        foreach($app->customMenu['main'] as $menuKey => $menuContent)
-        {
-            if($menuContent['status'] == 'hide') continue;
-            $active = $menuKey == $mainMenu ? "class='$activeName'" : '';
-            $link = explode('|', $menuContent['link']);
-            list($menuLabel, $module, $method) = $link;
-            $vars = isset($link[3]) ? $link[3] : '';
+        $menu       = customModel::getMainMenu();
+        $activeName = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
 
-            if(commonModel::hasPriv($module, $method))
-            {
-                $link  = helper::createLink($module, $method, $vars);
-                echo "<li $active><a href='$link' $active data-id='$menuKey'>$menuLabel</a></li>\n";
-            }
+        echo "<ul class='nav'>\n";
+        foreach($menu as $menuItem)
+        {
+            if($menuItem->hidden) continue;
+            $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
+            $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], $menuItem->link['vars']) : $menuItem->link;
+            echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->label</a></li>\n";
         }
+        $customLink = helper::createLink('custom', 'menu');
+        echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 

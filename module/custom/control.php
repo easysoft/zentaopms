@@ -181,4 +181,24 @@ class custom extends control
         $account = $this->app->user->account;
         $this->loadModel('setting')->setItem("$account.$module.homepage", $page);
     }
+
+    /**
+     * Ajax get or set menu
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function menu($type = 'main')
+    {
+        global $config;
+        if($_POST)
+        {
+            $config->menucustom->main = $_POST['menu'];
+            $this->send(array('result' => 'success', 'menu' => $_POST['menu']));
+        }
+        else
+        {
+            $this->send(customModel::getMainMenu());
+        }
+    }
 }

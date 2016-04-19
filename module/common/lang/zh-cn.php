@@ -69,6 +69,7 @@ $lang->hideNotCheck = '页面隐藏取消选中字段';
 $lang->quitNovice   = '退出新手';
 $lang->enterNovice  = '进入新手';
 $lang->homepage     = '设为主页';
+$lang->customMenu   = '自定义导航';
 
 $lang->preShortcutKey  = '[快捷键:←]';
 $lang->nextShortcutKey = '[快捷键:→]';
