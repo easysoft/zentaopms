@@ -1,20 +1,30 @@
 <div id='featurebar'>
   <ul class='nav'>
-    <?php if(isset($moduleID)):?>
     <li>
       <span>
         <?php
-        echo $moduleName;
-        if($moduleID)
+        if($productID)
         {
-            $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskModule")';
+            $product    = $this->product->getById($productID);
+            $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("browseParam")';
+            echo $product->name;
             echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        elseif($moduleID)
+        {
+            $module     = $this->tree->getById($moduleID);
+            $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("browseParam")';
+            echo $module->name;
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        else
+        {
+            echo $this->lang->tree->all;
         }
         echo " <i class='icon-angle-right'></i>&nbsp; ";
         ?>
       </span>
     </li>
-    <?php endif;?>
     <?php
     $hasBrowsePriv    = common::hasPriv('project', 'task');
     $hasKanbanPriv    = common::hasPriv('project', 'kanban');
