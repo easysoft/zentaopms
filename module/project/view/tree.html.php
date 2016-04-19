@@ -43,8 +43,10 @@ $('#treeTab').addClass('active');
 
 $(function()
 {
+    var hoursFormat = '<?php echo $lang->project->hours  ?>';
     var viewLevel = '<?php echo $level ?>' || 'custom';
     var data = $.parseJSON('<?php echo json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
+    console.log('data', data);
     var $tree = $('#projectTree');
     var statusMap = $.parseJSON('<?php echo json_encode($lang->task->statusList);?>');
     var selectCustomLevel = function() {$('.tree-view-btn.active').removeClass('active').filter('[data-type="custom"]').addClass('active');};
@@ -98,7 +100,8 @@ $(function()
                         $tr.append($('<td width="30"/>').append('<span class="pri' + task.pri + '">' + task.pri + '</span>'));
                         $tr.append($('<td/>').addClass('text-left').append($('<a>').attr({href: task.url}).text('#' + task.id + ' ' + task.title).css('color', task.color)));
                         $tr.append($('<td width="70"/>').addClass(task.storyChanged ? 'warning' : task.status).text(statusMap[task.status]));
-                        $tr.append($('<td width="70"/>').addClass(task.storyChanged ? 'warning' : task.status).text(statusMap[task.status]));
+                        $tr.append($('<td width="90"/>').html(task.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + task.assignedTo) : ''));
+                        $tr.append($('<td width="140"/>').text(hoursFormat.replace('%s', task.estimate).replace('%s', task.consumed).replace('%s', task.left)));
                         $tr.append($('<td width="130"/>').html(task.buttons));
                         $tbody.append($tr);
                     });
