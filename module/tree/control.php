@@ -110,7 +110,7 @@ class tree extends control
         $this->view->viewType        = $viewType;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->branch          = $branch;
-        $this->view->tree            = $this->tree->getFullTree($rootID, $viewType, $branch);
+        $this->view->tree            = $this->tree->getFullTrees($rootID, $viewType);
         $this->display();
     }
 

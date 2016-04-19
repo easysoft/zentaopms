@@ -46,7 +46,7 @@
           <div class='text-center'>
             <?php 
             echo html::submitButton() . html::commonButton($lang->close, 'data-dismiss="modal"', 'btn');
-            echo html::hidden('maxOrder', $maxOrder);
+            echo html::hidden('maxOrder', 0);
             echo html::hidden('parentModuleID', $currentModuleID);
             ?>
           </div>
