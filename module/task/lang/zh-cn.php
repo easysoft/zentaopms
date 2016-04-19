@@ -87,6 +87,7 @@ $lang->task->recordEstimate    = '工时';
 $lang->task->editEstimate      = '编辑工时';
 $lang->task->deleteEstimate    = '删除工时';
 $lang->task->colorTag          = '颜色标签';
+$lang->task->files             = '附件';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";

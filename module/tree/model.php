@@ -446,23 +446,18 @@ class treeModel extends model
                 $productModulesTree = array();
                 foreach ($products as $product)
                 {
-                    $productModulesTree[] = array('type' => 'product', 'name' => $product->name, 'actions' => false, 'id' => 'product' . $product->id, 'children' => $this->getFullTree($product->id, 'story'));
+                    $productModulesTree[] = array('type' => 'product', 'name' => $product->name, 'actions' => false, 'id' => 'product' . $product->id, 'children' => $this->getFullTrees($product->id, 'story'));
                 }
                 $tree = array_merge($productModulesTree, $tree);
             }
-
-            // TODO: get product moduels for the project
-            
         }
-        if(count($tree))
+        if($tree)
         {
             foreach ($tree as $node)
             {
+                if(is_array($node))$node = (object)$node;
                 $children = $this->getFullTaskTree($projectID, $productID, $node->id);
-                if(count($children))
-                {
-                    $node->children = $children;
-                }
+                if(!empty($children)) $node->children = $children;
             }
         }
         return $tree; 
@@ -1427,26 +1422,57 @@ class treeModel extends model
     }
 
     /**
-     * Get full modules tree
-     * @param  integer $rootID
-     * @param  integer $currentModuleID
-     * @param  string  $viewType
-     * @param  string  $branch
+     * Get full trees.
+     * 
+     * @param  int    $rootID 
+     * @param  string $viewType 
+     * @param  int    $branch 
+     * @param  int    $currentModuleID 
      * @access public
-     * @return object
+     * @return array
      */
-    public function getFullTree($rootID, $viewType, $branch, $currentModuleID) 
+    public function getFullTrees($rootID, $viewType, $branch = 0, $currentModuleID = 0)
+    {
+        $branches = array($branch => '');
+        $product  = $this->loadModel('product')->getById($rootID);
+        if(strpos('story|bug|case', $viewType) !== false and empty($branch))
+        {
+            if($product->type != 'normal') $branches = array(0 => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+        }
+
+        $fullTrees = array();
+        if(isset($branches[0]))
+        {
+            $fullTrees = $this->getFullTree($rootID, $viewType, 0, $currentModuleID);
+            unset($branches[0]);
+        }
+        if($branches)
+        {
+            $branchTrees = array();
+            foreach($branches as $branchID => $branch) $branchTrees[] = array('name' => $branch, 'type' => 'branch', 'actions' => false, 'children' => $this->getFullTree($rootID, $viewType, $branchID, $currentModuleID));
+            $fullTrees[] = array('name' => $this->lang->product->branchName[$product->type], 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
+        }
+        return $fullTrees;
+    }
+
+    /**
+     * Get full modules tree
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @param  int    $branch
+     * @param  int    $currentModuleID
+     * @access public
+     * @return array
+     */
+    public function getFullTree($rootID, $viewType, $branch = 0, $currentModuleID = 0) 
     {
         $tree = array_values($this->getSons($rootID, $currentModuleID, $viewType, $branch));
-        if(count($tree))
+        if($tree)
         {
-            foreach ($tree as $node)
+            foreach($tree as $node)
             {
                 $children = $this->getFullTree($rootID, $viewType, $branch, $node->id);
-                if(count($children))
-                {
-                    $node->children = $children;
-                }
+                if($children) $node->children = $children;
             }
         }
         return $tree; 
