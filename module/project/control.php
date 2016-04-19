@@ -121,13 +121,22 @@ class project extends control
         /* Set browse type. */
         $browseType = strtolower($status);
 
-        if($browseType == 'bymodule') setcookie('taskModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
-        if($browseType != 'bymodule') $this->session->set('taskBrowseType', $browseType);
+        if($browseType == 'bymodule' or $browseType == 'byproduct')
+        {
+            setcookie('taskBrowseType', $browseType, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('browseParam',    (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        }
+        else
+        {
+            $this->session->set('taskBrowseType', $browseType);
+        }
 
-        /* Set productID, moduleID and queryID. */
+        /* Set queryID, moduleID and productID. */
         $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskModule ? $this->cookie->taskModule : 0));
-        $productID = ($browseType == 'byproduct') ? (int)$param : 0;
+        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : (($browseType == 'bysearch' or $browseType == 'byproduct') ? 0 : ($this->cookie->taskBrowseType == 'bymodule'  ? $this->cookie->browseParam : 0));
+        $productID = ($browseType == 'byproduct') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bymodule')  ? 0 : ($this->cookie->taskBrowseType == 'byproduct' ? $this->cookie->browseParam : 0));
+
+        /* Get products by project. */
         $project   = $this->commonAction($projectID, $status);
         $projectID = $project->id;
         $products  = $this->loadModel('product')->getProductsByProject($projectID);
@@ -156,7 +165,7 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get tasks. */
-        $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $status, $browseType, $queryID, $moduleID, $sort, $pager);
+        $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
 
        /* Build the search form. */
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
@@ -187,7 +196,6 @@ class project extends control
         $this->view->modules       = $this->tree->getTaskOptionMenu($projectID);
         $this->view->moduleID      = $moduleID;
         $this->view->moduleTree    = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
-        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->projectTree   = $this->project->tree();
         $this->view->memberPairs   = $memberPairs;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');

@@ -752,7 +752,6 @@ class projectModel extends model
      * @param  int    $productID
      * @param  int    $projectID
      * @param  array  $projects
-     * @param  string $status
      * @param  string $browseType
      * @param  int    $queryID
      * @param  int    $moduleID
@@ -761,20 +760,24 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getTasks($productID, $projectID, $projects, $status, $browseType, $queryID, $moduleID, $sort, $pager)
+    public function getTasks($productID, $projectID, $projects, $browseType, $queryID, $moduleID, $sort, $pager)
     {
         $this->loadModel('task');
 
         /* Set modules and $browseType. */
-        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
-        $browseType = (($browseType == 'bymodule') and ($this->session->taskBrowseType) and ($this->session->taskBrowseType != 'bysearch')) ? $this->session->taskBrowseType : $browseType;
+        $modules = 0;
+        if($productID) $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
+        if($moduleID)  $modules = $this->loadModel('tree')->getAllChildID($moduleID);
+        if($browseType == 'bymodule' or $browseType == 'byproduct')
+        {
+            if(($this->session->taskBrowseType) and ($this->session->taskBrowseType != 'bysearch')) $browseType = $this->session->taskBrowseType;
+        }
 
         /* Get tasks. */
         $tasks = array();
-        if($status == 'byProduct')
+        if($browseType == 'byproduct')
         {
-            $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
-            $tasks   = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
+            $tasks = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
         }
         elseif($browseType == 'bymodule')
         {
