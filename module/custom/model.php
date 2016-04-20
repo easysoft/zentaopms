@@ -123,17 +123,17 @@ class customModel extends model
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
 
-    public static function getModuleMenu($module = 'main', $rebuild = false)
+    /**
+     * Build menu data from config
+     * @param  object          $allMenu
+     * @param  string | array  $menuConfig
+     * @access public
+     * @return array
+     */
+    public static function buildMenuConfig($allMenu, $menuConfig)
     {
-        if(empty($module)) $module = 'main';
-
-        global $app, $lang, $config;
-        // if(empty($app->customMenu)) $app->customMenu = array();
-        // if(!$rebuild && !empty($app->customMenu[$module])) return $app->customMenu[$module];
-
-        $menuConfig = $config->menucustom->$module;
-        if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->$module['novice'];
         $isSetMenuConfig = isset($menuConfig);
+        $menu = array();
 
         if($isSetMenuConfig)
         {
@@ -147,9 +147,6 @@ class customModel extends model
                 }
             }
         }
-
-        $menu = array();
-        $allMenu = $module == 'main' ? $lang->menu : $lang->$module->menu;
 
         foreach($allMenu as $name => $item)
         {
@@ -193,183 +190,61 @@ class customModel extends model
                 $menu[] = $menuItem;
             }
         }
-        // $app->customMenu[$module] = $menu;
         return $menu;
     }
 
+    /**
+     * Get module menu data, if module is 'main' then return main menu
+     * @param  string   $module
+     * @param  boolean  $rebuild
+     * @access public
+     * @return array
+     */
+    public static function getModuleMenu($module = 'main', $rebuild = false)
+    {
+        if(empty($module)) $module = 'main';
+
+        global $app, $lang, $config;
+        if(empty($app->customMenu)) $app->customMenu = array();
+        if(!$rebuild && !empty($app->customMenu[$module])) return $app->customMenu[$module];
+
+        $menuConfig = $config->menucustom->$module;
+        if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->$module['novice'];
+
+        $allMenu = $module == 'main' ? $lang->menu : $lang->$module->menu;
+        $menu    = self::buildMenuConfig($allMenu, $menuConfig);
+
+        $app->customMenu[$module] = $menu;
+        return $menu;
+    }
+
+    /**
+     * Get main menu data
+     * @param  boolean $rebuild
+     * @access public
+     * @return array
+     */
     public static function getMainMenu($rebuild = false)
     {
         return self::getModuleMenu('main', $rebuild);
     }
 
+    /**
+     * Get feature menu
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
     public static function getFeatureMenu($module, $method)
     {
         global $app, $lang, $config;
-        $menucustomKey = 'menucustom' . $module;
-
         $app->loadLang($module);
-        $featurebar = '';
-        if(isset($lang->$module->featurebar[$method])) $featurebar = $lang->$module->featurebar[$method];
-        $menucustomKey = 'menucustom' . $module;
-        return $featurebar;
-        if($featurebar)
-        {
-            $menuOrder  = array();
-            $menuStatus = array();
-            if(isset($config->$menucustomKey->$method))
-            {
-                $menuStatus = json_decode($config->$menucustomKey->$method, true);
-                foreach($menuStatus as $menuKey => $status) $menuOrder[] = $menuKey;
-            }
+        $configKey = 'menucustom' . $module;
 
-            /* Merge all menu. */
-            $inOrderMenu    = ',' . join(',', $menuOrder) . ',';
-            $notInOrderMenu = array();
-            foreach($featurebar as $menuKey => $menuName)
-            {
-                if(strpos($inOrderMenu, ",$menuKey,") === false) $notInOrderMenu[] = $menuKey;
-            }
-            if($notInOrderMenu)
-            {
-                $order = count($menuOrder);
-                foreach($notInOrderMenu as $menuKey)
-                {
-                    $menuOrder[$order] = $menuKey;
-                    $order++;
-                }
-            }
-            ksort($menuOrder, SORT_ASC);
+        $menuConfig = $config->$configKey->$method;
+        $allMenu    = $lang->$module->featurebar[$method];
 
-            $processedMenu = new stdclass();
-            foreach($menuOrder as $order => $menuKey)
-            {
-                $menuContent = $featurebar[$menuKey];
-                $menuContent = array('link' => $menuContent);
-                $menuContent['status'] = isset($menuStatus[$menuKey]) ? $menuStatus[$menuKey] : 'show';
-                $menuContent['order']  = ($order + 1) * 5;
-
-                $processedMenu->$menuKey = $menuContent;
-            }
-            $processedMenus['featurebar'] = $processedMenu;
-        }
-    }
-
-    public static function getCustomMenu($module, $method)
-    {
-        global $app, $lang, $config;
-        if(!isset($lang->$module->menu)) return array();
-        $allMenu['main']   = $lang->menu;
-        $allMenu['module'] = $lang->$module->menu;
-
-        /* Process main and module menu. */
-        $processedMenus = array();
-        foreach($allMenu as $type => $menu)
-        {
-            $menucustom = '';
-            $menuOrder  = array();
-            $menuStatus = array();
-            if($type == 'main')  $menucustom = isset($config->menucustom->main) ? $config->menucustom->main : '';
-            if($type == 'module')$menucustom = isset($config->menucustomModule->$module) ? $config->menucustomModule->$module : '';
-
-            /* Get order and status from config. */
-            if($menucustom)
-            {
-                $menuStatus = json_decode($menucustom, true);
-                $i = 1;
-                foreach($menuStatus as $menuKey => $status)
-                {
-                    $order = $i * 5;
-                    $menuOrder[$order] = $menuKey;
-                    $i++;
-                }
-            }
-            if(empty($menuOrder)) $menuOrder = $type == 'main' ? $lang->menuOrder : $lang->$module->menuOrder;
-
-            /* Merge all menu. */
-            $inOrderMenu    = ',' . join(',', $menuOrder) . ',';
-            $notInOrderMenu = array();
-            foreach($menu as $menuKey => $menuName)
-            {
-                if(strpos($inOrderMenu, ",$menuKey,") === false) $notInOrderMenu[] = $menuKey;
-            }
-            if($notInOrderMenu)
-            {
-                $order = count($menuOrder) * 5;
-                foreach($notInOrderMenu as $menuKey)
-                {
-                    $order = $order + 5;
-                    $menuOrder[$order] = $menuKey;
-                }
-            }
-            ksort($menuOrder, SORT_ASC);
-
-            /* Rebuild menu. */
-            $processedMenu = new stdclass();
-            foreach($menuOrder as $order => $menuKey)
-            {
-                if(!isset($menu->$menuKey)) continue;
-                $menuContent = $menu->$menuKey;
-                if(is_string($menuContent)) $menuContent = array('link' => $menuContent);
-                $menuContent['status'] = isset($menuStatus[$menuKey]) ? $menuStatus[$menuKey] : 'show';
-                $menuContent['order']  = $order;
-
-                if(strpos($menuContent['link'], '|') !== false)
-                {
-                    list($menuTitle, $menuModule, $menuMethod) = explode('|', $menuContent['link']);
-                    if($menuContent['status'] == 'show' and !common::hasPriv($menuModule, $menuMethod)) $menuContent['status'] = 'hide';
-                }
-
-                $processedMenu->$menuKey = $menuContent;
-            }
-            $processedMenus[$type] = $processedMenu;
-        }
-
-        /* Process featurebar. */
-        $app->loadLang($module);
-        $featurebar = '';
-        if(isset($lang->$module->featurebar[$method])) $featurebar = $lang->$module->featurebar[$method];
-        $menucustomKey = 'menucustom' . $module;
-        if($featurebar)
-        {
-            $menuOrder  = array();
-            $menuStatus = array();
-            if(isset($config->$menucustomKey->$method))
-            {
-                $menuStatus = json_decode($config->$menucustomKey->$method, true);
-                foreach($menuStatus as $menuKey => $status) $menuOrder[] = $menuKey;
-            }
-
-            /* Merge all menu. */
-            $inOrderMenu    = ',' . join(',', $menuOrder) . ',';
-            $notInOrderMenu = array();
-            foreach($featurebar as $menuKey => $menuName)
-            {
-                if(strpos($inOrderMenu, ",$menuKey,") === false) $notInOrderMenu[] = $menuKey;
-            }
-            if($notInOrderMenu)
-            {
-                $order = count($menuOrder);
-                foreach($notInOrderMenu as $menuKey)
-                {
-                    $menuOrder[$order] = $menuKey;
-                    $order++;
-                }
-            }
-            ksort($menuOrder, SORT_ASC);
-
-            $processedMenu = new stdclass();
-            foreach($menuOrder as $order => $menuKey)
-            {
-                $menuContent = $featurebar[$menuKey];
-                $menuContent = array('link' => $menuContent);
-                $menuContent['status'] = isset($menuStatus[$menuKey]) ? $menuStatus[$menuKey] : 'show';
-                $menuContent['order']  = ($order + 1) * 5;
-
-                $processedMenu->$menuKey = $menuContent;
-            }
-            $processedMenus['featurebar'] = $processedMenu;
-        }
-
-        return $processedMenus;
+        return $allMenu ? self::buildMenuConfig($allMenu, $menuConfig) : null;
     }
 }

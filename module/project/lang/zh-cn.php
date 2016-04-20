@@ -255,12 +255,14 @@ $lang->project->featurebar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featurebar['task']['all']          = $lang->project->allTasks;
 $lang->project->featurebar['task']['kanban']       = $lang->project->kanban;
 $lang->project->featurebar['task']['burn']         = $lang->project->burn;
+$lang->project->featurebar['task']['tree']         = $lang->project->tree;
 $lang->project->featurebar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featurebar['task']['status']       = $lang->project->statusSelects[''];
 $lang->project->featurebar['task']['group']        = $lang->project->groups[''];
 $lang->project->featurebar['grouptask']            = $lang->project->featurebar['task'];
 $lang->project->featurebar['kanban']               = $lang->project->featurebar['task'];
-$lang->project->featurebar['burn']               = $lang->project->featurebar['task'];
+$lang->project->featurebar['burn']                 = $lang->project->featurebar['task'];
+$lang->project->featurebar['tree']                 = $lang->project->featurebar['task'];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '产品视图');

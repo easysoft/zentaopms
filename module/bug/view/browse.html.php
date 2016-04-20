@@ -32,9 +32,9 @@ js::set('bugBrowseType', $this->session->bugBrowseType);
         ?>
       </span>
     </li>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
-    <?php if($featurebar['status'] == 'hide') continue;?>
-    <li id='<?php echo $type?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$type&param=0"), $featurebar['link'])?></li>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
+    <?php if($menuItem->hidden) continue;?>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuItem->name&param=0"), $menuItem->text)?></li>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
   </ul>

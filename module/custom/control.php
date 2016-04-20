@@ -188,15 +188,15 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function menu($module = 'main')
+    public function menu($module = 'main', $method = '')
     {
-        a(customModel::getModuleMenu($module));
         global $config;
         if($_POST)
         {
             $config->menucustom->main = $_POST['menu'];
             $this->send(array('result' => 'success', 'menu' => $_POST['menu']));
         }
-        $this->send(json_encode(customModel::getModuleMenu($module)));
+        $menu = empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module);
+        $this->send(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu));
     }
 }

@@ -3,12 +3,13 @@
     <?php echo "<span class='prefix'>" . html::icon($lang->icons['usecase']) . '</span><strong>' . $task->name . '</strong>';?>
   </div>
   <div class='nav'>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
-    <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
+    if($menuItem->hidden) continue;
+    $type = $menuItem->name;
     if(common::hasPriv('testtask', 'cases') and ($type == 'all' or $type == 'assignedtome'))
     {
-        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=$type&param=0"), $featurebar['link']) . "</li>";
+        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=$type&param=0"), $menuItem->text) . "</li>";
     }
     elseif(common::hasPriv('testtask', 'cases') and $type == 'group')
     {

@@ -16,12 +16,13 @@
       </span>
     </li>
     <?php endif;?>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
-    <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
+    if($menuItem->hidden) continue;
+    $type = $menuItem->name;
     if(common::hasPriv('testcase', 'browse') and ($type == 'all' or $type == 'needconfirm'))
     {
-        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $featurebar['link']) . "</li>";
+        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $menuItem->text) . "</li>";
     }
     elseif($type == 'group' and common::hasPriv('testcase', 'groupcase'))
     {
