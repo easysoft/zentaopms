@@ -46,24 +46,25 @@ js::set('browseType', $browseType);
         ?>
       </span>
     </li>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
-    if($featurebar['status'] == 'hide') continue;
+    if($menuItem->hidden) continue;
+    $type = $menuItem->name;
     if(strpos($type, 'QUERY') === 0)
     {
         $queryID = (int)substr($type, 5);
-        echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $featurebar['link']) . '</li>' ;
+        echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
     }
     elseif($type != 'status')
     {
-        echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $featurebar['link']) . '</li>' ;
+        echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
     }
     elseif($type == 'status')
     {
         echo "<li id='statusTab' class='dropdown'>";
         $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
         $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
-        if(empty($current)) $current = $featurebar['link'];
+        if(empty($current)) $current = $menuItem->text;
         echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
         echo "<ul class='dropdown-menu'>";
         foreach ($lang->project->statusSelects as $key => $value)

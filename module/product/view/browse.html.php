@@ -28,13 +28,13 @@
         ?>
       </span>
     </li>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
-    <?php if($featurebar['status'] == 'hide') continue;?>
-    <?php if(strpos($type, 'QUERY') === 0):?>
-    <?php $queryID = (int)substr($type, 5);?>
-    <li id='<?php echo $type?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $featurebar['link']);?></li>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
+    <?php if($menuItem->hidden) continue;?>
+    <?php if(strpos($menuItem->name, 'QUERY') === 0):?>
+    <?php $queryID = (int)substr($menuItem->name, 5);?>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text);?></li>
     <?php else:?>
-    <li id='<?php echo $type?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$type"), $featurebar['link']);?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuItem->name"), $menuItem->text);?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>

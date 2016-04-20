@@ -20,17 +20,18 @@
     $hasCasesPriv = common::hasPriv('testtask', 'cases');
     $hasGroupPriv = common::hasPriv('testtask', 'groupcase');
     ?>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
-    <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
+    if($menuItem->hidden) continue;
+    $type = $menuItem->name;
     if($hasCasesPriv and strpos($type, 'QUERY') === 0)
     {
         $queryID = (int)substr($type, 5);
-        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=bySearch&param=$queryID"), $featurebar['link']) . "</li>";
+        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
     }
     elseif($hasCasesPriv and ($type == 'all' or $type == 'assignedtome'))
     {
-        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=$type&param=0"), $featurebar['link']) . "</li>";
+        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=$type&param=0"), $menuItem->text) . "</li>";
     }
     elseif($hasGroupPriv and $type == 'group')
     {

@@ -2,13 +2,12 @@
   <ul class='nav'>
     <?php
     echo "<li id='listTab'>"; common::printLink('project', 'task', "project=$projectID&type=unclosed", $lang->project->list); echo '</li>';
-    echo "<li id='kanbanTab'>"; common::printLink('product', 'kanban', "projectID=$projectID", $lang->project->kanban) . '</li>';
+    echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban) . '</li>';
     if($project->type == 'sprint' or $project->type == 'waterfall') echo "<li id='burnTab'>"; common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); echo '</li>';
     echo "<li id='treeTab'>"; common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree); echo '</li>';
     echo "<li id='groupTab' class='dropdown'>";
     $groupBy = isset($groupBy) ? $groupBy : '';
     $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
-    if(empty($current)) $current = $featurebar['link'];
     echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
     echo "<ul class='dropdown-menu'>";
     foreach ($lang->project->groups as $key => $value)

@@ -19,17 +19,18 @@
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
     $hasZeroPriv   = common::hasPriv('story', 'zerocase');
     ?>
-    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
-    <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
+    if($menuItem->hidden) continue;
+    $type = $menuItem->name;
     if($hasBrowsePriv and strpos($type, 'QUERY') === 0)
     {
         $queryID = (int)substr($type, 5);
-        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $featurebar['link']) . "</li>";
+        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
     }
     elseif($hasBrowsePriv and ($type == 'all' or $type == 'needconfirm'))
     {
-        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $featurebar['link']) . "</li>";
+        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $menuItem->text) . "</li>";
     }
     elseif($hasGroupPriv and $type == 'group')
     {
