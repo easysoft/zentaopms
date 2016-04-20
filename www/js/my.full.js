@@ -1758,7 +1758,7 @@ function initHelpLink()
         if(!$helpMenuItem.length)
         {
             $helpMenuItem = $('<li id="helpMenuItem"><a href="javascript:;" class="open-help-tab">' + $(this).text() + '<i class="icon icon-remove close-help-tab"></i></a></li>');
-            $mainNav.append($helpMenuItem);
+            $mainNav.find('.custom-item').before($helpMenuItem);
         }
         openHelp();
     }).on('click', '.close-help-tab', function(e)
@@ -1798,7 +1798,6 @@ function initMainMenu()
             var menu = e.list.map(function(){return $(this).data('id');}).get();
             $.post(createLink('custom', 'menu'), {menu: menu.join(',')}, function(data)
             {
-                console.log(data);
             }, 'json');
         }
     });
