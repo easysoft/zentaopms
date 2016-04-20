@@ -1,7 +1,5 @@
 $(document).ready(function()
 {
-    $('#' + bugBrowseType + 'Tab').addClass('active');
-    $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();
 
     $('.dropdown-menu .with-search .menu-search').click(function(e)

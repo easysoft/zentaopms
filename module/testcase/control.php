@@ -95,8 +95,10 @@ class testcase extends control
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         /* Build the search form. */
+        $this->config->testcase->search['style'] = 'shortcut';
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->loadModel('search')->mergeFeatureBar('testcase', 'browse');
 
         $showModule = !empty($this->config->datatable->testcasebrowse->showModule) ? $this->config->datatable->testcasebrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();

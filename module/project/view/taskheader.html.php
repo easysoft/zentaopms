@@ -1,80 +1,24 @@
 <div id='featurebar'>
   <ul class='nav'>
-    <li>
-      <span>
-        <?php
-        if($productID)
-        {
-            $product    = $this->product->getById($productID);
-            $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("browseParam")';
-            echo $product->name;
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
-        }
-        elseif($moduleID)
-        {
-            $module     = $this->tree->getById($moduleID);
-            $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("browseParam")';
-            echo $module->name;
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
-        }
-        else
-        {
-            echo $this->lang->tree->all;
-        }
-        echo " <i class='icon-angle-right'></i>&nbsp; ";
-        ?>
-      </span>
-    </li>
     <?php
-    $hasBrowsePriv    = common::hasPriv('project', 'task');
-    $hasKanbanPriv    = common::hasPriv('project', 'kanban');
-    $hasBurnPriv      = common::hasPriv('project', 'burn');
-    $hasGroupTaskPriv = common::hasPriv('project', 'groupTask');
-    $hasTreePriv      = common::hasPriv('project', 'tree');
-    ?>
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
-    <?php
-    if($menuItem->hidden) continue;
-    $type = $menuItem->name;
-    if($hasBrowsePriv and ($type == 'unclosed' or $type == 'all' or $type == 'assignedtome')) echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
-    if($hasKanbanPriv and $type == 'kanban') echo "<li id='kanbanTab'>" . html::a(inlink('kanban', "projectID=$projectID"), $menuItem->text) . '</li>';
-    if($hasBurnPriv   and $type == 'burn' and ($project->type == 'sprint' or $project->type == 'waterfall')) echo "<li id='burnTab'>" . html::a(inlink('burn', "project=$projectID"), $menuItem->text) . '</li>' ;
-    if($hasTreePriv and $type == 'tree') echo "<li id='treeTab'>" . html::a(inlink('project', 'tree', "projectID=$projectID"), $menuItem->text) . '</li>';
-
-    if($hasBrowsePriv and $type == 'status')
+    echo "<li id='listTab'>"; common::printLink('project', 'task', "project=$projectID&type=unclosed", $lang->project->list); echo '</li>';
+    echo "<li id='kanbanTab'>"; common::printLink('product', 'kanban', "projectID=$projectID", $lang->project->kanban) . '</li>';
+    if($project->type == 'sprint' or $project->type == 'waterfall') echo "<li id='burnTab'>"; common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); echo '</li>';
+    echo "<li id='treeTab'>"; common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree); echo '</li>';
+    echo "<li id='groupTab' class='dropdown'>";
+    $groupBy = isset($groupBy) ? $groupBy : '';
+    $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
+    if(empty($current)) $current = $featurebar['link'];
+    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+    echo "<ul class='dropdown-menu'>";
+    foreach ($lang->project->groups as $key => $value)
     {
-        echo "<li id='statusTab' class='dropdown'>";
-        $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
-        $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
-        if(empty($current)) $current = $menuItem->text;
-        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-        echo "<ul class='dropdown-menu'>";
-        foreach ($lang->project->statusSelects as $key => $value)
-        {
-            if($key == '') continue;
-            echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
-            echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value) . '</li>';
-        }
-        echo '</ul></li>';
+        if($key == '') continue;
+        echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
+        common::printLink('project', 'groupTask', "project=$projectID&groupBy=$key", $value);
     }
-    elseif($hasGroupTaskPriv and $type == 'group')
-    {
-        echo "<li id='groupTab' class='dropdown'>";
-        $groupBy = isset($groupBy) ? $groupBy : '';
-        $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
-        if(empty($current)) $current = $menuItem->text;
-        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-        echo "<ul class='dropdown-menu'>";
-        foreach ($lang->project->groups as $key => $value)
-        {
-            if($key == '') continue;
-            echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
-            echo html::a($this->createLink('project', 'groupTask', "project=$projectID&groupBy=$key"), $value) . '</li>';
-        }
-        echo '</ul></li>';
-    }
+    echo '</ul></li>';
     ?>
-    <?php endforeach;?>
   </ul>
   <div class='actions'>
     <div class='btn-group'>
@@ -123,7 +67,6 @@
     ?>
     </div>
   </div>
-  <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
 <?php
 $headerHooks = glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php");

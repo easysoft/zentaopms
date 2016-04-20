@@ -14,6 +14,7 @@
 <?php include '../../common/view/datatable.fix.html.php';?>
 <?php include './caseheader.html.php';?>
 <?php js::set('confirmUnlink', $lang->testtask->confirmUnlinkCase)?>
+<?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
@@ -79,4 +80,17 @@ include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(
     </table>
   </form>
 </div>
+<script>
+$('#module' + moduleID).addClass('active'); 
+$('#' + taskCaseBrowseType + 'Tab').addClass('active');
+<?php if($browseType == 'bysearch'):?>
+$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
+if($shortcut.size() > 0)
+{
+    $shortcut.addClass('active');
+    $('#bysearchTab').removeClass('active');
+    $('#querybox').removeClass('show');
+}
+<?php endif;?>
+</script>
 <?php include '../../common/view/footer.html.php';?>

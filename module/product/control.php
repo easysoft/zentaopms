@@ -143,8 +143,10 @@ class product extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         /* Build search form. */
+        $this->config->product->search['style'] = 'shortcut';
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->loadModel('search')->mergeFeatureBar('product', 'browse');
 
         $showModule = !empty($this->config->datatable->productbrowse->showModule) ? $this->config->datatable->productbrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
@@ -172,6 +174,7 @@ class product extends control
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
         $this->view->setShowModule = true;
+        $this->view->param         = $param;
         $this->display();
     }
 

@@ -28,9 +28,14 @@
         ?>
       </span>
     </li>
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
-    <?php if($menuItem->hidden) continue;?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuItem->name"), $menuItem->text);?></li>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php if(strpos($type, 'QUERY') === 0):?>
+    <?php $queryID = (int)substr($type, 5);?>
+    <li id='<?php echo $type?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $featurebar['link']);?></li>
+    <?php else:?>
+    <li id='<?php echo $type?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$type"), $featurebar['link']);?></li>
+    <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
   </ul>
@@ -79,7 +84,7 @@
     <?php
     $datatableId  = $this->moduleName . $this->methodName;
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-    $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+    $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
     include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
     ?>
       <tfoot>
@@ -254,7 +259,16 @@
 </div>
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active');
-$('#<?php echo $this->session->storyBrowseType;?>Tab').addClass('active');
+$('#<?php echo ($browseType == 'bymodule' and $this->session->storyBrowseType == 'bysearch') ? 'all' : $this->session->storyBrowseType;?>Tab').addClass('active');
+<?php if($browseType == 'bysearch'):?>
+$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
+if($shortcut.size() > 0)
+{
+    $shortcut.addClass('active');
+    $('#bysearchTab').removeClass('active');
+    $('#querybox').removeClass('show');
+}
+<?php endif;?>
 <?php if($this->config->product->homepage != 'browse'):?>
 $('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"product\", \"browse\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
 <?php endif;?>

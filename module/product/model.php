@@ -367,7 +367,7 @@ class productModel extends model
 
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : '0';
-        $browseType = (($browseType == 'bymodule') and ($this->session->storyBrowseType) and ($this->session->storyBrowseType != 'bysearch')) ? $this->session->storyBrowseType : $browseType;
+        $browseType = ($browseType == 'bymodule' and $this->session->storyBrowseType and $this->session->storyBrowseType != 'bysearch') ? $this->session->storyBrowseType : $browseType;
 
         /* Get stories by browseType. */
         $stories = array();

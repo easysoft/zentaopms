@@ -168,8 +168,10 @@ class project extends control
         $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
 
        /* Build the search form. */
+        $this->config->project->search['style'] = 'shortcut';
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->project->buildSearchForm($projectID, $this->projects, $queryID, $actionURL);
+        $this->loadModel('search')->mergeFeatureBar('project', 'task');
 
         /* team member pairs. */
         $memberPairs = array();

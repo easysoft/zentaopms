@@ -262,7 +262,7 @@ class testcaseModel extends model
     {
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
-        $browseType = (($browseType == 'bymodule') and ($this->session->caseBrowseType) and ($this->session->caseBrowseType != 'bysearch')) ? $this->session->caseBrowseType : $browseType;
+        $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
 
         /* By module or all cases. */
         $cases = array();

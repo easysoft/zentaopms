@@ -1,12 +1,11 @@
 <?php if(!isset($branch)) $branch = 0;?>
 <div id='featurebar'>
   <ul class='nav'>
-    <?php if(isset($moduleID)):?>
     <li>
       <span>
         <?php
-        echo $moduleName;
-        if($moduleID)
+        echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
+        if(!empty($moduleID))
         {
             $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
             echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
@@ -15,16 +14,24 @@
         ?>
       </span>
     </li>
-    <?php endif;?>
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
-    if($menuItem->hidden) continue;
-    $type = $menuItem->name;
-    if(common::hasPriv('testcase', 'browse') and ($type == 'all' or $type == 'needconfirm'))
+    $hasBrowsePriv = common::hasPriv('testcase', 'browse');
+    $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
+    $hasZeroPriv   = common::hasPriv('story', 'zerocase');
+    ?>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php
+    if($hasBrowsePriv and strpos($type, 'QUERY') === 0)
     {
-        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $menuItem->text) . "</li>";
+        $queryID = (int)substr($type, 5);
+        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $featurebar['link']) . "</li>";
     }
-    elseif($type == 'group' and common::hasPriv('testcase', 'groupcase'))
+    elseif($hasBrowsePriv and ($type == 'all' or $type == 'needconfirm'))
+    {
+        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $featurebar['link']) . "</li>";
+    }
+    elseif($hasGroupPriv and $type == 'group')
     {
         echo "<li id='groupTab' class='dropdown'>";
         $groupBy  = isset($groupBy) ? $groupBy : '';
@@ -40,7 +47,7 @@
         }
         echo '</ul></li>';
     }
-    elseif($type == 'zerocase' and common::hasPriv('story', 'zeroCase'))
+    elseif($hasZeroPriv and $type == 'zerocase')
     {
         echo "<li id='zerocaseTab'>" . html::a($this->createLink('story', 'zeroCase', "productID=$productID"), $lang->story->zeroCase) . '</li>';
     }

@@ -230,7 +230,11 @@ class testtask extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         /* Set the browseType and moduleID. */
         $browseType = strtolower($browseType);
-        $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
+
+        if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
+
+        $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Append id for secend sort. */
@@ -241,58 +245,9 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch);
-        if($browseType == 'bymodule' or $browseType == 'all')
-        {
-            $modules = '';
-            if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
-            $this->view->runs      = $this->testtask->getRuns($taskID, $modules, $sort, $pager);
-        }
-        elseif($browseType == 'assignedtome')
-        {
-            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $sort, $pager);
-        }
-        /* By search. */
-        elseif($browseType == 'bysearch')
-        {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('testcaseQuery', $query->sql);
-                    $this->session->set('testcaseForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('testcaseQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-            }
 
-            $queryProductID = $productID;
-            $allProduct     = "`product` = 'all'";
-            $caseQuery      = $this->session->testcaseQuery;
-            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
-            {
-                $products  = array_keys($this->loadModel('product')->getPrivProducts());
-                $caseQuery = str_replace($allProduct, '1', $this->session->testcaseQuery);
-                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
-                $queryProductID = 'all';
-            }
-
-            $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
-            $this->view->runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->where($caseQuery)
-                ->andWhere('t1.task')->eq($taskID)
-                ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
-                ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
-                ->page($pager)
-                ->fetchAll();
-        }
+        /* Get test cases. */
+        $this->view->runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         /* Save testcaseIDs session for get the pre and next testcase. */
@@ -302,12 +257,15 @@ class testtask extends control
 
         /* Build the search form. */
         $this->loadModel('testcase');
-        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['style']                       = 'shortcut';
+        $this->config->testcase->search['module']                      = 'testtask';
+        $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
         unset($this->config->testcase->search['fields']['branch']);
         unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+        $this->search->mergeFeatureBar('testtask', 'cases');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -325,6 +283,7 @@ class testtask extends control
         $this->view->orderBy       = $orderBy;
         $this->view->taskID        = $taskID;
         $this->view->moduleID      = $moduleID;
+        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
         $this->view->pager         = $pager;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
