@@ -16,7 +16,7 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/datatable.fix.html.php';
 include './caseheader.html.php';
 js::set('browseType',     $browseType);
-js::set('caseBrowseType', $this->session->caseBrowseType);
+js::set('caseBrowseType', ($browseType == 'bymodule' and $this->session->caseBrowseType == 'bysearch') ? 'all' : $this->session->caseBrowseType);
 js::set('moduleID'  ,     $moduleID);
 js::set('confirmDelete',  $lang->testcase->confirmDelete);
 js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
@@ -98,4 +98,17 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
     </tfoot>
   </form>
 </div>
+<script>
+$('#module' + moduleID).addClass('active'); 
+$('#' + caseBrowseType + 'Tab').addClass('active');
+<?php if($browseType == 'bysearch'):?>
+$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
+if($shortcut.size() > 0)
+{
+    $shortcut.addClass('active');
+    $('#bysearchTab').removeClass('active');
+    $('#querybox').removeClass('show');
+}
+<?php endif;?>
+</script>
 <?php include '../../common/view/footer.html.php';?>

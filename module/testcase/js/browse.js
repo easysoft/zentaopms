@@ -23,8 +23,6 @@ function confirmBatchDelete(actionLink)
 
 $(document).ready(function()
 {
-    $('#' + caseBrowseType + 'Tab').addClass('active');
-    $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();
     setTimeout(function(){fixedTfootAction('#batchForm')}, 100);
     setTimeout(function(){fixedTheadOfList('#caseList')}, 100);

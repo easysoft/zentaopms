@@ -282,7 +282,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getUserRuns($taskID, $user, $orderBy, $pager = null)
+    public function getUserRuns($taskID, $user, $modules = '', $orderBy, $pager = null)
     {
         $orderBy = strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
 
@@ -290,9 +290,75 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->andWhere('t1.assignedTo')->eq($user)
+            ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Get testtask linked cases. 
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $queryID 
+     * @param  int    $moduleID 
+     * @param  string $sort 
+     * @param  object $pager 
+     * @param  object $task 
+     * @access public
+     * @return array
+     */
+    public function getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task)
+    {
+        /* Set modules and browse type. */
+        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $browseType = ($browseType == 'bymodule' and $this->session->taskCaseBrowseType and $this->session->taskCaseBrowseType != 'bysearch') ? $this->session->taskCaseBrowseType : $browseType;
+
+        if($browseType == 'bymodule' or $browseType == 'all')
+        {
+            $runs = $this->getRuns($task->id, $modules, $sort, $pager);
+        }
+        elseif($browseType == 'assignedtome')
+        {
+            $runs = $this->getUserRuns($task->id, $this->session->user->account, $modules, $sort, $pager);
+        }
+        /* By search. */
+        elseif($browseType == 'bysearch')
+        {
+            if($this->session->testtaskQuery == false) $this->session->set('testtaskQuery', ' 1 = 1');
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('testtaskQuery', $query->sql);
+                    $this->session->set('testtaskForm', $query->form);
+                }
+            }
+
+            $queryProductID = $productID;
+            $allProduct     = "`product` = 'all'";
+            $caseQuery      = $this->session->testtaskQuery;
+            if(strpos($this->session->testtaskQuery, $allProduct) !== false)
+            {
+                $products  = array_keys($this->loadModel('product')->getPrivProducts());
+                $caseQuery = str_replace($allProduct, '1', $this->session->testtaskQuery);
+                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+                $queryProductID = 'all';
+            }
+
+            $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
+            $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->where($caseQuery)
+                ->andWhere('t1.task')->eq($task->id)
+                ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
+                ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
+                ->page($pager)
+                ->fetchAll();
+        }
+        return $runs;
     }
 
     /**

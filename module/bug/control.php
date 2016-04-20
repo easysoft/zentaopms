@@ -105,8 +105,10 @@ class bug extends control
         $bugs = $this->bug->processBuildForBugs($bugs);
 
         /* Build the search form. */
+        $this->config->bug->search['style'] = 'shortcut';
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->loadModel('search')->mergeFeatureBar('bug', 'browse');
 
         $showModule = !empty($this->config->datatable->bugbrowse->showModule) ? $this->config->datatable->bugbrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();

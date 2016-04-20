@@ -19,6 +19,67 @@ js::set('moduleID', $moduleID);
 js::set('productID', $productID);
 js::set('browseType', $browseType);
 ?>
+<div class='sub-featurebar'>
+  <ul class='nav'>
+    <li style='padding-top:5px;'>
+      <span>
+        <?php
+        if($productID)
+        {
+            $product    = $this->product->getById($productID);
+            $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("browseParam")';
+            echo $product->name;
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        elseif($moduleID)
+        {
+            $module     = $this->tree->getById($moduleID);
+            $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("browseParam")';
+            echo $module->name;
+            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>") . '&nbsp;';
+        }
+        else
+        {
+            echo $this->lang->tree->all;
+        }
+        echo " <i class='icon-angle-right'></i>&nbsp; ";
+        ?>
+      </span>
+    </li>
+    <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
+    <?php
+    if($featurebar['status'] == 'hide') continue;
+    if(strpos($type, 'QUERY') === 0)
+    {
+        $queryID = (int)substr($type, 5);
+        echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $featurebar['link']) . '</li>' ;
+    }
+    elseif($type != 'status')
+    {
+        echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $featurebar['link']) . '</li>' ;
+    }
+    elseif($type == 'status')
+    {
+        echo "<li id='statusTab' class='dropdown'>";
+        $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
+        $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
+        if(empty($current)) $current = $featurebar['link'];
+        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->project->statusSelects as $key => $value)
+        {
+            if($key == '') continue;
+            echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
+            echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
+        }
+        echo '</ul></li>';
+    }
+    ?>
+    <?php endforeach;?>
+    <?php echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->project->byQuery}</a></li> ";?>
+  </ul>
+  <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
+</div>
 
 <div class='side' id='taskTree'>
   <a class='side-handle' data-id='projectTree'><i class='icon-caret-left'></i></a>
@@ -123,7 +184,17 @@ js::set('browseType', $browseType);
 <?php js::set('replaceID', 'taskList')?>
 <script language='javascript'>
 $('#project<?php echo $projectID;?>').addClass('active')
-$('#<?php echo $this->session->taskBrowseType;?>Tab').addClass('active')
+$('#listTab').addClass('active')
+$('#<?php echo ($browseType == 'bymodule' and $this->session->taskBrowseType == 'bysearch') ? 'all' : $this->session->taskBrowseType;?>Tab').addClass('active');
+<?php if($browseType == 'bysearch'):?>
+$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
+if($shortcut.size() > 0)
+{
+    $shortcut.addClass('active');
+    $('#bysearchTab').removeClass('active');
+    $('#querybox').removeClass('show');
+}
+<?php endif;?>
 statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
 if(statusActive) $('#statusTab').addClass('active')
 <?php if($this->config->project->homepage != 'browse'):?>

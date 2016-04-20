@@ -123,20 +123,17 @@ $lang->project->importTask       = '转入任务';
 $lang->project->importBug        = '导入Bug';
 $lang->project->updateOrder      = '排序';
 $lang->project->tree             = '树视图';
+$lang->project->list             = '列表';
 
 /* 分组浏览。*/
 $lang->project->allTasks             = '所有';
 $lang->project->assignedToMe         = '指派给我';
 
 $lang->project->statusSelects['']             = '更多';
-$lang->project->statusSelects['finishedbyme'] = '我完成';
 $lang->project->statusSelects['wait']         = '未开始';
 $lang->project->statusSelects['doing']        = '进行中';
-$lang->project->statusSelects['undone']       = '未完成';
 $lang->project->statusSelects['done']         = '已完成';
 $lang->project->statusSelects['closed']       = '已关闭';
-$lang->project->statusSelects['delayed']      = '已延期';
-$lang->project->statusSelects['needconfirm']  = '需求变动';
 $lang->project->statusSelects['cancel']       = '已取消';
 
 $lang->project->groups['']           = '分组查看';
@@ -253,14 +250,10 @@ $lang->printKanban->typeList['increment'] = '增量';
 
 $lang->project->featurebar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featurebar['task']['all']          = $lang->project->allTasks;
-$lang->project->featurebar['task']['kanban']       = $lang->project->kanban;
-$lang->project->featurebar['task']['burn']         = $lang->project->burn;
-$lang->project->featurebar['task']['assignedtome'] = $lang->project->assignedToMe;
+$lang->project->featurebar['task']['finishedbyme'] = '我完成';
+$lang->project->featurebar['task']['delayed']      = '已延期';
+$lang->project->featurebar['task']['needconfirm']  = '需求变动';
 $lang->project->featurebar['task']['status']       = $lang->project->statusSelects[''];
-$lang->project->featurebar['task']['group']        = $lang->project->groups[''];
-$lang->project->featurebar['grouptask']            = $lang->project->featurebar['task'];
-$lang->project->featurebar['kanban']               = $lang->project->featurebar['task'];
-$lang->project->featurebar['burn']               = $lang->project->featurebar['task'];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '产品视图');

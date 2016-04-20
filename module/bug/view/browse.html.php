@@ -15,7 +15,7 @@ include '../../common/view/header.html.php';
 include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
-js::set('bugBrowseType', $this->session->bugBrowseType);
+js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrowseType == 'bysearch') ? 'all' : $this->session->bugBrowseType);
 ?>
 <div id='featurebar'>
   <ul class='nav'>
@@ -34,7 +34,12 @@ js::set('bugBrowseType', $this->session->bugBrowseType);
     </li>
     <?php foreach($app->customMenu['featurebar'] as $type => $featurebar):?>
     <?php if($featurebar['status'] == 'hide') continue;?>
+    <?php if(strpos($type, 'QUERY') === 0):?>
+    <?php $queryID = (int)substr($type, 5);?>
+    <li id='<?php echo $type?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $featurebar['link'])?></li>
+    <?php else:?>
     <li id='<?php echo $type?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$type&param=0"), $featurebar['link'])?></li>
+    <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
   </ul>
@@ -211,14 +216,20 @@ js::set('bugBrowseType', $this->session->bugBrowseType);
   </form>
 </div>
 <script>
-<?php
-$this->app->loadConfig('qa', '', false);
-if($this->config->qa->homepage != 'browse'):
-?>
-$(function()
+$('#' + bugBrowseType + 'Tab').addClass('active');
+$('#module' + moduleID).addClass('active'); 
+<?php if($browseType == 'bysearch'):?>
+$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
+if($shortcut.size() > 0)
 {
-    $('#modulemenu .nav li:last').after("<li class='right'><a href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
-});
+    $shortcut.addClass('active');
+    $('#bysearchTab').removeClass('active');
+    $('#querybox').removeClass('show');
+}
+<?php endif;?>
+<?php $this->app->loadConfig('qa', '', false);?>
+<?php if($this->config->qa->homepage != 'browse'):?>
+$(function(){$('#modulemenu .nav li:last').after("<li class='right'><a href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
