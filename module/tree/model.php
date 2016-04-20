@@ -129,8 +129,28 @@ class treeModel extends model
      */
     public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end')
     {
-        if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
-        $modules     = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->fetchAll('id');
+        if($viewType == 'task')
+        {
+            $products = array_keys($this->loadModel('product')->getProductsByProject($rootID));
+            if(!$this->isMergeModule($rootID, $viewType) or !$products)
+            {
+                $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->fetchAll('id');
+            }
+            else
+            {
+                $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)
+                    ->where("((root = $rootID and type = 'task')")
+                    ->orWhere('(root')->in($products)->andWhere('type')->eq('story')
+                    ->markRight(2)
+                    ->fetchAll('id');
+            }
+        }
+        else
+        {
+            if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
+            $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->fetchAll('id');
+        }
+
         $modulePairs = array();
         foreach($modules as $moduleID => $module)
         {
