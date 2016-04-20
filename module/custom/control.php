@@ -193,10 +193,19 @@ class custom extends control
         global $config;
         if($_POST)
         {
-            $config->menucustom->main = $_POST['menu'];
+            $config->menucustom->$module = $_POST['menu'];
             $this->send(array('result' => 'success', 'menu' => $_POST['menu']));
         }
-        $menu = empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module);
-        $this->send(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu));
+        if($this->viewType === 'json')
+        {
+            $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module);
+            $this->send(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu));
+        }
+        else
+        {
+            $this->view->module = $module;
+            $this->view->method = $method;
+            $this->display();
+        }
     }
 }
