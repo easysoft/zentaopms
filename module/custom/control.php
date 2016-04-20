@@ -193,7 +193,15 @@ class custom extends control
         global $config;
         if($_POST)
         {
-            $config->menucustom->$module = $_POST['menu'];
+            if(empty($method))
+            {
+                $config->menucustom->$module = $_POST['menu'];
+            }
+            else
+            {
+                $configKey = 'menucustom' . $module;
+                $config->$configKey->$method = $_POST['menu'];
+            }
             $this->send(array('result' => 'success', 'menu' => $_POST['menu']));
         }
         if($this->viewType === 'json')
