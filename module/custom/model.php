@@ -123,14 +123,16 @@ class customModel extends model
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
 
-    public static function getMainMenu($rebuild = false)
+    public static function getModuleMenu($module = 'main', $rebuild = false)
     {
+        if(empty($module)) $module = 'main';
+
         global $app, $lang, $config;
         // if(empty($app->customMenu)) $app->customMenu = array();
-        // if(!$rebuild && !empty($app->customMenu['main'])) return $app->customMenu['main'];
+        // if(!$rebuild && !empty($app->customMenu[$module])) return $app->customMenu[$module];
 
-        $menuConfig = $config->menucustom->main;
-        if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->main['novice'];
+        $menuConfig = $config->menucustom->$module;
+        if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->$module['novice'];
         $isSetMenuConfig = isset($menuConfig);
 
         if($isSetMenuConfig)
@@ -147,31 +149,109 @@ class customModel extends model
         }
 
         $menu = array();
-        foreach($lang->menu as $name => $item)
+        $allMenu = $module == 'main' ? $lang->menu : $lang->$module->menu;
+
+        foreach($allMenu as $name => $item)
         {
-            $link = explode('|', $item);
-            list($label, $module, $method) = $link;
+            $label  = '';
+            $module = '';
+            $method = '';
+            $link = is_array($item) ? $item['link'] : $item;
+            if(strpos($link, '|') !== false)
+            {
+                $link = explode('|', $link);
+                list($label, $module, $method) = $link;
+            }
+            else
+            {
+                $label = $link;
+            }
 
             if(commonModel::hasPriv($module, $method))
             {
-                $vars = isset($link[3]) ? $link[3] : '';
+                $itemLink = '';
+                if($module && $method)
+                {
+                    $itemLink = array('module' => $module, 'method' => $method);
+                    if($link[3]) $itemLink['vars'] = $link[3];
+                    if(is_array($item))
+                    {
+                        $itemLink['subModule'] = $item['subModule'];
+                        $itemLink['alias']     = $item['alias'];
+                        $itemLink['target']    = $item['target'];
+                        $itemLink['float']     = $item['float'];
+                    }
+                }
 
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
-                $menuItem->link   = array('module' => $module, 'method' => $method, 'vars' => $vars);
-                $menuItem->label  = $label;
+                $menuItem->link   = $itemLink;
+                $menuItem->text   = $label;
+                $menuItem->source = $item;
                 $menuItem->hidden = $isSetMenuConfig && (!$menuConfig[$name]);
 
                 $menu[] = $menuItem;
             }
         }
-        // $app->customMenu['main'] = $menu;
+        // $app->customMenu[$module] = $menu;
         return $menu;
     }
 
-    public static function getModuleMenu()
+    public static function getMainMenu($rebuild = false)
     {
-        
+        return self::getModuleMenu('main', $rebuild);
+    }
+
+    public static function getFeatureMenu($module, $method)
+    {
+        global $app, $lang, $config;
+        $menucustomKey = 'menucustom' . $module;
+
+        $app->loadLang($module);
+        $featurebar = '';
+        if(isset($lang->$module->featurebar[$method])) $featurebar = $lang->$module->featurebar[$method];
+        $menucustomKey = 'menucustom' . $module;
+        return $featurebar;
+        if($featurebar)
+        {
+            $menuOrder  = array();
+            $menuStatus = array();
+            if(isset($config->$menucustomKey->$method))
+            {
+                $menuStatus = json_decode($config->$menucustomKey->$method, true);
+                foreach($menuStatus as $menuKey => $status) $menuOrder[] = $menuKey;
+            }
+
+            /* Merge all menu. */
+            $inOrderMenu    = ',' . join(',', $menuOrder) . ',';
+            $notInOrderMenu = array();
+            foreach($featurebar as $menuKey => $menuName)
+            {
+                if(strpos($inOrderMenu, ",$menuKey,") === false) $notInOrderMenu[] = $menuKey;
+            }
+            if($notInOrderMenu)
+            {
+                $order = count($menuOrder);
+                foreach($notInOrderMenu as $menuKey)
+                {
+                    $menuOrder[$order] = $menuKey;
+                    $order++;
+                }
+            }
+            ksort($menuOrder, SORT_ASC);
+
+            $processedMenu = new stdclass();
+            foreach($menuOrder as $order => $menuKey)
+            {
+                $menuContent = $featurebar[$menuKey];
+                $menuContent = array('link' => $menuContent);
+                $menuContent['status'] = isset($menuStatus[$menuKey]) ? $menuStatus[$menuKey] : 'show';
+                $menuContent['order']  = ($order + 1) * 5;
+
+                $processedMenu->$menuKey = $menuContent;
+            }
+            $processedMenus['featurebar'] = $processedMenu;
+        }
     }
 
     public static function getCustomMenu($module, $method)

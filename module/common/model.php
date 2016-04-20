@@ -404,7 +404,7 @@ class commonModel extends model
             if($menuItem->hidden) continue;
             $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
             $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], $menuItem->link['vars']) : $menuItem->link;
-            echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->label</a></li>\n";
+            echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
         $customLink = helper::createLink('custom', 'menu');
         echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog'><i class='icon icon-cog'></i></a></li>";
@@ -466,50 +466,53 @@ class commonModel extends model
     {
         global $lang, $app;
 
-        if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
+        if(!isset($lang->$moduleName->menu))
+        {
+            echo "<ul></ul>";
+            return;
+        }
 
-        /* Get the sub menus of the module, and get current module and method. */
-        $submenus      = $lang->$moduleName->menu;  
+        /* get current module and method. */
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
+        $menu = customModel::getModuleMenu($moduleName);
 
         /* The beginning of the menu. */
         echo "<ul class='nav'>\n";
 
         /* Cycling to print every sub menus. */
-        foreach($app->customMenu['module'] as $subMenuKey => $submenu)
+        foreach($menu as $menuItem)
         {
+
             /* Init the these vars. */
-            $link      = $submenu;
-            $subModule = '';
-            $alias     = '';
-            $float     = '';
-            $active    = '';
-            $target    = '';
-            $status    = '';
-            $order     = '';
-
-            if(is_array($submenu)) extract($submenu);   // If the sub menu is an array, extract it.
-            if($status == 'hide') continue;
-
-            /* Print the menu. */
-            if(strpos($link, '|') === false)
+            if($menuItem->link)
             {
-                echo "<li>$link</li>\n";
+                $active = '';
+                $float  = '';
+                $alias  = '';
+                $target = '';
+                $module = '';
+                $method = '';
+                $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], $menuItem->link['vars']) : $menuItem->link;
+                if(is_array($menuItem->link))
+                {
+                    if($menuItem->link['subModule'])
+                    {
+                        $subModules = explode(',', $menuItem->link['subModule']);
+                        if(in_array($currentModule, $subModules) and $float != 'right') $active = 'active';
+                    }
+                    $alias  = $menuItem->link['alias'];
+                    $target = $menuItem->link['target'];
+                    $float  = $menuItem->link['float'];
+                    $module = $menuItem->link['module'];
+                    $method = $menuItem->link['method'];
+                }
+                if($float != 'right' and $module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
+                echo "<li class='$float $active'>" . html::a($link, $menuItem->text, $target, "data-id='$menuItem->name'") . "</li>\n";
             }
             else
             {
-                $link = explode('|', $link);
-                list($label, $module, $method) = $link;
-                $vars = isset($link[3]) ? $link[3] : '';
-                if(commonModel::hasPriv($module, $method))
-                {
-                    /* Is the currentModule active? */
-                    $subModules = explode(',', $subModule);
-                    if(in_array($currentModule,$subModules) and $float != 'right') $active = 'active';
-                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and $float != 'right') $active = 'active';
-                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target, "id=submenu$subMenuKey") . "</li>\n";
-                }
+                echo "<li>$menuItem->text</li>\n";
             }
         }
         echo "</ul>\n";
