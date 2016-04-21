@@ -108,6 +108,7 @@ $lang->project->team             = '团队成员';
 $lang->project->doc              = '文档列表';
 $lang->project->manageProducts   = '关联' . $lang->productCommon;
 $lang->project->linkStory        = '关联需求';
+$lang->project->unlinkStoryTasks = '未关联需求任务';
 $lang->project->view             = "{$lang->projectCommon}概况";
 $lang->project->create           = "添加{$lang->projectCommon}";
 $lang->project->copy             = "复制{$lang->projectCommon}";
@@ -260,4 +261,3 @@ $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '�
 $lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => '模块视图');
 $lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => '需求视图');
 $lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => '任务视图');
-$lang->project->treeLevel['custom']  = array('icon' => 'icon-align-left', 'text' => '自定义');

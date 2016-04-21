@@ -1945,6 +1945,54 @@ class projectModel extends model
     }
 
     /**
+     * Format task list for tree view
+     * @param  array $tasks
+     * @access public
+     * @return array
+     */
+    public function formatTasksForTree($tasks)
+    {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $taskItems = array();
+        foreach ($tasks as $task)
+        {
+            $taskItem = new stdclass();
+            $taskItem->type         = 'task';
+            $taskItem->id           = $task->id;
+            $taskItem->title        = $task->name;
+            $taskItem->color        = $task->color;
+            $taskItem->pri          = (int) $task->pri;
+            $taskItem->status       = $task->status;
+            $taskItem->estimate     = $task->estimate;
+            $taskItem->consumed     = $task->consumed;
+            $taskItem->left         = $task->left;
+            $taskItem->assignedTo   = $users[$task->assignedTo];
+            $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
+            $taskItem->storyChanged = $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
+
+            $buttons = '';
+            $buttons .= common::buildIconButton('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
+            $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+            if($browseType == 'needconfirm')
+            {
+                $lang->task->confirmStoryChange = $lang->confirm;
+                $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+            }
+            $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
+
+            $taskItem->buttons = $buttons;
+            $taskItems[] = $taskItem;
+        }
+        return $taskItems;
+    }
+
+    /**
      * Build product task tree item
      * @param  object $tree
      * @access public
@@ -1991,41 +2039,8 @@ class projectModel extends model
                 $storyTasks = $this->task->getStoryTasks($story->id, $projectID);
                 if(!empty($storyTasks))
                 {
-                    $taskItems = array();
-                    foreach ($storyTasks as $task)
-                    {
-                        $taskItem = new stdclass();
-                        $taskItem->type         = 'task';
-                        $taskItem->id           = $task->id;
-                        $taskItem->title        = $task->name;
-                        $taskItem->color        = $task->color;
-                        $taskItem->pri          = $task->pri;
-                        $taskItem->status       = $task->status;
-                        $taskItem->estimate     = $task->estimate;
-                        $taskItem->consumed     = $task->consumed;
-                        $taskItem->left         = $task->left;
-                        $taskItem->assignedTo   = $users[$task->assignedTo];
-                        $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
-                        $taskItem->storyChanged = $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
-
-                        $buttons = '';
-                        $buttons .= common::buildIconButton('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                        $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-
-                        $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-                        if($browseType == 'needconfirm')
-                        {
-                            $lang->task->confirmStoryChange = $lang->confirm;
-                            $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
-                        }
-                        $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                        $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                        $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
-
-                        $taskItem->buttons = $buttons;
-                        $taskItems[] = $taskItem;
-                    }
-
+                    $taskItems = $this->formatTasksForTree($storyTasks);
+                    $storyItem->tasksCount = count($taskItems);
                     $storyItem->children   = array();
                     $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
                 }
@@ -2055,6 +2070,20 @@ class projectModel extends model
             $productItem->children = $this->loadModel('tree')->getFullTree($product->id, 'story');
 
             $tree[] = $this->buildProductTaskTree($productItem, $projectID);
+        }
+        $zeroStoryTasks = $this->loadModel('task')->getStoryTasks(0, $projectID);
+        if(count($zeroStoryTasks))
+        {
+            $zeroStoryTasks = $this->formatTasksForTree($zeroStoryTasks);
+            $unlinkStoryItem = new stdclass();
+            $unlinkStoryItem->type       = 'unlinkStory';
+            $unlinkStoryItem->id         = 'unlinkStory';
+            $unlinkStoryItem->tasksCount = count($zeroStoryTasks);
+            $unlinkStoryItem->title      = $this->lang->project->unlinkStoryTasks;
+            $unlinkStoryItem->children   = array();
+            $unlinkStoryItem->actions    = false;
+            $unlinkStoryItem->children[] = array('id' => 'tasks0', 'tasks' => $zeroStoryTasks, 'type' => 'tasks', 'actions' => false);
+            $tree[] = $unlinkStoryItem;
         }
         return $tree;
     }

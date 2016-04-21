@@ -108,6 +108,7 @@ $lang->project->team             = 'Team';
 $lang->project->doc              = 'Doc';
 $lang->project->manageProducts   = 'Link ' . $lang->productCommon;
 $lang->project->linkStory        = 'Link story';
+$lang->project->unlinkStoryTasks = 'Tasks of unlink story';
 $lang->project->view             = "Info";
 $lang->project->create           = "Add";
 $lang->project->copy             = "Copy a {$lang->projectCommon}";
@@ -256,4 +257,3 @@ $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => 'P
 $lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => 'Modules view');
 $lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => 'Stories view');
 $lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => 'Tasks view');
-$lang->project->treeLevel['custom']  = array('icon' => 'icon-align-left', 'text' => 'Custom view');

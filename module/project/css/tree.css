@@ -5,9 +5,10 @@
 #projectTree li > .tree-item-wrapper > .tree-toggle {display: block}
 #projectTree li > .tree-item-wrapper:hover {display: block; background-color: #edf3fe; cursor: pointer; margin-left: -20px; padding-left: 20px;}
 #projectTree li {line-height: 30px; padding-top: 0; padding-bottom: 0}
-#projectTree .item-type-product > .tree-item-wrapper {display: block; background-color: #edf3fe; margin-left: -20px; padding-left: 20px; border-bottom: 1px solid #ddd; cursor: pointer}
-#projectTree .item-type-product > .tree-item-wrapper:hover {background-color: #eee}
-#projectTree .item-type-product.open > .tree-item-wrapper {border-bottom: none}
+#projectTree > li > .tree-item-wrapper {display: block; background-color: #edf3fe; margin-left: -20px; padding-left: 20px; border-bottom: 1px solid #ddd; cursor: pointer}
+#projectTree > li > .tree-item-wrapper:hover {background-color: #eee}
+#projectTree > li.open > .tree-item-wrapper {border-bottom: none}
+#projectTree > li.open + li > .tree-item-wrapper {border-top: 1px solid #ddd}
 #projectTree.tree li>.list-toggle:before {content: '\e6bb'}
 #projectTree.tree li.open>.list-toggle:before {content: '\e6b8';}
 #projectTree.tree li>.list-toggle {top: 2px}
@@ -18,3 +19,5 @@
 
 .tree-view-btn {min-width: 36px;}
 .main > .panel > .panel-heading > .panel-actions {margin-top: -8px; margin-right: -12px;}
+
+.label-task-count {background: #ddd; color: #333}
