@@ -406,8 +406,8 @@ class commonModel extends model
             $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], $menuItem->link['vars']) : $menuItem->link;
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
-        $customLink = helper::createLink('custom', 'menu');
-        echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog'><i class='icon icon-cog'></i></a></li>";
+        $customLink = helper::createLink('custom', 'menu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
+        echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
@@ -488,7 +488,7 @@ class commonModel extends model
             if($menuItem->link)
             {
                 $active = '';
-                $float  = '';
+                $float  = $menuItem->float;
                 $alias  = '';
                 $target = '';
                 $module = '';
@@ -503,7 +503,6 @@ class commonModel extends model
                     }
                     $alias  = $menuItem->link['alias'];
                     $target = $menuItem->link['target'];
-                    $float  = $menuItem->link['float'];
                     $module = $menuItem->link['module'];
                     $method = $menuItem->link['method'];
                 }

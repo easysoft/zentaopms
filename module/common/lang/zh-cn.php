@@ -205,7 +205,7 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list      = '%s';
+$lang->project->menu->list      = array('link' => '%s', 'fixed' => true);
 $lang->project->menu->index     = '首页|project|index|locate=no';
 $lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban,tree');
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
@@ -229,7 +229,7 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
-$lang->qa->menu->product  = '%s';
+$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->qa->menu->index    = '首页|qa|index|locate=no&productID=%s';
 $lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->qa->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
@@ -238,7 +238,7 @@ $lang->qa->menu->testtask = array('link' => '版本|testtask|browse|productID=%s
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = '%s';
+$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->bug->menu->index    = '首页|qa|index|locate=no&productID=%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
@@ -247,7 +247,7 @@ $lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = '%s';
+$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->testcase->menu->index    = '首页|qa|index|locate=no&productID=%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
@@ -260,7 +260,7 @@ $lang->testtask->menu = $lang->testcase->menu;
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
-$lang->doc->menu->list    = '%s';
+$lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->doc->menu->browse  = array('link' => '文档|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = '编辑|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '分类|tree|browse|libID=%s&viewType=doc';
@@ -279,7 +279,7 @@ $lang->report->menu->staff   = array('link' => '组织|report|workload');
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->name         = '%s' . $lang->arrow;
+$lang->company->menu->name         = array('link' => '%s' . $lang->arrow, 'fixed' => true);
 $lang->company->menu->browseUser   = array('link' => '用户|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => '部门|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup  = array('link' => '权限|group|browse', 'subModule' => 'group');

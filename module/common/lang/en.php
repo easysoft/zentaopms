@@ -176,7 +176,7 @@ $lang->todo->menu = $lang->my->menu;
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
-$lang->product->menu->list    = '%s';
+$lang->product->menu->list    = array('link' => '%s' . $lang->arrow, 'fixed' => true);
 $lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
@@ -204,7 +204,7 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list      = '%s';
+$lang->project->menu->list      = array('link' => '%s', 'fixed' => true);
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,burn');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
@@ -227,7 +227,7 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
-$lang->qa->menu->product  = '%s';
+$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->qa->menu->index    = '首页|qa|index|locate=no&productID=%s';
 $lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->qa->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
@@ -236,7 +236,7 @@ $lang->qa->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s'
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = '%s';
+$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->bug->menu->index    = 'Index|qa|index|locate=no&productID=%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
@@ -245,7 +245,7 @@ $lang->bug->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = '%s';
+$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->testcase->menu->index    = 'Index|qa|index|locate=no&productID=%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
@@ -258,7 +258,7 @@ $lang->testtask->menu = $lang->testcase->menu;
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
-$lang->doc->menu->list    = '%s';
+$lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
 $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
@@ -277,7 +277,7 @@ $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 /* Company menu. */
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->name         = '%s' . $lang->arrow;
+$lang->company->menu->name         = array('link' => '%s' . $lang->arrow, 'fixed' => true);
 $lang->company->menu->browseUser   = array('link' => 'Users|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subModule' => 'group');

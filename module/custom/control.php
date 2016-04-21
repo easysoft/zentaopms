@@ -188,25 +188,43 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function menu($module = 'main', $method = '')
+    public function menu($module = 'main', $method = '', $type = '')
     {
-        global $config;
         if($_POST)
         {
+            $account = $this->app->user->account;
+            $menu    = $_POST['menu'];
+
             if(empty($method))
             {
-                $config->menucustom->$module = $_POST['menu'];
+                $this->loadModel('setting')->setItem("$account.menucustom.$module", $menu);
             }
             else
             {
                 $configKey = 'menucustom' . $module;
-                $config->$configKey->$method = $_POST['menu'];
+                $this->loadModel('setting')->setItem("$account.$configKey.$method", $menu);
             }
-            $this->send(array('result' => 'success', 'menu' => $_POST['menu']));
+            $this->send(array('result' => 'success', 'menu' => $menu));
         }
+
         if($this->viewType === 'json')
         {
-            $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module);
+            if($type === 'all')
+            {
+                $menu = array();
+                $menu['main'] = customModel::getModuleMenu('main', true);
+                if($module !== 'main')
+                {
+                    $menu['module']     = customModel::getModuleMenu($module, true);
+                    $menu['feature']    = customModel::getFeatureMenu($module, $method);
+                    $menu['moduleName'] = $module;
+                    $menu['methodName'] = $method;
+                }
+            }
+            else
+            {
+                $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
+            }
             $this->send(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu));
         }
         else

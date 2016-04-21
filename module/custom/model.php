@@ -132,19 +132,37 @@ class customModel extends model
      */
     public static function buildMenuConfig($allMenu, $menuConfig)
     {
+        global $app, $lang, $config;
         $isSetMenuConfig = isset($menuConfig);
         $menu = array();
+        $order = 1;
+        $menuConfigMap = array();
 
         if($isSetMenuConfig)
         {
             if(is_string($menuConfig))
             {
                 $menuConfigItems = explode(',', $menuConfig);
-                $menuConfig = array();
                 foreach($menuConfigItems as $menuConfigItem)
                 {
-                    $menuConfig[$menuConfigItem] = true;
+                    $item = new stdclass();
+                    $item->name   = $menuConfigItem;
+                    $item->order  = $order++;
+                    $item->hidden = false;
+                    $menuConfigMap[$item->name] = $item;
                 }
+            }
+            else if(is_array($menuConfig))
+            {
+                foreach($menuConfig as $menuConfigItem)
+                {
+                    if(!isset($menuConfigItem->order)) $menuConfigItem->order = $order++;
+                    $menuConfigMap[$menuConfigItem->name] = $menuConfigItem;
+                }
+            }
+            else
+            {
+                $isSetMenuConfig = false;
             }
         }
 
@@ -153,6 +171,10 @@ class customModel extends model
             $label  = '';
             $module = '';
             $method = '';
+            $float  = '';
+            $fixed  = '';
+            $hidden = $isSetMenuConfig && $menuConfigMap[$name] && $menuConfigMap[$name]->hidden;
+
             $link = is_array($item) ? $item['link'] : $item;
             if(strpos($link, '|') !== false)
             {
@@ -176,8 +198,14 @@ class customModel extends model
                         $itemLink['subModule'] = $item['subModule'];
                         $itemLink['alias']     = $item['alias'];
                         $itemLink['target']    = $item['target'];
-                        $itemLink['float']     = $item['float'];
+
                     }
+                }
+
+                if(is_array($item))
+                {
+                    $float = $item['float'];
+                    $fixed = $item['fixed'];
                 }
 
                 $menuItem = new stdclass();
@@ -185,12 +213,16 @@ class customModel extends model
                 $menuItem->link   = $itemLink;
                 $menuItem->text   = $label;
                 $menuItem->source = $item;
-                $menuItem->hidden = $isSetMenuConfig && (!$menuConfig[$name]);
-
-                $menu[] = $menuItem;
+                $menuItem->order  = $isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->order) ? $menuConfigMap[$name]->order : $order++;
+                if($float)  $menuItem->float   = $float;
+                if($fixed)  $menuItem->fixed   = $fixed;
+                if($hidden) $menuItem->hidden  = $hidden;
+                $menu[$menuItem->order] = $menuItem;
             }
         }
-        return $menu;
+
+        ksort($menu, SORT_NUMERIC);
+        return array_values($menu);
     }
 
     /**
@@ -209,6 +241,7 @@ class customModel extends model
         if(!$rebuild && !empty($app->customMenu[$module])) return $app->customMenu[$module];
 
         $menuConfig = $config->menucustom->$module;
+        if(!empty($menuConfig)) $menuConfig = json_decode($menuConfig);
         if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->$module['novice'];
 
         $allMenu = $module == 'main' ? $lang->menu : $lang->$module->menu;
@@ -243,6 +276,7 @@ class customModel extends model
         $configKey = 'menucustom' . $module;
 
         $menuConfig = $config->$configKey->$method;
+        if(!empty($menuConfig)) $menuConfig = json_decode($menuConfig);
         $allMenu    = $lang->$module->featurebar[$method];
 
         return $allMenu ? self::buildMenuConfig($allMenu, $menuConfig) : null;

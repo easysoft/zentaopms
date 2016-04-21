@@ -1,0 +1,19 @@
+#loadingIcon {opacity: 0; transition: opacity .3s}
+#loadingIcon.active {opacity: 1}
+
+#menuEditor {padding: 20px;}
+#menuEditor > .panel {background-color: #003366; border: none; padding-top: 10px;}
+#modulemenu, #featurebar {margin: 0; border-left: 1px solid #ddd; border-right: 1px solid #ddd; padding-left: 10px; padding-right: 10px;}
+#mainmenu {padding-left: 10px; padding-right: 10px;}
+#featurebar {border-top: 1px solid #ddd}
+#featurebar > .nav {width: 100%}
+#menuEditor .nav > li > a .item-hidden-icon {display: none}
+#menuEditor .nav > li.menu-hidden > a .item-hidden-icon {display: inline-block; margin-left: 5px;}
+#menuEditor .nav > li.menu-hidden {opacity: 0.5;}
+#menuEditor.preview .nav > li.menu-hidden {display: none}
+#menuEditor .nav > li.menu-hidden > a {position: relative;}
+#menuEditor .nav > li.menu-hidden > a:before {content: ' '; display: block; position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: rgba(0,0,0,.1); border: 1px dashed #aaa}
+#modulemenu .nav > li.menu-hidden {margin-left: 3px;}
+
+#titlebar > .heading > i,
+#titlebar > .heading > strong > i {display: inline-block;}
