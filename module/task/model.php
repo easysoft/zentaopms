@@ -615,9 +615,11 @@ class taskModel extends model
         $oldTask->status   = $oldStatus;
         $newTask->status   = $task->status;
 
-        $changes =  common::createChanges($oldTask, $newTask);
+        $changes = common::createChanges($oldTask, $newTask);
         $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
+
+        return $changes;
     }
 
     /**

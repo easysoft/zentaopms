@@ -578,6 +578,23 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
+
+            /* Remind whether to update status of the bug, if task which from that bug has been finished. */
+            $task = $this->task->getById($taskID);
+            if($task->fromBug != 0)
+            {
+                foreach($changes as $change)
+                {
+                    if($change['field'] == 'status' and $change['new'] == 'done')
+                    {
+                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                        unset($_GET['onlybody']);
+                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    }
+                }
+            }
+
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -601,7 +618,24 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $this->task->recordEstimate($taskID);
+            $changes = $this->task->recordEstimate($taskID);
+
+            /* Remind whether to update status of the bug, if task which from that bug has been finished. */
+            $task = $this->task->getById($taskID);
+            if($changes and $task->fromBug != 0)
+            {
+                foreach($changes as $change)
+                {
+                    if($change['field'] == 'status' and $change['new'] == 'done')
+                    {
+                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                        unset($_GET['onlybody']);
+                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    }
+                }
+            }
+
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
