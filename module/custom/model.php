@@ -207,13 +207,13 @@ class customModel extends model
                     if(isset($item['fixed'])) $fixed = $item['fixed'];
                 }
 
-                $hidden = !$fixed && $isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->hidden) && $menuConfigMap[$name]->hidden;
+                $hidden = !$fixed && $isSetMenuConfig && isset($menuConfigMap[$name]) && isset($menuConfigMap[$name]->hidden) && $menuConfigMap[$name]->hidden;
 
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
                 $menuItem->link   = $itemLink;
                 $menuItem->text   = $label;
-                $menuItem->order  = $fixed ? 0 : ($isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->order) ? $menuConfigMap[$name]->order : $order++);
+                $menuItem->order  = $fixed ? 0 : ($isSetMenuConfig && isset($menuConfigMap[$name]) && isset($menuConfigMap[$name]->order) ? $menuConfigMap[$name]->order : $order++);
                 if($float)  $menuItem->float   = $float;
                 if($fixed)  $menuItem->fixed   = $fixed;
                 if($hidden) $menuItem->hidden  = $hidden;
@@ -277,10 +277,10 @@ class customModel extends model
         $app->loadLang($module);
 
         $configKey  = 'feature_' . $module . '_' . $method;
-        $menuConfig = $config->menucustom->$configKey;
+        $allMenu    = isset($lang->$module->featurebar[$method]) ? $lang->$module->featurebar[$method] : null;
+        $menuConfig = '';
+        if(isset($config->menucustom->$configKey)) $menuConfig = $config->menucustom->$configKey;
         if(!empty($menuConfig)) $menuConfig = json_decode($menuConfig);
-        $allMenu    = $lang->$module->featurebar[$method];
-
         return $allMenu ? self::buildMenuConfig($allMenu, $menuConfig) : null;
     }
 
