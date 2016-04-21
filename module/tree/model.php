@@ -490,10 +490,14 @@ class treeModel extends model
                     ->get();
                 $stmt = $this->dbh->query($query);
                 if($branch == 0)$productTree   = $this->getFullTree($stmt, 'task', $projectModules);
-                if($branch != 0)$branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $this->getFullTree($stmt, 'task', $projectModules));
+                if($branch != 0)
+                {
+                    $children = $this->getFullTree($stmt, 'task', $projectModules);
+                    if($children) $branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $children);
+                }
             }
-            $productTree[] = array('name' => $this->lang->product->branchName[$productInfo->type], 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
-            $fullTrees[]   = array('name' => $productInfo->name, 'root' => $id, 'type' => 'product', 'actions' => false, 'children' => $productTree);
+            if($branchTrees) $productTree[] = array('name' => $this->lang->product->branchName[$productInfo->type], 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
+            $fullTrees[] = array('name' => $productInfo->name, 'root' => $id, 'type' => 'product', 'actions' => false, 'children' => $productTree);
         }
 
         /* Get project module. */
