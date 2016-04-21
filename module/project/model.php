@@ -1945,34 +1945,113 @@ class projectModel extends model
     }
 
     /**
-     * Format task list for tree view
-     * @param  array $tasks
+     * Fill tasks in tree.
+     * @param  object $tree
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function fillTasksInTree($node, $projectID)
+    {
+        $node = (object)$node;
+        static $storyGroups, $taskGroups;
+        if(empty($storyGroups))
+        {
+            $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where('t1.project')->eq((int)$projectID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchAll();
+            $storyGroups = array();
+            foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
+        }
+        if(empty($taskGroups))
+        {
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('project')->eq((int)$projectID)
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
+            $taskGroups = array();
+            foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $task;
+        }
+
+        if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillTasksInTree($child, $projectID);
+
+        if(!isset($node->id))$node->id = 0;
+        if($node->type == 'story' or $node->type == 'product')
+        {
+            $stories = $storyGroups[$node->root][$node->id];
+            foreach($stories as $story)
+            {
+                $storyItem = new stdclass();
+                $storyItem->type          = 'story';
+                $storyItem->id            = 'story' . $story->id;
+                $storyItem->title         = $story->title;
+                $storyItem->color         = $story->color;
+                $storyItem->pri           = $story->pri;
+                $storyItem->storyId       = $story->id;
+                $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
+                $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
+
+                $storyTasks = $taskGroups[$node->id][$story->id];
+                if(!empty($storyTasks))
+                {
+                    $taskItems = $this->formatTasksForTree($storyTasks, $story);
+                    $storyItem->tasksCount = count($taskItems);
+                    $storyItem->children   = array();
+                    $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
+                }
+
+                $node->children[] = $storyItem;
+            }
+        }
+        elseif($node->type == 'task')
+        {
+            $tasks = $taskGroups[$node->id][0];
+            if(!empty($tasks))
+            {
+                $taskItems = $this->formatTasksForTree($tasks);
+                $node->children[] = array('id' => 'tasks', 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
+            }
+
+        }
+
+        $node->type    = 'module';
+        $node->actions = false;
+        return $node;
+    }
+
+    /**
+     * Format tasks for tree.
+     * 
+     * @param  array  $tasks 
+     * @param  object $story 
      * @access public
      * @return array
      */
-    public function formatTasksForTree($tasks)
+    public function formatTasksForTree($tasks, $story = '')
     {
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 
         $taskItems = array();
-        foreach ($tasks as $task)
+        foreach($tasks => $task)
         {
             $taskItem = new stdclass();
             $taskItem->type         = 'task';
             $taskItem->id           = $task->id;
             $taskItem->title        = $task->name;
             $taskItem->color        = $task->color;
-            $taskItem->pri          = (int) $task->pri;
+            $taskItem->pri          = (int)$task->pri;
             $taskItem->status       = $task->status;
             $taskItem->estimate     = $task->estimate;
             $taskItem->consumed     = $task->consumed;
             $taskItem->left         = $task->left;
             $taskItem->assignedTo   = $users[$task->assignedTo];
             $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
-            $taskItem->storyChanged = $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
+            $taskItem->storyChanged = $story and $story->status == 'active' and $story->version > $story->taskVersion;
 
-            $buttons = '';
+            $buttons  = '';
             $buttons .= common::buildIconButton('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
@@ -1985,70 +2064,11 @@ class projectModel extends model
             $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
-
             $taskItem->buttons = $buttons;
             $taskItems[] = $taskItem;
         }
+
         return $taskItems;
-    }
-
-    /**
-     * Build product task tree item
-     * @param  object $tree
-     * @access public
-     * @return object
-     */
-    public function buildProductTaskTree($node, $projectID)
-    {
-        $this->loadModel('story');
-        $this->loadModel('task');
-
-        static $users;
-        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
-
-        if($node->children)
-        {
-            foreach ($node->children as $child)
-            {
-                $child = $this->buildProductTaskTree($child, $projectID);
-            }
-        }
-
-        if($node->type === 'product')
-        {
-            $node->actions = false;
-            // TODO: get product root storys and appent to children
-        }
-        else if($node->type === 'story')
-        {
-            $node->type = 'module';
-            $node->actions = false;
-            $stories = $this->story->getProjectStories($projectID, 'pri_asc,id_desc', 'byModule', $node->id);
-            foreach ($stories as $story)
-            {
-                $storyItem = new stdclass();
-                $storyItem->type          = 'story';
-                $storyItem->id            = 'story' . $story->id;
-                $storyItem->title         = $story->title;
-                $storyItem->color         = $story->color;
-                $storyItem->pri           = $story->pri;
-                $storyItem->storyId       = $story->id;
-                $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
-                $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
-
-                $storyTasks = $this->task->getStoryTasks($story->id, $projectID);
-                if(!empty($storyTasks))
-                {
-                    $taskItems = $this->formatTasksForTree($storyTasks);
-                    $storyItem->tasksCount = count($taskItems);
-                    $storyItem->children   = array();
-                    $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
-                }
-
-                $node->children[] = $storyItem;
-            }
-        }
-        return $node;
     }
 
     /**
@@ -2059,32 +2079,9 @@ class projectModel extends model
      */
     public function getProjectTree($projectID)
     {
-        $tree = array();
-        $products = $this->getProducts($projectID);
-        foreach ($products as $product)
-        {
-            $productItem = new stdclass();
-            $productItem->type     = 'product';
-            $productItem->id       = 'product' . $product->id;
-            $productItem->title    = $product->name;
-            $productItem->children = $this->loadModel('tree')->getFullTree($product->id, 'story');
-
-            $tree[] = $this->buildProductTaskTree($productItem, $projectID);
-        }
-        $zeroStoryTasks = $this->loadModel('task')->getStoryTasks(0, $projectID);
-        if(count($zeroStoryTasks))
-        {
-            $zeroStoryTasks = $this->formatTasksForTree($zeroStoryTasks);
-            $unlinkStoryItem = new stdclass();
-            $unlinkStoryItem->type       = 'unlinkStory';
-            $unlinkStoryItem->id         = 'unlinkStory';
-            $unlinkStoryItem->tasksCount = count($zeroStoryTasks);
-            $unlinkStoryItem->title      = $this->lang->project->unlinkStoryTasks;
-            $unlinkStoryItem->children   = array();
-            $unlinkStoryItem->actions    = false;
-            $unlinkStoryItem->children[] = array('id' => 'tasks0', 'tasks' => $zeroStoryTasks, 'type' => 'tasks', 'actions' => false);
-            $tree[] = $unlinkStoryItem;
-        }
-        return $tree;
+        $fullTrees = $this->loadModel('tree')->getFullTaskTree($projectID, 0, false);
+        array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $projectID));
+        foreach($fullTrees as $i => $tree) $fullTrees[$i] = $this->fillTasksInTree($tree, $projectID);
+        return $fullTrees;
     }
 }

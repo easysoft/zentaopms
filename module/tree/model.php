@@ -456,32 +456,52 @@ class treeModel extends model
      * @access public
      * @return object
      */
-    public function getFullTaskTree($projectID, $productID, $moduleID = 0, $newModule = false) 
+    public function getFullTaskTree($rootID, $productID = 0, $manage = true) 
     {
-        $tree = array_values($this->getTaskSons($projectID, $productID, $moduleID));
-        if(!$moduleID)
+        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
+
+        /* If createdVersion <= 4.1, go to getTreeMenu(). */
+        $products      = $this->loadModel('product')->getProductsByProject($rootID);
+        $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
+
+        if(!$this->isMergeModule($rootID, 'task') or !$products)
         {
-            $products = $this->loadModel('project')->getProducts($projectID);
-            if($newModule and $products)
-            {
-                $productModulesTree = array();
-                foreach ($products as $product)
-                {
-                    $productModulesTree[] = array('type' => 'product', 'name' => $product->name, 'actions' => false, 'id' => 'product' . $product->id, 'children' => $this->getFullTrees($product->id, 'story'));
-                }
-                $tree = array_merge($productModulesTree, $tree);
-            }
+            $extra['tip'] = false;
+            $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task'));
+            return $this->getFullTree($stmt, 'task');
         }
-        if($tree)
+
+        /* if not manage, only get linked modules and ignore others. */
+        $projectModules = $manage ? array() : $this->getTaskTreeModules($rootID, true);
+
+        /* Get module according to product. */
+        $fullTrees = array();
+        foreach($products as $id => $product)
         {
-            foreach ($tree as $node)
+            $productInfo  = $this->product->getById($id);
+            /* tree menu. */
+            $productTree = '';
+            $branchTrees = '';
+            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
+            foreach($branchGroups[$id] as $branch => $branchName)
             {
-                if(is_array($node))$node = (object)$node;
-                $children = $this->getFullTaskTree($projectID, $productID, $node->id);
-                if(!empty($children)) $node->children = $children;
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
+                    ->orderBy('grade desc, type, `order`')
+                    ->get();
+                $stmt = $this->dbh->query($query);
+                if($branch == 0)$productTree   = $this->getFullTree($stmt, 'task', $projectModules);
+                if($branch != 0)$branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $this->getFullTree($stmt, 'task', $projectModules));
             }
+            $productTree[] = array('name' => $this->lang->product->branchName[$productInfo->type], 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
+            $fullTrees[]   = array('name' => $productInfo->name, 'root' => $id, 'type' => 'product', 'actions' => false, 'children' => $productTree);
         }
-        return $tree; 
+
+        /* Get project module. */
+        $query      = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task'")->orderBy('grade desc, type, `order`')->get();
+        $stmt       = $this->dbh->query($query);
+        $taskTrees  = $this->getFullTree($stmt, 'task', $projectModules);
+        foreach($taskTrees as $taskModule) $fullTrees[] = $taskModule;
+        return $fullTrees;
     }
 
     /**
@@ -1464,14 +1484,19 @@ class treeModel extends model
         $fullTrees = array();
         if(isset($branches[0]))
         {
-            $fullTrees = $this->getFullTree($rootID, $viewType, 0, $currentModuleID);
+            $stmt      = $this->dbh->query($this->buildMenuQuery($rootID, $viewType, $currentModuleID, 'null'));
+            $fullTrees = $this->getFullTree($stmt, $viewType);
             unset($branches[0]);
         }
         if($branches)
         {
             $branchTrees = array();
-            foreach($branches as $branchID => $branch) $branchTrees[] = array('name' => $branch, 'type' => 'branch', 'actions' => false, 'children' => $this->getFullTree($rootID, $viewType, $branchID, $currentModuleID));
-            $fullTrees[] = array('name' => $this->lang->product->branchName[$product->type], 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
+            foreach($branches as $branchID => $branch)
+            {
+                $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
+                $branchTrees[] = array('name' => $branch, 'root' => $rootID, 'type' => 'branch', 'actions' => false, 'children' => $this->getFullTree($stmt, $viewType));
+            }
+            $fullTrees[] = array('name' => $this->lang->product->branchName[$product->type], 'root' => $rootID, 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
         }
         return $fullTrees;
     }
@@ -1485,17 +1510,32 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getFullTree($rootID, $viewType, $branch = 0, $currentModuleID = 0) 
+    public function getFullTree($stmt, $viewType, $keepModules = array()) 
     {
-        $tree = array_values($this->getSons($rootID, $currentModuleID, $viewType, $branch));
-        if($tree)
+        $parent = array();
+        while($module = $stmt->fetch())
         {
-            foreach($tree as $node)
+            /* Ignore useless module for task. */
+            if($keepModules and !isset($keepModules[$module->id])) continue;
+            if(isset($parent[$module->id]))
             {
-                $children = $this->getFullTree($rootID, $viewType, $branch, $node->id);
-                if($children) $node->children = $children;
+                $module->children = $parent[$module->id]->children;
+                unset($parent[$module->id]);
+            }
+            if(!isset($parent[$module->parent])) $parent[$module->parent] = new stdclass();
+            $parent[$module->parent]->children[] = $module;
+        }
+
+        if($viewType == 'task') $parentTypePairs = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($parent))->fetchPairs('id', 'type');
+        $tree = array();
+        foreach($parent as $module)
+        {
+            foreach($module->children as $children)
+            {
+                if($viewType == 'task' and isset($parentTypePairs[$children->parent]) and $parentTypePairs[$children->parent] != 'task') continue;
+                $tree[] = $children;
             }
         }
-        return $tree; 
+        return $tree;
     }
 }
