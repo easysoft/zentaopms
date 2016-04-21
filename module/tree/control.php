@@ -128,19 +128,10 @@ class tree extends control
         $project = $this->loadModel('project')->getById($rootID);
         $this->view->root = $project;
 
-        $products = $this->project->getProducts($rootID);
-        $this->view->products = $products;
-
         $this->lang->set('menugroup.tree', 'project');
         $this->project->setMenu($this->project->getPairs(), $rootID);
         $this->lang->tree->menu      = $this->lang->project->menu;
         $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
-
-        $projects = $this->project->getPairs();
-        unset($projects[$rootID]);
-        $currentProject = key($projects);
-        $parentModules  = $this->tree->getParents($currentModuleID);
-        $newModule      = (version_compare($project->openedVersion, '4.1', '>') and $products) ? true : false;
 
         $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
@@ -150,12 +141,8 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->productID       = $productID;
-        $this->view->allProject      = $projects;
-        $this->view->newModule       = $newModule;
-        $this->view->currentProject  = $currentProject;
-        $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID, 0, $newModule);
+        $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID);
         $this->display();
     }
 
