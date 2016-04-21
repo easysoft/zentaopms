@@ -1277,10 +1277,11 @@ function setModal4List(triggerClass, replaceID, callback, width)
                         $(".date").datetimepicker(datepickerOptions);
                     }
                     catch(err){}
-                    if(typeof(e) == 'function') callback();
+                    if($.isFunction(callback)) callback();
                     $.cookie('selfClose', 0);
                 });
             }
+            else if($.isFunction(callback)) callback();
         }
     });
 }

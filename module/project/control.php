@@ -1234,12 +1234,18 @@ class project extends control
     {
         $this->project->setMenu($this->projects, $projectID);
         $project  = $this->loadModel('project')->getById($projectID);
+        $tree     = $this->project->getProjectTree($projectID);
+
+        if($this->viewType === 'json')
+        {
+            die(json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
+        }
 
         $this->view->title      = $this->lang->project->tree;
         $this->view->project    = $project;
         $this->view->projectID  = $projectID;
         $this->view->level      = $level;
-        $this->view->tree       = $this->project->getProjectTree($projectID);
+        $this->view->tree       = $tree;
         $this->display(); 
     }
 

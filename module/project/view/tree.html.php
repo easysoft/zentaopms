@@ -33,7 +33,6 @@ include './taskheader.html.php';
   </div>
 </div>
 
-<?php js::set('replaceID', 'taskList')?>
 <script>
 var projectID = <?php echo $projectID?>;
 $('#project<?php echo $projectID;?>').addClass('active')
@@ -142,6 +141,15 @@ $(function()
             tree.collapse();
             tree.show($('.item-type-module'));
         }
+    });
+
+    setModal4List('iframe', null, function()
+    {
+        $.cancelReloadCloseModal();
+        $.getJSON('<?php echo inlink('tree', "projectID=$projectID", 'json') ?>', function(newData)
+        {
+            tree.reload(newData);
+        });
     });
 });
 </script>
