@@ -213,10 +213,12 @@ class customModel extends model
                 $menuItem->name   = $name;
                 $menuItem->link   = $itemLink;
                 $menuItem->text   = $label;
-                $menuItem->order  = $isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->order) ? $menuConfigMap[$name]->order : $order++;
+                $menuItem->order  = $fixed ? 0 : ($isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->order) ? $menuConfigMap[$name]->order : $order++);
                 if($float)  $menuItem->float   = $float;
                 if($fixed)  $menuItem->fixed   = $fixed;
                 if($hidden) $menuItem->hidden  = $hidden;
+
+                while(isset($menu[$menuItem->order])) { $menuItem->order++; }
                 $menu[$menuItem->order] = $menuItem;
             }
         }
