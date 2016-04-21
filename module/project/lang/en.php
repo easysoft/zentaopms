@@ -124,6 +124,7 @@ $lang->project->importTask       = 'Transfer task';
 $lang->project->importBug        = 'Import bug';
 $lang->project->updateOrder      = 'Order';
 $lang->project->tree             = 'Tree';
+$lang->project->list             = 'List';
 
 /* Browse. */
 $lang->project->allTasks             = 'All';
