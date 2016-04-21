@@ -483,7 +483,7 @@ class commonModel extends model
         /* Cycling to print every sub menus. */
         foreach($menu as $menuItem)
         {
-
+            if($menuItem->hidden) continue;
             /* Init the these vars. */
             if($menuItem->link)
             {

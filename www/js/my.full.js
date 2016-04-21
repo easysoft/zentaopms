@@ -1795,10 +1795,15 @@ function initMainMenu()
         selector: 'li:not(.custom-item)',
         finish: function(e)
         {
-            var menu = e.list.map(function(){return $(this).data('id');}).get();
-            $.post(createLink('custom', 'menu'), {menu: menu.join(',')}, function(data)
+            var menu = [];
+            e.list.each(function()
             {
-            }, 'json');
+                var $e = $(this);
+                menu.push({name: $e.data('id'), order: $e.attr('data-order')});
+            });
+            $.post(createLink('custom', 'menu'), {menus: JSON.stringify(menu), "module": 'main'}, function(data)
+            {
+            }, 'json').error(function() {alert(lang.timeout)});
         }
     });
 }

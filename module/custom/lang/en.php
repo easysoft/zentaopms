@@ -80,4 +80,5 @@ $lang->custom->productproject->relation['1_1'] = 'Project - Sprint';
 
 $lang->custom->productproject->notice = 'You can change the name of product and project, and the corresponding name display';
 
-$lang->custom->menuTip = 'Click menu item to toggle display status, drag and drop to change display order.';
+$lang->custom->menuTip  = 'Click menu item to toggle display status, drag and drop to change display order.';
+$lang->custom->saveFail = 'Save failed.';

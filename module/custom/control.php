@@ -193,18 +193,27 @@ class custom extends control
         if($_POST)
         {
             $account = $this->app->user->account;
-            $menu    = $_POST['menu'];
+            $menus   = $_POST['menus'];
+            
+            if(empty($menus)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
 
-            if(empty($method))
+            if(is_array($menus))
             {
-                $this->loadModel('setting')->setItem("$account.menucustom.$module", $menu);
+                foreach ($menus as $menu)
+                {
+                    $menu = json_decode($menu);
+                    $this->custom->saveCustomMenu($menu->value, $menu->module, $menu->method);
+                }
             }
             else
             {
-                $configKey = 'menucustom' . $module;
-                $this->loadModel('setting')->setItem("$account.$configKey.$method", $menu);
+                if(!empty($_POST['module'])) $module = $_POST['module'];
+                if(!empty($_POST['method'])) $method = $_POST['method'];
+
+                $this->custom->saveCustomMenu($menus, $module, $method);
             }
-            $this->send(array('result' => 'success', 'menu' => $menu));
+
+            $this->send(array('result' => 'success'));
         }
 
         if($this->viewType === 'json')
@@ -225,7 +234,7 @@ class custom extends control
             {
                 $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
             }
-            $this->send(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu));
+            die(json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu), JSON_HEX_QUOT | JSON_HEX_APOS));
         }
         else
         {

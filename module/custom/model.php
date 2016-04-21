@@ -173,7 +173,6 @@ class customModel extends model
             $method = '';
             $float  = '';
             $fixed  = '';
-            $hidden = $isSetMenuConfig && $menuConfigMap[$name] && $menuConfigMap[$name]->hidden;
 
             $link = is_array($item) ? $item['link'] : $item;
             if(strpos($link, '|') !== false)
@@ -208,11 +207,12 @@ class customModel extends model
                     $fixed = $item['fixed'];
                 }
 
+                $hidden = !$fixed && $isSetMenuConfig && $menuConfigMap[$name] && $menuConfigMap[$name]->hidden;
+
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
                 $menuItem->link   = $itemLink;
                 $menuItem->text   = $label;
-                $menuItem->source = $item;
                 $menuItem->order  = $isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->order) ? $menuConfigMap[$name]->order : $order++;
                 if($float)  $menuItem->float   = $float;
                 if($fixed)  $menuItem->fixed   = $fixed;
@@ -273,12 +273,39 @@ class customModel extends model
     {
         global $app, $lang, $config;
         $app->loadLang($module);
-        $configKey = 'menucustom' . $module;
 
-        $menuConfig = $config->$configKey->$method;
+        $configKey  = 'feature_' . $module . '_' . $method;
+        $menuConfig = $config->menucustom->$configKey;
         if(!empty($menuConfig)) $menuConfig = json_decode($menuConfig);
         $allMenu    = $lang->$module->featurebar[$method];
 
         return $allMenu ? self::buildMenuConfig($allMenu, $menuConfig) : null;
+    }
+
+    /**
+     * Save custom menu to config
+     * @param  string $menu
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function saveCustomMenu($menu, $module, $method)
+    {
+        $account    = $this->app->user->account;
+        $settingKey = '';
+
+        if(!is_string($menu)) $menu = json_encode($menu);
+
+        if(empty($method))
+        {
+            $settingKey = "$account.common.menucustom.$module";
+        }
+        else
+        {
+            $settingKey = "$account.common.menucustom.feature_$module_$method";
+        }
+
+        $this->loadModel('setting')->setItem($settingKey, $menu);
     }
 }
