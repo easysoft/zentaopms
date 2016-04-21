@@ -13,8 +13,6 @@
 <?php
 include '../../common/view/header.html.php';
 include './taskheader.html.php';
-js::set('moduleID', $moduleID);
-js::set('productID', $productID);
 ?>
 
 <div class='main'>
@@ -81,7 +79,7 @@ $(function()
             }
             else if(item.type === 'story')
             {
-                $li.append('<span class="tree-item-title"><i class="icon icon-lightbulb text-muted"></i> </span>').append($('<a>').attr({href: item.url}).text('#' + item.storyId + ' ' + item.title).css('color', item.color));
+                $li.append('<span><i class="icon icon-lightbulb text-muted"></i> </span>').append($('<a>').attr({href: item.url}).text('#' + item.storyId + ' ' + item.title).css('color', item.color));
                 if(item.children && item.children.length)
                 {
                     if(item.tasksCount) $li.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');

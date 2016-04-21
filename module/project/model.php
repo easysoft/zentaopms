@@ -1970,18 +1970,13 @@ class projectModel extends model
             $taskItem->left         = $task->left;
             $taskItem->assignedTo   = $users[$task->assignedTo];
             $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
-            $taskItem->storyChanged = $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
+            $taskItem->storyChanged = isset($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion;
 
             $buttons = '';
             $buttons .= common::buildIconButton('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
             $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-            if($browseType == 'needconfirm')
-            {
-                $lang->task->confirmStoryChange = $lang->confirm;
-                $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
-            }
             $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
@@ -1993,6 +1988,42 @@ class projectModel extends model
     }
 
     /**
+     * Format stories list for tree view
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function formatStoriesForTree($stories)
+    {
+        $this->loadModel('task');
+        $storyItems = array();
+        foreach ($stories as $story)
+        {
+            $storyItem = new stdclass();
+            $storyItem->type          = 'story';
+            $storyItem->id            = 'story' . $story->id;
+            $storyItem->title         = $story->title;
+            $storyItem->color         = $story->color;
+            $storyItem->pri           = (int) $story->pri;
+            $storyItem->storyId       = $story->id;
+            $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$story->project");
+            $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$story->project}&story={$story->id}");
+
+            $storyTasks = $this->task->getStoryTasks($story->id, $story->project);
+            if(!empty($storyTasks))
+            {
+                $taskItems = $this->formatTasksForTree($storyTasks);
+                $storyItem->tasksCount = count($taskItems);
+                $storyItem->children   = array();
+                $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
+            }
+
+            $storyItems[] = $storyItem;
+        }
+        return $storyItems;
+    }
+
+    /**
      * Build product task tree item
      * @param  object $tree
      * @access public
@@ -2001,12 +2032,11 @@ class projectModel extends model
     public function buildProductTaskTree($node, $projectID)
     {
         $this->loadModel('story');
-        $this->loadModel('task');
 
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 
-        if($node->children)
+        if(isset($node->children))
         {
             foreach ($node->children as $child)
             {
@@ -2024,29 +2054,33 @@ class projectModel extends model
             $node->type = 'module';
             $node->actions = false;
             $stories = $this->story->getProjectStories($projectID, 'pri_asc,id_desc', 'byModule', $node->id);
-            foreach ($stories as $story)
-            {
-                $storyItem = new stdclass();
-                $storyItem->type          = 'story';
-                $storyItem->id            = 'story' . $story->id;
-                $storyItem->title         = $story->title;
-                $storyItem->color         = $story->color;
-                $storyItem->pri           = $story->pri;
-                $storyItem->storyId       = $story->id;
-                $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
-                $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
 
-                $storyTasks = $this->task->getStoryTasks($story->id, $projectID);
-                if(!empty($storyTasks))
-                {
-                    $taskItems = $this->formatTasksForTree($storyTasks);
-                    $storyItem->tasksCount = count($taskItems);
-                    $storyItem->children   = array();
-                    $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
-                }
+            if(isset($node->children)) $node->children = array_merge($node->children, $this->formatStoriesForTree($stories));
+            else $node->children = $this->formatStoriesForTree($stories);
 
-                $node->children[] = $storyItem;
-            }
+            // foreach ($stories as $story)
+            // {
+            //     $storyItem = new stdclass();
+            //     $storyItem->type          = 'story';
+            //     $storyItem->id            = 'story' . $story->id;
+            //     $storyItem->title         = $story->title;
+            //     $storyItem->color         = $story->color;
+            //     $storyItem->pri           = (int) $story->pri;
+            //     $storyItem->storyId       = $story->id;
+            //     $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
+            //     $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
+
+            //     $storyTasks = $this->task->getStoryTasks($story->id, $projectID);
+            //     if(!empty($storyTasks))
+            //     {
+            //         $taskItems = $this->formatTasksForTree($storyTasks);
+            //         $storyItem->tasksCount = count($taskItems);
+            //         $storyItem->children   = array();
+            //         $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
+            //     }
+
+            //     $node->children[] = $storyItem;
+            // }
         }
         return $node;
     }
