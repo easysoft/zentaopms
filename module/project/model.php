@@ -1978,8 +1978,9 @@ class projectModel extends model
         if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillTasksInTree($child, $projectID);
 
         if(!isset($node->id))$node->id = 0;
-        if($node->type == 'story' or $node->type == 'product')
+        if($node->type == 'story')
         {
+            $node->type = 'module';
             $stories = $storyGroups[$node->root][$node->id];
             foreach($stories as $story)
             {
@@ -2007,6 +2008,7 @@ class projectModel extends model
         }
         elseif($node->type == 'task')
         {
+            $node->type = 'module';
             $tasks = $taskGroups[$node->id][0];
             if(!empty($tasks))
             {
@@ -2015,8 +2017,12 @@ class projectModel extends model
             }
 
         }
+        elseif($node->type == 'product')
+        {
+            $node->title = $node->name;
+            if(empty($node->children[0]->children)) array_shift($node->children);
+        }
 
-        $node->type    = 'module';
         $node->actions = false;
         return $node;
     }
@@ -2035,7 +2041,7 @@ class projectModel extends model
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 
         $taskItems = array();
-        foreach($tasks => $task)
+        foreach($tasks as $task)
         {
             $taskItem = new stdclass();
             $taskItem->type         = 'task';
@@ -2054,13 +2060,14 @@ class projectModel extends model
             $buttons  = '';
             $buttons .= common::buildIconButton('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-
             $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+
             if($browseType == 'needconfirm')
             {
                 $lang->task->confirmStoryChange = $lang->confirm;
                 $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
             }
+
             $buttons .= common::buildIconButton('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
@@ -2081,7 +2088,13 @@ class projectModel extends model
     {
         $fullTrees = $this->loadModel('tree')->getFullTaskTree($projectID, 0, false);
         array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $projectID));
-        foreach($fullTrees as $i => $tree) $fullTrees[$i] = $this->fillTasksInTree($tree, $projectID);
+        foreach($fullTrees as $i => $tree)
+        {
+            $tree = (object)$tree;
+            if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
+            $fullTrees[$i] = $this->fillTasksInTree($tree, $projectID);
+        }
+        if(empty($fullTrees[0]->children)) array_shift($fullTrees);
         return $fullTrees;
     }
 }
