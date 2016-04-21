@@ -159,14 +159,14 @@ $(function()
         }
         else if($menu.is('#modulemenu'))
         {
-            var moduleName = currentModule;
-            var methodName = item.name;
+            var moduleName = item.link ? item.link['module'] : $menu.data('module');
+            var methodName = item.link ? item.link['method'] : item.name;
             if(methodName !== currentMethod)
             {
                 if(menuConfig['feature'][moduleName] && menuConfig['feature'][moduleName][methodName] !== undefined)
                 {
                     updateMenu(moduleName, methodName);
-                    activeCurrent(moduleName, methodName);
+                    activeCurrent($menu.data('module'), item.name);
                 }
                 else
                 {
@@ -175,7 +175,7 @@ $(function()
                         if(result)
                         {
                             updateMenu(moduleName, methodName);
-                            activeCurrent(moduleName, methodName);
+                            activeCurrent($menu.data('module'), item.name);
                         }
                     });
                 }
@@ -221,7 +221,7 @@ $(function()
         {
             if(data.result === 'success') window.parent.location.reload()
             if(data.message) alert(data.message);
-        }, 'json').error(function(e) {alert(lang.timeout); console.log(e);});
+        }, 'json').error(function(e) {alert(lang.timeout);});
     }).on('mouseenter', function() {$menuEditor.addClass('preview')})
     .on('mouseout', function() {$menuEditor.removeClass('preview')});
 
