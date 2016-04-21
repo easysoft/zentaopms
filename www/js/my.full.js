@@ -1782,32 +1782,6 @@ function setHomepage(module, page)
     $.get(createLink('custom', 'ajaxSetHomepage', 'module=' + module + '&page=' + page), function(){location.reload(true)});
 }
 
-/**
- * Init main menu
- * @access public
- * @return void
- */
-function initMainMenu()
-{
-    var $menu = $('#mainmenu > .nav');
-    $menu.sortable(
-    {
-        selector: 'li:not(.custom-item)',
-        finish: function(e)
-        {
-            var menu = [];
-            e.list.each(function()
-            {
-                var $e = $(this);
-                menu.push({name: $e.data('id'), order: $e.attr('data-order')});
-            });
-            $.post(createLink('custom', 'menu'), {menus: JSON.stringify(menu), "module": 'main'}, function(data)
-            {
-            }, 'json').error(function() {alert(lang.timeout)});
-        }
-    });
-}
-
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1861,5 +1835,4 @@ $(document).ready(function()
     initHotKey();
 
     initHelpLink();
-    initMainMenu();
 });
