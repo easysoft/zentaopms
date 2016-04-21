@@ -475,8 +475,11 @@ class block extends control
     public function printStoryBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init(0, $this->params->num, 1);
-        $this->view->stories  = $this->loadModel('story')->getUserStories($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType != 'json' ? $pager : '');
+        $num     = isset($this->params->num) ? $this->params->num : 0;
+        $pager   = pager::init(0, $num , 1);
+        $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
+        $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
+        $this->view->stories  = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '');
     }
 
     /**
@@ -546,7 +549,8 @@ class block extends control
     public function printProductBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init(0, $this->params->num, 1);
+        $num   = isset($this->params->num) ? $this->params->num : 0;
+        $pager = pager::init(0, $num , 1);
         $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '');
     }
 
@@ -559,7 +563,9 @@ class block extends control
     public function printProjectBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init(0, $this->params->num, 1);
-        $this->view->projectStats = $this->loadModel('project')->getProjectStats($this->params->type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+        $num   = isset($this->params->num) ? $this->params->num : 0;
+        $type  = isset($this->params->type) ? $this->params->type : 'all';
+        $pager = pager::init(0, $num, 1);
+        $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
     }
 }
