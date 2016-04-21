@@ -401,9 +401,9 @@ class commonModel extends model
         echo "<ul class='nav'>\n";
         foreach($menu as $menuItem)
         {
-            if($menuItem->hidden) continue;
+            if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
-            $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], $menuItem->link['vars']) : $menuItem->link;
+            $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], isset($menuItem->link['vars']) ? $menuItem->link['vars'] : null) : $menuItem->link;
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
         $customLink = helper::createLink('custom', 'menu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
@@ -483,28 +483,29 @@ class commonModel extends model
         /* Cycling to print every sub menus. */
         foreach($menu as $menuItem)
         {
-            if($menuItem->hidden) continue;
+            if(isset($menuItem->hidden) && $menuItem->hidden) continue;
+
             /* Init the these vars. */
             if($menuItem->link)
             {
                 $active = '';
-                $float  = $menuItem->float;
+                $float  = isset($menuItem->float) ? $menuItem->float : '';
                 $alias  = '';
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], $menuItem->link['vars']) : $menuItem->link;
+                $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], isset($menuItem->link['vars']) ? $menuItem->link['vars'] : '') : $menuItem->link;
                 if(is_array($menuItem->link))
                 {
-                    if($menuItem->link['subModule'])
+                    if(isset($menuItem->link['subModule']))
                     {
                         $subModules = explode(',', $menuItem->link['subModule']);
                         if(in_array($currentModule, $subModules) and $float != 'right') $active = 'active';
                     }
-                    $alias  = $menuItem->link['alias'];
-                    $target = $menuItem->link['target'];
-                    $module = $menuItem->link['module'];
-                    $method = $menuItem->link['method'];
+                    if(isset($menuItem->link['alias']))  $alias  = $menuItem->link['alias'];
+                    if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
+                    if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
+                    if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
                 if($float != 'right' and $module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
                 echo "<li class='$float $active'>" . html::a($link, $menuItem->text, $target, "data-id='$menuItem->name'") . "</li>\n";

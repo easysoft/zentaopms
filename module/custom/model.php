@@ -191,23 +191,23 @@ class customModel extends model
                 if($module && $method)
                 {
                     $itemLink = array('module' => $module, 'method' => $method);
-                    if($link[3]) $itemLink['vars'] = $link[3];
+                    if(isset($link[3])) $itemLink['vars'] = $link[3];
                     if(is_array($item))
                     {
-                        $itemLink['subModule'] = $item['subModule'];
-                        $itemLink['alias']     = $item['alias'];
-                        $itemLink['target']    = $item['target'];
+                        if(isset($item['subModule'])) $itemLink['subModule'] = $item['subModule'];
+                        if(isset($item['alias']))     $itemLink['alias']     = $item['alias'];
+                        if(isset($item['target']))    $itemLink['target']    = $item['target'];
 
                     }
                 }
 
                 if(is_array($item))
                 {
-                    $float = $item['float'];
-                    $fixed = $item['fixed'];
+                    if(isset($item['float'])) $float = $item['float'];
+                    if(isset($item['fixed'])) $fixed = $item['fixed'];
                 }
 
-                $hidden = !$fixed && $isSetMenuConfig && $menuConfigMap[$name] && $menuConfigMap[$name]->hidden;
+                $hidden = !$fixed && $isSetMenuConfig && $menuConfigMap[$name] && isset($menuConfigMap[$name]->hidden) && $menuConfigMap[$name]->hidden;
 
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
