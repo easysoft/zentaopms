@@ -48,7 +48,8 @@ class treeModel extends model
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
-                ->andWhere('type')->in("story,$type")
+                ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
+                ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
                 ->beginIF((!empty($branch) and $branch != 'null'))->andWhere("branch")->eq($branch)->fi()
