@@ -358,7 +358,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 #topbar {color: #ACCADF;}
 #topbar > .pull-right {margin-top: -4px; margin-right: -4px;}
-#topnav .dropdown-menu {min-width: 100px;}
+#topnav .dropdown-menu {min-width: 110px;}
 #topnav > .dropdown .caret {border-top-color: #fff}
 #topnav > .dropdown, #topnav > a {display: block; float: left;}
 #topnav > .dropdown > a, #topnav > a {display: block; padding: 3px 6px; position: relative;}
