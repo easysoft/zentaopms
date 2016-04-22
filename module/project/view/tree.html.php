@@ -38,6 +38,19 @@ var projectID = <?php echo $projectID?>;
 $('#project<?php echo $projectID;?>').addClass('active')
 $('#treeTab').addClass('active');
 
+function setModalInTree(tree)
+{
+    setModal4List('iframe', null, function()
+    {
+        $.cancelReloadCloseModal();
+        $.getJSON('<?php echo inlink('tree', "projectID=$projectID&type=json") ?>', function(newData)
+        {
+            tree.reload(newData);
+            setModalInTree(tree);
+        });
+    });
+}
+
 $(function()
 {
     var hoursFormat = '<?php echo $lang->project->hours  ?>';
@@ -129,28 +142,25 @@ $(function()
     {
         $('.tree-view-btn.active').removeClass('active');
         var level = $(this).addClass('active').data('type');
-        if(level === 'task') tree.expand();
+        if(level === 'task')
+        {
+            tree.collapse();
+            tree.show($('.item-type-tasks').parent().parent());
+        }
         if(level === 'product') tree.collapse();
         else if(level === 'module')
         {
             tree.collapse();
-            tree.show($('.item-type-product'));
+            tree.show($('.item-type-module').parent().parent());
         }
         else if(level === 'story')
         {
             tree.collapse();
-            tree.show($('.item-type-module'));
+            tree.show($('.item-type-story').parent().parent());
         }
     });
 
-    setModal4List('iframe', null, function()
-    {
-        $.cancelReloadCloseModal();
-        $.getJSON('<?php echo inlink('tree', "projectID=$projectID", 'json') ?>', function(newData)
-        {
-            tree.reload(newData);
-        });
-    });
+    setModalInTree(tree);
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
