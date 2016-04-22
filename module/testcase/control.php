@@ -60,12 +60,19 @@ class testcase extends control
         /* Set browse type. */
         $browseType = strtolower($browseType);
 
-        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
-        if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
-
         /* Set browseType, productID, moduleID and queryID. */
         $productID  = $this->product->saveState($productID, $this->products);
         $branch     = ($branch === '') ? $this->session->branch : $branch;
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
+
+        if($this->cookie->preProductID != $productID)
+        {
+            $_COOKIE['caseModule'] = 0;
+            setcookie('caseModule', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
+        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
+
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -148,6 +155,7 @@ class testcase extends control
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $this->loadModel('search')->mergeFeatureBar('testcase', 'browse');
 
         $groupCases  = array();
         $groupByList = array();

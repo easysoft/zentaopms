@@ -1970,6 +1970,7 @@ class projectModel extends model
             $tasks = $this->dao->select('*')->from(TABLE_TASK)
                 ->where('project')->eq((int)$projectID)
                 ->andWhere('deleted')->eq(0)
+                ->orderBy('id_desc')
                 ->fetchAll();
             $taskGroups = array();
             foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $task;
@@ -1981,7 +1982,7 @@ class projectModel extends model
         if($node->type == 'story')
         {
             $node->type = 'module';
-            $stories = $storyGroups[$node->root][$node->id];
+            $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
             foreach($stories as $story)
             {
                 $storyItem = new stdclass();
@@ -1994,7 +1995,7 @@ class projectModel extends model
                 $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
                 $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
 
-                $storyTasks = $taskGroups[$node->id][$story->id];
+                $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
                 if(!empty($storyTasks))
                 {
                     $taskItems = $this->formatTasksForTree($storyTasks, $story);
@@ -2009,7 +2010,7 @@ class projectModel extends model
         elseif($node->type == 'task')
         {
             $node->type = 'module';
-            $tasks = $taskGroups[$node->id][0];
+            $tasks = isset($taskGroups[$node->id][0]) ? $taskGroups[$node->id][0] : array();
             if(!empty($tasks))
             {
                 $taskItems = $this->formatTasksForTree($tasks);
@@ -2062,9 +2063,9 @@ class projectModel extends model
             $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
 
-            if($browseType == 'needconfirm')
+            if($taskItem->storyChanged)
             {
-                $lang->task->confirmStoryChange = $lang->confirm;
+                $this->lang->task->confirmStoryChange = $this->lang->confirm;
                 $buttons .= common::buildIconButton('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
             }
 

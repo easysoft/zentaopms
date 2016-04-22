@@ -418,6 +418,7 @@ class searchModel extends model
      */
     public function mergeFeatureBar($module, $method)
     {
+        if(!isset($this->lang->$module->featurebar[$method])) return;
         $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
         $shortcuts = $this->getShorcutQueryPairs($queryModule);
         foreach($shortcuts as $id => $name)

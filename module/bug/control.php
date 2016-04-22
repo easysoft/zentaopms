@@ -64,12 +64,19 @@ class bug extends control
         /* Set browse type. */
         $browseType = strtolower($browseType);
 
-        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
-        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
-
         /* Set productID, moduleID, queryID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch == '') ? $this->session->branch  : $branch;
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
+
+        if($this->cookie->preProductID != $productID)
+        {
+            $_COOKIE['bugModule'] = 0;
+            setcookie('bugModule', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
+        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
+
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 

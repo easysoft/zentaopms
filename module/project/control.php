@@ -121,10 +121,27 @@ class project extends control
         /* Set browse type. */
         $browseType = strtolower($status);
 
-        if($browseType == 'bymodule' or $browseType == 'byproduct')
+        /* Get products by project. */
+        $project   = $this->commonAction($projectID, $status);
+        $projectID = $project->id;
+        $products  = $this->loadModel('product')->getProductsByProject($projectID);
+        setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot);
+
+        if($this->cookie->preProjectID != $projectID)
         {
-            setcookie('taskBrowseType', $browseType, $this->config->cookieLife, $this->config->webRoot);
-            setcookie('browseParam',    (int)$param, $this->config->cookieLife, $this->config->webRoot);
+            $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
+            setcookie('moduleBrowseParam',  0, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('productBrowseParam', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
+        if($browseType == 'bymodule')
+        {
+            setcookie('moduleBrowseParam',  (int)$param, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('productBrowseParam', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
+        elseif($browseType == 'byproduct')
+        {
+            setcookie('moduleBrowseParam',  0, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('productBrowseParam', (int)$param, $this->config->cookieLife, $this->config->webRoot);
         }
         else
         {
@@ -133,13 +150,8 @@ class project extends control
 
         /* Set queryID, moduleID and productID. */
         $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : (($browseType == 'bysearch' or $browseType == 'byproduct') ? 0 : ($this->cookie->taskBrowseType == 'bymodule'  ? $this->cookie->browseParam : 0));
-        $productID = ($browseType == 'byproduct') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bymodule')  ? 0 : ($this->cookie->taskBrowseType == 'byproduct' ? $this->cookie->browseParam : 0));
-
-        /* Get products by project. */
-        $project   = $this->commonAction($projectID, $status);
-        $projectID = $project->id;
-        $products  = $this->loadModel('product')->getProductsByProject($projectID);
+        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : ($browseType == 'bysearch' ? 0 : $this->cookie->moduleBrowseParam);
+        $productID = ($browseType == 'byproduct') ? (int)$param : ($browseType == 'bysearch' ? 0 : $this->cookie->productBrowseParam);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1235,6 +1247,12 @@ class project extends control
         $this->project->setMenu($this->projects, $projectID);
         $project  = $this->loadModel('project')->getById($projectID);
         $tree     = $this->project->getProjectTree($projectID);
+
+        /* Save to session. */
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('taskList',    $uri);
+        $this->app->session->set('storyList',   $uri);
+        $this->app->session->set('projectList', $uri);
 
         if($type === 'json')
         {

@@ -939,6 +939,7 @@ class story extends control
         $this->lang->story->menuOrder = $this->lang->testcase->menuOrder;
         $this->lang->story->menu->testcase['subModule'] = 'story';
         $this->loadModel('testcase')->setMenu($products, $productID);
+        $this->loadModel('search')->mergeFeatureBar('testcase', 'browse');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
