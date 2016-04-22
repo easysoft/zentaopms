@@ -235,4 +235,9 @@ $(function()
             activeCurrent(currentModule, currentMethod);
         }
     });
+
+    $('#closeModalBtn').click(function()
+    {
+        window.parent.$.closeModal();
+    });
 });

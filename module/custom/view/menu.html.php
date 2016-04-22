@@ -32,7 +32,7 @@
     </div>
     <div class='text-center'>
       <button id='saveMenuBtn' type='button' class='btn btn-primary'><?php echo $lang->save ?></button> &nbsp;
-      <button type='button' class='btn' data-dismiss="modal"><?php echo $lang->close ?></button>
+      <button id='closeModalBtn' type='button' class='btn'><?php echo $lang->close ?></button>
     </div>
   </div>
 </div>
