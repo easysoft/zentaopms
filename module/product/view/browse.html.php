@@ -29,7 +29,7 @@
       </span>
     </li>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
-    <?php if($menuItem->hidden) continue;?>
+    <?php if(isset($menuItem->hidden)) continue;?>
     <?php if(strpos($menuItem->name, 'QUERY') === 0):?>
     <?php $queryID = (int)substr($menuItem->name, 5);?>
     <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text);?></li>
