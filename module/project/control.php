@@ -1230,13 +1230,13 @@ class project extends control
      * @access public
      * @return void
      */
-    public function tree($projectID, $level = '')
+    public function tree($projectID, $type = '')
     {
         $this->project->setMenu($this->projects, $projectID);
         $project  = $this->loadModel('project')->getById($projectID);
         $tree     = $this->project->getProjectTree($projectID);
 
-        if($this->viewType === 'json')
+        if($type === 'json')
         {
             die(json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
         }
@@ -1244,7 +1244,7 @@ class project extends control
         $this->view->title      = $this->lang->project->tree;
         $this->view->project    = $project;
         $this->view->projectID  = $projectID;
-        $this->view->level      = $level;
+        $this->view->level      = $type;
         $this->view->tree       = $tree;
         $this->display(); 
     }
