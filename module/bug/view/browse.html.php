@@ -65,7 +65,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
     <div class='btn-group'>
       <?php
       common::printIcon('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
-      common::printIcon('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+      common::printIcon('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", 'btn', 'button', 'plus', '', 'btn-bug-create');
       ?>
     </div>
   </div>

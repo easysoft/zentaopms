@@ -18,6 +18,7 @@ class tutorial extends control
      */
     public function start()
     {
+        $this->view->title = $this->lang->tutorial->common;
         $this->display();
     }
 
@@ -26,8 +27,27 @@ class tutorial extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index($task = '')
     {
+        if($_POST)
+        {
+            $account = $this->app->user->account;
+            $setting   = $_POST['tasks'];
+            
+            if(empty($setting)) $this->send(array('result' => 'fail'));
+            $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $setting);
+            $this->send(array('result' => 'success'));
+        }
+        $setting = $this->config->tasks->setting;
+
+        if($this->viewType === 'json')
+        {
+            die(json_encode(array('result' => isset($setting) ? 'success' : 'fail', 'setting' => $setting), JSON_HEX_QUOT | JSON_HEX_APOS));
+        }
+
+        $this->view->title   = $this->lang->tutorial->common;
+        $this->view->current = $task;
+        $this->view->setting = $setting;
         $this->display();
     }
 }

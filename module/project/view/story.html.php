@@ -23,7 +23,7 @@
     $this->lang->story->create = $this->lang->project->createStory;
     if($productID) common::printIcon('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id");
 
-    common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link');
+    common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
     ?>
     </div>
   </div>
@@ -97,7 +97,7 @@
             $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
             $lang->task->create = $lang->project->wbs;
-            common::printIcon('task', 'create', $param, '', 'list', 'smile');
+            common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', '.btn-task-create');
 
             $lang->task->batchCreate = $lang->project->batchWBS;
             common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');

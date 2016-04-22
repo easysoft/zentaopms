@@ -12,10 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='start'>
-  <div class='start-icon'>
-    <i class='icon icon-flag icon-front'></i>
-    <i class='icon icon-certificate icon-spin icon-back'></i>
-  </div>
+  <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back'></i><i class='icon icon-flag icon-front'></i></div>
   <h1><?php echo $lang->tutorial->common ?></h1>
   <p><?php echo $lang->tutorial->desc ?></p>
   <?php echo html::a(inlink('index'), $lang->tutorial->start, '_top', "class='btn btn-primary btn-lg'");;?>

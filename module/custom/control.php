@@ -237,7 +237,7 @@ class custom extends control
             die(json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu), JSON_HEX_QUOT | JSON_HEX_APOS));
         }
         else
-        {
+        { 
             $this->view->module = $module;
             $this->view->method = $method;
             $this->display();

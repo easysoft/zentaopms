@@ -1,0 +1,39 @@
+#pageContainer {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden;}
+#iframeWrapper {position: absolute; left: 0; top: 0; bottom: 0; right: 300px; display: block}
+#sidebar {position: absolute; right: 0; top: 0; bottom: 0; width: 300px; background: #f5f5f5; overflow-y: auto; padding-top: 66px; border-left: 1px solid #ddd}
+#sidebar > header {background: #EBF2F9; padding: 15px; position: fixed; top: 0; right: 0; z-index: 10; width: 300px; border-bottom: 1px solid #ddd}
+#sidebar > header > h2 {margin: 0 0 0 40px; font-size: 18px; padding: 0; line-height: 36px;}
+#sidebar > header .start-icon {position: absolute; left: 12px; top: 15px; width: 36px; height: 36px;  text-align: center; margin-right: 5px;}
+#sidebar > header .start-icon > .icon-front {color: #fff; position: absolute; width: 36px; height: 36px; line-height: 36px; top: 0; left: 0}
+#sidebar > header .start-icon > .icon-back {font-size: 35px; color: #114f8e; line-height: 36px;}
+#sidebar > header > .actions {position: absolute; right: 15px; top: 15px}
+#sidebar > section {padding: 20px 10px; border-top: 1px solid #ddd}
+#sidebar > section > h4 {margin: 0 0 10px 0; font-size: 14px; color: #808080; font-weight: normal}
+#task {border: none}
+#task > .panel-heading {padding: 10px; background: #114f8e; color: #fff; font-size: 15px; transition: background .4s;}
+#task > .panel-heading > .pull-right {margin-top: 3px; opacity: 0; transition: opacity .4s, transform .4s; transform: scale(2.5, 2)}
+#task > .panel-body {border: 1px solid #ddd; border-top: none; padding: 10px}
+#task > .panel-body > ul, #task > .panel-body > p {margin: 0; line-height: 20px;}
+#task.finish > .panel-heading {background: #38B03F}
+#task.finish > .panel-heading .task-name {text-decoration: line-through;}
+#task.finish.finish > .panel-heading > .pull-right {opacity: 1; transform: scale(1)}
+#task .task-nav {color: #114f8e; display: inline-block; background: #EBF2F9; padding: 1px 5px 0; transition: all .2s}
+#task .task-nav:hover {color: #fff; background: #114f8e; cursor: pointer}
+#tasksProgress {background: #ccc;}
+#tasksProgress > .progress-bar {background: #114f8e; height: 4px; margin-bottom: 15px; transition: background .4s, width .4s;}
+#tasksProgress.finish > .progress-bar {width: 100%!important; background: #38B03F}
+#tasks {background: #fff;}
+#tasks > li > a > .pull-right {opacity: 0; transition: opacity .4s, transform .4s; transform: scale(2.5, 2); color: #38B03F}
+#tasks > li.finish > a, #tasks > li.finish.active > a {box-shadow: inset 2px 0 0 #38B03F; border-left-color: #38B03F; color: #808080}
+#tasks > li.finish > a > .pull-right {opacity: 1; transform: scale(1)}
+#tasks > li.finish > a > .task-name {text-decoration: line-through;}
+#tasks > li.active > a, #tasks > li.active.finish > a {box-shadow: inset 2px 0 0 #114f8e; border-color: #ddd; border-left-color: #114f8e; color: #114f8e; background: #EBF2F9}
+#tasks > li.finish > a:hover, #tasks > li.active > a:hover {background-color: #f1f1f1}
+#finish {background: #38B03F; color: #fff; text-align: center; overflow: hidden; height: 220px; margin-top: -220px; transform: scale(.5); transition:  margin-top .4s, transform .4s, opacity .4s; opacity: 0; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1)}
+#finish.show {margin-top: 0; transform: scale(1); opacity: 1}
+#finish > h3 {margin-bottom: 20px}
+#finish .start-icon > .icon-spin {-moz-animation: spin 10s infinite linear;-o-animation: spin 10s infinite linear;-webkit-animation: spin 10s infinite linear;animation: spin 10s infinite linear;}
+#finish .start-icon {width: 60px; height: 60px; text-align: center; margin: 10px auto; position: relative}
+#finish .start-icon > .icon-front {color: #38B03F; width: 60px; height: 60px; line-height: 60px; position: absolute; left: 0; top: 0; font-size: 28px;}
+#finish .start-icon > .icon-back {font-size: 56px; color: #fff; line-height: 60px;}
+#finish .btn-success {border-color: #DDF4DF}

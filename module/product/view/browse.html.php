@@ -59,7 +59,7 @@
     <div class='btn-group'>
     <?php 
     common::printIcon('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID", '', 'button', 'plus-sign');
-    common::printIcon('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", '', 'button', 'plus'); 
+    common::printIcon('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", 'btn', 'button', 'plus', '', 'create-story-btn'); 
     ?>
     </div>
   </div>
