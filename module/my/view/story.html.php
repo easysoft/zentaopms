@@ -54,7 +54,7 @@
       </td>
       <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
       <td><?php echo $story->productTitle;?></td>
-      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?></td>
       <td><?php echo $story->planTitle;?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>

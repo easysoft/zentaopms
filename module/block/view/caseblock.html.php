@@ -29,7 +29,7 @@
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td><?php echo $case->id;?></td>
     <td><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></td>
-    <td title='<?php echo $case->title?>'><?php echo $case->title?></td>
+    <td style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
     <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
     <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
     <td><?php echo $lang->testcase->statusList[$case->status];?></td>
