@@ -28,7 +28,7 @@
     <td><?php echo $bug->id;?></td>
     <td><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></td>
     <td><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></td>
-    <td title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+    <td style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
   </tr>
   <?php endforeach;?>
 </table>

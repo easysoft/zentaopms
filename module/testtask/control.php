@@ -231,6 +231,18 @@ class testtask extends control
         /* Set the browseType and moduleID. */
         $browseType = strtolower($browseType);
 
+        /* Get task and product info, set menu. */
+        $task = $this->testtask->getById($taskID);
+        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        $productID = $task->product;
+        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
+
+        if($this->cookie->preProductID != $productID)
+        {
+            $_COOKIE['taskCaseModule'] = 0;
+            setcookie('taskCaseModule', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
@@ -239,12 +251,6 @@ class testtask extends control
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy, 't2.id');
-
-        /* Get task and product info, set menu. */
-        $task = $this->testtask->getById($taskID);
-        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
-        $productID = $task->product;
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
 
         /* Get test cases. */
         $this->view->runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);

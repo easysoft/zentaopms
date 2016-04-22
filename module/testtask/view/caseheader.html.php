@@ -22,7 +22,7 @@
     ?>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
-    if($menuItem->hidden) continue;
+    if(isset($menuItem->hidden)) continue;
     $type = $menuItem->name;
     if($hasCasesPriv and strpos($type, 'QUERY') === 0)
     {

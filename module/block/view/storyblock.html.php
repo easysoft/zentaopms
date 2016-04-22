@@ -29,7 +29,7 @@
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td><?php echo $story->id;?></td>
     <td><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></td>
-    <td title='<?php echo $story->title?>'><?php echo $story->title?></td>
+    <td style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
     <td><?php echo $story->estimate?></td>
     <td ><?php echo zget($lang->story->statusList, $story->status, $story->status);?></th>
     <td ><?php echo zget($lang->story->stageList, $story->stage, $story->stage);?></th>

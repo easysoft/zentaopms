@@ -19,9 +19,9 @@
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
     $hasZeroPriv   = common::hasPriv('story', 'zerocase');
     ?>
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
+    <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
-    if($menuItem->hidden) continue;
+    if(isset($menuItem->hidden)) continue;
     $type = $menuItem->name;
     if($hasBrowsePriv and strpos($type, 'QUERY') === 0)
     {

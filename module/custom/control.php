@@ -202,7 +202,7 @@ class custom extends control
                 foreach ($menus as $menu)
                 {
                     $menu = json_decode($menu);
-                    $this->custom->saveCustomMenu($menu->value, $menu->module, $menu->method);
+                    $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
                 }
             }
             else
@@ -222,6 +222,11 @@ class custom extends control
             {
                 $menu = array();
                 $menu['main'] = customModel::getModuleMenu('main', true);
+                if($method)
+                {
+                    $this->app->loadLang($module);
+                    $this->loadModel('search')->mergeFeatureBar($module, $method);
+                }
                 if($module !== 'main')
                 {
                     $menu['module']     = customModel::getModuleMenu($module, true);

@@ -148,7 +148,6 @@ $lang->testcase->searchStories = '键入来搜索需求';
 
 $lang->testcase->featurebar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featurebar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featurebar['browse']['group']       = '';
-$lang->testcase->featurebar['browse']['zerocase']    = '';
+$lang->testcase->featurebar['browse']['group']       = '分组查看';
+$lang->testcase->featurebar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featurebar['groupcase']             = $lang->testcase->featurebar['browse'];
-if(isset($lang->story))$lang->story->featurebar['zerocase'] = $lang->testcase->featurebar['browse'];

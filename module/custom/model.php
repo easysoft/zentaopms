@@ -242,7 +242,7 @@ class customModel extends model
         if(empty($app->customMenu)) $app->customMenu = array();
         if(!$rebuild && !empty($app->customMenu[$module])) return $app->customMenu[$module];
 
-        $menuConfig = $config->menucustom->$module;
+        $menuConfig = isset($config->menucustom->$module) ? $config->menucustom->$module : array();
         if(!empty($menuConfig)) $menuConfig = json_decode($menuConfig);
         if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->$module['novice'];
 
@@ -292,7 +292,7 @@ class customModel extends model
      * @access public
      * @return void
      */
-    public function saveCustomMenu($menu, $module, $method)
+    public function saveCustomMenu($menu, $module, $method = '')
     {
         $account    = $this->app->user->account;
         $settingKey = '';
@@ -305,7 +305,7 @@ class customModel extends model
         }
         else
         {
-            $settingKey = "$account.common.menucustom.feature_$module_$method";
+            $settingKey = "$account.common.menucustom.feature_{$module}_{$method}";
         }
 
         $this->loadModel('setting')->setItem($settingKey, $menu);
