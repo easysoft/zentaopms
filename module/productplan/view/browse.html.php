@@ -81,5 +81,8 @@
   </tfoot>
 </table>
 </form>
-<script>$(function(){fixedTfootAction('#productplanForm')})</script>
+<script>
+$(function(){fixedTfootAction('#productplanForm')});
+$(function(){fixedTheadOfList('#productplan')});
+</script>
 <?php include '../../common/view/footer.html.php';?>
