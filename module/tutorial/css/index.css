@@ -55,7 +55,8 @@
 #tasks > li.active > a, #tasks > li.active.finish > a {box-shadow: inset 2px 0 0 #114f8e; border-color: #ddd; border-left-color: #114f8e; color: #114f8e; background: #EBF2F9}
 #tasks > li.finish > a:hover, #tasks > li.active > a:hover {background-color: #f1f1f1}
 
-#taskModalBack {position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #fff; opacity: .6; transition: opacity .4s; opacity: 0; display: none}
+#taskModalBack {position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #fff; transition: opacity .4s; opacity: 0; display: none}
+#taskModalBack.in {filter: alpha(opacity=60); opacity: 0.6;}
 #taskModal {width: 500px; position: absolute; background: #38B03F; color: #fff; text-align: center; overflow: hidden; transform: scale(.5) translate(0, 200px) rotateX(120deg); transition: transform .4s, opacity .4s; opacity: 0; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1); top: 0; padding: 30px; left: 50%; margin-left: -250px; top: 20%; box-shadow: 0 3px 9px rgba(0,0,0,.5); display: none}
 #taskModal.in {transform: scale(1) translate(0) rotateX(0); opacity: 1}
 #taskModal h3 {margin-bottom: 20px}
@@ -64,3 +65,8 @@
 #taskModal .start-icon > .icon-front {color: #38B03F; width: 60px; height: 60px; line-height: 60px; position: absolute; left: 0; top: 0; font-size: 28px;}
 #taskModal .start-icon > .icon-back {font-size: 56px; color: #fff; line-height: 60px;}
 #taskModal .btn-success {border-color: #DDF4DF}
+#taskModal > .close {position: absolute; right: 15px; top: 10px;}
+#taskModal > .finish-all {display: none}
+#taskModal > .finish {display: block}
+#taskModal.show-all > .finish-all {display: block}
+#taskModal.show-all > .finish {display: none}

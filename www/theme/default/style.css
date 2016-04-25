@@ -725,6 +725,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #helpContent .load-error {padding: 20px; display: none}
 #helpContent.show-error .load-error {display: block}
 
-.hl-tutorial {position: relative!important; z-index: 1010!important; box-shadow: 0 0 0 0px rgba(0,0,0,0)!important; transition: box-shadow 2s cubic-bezier(.175,.885,.32,1)!important;}
+.hl-tutorial {position: relative!important; z-index: 1010!important; box-shadow: 0 0 0 0px #000!important; transition: box-shadow 1s!important;}
 .hl-tutorial.hl-in {box-shadow:  0 0 20px 0 #FFF0D5, 0 0 0 2px #F1A325, 0 0 0 2000px rgba(0,0,0,.2)!important}
 .hl-tutorial.hl-in:hover {box-shadow:  0 0 30px 0 #FFF0D5, 0 0 0 5px #F1A325, 0 0 0 2000px rgba(0,0,0,.3)!important}

@@ -32,13 +32,12 @@ class tutorial extends control
         if($_POST)
         {
             $account = $this->app->user->account;
-            $setting   = $_POST['tasks'];
+            $setting   = $_POST['finish'];
             
-            if(empty($setting)) $this->send(array('result' => 'fail'));
             $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $setting);
             $this->send(array('result' => 'success'));
         }
-        $setting = $this->config->tasks->setting;
+        $setting = $this->config->tutorial->tasks->setting;
 
         if($this->viewType === 'json')
         {

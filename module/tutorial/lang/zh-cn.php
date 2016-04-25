@@ -26,6 +26,9 @@ $lang->tutorial->atTargetPage     = '已在 <strong class="task-page-name">目�
 $lang->tutorial->reloadTargetPage = '重新载入';
 $lang->tutorial->target           = '目标';
 $lang->tutorial->tagetPageTip     = '按此指示打开【%s】页面';
+$lang->tutorial->requiredTip      = '【%s】为必填项';
+$lang->tutorial->congratulateTask = '恭喜，你完成了任务 【<span class="task-name-current"></span>】！';
+$lang->tutorial->serverErrorTip   = '发生了一些错误。';
 
 $lang->tutorial->tasks = array();
 
@@ -55,4 +58,4 @@ $lang->tutorial->tasks['createTask']['desc'] = "<p>将项目需求分解为任�
 
 $lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
 $lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');
-$lang->tutorial->tasks['createBug']['desc'] = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 项目 <i class='icon icon-angle-right'></i> Bug列表 <i class='icon icon-angle-right'></i> 提Bug</span> 页面，或者打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug列表 <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在创建任务表单中填写任务信息；</li><li data-target='submit'>保存任务信息。</li></ul>";
+$lang->tutorial->tasks['createBug']['desc'] = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 项目 <i class='icon icon-angle-right'></i> Bug列表 <i class='icon icon-angle-right'></i> 提Bug</span> 页面，或者打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug列表 <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在创建Bug表单中填写Bug信息；</li><li data-target='submit'>保存任务信息。</li></ul>";
