@@ -509,11 +509,11 @@ class commonModel extends model
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
                 if($float != 'right' and $module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
-                echo "<li class='$float $active'>" . html::a($link, $menuItem->text, $target, "data-id='$menuItem->name'") . "</li>\n";
+                echo "<li class='$float $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
             }
             else
             {
-                echo "<li>$menuItem->text</li>\n";
+                echo "<li data-id='$menuItem->name'>$menuItem->text</li>\n";
             }
         }
         echo "</ul>\n";

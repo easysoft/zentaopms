@@ -11,38 +11,19 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<script>
-$(function()
-{
-    var formatSetting = function()
-    {
-        
-    };
-
-    var tasks = $.parseJSON('<?php echo json_encode(array_values($lang->tutorial->tasks), JSON_HEX_QUOT | JSON_HEX_APOS) ?>');
-    console.log(tasks);
-    var current = '<?php echo $current ?>';
-    var setting = '<?php echo $setting ?>';
-
-    var $tasks = $('#tasks');
-
-    var updateTasks = function()
-    {
-        $tasks.empty();
-        $.each(tasks, function(idx, task)
-        {
-            var $li = $('<li/>');
-            var $a = $('<a href="###" />');
-
-        });
-    };
-
-
-});
-</script>
+<?php js::import($jsRoot . 'misc/base64.js'); ?>
+<?php $referer = $referer ? $referer : helper::createLink('my', 'index', '', 'tutorial') ?>
 <div id='pageContainer'>
   <div id='iframeWrapper'>
-    <iframe id='iframePage' name='iframePage' src='<?php echo helper::createLink('my', 'index') ?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
+    <iframe id='iframePage' name='iframePage' src='<?php echo $referer ?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
+    <div id='taskModalBack'></div>
+    <div id='taskModal'>
+      <div class='finish-all'>
+        <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back'></i><i class='icon icon-check icon-front'></i></div>
+        <h3><?php echo $lang->tutorial->congratulation ?></h3>
+        <button type='button' class='btn btn-success'><i class="icon icon-repeat"></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo $referer ?>' class='btn btn-success'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
+      </div>
+    </div>
   </div>
   <div id='sidebar'>
     <header>
@@ -52,36 +33,347 @@ $(function()
         <a data-toggle='tooltip' data-placement='left' title='<?php echo $lang->tutorial->exit ?>' href='<?php echo helper::createLink('my', 'index') ?>' class='btn btn-sm'><i class="icon icon-signout"></i></a>
       </div>
     </header>
-    <section id='finish'>
-      <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back'></i><i class='icon icon-check icon-front'></i></div>
-      <h3><?php echo $lang->tutorial->congratulation ?></h3>
-      <button type='button' class='btn btn-success'><i class="icon icon-repeat"></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo helper::createLink('my', 'index') ?>' class='btn btn-success'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
-    </section>
     <section id='current'>
       <h4><?php echo $lang->tutorial->currentTask ?></h4>
-      <div class='panel finish' id='task'>
+      <div class='panel' id='task'>
         <div class='panel-heading'>
-          <strong class='task-name task-name-current'>1. 创建账号</strong>
+          <strong><span class='task-id-current'>1</span>. <span class='task-name task-name-current'></span></strong>
           <i class="icon icon-check pull-right"></i>
         </div>
-        <div class='panel-body'></div>
+        <div class='panel-body'>
+          <div class='task-desc'></div>
+          <a href='javascript:;' id='openTaskPage' class='btn-open-target-page'>
+            <div class='normal'><i class="icon icon-flag-alt"></i> <?php echo $lang->tutorial->openTargetPage ?></div>
+            <div class='opened'><i class="icon icon-flag"></i> <?php echo $lang->tutorial->atTargetPage ?></div>
+            <div class='reload'><i class="icon icon-repeat"></i> <?php echo $lang->tutorial->reloadTargetPage ?></div>
+          </a>
+        </div>
       </div>
       <div class='clearfix actions'>
-        <button type='button' class='btn btn-sm btn-prev-task'><i class="icon icon-angle-left"></i> <?php echo $lang->tutorial->previous ?></button>
-        <button type='button' class='btn btn-primary btn-sm pull-right btn-next-task'><?php echo $lang->tutorial->nextTask ?> <i class="icon icon-angle-right"></i></button>
+        <button type='button' class='btn btn-sm btn-prev-task btn-task'><i class="icon icon-angle-left"></i> <?php echo $lang->tutorial->previous ?></button>
+        <button type='button' class='btn btn-primary btn-sm pull-right btn-task btn-next-task'><?php echo $lang->tutorial->nextTask ?> <i class="icon icon-angle-right"></i></button>
       </div>
     </section>
     <section id='all'>
-      <h4><?php echo $lang->tutorial->allTasks ?> (<span class='task-num-current'>2</span>/<span class='tasks-count'>8</span>)</h4>
+      <h4><?php echo $lang->tutorial->allTasks ?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks) ?></span>)</h4>
       <div class='progress' id='tasksProgress'>
         <div class='progress-bar' style='width: 40%'>
         </div>
       </div>
       <ul id='tasks' class='nav nav-primary nav-stacked'>
-        <li class='finish'><a href="#"><span>1</span>. <span class='task-name'></span><i class="icon icon-check pull-right"></i></a></li>
+        <?php
+        $idx = 1;
+        $tasks = array();
+        ?>
+        <?php foreach ($lang->tutorial->tasks as $name => $task):?>
+        <?php
+        $nav = $task['nav'];
+        $task['name'] = $name;
+        $task['id'] = $idx+1;
+        $task['url'] = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
+        $tasks[$name] = $task;
+        ?>
+        <li data-name='<?php echo $name; ?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name; ?>'><span><?php echo $idx++; ?></span>. <span class='task-name'><?php echo $task['title'] ?></span><i class='icon icon-check pull-right'></i></a></li>
+        <?php endforeach; ?>
       </ul>
     </section>
   </div>
 </div>
+<script>
+$(function()
+{
+    var formatSetting = function(str)
+    {
+        var settings = {};
+        if(typeof str === 'string')
+        {
+            $.each(str.split(','), function(idx, name)
+            {
+                if(name) settings[name] = true;
+            });
+        }
+        return settings;
+    };
 
+    var tasks        = $.parseJSON('<?php echo json_encode($tasks, JSON_HEX_QUOT | JSON_HEX_APOS) ?>');
+    var current      = '<?php echo $current ?>';
+    var setting      = formatSetting('<?php echo $setting ?>');
+    var lang         = 
+    {
+        tagetPageTip: '<?php echo $lang->tutorial->tagetPageTip ?>',
+        target      : '<?php echo $lang->tutorial->taget ?>'
+    }
+
+    console.log('TASKS', tasks);
+    console.log('SETTING', setting);
+
+    var $tasks        = $('#tasks'),
+        $task         = $('#task'),
+        $openTaskPage = $('#openTaskPage'),
+        $finish       = $('#finish');
+    var totalCount    = $tasks.length;
+
+    var iWindow = window.frames['iframePage'];
+    var iframe  = $('#iframePage').get(0);
+    var checkTaskId = null;
+    var $lastTooltip;
+
+    var highlight = function($e, callback)
+    {
+        $e = $e.first();
+        $e.closest('body').find('.hl-tutorial').removeClass('hl-tutorial hl-in');
+        $e.addClass('hl-tutorial').parent().css('overflow', 'visible');
+        setTimeout(function() {$e.addClass('hl-in'); callback && callback()}, 50);
+    };
+
+    var finishTask = function()
+    {
+        $task.addClass('finish').find('[data-target]').removeClass('active').addClass('finish');
+        alert('you finish task: ' + JSON.stringify(task));
+    };
+
+    var showToolTip = function($e, text, options)
+    {
+        options = $.extend(
+        {
+            trigger: 'manual',
+            title: text,
+            placement: 'top',
+            container: 'body',
+            tipClass: 'tooltip-warning'
+        }, options);
+        $e = $e.first();
+        if($lastTooltip) $lastTooltip.tooltip('hide');
+        $lastTooltip = $e;
+        if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options)
+        $e.tooltip('show');
+    };
+
+    var checkTask = function()
+    {
+        if(!(iWindow && iWindow.config && iWindow.$))
+        {
+            checkTaskId = setTimeout(checkTask, 1000);
+            return;
+        }
+
+        if(checkTaskId) clearTimeout(checkTaskId);
+
+        var task = tasks[current];
+        var $$ = iWindow.$;
+        var pageConfig = iWindow.config;
+        var targetStatus = status || {},
+            $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
+            $formTarget = $task.find('[data-target="form"]').removeClass('active'),
+            $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
+        targetStatus.nav = task.nav['module'].toLowerCase() === pageConfig.currentModule.toLowerCase() && task.nav['method'].toLowerCase() === pageConfig.currentMethod.toLowerCase();
+
+        if(targetStatus.nav)
+        {
+            // check form target
+            var $form = $$(task.nav.form);
+            var $formWrapper = $form.closest('.container');
+            if(!$formWrapper.length) $formWrapper = $form;
+            highlight($formWrapper);
+            showToolTip($formWrapper, $formTarget.text());
+            var fieldSelector = '';
+
+            if(task.nav.formType === 'table')
+            {
+                fieldSelector = ':checkbox:not(.rows-selector)';
+                var $checkboxes = $form.find(fieldSelector);
+                targetStatus.form = $checkboxes.filter(':checked').length > 0;
+                if(!targetStatus.form) {
+                    targetStatus.waitFeild = $checkboxes.filter(':not(:checked):first').closest('td');
+                }
+            }
+            else if(pageConfig.requiredFields)
+            {
+                targetStatus.form = true;
+                var requiredFields = pageConfig.requiredFields.split(',');
+                $.each(requiredFields, function(idx, requiredId)
+                {
+                    fieldSelector += ',' + '#' + requiredId;
+                    var $required = $$('#' + requiredId);
+                        console.log('check', requiredId, $required.val(), $required);
+                    if($required.length)
+                    {
+                        var val = $required.val();
+                        if(val === undefined || val === null || val === '')
+                        {
+                            targetStatus.form = false;
+                            targetStatus.waitFeild = $required;
+                        }
+                    }
+                });
+                if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
+            }
+
+            if(!$form.data('bindCheckTaskEvent'))
+            {
+                $form.off('submit .tutorial');
+                $form.on('change.tutorial', fieldSelector, checkTask);
+                var onSubmit = function(e)
+                {
+                    var status = checkTask();
+                    if(!status.submitOK)
+                    {
+                        if(status.waitFeild)
+                        {
+                            highlight(status.waitFeild, function() {
+                                setTimeout(function() {
+                                    highlight($formWrapper);
+                                }, 2000);
+                            });
+                        }
+
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return false;
+                    } else
+                    {
+                        finishTask();
+                    }
+                }
+                if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
+                else $form.submit(onSubmit);
+            }
+
+            if(targetStatus.form)
+            {
+                $submitTarget.addClass('active');
+                if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text());
+            }
+            else
+            {
+                $formTarget.addClass('active');
+            }
+        }
+        else
+        {
+            // check nav target
+            $navTarget.addClass('active');
+            var menuModule = task.nav.menuModule || task.nav['module'];
+            var $mainmenu = $$('#mainmenu');
+            var $mainmenuItem = $mainmenu.find('[data-id="' + menuModule + '"]');
+            var tagetPageTip = lang.tagetPageTip.replace('%s', task.nav.targetPageName || lang.target);
+            if(!$mainmenuItem.hasClass('active'))
+            {
+                highlight($mainmenuItem);
+                showToolTip($mainmenuItem, tagetPageTip);
+            }
+            else if(task.nav.menu)
+            {
+                var $modulemenu = $$('#modulemenu');
+                var $modulemenuItem = $modulemenu.find('[data-id="' + task.nav.menu + '"]');
+                if(!$modulemenuItem.hasClass('active'))
+                {
+                    highlight($modulemenuItem);
+                    showToolTip($modulemenuItem, tagetPageTip);
+                }
+                else if(task.nav.target)
+                {
+                    var $targetItem = $$(task.nav.target);
+                    highlight($targetItem);
+                    showToolTip($targetItem, tagetPageTip);
+                }
+            }
+        }
+        $navTarget.toggleClass('finish', !!targetStatus.nav);
+        $formTarget.toggleClass('finish', !!targetStatus.form);
+        $submitTarget.toggleClass('finish', !!targetStatus.submit);
+        $openTaskPage.toggleClass('open', targetStatus.nav);
+
+        targetStatus.submitOK = targetStatus.nav && targetStatus.form;
+        return targetStatus;
+    };
+
+    var onIframeLoad = function()
+    {
+        iWindow = window.frames['iframePage'];
+        checkTask();
+        var title = (iWindow.$ ? iWindow.$('head > title').text() : '') + $('head > title').text();
+        var url = createLink('tutorial', 'index', 'referer=' + Base64.encode(iWindow.location.href) + '&task=' + current);
+        window.history.replaceState({}, title, url);
+    };
+
+    var openIframePage = function(url)
+    {
+        url = url || tasks[current].url;
+        console.log('open', url);
+        try
+        {
+            iWindow.location.replace(url);
+        }
+        catch(e)
+        {
+            iframe.get(0).src = url;
+        }
+    };
+
+    var showTask = function(taskName)
+    {
+        taskName = taskName || current;
+        current = taskName;
+
+        if(!taskName) return;
+        var task = tasks[taskName];
+        if(!task) return;
+
+        var $li = $tasks.children('li').removeClass('active').filter('[data-name="' + taskName + '"]').addClass('active');
+        $task.find('.task-name-current').text(task.title);
+        $task.find('.task-id-current').text(task.id);
+        $task.toggleClass('finish', task.finish);
+        $task.find('.task-desc').html(task.desc).find('.task-nav').addClass('btn-open-target-page');
+        $task.find('.task-page-name').text(task.nav.targetPageName || lang.target);
+
+        var $prev = $li.prev('li'), $next = $li.next('li');
+        $('.btn-prev-task').toggleClass('hidden', !$prev.length).data('name', $prev.data('name'));
+        $('.btn-next-task').toggleClass('hidden', !$next.length).data('name', $next.data('name'));
+        checkTask();
+    };
+
+    var updateUI = function()
+    {
+        var currentTask, finishCount = 0;
+
+        $tasks.children('li').each(function(idx)
+        {
+            var $li      = $(this);
+            var name     = $li.data('name');
+            var task     = tasks[name];
+            var finish   = !!setting[name];
+            task.id      = idx + 1;
+            task.finish  = finish;
+            finishCount += finish ? 1 : 0;
+
+            $li.toggleClass('finish', finish);
+            if(!current && !finish) current = name;
+        });
+
+        $finish.toggleClass('show', finishCount >= totalCount);
+        $('.task-num-finish').text(finishCount);
+
+        showTask(current);
+    };
+
+    updateUI();
+
+    $(document).on('click', '.btn-task', function()
+    {
+        showTask($(this).data('name'));
+    }).on('click', '.btn-open-target-page', function()
+    {
+        openIframePage();
+    });
+
+    iframe.onload = iframe.onreadystatechange = function()
+    {
+        if (this.readyState && this.readyState != 'complete') return;
+        onIframeLoad();
+    };
+
+    iWindow.onload = onIframeLoad;
+});
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -75,6 +75,7 @@
     </tfoot>
   </table>
 </form>
+
 <script type='text/javascript'>
 $(function()
 {

@@ -88,7 +88,7 @@
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
           <td class='linkbox'>
             <?php
-            $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
+            $tasksLink = $this->createLink('storybtn-task-create', 'tasks', "storyID=$story->id&projectID=$project->id");
             $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
             ?> 
           </td>
@@ -97,7 +97,7 @@
             $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
             $lang->task->create = $lang->project->wbs;
-            common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', '.btn-task-create');
+            common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', 'btn-task-create');
 
             $lang->task->batchCreate = $lang->project->batchWBS;
             common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');

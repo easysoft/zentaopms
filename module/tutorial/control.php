@@ -27,7 +27,7 @@ class tutorial extends control
      * @access public
      * @return void
      */
-    public function index($task = '')
+    public function index($referer = '', $task = '')
     {
         if($_POST)
         {
@@ -48,6 +48,7 @@ class tutorial extends control
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
         $this->view->setting = $setting;
+        $this->view->referer = base64_decode($referer);
         $this->display();
     }
 }
