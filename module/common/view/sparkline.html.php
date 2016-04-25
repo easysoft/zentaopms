@@ -22,13 +22,20 @@ jQuery.fn.projectLine = function(setting)
             height = $e.height() - 4,
             values = [],
             maxWidth = $e.width() - 4;
-        var strValues = options.values.split(',');
+        var strValues = options.values.split(','), maxValue = 0;
         for(var i in strValues)
         {
             var v = parseFloat(strValues[i]);
-            if(v != NaN) values.push(v);
+            if(v != NaN)
+            {
+                values.push(v);
+                maxValue = Math.max(v, maxValue);
+            }
         }
-        
+
+        var scaleSteps = Math.min(maxValue, 30);
+        var scaleStepWidth = Math.ceil(maxValue/scaleSteps);
+
         var width = Math.min(maxWidth, Math.max(10, values.length*maxWidth/30));
         var canvas = $e.children('canvas');
         if(!canvas.length)
@@ -47,7 +54,15 @@ jQuery.fn.projectLine = function(setting)
                 pointStrokeColor : "#fff",
                 data : values
             }]
-        }, {animation: !isIE}));
+        }, {
+            animation: !isIE,
+            scaleOverride: true,
+            scaleStepWidth: Math.ceil(maxValue/10),
+            scaleSteps: 10,
+            scaleStartValue: 0
+        }));
+
+        console.log(values, maxValue, scaleSteps, scaleStepWidth);
     });
 }
 
