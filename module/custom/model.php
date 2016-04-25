@@ -246,8 +246,9 @@ class customModel extends model
         if(!empty($menuConfig)) $menuConfig = json_decode($menuConfig);
         if(!isset($menuConfig) && common::inNoviceMode()) $menuConfig = $config->menu->$module['novice'];
 
-        $allMenu = $module == 'main' ? $lang->menu : $lang->$module->menu;
-        $menu    = self::buildMenuConfig($allMenu, $menuConfig);
+        $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
+        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
+        $menu = self::buildMenuConfig($allMenu, $menuConfig);
 
         $app->customMenu[$module] = $menu;
         return $menu;

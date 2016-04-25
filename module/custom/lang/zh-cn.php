@@ -7,6 +7,7 @@ $lang->custom->key       = '键';
 $lang->custom->value     = '值';
 $lang->custom->flow      = '流程';
 $lang->custom->select    = '请选择流程：';
+$lang->custom->branch    = '多分支';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';
@@ -63,7 +64,7 @@ $lang->custom->user->fields['statusList'] = '状态';
 $lang->custom->currentLang = '适用当前语言';
 $lang->custom->allLang     = '适用所有语言';
 
-$lang->custom->confirmRestore = '是否要恢复默认语言配置？';
+$lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole  = '键的长度必须小于20个字符！';

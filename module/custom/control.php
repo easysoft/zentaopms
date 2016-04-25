@@ -248,4 +248,19 @@ class custom extends control
             $this->display();
         }
     }
+
+    /**
+     * Ajax restore menu.
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function ajaxRestoreMenu($confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "confirm=yes")));
+
+        $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=common&section=menucustom");
+        die(js::reload('parent.parent'));
+    }
 }

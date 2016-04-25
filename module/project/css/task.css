@@ -5,6 +5,8 @@
 #hideButton span{padding:2px 10px; background:url(theme/default/images/main/zt-icons.png) -100px  -161px;}
 #featurebar .f-right .icon-green-task-import {padding:2px 8px; background:url(theme/default/images/main/zt-icons.png) 0px   -82px;}
 .sub-featurebar #querybox {margin:0px;}
+.sub-featurebar #bysearchTab.active {padding:0px;}
+.sub-featurebar #bysearchTab.active:hover {background:#fff;}
 
 .dropdown-menu.with-search {padding-bottom: 34px; min-width: 150px; overflow: hidden; max-height: 305px}
 .dropdown-menu > .menu-search {padding: 0; position: absolute; z-index: 0; bottom: 0; left: 0; right: 0}

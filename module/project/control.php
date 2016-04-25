@@ -1260,6 +1260,8 @@ class project extends control
         }
 
         $this->view->title      = $this->lang->project->tree;
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->tree;
         $this->view->project    = $project;
         $this->view->projectID  = $projectID;
         $this->view->level      = $type;
