@@ -63,7 +63,8 @@
     <section id='all'>
       <h4><?php echo $lang->tutorial->allTasks ?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks) ?></span>)</h4>
       <div class='progress' id='tasksProgress'>
-        <div class='progress-bar' style='width: 40%'>
+        <div class='progress-text'></div>
+        <div class='progress-bar' style='width: 0%'>
         </div>
       </div>
       <ul id='tasks' class='nav nav-primary nav-stacked'>
@@ -114,10 +115,10 @@ $(function()
     var $tasks        = $('#tasks'),
         $task         = $('#task'),
         $openTaskPage = $('#openTaskPage'),
-        $finish       = $('#finish'),
+        $progress     = $('#tasksProgress'),
         $modal        = $('#taskModal'),
         $modalBack    = $('#taskModalBack');
-    var totalCount    = $tasks.length, finishCount = 0;
+    var totalCount    = $tasks.children('li').length, finishCount = 0;
 
     var iWindow = window.frames['iframePage'];
     var iframe  = $('#iframePage').get(0);
@@ -413,7 +414,8 @@ $(function()
     {
         var currentTask;
 
-        finishCount = 0
+        finishCount = 0;
+        totalCount  = 0;
         $tasks.children('li').each(function(idx)
         {
             var $li      = $(this);
@@ -423,16 +425,22 @@ $(function()
             task.id      = idx + 1;
             task.finish  = finish;
             finishCount += finish ? 1 : 0;
+            totalCount++;
 
             $li.toggleClass('finish', finish);
             if(!current && !finish) current = name;
         });
 
-        $finish.toggleClass('show', finishCount >= totalCount);
         $('.task-num-finish').text(finishCount);
+        var isFinishAll = finishCount >= totalCount;
+        if(isFinishAll) current = $tasks.children('li').first().data('name');
 
-        if(finishCount >= totalCount) current = $tasks.children('li').first().data('name');
+        var progress = Math.round(finishCount/totalCount);
+        $progress.toggleClass('finish', isFinishAll).find('.progress-bar').css('width', (100*finishCount/totalCount) + '%');
+        $progress.find('.progress-text').text(progress + '%');
+
         showTask(current);
+        console.log('totalCount', totalCount, 'finishCount', finishCount);
     };
 
     updateUI();

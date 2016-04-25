@@ -44,9 +44,12 @@
 #task.finish.finish > .panel-heading > .pull-right {opacity: 1; transform: scale(1)}
 #task .task-nav {color: #114f8e; display: inline-block; background: #EBF2F9; padding: 1px 5px 0; transition: all .2s}
 #task .task-nav:hover {color: #fff; background: #114f8e; cursor: pointer}
-#tasksProgress {background: #ccc;}
+#tasksProgress {background: #ccc; position: relative}
 #tasksProgress > .progress-bar {background: #114f8e; height: 4px; margin-bottom: 15px; transition: background .4s, width .4s;}
 #tasksProgress.finish > .progress-bar {width: 100%!important; background: #38B03F}
+#tasksProgress .progress-text {position: absolute; right: 0; top: -25px; font-weight: bold; opacity: 0.7; color: #114f8e}
+#tasksProgress.finish .progress-text {color: #38B03F; opacity: 1}
+
 #tasks {background: #fff;}
 #tasks > li > a > .pull-right {opacity: 0; transition: opacity .4s, transform .4s; transform: scale(2.5, 2); color: #38B03F}
 #tasks > li.finish > a, #tasks > li.finish.active > a {box-shadow: inset 2px 0 0 #38B03F; border-left-color: #38B03F; color: #808080}
