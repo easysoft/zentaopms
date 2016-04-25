@@ -158,7 +158,7 @@ $lang->index->menu->project = "{$lang->projectCommon}s|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>';
+$lang->my->menu->account        = array('link' => '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>', 'fixed' => true);
 $lang->my->menu->index          = 'Index|my|index';
 $lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
@@ -179,6 +179,7 @@ $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
 $lang->product->menu->list    = array('link' => '%s' . $lang->arrow, 'fixed' => true);
+$lang->product->menu->index   = 'Index|product|index|locate=no';
 $lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
@@ -207,6 +208,7 @@ $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
 $lang->project->menu->list      = array('link' => '%s', 'fixed' => true);
+$lang->project->menu->index     = 'Index|project|index|locate=no';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,burn');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
@@ -230,7 +232,7 @@ $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
 $lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->qa->menu->index    = '首页|qa|index|locate=no&productID=%s';
+$lang->qa->menu->index    = 'Index|qa|index|locate=no&productID=%s';
 $lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->qa->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
 $lang->qa->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');

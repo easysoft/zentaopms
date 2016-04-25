@@ -31,6 +31,7 @@ $lang->block->editBlock          = 'Edit block';
 $lang->block->ordersSaved        = 'Sort have been saved';
 $lang->block->confirmRemoveBlock = 'Are you sure remove block [{0}] ?';
 $lang->block->emptyMessage       = 'Nothing here, custom it now!';
+$lang->block->refresh            = 'Refresh';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' list';
@@ -205,6 +206,7 @@ $lang->block->typeList->story['reviewedBy'] = 'Reviewed by';
 $lang->block->typeList->story['closedBy']   = 'Closed by';
 
 $lang->block->typeList->product['noclosed'] = 'No closed';
+$lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';
 
 $lang->block->typeList->project['undone']  = 'Undone';
