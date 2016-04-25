@@ -7,6 +7,7 @@ $lang->custom->key       = 'Key';
 $lang->custom->value     = 'Value';
 $lang->custom->flow      = 'Flow';
 $lang->custom->select    = 'Select flow:';
+$lang->custom->branch    = 'Multi branch';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -63,7 +64,7 @@ $lang->custom->user->fields['statusList'] = 'Status';
 $lang->custom->currentLang = 'For current language';
 $lang->custom->allLang     = 'For all language';
 
-$lang->custom->confirmRestore = 'Are you sure to restore the default lang setting?';
+$lang->custom->confirmRestore = 'Are you sure to restore the default setting?';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole  = 'The length of key must be less than 20!';
