@@ -25,7 +25,7 @@
         <tr>
           <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong> <?php echo $run->case->precondition;?></td>
         </tr>
-        <tr class='fix-position'>
+        <tr>
           <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
           <th class='w-p30'><?php  echo $lang->testcase->stepDesc;?></th>
           <th class='w-p30'><?php  echo $lang->testcase->stepExpect;?></th>
@@ -33,7 +33,7 @@
           <th>
             <?php echo $lang->testcase->real;?>
             <?php if(empty($run->case->steps)):?>
-            <button type='button' class='btn-file' data-toggle='modal' data-target='#fileModal'><?php echo $lang->testtask->files;?></button>
+            <button type='button' class='btn btn-file' data-toggle='modal' data-target='#fileModal'><?php echo $lang->testtask->files;?></button>
             <?php endif;?>
           </th>
         </tr>
@@ -49,7 +49,7 @@
           <table class='fix-border fix-position'>
             <tr>
               <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='form-control fix-textarea'");?></td>
-              <td><button type='button' title='<?php echo $lang->testtask->files?>' class='btn-file' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
+              <td><button type='button' title='<?php echo $lang->testtask->files?>' class='btn btn-file' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
             </tr>
           </table>
         </td>

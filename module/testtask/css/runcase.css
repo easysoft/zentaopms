@@ -1,5 +1,6 @@
 .outer > #titlebar {display: none}
 
-.btn-file {float:right}
+.table > thead > tr > th {vertical-align: middle;}
+.btn-file {float:right; padding: 0px 5px!important}
 .fix-border td {border:0px;}
 .fix-position td {vertical-align: middle;}
