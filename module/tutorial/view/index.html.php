@@ -76,8 +76,8 @@
         <?php
         $nav = $task['nav'];
         $task['name'] = $name;
-        $task['id'] = $idx+1;
-        $task['url'] = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
+        $task['id']   = $idx+1;
+        $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
         $tasks[$name] = $task;
         ?>
         <li data-name='<?php echo $name; ?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name; ?>'><span><?php echo $idx++; ?></span>. <span class='task-name'><?php echo $task['title'] ?></span><i class='icon icon-check pull-right'></i></a></li>
