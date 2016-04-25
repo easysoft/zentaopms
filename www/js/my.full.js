@@ -1397,55 +1397,43 @@ function checkOnlybodyPage()
 function fixedTfootAction(formID)
 {
     if($(formID).size() == 0) return false;
-    var $table = $(formID).find('table:last');
-    var $tfoot = $table.find('tfoot');
-    if($tfoot.size() == 0) return false;
+    if($(formID).find('table:last').find('tfoot').size() == 0) return false;
 
-    var tableWidth;
-    var tableOffset;
-    var fixHeight   = $tfoot.height() / 5;
-    var tableHeight = $table.height();
-    var $inputgroup = $tfoot.find('.table-actions').children('.input-group');
-    if($inputgroup.size() > 0)var $inputwidth = $inputgroup.width();
+    fixTfootInit();
+    $(window).scroll(fixTfoot);//Fix table foot when scrolling.
+    $('.side-handle').click(function(){setTimeout(fixTfootInit, 300);});//Fix table foot if module tree is hidden or displayed.
 
-    var fixTfootInitHandle = function()
+    var $table, $tfoot, $inputGroup, tableWidth, tableOffset, hasFixed;
+    function fixTfoot()
     {
-        tableWidth  = $table.width();
-        tableOffset = $table.offset().top + tableHeight - fixHeight;
-        $tfoot.removeClass('fixedTfootAction');
-        if($(window).height() + $(window).scrollTop() <= tableOffset)
+        $table       = $(formID).find('table:last');
+        $tfoot       = $table.find('tfoot');
+        tableWidth   = $table.width();
+        hasFixed     = $tfoot.hasClass('fixedTfootAction');
+        offsetHeight = $(window).height() + $(window).scrollTop();
+        tableOffset  = $table.offset().top + $table.height() - $tfoot.height() / 5;
+        $inputGroup  = $tfoot.find('.table-actions').children('.input-group');
+
+        if(!hasFixed && offsetHeight <= tableOffset)
         {
             $tfoot.addClass('fixedTfootAction');
             $tfoot.width(tableWidth);
             $tfoot.find('td').width(tableWidth);
-            if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
+            if($inputGroup.size() > 0) $inputGroup.width($inputGroup.width());
         }
-    }
-    fixTfootInitHandle();
-
-    var fixTfootScrollHandle = function()
-    {
-        $hasFixed = $tfoot.hasClass('fixedTfootAction');
-        tableOffset = $table.offset().top + tableHeight - fixHeight;
-        offsetHeight = $(window).height() + $(window).scrollTop();
-        if(offsetHeight > tableOffset || $(document).height() == offsetHeight)
+        if(hasFixed && (offsetHeight > tableOffset || $(document).height() == offsetHeight))
         {
             $tfoot.removeClass('fixedTfootAction');
             $tfoot.removeAttr('style');
             $tfoot.find('td').removeAttr('style');
         }
-        else if(!$hasFixed)
-        {
-            tableWidth  = $table.width();
-            $tfoot.addClass('fixedTfootAction');
-            $tfoot.width(tableWidth);
-            $tfoot.find('td').width(tableWidth);
-            if($inputgroup.size() > 0) $inputgroup.width($inputwidth);
-        }
-    };
-    $(window).scroll(fixTfootScrollHandle);//Fix table foot when scrolling.
-
-    $('.side-handle').click(function(){setTimeout(fixTfootInitHandle, 300);});//Fix table foot if module tree is hidden or displayed.
+    }
+    function fixTfootInit()
+    {
+        $tfoot = $(formID).find('table:last').find('tfoot')
+        if($tfoot.hasClass('fixedTfootAction')) $tfoot.removeClass('fixedTfootAction');
+        fixTfoot();
+    }
 }
 
 /**
@@ -1488,47 +1476,32 @@ function fixedTheadOfList(tableID)
 {
     if($(tableID).size() == 0) return false;
     if($(tableID).css('display') == 'none') return false;
-    var $table = $(tableID);
-    var $thead = $table.find('thead');
-    if($thead.size() == 0) return false;
+    if($(tableID).find('thead').size() == 0) return false;
 
-    var tableWidth;
-    var theadOffset = $thead.offset().top;
-    var fixedThead  = "<table class='fixedTheadOfList'><thead>" + $thead.html() + '</thead></table>';
+    fixTheadInit();
+    $(window).scroll(fixThead);//Fix table head when scrolling.
+    $('.side-handle').click(function(){setTimeout(fixTheadInit, 300);});//Fix table head if module tree is hidden or displayed.
 
-    var fixTheadInitHandle = function()
+    var tableWidth, theadOffset, fixedThead, $fixedThead;
+    function fixThead()
     {
-        $table.parent().find('.fixedTheadOfList').remove();
-        if(theadOffset < $(window).scrollTop())
+        theadOffset = $(tableID).find('thead').offset().top;
+        $fixedThead = $(tableID).parent().find('.fixedTheadOfList');
+        if($fixedThead.size() <= 0 &&theadOffset < $(window).scrollTop())
         {
-            tableWidth = $table.width();
-            $table.before(fixedThead);
-            $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
+            tableWidth  = $(tableID).width();
+            fixedThead  = "<table class='fixedTheadOfList'><thead>" + $(tableID).find('thead').html() + '</thead></table>';
+            $(tableID).before(fixedThead);
+            $('.fixedTheadOfList').addClass($(tableID).attr('class')).width(tableWidth);
         }
-    };
-    fixTheadInitHandle();
-
-    var fixTheadScrollHandle = function()
-    {    
-        tableWidth = $table.width();
-        var hasFixed  = $table.parent().find('.fixedTheadOfList').size() > 0;
-        if(!hasFixed)
-        {
-            theadOffset = $thead.offset().top;
-            if(theadOffset < $(window).scrollTop())
-            {
-                $table.before(fixedThead);
-                $('.fixedTheadOfList').addClass($table.attr('class')).width(tableWidth);
-            }
-        }
-        else if(theadOffset >= $(window).scrollTop())
-        {
-            $table.parent().find('.fixedTheadOfList').remove();
-        }
-    };
-    $(window).scroll(fixTheadScrollHandle);//Fix table head when scrolling.
-
-    $('.side-handle').click(function(){setTimeout(fixTheadInitHandle, 300);});//Fix table head if module tree is hidden or displayed.
+        if($fixedThead.size() > 0 && theadOffset >= $(window).scrollTop()) $fixedThead.remove();
+    }
+    function fixTheadInit()
+    {
+        $fixedThead = $(tableID).parent().find('.fixedTheadOfList');
+        if($fixedThead.size() > 0) $fixedThead.remove();
+        fixThead();
+    }
 }
 
 /**

@@ -7,4 +7,5 @@ $(function()
         $.post(createLink('product', 'updateOrder'), {'products' : list, 'orderBy' : orderBy});
     });
     fixedTfootAction('#productsForm');
+    fixedTheadOfList('#productList');
 });
