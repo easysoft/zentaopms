@@ -61,8 +61,6 @@ jQuery.fn.projectLine = function(setting)
             scaleSteps: 10,
             scaleStartValue: 0
         }));
-
-        console.log(values, maxValue, scaleSteps, scaleStepWidth);
     });
 }
 
