@@ -70,6 +70,7 @@ $lang->quitNovice   = 'Quit novice';
 $lang->enterNovice  = 'Enter novice';
 $lang->homepage     = 'Set homepage';
 $lang->tutorial     = 'Novice tutorial';
+$lang->feature      = 'New features';
 $lang->customMenu   = 'Custom menu';
 
 $lang->preShortcutKey  = '[Shortcut key:←]';

@@ -210,4 +210,16 @@ class misc extends control
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice);
         if($reload == 'true') die(js::reload('parent'));
     }
+
+    /**
+     * Show version feature
+     * @access public
+     * @return viod
+     */
+    public function feature($version = 'latest')
+    {
+        $this->view->version = $version;
+
+        $this->display();
+    }
 }
