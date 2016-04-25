@@ -101,7 +101,7 @@ $(function()
     var lang         = 
     {
         tagetPageTip: '<?php echo $lang->tutorial->tagetPageTip ?>',
-        target      : '<?php echo $lang->tutorial->taget ?>'
+        target      : '<?php echo $lang->tutorial->target ?>'
     }
 
     console.log('TASKS', tasks);

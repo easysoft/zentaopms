@@ -33,26 +33,7 @@ class my extends control
      */
     public function index()
     {
-        $account = $this->app->user->account;
-
-        /* Get project and product stats. */
-        $projectStats = $this->loadModel('project')->getProjectStats();
-        $productStats = $this->loadModel('product')->getStats();
-
-        /* Set the dynamic pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal = 1000, $this->config->my->dynamicCounts);   // Init the $recTotal var, thus omit one sql query.
-
-        $this->view->projectStats  = $projectStats;
-        $this->view->productStats  = $productStats;
-        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
-        $this->view->todos         = $this->loadModel('todo')->getList('all', $account, 'wait, doing', $this->config->my->todoCounts);
-        $this->view->tasks         = $this->loadModel('task')->getUserTasks($account, 'assignedTo', $this->config->my->taskCounts);
-        $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($account, false, $this->config->my->bugCounts);
-        $this->view->stories       = $this->loadModel('story')->getUserStoryPairs($account, $this->config->my->storyCounts);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|withguest');
-        $this->view->title         = $this->lang->my->common;
-
+        $this->view->title = $this->lang->my->common;
         $this->display();
     }
 
