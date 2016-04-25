@@ -37,7 +37,7 @@ class tutorial extends control
             $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $setting);
             $this->send(array('result' => 'success'));
         }
-        $setting = $this->config->tutorial->tasks->setting;
+        $setting = isset($this->config->tutorial->tasks->setting) ? $this->config->tutorial->tasks->setting : '';
 
         if($this->viewType === 'json')
         {

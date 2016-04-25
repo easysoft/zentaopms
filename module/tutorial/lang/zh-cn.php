@@ -25,7 +25,7 @@ $lang->tutorial->openTargetPage   = '打开 <strong class="task-page-name">目�
 $lang->tutorial->atTargetPage     = '已在 <strong class="task-page-name">目标</strong> 页面';
 $lang->tutorial->reloadTargetPage = '重新载入';
 $lang->tutorial->target           = '目标';
-$lang->tutorial->tagetPageTip     = '按此指示打开【%s】页面';
+$lang->tutorial->targetPageTip    = '按此指示打开【%s】页面';
 $lang->tutorial->requiredTip      = '【%s】为必填项';
 $lang->tutorial->congratulateTask = '恭喜，你完成了任务 【<span class="task-name-current"></span>】！';
 $lang->tutorial->serverErrorTip   = '发生了一些错误。';

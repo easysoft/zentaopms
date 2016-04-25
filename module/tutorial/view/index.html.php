@@ -106,8 +106,8 @@ $(function()
     var setting      = formatSetting('<?php echo $setting ?>');
     var lang         = 
     {
-        tagetPageTip: '<?php echo $lang->tutorial->tagetPageTip ?>',
-        target      : '<?php echo $lang->tutorial->taget ?>',
+        tagetPageTip: '<?php echo $lang->tutorial->targetPageTip ?>',
+        target      : '<?php echo $lang->tutorial->target ?>',
         requiredTip : '<?php echo $lang->tutorial->requiredTip ?>'
     }
 
