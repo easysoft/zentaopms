@@ -9,6 +9,7 @@
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z sunhao@cnezsoft.com $
  * @link        http://www.zentao.net
  */
+
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Novice tutorial';
 $lang->tutorial->desc             = 'Learn zentao through a series of tasks. This may cost you 10 minutes, you can quit anytime.';
@@ -24,7 +25,10 @@ $lang->tutorial->openTargetPage   = 'Open <strong class="task-page-name">target<
 $lang->tutorial->atTargetPage     = 'In <strong class="task-page-name">target</strong> page';
 $lang->tutorial->reloadTargetPage = 'Reload target page';
 $lang->tutorial->target           = 'Target';
-$lang->tutorial->tagetPageTip     = 'Open【%s】page by this instruction';
+$lang->tutorial->targetPageTip     = 'Open【%s】page by this instruction';
+$lang->tutorial->requiredTip      = '【%s】is necessary';
+$lang->tutorial->congratulateTask = 'Congratulations!You have finished task【<span class="task-name-current"></span>】!';
+$lang->tutorial->serverErrorTip   = 'Some error has occurred.';
 
 $lang->tutorial->tasks = array();
 
