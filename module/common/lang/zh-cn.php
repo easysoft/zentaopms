@@ -66,8 +66,6 @@ $lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text
 $lang->unfold       = '+';
 $lang->fold         = '-';
 $lang->hideNotCheck = '页面隐藏取消选中字段';
-$lang->quitNovice   = '退出新手';
-$lang->enterNovice  = '进入新手';
 $lang->homepage     = '设为主页';
 $lang->tutorial     = '新手教程';
 $lang->feature      = '了解新功能';

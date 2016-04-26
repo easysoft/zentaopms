@@ -199,19 +199,6 @@ class misc extends control
     }
 
     /**
-     * Ajax save novice result.
-     * 
-     * @param  string $novice 
-     * @access public
-     * @return void
-     */
-    public function ajaxSaveNovice($novice = 'true', $reload = 'false')
-    {
-        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice);
-        if($reload == 'true') die(js::reload('parent'));
-    }
-
-    /**
      * Show version feature
      * @access public
      * @return viod
