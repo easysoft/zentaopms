@@ -133,7 +133,7 @@ class customModel extends model
     public static function buildMenuConfig($allMenu, $menuConfig)
     {
         global $app, $lang, $config;
-        $isSetMenuConfig = isset($menuConfig);
+        $isSetMenuConfig = !empty($menuConfig);
         $menu            = array();
         $order           = 1;
         $menuConfigMap   = array();
