@@ -43,13 +43,11 @@
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
           <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
-          <?php if(!empty($result->files)):?>
-          <td class='w-20px'><?php echo html::a("#caseResult{$result->id}", '<i class="btn-icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe'")?></td>
-          <?php endif;?>
+          <td class='w-20px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", '<i class="btn-icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
         <tr class='result-detail hide'>
-          <td colspan='<?php echo empty($result->files) ? 6 : 7?>' class='pd-0'>
+          <td colspan='7' class='pd-0'>
             <table class='table table-condensed borderless mg-0'>
               <thead>
                 <tr>
