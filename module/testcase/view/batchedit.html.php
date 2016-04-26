@@ -61,7 +61,7 @@ foreach(explode(',', $showFields) as $field)
         <td class='text-left<?php echo zget($hasFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules,   $cases[$caseID]->module, "class='form-control chosen'");?></td>
         <td title='<?php echo $cases[$caseID]->title?>'><?php echo html::input("titles[$caseID]", $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?></td>
         <td><?php echo html::select("types[$caseID]", $typeList, $cases[$caseID]->type, 'class=form-control');?></td>
-        <td class='<?php echo zget($hasFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$caseID]", $cases[$caseID]->precondition, "class='form-control'")?></td>
+        <td class='<?php echo zget($hasFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$caseID]", $cases[$caseID]->precondition, "rows='1' class='form-control autosize'")?></td>
         <td class='<?php echo zget($hasFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$caseID]", $cases[$caseID]->keywords, "class='form-control'");?></td>
         <td class='text-left<?php echo zget($hasFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
       </tr>
