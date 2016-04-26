@@ -133,7 +133,7 @@ class customModel extends model
     public static function buildMenuConfig($allMenu, $menuConfig)
     {
         global $app, $lang, $config;
-        $isSetMenuConfig = isset($menuConfig);
+        $isSetMenuConfig = !empty($menuConfig);
         $menu            = array();
         $order           = 1;
         $menuConfigMap   = array();
@@ -186,18 +186,16 @@ class customModel extends model
             $float  = '';
             $fixed  = '';
 
-            $link = is_array($item) ? $item['link'] : $item;
+            $link    = is_array($item) ? $item['link'] : $item;
+            $label   = $link;
+            $hasPriv = true;
             if(strpos($link, '|') !== false)
             {
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
-            }
-            else
-            {
-                $label = $link;
+                $hasPriv = commonModel::hasPriv($module, $method);
             }
 
-            $hasPriv = commonModel::hasPriv($module, $method);
             if($isTutorialMode || $hasPriv)
             {
                 $itemLink = '';
@@ -232,7 +230,7 @@ class customModel extends model
                 if($hidden) $menuItem->hidden  = $hidden;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
-                while(isset($menu[$menuItem->order])) { $menuItem->order++; }
+                while(isset($menu[$menuItem->order])) $menuItem->order++;
                 $menu[$menuItem->order] = $menuItem;
             }
         }

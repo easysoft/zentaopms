@@ -38,8 +38,8 @@ $lang->block->default['product']['1']['title'] = $lang->productCommon . '列表'
 $lang->block->default['product']['1']['block'] = 'list';
 $lang->block->default['product']['1']['grid']  = 8;
 
-$lang->block->default['product']['1']['params']['num']     = 15;
-$lang->block->default['product']['1']['params']['type']  = 'noclosed';
+$lang->block->default['product']['1']['params']['num']  = 15;
+$lang->block->default['product']['1']['params']['type'] = 'noclosed';
 
 $lang->block->default['product']['2']['title'] = '指派给我的需求';
 $lang->block->default['product']['2']['block'] = 'story';
@@ -55,7 +55,7 @@ $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['num']     = 15;
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']  = 'undone';
+$lang->block->default['project']['1']['params']['type']    = 'undone';
 
 $lang->block->default['project']['2']['title'] = '指派给我的任务';
 $lang->block->default['project']['2']['block'] = 'task';
@@ -71,7 +71,7 @@ $lang->block->default['qa']['1']['grid']  = 4;
 
 $lang->block->default['qa']['1']['params']['num']     = 15;
 $lang->block->default['qa']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['1']['params']['type']  = 'assignedTo';
+$lang->block->default['qa']['1']['params']['type']    = 'assignedTo';
 
 $lang->block->default['qa']['2']['title'] = '指派给我的用例';
 $lang->block->default['qa']['2']['block'] = 'case';
@@ -79,7 +79,7 @@ $lang->block->default['qa']['2']['grid']  = 4;
 
 $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['2']['params']['type']  = 'assignedTo';
+$lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
 $lang->block->default['qa']['3']['title'] = '待测版本列表';
 $lang->block->default['qa']['3']['block'] = 'testtask';
@@ -89,23 +89,25 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'wait';
 
-$lang->block->default['my']['1'] = $lang->block->default['project']['2'];
+$lang->block->default['my']['1'] = $lang->block->default['project']['1'];
 $lang->block->default['my']['1']['source'] = 'project';
 $lang->block->default['my']['2']['title']  = '最新动态';
 $lang->block->default['my']['2']['block']  = 'dynamic';
 $lang->block->default['my']['2']['grid']   = 4;
 $lang->block->default['my']['2']['source'] = '';
-$lang->block->default['my']['3'] = $lang->block->default['product']['2'];
+$lang->block->default['my']['3'] = $lang->block->default['product']['1'];
 $lang->block->default['my']['3']['source'] = 'product';
 $lang->block->default['my']['4']['title']  = '我的待办';
 $lang->block->default['my']['4']['block']  = 'list';
 $lang->block->default['my']['4']['grid']   = 4;
 $lang->block->default['my']['4']['source'] = 'todo';
 $lang->block->default['my']['4']['params']['num'] = '20';
-$lang->block->default['my']['5'] = $lang->block->default['project']['1'];
+$lang->block->default['my']['5'] = $lang->block->default['project']['2'];
 $lang->block->default['my']['5']['source'] = 'project';
 $lang->block->default['my']['6'] = $lang->block->default['qa']['1'];
 $lang->block->default['my']['6']['source'] = 'qa';
+$lang->block->default['my']['7'] = $lang->block->default['product']['2'];
+$lang->block->default['my']['7']['source'] = 'product';
 
 $lang->block->num      = '数量';
 $lang->block->type     = '类型';

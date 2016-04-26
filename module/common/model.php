@@ -1295,7 +1295,7 @@ class commonModel extends model
      */
     public static function isTutorialMode()
     {
-        return $_SESSION['tutorialMode'];
+        return (isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']);
     }
 }
 
