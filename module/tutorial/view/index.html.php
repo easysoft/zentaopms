@@ -470,6 +470,11 @@ $(function()
     $modal.on('click', '.close', hideModal);
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    window.onbeforeunload = function()
+    {
+        $.getJSON(createLink('tutorial', 'quit'));
+    }
 });
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>

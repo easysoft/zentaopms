@@ -1756,6 +1756,27 @@ function setHomepage(module, page)
     $.get(createLink('custom', 'ajaxSetHomepage', 'module=' + module + '&page=' + page), function(){location.reload(true)});
 }
 
+/**
+ * Reload page when tutorial mode setted in this session but not load in iframe
+ * 
+ * @access public
+ * @return void
+ */
+function checkTutorial()
+{
+    if(config.currentModule != 'tutorial' && window.TUTORIAL && (!frameElement || frameElement.tagName != 'IFRAME'))
+    {
+        if(confirm(window.TUTORIAL.tip))
+        {
+            $.getJSON(createLink('tutorial', 'quit'), function()
+            {
+                window.location.reload();
+            }).error(function(){alert(lang.timeout)});
+        }
+    }
+}
+
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1805,8 +1826,7 @@ $(document).ready(function()
     });
 
     initPrioritySelector();
-
     initHotKey();
-
     initHelpLink();
+    checkTutorial();
 });

@@ -41,7 +41,7 @@ $clientTheme  = $this->app->getClientTheme();
       $wizardMethod    = constant('WIZARD_METHOD');
       $requiredFields  = '';
       if(isset($config->$wizardModule->$wizardMethod->requiredFields)) $requiredFields = str_replace(' ', '', $config->$wizardModule->$wizardMethod->requiredFields);
-      echo "<script>window.TUTORIAL = {'module': '$wizardModule', 'method': '$wizardMethod'}; if(config) config.requiredFields = '$requiredFields';</script>";
+      echo "<script>window.TUTORIAL = {'module': '$wizardModule', 'method': '$wizardMethod', tip: '$lang->tutorialConfirm'}; if(config) config.requiredFields = '$requiredFields'; </script>";
   }
 
   if(isset($pageCSS)) css::internal($pageCSS);
