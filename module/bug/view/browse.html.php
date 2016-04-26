@@ -65,7 +65,11 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
     <div class='btn-group'>
       <?php
       common::printIcon('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
-      common::printIcon('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", 'btn', 'button', 'plus', '', 'btn-bug-create');
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+          common::printIcon('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams", 'btn', 'button', 'plus', '', 'btn-bug-create', '', false, $lang->bug->create);
+      } else common::printIcon('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", 'btn', 'button', 'plus', '', 'btn-bug-create');
       ?>
     </div>
   </div>

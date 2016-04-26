@@ -236,11 +236,13 @@ $(function()
         var task = tasks[current];
         var $$ = iWindow.$;
         var pageConfig = iWindow.config;
+        var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig.currentModule).toLowerCase();
+        var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig.currentMethod).toLowerCase();
         var targetStatus = status || {},
             $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
             $formTarget = $task.find('[data-target="form"]').removeClass('active'),
             $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
-        targetStatus.nav = task.nav['module'].toLowerCase() === pageConfig.currentModule.toLowerCase() && task.nav['method'].toLowerCase() === pageConfig.currentMethod.toLowerCase();
+        targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod;
 
         if(targetStatus.nav)
         {

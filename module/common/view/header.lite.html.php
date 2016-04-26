@@ -35,6 +35,15 @@ $clientTheme  = $this->app->getClientTheme();
       css::import($defaultTheme . $this->cookie->lang . '.' . $this->cookie->theme . '.css');
   }
 
+  if(commonModel::isTutorialMode())
+  {
+      $wizardModule    = constant('WIZARD_MODULE');
+      $wizardMethod    = constant('WIZARD_METHOD');
+      $requiredFields  = '';
+      if(isset($config->$wizardModule->$wizardMethod->requiredFields)) $requiredFields = str_replace(' ', '', $config->$wizardModule->$wizardMethod->requiredFields);
+      echo "<script>window.TUTORIAL = {'module': '$wizardModule', 'method': '$wizardMethod'}; if(config) config.requiredFields = '$requiredFields';</script>";
+  }
+
   if(isset($pageCSS)) css::internal($pageCSS);
 
   echo html::favicon($webRoot . 'favicon.ico');

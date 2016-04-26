@@ -80,11 +80,12 @@ class tutorial extends control
      */
     public function wizard($module, $method, $params = '')
     {
-        define('WIZARD', true);
+        define('WIZARD_MODULE', $module);
+        define('WIZARD_METHOD', $method);
         $params = helper::safe64Decode($params);
         if($_POST)
         {
-            die();
+            die(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=$params"), 'parent'));
         }
         die($this->fetch($module, $method, $params));
     }

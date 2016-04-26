@@ -359,6 +359,7 @@ class commonModel extends model
             $vars = isset($menuItem->link['vars']) ? $menuItem->link['vars'] : '';
             if(isset($menuItem->tutorial) && $menuItem->tutorial)
             {
+                if(!empty($vars)) $vars = helper::safe64Encode($vars);
                 $link = helper::createLink('tutorial', 'wizard', "module={$menuItem->link['module']}&method={$menuItem->link['method']}&params=$vars");
             }
             else
@@ -472,8 +473,9 @@ class commonModel extends model
         }
 
         /* get current module and method. */
-        $currentModule  = $app->getModuleName();
-        $currentMethod  = $app->getMethodName();
+        $isTutorialMode = commonModel::isTutorialMode();
+        $currentModule  = $isTutorialMode ? constant('WIZARD_MODULE') : $app->getModuleName();
+        $currentMethod  = $isTutorialMode ? constant('WIZARD_METHOD') : $app->getMethodName();
         $menu           = customModel::getModuleMenu($moduleName);
 
         /* The beginning of the menu. */
@@ -701,7 +703,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '')
+    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '')
     {
         if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
 
@@ -727,15 +729,18 @@ class commonModel extends model
         $link = helper::createLink($module, $method, $vars, '', $onlyBody);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
-        $title = $method;
-        if($method == 'create' and $icon == 'copy') $method = 'copy';
-        if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
-        if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method)) 
+        if(empty($title))
         {
-            $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+            $title = $method;
+            if($method == 'create' and $icon == 'copy') $method = 'copy';
+            if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
+            if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method)) 
+            {
+                $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+            }
+            if($icon == 'toStory')   $title  = $lang->bug->toStory;
+            if($icon == 'createBug') $title  = $lang->testtask->createBug;
         }
-        if($icon == 'toStory')   $title  = $lang->bug->toStory;
-        if($icon == 'createBug') $title  = $lang->testtask->createBug;
 
         /* set the class. */
         if(!$icon)
@@ -797,9 +802,9 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '')
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '')
     {
-        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc);
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title);
     }
 
     /**
