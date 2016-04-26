@@ -1680,7 +1680,7 @@ function initHotKey()
  */
 function initHelpLink()
 {
-    var zentaoUrl = 'http://www.zentao.net/book/zentaopmshelp.html?app=zentao';
+    var zentaoUrl = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
     var $mainNav = $('#mainmenu > .nav').first();
     var showLoadingError;
     var timeout = 10000;
