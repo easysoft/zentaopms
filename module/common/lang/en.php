@@ -178,7 +178,7 @@ $lang->todo->menu = $lang->my->menu;
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
-$lang->product->menu->list    = array('link' => '%s' . $lang->arrow, 'fixed' => true);
+$lang->product->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->product->menu->index   = 'Index|product|index|locate=no';
 $lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';

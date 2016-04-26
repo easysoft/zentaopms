@@ -20,7 +20,7 @@
 include dirname(__FILE__) . '/base/helper.class.php';
 class helper extends baseHelper
 {
-    public static function getViewType()
+    public static function getViewType($source = false)
     {
         global $config, $app;
         if($config->requestType != 'GET')
@@ -51,6 +51,7 @@ class helper extends baseHelper
                 $config->default->view = ($config->default->view == 'mhtml' and isset($_GET[$config->moduleVar])) ? 'html' : $config->default->view;
             }
         }
+        if($source and isset($viewType)) return $viewType;
 
         if(isset($viewType) and strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
         return isset($viewType) ? $viewType : $config->default->view;

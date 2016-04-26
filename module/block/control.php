@@ -299,7 +299,7 @@ class block extends control
 
             echo "<th>{$this->lang->block->lblBlock}</th>";
             echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';
-            if(isset($block->source)) echo "<script>$(function(){console.log(1, window.getBlockParams); getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
+            if(isset($block->source)) echo "<script>$(function(){getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
         }   
         elseif($mode == 'getblockform')
         {   

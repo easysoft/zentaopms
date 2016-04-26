@@ -17,8 +17,8 @@
     <th width='30'><?php echo $lang->priAB?></th>
     <th>           <?php echo $lang->story->title;?></th>
     <th width='50'><?php echo $lang->story->estimateAB;?></th>
-    <th width='50'><?php echo $lang->statusAB;?></th>
-    <th width='60'><?php echo $lang->story->stageAB;?></th>
+    <th width='70'><?php echo $lang->statusAB;?></th>
+    <th width='70'><?php echo $lang->story->stageAB;?></th>
   </tr>
   </thead>
   <?php foreach($stories as $story):?>
@@ -27,12 +27,12 @@
   $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
   ?>
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-    <td><?php echo $story->id;?></td>
-    <td><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></td>
+    <td class='text-center'><?php echo $story->id;?></td>
+    <td class='text-center'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></td>
     <td style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
-    <td><?php echo $story->estimate?></td>
-    <td ><?php echo zget($lang->story->statusList, $story->status, $story->status);?></th>
-    <td ><?php echo zget($lang->story->stageList, $story->stage, $story->stage);?></th>
+    <td class='text-center'><?php echo $story->estimate?></td>
+    <td class='text-center'><?php echo zget($lang->story->statusList, $story->status, $story->status);?></th>
+    <td class='text-center'><?php echo zget($lang->story->stageList, $story->stage, $story->stage);?></th>
   </tr>
   <?php endforeach;?>
 </table>

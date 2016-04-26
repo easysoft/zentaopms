@@ -22,6 +22,8 @@ $lang->search->deleteQuery   = 'Delete query';
 $lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
 $lang->search->select        = 'Stories/Tasks filter';
 $lang->search->me            = 'Me';
+$lang->search->shortcut      = 'Shortcut';
+$lang->search->noQuery       = 'Save no query!';
 
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';

@@ -14,11 +14,11 @@
   <thead>
   <tr>
     <th width='50'><?php echo $lang->idAB?></th>
-    <th width='40'><?php echo $lang->priAB?></th>
+    <th width='50'><?php echo $lang->priAB?></th>
     <th>           <?php echo $lang->case->title;?></th>
     <th width='120'> <?php echo $lang->testtask->lastRunTime;?></th>
     <th width='60'>  <?php echo $lang->testtask->lastRunResult;?></th>
-    <th width='50'><?php echo $lang->statusAB;?></th> 
+    <th width='70'><?php echo $lang->statusAB;?></th> 
   </tr>
   </thead>
   <?php foreach($cases as $case):?>
@@ -27,12 +27,12 @@
   $viewLink = $this->createLink('testcase', 'view', "caseID={$case->id}");
   ?>
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-    <td><?php echo $case->id;?></td>
-    <td><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></td>
+    <td class='text-center'><?php echo $case->id;?></td>
+    <td class='text-center'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></td>
     <td style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
-    <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-    <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-    <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+    <td class='text-center'><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+    <td class='text-center'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+    <td class='text-center'><?php echo $lang->testcase->statusList[$case->status];?></td>
   </tr>
   <?php endforeach;?>
 </table>
