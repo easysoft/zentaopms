@@ -440,7 +440,6 @@ $(function()
         $progress.find('.progress-text').text(progress + '%');
 
         showTask(current);
-        console.log('totalCount', totalCount, 'finishCount', finishCount);
     };
 
     updateUI();
