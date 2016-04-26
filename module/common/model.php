@@ -294,7 +294,7 @@ class commonModel extends model
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
 
-        echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'");
+        if(!commonModel::isTutorialMode()) echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'");
         echo html::a(helper::createLink('misc', 'feature'), $lang->feature, '', "class='iframe' data-width='1200' data-headerless='true'");
         echo html::a('javascript:;', $lang->help, '', "class='open-help-tab'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
@@ -344,6 +344,32 @@ class commonModel extends model
     }
 
     /**
+     * Create menu item link
+     * 
+     * @param  object   $menuItemLink
+     * @param  boolean  $isTutorialMode
+     * @access public
+     * @return string
+     */
+    public static function createMenuLink($menuItem)
+    {
+        $link = $menuItem->link;
+        if(is_array($menuItem->link))
+        {
+            $vars = isset($menuItem->link['vars']) ? $menuItem->link['vars'] : '';
+            if(isset($menuItem->tutorial) && $menuItem->tutorial)
+            {
+                $link = helper::createLink('tutorial', 'wizard', "module={$menuItem->link['module']}&method={$menuItem->link['method']}&params=$vars");
+            }
+            else
+            {
+                $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
+            }
+        }
+        return $link;
+    }
+
+    /**
      * Print the main menu.
      * 
      * @param  string $moduleName 
@@ -368,19 +394,19 @@ class commonModel extends model
         }
 
         /* Print all main menus. */
-        $menu       = customModel::getMainMenu();
-        $activeName = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
+        $menu           = customModel::getMainMenu();
+        $activeName     = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
 
         echo "<ul class='nav'>\n";
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
-            $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], isset($menuItem->link['vars']) ? $menuItem->link['vars'] : null) : $menuItem->link;
+            $link   = commonModel::createMenuLink($menuItem);
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
         $customLink = helper::createLink('custom', 'menu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
-        echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
+        if(!commonModel::isTutorialMode()) echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
@@ -446,9 +472,9 @@ class commonModel extends model
         }
 
         /* get current module and method. */
-        $currentModule = $app->getModuleName();
-        $currentMethod = $app->getMethodName();
-        $menu = customModel::getModuleMenu($moduleName);
+        $currentModule  = $app->getModuleName();
+        $currentMethod  = $app->getMethodName();
+        $menu           = customModel::getModuleMenu($moduleName);
 
         /* The beginning of the menu. */
         echo "<ul class='nav'>\n";
@@ -467,7 +493,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = is_array($menuItem->link) ? helper::createLink($menuItem->link['module'], $menuItem->link['method'], isset($menuItem->link['vars']) ? $menuItem->link['vars'] : '') : $menuItem->link;
+                $link   = commonModel::createMenuLink($menuItem);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['subModule']))
@@ -1255,6 +1281,16 @@ class commonModel extends model
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
         return "$httpType://$httpHost";
+    }
+
+    /**
+     * Check whether view type is tutorial
+     * @access public
+     * @return boolean
+     */
+    public static function isTutorialMode()
+    {
+        return $_SESSION['tutorialMode'];
     }
 }
 
