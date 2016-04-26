@@ -539,9 +539,7 @@ class baseHelper
         $domain = strtolower($domain);
 
         if(isset($config->siteCode[$domain])) return $config->siteCode[$domain];
-
         if($domain == 'localhost') return $domain;
-        if(!preg_match('/^([a-z0-9\-_]+\.)+[a-z0-9\-]+$/', $domain)) die('domain denied');
 
         $domain  = str_replace('-', '_', $domain);    // Replace '-' by '_'.
         $items   = explode('.', $domain);
