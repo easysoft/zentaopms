@@ -14,9 +14,10 @@
   <thead>
   <tr>
     <th width='50'><?php echo $lang->idAB?></th>
-    <th width='40'><?php echo $lang->bug->severityAB?></th>
-    <th width='40'><?php echo $lang->priAB?></th>
+    <th width='50'><?php echo $lang->priAB?></th>
     <th>           <?php echo $lang->bug->title;?></th>
+    <th width='50'><?php echo $lang->bug->severityAB?></th>
+    <th width='70'><?php echo $lang->bug->statusAB;?></th>
   </tr>
   </thead>
   <?php foreach($bugs as $bug):?>
@@ -25,10 +26,11 @@
   $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
   ?>
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-    <td><?php echo $bug->id;?></td>
-    <td><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></td>
-    <td><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></td>
+    <td class='text-center'><?php echo $bug->id;?></td>
+    <td class='text-center'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></td>
     <td style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+    <td class='text-center'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></td>
+    <td class='text-center'><?php echo zget($lang->bug->statusList, $bug->status, $bug->status)?></td>
   </tr>
   <?php endforeach;?>
 </table>
