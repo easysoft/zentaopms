@@ -520,6 +520,8 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
+        if(defined('KIZARD')) return $this->loadModel('tutorial')->getProjectPairs();
+
         $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
         /* Order by status's content whether or not done */
@@ -840,6 +842,8 @@ class projectModel extends model
      */
     public function getById($projectID, $setImgSize = false)
     {
+        if(defined('WIZARD')) return $this->loadModel('tutorial')->getProject();
+
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         if(!$project) return false;
 
@@ -901,6 +905,11 @@ class projectModel extends model
      */
     public function getProducts($projectID, $withBranch = true)
     {
+        if(defined('WIZARD'))
+        {
+            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
+            return $this->loadModel('tutorial')->getProjectProducts();
+        }
         $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')

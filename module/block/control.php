@@ -188,7 +188,7 @@ class block extends control
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
         /* Init block when vist index first. */
-        if(empty($blocks) and !$inited)
+        if(empty($blocks) and !$inited and !defined('KIZARD'))
         {
             if($this->block->initBlock($module)) die(js::reload());
         }

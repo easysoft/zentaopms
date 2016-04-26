@@ -431,6 +431,6 @@ foreach($fieldParams as $fieldName => $param)
 </div>
 </form>
 <script language='Javascript'>
-$("#shortcutModal").modalTrigger({width:650, type:'iframe'});
+if($('#shortcutModal').size() > 0) $("#shortcutModal").modalTrigger({width:650, type:'iframe'});
 <?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}('#{$module}-search')";?>
 </script>

@@ -51,4 +51,23 @@ class tutorial extends control
         $this->view->referer = base64_decode($referer);
         $this->display();
     }
+
+    /**
+     * Wizard. 
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $params 
+     * @access public
+     * @return void
+     */
+    public function wizard($module, $method, $params = '')
+    {
+        define('WIZARD', true);
+        if($_POST)
+        {
+            die();
+        }
+        die($this->fetch($module, $method, $params));
+    }
 }

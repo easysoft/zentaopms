@@ -141,6 +141,7 @@ class productModel extends model
      */
     public function getById($productID)
     {
+        if(defined('WIZARD')) return $this->loadModel('tutorial')->getProduct();
         return $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
     }
 
@@ -183,6 +184,8 @@ class productModel extends model
      */
     public function getPairs($mode = '')
     {
+        if(defined('WIZARD')) return $this->loadModel('tutorial')->getProductPairs();
+
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
         $mode    .= $this->cookie->productMode;
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
@@ -363,6 +366,8 @@ class productModel extends model
      */
     public function getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager)
     {
+        if(defined('WIZARD')) return $this->loadModel('tutorial')->getStories();
+
         $this->loadModel('story');
 
         /* Set modules and browse type. */
