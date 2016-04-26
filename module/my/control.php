@@ -383,8 +383,10 @@ class my extends control
             }
         }
 
-        $mode  = empty($mode) ? 'edit' : $mode;
-        $lists = $this->user->getContactLists($this->app->user->account);
+        $mode   = empty($mode) ? 'edit' : $mode;
+        $lists  = $this->user->getContactLists($this->app->user->account);
+        $listID = $listID ? $listID : key($lists);
+        if(!$listID) $mode = 'new';
 
         /* Create or manage list according to mode. */
         if($mode == 'new')
@@ -394,9 +396,6 @@ class my extends control
         }
         else
         {
-            $listID = $listID ? $listID : key($lists);
-            if(!$listID) die(js::alert($this->lang->user->contacts->noListYet) . js::locate($this->createLink('my', 'managecontacts', "listID=0&mode=new"), 'parent'));
-
             $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->manage;
             $this->view->position[] = $this->lang->user->contacts->manage;
             $this->view->list       = $this->user->getContactListByID($listID);
