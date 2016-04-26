@@ -16,7 +16,7 @@
     <th width='50'><?php echo $lang->idAB?></th>
     <th>           <?php echo $lang->testtask->product;?></th>
     <th>           <?php echo $lang->testtask->name;?></th>
-    <th>           <?php echo $lang->testtask->project . '/' . $lang->testtask->project;?></th>
+    <th>           <?php echo $lang->testtask->project . '/' . $lang->testtask->build;?></th>
     <th width='80'><?php echo $lang->testtask->begin;?></th>
     <th width='80'><?php echo $lang->testtask->end;?></th>
   </tr>
@@ -30,7 +30,7 @@
     <td class='text-center'><?php echo $testtask->id;?></td>
     <td title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
     <td title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>
-    <td title='<?php echo $testtask->projectName . '/' . $testtask->buildName?>'><?php echo $testtask->projectName . '/' . $testtask->buildName?></td>
+    <td class='text-center' title='<?php echo $testtask->projectName . '/' . $testtask->buildName?>'><?php echo $testtask->projectName . '/' . $testtask->buildName?></td>
     <td><?php echo $testtask->begin?></td>
     <td><?php echo $testtask->end?></td>
   </tr>

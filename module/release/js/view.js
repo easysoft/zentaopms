@@ -25,7 +25,6 @@ $(function()
         if(tabPane.size() == 0) return;
         var formID = tabPane.find('.linkBox').find('form:last');
         if(formID.size() == 0) formID = tabPane.find('form:last');
-        console.log(formID);
         setTimeout(function(){fixedTfootAction(formID)}, 100);
     });
 })
