@@ -44,11 +44,29 @@ class tutorial extends control
             die(json_encode(array('result' => isset($setting) ? 'success' : 'fail', 'setting' => $setting), JSON_HEX_QUOT | JSON_HEX_APOS));
         }
 
+        $this->session->set('tutorialMode', true);
+
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
         $this->view->setting = $setting;
         $this->view->referer = base64_decode($referer);
         $this->display();
+    }
+
+    /**
+     * Exit tuturial mode
+     * @access public
+     * @return void
+     */
+    public function quit($referer = '')
+    {
+        $this->session->set('tutorialMode', false);
+
+        if(!empty($referer))
+        {
+            die(js::locate(base64_decode($referer), 'parent'));
+        }
+        die(json_encode(array('result' => 'success')));
     }
 
     /**
