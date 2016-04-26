@@ -285,7 +285,7 @@ class userModel extends model
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5($users->password[$i]); 
                 $data[$i]->commiter = $users->commiter[$i];
-                $data[$i]->join     = $users->join[$i];
+                $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($user->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
                 $data[$i]->yahoo    = $users->yahoo[$i];
