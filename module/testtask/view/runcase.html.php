@@ -48,8 +48,8 @@
         <td>
           <table class='fix-border fix-position'>
             <tr>
-              <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='form-control fix-textarea'");?></td>
-              <td><button type='button' title='<?php echo $lang->testtask->files?>' class='btn btn-file' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
+              <td><?php echo html::textarea("reals[$step->id]", '', "rows=1 class='form-control autosize'");?></td>
+              <td><button type='button' title='<?php echo $lang->testtask->files?>' class='btn' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
             </tr>
           </table>
         </td>

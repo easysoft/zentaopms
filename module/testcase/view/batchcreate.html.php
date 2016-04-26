@@ -70,7 +70,7 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
       <td class='<?php echo zget($hasFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
-      <td class='<?php echo zget($hasFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "class='form-control'")?></td>
+      <td class='<?php echo zget($hasFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
       <td class='<?php echo zget($hasFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
       <td class='text-left<?php echo zget($hasFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
     </tr>

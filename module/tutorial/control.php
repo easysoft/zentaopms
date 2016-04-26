@@ -81,6 +81,7 @@ class tutorial extends control
     public function wizard($module, $method, $params = '')
     {
         define('WIZARD', true);
+        $params = helper::safe64Decode($params);
         if($_POST)
         {
             die();

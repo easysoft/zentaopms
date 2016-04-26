@@ -56,7 +56,7 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr><td colspan='<?php echo count($hasFields) + 3?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo count($hasFields) + 4?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=product&section=custom&key=batchedit')?>

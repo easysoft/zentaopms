@@ -73,7 +73,7 @@ $minWidth = (count($hasFields) > 5) ? 'w-150px' : '';
     <td><?php echo html::input("orders[$projectID]", $projects[$projectID]->order, "class='form-control' autocomplete='off'")?></td>
   </tr>
   <?php endforeach;?>
-  <tr><td colspan='<?php echo count($hasFields) + 5?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+  <tr><td colspan='<?php echo count($hasFields) + 6?>' class='text-center'><?php echo html::submitButton();?></td></tr>
 </table>
 </form>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=project&section=custom&key=batchedit')?>
