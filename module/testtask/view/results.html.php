@@ -42,8 +42,8 @@
           <td class='w-180px'><?php echo $result->date;?></td>
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
-          <td class='w-50px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", '<i class="icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe'")?></td>
           <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
+          <td class='w-20px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", '<i class="btn-icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
         <tr class='result-detail hide'>
@@ -71,7 +71,7 @@
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
                 <td>
                   <?php echo $stepResult['real'];?>
-                  <?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", '<i class="icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe' style='float:right'")?>
+                  <?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", '<i class="btn-icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe' style='float:right'")?>
                 </td>
               </tr>
                 <?php else:?>

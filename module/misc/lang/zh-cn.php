@@ -60,3 +60,10 @@ $lang->misc->repairTable = "数据库表可以因为断电原因损坏，需要�
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "状态";
 $lang->misc->novice      = "您可能初次使用禅道，是否进入新手模式？";
+
+$lang->misc->feature = new stdclass();
+$lang->misc->feature->lastest       = '最新版本';
+$lang->misc->feature->all = array();
+$lang->misc->feature->all['latest']   = array();
+$lang->misc->feature->all['latest'][] = array('title'=>'可自定义内容的首页', 'desc' => '<p>你的地盘由你做主。现在开始，你可以向首页添加多种多样的内容区块，而且还可以决定如何排列和显示他们。</p>', 'img' => '1.gif');
+$lang->misc->feature->all['latest'][] = array('title'=>'完全定制所有导航内容', 'desc' => '<p>导航上显示的项目现在完全由你来决定。将鼠标悬浮在导航上稍后会在右侧显示定制按钮，点击打开定制对话框，通过点击切换项目是否显示，拖拽导航项目来更改显示顺序。</p>', 'img' => '2.gif');

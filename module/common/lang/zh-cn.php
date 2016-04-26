@@ -70,6 +70,7 @@ $lang->quitNovice   = '退出新手';
 $lang->enterNovice  = '进入新手';
 $lang->homepage     = '设为主页';
 $lang->tutorial     = '新手教程';
+$lang->feature      = '了解新功能';
 $lang->customMenu   = '自定义导航';
 
 $lang->preShortcutKey  = '[快捷键:←]';

@@ -18,10 +18,16 @@
     <iframe id='iframePage' name='iframePage' src='<?php echo $referer ?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
     <div id='taskModalBack'></div>
     <div id='taskModal'>
+      <button class='close'>×</button>
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back'></i><i class='icon icon-check icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulation ?></h3>
-        <button type='button' class='btn btn-success'><i class="icon icon-repeat"></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo $referer ?>' class='btn btn-success'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
+        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-repeat'></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo $referer ?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit ?></a>
+      </div>
+      <div class='finish'>
+        <div class='start-icon'><i class='icon icon-circle icon-back'></i><i class='icon icon-check icon-front'></i></div>
+        <h3><?php echo $lang->tutorial->congratulateTask ?></h3>
+        <button type='button' class='btn btn-success btn-next-task btn-task'><?php echo $lang->tutorial->nextTask ?> <i class='icon icon-angle-right'></i></button>
       </div>
     </div>
   </div>
@@ -57,7 +63,8 @@
     <section id='all'>
       <h4><?php echo $lang->tutorial->allTasks ?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks) ?></span>)</h4>
       <div class='progress' id='tasksProgress'>
-        <div class='progress-bar' style='width: 40%'>
+        <div class='progress-text'></div>
+        <div class='progress-bar' style='width: 0%'>
         </div>
       </div>
       <ul id='tasks' class='nav nav-primary nav-stacked'>
@@ -69,8 +76,8 @@
         <?php
         $nav = $task['nav'];
         $task['name'] = $name;
-        $task['id'] = $idx+1;
-        $task['url'] = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
+        $task['id']   = $idx+1;
+        $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
         $tasks[$name] = $task;
         ?>
         <li data-name='<?php echo $name; ?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name; ?>'><span><?php echo $idx++; ?></span>. <span class='task-name'><?php echo $task['title'] ?></span><i class='icon icon-check pull-right'></i></a></li>
@@ -100,23 +107,48 @@ $(function()
     var setting      = formatSetting('<?php echo $setting ?>');
     var lang         = 
     {
-        tagetPageTip: '<?php echo $lang->tutorial->tagetPageTip ?>',
-        target      : '<?php echo $lang->tutorial->target ?>'
+        tagetPageTip: '<?php echo $lang->tutorial->targetPageTip ?>',
+        target      : '<?php echo $lang->tutorial->target ?>',
+        requiredTip : '<?php echo $lang->tutorial->requiredTip ?>'
     }
-
-    console.log('TASKS', tasks);
-    console.log('SETTING', setting);
 
     var $tasks        = $('#tasks'),
         $task         = $('#task'),
         $openTaskPage = $('#openTaskPage'),
-        $finish       = $('#finish');
-    var totalCount    = $tasks.length;
+        $progress     = $('#tasksProgress'),
+        $modal        = $('#taskModal'),
+        $modalBack    = $('#taskModalBack');
+    var totalCount    = $tasks.children('li').length, finishCount = 0;
 
     var iWindow = window.frames['iframePage'];
     var iframe  = $('#iframePage').get(0);
-    var checkTaskId = null;
+    var checkTaskId = null, modalShowTaskId;
     var $lastTooltip;
+
+    var showModal = function(showAll)
+    {
+        clearTimeout(modalShowTaskId);
+        $modal.show();
+        $modalBack.show();
+        $modal.toggleClass('show-all', showAll);
+        modalShowTaskId = setTimeout(function()
+        {
+            $modal.addClass('in');
+            $modalBack.addClass('in');
+        }, 10);
+    };
+
+    var hideModal = function()
+    {
+        clearTimeout(modalShowTaskId);
+        $modal.removeClass('in');
+        $modalBack.removeClass('in');
+        modalShowTaskId = setTimeout(function()
+        {
+            $modal.hide();
+            $modalBack.hide();
+        }, 450);
+    };
 
     var highlight = function($e, callback)
     {
@@ -128,8 +160,44 @@ $(function()
 
     var finishTask = function()
     {
-        $task.addClass('finish').find('[data-target]').removeClass('active').addClass('finish');
-        alert('you finish task: ' + JSON.stringify(task));
+        var task = tasks[current];
+        if(task)
+        {
+            setting[current] = true;
+            var postData = [];
+            $.each(setting, function(name, value) {if(value) postData.push(name);});
+
+            $.post('<?php echo inLink('index') ?>', {finish: postData.join(',')}, function(e)
+            {
+                if(e.result === 'success')
+                {
+                    $task.addClass('finish').find('[data-target]').removeClass('active').addClass('finish');
+                    updateUI();
+                    showModal(finishCount >= totalCount);
+                }
+                else
+                {
+                    setting[current] = false;
+                    alert('<?php echo $lang->tutorial->serverErrorTip ?>');
+                }
+            }, 'json').error(function() {alert(lang.timeout)});
+        }
+    };
+
+    var resetTasks = function()
+    {
+        $.post('<?php echo inLink('index') ?>', {finish: ''}, function(e)
+        {
+            if(e.result === 'success')
+            {
+                setting = {};
+                updateUI();
+            }
+            else
+            {
+                alert('<?php echo $lang->tutorial->serverErrorTip ?>');
+            }
+        }, 'json').error(function() {alert(lang.timeout)});
     };
 
     var showToolTip = function($e, text, options)
@@ -149,16 +217,22 @@ $(function()
         $e.tooltip('show');
     };
 
-    var checkTask = function()
+    var tryCheckTask = function()
     {
-        if(!(iWindow && iWindow.config && iWindow.$))
-        {
-            checkTaskId = setTimeout(checkTask, 1000);
-            return;
-        }
-
         if(checkTaskId) clearTimeout(checkTaskId);
 
+        if(!(iWindow && iWindow.config && iWindow.$))
+        {
+            checkTaskId = setTimeout(tryCheckTask, 1000);
+        }
+        else
+        {
+            checkTaskId = setTimeout(checkTask, 200);
+        }
+    };
+
+    var checkTask = function()
+    {
         var task = tasks[current];
         var $$ = iWindow.$;
         var pageConfig = iWindow.config;
@@ -195,14 +269,13 @@ $(function()
                 {
                     fieldSelector += ',' + '#' + requiredId;
                     var $required = $$('#' + requiredId);
-                        console.log('check', requiredId, $required.val(), $required);
                     if($required.length)
                     {
                         var val = $required.val();
                         if(val === undefined || val === null || val === '')
                         {
                             targetStatus.form = false;
-                            targetStatus.waitFeild = $required;
+                            if(!targetStatus.waitFeild) targetStatus.waitFeild = $required;
                         }
                     }
                 });
@@ -212,7 +285,7 @@ $(function()
             if(!$form.data('bindCheckTaskEvent'))
             {
                 $form.off('submit .tutorial');
-                $form.on('change.tutorial', fieldSelector, checkTask);
+                $form.on('change.tutorial', fieldSelector, tryCheckTask);
                 var onSubmit = function(e)
                 {
                     var status = checkTask();
@@ -220,8 +293,11 @@ $(function()
                     {
                         if(status.waitFeild)
                         {
+                            var feildName = status.waitFeild.closest('td').prev('th').text();
+                            if(feildName) showToolTip(status.waitFeild, lang.requiredTip.replace('%s', feildName));
                             highlight(status.waitFeild, function() {
                                 setTimeout(function() {
+                                    showToolTip($formWrapper, $formTarget.text());
                                     highlight($formWrapper);
                                 }, 2000);
                             });
@@ -291,7 +367,7 @@ $(function()
     var onIframeLoad = function()
     {
         iWindow = window.frames['iframePage'];
-        checkTask();
+        tryCheckTask();
         var title = (iWindow.$ ? iWindow.$('head > title').text() : '') + $('head > title').text();
         var url = createLink('tutorial', 'index', 'referer=' + Base64.encode(iWindow.location.href) + '&task=' + current);
         window.history.replaceState({}, title, url);
@@ -300,7 +376,6 @@ $(function()
     var openIframePage = function(url)
     {
         url = url || tasks[current].url;
-        console.log('open', url);
         try
         {
             iWindow.location.replace(url);
@@ -313,6 +388,8 @@ $(function()
 
     var showTask = function(taskName)
     {
+        hideModal();
+
         taskName = taskName || current;
         current = taskName;
 
@@ -321,22 +398,24 @@ $(function()
         if(!task) return;
 
         var $li = $tasks.children('li').removeClass('active').filter('[data-name="' + taskName + '"]').addClass('active');
-        $task.find('.task-name-current').text(task.title);
-        $task.find('.task-id-current').text(task.id);
         $task.toggleClass('finish', task.finish);
-        $task.find('.task-desc').html(task.desc).find('.task-nav').addClass('btn-open-target-page');
-        $task.find('.task-page-name').text(task.nav.targetPageName || lang.target);
+        $('.task-name-current').text(task.title);
+        $('.task-id-current').text(task.id);
+        $('.task-desc').html(task.desc).find('.task-nav').addClass('btn-open-target-page');
+        $('.task-page-name').text(task.nav.targetPageName || lang.target);
 
         var $prev = $li.prev('li'), $next = $li.next('li');
         $('.btn-prev-task').toggleClass('hidden', !$prev.length).data('name', $prev.data('name'));
         $('.btn-next-task').toggleClass('hidden', !$next.length).data('name', $next.data('name'));
-        checkTask();
+        tryCheckTask();
     };
 
     var updateUI = function()
     {
-        var currentTask, finishCount = 0;
+        var currentTask;
 
+        finishCount = 0;
+        totalCount  = 0;
         $tasks.children('li').each(function(idx)
         {
             var $li      = $(this);
@@ -346,18 +425,26 @@ $(function()
             task.id      = idx + 1;
             task.finish  = finish;
             finishCount += finish ? 1 : 0;
+            totalCount++;
 
             $li.toggleClass('finish', finish);
             if(!current && !finish) current = name;
         });
 
-        $finish.toggleClass('show', finishCount >= totalCount);
         $('.task-num-finish').text(finishCount);
+        var isFinishAll = finishCount >= totalCount;
+        if(isFinishAll) current = $tasks.children('li').first().data('name');
+
+        var progress = Math.round(100*finishCount/totalCount);
+        $progress.toggleClass('finish', isFinishAll).find('.progress-bar').css('width', (100*finishCount/totalCount) + '%');
+        $progress.find('.progress-text').text(progress + '%');
 
         showTask(current);
+        console.log('totalCount', totalCount, 'finishCount', finishCount);
     };
 
     updateUI();
+    if(finishCount >= totalCount) showModal(true);
 
     $(document).on('click', '.btn-task', function()
     {
@@ -365,6 +452,10 @@ $(function()
     }).on('click', '.btn-open-target-page', function()
     {
         openIframePage();
+    }).on('click', '.btn-reset-tasks', function()
+    {
+        hideModal();
+        resetTasks();
     });
 
     iframe.onload = iframe.onreadystatechange = function()
@@ -374,6 +465,10 @@ $(function()
     };
 
     iWindow.onload = onIframeLoad;
+
+    $modal.on('click', '.close', hideModal);
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
