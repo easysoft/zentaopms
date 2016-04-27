@@ -9,7 +9,7 @@
  * @version     $Id: login.html.php 5084 2013-07-10 01:31:38Z wyd621@gmail.com $
  */
 include '../../common/view/header.lite.html.php';
-if(!empty($config->safe->md5Pwd))js::import($jsRoot . 'md5.js');
+if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
 <div id='container'>
   <div id='login-panel'>
