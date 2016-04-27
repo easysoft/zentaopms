@@ -363,9 +363,10 @@ class deptModel extends model
         if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,qd,qa,dev,', role) AS roleOrder";
         $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
 
+        $childDeptIds = $this->getAllChildID($deptID);
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->beginIF($deptID)->andWhere('dept')->eq((int)$deptID)->fi()
+            ->beginIF($deptID)->andWhere('dept')->in($childDeptIds)->fi()
             ->orderBy($orderBy)
             ->fetchAll('account');
 
