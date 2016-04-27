@@ -645,12 +645,12 @@ function setComment()
 }
 
 /**
- * Auto checked the checkbox of a row. 
+ * Make table checkable by click row
  * 
  * @access public
  * @return void
  */
-function autoCheck()
+function checkTable()
 {
     var checkRow = function(checked)
     {
@@ -671,28 +671,41 @@ function autoCheck()
             $tr.closest('.table').find('.rows-selector').prop('checked', false);
         }
     };
-    $('.tablesorter:not(.table-datatable)')
-        .selectable({
-            selector: 'tbody > tr',
-            trigger: 'tbody',
-            start: function(e) {
-                if($(e.target).is(':checkbox')) return false;
-            },
-            select: function(e) {
-                checkRow.call(e.target, true);
-            },
-            unselect: function(e) {
-                checkRow.call(e.target, false);
-            }
-        })
-        .on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();});
+    $('.tablesorter:not(.table-datatable)').selectable(
+    {
+        selector: 'tbody > tr',
+        trigger: 'tbody',
+        start: function(e)
+        {
+            if($(e.target).is(':checkbox,a')) return false;
+            var that = this;
+            that.selections = {};
+            that.$.find('tbody > tr').each(function(idx)
+            {
+                var $tr = $(this);
+                if($tr.hasClass(that.options.selectClass))
+                {
+                    that.selections[$tr.data('id')] = idx + 1;
+                }
+            });
+        },
+        select: function(e)
+        {
+            checkRow.call(e.target, true);
+        },
+        unselect: function(e)
+        {
+            checkRow.call(e.target, false);
+        }
+    }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'a', function(e) {e.stopPropagation();});
 
     $(document).on('change', '.rows-selector:checkbox', function()
     {
         var $checkbox = $(this);
         var $datatable = $checkbox.closest('.datatable');
         if($datatable.length) {
-            $datatable.find('.check-all.check-btn:first').trigger('click');
+            var $checkAll = $datatable.find('.check-all.check-btn:first').trigger('click');
+            $checkbox.prop('checked', $checkAll.hasClass('checked'))
             return;
         }
         var scope = $checkbox.data('scope');
@@ -1798,7 +1811,7 @@ $(document).ready(function()
 
     setModalTriggerLink();
 
-    autoCheck();
+    checkTable();
     toggleSearch();
 
     fixStyle();
