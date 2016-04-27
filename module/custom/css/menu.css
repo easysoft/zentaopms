@@ -7,6 +7,7 @@
 #mainmenu {padding-left: 10px; padding-right: 10px;}
 #featurebar {border-top: 1px solid #ddd}
 #featurebar > .nav {width: 100%}
+#menuEditor .nav > li > a {cursor: move}
 #menuEditor .nav > li > a .item-hidden-icon {display: none}
 #menuEditor .nav > li.menu-hidden > a .item-hidden-icon {display: inline-block; margin-left: 5px;}
 #menuEditor .nav > li.menu-hidden {opacity: 0.5;}
