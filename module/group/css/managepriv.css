@@ -1,3 +1,5 @@
 .form-condensed select.form-control {height:250px}
 #featurebar > .nav > li > a > .icon-home {display: none}
 .group-item {display:block; width:200px; float:left; font-size: 14px}
+.outer .table.table-form tbody > tr:last-child td {border-top: 1px solid #ddd}
+@-moz-document url-prefix(){.outer .table.table-form tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child th {border-bottom: 1px solid #ddd}}
