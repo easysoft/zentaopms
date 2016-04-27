@@ -33,11 +33,13 @@ $lang->story->batchChangePlan   = "批量修改計劃";
 $lang->story->batchChangeBranch = "批量修改分支";
 $lang->story->batchChangeStage  = "批量修改階段";
 $lang->story->batchAssignTo     = "批量指派";
+$lang->story->batchChangeModule = "批量修改模組";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';
 $lang->story->product        = "所屬{$lang->productCommon}";
 $lang->story->module         = '所屬模組';
+$lang->story->moduleAB       = '模組';
 $lang->story->source         = '需求來源';
 $lang->story->fromBug        = '來源Bug';
 $lang->story->title          = '需求名稱';
@@ -74,8 +76,11 @@ $lang->story->reviewResult   = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
 $lang->story->newStory       = '繼續添加需求';
+$lang->story->colorTag       = '顏色標籤';
+$lang->story->files          = '附件';
 
-$lang->story->same = '同上';
+$lang->story->ditto       = '同上';
+$lang->story->dittoNotice = '該需求與上一需求不屬於同一產品！';
 
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';

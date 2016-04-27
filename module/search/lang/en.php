@@ -25,6 +25,8 @@ $lang->search->me            = 'Me';
 $lang->search->shortcut      = 'Shortcut';
 $lang->search->noQuery       = 'Save no query!';
 
+$lang->search->noticeShortcut = 'Set shortcut, that can fixed menu and easy to use.';
+
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';
 $lang->search->operators['>']          = '>';

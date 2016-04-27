@@ -7,6 +7,7 @@ $lang->custom->key       = '鍵';
 $lang->custom->value     = '值';
 $lang->custom->flow      = '流程';
 $lang->custom->select    = '請選擇流程：';
+$lang->custom->branch    = '多分支';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
@@ -63,10 +64,11 @@ $lang->custom->user->fields['statusList'] = '狀態';
 $lang->custom->currentLang = '適用當前語言';
 $lang->custom->allLang     = '適用所有語言';
 
-$lang->custom->confirmRestore = '是否要恢復預設語言配置？';
+$lang->custom->confirmRestore = '是否要恢復預設配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole = '鍵的長度必須小於20個字元！';
+$lang->custom->notice->userRole  = '鍵的長度必須小於20個字元！';
+$lang->custom->notice->indexPage = "%s增加首頁頁面，是否設該頁面為主頁？";
 
 $lang->custom->storyReview   = '評審流程';
 $lang->custom->reviewList[1] = '開啟';
@@ -78,3 +80,6 @@ $lang->custom->productproject->relation['0_1'] = '產品 - 迭代';
 $lang->custom->productproject->relation['1_1'] = '項目 - 迭代';
 
 $lang->custom->productproject->notice = '請根據實際情況選擇適合自己團隊的概念。';
+
+$lang->custom->menuTip  = '點擊導航項目來切換顯示或隱藏，拖動導航項目來更改顯示順序。';
+$lang->custom->saveFail = '保存失敗！';

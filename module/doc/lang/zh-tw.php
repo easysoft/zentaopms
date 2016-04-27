@@ -43,6 +43,7 @@ $lang->doc->delete         = '刪除文檔';
 $lang->doc->browse         = '文檔列表';
 $lang->doc->view           = '文檔詳情';
 $lang->doc->manageType     = '維護分類';
+$lang->doc->addType        = '增加分類';
 
 $lang->doc->libName        = '文檔庫名稱';
 $lang->doc->createLib      = '創建文檔庫';

@@ -131,28 +131,34 @@ $lang->project->allTasks             = 'All';
 $lang->project->assignedToMe         = 'To me';
 
 $lang->project->statusSelects['']             = 'More';
-$lang->project->statusSelects['finishedbyme'] = 'Finished by me'; 
 $lang->project->statusSelects['wait']         = 'Wait';
 $lang->project->statusSelects['doing']        = 'Doing';
-$lang->project->statusSelects['undone']       = 'Undone';
 $lang->project->statusSelects['done']         = 'Done'; 
 $lang->project->statusSelects['closed']       = 'Closed';
-$lang->project->statusSelects['delayed']      = 'Delayed';
-$lang->project->statusSelects['needconfirm']  = 'Story changed';
-$lang->project->statusSelects['cancel']       = 'Canceled';
+$lang->project->statusSelects['cancel']       = 'Cancel';
+
 $lang->project->groups['']           = 'Group View';
 $lang->project->groups['story']      = 'Group by story';
 $lang->project->groups['status']     = 'Group by status';
 $lang->project->groups['pri']        = 'Group by priority';
-$lang->project->groups['openedby']   = 'Group by openedBy';
 $lang->project->groups['assignedTo'] = 'Group by assignedTo';
-$lang->project->groups['finishedby'] = 'Group by finishedBy';
-$lang->project->groups['closedby']   = 'Group by closedBy';
-$lang->project->groups['estimate']   = 'Group by estimate';
-$lang->project->groups['consumed']   = 'Group by consumed';
-$lang->project->groups['left']       = 'Group by left';
+$lang->project->groups['finishedBy'] = 'Group by finishedBy';
+$lang->project->groups['closedBy']   = 'Group by closedBy';
 $lang->project->groups['type']       = 'Group by type';
 $lang->project->groups['deadline']   = 'Group by deadline';
+
+$lang->project->groupFilter['story']['all']         = $lang->project->all;
+$lang->project->groupFilter['story']['linked']      = 'Task of linked story';
+$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['pri']['setted']        = 'Setted';
+$lang->project->groupFilter['assignedTo']['undone'] = 'Undone';
+$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['done']   = 'Done';
+$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
+$lang->project->groupFilter['closedBy']['closed']   = 'Closed';
+$lang->project->groupFilter['deadline']['all']      = $lang->project->all;
+$lang->project->groupFilter['deadline']['setted']   = '已设置';
 
 $lang->project->byQuery              = 'Search';
 
@@ -169,6 +175,7 @@ $lang->project->stats           = 'Total work hours is 『%s』hours, <br />Tota
 $lang->project->taskSummary     = "<strong>%s</strong> tasks in this page. Pending: <strong>%s</strong>. doing: <strong>%s</strong>. Est: <strong>%s</strong> h. Consumed: <strong>%s</strong> h. Left: <strong>%s</strong>.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";
 $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
+$lang->project->noTimeSummary   = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>";
 $lang->project->wbs             = "WBS";
 $lang->project->batchWBS        = "Batch WBS";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' title='How to update burndown?' target='_blank' class='btn btn-sm'>Help</a>";
@@ -244,14 +251,10 @@ $lang->printKanban->typeList['increment'] = 'Increment';
 
 $lang->project->featurebar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featurebar['task']['all']          = $lang->project->allTasks;
-$lang->project->featurebar['task']['kanban']       = $lang->project->kanban;
-$lang->project->featurebar['task']['burn']         = $lang->project->burn;
-$lang->project->featurebar['task']['assignedtome'] = $lang->project->assignedToMe;
+$lang->project->featurebar['task']['finishedbyme'] = 'Finished by me';
+$lang->project->featurebar['task']['delayed']      = 'Delayed';
+$lang->project->featurebar['task']['needconfirm']  = 'Story changed';
 $lang->project->featurebar['task']['status']       = $lang->project->statusSelects[''];
-$lang->project->featurebar['task']['group']        = $lang->project->groups[''];
-$lang->project->featurebar['grouptask']            = $lang->project->featurebar['task'];
-$lang->project->featurebar['kanban']               = $lang->project->featurebar['task'];
-$lang->project->featurebar['burn']               = $lang->project->featurebar['task'];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => 'Products view');

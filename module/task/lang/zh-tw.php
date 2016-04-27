@@ -31,11 +31,13 @@ $lang->task->export             = "導出數據";
 $lang->task->reportChart        = "報表統計";
 $lang->task->fromBug            = '來源Bug';
 $lang->task->confirmStoryChange = "確認需求變動";
+$lang->task->batchChangeModule  = "批量修改模組";
 
 $lang->task->common            = '任務';
 $lang->task->id                = '編號';
 $lang->task->project           = '所屬' . $lang->projectCommon;
 $lang->task->module            = '所屬模組';
+$lang->task->moduleAB          = '模組';
 $lang->task->story             = '相關需求';
 $lang->task->storySpec         = '需求描述';
 $lang->task->storyVerify       = '驗收標準';
@@ -84,8 +86,11 @@ $lang->task->lastEdited        = '最後編輯';
 $lang->task->recordEstimate    = '工時';
 $lang->task->editEstimate      = '編輯工時';
 $lang->task->deleteEstimate    = '刪除工時';
+$lang->task->colorTag          = '顏色標籤';
+$lang->task->files             = '附件';
 
 $lang->task->ditto         = '同上';
+$lang->task->dittoNotice   = "該任務與上一任務不屬於同一項目！";
 $lang->task->selectAllUser = '全部';
 
 $lang->task->statusList['']        = '';

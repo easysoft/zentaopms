@@ -19,6 +19,8 @@ $lang->dept->name        = "部門名稱";
 $lang->dept->browse      = "部門維護";
 $lang->dept->manage      = "維護部門結構";
 $lang->dept->updateOrder = "更新排序";
+$lang->dept->add         = "添加部門";
+$lang->dept->dragAndSort = "拖動排序";
 
 $lang->dept->confirmDelete = " 您確定刪除該部門嗎？";
 $lang->dept->successSave   = " 修改成功。";

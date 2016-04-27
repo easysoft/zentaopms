@@ -25,6 +25,7 @@ $lang->product->mine        = 'I charge : ';
 $lang->product->other       = 'Other : ';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Order';
+$lang->product->all         = "All {$lang->productCommon}";
 
 $lang->product->basicInfo = 'Basic info';
 $lang->product->otherInfo = 'Other info';
