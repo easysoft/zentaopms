@@ -7,7 +7,8 @@ body {background: #fafafa;}
 .dashboard .panel-actions {margin-top: 0; margin-right: 0;}
 .dashboard .panel-heading {line-height: 17px; height: 30px; position: relative;}
 .dashboard .panel-actions {position: absolute; top: 0; right: 0; height: 30px;}
-.dashboard .panel-action {display: block; float: left; height: 30px; width: 26px; text-align: center; line-height: 30px;}
+.dashboard .panel-action {display: block; float: left; height: 30px; min-width: 26px; text-align: center; line-height: 30px; padding-left: 3px; padding-right: 3px;}
+.dashboard .panel-action-more {font-size: 12px; font-weight: 200}
 .dashboard .panel-action:hover, .dashboard .panel-actions > .dropdown > a:hover {color: #333; background-color: #ddd; background-color: rgba(0,0,0,0.1)}
 .dashboard .panel-title {font-size: 13px; color: #333}
 .dashboard a.panel-title > .icon-double-angle-right {position: relative; opacity: 0; transition: opacity .2s, left .2s; left: -5px}

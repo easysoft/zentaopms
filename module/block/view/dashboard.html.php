@@ -28,20 +28,19 @@ if(isset($pageCSS)) css::internal($pageCSS);
       <div class='panel panel-block <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>'>
         <div class='panel-heading'>
           <div class='panel-actions'>
-            <a href='javascript:;' class='refresh-panel panel-action' data-toggle='tooltip' title='<?php echo $lang->block->refresh ?>'><i class='icon-repeat'></i></a>
+            <?php if(!empty($block->moreLink)):?>
+               <?php echo html::a($block->moreLink, $lang->more . " <i class='icon-double-angle-right'></i>", null, "class='panel-action drag-disabled panel-action-more'"); ?>
+            <?php endif; ?>
             <div class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
+                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh ?></a></li>
                 <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit; ?></a></li>
                 <li><a href='javascript:;' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->delete; ?></a></li>
               </ul>
             </div>
           </div>
-          <?php if(!empty($block->moreLink)):?>
-          <?php echo html::a($block->moreLink, $block->title . " <i class='icon-double-angle-right'></i>", null, "class='panel-title drag-disabled' title='$lang->more' data-toggle='tooltip' data-placement='right'"); ?>
-          <?php else: ?>
           <span class='panel-title'><?php echo $block->title;?></span>
-          <?php endif; ?>
         </div>
         <div class='panel-body no-padding'></div>
       </div>
