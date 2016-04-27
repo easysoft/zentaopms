@@ -104,12 +104,15 @@ class tree extends control
             $position[] = $this->lang->tree->manageCustomDoc;
         }
 
+        $parentModules = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
+        $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
+        $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->branch          = $branch;
+        $this->view->parentModules   = $parentModules;
         $this->view->tree            = $this->tree->getFullTrees($rootID, $viewType);
         $this->display();
     }
@@ -128,10 +131,19 @@ class tree extends control
         $project = $this->loadModel('project')->getById($rootID);
         $this->view->root = $project;
 
+        $products = $this->project->getProducts($rootID);
+        $this->view->products = $products;
+
         $this->lang->set('menugroup.tree', 'project');
         $this->project->setMenu($this->project->getPairs(), $rootID);
         $this->lang->tree->menu      = $this->lang->project->menu;
         $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
+
+        $projects = $this->project->getPairs();
+        unset($projects[$rootID]);
+        $currentProject = key($projects);
+        $parentModules  = $this->tree->getParents($currentModuleID);
+        $newModule      = (version_compare($project->openedVersion, '4.1', '>') and $products) ? true : false;
 
         $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
@@ -141,10 +153,17 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->productID       = $productID;
+        $this->view->allProject      = $projects;
+        $this->view->newModule       = $newModule;
+        $this->view->currentProject  = $currentProject;
+        $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
+        $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'));
+        $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
+        $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
         $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID);
         $this->display();
-    }
+    } 
 
     /**
      * Edit a module.
