@@ -112,6 +112,7 @@ $(function()
 {
     var data = $.parseJSON('<?php echo json_encode($tree);?>');
     var options = {
+        name: 'tree-<?php echo $viewType ?>-edit',
         initialState: 'preserve',
         data: data,
         itemCreator: function($li, item)
