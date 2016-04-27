@@ -170,6 +170,7 @@ class commonModel extends model
         {
             if(stripos($method, 'ajax') !== false) return true;
             if(stripos($method, 'downnotify') !== false) return true;
+            if($module == 'tutorial') return true;
         }
 
         if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
@@ -294,7 +295,7 @@ class commonModel extends model
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
 
-        if(!commonModel::isTutorialMode()) echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'");
+        if(!commonModel::isTutorialMode() and self::hasPriv('tutorial', 'start')) echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'");
         echo html::a(helper::createLink('misc', 'feature'), $lang->feature, '', "class='iframe' data-width='1200' data-headerless='true'");
         echo html::a('javascript:;', $lang->help, '', "class='open-help-tab'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");

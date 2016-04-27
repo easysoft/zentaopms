@@ -64,7 +64,7 @@ class tutorial extends control
 
         if(!empty($referer))
         {
-            die(js::locate(base64_decode($referer), 'parent'));
+            die(js::locate($this->createLink('index'), 'parent'));
         }
         die(json_encode(array('result' => 'success')));
     }
