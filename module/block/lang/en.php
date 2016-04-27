@@ -231,3 +231,10 @@ $lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
 $lang->block->modules['qa']->moreLinkList->testtask = 'my|testtask|type=%s';
 $lang->block->modules['todo']->moreLinkList = new stdclass();
 $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
+
+$lang->block->flowchart = array();
+$lang->block->flowchart[] = array('Administrator', 'Manage company', 'Add user', 'Manage privilege');
+$lang->block->flowchart[] = array('Product manager', 'Create product', 'Manage odules', 'manage plans', 'manage stories', 'Create release');
+$lang->block->flowchart[] = array('Project manager', 'Create project', 'Manage team', 'Link products', 'Link stories', 'Create task');
+$lang->block->flowchart[] = array('Developer', 'Get tasks/bugs', 'Update status', 'Finish tasks/bugs');
+$lang->block->flowchart[] = array('Tester', 'Create testcase', 'Run testcases', 'Create bug', 'Confirm bug', 'Close bug');

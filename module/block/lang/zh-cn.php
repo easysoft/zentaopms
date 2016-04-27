@@ -231,3 +231,10 @@ $lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
 $lang->block->modules['qa']->moreLinkList->testtask = 'my|testtask|type=%s';
 $lang->block->modules['todo']->moreLinkList = new stdclass();
 $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
+
+$lang->block->flowchart = array();
+$lang->block->flowchart[] = array('管理员', '维护公司', '添加用户', '维护权限');
+$lang->block->flowchart[] = array('产品经理', '创建产品', '维护模块', '维护计划', '维护需求', '创建发布');
+$lang->block->flowchart[] = array('项目经理', '创建项目', '维护团队', '关联产品', '关联需求', '分解任务');
+$lang->block->flowchart[] = array('研发人员', '领取任务和Bug', '更新状态', '完成任务和Bug');
+$lang->block->flowchart[] = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');

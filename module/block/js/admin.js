@@ -18,7 +18,7 @@ function getBlocks(moduleID)
         getRssAndHtmlParams('html', moduleID.replace('hiddenBlock', ''));
         return true;
     }
-    if(moduleID == 'html' || moduleID == 'dynamic')
+    if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart')
     {
         getRssAndHtmlParams(moduleID);
         return true;

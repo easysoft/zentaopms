@@ -48,8 +48,9 @@ class block extends control
                 if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
             }
 
-            $modules['dynamic'] = $this->lang->block->dynamic;
-            $modules['html']    = 'HTML';
+            $modules['dynamic']   = $this->lang->block->dynamic;
+            $modules['html']      = 'HTML';
+            $modules['flowchart'] = '流程图';
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -261,6 +262,10 @@ class block extends control
         elseif($block->block == 'dynamic')
         {
             $html = $this->fetch('block', 'dynamic');
+        }
+        elseif($block->block == 'flowchart')
+        {
+            $html = $this->fetch('block', 'flowchart');
         }
         
         die($html);
@@ -567,5 +572,15 @@ class block extends control
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $num, 1);
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+    }
+
+    /**
+     * Print flow chart block
+     * @access public
+     * @return void
+     */
+    public function flowchart()
+    {
+        $this->display();
     }
 }
