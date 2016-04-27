@@ -17,9 +17,9 @@ class story extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($module = '', $method = '')
     {
-        parent::__construct();
+        parent::__construct($module, $method);
         $this->loadModel('product');
         $this->loadModel('project');
         $this->loadModel('tree');

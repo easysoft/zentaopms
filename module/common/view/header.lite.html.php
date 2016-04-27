@@ -37,8 +37,8 @@ $clientTheme  = $this->app->getClientTheme();
 
   if(commonModel::isTutorialMode())
   {
-      $wizardModule    = constant('WIZARD_MODULE');
-      $wizardMethod    = constant('WIZARD_METHOD');
+      $wizardModule    = defined('WIZARD_MODULE') ? WIZARD_MODULE : '';
+      $wizardMethod    = defined('WIZARD_METHOD') ? WIZARD_METHOD : '';
       $requiredFields  = '';
       if(isset($config->$wizardModule->$wizardMethod->requiredFields)) $requiredFields = str_replace(' ', '', $config->$wizardModule->$wizardMethod->requiredFields);
       echo "<script>window.TUTORIAL = {'module': '$wizardModule', 'method': '$wizardMethod', tip: '$lang->tutorialConfirm'}; if(config) config.requiredFields = '$requiredFields'; </script>";
