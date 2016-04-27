@@ -206,9 +206,9 @@ $(function()
         {
             trigger: 'manual',
             title: text,
-            placement: 'top',
+            placement: $e.offset().left > ($(window).width()*2/3) ? 'left' : 'top',
             container: 'body',
-            tipClass: 'tooltip-warning'
+            tipClass: 'tooltip-warning tooltip-max'
         }, options);
         $e = $e.first();
         if($lastTooltip) $lastTooltip.tooltip('hide');
