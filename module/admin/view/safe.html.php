@@ -30,11 +30,6 @@
         <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->noticeStrong;?></span></td>
       </tr>
       <tr>
-        <th class='w-100px'><?php echo $lang->admin->safe->md5Pwd?></th>
-        <td><?php echo html::radio('md5Pwd', $lang->admin->safe->md5PwdList, isset($config->safe->md5Pwd) ? $config->safe->md5Pwd : 0)?></td>
-        <td><?php echo $lang->admin->safe->noticeMd5Pwd?></td>
-      </tr>
-      <tr>
         <th><?php echo $lang->admin->safe->weak?></th>
         <td colspan='2'><?php echo html::textarea('weak', $config->safe->weak, "class='form-control' rows='4'")?></td>
       </tr>

@@ -42,7 +42,6 @@ $lang->admin->safe = new stdclass();
 $lang->admin->safe->common    = 'Safe';
 $lang->admin->safe->set       = 'Set password safe';
 $lang->admin->safe->password  = 'Password safe';
-$lang->admin->safe->md5Pwd    = 'Encrypt Password';
 $lang->admin->safe->weak      = 'weak Password';
 $lang->admin->safe->reason    = 'Type';
 $lang->admin->safe->checkWeak = 'Weak password check';
@@ -51,9 +50,6 @@ $lang->admin->safe->modeList[0] = 'Do not check';
 $lang->admin->safe->modeList[1] = 'Intermediate';
 $lang->admin->safe->modeList[2] = 'Strong';
 
-$lang->admin->safe->md5PwdList[0] = 'No encryption';
-$lang->admin->safe->md5PwdList[1] = 'Encryptiton';
-
 $lang->admin->safe->reasonList['weak']     = 'Common weak password';
 $lang->admin->safe->reasonList['account']  = 'Same account';
 $lang->admin->safe->reasonList['mobile']   = 'Same mobile';
@@ -61,5 +57,4 @@ $lang->admin->safe->reasonList['phone']    = 'Same phone';
 $lang->admin->safe->reasonList['birthday'] = 'Same birthday';
 
 $lang->admin->safe->noticeMode   = 'The system will log in, create and modify the user password, check the user password.';
-$lang->admin->safe->noticeMd5Pwd = 'When login, encrypt password before submit.';
 $lang->admin->safe->noticeStrong = 'The longer the password length, the more the number of letters or numbers or special characters, the more secure!';
