@@ -81,5 +81,5 @@ $lang->custom->productproject->relation['1_1'] = '项目 - 迭代';
 
 $lang->custom->productproject->notice = '请根据实际情况选择适合自己团队的概念。';
 
-$lang->custom->menuTip  = '点击导航项目来切换显示或隐藏，拖动导航项目来更改显示顺序。';
+$lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
 $lang->custom->saveFail = '保存失败！';

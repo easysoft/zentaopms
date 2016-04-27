@@ -18,7 +18,7 @@
     </div>
   </div>
   <div id='menuEditor'>
-    <p class='text-info'><i class="icon icon-info-sign"></i> <?php echo $lang->custom->menuTip ?></p>
+    <p class='text-danger'><i class="icon icon-info-sign"></i> <?php echo $lang->custom->menuTip ?></p>
     <div class='panel'>
       <nav id='mainmenu'>
         <ul></ul>

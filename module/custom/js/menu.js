@@ -62,9 +62,9 @@ $(function()
         currentModule = moduleName;
         currentMethod = methodName;
         $mainMenu.find('li.active').removeClass('active');
-        $mainMenu.find('li[data-id="' + moduleName + '"]').addClass('active');
+        $mainMenu.find('li[data-id="' + moduleName + '"]:not(.right)').addClass('active');
         $moduleMenu.find('li.active').removeClass('active');
-        $moduleMenu.find('li[data-id="' + methodName + '"]').addClass('active');
+        $moduleMenu.find('li[data-id="' + methodName + '"]:not(.right)').addClass('active');
     };
 
     var loadData = function(moduleName, methodName, type, callback)
