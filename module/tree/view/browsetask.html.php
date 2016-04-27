@@ -104,6 +104,7 @@ $(function()
     var data = $.parseJSON('<?php echo json_encode($tree);?>');
     var $tree = $('#modulesTree').tree(
     {
+        name: 'tree-project-edit',
         initialState: 'preserve',
         data: data,
         itemCreator: function($li, item)
