@@ -474,8 +474,8 @@ class commonModel extends model
 
         /* get current module and method. */
         $isTutorialMode = commonModel::isTutorialMode();
-        $currentModule  = $isTutorialMode ? constant('WIZARD_MODULE') : $app->getModuleName();
-        $currentMethod  = $isTutorialMode ? constant('WIZARD_METHOD') : $app->getMethodName();
+        $currentModule  = ($isTutorialMode and defined('WIZARD_MODULE')) ? WIZARD_MODULE : $app->getModuleName();
+        $currentMethod  = ($isTutorialMode and defined('WIZARD_METHOD')) ? WIZARD_METHOD : $app->getMethodName();
         $menu           = customModel::getModuleMenu($moduleName);
 
         /* The beginning of the menu. */
@@ -1006,6 +1006,8 @@ class commonModel extends model
         if($onlyCondition)
         {
             $queryCondition = explode('WHERE', $sql);
+            if(!isset($queryCondition[1])) return true;
+
             $queryCondition = explode('ORDER', $queryCondition[1]);
             $queryCondition = str_replace('t1.', '', $queryCondition[0]);
         }
