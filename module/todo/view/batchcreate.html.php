@@ -35,7 +35,7 @@
   }
   $columns = count($hasFields) + 2;
   ?>
-  <table class='table table-form table-fixed'>
+  <table class='table table-form table-fixed with-border'>
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 

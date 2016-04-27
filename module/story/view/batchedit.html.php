@@ -32,7 +32,7 @@ foreach(explode(',', $showFields) as $field)
 }
 ?>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">
-  <table class='table table-form table-fixed'>
+  <table class='table table-form table-fixed with-border'>
     <thead>
       <tr class='text-center'>
         <th class='w-40px'> <?php echo $lang->idAB;?></th> 

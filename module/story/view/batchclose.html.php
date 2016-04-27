@@ -20,7 +20,7 @@
 </div>
 
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchClose', "from=storyBatchClose")?>">
-  <table class='table table-fixed table-form'>
+  <table class='table table-fixed table-form with-border'>
   <thead>
     <tr>
       <th class='w-50px'> <?php echo $lang->idAB;?></th> 

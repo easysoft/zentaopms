@@ -20,7 +20,7 @@
 </div>
 
 <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
-  <table class='table table-form table-fixed'>
+  <table class='table table-form table-fixed with-border'>
     <thead>
       <tr>
         <th class='w-40px'>   <?php echo $lang->idAB;?></th> 

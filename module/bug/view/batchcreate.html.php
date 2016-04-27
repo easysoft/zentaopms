@@ -34,7 +34,7 @@ foreach(explode(',', $showFields) as $field)
 }
 ?>
 <form class='form-condensed' class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-fixed table-form'>
+  <table class='table table-fixed table-form with-border'>
     <thead>
       <tr>
         <th class='w-50px'>  <?php echo $lang->idAB;?></th> 
