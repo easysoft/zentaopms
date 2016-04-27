@@ -171,6 +171,7 @@ class commonModel extends model
             if(stripos($method, 'ajax') !== false) return true;
             if(stripos($method, 'downnotify') !== false) return true;
             if($module == 'tutorial') return true;
+            if($module == 'custom' and $method == 'menu') return true;
         }
 
         if(stripos($method, 'ajaxgetdropmenu') !== false) return true;

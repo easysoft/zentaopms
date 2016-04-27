@@ -50,6 +50,7 @@ $lang->testtask->lastRunAccount = '執行人';
 $lang->testtask->lastRunTime    = '執行時間';
 $lang->testtask->lastRunResult  = '結果';
 $lang->testtask->report         = '測試總結';
+$lang->testtask->files          = '上傳附件';
 
 $lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '測試總結';
@@ -102,3 +103,8 @@ $lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 啟動版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成版本 <strong>$extra</strong>。' . "\n";
+
+$lang->testtask->featurebar['cases']['all']          = $lang->testtask->allCases;
+$lang->testtask->featurebar['cases']['assignedtome'] = $lang->testtask->assignedToMe;
+$lang->testtask->featurebar['cases']['group']        = '';
+$lang->testtask->featurebar['groupcase']             = $lang->testtask->featurebar['cases'];

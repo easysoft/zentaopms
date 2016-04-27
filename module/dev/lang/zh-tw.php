@@ -81,6 +81,7 @@ $lang->dev->tableList['tree']           = '模組關係';
 $lang->dev->tableList['upgrade']        = '更新';
 $lang->dev->tableList['cron']           = '定時任務';
 $lang->dev->tableList['mailqueue']      = '郵件隊列';
+$lang->dev->tableList['datatable']      = '數據表格';
 
 $lang->dev->groupList['my']      = '我的地盤';
 $lang->dev->groupList['product'] = $lang->productCommon;

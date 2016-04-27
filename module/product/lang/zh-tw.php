@@ -25,6 +25,7 @@ $lang->product->mine        = '我負責：';
 $lang->product->other       = '其他：';
 $lang->product->closed      = '已關閉';
 $lang->product->updateOrder = "排序";
+$lang->product->all         = "所有{$lang->productCommon}";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -93,3 +94,15 @@ $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名�
 
 $lang->product->storySummary = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時，用例覆蓋率<strong>%s</strong>。";
 $lang->product->noMatched    = '找不到包含"%s"的' . $lang->productCommon;
+
+$lang->product->featurebar['browse']['unclosed']     = $lang->product->unclosed;
+$lang->product->featurebar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featurebar['browse']['assignedtome'] = $lang->product->assignedToMe;
+$lang->product->featurebar['browse']['openedbyme']   = $lang->product->openedByMe;
+$lang->product->featurebar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+$lang->product->featurebar['browse']['closedbyme']   = $lang->product->closedByMe;
+$lang->product->featurebar['browse']['draftstory']   = $lang->product->draftStory;
+$lang->product->featurebar['browse']['activestory']  = $lang->product->activeStory;
+$lang->product->featurebar['browse']['changedstory'] = $lang->product->changedStory;
+$lang->product->featurebar['browse']['willclose']    = $lang->product->willClose;
+$lang->product->featurebar['browse']['closedstory']  = $lang->product->closedStory;

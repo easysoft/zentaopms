@@ -38,6 +38,7 @@ $lang->project->totalConsumed = '總消耗';
 $lang->project->totalLeft     = '總剩餘';
 $lang->project->Left          = '剩餘';
 $lang->project->progess       = '進度';
+$lang->project->hours         = '預計 %s 消耗 %s 剩餘 %s';
 $lang->project->viewBug       = '查看bug';
 $lang->project->noProduct     = "無{$lang->productCommon}{$lang->projectCommon}";
 $lang->project->createStory   = "新增需求";
@@ -48,6 +49,7 @@ $lang->project->typeDesc      = "運維{$lang->projectCommon}禁用燃盡圖和�
 $lang->project->mine          = '我負責：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已刪除';
+$lang->project->delayed       = '已延期';
 
 $lang->project->start    = '開始';
 $lang->project->activate = '激活';
@@ -106,6 +108,7 @@ $lang->project->team             = '團隊成員';
 $lang->project->doc              = '文檔列表';
 $lang->project->manageProducts   = '關聯' . $lang->productCommon;
 $lang->project->linkStory        = '關聯需求';
+$lang->project->unlinkStoryTasks = '未關聯需求任務';
 $lang->project->view             = "{$lang->projectCommon}概況";
 $lang->project->create           = "添加{$lang->projectCommon}";
 $lang->project->copy             = "複製{$lang->projectCommon}";
@@ -120,34 +123,42 @@ $lang->project->batchUnlinkStory = '批量移除需求';
 $lang->project->importTask       = '轉入任務';
 $lang->project->importBug        = '導入Bug';
 $lang->project->updateOrder      = '排序';
+$lang->project->tree             = '樹視圖';
+$lang->project->list             = '列表';
 
 /* 分組瀏覽。*/
 $lang->project->allTasks             = '所有';
 $lang->project->assignedToMe         = '指派給我';
 
 $lang->project->statusSelects['']             = '更多';
-$lang->project->statusSelects['finishedbyme'] = '我完成';
 $lang->project->statusSelects['wait']         = '未開始';
 $lang->project->statusSelects['doing']        = '進行中';
-$lang->project->statusSelects['undone']       = '未完成';
 $lang->project->statusSelects['done']         = '已完成';
 $lang->project->statusSelects['closed']       = '已關閉';
-$lang->project->statusSelects['delayed']      = '已延期';
-$lang->project->statusSelects['needconfirm']  = '需求變動';
 $lang->project->statusSelects['cancel']       = '已取消';
+
 $lang->project->groups['']           = '分組查看';
 $lang->project->groups['story']      = '需求分組';
 $lang->project->groups['status']     = '狀態分組';
 $lang->project->groups['pri']        = '優先順序分組';
-$lang->project->groups['openedby']   = '創建者分組';
 $lang->project->groups['assignedTo'] = '指派給分組';
-$lang->project->groups['finishedby'] = '完成者分組';
-$lang->project->groups['closedby']   = '關閉者分組';
-$lang->project->groups['estimate']   = '預計分組';
-$lang->project->groups['consumed']   = '已消耗分組';
-$lang->project->groups['left']       = '剩餘分組';
+$lang->project->groups['finishedBy'] = '完成者分組';
+$lang->project->groups['closedBy']   = '關閉者分組';
 $lang->project->groups['type']       = '類型分組';
 $lang->project->groups['deadline']   = '截止分組';
+
+$lang->project->groupFilter['story']['all']         = $lang->project->all;
+$lang->project->groupFilter['story']['linked']      = '關聯需求的任務';
+$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['pri']['setted']        = '已設置';
+$lang->project->groupFilter['assignedTo']['undone'] = '未完成';
+$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['done']   = '已完成';
+$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
+$lang->project->groupFilter['closedBy']['closed']   = '已關閉';
+$lang->project->groupFilter['deadline']['all']      = $lang->project->all;
+$lang->project->groupFilter['deadline']['setted']   = '已設置';
 
 $lang->project->byQuery              = '搜索';
 
@@ -164,6 +175,7 @@ $lang->project->stats           = '可用工時<strong>%s</strong>工時<br />�
 $lang->project->taskSummary     = "本頁共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->memberHours     = "%s共有 <strong>%s</strong> 個可用工時，";
 $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
+$lang->project->noTimeSummary   = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>";
 $lang->project->wbs             = "分解任務";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank' title='如何更新燃盡圖？' class='btn btn-sm'>幫助</a>";
@@ -215,3 +227,37 @@ $lang->project->placeholder->totalLeft = '項目開始時的總預計工時';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(已結束)';
+
+$lang->project->orderList['pri_asc']    = "需求優先順序正序";
+$lang->project->orderList['pri_desc']   = "需求優先順序倒序";
+$lang->project->orderList['id_asc']     = "需求ID正序";
+$lang->project->orderList['id_desc']    = "需求ID倒序";
+$lang->project->orderList['stage_asc']  = "需求階段正序";
+$lang->project->orderList['stage_desc'] = "需求階段倒序";
+
+$lang->project->kanban      = "看板";
+$lang->project->printKanban = "打印看板";
+$lang->project->bugList     = "Bug列表";
+
+$lang->printKanban = new stdclass();
+$lang->printKanban->common  = '看板打印';
+$lang->printKanban->content = '內容';
+$lang->printKanban->print   = '打印';
+
+$lang->printKanban->taskStatus = '狀態';
+
+$lang->printKanban->typeList['all']       = '全部';
+$lang->printKanban->typeList['increment'] = '增量';
+
+$lang->project->featurebar['task']['unclosed']     = $lang->project->unclosed;
+$lang->project->featurebar['task']['all']          = $lang->project->allTasks;
+$lang->project->featurebar['task']['finishedbyme'] = '我完成';
+$lang->project->featurebar['task']['delayed']      = '已延期';
+$lang->project->featurebar['task']['needconfirm']  = '需求變動';
+$lang->project->featurebar['task']['status']       = $lang->project->statusSelects[''];
+
+$lang->project->treeLevel = array();
+$lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '產品視圖');
+$lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => '模組視圖');
+$lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => '需求視圖');
+$lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => '任務視圖');

@@ -59,3 +59,11 @@ $lang->misc->needRepair  = "修復表";
 $lang->misc->repairTable = "資料庫表可以因為斷電原因損壞，需要檢查修復！！";
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "狀態";
+$lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
+
+$lang->misc->feature = new stdclass();
+$lang->misc->feature->lastest       = '最新版本';
+$lang->misc->feature->all = array();
+$lang->misc->feature->all['latest']   = array();
+$lang->misc->feature->all['latest'][] = array('title'=>'可自定義內容的首頁', 'desc' => '<p>你的地盤由你做主。現在開始，你可以向首頁添加多種多樣的內容區塊，而且還可以決定如何排列和顯示他們。</p>', 'img' => '1.gif');
+$lang->misc->feature->all['latest'][] = array('title'=>'完全定製所有導航內容', 'desc' => '<p>導航上顯示的項目現在完全由你來決定。將滑鼠懸浮在導航上稍後會在右側顯示定製按鈕，點擊打開定製對話框，通過點擊切換項目是否顯示，拖拽導航項目來更改顯示順序。</p>', 'img' => '2.gif');

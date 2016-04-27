@@ -135,6 +135,7 @@ $lang->resource->product->dynamic     = 'dynamic';
 $lang->resource->product->project     = 'project';
 $lang->resource->product->close       = 'close';
 $lang->resource->product->updateOrder = 'updateOrder';
+$lang->resource->product->all         = 'all';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -149,6 +150,7 @@ $lang->product->methodOrder[50] = 'dynamic';
 $lang->product->methodOrder[55] = 'project';
 $lang->product->methodOrder[60] = 'close';
 $lang->product->methodOrder[65] = 'updateOrder';
+$lang->product->methodOrder[70] = 'all';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -304,6 +306,8 @@ $lang->resource->project->batchUnlinkStory = 'batchUnlinkStory';
 $lang->resource->project->updateOrder      = 'updateOrder';
 $lang->resource->project->kanban           = 'kanban';
 $lang->resource->project->printKanban      = 'printKanban';
+$lang->resource->project->tree             = 'tree';
+$lang->resource->project->all              = 'all';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -341,6 +345,8 @@ $lang->project->methodOrder[165] = 'batchUnlinkStory';
 $lang->project->methodOrder[170] = 'updateOrder';
 $lang->project->methodOrder[175] = 'kanban';
 $lang->project->methodOrder[180] = 'printKanban';
+$lang->project->methodOrder[185] = 'tree';
+$lang->project->methodOrder[190] = 'all';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -1159,3 +1165,7 @@ $lang->changelog['8.1.3'][] = 'bug-batchChangeModule';
 $lang->changelog['8.1.3'][] = 'testcase-batchChangeModule';
 $lang->changelog['8.1.3'][] = 'my-manageContacts';
 $lang->changelog['8.1.3'][] = 'my-deleteContacts';
+
+$lang->changelog['8.2.beta'][] = 'product-all';
+$lang->changelog['8.2.beta'][] = 'project-tree';
+$lang->changelog['8.2.beta'][] = 'project-all';

@@ -63,7 +63,6 @@ $lang->bug->lastEditedDateAB = 'Edited Date';
 $lang->bug->lastEditedDate   = 'Edited Date';
 $lang->bug->fromCase         = 'From case';
 $lang->bug->toCase           = 'To case';
-$lang->bug->colorTag         = 'Color tag';
 
 /* Actions. */
 $lang->bug->index              = 'Index';
@@ -90,6 +89,7 @@ $lang->bug->saveTemplate       = 'Save template';
 $lang->bug->deleteTemplate     = 'Delete template';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->setPublic          = 'Set public template';
+$lang->bug->colorTag         = 'Color tag';
 $lang->bug->batchChangeModule  = 'Batch change module';
 
 /* Browse tabs. */

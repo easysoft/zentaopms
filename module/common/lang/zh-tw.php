@@ -22,6 +22,7 @@ $lang->zentaoPMS      = '禪道';
 $lang->welcome        = "%s項目管理系統";
 $lang->logout         = '退出';
 $lang->login          = '登錄';
+$lang->help           = '幫助';
 $lang->aboutZenTao    = '關於';
 $lang->profile        = '個人檔案';
 $lang->changePassword = '更改密碼';
@@ -45,23 +46,31 @@ $lang->goback       = '返回';
 $lang->goPC         = 'PC版';
 $lang->more         = '更多';
 $lang->day          = '天';
+$lang->customConfig = '自定義';
+$lang->public       = '公共';
 
-$lang->actions      = '操作';
-$lang->comment      = '備註';
-$lang->history      = '歷史記錄';
-$lang->attatch      = '附件';
-$lang->reverse      = '切換順序';
-$lang->switchDisplay= '切換顯示';
-$lang->addFiles     = '上傳了附件 ';
-$lang->files        = '附件 ';
-$lang->pasteText    = '粘貼文本 ';
-$lang->uploadImages = '多圖上傳 ';
-$lang->timeout      = '連接超時，請檢查網絡環境，或重試！';
-$lang->repairTable  = '資料庫表可能損壞，請用phpmyadmin或myisamchk檢查修復。';
-$lang->duplicate    = '已有相同標題的%s';
-$lang->ipLimited    = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>抱歉，管理員限制當前IP登錄，請聯繫管理員解除限制。</body></html>";
-$lang->unfold       = '+';
-$lang->fold         = '-';
+$lang->actions         = '操作';
+$lang->comment         = '備註';
+$lang->history         = '歷史記錄';
+$lang->attatch         = '附件';
+$lang->reverse         = '切換順序';
+$lang->switchDisplay   = '切換顯示';
+$lang->addFiles        = '上傳了附件 ';
+$lang->files           = '附件 ';
+$lang->pasteText       = '粘貼文本 ';
+$lang->uploadImages    = '多圖上傳 ';
+$lang->timeout         = '連接超時，請檢查網絡環境，或重試！';
+$lang->repairTable     = '資料庫表可能損壞，請用phpmyadmin或myisamchk檢查修復。';
+$lang->duplicate       = '已有相同標題的%s';
+$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>抱歉，管理員限制當前IP登錄，請聯繫管理員解除限制。</body></html>";
+$lang->unfold          = '+';
+$lang->fold            = '-';
+$lang->hideNotCheck    = '頁面隱藏取消選中欄位';
+$lang->homepage        = '設為主頁';
+$lang->tutorial        = '新手教程';
+$lang->feature         = '瞭解新功能';
+$lang->customMenu      = '自定義導航';
+$lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
 
 $lang->preShortcutKey  = '[快捷鍵:←]';
 $lang->nextShortcutKey = '[快捷鍵:→]';
@@ -148,7 +157,7 @@ $lang->index->menu->project = "瀏覽{$lang->projectCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>';
+$lang->my->menu->account        = array('link' => '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>', 'fixed' => true);
 $lang->my->menu->index          = '首頁|my|index';
 $lang->my->menu->todo           = array('link' => '待辦|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => '任務|my|task|', 'subModule' => 'task');
@@ -159,6 +168,7 @@ $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密碼|my|changepassword';
+$lang->my->menu->manageContacts = '聯繫人|my|managecontacts';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -167,7 +177,8 @@ $lang->todo->menu = $lang->my->menu;
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
-$lang->product->menu->list    = '%s';
+$lang->product->menu->list    = array('link' => '%s', 'fixed' => true);
+$lang->product->menu->index   = '首頁|product|index|locate=no';
 $lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = '動態|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => '計劃|productplan|browse|productID=%s', 'subModule' => 'productplan');
@@ -179,7 +190,7 @@ $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
 $lang->product->menu->create  = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->productCommon}|product|create", 'float' => 'right');
-$lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp;所有{$lang->productCommon}|product|index|locate=no&productID=%s", 'float' => 'right');
+$lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp;所有{$lang->productCommon}|product|all|productID=%s", 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -195,8 +206,9 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list      = '%s';
-$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug');
+$lang->project->menu->list      = array('link' => '%s', 'fixed' => true);
+$lang->project->menu->index     = '首頁|project|index|locate=no';
+$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban,tree');
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
@@ -207,7 +219,7 @@ $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->projectCommon}|project|create", 'float' => 'right');
-$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;所有{$lang->projectCommon}|project|index|locate=no&status=undone&projectID=%s", 'float' => 'right');
+$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;所有{$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -215,10 +227,20 @@ $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
 
 /* QA視圖菜單設置。*/
+$lang->qa = new stdclass();
+$lang->qa->menu = new stdclass();
+
+$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
+$lang->qa->menu->index    = '首頁|qa|index|locate=no&productID=%s';
+$lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->qa->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
+$lang->qa->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
+
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = '%s';
+$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
+$lang->bug->menu->index    = '首頁|qa|index|locate=no&productID=%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
 $lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
@@ -226,7 +248,8 @@ $lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = '%s';
+$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
+$lang->testcase->menu->index    = '首頁|qa|index|locate=no&productID=%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
@@ -238,7 +261,7 @@ $lang->testtask->menu = $lang->testcase->menu;
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
-$lang->doc->menu->list    = '%s';
+$lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->doc->menu->browse  = array('link' => '文檔|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = '編輯|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '分類|tree|browse|libID=%s&viewType=doc';
@@ -257,7 +280,7 @@ $lang->report->menu->staff   = array('link' => '組織|report|workload');
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->name         = '%s' . $lang->arrow;
+$lang->company->menu->name         = array('link' => '%s' . $lang->arrow, 'fixed' => true);
 $lang->company->menu->browseUser   = array('link' => '用戶|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => '部門|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup  = array('link' => '權限|group|browse', 'subModule' => 'group');

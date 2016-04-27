@@ -29,6 +29,8 @@ $lang->tree->manageBugChild    = '維護Bug子模組';
 $lang->tree->manageCaseChild   = '維護用例子模組';
 $lang->tree->manageTaskChild   = "維護{$lang->projectCommon}子模組";
 $lang->tree->syncFromProduct   = '複製';
+$lang->tree->dragAndSort       = "拖放排序";
+$lang->tree->addChild          = "增加子模組";
 
 $lang->tree->confirmDelete = '該模組及其子模組都會被刪除，您確定刪除嗎？';
 $lang->tree->confirmRoot   = "模組的所屬{$lang->productCommon}修改，會關聯修改該模組下的需求、Bug、用例的所屬{$lang->productCommon}，以及{$lang->projectCommon}和{$lang->productCommon}的關聯關係。該操作比較危險，請謹慎操作。是否確認修改？";
@@ -41,5 +43,7 @@ $lang->tree->parent     = '上級模組';
 $lang->tree->child      = '子模組';
 $lang->tree->owner      = '負責人';
 $lang->tree->order      = '排序';
+$lang->tree->short      = '簡稱';
+$lang->tree->all        = '所有模組';
 $lang->tree->projectDoc = "{$lang->projectCommon}文檔";
 $lang->tree->product    = "所屬{$lang->productCommon}";

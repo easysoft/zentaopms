@@ -15,6 +15,8 @@ $lang->my->dynamic        = '我的動態';
 $lang->my->editProfile    = '修改檔案';
 $lang->my->changePassword = '修改密碼';
 $lang->my->unbind         = '解除然之綁定';
+$lang->my->manageContacts = '維護聯繫人';
+$lang->my->deleteContacts = '刪除聯繫人';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派給我';

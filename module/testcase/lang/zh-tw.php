@@ -12,6 +12,7 @@
 $lang->testcase->id               = '用例編號';
 $lang->testcase->product          = "所屬{$lang->productCommon}";
 $lang->testcase->module           = '所屬模組';
+$lang->testcase->moduleAB         = '模組';
 $lang->testcase->story            = '相關需求';
 $lang->testcase->title            = '用例標題';
 $lang->testcase->precondition     = '前置條件';
@@ -32,6 +33,12 @@ $lang->testcase->unlinkCase       = '移除相關用例';
 $lang->testcase->stage            = '適用階段';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
+$lang->testcase->lastEditedDate   = '修改日期';
+$lang->testcase->version          = '用例版本';
+$lang->testcase->lastRunner       = '執行人';
+$lang->testcase->lastRunDate      = '執行時間';
+$lang->testcase->assignedTo       = '指派給';
+$lang->testcase->lastRunResult    = '結果';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '來源Bug';
 $lang->testcase->toBug            = '生成Bug';
@@ -61,6 +68,8 @@ $lang->testcase->exportTemplet      = "導出模板";
 $lang->testcase->export             = "導出數據";
 $lang->testcase->confirmChange      = '確認用例變動';
 $lang->testcase->confirmStoryChange = '確認需求變動';
+$lang->testcase->colorTag           = '顏色標籤';
+$lang->testcase->batchChangeModule  = "批量修改模組";
 
 $lang->testcase->new = '新增';
 
@@ -90,7 +99,8 @@ $lang->testcase->legendComment      = '備註';
 
 $lang->testcase->confirmDelete      = '您確認要刪除該測試用例嗎？';
 $lang->testcase->confirmBatchDelete = '您確認要批量刪除這些測試用例嗎？';
-$lang->testcase->same               = '同上';
+$lang->testcase->ditto              = '同上';
+$lang->testcase->dittoNotice        = '該用例與上一用例不屬於同一產品！';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
@@ -135,3 +145,9 @@ $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding轉碼方法
 $lang->testcase->noRequire   = "%s行的“%s”是必填欄位，不能為空";
 
 $lang->testcase->searchStories = '鍵入來搜索需求';
+
+$lang->testcase->featurebar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featurebar['browse']['needconfirm'] = $lang->testcase->needConfirm;
+$lang->testcase->featurebar['browse']['group']       = '分組查看';
+$lang->testcase->featurebar['browse']['zerocase']    = '零用例需求';
+$lang->testcase->featurebar['groupcase']             = $lang->testcase->featurebar['browse'];

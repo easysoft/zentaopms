@@ -148,7 +148,7 @@ $lang->project->groups['type']       = '类型分组';
 $lang->project->groups['deadline']   = '截止分组';
 
 $lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = '已关联需求';
+$lang->project->groupFilter['story']['linked']      = '关联需求的任务';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['setted']        = '已设置';
 $lang->project->groupFilter['assignedTo']['undone'] = '未完成';
