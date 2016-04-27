@@ -20,6 +20,7 @@ class block extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        /* Mark the call from zentao or ranzhi. */
         $this->selfCall = strpos($this->server->http_referer, common::getSysURL()) === 0 || $this->session->blockModule;
         if($this->methodName != 'admin' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) die('');
     }
@@ -49,8 +50,8 @@ class block extends control
             }
 
             $modules['dynamic']   = $this->lang->block->dynamic;
+            $modules['flowchart'] = $this->lang->flowchart;
             $modules['html']      = 'HTML';
-            $modules['flowchart'] = '流程图';
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -198,13 +199,18 @@ class block extends control
         {
             $block->params  = json_decode($block->params);
             $blockID = $block->block;
+            $source  = empty($block->source) ? 'common' : $block->source;
 
             $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
             $block->moreLink  = '';
-            if(isset($this->lang->block->modules[$block->source]->moreLinkList->{$blockID}))
+            if(isset($this->lang->block->modules[$source]->moreLinkList->{$blockID}))
             {
-                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$block->source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
+                list($moduleName, $method, $vars) = explode('|', sprintf($this->lang->block->modules[$source]->moreLinkList->{$blockID}, isset($block->params->type) ? $block->params->type : ''));
                 $block->moreLink = $this->createLink($moduleName, $method, $vars);
+            }
+            elseif($block->block == 'dynamic')
+            {
+                $block->moreLink = $this->createLink('company', 'dynamic');
             }
         }
 
@@ -387,7 +393,11 @@ class block extends control
      */
     public function printTodoBlock()
     {
-        $this->view->todos    = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $this->viewType == 'json' ? 0 : $this->params->num);
+        $uri = $this->server->http_referer;
+        $this->session->set('todoList', $uri);
+        $this->session->set('bugList',  $uri);
+        $this->session->set('taskList', $uri);
+        $this->view->todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $this->viewType == 'json' ? 0 : $this->params->num);
     }
 
     /**
@@ -398,7 +408,9 @@ class block extends control
      */
     public function printTaskBlock()
     {
-        $this->view->tasks    = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : $this->params->num, null, $this->params->orderBy);
+        $this->session->set('taskList',  $this->server->http_referer);
+        $this->session->set('storyList', $this->server->http_referer);
+        $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : $this->params->num, null, $this->params->orderBy);
     }
 
     /**
@@ -409,7 +421,8 @@ class block extends control
      */
     public function printBugBlock()
     {
-        $this->view->bugs     = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : $this->params->num);
+        $this->session->set('bugList', $this->server->http_referer);
+        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : $this->params->num);
     }
 
     /**
@@ -420,6 +433,7 @@ class block extends control
      */
     public function printCaseBlock()
     {
+        $this->session->set('caseList', $this->server->http_referer);
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
@@ -457,6 +471,7 @@ class block extends control
      */
     public function printTesttaskBlock()
     {
+        $this->session->set('testtaskList', $this->server->http_referer);
         $this->app->loadLang('testtask');
         $products = $this->loadModel('product')->getPairs();
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
@@ -479,6 +494,7 @@ class block extends control
      */
     public function printStoryBlock()
     {
+        $this->session->set('storyList', $this->server->http_referer);
         $this->app->loadClass('pager', $static = true);
         $num     = isset($this->params->num) ? $this->params->num : 0;
         $pager   = pager::init(0, $num , 1);
@@ -495,6 +511,7 @@ class block extends control
      */
     public function printPlanBlock()
     {
+        $this->session->set('productPlanList', $this->server->http_referer);
         $this->app->loadLang('productplan');
         $products = $this->loadModel('product')->getPairs();
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
@@ -514,6 +531,7 @@ class block extends control
      */
     public function printReleaseBlock()
     {
+        $this->session->set('releaseList', $this->server->http_referer);
         $this->app->loadLang('release');
         $products = $this->loadModel('product')->getPairs();
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
@@ -534,6 +552,7 @@ class block extends control
      */
     public function printBuildBlock()
     {
+        $this->session->set('buildList', $this->server->http_referer);
         $this->app->loadLang('build');
         $projects = $this->loadModel('project')->getPairs();
         $this->view->builds = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUILD)->alias('t1')

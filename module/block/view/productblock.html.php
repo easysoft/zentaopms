@@ -14,13 +14,13 @@
   <thead>
     <tr class='text-center'>
       <th class='text-left'><?php echo $lang->product->name;?></th>
-      <th width='35' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
-      <th width='45' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
-      <th width='35' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>
-      <th width='45'><?php echo $lang->product->plans;?></th>
-      <th width='45'><?php echo $lang->product->releases;?></th>
-      <th width='55' title='<?php echo $lang->bug->common;?>'><?php echo $lang->product->bugs;?></th>
-      <th width='45' title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
+      <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
+      <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
+      <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>
+      <th width='65'><?php echo $lang->product->plans;?></th>
+      <th width='65'><?php echo $lang->product->releases;?></th>
+      <th width='65' title='<?php echo $lang->bug->common;?>'><?php echo $lang->product->bugs;?></th>
+      <th width='65' title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
     </tr>
   </thead>
   <tbody>
