@@ -2,6 +2,7 @@
 <style>
 .table-chart tr > td.chart-color {padding-left: 0!important; text-align: center; padding-right: 0!important; color: #f1f1f1}
 .chart-wrapper {padding: 10px; background-color: #f1f1f1; border: 1px solid #e5e5e5}
+.table-wrapper > .table-bordered > thead > tr:first-child th {border-top: 1px solid #ddd}
 </style>
 <!--[if lte IE 8]>
 <?php
