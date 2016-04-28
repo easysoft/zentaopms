@@ -204,24 +204,24 @@ fieldset.actionbox ol {padding-top: 8px\0/;}
 .stars-list {color: #E48600}
 
 /* status in table */
-td.done, [class$="-done"],
-td.pass, [class$="-pass"],
-td.resolved, [class$="-resolved"],
-td.normal, [class$="-normal"],
-td.status-active, [class$="-active"] {color:#229f24;}
-td.wait, [class$="-wait"] {color:#808080;}
-td.pause, [class$="-pause"],
-td.suspended, [class$="-suspended"] {color:#E48600;}
-td.delay,  [class$="-delay"] {color:#e84e0f;}
-td.closed, [class$="-closed"],
-td.cancel, [class$="-cancel"] {color:#888;}
-td.doing, [class$="-doing"],
-td.changed, [class$="-changed"],
-td.investigate, [class$="-investigate"] {color:#d2322d;}
-td.delayed, [class$="-delayed"] {background:#e84e0f!important; color:white;}
-td.blocked, [class$="-blocked"] {background:yellow!important;}
-td.fail, [class$="-fail"]  {color:#d2322d}
-td.draft, [class$="-draft"]  {color:#8957a1}
+td.done, .status-done, td[class$="-done"],
+td.pass, .status-pass, td[class$="-pass"],
+td.resolved, .status-resolved, td[class$="-resolved"],
+td.normal, .status-normal, td[class$="-normal"],
+td.status-active, .status-status, td[class$="-active"] {color:#229f24;}
+td.wait, .status-wait, td[class$="-wait"] {color:#808080;}
+td.pause, .status-pause, td[class$="-pause"],
+td.suspended, .status-suspended, td[class$="-suspended"] {color:#E48600;}
+td.delay,  .status-delay, td[class$="-delay"] {color:#e84e0f;}
+td.closed, .status-closed, td[class$="-closed"],
+td.cancel, .status-cancel, td[class$="-cancel"] {color:#888;}
+td.doing, .status-doing, td[class$="-doing"],
+td.changed, .status-changed, td[class$="-changed"],
+td.investigate, .status-investigate, td[class$="-investigate"] {color:#d2322d;}
+td.delayed, .status-delayed, td[class$="-delayed"] {background:#e84e0f!important; color:white;}
+td.blocked, .status-blocked, td[class$="-blocked"] {background:yellow!important;}
+td.fail, .status-fail, td[class$="-fail"]  {color:#d2322d}
+td.draft, .status-draft, td[class$="-draft"]  {color:#8957a1}
 .bug-active {color: #8957a1}
 .testcase-normal,
 .story-active {color: #333}
