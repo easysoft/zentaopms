@@ -16,12 +16,12 @@ $lang->block->style  = '外观';
 $lang->block->grid   = '宽度';
 $lang->block->color  = '颜色';
 
-$lang->block->lblModule = '模块';
-$lang->block->lblBlock  = '区块';
-$lang->block->lblNum    = '条数';
-$lang->block->lblHtml   = 'HTML内容';
-$lang->block->dynamic   = '最新动态';
-$lang->block->flowchart = '流程图';
+$lang->block->lblModule    = '模块';
+$lang->block->lblBlock     = '区块';
+$lang->block->lblNum       = '条数';
+$lang->block->lblHtml      = 'HTML内容';
+$lang->block->dynamic      = '最新动态';
+$lang->block->lblFlowchart = '流程图';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';

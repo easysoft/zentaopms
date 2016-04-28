@@ -50,7 +50,7 @@ class block extends control
             }
 
             $modules['dynamic']   = $this->lang->block->dynamic;
-            $modules['flowchart'] = $this->lang->flowchart;
+            $modules['flowchart'] = $this->lang->block->lblFlowchart;
             $modules['html']      = 'HTML';
             $modules = array('' => '') + $modules;
 
