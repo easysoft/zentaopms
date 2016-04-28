@@ -1,7 +1,9 @@
-#versionMenu {position: absolute; top: 10px; right: 50px;}
+#versionMenu {margin: 20px;}
 #versionMenu .dropdown-menu {min-width: 120px}
 
-#featureCarousel .item {text-align: center; padding: 10px 0}
-#featureCarousel .item > h2 {margin-bottom: 30px; color: #114f8e}
-#featureCarousel .item > img {margin: 0 auto 30px}
-#featureCarousel .item > .desc {font-size: 16px; width: 70%; margin: 0 auto 20px; min-height: 44px}
+#featureList {padding: 0 20px 20px;}
+#featureList > .item {padding: 0 0 10px 0;}
+#featureList > .item > h3 {color: #114f8e; font-size: 16px; margin: 0; padding: 10px 0}
+#featureList > .item > .desc {color: #666; padding-left: 18px;}
+#featureList > .item > .more-link {color: #666; padding-left: 18px;}
+#featureList > .item > .more {display: none}

@@ -62,8 +62,8 @@ $lang->misc->tableStatus = "Table status";
 $lang->misc->novice      = "You may use the ZenTao first, whether to enter the novice mode?";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest       = 'Latest';
-$lang->misc->feature->all = array();
+$lang->misc->feature->lastest         = 'Latest';
+$lang->misc->feature->all             = array();
 $lang->misc->feature->all['latest']   = array();
-$lang->misc->feature->all['latest'][] = array('title'=>'Customizable home page', 'desc' => '<p>You can add contents blocks to home page and determine how to display them.</p>', 'img' => '1.gif');
-$lang->misc->feature->all['latest'][] = array('title'=>'Full customizable navigations', 'desc' => '<p>You can sort and hide items in navigations.</p>', 'img' => '2.gif');
+$lang->misc->feature->all['latest'][] = array('title'=>'Customizable home page', 'desc' => '<p>You can add contents blocks to home page and determine how to display them.</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'Full customizable navigations', 'desc' => '<p>You can sort and hide items in navigations.</p>');
