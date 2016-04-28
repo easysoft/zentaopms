@@ -1,15 +1,16 @@
 $(function()
 {
     var currentModule = startMenu['module'],
-        currentMethod = startMenu['method'];
-    var $mainMenu    = $('#mainmenu'),
-        $moduleMenu  = $('#modulemenu'),
-        $featureMenu = $('#featurebar'),
-        $loadingIcon = $('#loadingIcon'),
-        $menuEditor  = $('#menuEditor');
-    var menuConfig = {
-        'main': null,
-        'module': {},
+        currentMethod = startMenu['method'],
+        $mainMenu     = $('#mainmenu'),
+        $moduleMenu   = $('#modulemenu'),
+        $featureMenu  = $('#featurebar'),
+        $loadingIcon  = $('#loadingIcon'),
+        $menuEditor   = $('#menuEditor');
+    var menuConfig    =
+    {
+        'main':    null,
+        'module':  {},
         'feature': {}
     };
 
@@ -183,12 +184,12 @@ $(function()
         }
     }).on('click', '.nav > li > a', function()
     {
-        var $a   = $(this);
-        var item = $a.data('menu');
-        item.hidden = !!!item.hidden;
-        var $menu = $a.closest('nav');
+        var $a         = $(this);
+        var item       = $a.data('menu');
+        var $menu      = $a.closest('nav');
         var moduleName = item.link && item.link['module'] ? item.link['module'] : item.name;
         var methodName = item.link && item.link['method'] ? item.link['method'] : '';
+        item.hidden    = !!!item.hidden;
         if($menu.is('#modulemenu'))
         {
             moduleName = currentModule;
