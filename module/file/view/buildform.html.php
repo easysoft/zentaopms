@@ -101,9 +101,11 @@ function addFile(clickedButton)
     fileRow = <?php echo json_encode($fileRow);?>;
     fileRow = fileRow.replace('$i', $('.fileID').size() + 1);
 
+    /* Get files and labels name.*/
     filesName  = $(clickedButton).closest('tr').find('input[type="file"]').attr('name');
     labelsName = $(clickedButton).closest('tr').find('input[type="text"]').attr('name');
 
+    /* Add file input control and set files and labels name in it.*/
     $fileBox = $(clickedButton).closest('.fileBox').after(fileRow).next('.fileBox');
     $fileBox.find('input[type="file"]').attr('name', filesName);
     $fileBox.find('input[type="text"]').attr('name', labelsName);

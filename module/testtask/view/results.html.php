@@ -43,7 +43,7 @@
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
           <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
-          <td class='w-20px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", '<i class="btn-icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe'")?></td>
+          <td class='w-40px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
         <tr class='result-detail hide'>
@@ -53,9 +53,10 @@
                 <tr>
                   <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
                   <th class='w-p30'><?php echo $lang->testcase->stepDesc;?></th>
-                  <th class='w-p30'><?php echo $lang->testcase->stepExpect;?></th>
-                  <th><?php echo $lang->testcase->result;?></th>
+                  <th class='w-p25'><?php echo $lang->testcase->stepExpect;?></th>
+                  <th class='text-center'><?php echo $lang->testcase->result;?></th>
                   <th class='w-p20'><?php echo $lang->testcase->real;?></th>
+                  <th class='w-50px'></th>
                 </tr>
               </thead>
               <?php 
@@ -69,10 +70,8 @@
                 <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
                 <?php if(!empty($stepResult['result'])):?>
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
-                <td>
-                  <?php echo $stepResult['real'];?>
-                  <?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", '<i class="btn-icon icon-file"></i>', '', "data-toggle='modal' title='{$lang->files}' data-type='iframe' style='float:right'")?>
-                </td>
+                <td><?php echo $stepResult['real'];?></td>
+                <td class='text-center'><?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", $lang->files, '', "data-toggle='modal' data-type='iframe'")?></td>
               </tr>
                 <?php else:?>
                 <td></td>
