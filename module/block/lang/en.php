@@ -16,12 +16,12 @@ $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
 
-$lang->block->lblModule = 'Module';
-$lang->block->lblBlock  = 'Block';
-$lang->block->lblNum    = 'Number';
-$lang->block->lblHtml   = 'HTML Content';
-$lang->block->dynamic   = 'Dynamic';
-$lang->block->flowchart = 'Flowchart';
+$lang->block->lblModule    = 'Module';
+$lang->block->lblBlock     = 'Block';
+$lang->block->lblNum       = 'Number';
+$lang->block->lblHtml      = 'HTML Content';
+$lang->block->dynamic      = 'Dynamic';
+$lang->block->lblFlowchart = 'Flowchart';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
