@@ -332,6 +332,7 @@ class block extends control
                     $this->app->user = new stdclass();
                     $this->app->user->account = 'guest';
                 }
+                $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
 
                 $sso = base64_decode($this->get->sso);
                 $this->view->sso  = $sso;
