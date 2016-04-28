@@ -23,38 +23,39 @@
             echo $this->lang->tree->all;
         }
         echo " <i class='icon-angle-right'></i>&nbsp; </span></li>";
+    }
 
-        foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
+    foreach(customModel::getFeatureMenu($this->moduleName, 'task') as $menuItem)
+    {
+        if(isset($menuItem->hidden)) continue;
+        $type = $menuItem->name;
+        if(strpos($type, 'QUERY') === 0)
         {
-            if(isset($menuItem->hidden)) continue;
-            $type = $menuItem->name;
-            if(strpos($type, 'QUERY') === 0)
+            $queryID = (int)substr($type, 5);
+            echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
+        }
+        elseif($type != 'status')
+        {
+            echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
+        }
+        elseif($type == 'status')
+        {
+            echo "<li id='statusTab' class='dropdown'>";
+            $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
+            $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
+            if(empty($current)) $current = $menuItem->text;
+            echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+            echo "<ul class='dropdown-menu'>";
+            foreach ($lang->project->statusSelects as $key => $value)
             {
-                $queryID = (int)substr($type, 5);
-                echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
+                if($key == '') continue;
+                echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
+                echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
             }
-            elseif($type != 'status')
-            {
-                echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
-            }
-            elseif($type == 'status')
-            {
-                echo "<li id='statusTab' class='dropdown'>";
-                $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
-                $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
-                if(empty($current)) $current = $menuItem->text;
-                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-                echo "<ul class='dropdown-menu'>";
-                foreach ($lang->project->statusSelects as $key => $value)
-                {
-                    if($key == '') continue;
-                    echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
-                    echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
-                }
-                echo '</ul></li>';
-            }
+            echo '</ul></li>';
         }
     }
+
     echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban) . '</li>';
     if($project->type == 'sprint' or $project->type == 'waterfall') echo "<li id='burnTab'>"; common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); echo '</li>';
     echo "<li id='treeTab'>"; common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree); echo '</li>';
