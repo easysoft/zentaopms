@@ -20,9 +20,12 @@ body {background: #fafafa;}
 .dashboard .panel-dragging-shadow {position: absolute;}
 .dashboard-empty-message {text-align: center; margin-top: 100px;}
 .dashboard-empty-message > h5 {margin-bottom: 20px;}
+.dashboard-actions {text-align: right; margin-top: -10px; margin-right: 10px; margin-bottom: 10px;}
+.dashboard-actions > a {display: inline-block; width: 20px; height: 20px; text-align: center; color: #999; border: 1px solid #999; line-height: 20px; background: #999; color: #fff}
+.dashboard-actions > a:hover {background: #2e6dad; border-color: #2e6dad}
 
-.outer {background-color: #fafafa}
-.outer > .dashboard {margin-left: -10px; margin-right: -10px;}
+#wrap .outer {background-color: #fafafa;}
+#wrap .outer > .dashboard {margin-left: -10px; margin-right: -10px;}
 
 /* panel style */
 .panel-block .table th {background-color: #fafafa}

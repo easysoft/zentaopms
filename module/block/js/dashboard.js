@@ -120,7 +120,7 @@ $(function()
         afterRefresh      : initTableHeader
     });
 
-    $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
+    // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
     $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
 
     checkEmpty();
