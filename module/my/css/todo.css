@@ -1,3 +1,3 @@
-.input-group .datepicker-wrapper{width: 110px!important;}
-.input-group .datepicker-wrapper .form-control {max-width: 110px; line-height: 25px; height: 26px!important}
-.input-group-btn {float: left}
+#featurebar .input-group .datepicker-wrapper{width: 110px!important;}
+#featurebar .input-group .datepicker-wrapper .form-control {max-width: 110px; line-height: 25px; height: 26px!important}
+#featurebar .input-group-btn {float: left}
