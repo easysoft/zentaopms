@@ -27,8 +27,8 @@ include './taskheader.html.php';
         </div>
       </div>
     </div>
-    <div class='panel-body no-padding'>
-      <ul id='projectTree'></ul>
+    <div class='panel-body'>
+      <ul id='projectTree' class='tree-lines'></ul>
     </div>
   </div>
 </div>
@@ -56,6 +56,7 @@ $(function()
     var hoursFormat = '<?php echo $lang->project->hours  ?>';
     var viewLevel = '<?php echo $level ?>' || 'custom';
     var data = $.parseJSON('<?php echo json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
+    console.log('DATA', data);
     var $tree = $('#projectTree');
     var statusMap = $.parseJSON('<?php echo json_encode($lang->task->statusList);?>');
     var selectCustomLevel = function() {$('.tree-view-btn.active').removeClass('active').filter('[data-type="custom"]').addClass('active');};
@@ -70,7 +71,7 @@ $(function()
             {
                 title: '<?php echo $lang->project->batchWBS ?>',
                 template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-sitemap"></i>',
-                templateInList: '<a href="javascript:;"><i class="icon icon-sitemap"></i> <?php echo $lang->project->batchWBS ?></a>',
+                templateInList: false,
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=task"); ?>'
             },
         },
@@ -84,10 +85,10 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            $li.closest('li').addClass('item-type-' + item.type);
+            $li.toggleClass('tree-toggle', item.type !== 'task').closest('li').addClass('item-type-' + item.type);
             if(item.type === 'product')
             {
-                $li.append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>')).addClass('tree-toggle');
+                $li.append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>'));
             }
             else if(item.type === 'story')
             {
@@ -99,23 +100,29 @@ $(function()
             }
             else if(item.type === 'task')
             {
-                $li.append('<span class="pri' + item.pri + '">' + item.pri + '</span> ').append($('<a>').attr({href: item.url}).text('#' + item.id + ' ' + item.title).css('color', item.color));
+                $li.append('<span class="task-pri pri' + item.pri + '">' + (item.pri || '') + '</span> ').append($('<a>').attr({href: item.url}).text('#' + item.id + ' ' + item.title).css('color', item.color));
+                if(item.assignedTo) $li.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
+                var $info = $('<div class="task-info clearfix"/>');
+                $info.append($('<div/>').addClass('task-' + item.status).text(statusMap[item.status]));
+                $info.append($('<div/>').text(hoursFormat.replace('%s', item.estimate).replace('%s', item.consumed).replace('%s', item.left)));
+                $info.append($('<div class="buttons"/>').html(item.buttons));
+                $li.append($info);
             }
             else if(item.type === 'tasks')
             {
                 if(item.tasks && item.tasks.length)
                 {
-                    var $table = $('<table class="table table-fixed table-bordered table-condensed table-hover table-striped"><tbody></tbody></table>');
+                    var $table = $('<table class="table table-tasks table-fixed table-bordered table-condensed table-hover table-striped"><tbody></tbody></table>');
                     var $tbody = $table.find('tbody');
                     $.each(item.tasks, function(idx, task)
                     {
                         var $tr = $('<tr class="text-center"/>');
-                        $tr.append($('<td width="30"/>').append('<span class="pri' + task.pri + '">' + (task.pri || '') + '</span>'));
                         $tr.append($('<td/>').addClass('text-left').append($('<a>').attr({href: task.url}).text('#' + task.id + ' ' + task.title).css('color', task.color)));
-                        $tr.append($('<td width="90"/>').html(task.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + task.assignedTo) : ''));
-                        $tr.append($('<td width="70"/>').addClass(task.storyChanged ? 'warning' : task.status).text(statusMap[task.status]));
-                        $tr.append($('<td width="140"/>').text(hoursFormat.replace('%s', task.estimate).replace('%s', task.consumed).replace('%s', task.left)));
-                        $tr.append($('<td width="130"/>').html(task.buttons));
+                        $tr.append($('<td class="td-extra" width="30"/>').append('<span class="pri' + task.pri + '">' + (task.pri || '') + '</span>'));
+                        $tr.append($('<td class="td-extra" width="90"/>').html(task.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + task.assignedTo) : ''));
+                        $tr.append($('<td class="td-extra" width="70"/>').addClass(task.status).text(statusMap[task.status]));
+                        $tr.append($('<td class="td-extra" width="140"/>').text(hoursFormat.replace('%s', task.estimate).replace('%s', task.consumed).replace('%s', task.left)));
+                        $tr.append($('<td class="td-extra" width="150"/>').html(task.buttons));
                         $tbody.append($tr);
                     });
                     $li.append($table);
@@ -123,12 +130,12 @@ $(function()
             }
             else if(item.type === 'unlinkStory')
             {
-                $li.append($('<span class="tree-item-title"><i class="icon icon-tasks text-muted"></i> ' + item.title + '</span>')).addClass('tree-toggle');
+                $li.append($('<span class="tree-item-title"><i class="icon icon-tasks text-muted"></i> ' + item.title + '</span>'));
                 if(item.tasksCount) $li.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
             }
             else
             {
-                $li.addClass('tree-toggle').append($('<span class="tree-toggle"><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
+                $li.append($('<span class="tree-toggle"><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
             }
         }
     });
@@ -145,7 +152,7 @@ $(function()
         if(level === 'task')
         {
             tree.collapse();
-            tree.show($('.item-type-tasks').parent().parent());
+            tree.show($('.item-type-tasks, .item-type-task').parent().parent());
         }
         if(level === 'product') tree.collapse();
         else if(level === 'module')

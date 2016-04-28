@@ -2007,10 +2007,10 @@ class projectModel extends model
                 $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
                 if(!empty($storyTasks))
                 {
-                    $taskItems = $this->formatTasksForTree($storyTasks, $story);
+                    $taskItems             = $this->formatTasksForTree($storyTasks, $story);
                     $storyItem->tasksCount = count($taskItems);
                     $storyItem->children   = array();
-                    $storyItem->children[] = array('id' => 'tasks' . $story->id, 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
+                    $storyItem->children   = $taskItems;
                 }
 
                 $node->children[] = $storyItem;
@@ -2022,8 +2022,9 @@ class projectModel extends model
             $tasks = isset($taskGroups[$node->id][0]) ? $taskGroups[$node->id][0] : array();
             if(!empty($tasks))
             {
-                $taskItems = $this->formatTasksForTree($tasks);
-                $node->children[] = array('id' => 'tasks', 'tasks' => $taskItems, 'type' => 'tasks', 'actions' => false);
+                $taskItems        = $this->formatTasksForTree($tasks);
+                $node->tasksCount = count($taskItems);
+                $node->children  = $taskItems;
             }
 
         }
@@ -2082,6 +2083,7 @@ class projectModel extends model
             $buttons .= common::buildIconButton('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'edit',    "taskID=$task->id", '', 'list');
             $taskItem->buttons = $buttons;
+            $taskItem->actions = false;
             $taskItems[] = $taskItem;
         }
 
