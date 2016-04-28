@@ -697,7 +697,7 @@ function checkTable()
         {
             checkRow.call(e.target, false);
         }
-    }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'a', function(e) {e.stopPropagation();});
+    }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'tbody a', function(e) {e.stopPropagation();});
 
     $(document).on('change', '.rows-selector:checkbox', function()
     {
