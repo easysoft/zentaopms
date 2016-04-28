@@ -33,7 +33,7 @@
           <th>
             <?php echo $lang->testcase->real;?>
             <?php if(empty($run->case->steps)):?>
-            <button type='button' class='btn btn-file' data-toggle='modal' data-target='#fileModal'><?php echo $lang->testtask->files;?></button>
+            <button type='button' class='btn btn-danger btn-file' data-toggle='modal' data-target='#fileModal'><?php echo $lang->testtask->files;?></button>
             <?php endif;?>
           </th>
         </tr>
