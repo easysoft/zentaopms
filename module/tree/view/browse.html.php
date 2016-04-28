@@ -18,7 +18,7 @@
 <div class='row'>
   <div class='col-sm-6 col-md-4 col-lg-3'>
     <div class='panel'>
-      <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></div>
+      <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
         <div class='container'>
           <ul class='tree-lines' id='modulesTree'></ul>

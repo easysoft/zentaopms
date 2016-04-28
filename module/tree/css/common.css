@@ -10,7 +10,6 @@
 table.copy td {padding: 0!important}
 table.copy td .form-control {border-right: 0}
 
-.tree .module-name {font-weight: 500}
 .tree-toggle {cursor: pointer;}
 .tree li:hover > .tree-actions {opacity: 0}
 .tree li.hover > .tree-actions {opacity: 1}

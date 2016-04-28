@@ -2,7 +2,6 @@
 .table-form > tbody > tr > td .form-control + .form-control {margin-top: 5px;}
 
 .tree li.has-list > .tree-actions > .tree-action[data-type="delete"] {display: none}
-.tree .dept-name {font-weight: 500}
 .tree-toggle {cursor: pointer;}
 .tree li:hover > .tree-actions {opacity: 0}
 .tree li.hover > .tree-actions {opacity: 1}
