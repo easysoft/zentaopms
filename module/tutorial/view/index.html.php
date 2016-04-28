@@ -22,7 +22,7 @@
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back'></i><i class='icon icon-check icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulation ?></h3>
-        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-repeat'></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo $referer ?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit ?></a>
+        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-repeat'></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit', 'referer=' . base64_encode($referer)) ?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit ?></a>
       </div>
       <div class='finish'>
         <div class='start-icon'><i class='icon icon-circle icon-back'></i><i class='icon icon-check icon-front'></i></div>

@@ -92,7 +92,7 @@
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
           <td class='linkbox'>
             <?php
-            $tasksLink = $this->createLink('storybtn-task-create', 'tasks', "storyID=$story->id&projectID=$project->id");
+            $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
             $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
             ?> 
           </td>
@@ -104,7 +104,7 @@
             if(commonModel::isTutorialMode())
             {
                 $wizardParams = helper::safe64Encode($param);
-                common::printIcon('tutorial', 'wizard', "module=task&method=create&params=$wizardParams", '', 'list', 'list-ul', '', 'btn-task-create');
+                common::printIcon('tutorial', 'wizard', "module=task&method=create&params=$wizardParams", '', 'list', 'list-ul', '', 'btn-task-create', false, '', $lang->project->wbs);
             } else common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', 'btn-task-create');
 
             $lang->task->batchCreate = $lang->project->batchWBS;
