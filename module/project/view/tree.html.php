@@ -92,7 +92,7 @@ $(function()
             }
             else if(item.type === 'story')
             {
-                $li.append('<span><i class="icon icon-lightbulb text-muted"></i> </span>').append($('<a>').attr({href: item.url}).text('#' + item.storyId + ' ' + item.title).css('color', item.color));
+                $li.append('<span class="text-muted"><i class="icon icon-lightbulb"></i> #' + item.storyId + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.children && item.children.length)
                 {
                     if(item.tasksCount) $li.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
@@ -100,10 +100,10 @@ $(function()
             }
             else if(item.type === 'task')
             {
-                $li.append('<span class="task-pri pri' + item.pri + '">' + (item.pri || '') + '</span> ').append($('<a>').attr({href: item.url}).text('#' + item.id + ' ' + item.title).css('color', item.color));
+                $li.append('<span class="task-pri pri' + item.pri + '">' + (item.pri || '') + '</span> <span class="text-muted">#' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.assignedTo) $li.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
                 var $info = $('<div class="task-info clearfix"/>');
-                $info.append($('<div/>').addClass('task-' + item.status).text(statusMap[item.status]));
+                $info.append($('<div/>').addClass('status-' + item.status).text(statusMap[item.status]));
                 $info.append($('<div/>').text(hoursFormat.replace('%s', item.estimate).replace('%s', item.consumed).replace('%s', item.left)));
                 $info.append($('<div class="buttons"/>').html(item.buttons));
                 $li.append($info);
