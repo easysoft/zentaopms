@@ -982,24 +982,6 @@ class taskModel extends model
     }
 
     /**
-     * Get tasks a story.
-     * 
-     * @param  int    $storyID 
-     * @param  int    $projectID 
-     * @access public
-     * @return array
-     */
-    public function getStoryTasks($storyID, $projectID = 0)
-    {
-        return $this->dao->select('*')
-            ->from(TABLE_TASK)
-            ->where('story')->eq((int)$storyID)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->fetchAll();
-    }
-
-    /**
      * Get counts of some stories' tasks.
      * 
      * @param  array  $stories 
