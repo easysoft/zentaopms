@@ -14,18 +14,15 @@
 <?php include './taskheader.html.php';?>
 <?php if(isset($lang->project->groupFilter[$groupBy])):?>
 <?php $currentFilter = isset($_COOKIE["groupFilter_$groupBy"]) ? $_COOKIE["groupFilter_$groupBy"] : key($lang->project->groupFilter[$groupBy]);?>
-<style>
-.nav-tabs{border-bottom:0px!important;}
-.nav-tabs>li{margin-bottom:0px!important;}
-#featurebar{margin-bottom:5px!important;}
-</style>
-<ul class="nav nav-tabs">
-  <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
-  <li <?php if($filterKey == $currentFilter) echo "class='active'"?>><a href="javascript:setFilter('<?php echo $groupBy?>', '<?php echo $filterKey?>')"><?php echo $name?></a></li>
-  <?php endforeach;?>
-</ul>
+<div class='sub-featurebar'>
+  <ul class='nav nav-tabs'>
+    <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
+    <li <?php if($filterKey == $currentFilter) echo "class='active'"?>><a href="javascript:setFilter('<?php echo $groupBy?>', '<?php echo $filterKey?>')"><?php echo $name?></a></li>
+    <?php endforeach;?>
+  </ul>
+</div>
 <?php endif;?>
-<table class='table active-disabled table-condensed table-fixed table-striped table-custom' id='groupTable'>
+<table class='table active-disabled table-condensed table-fixed table-custom' id='groupTable'>
   <thead>
     <tr>
       <th class='w-120px'>
