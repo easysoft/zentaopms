@@ -7,9 +7,16 @@
 #projectTree li > .tree-item-wrapper:hover {background-color: #edf3fe; cursor: pointer; margin-left: -20px; padding-left: 20px;}
 #projectTree li {line-height: 30px; padding-top: 0; padding-bottom: 0}
 #projectTree > li.open > .tree-item-wrapper {border-bottom: none}
-#projectTree.tree li.has-list.open > ul:after {top: -10px; bottom: 17px}
+#projectTree.tree li.has-list.open > ul:after {top: -10px; bottom: 17px; display: none}
 #projectTree.tree ul > li.has-list:after {top: 14px}
 #projectTree.tree ul > li:after {top: 13px}
+#projectTree.tree ul > li:before {display: block; content: ' '; border: none; border-left: 1px dotted #999; top: -11px; bottom: 12px; left: -11px; position: absolute; width: auto; height: auto}
+#projectTree.tree ul > li:last-child:before {bottom: auto; height: 25px}
+#projectTree.tree ul > li > .tree-item-wrapper:before {display: block; content: ' '; position: absolute; width: 7px; height: 7px; top: 10px; left: 8px; background-color: #ddd}
+#projectTree.tree ul > li.has-list > .tree-item-wrapper:before {display: none;}
+#projectTree.tree ul > li.item-type-task > .tree-item-wrapper {padding-left: 15px; margin-left: -15px;}
+#projectTree.tree ul > li.item-type-task > .tree-item-wrapper:hover {background-color: #edf3fe}
+#projectTree.tree ul > li.item-type-task > .tree-item-wrapper:before {left: 0; z-index: 2}
 #projectTree.tree li>.list-toggle {top: 2px}
 #projectTree.tree li:before {display: none}
 #projectTree .item-type-story > ul > li {padding-left: 10px;}
