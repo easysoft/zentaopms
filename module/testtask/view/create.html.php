@@ -74,17 +74,10 @@
         <th><?php echo $lang->testtask->mailto;?></th>
         <td colspan='2'>
           <div id='mailtoGroup' class='input-group'>
-            <?php echo html::select('mailto[]', $users, '', "multiple class='form-control'");?>
-            <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
-            <?php
-            if(empty($contactLists))
-            {
-                echo '<span class="input-group-btn">';
-                echo '<a href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new") . '" target="_blank" data-toggle="tooltip" class="btn" title="' . $lang->user->contacts->manage . '"><i class="icon icon-cog"></i></a>';
-                echo '<a href="###" onclick="ajaxGetContacts(this)" data-toggle="tooltip" class="btn" title="' . $lang->refresh . '"><i class="icon icon-refresh"></i></a>';
-                echo '</span>';
-            }
-            ?>
+          <?php
+          echo html::select('mailto[]', $users, '', "multiple class='form-control'");
+          echo $this->fetch('my', 'buildContactLists');
+          ?>
           </div>
         </td>
       </tr>

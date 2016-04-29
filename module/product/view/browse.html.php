@@ -63,7 +63,11 @@
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
         common::printIcon('tutorial', 'wizard', "module=story&method=create&params=$wizardParams", 'btn', 'button', 'plus', '', 'create-story-btn', false, '', $lang->story->create);
-    } else common::printIcon('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", 'btn', 'button', 'plus', '', 'create-story-btn'); 
+    }
+    else
+    {
+        common::printIcon('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", 'btn', 'button', 'plus', '', 'create-story-btn');
+    }
     ?>
     </div>
   </div>
