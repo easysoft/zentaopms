@@ -105,8 +105,9 @@ js::set('browseType', $browseType);
     <?php
     $datatableId  = $this->moduleName . $this->methodName;
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+    $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/taskdata.html.php';
     $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
-    include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/taskdata.html.php';
+    include $file2Include;
     ?>
       <tfoot>
         <tr>

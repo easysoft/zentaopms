@@ -32,17 +32,18 @@ var moduleID   = '<?php echo $moduleID;?>';
 </div>
 <div class='main'>
   <form method='post' name='casesform' id='casesForm'>
-<?php
-$vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-$datatableId  = $this->moduleName . $this->methodName;
-$useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+    <?php
+    $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+    $datatableId  = $this->moduleName . $this->methodName;
+    $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+    $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/casesdata.html.php';
 
-$canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
-$canBatchAssign = common::hasPriv('testtask', 'batchAssign');
-$canBatchRun    = common::hasPriv('testtask', 'batchRun');
-$hasCheckbox    = ($canBatchEdit or $canBatchAssign or $canBatchRun);
-include $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/casesdata.html.php';
-?>
+    $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+    $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
+    $canBatchRun    = common::hasPriv('testtask', 'batchRun');
+    $hasCheckbox    = ($canBatchEdit or $canBatchAssign or $canBatchRun);
+    include $file2Include;
+    ?>
       <tfoot>
         <tr>
           <td colspan='10'>
