@@ -32,10 +32,10 @@
   </div>
 </div>
 <?php
-$hasFields = array();
+$visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if($field)$hasFields[$field] = '';
+    if($field)$visibleFields[$field] = '';
 }
 ?>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -43,14 +43,14 @@ foreach(explode(',', $showFields) as $field)
     <thead>
       <tr>
         <th class='w-50px'><?php echo $lang->idAB;?></th> 
-        <th class='w-200px<?php echo zget($hasFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
-        <th class='w-200px<?php echo zget($hasFields, 'story', ' hidden')?>'> <?php echo $lang->testcase->story;?></th>
+        <th class='w-200px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
+        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden')?>'> <?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
         <th class='w-180px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
-        <th class='w-80px<?php echo  zget($hasFields, 'pri', ' hidden')?>'>         <?php echo $lang->testcase->pri;?></th>
-        <th class='w-150px<?php echo zget($hasFields, 'precondition', ' hidden')?>'><?php echo $lang->testcase->precondition;?></th>
-        <th class='w-100px<?php echo zget($hasFields, 'keywords', ' hidden')?>'>    <?php echo $lang->testcase->keywords;?></th>
-        <th class='w-200px<?php echo zget($hasFields, 'stage', ' hidden')?>'>       <?php echo $lang->testcase->stage;?></th>
+        <th class='w-80px<?php echo  zget($visibleFields, 'pri', ' hidden')?>'>         <?php echo $lang->testcase->pri;?></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden')?>'><?php echo $lang->testcase->precondition;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>    <?php echo $lang->testcase->keywords;?></th>
+        <th class='w-200px<?php echo zget($visibleFields, 'stage', ' hidden')?>'>       <?php echo $lang->testcase->stage;?></th>
       </tr>
     </thead>
 
@@ -65,18 +65,18 @@ foreach(explode(',', $showFields) as $field)
     ?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td class='text-left<?php echo zget($hasFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
-      <td class='text-left<?php echo zget($hasFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
       <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-      <td class='<?php echo zget($hasFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
-      <td class='<?php echo zget($hasFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
-      <td class='<?php echo zget($hasFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
-      <td class='text-left<?php echo zget($hasFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
+      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
     </tr>
     <?php endfor;?>
     <tfoot>
-      <tr><td colspan='<?php echo count($hasFields) + 3?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><td colspan='<?php echo count($visibleFields) + 3?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </tfoot>
   </table>
 </form>
@@ -84,14 +84,14 @@ foreach(explode(',', $showFields) as $field)
   <tbody>
     <tr class='text-center'>
       <td>%s</td>
-      <td class='text-left<?php echo zget($hasFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
-      <td class='text-left<?php echo zget($hasFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
       <td><?php echo html::input("title[%s]", '', "class='form-control'");?></td>
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-      <td class='<?php echo zget($hasFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
-      <td class='<?php echo zget($hasFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>
-      <td class='<?php echo zget($hasFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
-      <td class='text-left<?php echo zget($hasFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
+      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control' multiple");?></td>
     </tr>
   </tbody>
 </table>

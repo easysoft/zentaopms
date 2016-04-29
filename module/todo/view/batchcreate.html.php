@@ -28,22 +28,22 @@
     </div>
   </div>
   <?php
-  $hasFields = array();
+  $visibleFields = array();
   foreach(explode(',', $showFields) as $field)
   {
-      if($field)$hasFields[$field] = '';
+      if($field)$visibleFields[$field] = '';
   }
-  $columns = count($hasFields) + 2;
+  $columns = count($visibleFields) + 2;
   ?>
   <table class='table table-form table-fixed with-border'>
     <thead>
       <tr>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-120px<?php echo zget($hasFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
-        <th class='w-80px<?php echo zget($hasFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
+        <th class='w-120px<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
+        <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
         <th class='w-p30 red'><?php echo $lang->todo->name;?></th>
-        <th <?php echo zget($hasFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
-        <th class='w-300px<?php echo zget($hasFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
+        <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
+        <th class='w-300px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
       </tr>
     </thead>
     <?php $pri = 3;?>
@@ -51,18 +51,18 @@
     <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td <?php echo zget($hasFields, 'type', "class='hidden'")?>><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
-      <td <?php echo zget($hasFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
+      <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
+      <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
       <td class='text-left' style='overflow:visible'>
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
       </td>
-      <td <?php echo zget($hasFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
-      <td <?php echo zget($hasFields, 'beginAndEnd', "class='hidden'")?>>
+      <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
+      <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?>>
         <div class='input-group'>
           <?php
-          echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'" . (isset($hasFields['beginAndEnd']) ? '' : " disabled"));
-          echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'" . (isset($hasFields['beginAndEnd']) ? '' : " disabled"));
+          echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
+          echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
           ?>
           <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'><?php echo $lang->todo->periods['future'];?></span>
         </div>
@@ -74,7 +74,7 @@
     </tfoot>
   </table>
 </form>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=todo&section=custom&key=batchcreate')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=todo&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include './footer.html.php';?>
 <script language='Javascript'>

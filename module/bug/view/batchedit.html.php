@@ -22,30 +22,30 @@
   </div>
 </div>
 <?php
-$hasFields = array();
+$visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if($field)$hasFields[$field] = '';
+    if($field)$visibleFields[$field] = '';
 }
-$columns = count($hasFields) + 2;
+$columns = count($visibleFields) + 2;
 ?>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "productID=$productID");?>">
   <table class='table table-form table-fixed with-border'>
     <thead>
       <tr>
         <th class='w-50px'><?php echo $lang->idAB;?></th>
-        <th class='w-110px<?php echo zget($hasFields, 'type', ' hidden')?>'><?php echo $lang->bug->type;?></th>
-        <th class='w-70px<?php echo zget($hasFields, 'severity', ' hidden')?>'><?php echo $lang->bug->severityAB;?></th>
-        <th class='w-70px<?php echo zget($hasFields, 'pri', ' hidden')?>'><?php echo $lang->bug->pri;?></th>
-        <th <?php if(count($hasFields) >= 10) echo "class='w-150px'"?>><?php echo $lang->bug->title;?> <span class='required'></span></th>
-        <th class='w-150px<?php echo zget($hasFields, 'productplan', ' hidden')?>'><?php echo $lang->bug->productplan;?></th>
-        <th class='w-150px<?php echo zget($hasFields, 'assignedTo', ' hidden')?>'><?php echo $lang->bug->assignedTo;?></th>
-        <th class='w-90px<?php echo zget($hasFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
-        <th class='w-100px<?php echo zget($hasFields, 'os', ' hidden')?>'><?php echo $lang->bug->os;?></th>
-        <th class='w-100px<?php echo zget($hasFields, 'browser', ' hidden')?>'><?php echo $lang->bug->browser;?></th>
-        <th class='w-100px<?php echo zget($hasFields, 'keywords', ' hidden')?>'><?php echo $lang->bug->keywords;?></th>
-        <th class='w-150px<?php echo zget($hasFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
-        <th class='w-180px<?php echo zget($hasFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
+        <th class='w-110px<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->bug->type;?></th>
+        <th class='w-70px<?php echo zget($visibleFields, 'severity', ' hidden')?>'><?php echo $lang->bug->severityAB;?></th>
+        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->bug->pri;?></th>
+        <th <?php if(count($visibleFields) >= 10) echo "class='w-150px'"?>><?php echo $lang->bug->title;?> <span class='required'></span></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'productplan', ' hidden')?>'><?php echo $lang->bug->productplan;?></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->bug->assignedTo;?></th>
+        <th class='w-90px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'os', ' hidden')?>'><?php echo $lang->bug->os;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden')?>'><?php echo $lang->bug->browser;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->bug->keywords;?></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
+        <th class='w-180px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
       </tr>
     </thead>
     <tbody>
@@ -66,18 +66,18 @@ $columns = count($hasFields) + 2;
       ?>
       <tr class='text-center'>
         <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
-        <td <?php echo zget($hasFields, 'type', "class='hidden'")?>><?php echo html::select("types[$bugID]",      $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'severity', "class='hidden'")?>><?php echo html::select("severities[$bugID]", $severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$bugID]",      $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'severity', "class='hidden'")?>><?php echo html::select("severities[$bugID]", $severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
         <td title='<?php echo $bugs[$bugID]->title?>'> <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?></td>
-        <td class='text-left<?php echo zget($hasFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
-        <td class='text-left<?php echo zget($hasFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
-        <td <?php echo zget($hasFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $lang->bug->osList, $bugs[$bugID]->os, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $lang->bug->browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
-        <td <?php echo zget($hasFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bugs[$bugID]->keywords, 'class=form-control');?></td>
-        <td class='text-left<?php echo zget($hasFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
-        <td <?php echo zget($hasFields, 'resolution', "class='hidden'")?>>
+        <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
+        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $lang->bug->osList, $bugs[$bugID]->os, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $lang->bug->browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bugs[$bugID]->keywords, 'class=form-control');?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
+        <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>
           <table class='w-p100'>
             <tr>
               <td class='pd-0'>

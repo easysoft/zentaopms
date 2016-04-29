@@ -94,9 +94,9 @@ class todo extends control
         }
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->todo->list->batchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+        foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->todo->custom->batchcreate;
+        $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
 
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
         $this->view->position[] = $this->lang->todo->common;
