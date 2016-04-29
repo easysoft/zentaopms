@@ -29,6 +29,7 @@ $lang->tutorial->targetPageTip     = 'Open【%s】page by this instruction';
 $lang->tutorial->requiredTip      = '【%s】is necessary';
 $lang->tutorial->congratulateTask = 'Congratulations!You have finished task【<span class="task-name-current"></span>】!';
 $lang->tutorial->serverErrorTip   = 'Some error has occurred.';
+$lang->tutorial->ajaxSetError     = 'Finished task must be defined. Set empty value to reset tasks.';
 
 $lang->tutorial->tasks = array();
 

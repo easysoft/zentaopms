@@ -70,24 +70,16 @@ class fileModel extends model
      * @param  string $objectType 
      * @param  string $objectID 
      * @param  string $extra 
-     * @param  array  $htmlTagName
+     * @param  string $filesName
+     * @param  string $labelsName
      * @access public
      * @return array
      */
-    public function saveUpload($objectType = '', $objectID = '', $extra = '', $htmlTagName = array())
+    public function saveUpload($objectType = '', $objectID = '', $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
-        if(empty($htmlTagName))
-        {
-            $files = $this->getUpload();
-        }
-        else
-        {
-            list($filesName, $labelsName) = $htmlTagName;
-            $files = $this->getUpload($filesName, $labelsName);
-        }
-
         $fileTitles = array();
         $now        = helper::today();
+        $files      = $this->getUpload($filesName, $labelsName);
 
         foreach($files as $id => $file)
         {
@@ -144,13 +136,14 @@ class fileModel extends model
             {
                 if(empty($filename)) continue;
                 if(!validater::checkFileName($filename)) continue;
+                $title             = $_POST[$labelsName][$id];
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = !empty($_POST[$labelsName][$id]) ? htmlspecialchars($_POST[$labelsName][$id]) : str_replace('.' . $file['extension'], '', $filename);
+                $file['title']     = !empty($title) ? htmlspecialchars($title) : str_replace('.' . $file['extension'], '', $filename);
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
-                $files[] = $file;
+                $files[]           = $file;
             }
         }
         else
@@ -158,9 +151,10 @@ class fileModel extends model
             if(empty($_FILES[$htmlTagName]['name'])) return $files;
             extract($_FILES[$htmlTagName]);
             if(!validater::checkFileName($name)) return array();;
+            $title             = $_POST[$labelsName][0];
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = !empty($_POST[$labelsName][0]) ? htmlspecialchars($_POST[$labelsName][0]) : substr($name, 0, strpos($name, $file['extension']) - 1);
+            $file['title']     = !empty($title) ? htmlspecialchars($title) : substr($name, 0, strpos($name, $file['extension']) - 1);
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
