@@ -46,7 +46,7 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-80px'> <?php echo $lang->story->status;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'stage', ' hidden')?>'> <?php echo $lang->story->stageAB;?></th>
         <th class='w-130px<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->story->closedBy;?></th>
-        <th<?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>><?php echo $lang->story->closedReason;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'closedReason', ' hidden')?>'> <?php echo $lang->story->closedReason;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
       </tr>
     </thead>
