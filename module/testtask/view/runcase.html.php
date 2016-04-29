@@ -96,7 +96,6 @@
     </div>
     <?php else:?>
     <?php foreach($run->case->steps as $key => $step):?>
-    <?php $htmlTagName = array("files{$step->id}", "labels{$step->id}");?>
     <div class="modal fade" id="fileModal<?php echo $step->id;?>">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -107,7 +106,7 @@
           <div class="modal-body">
             <table class='table table-form'>
               <tr>
-                <td><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'htmlTagName' => $htmlTagName));?></td>
+                <td><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'filesName' => "files{$step->id}", 'labelsName' => "labels{$step->id}"));?></td>
               </tr>
             </table>
           </div>
