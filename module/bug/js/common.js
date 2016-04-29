@@ -46,7 +46,7 @@ function loadAll(productID)
 
         if(!firstChoice)
         {
-            $('#product').val(oldProductID);
+            $('#product').val(oldProductID);//Revert old product id if confirm is no.
             $('#product').trigger("chosen:updated");
             $('#product').chosen(defaultChosenOptions);
         }
