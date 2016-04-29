@@ -11,6 +11,7 @@
  */
 ?>
 <style>
+form{overflow-x:auto;}
 #customModal .checkbox-inline{width:90px}
 #customModal .checkbox-inline+.checkbox-inline{margin-left:0px;}
 </style>
