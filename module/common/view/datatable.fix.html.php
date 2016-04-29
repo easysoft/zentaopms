@@ -14,12 +14,12 @@ $(function()
     {
         var $dropdown = $("<div class='datatable-menu-wrapper'><div class='dropdown datatable-menu'><button type='button' class='btn btn-link' data-toggle='dropdown'><i class='icon-cogs'></i> <span class='caret'></span></button></div></div>");
         var $dropmenu = $("<ul class='dropdown-menu pull-right'></ul>");
-        <?php if(!empty($setShowModule)):?>
-        $dropmenu.append("<li><a href='javascript:;' data-toggle='showModuleModal'><?php echo $lang->datatable->showModule?></a></li>");
-        <?php endif;?>
         $dropmenu.append("<li><a href='javascript:;' id='switchToDatatable'><?php echo $lang->datatable->switchToDatatable?></a></li>");
         $dropdown.children('.dropdown').append($dropmenu);
         $(table).before($dropdown);
+        <?php if(!empty($setShowModule)):?>
+        $('.side .side-body .panel-body .tree').parent().append("<div class='text-right'><a href='javascript:;' data-toggle='showModuleModal'><?php echo $lang->datatable->showModule?></a></div>");
+        <?php endif;?>
         $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
     }
 
