@@ -71,7 +71,7 @@ $(function()
     var loadData = function(moduleName, methodName, type, callback)
     {
         type     = type || '';
-        var link = createLink('custom', 'menu', 'module=' + moduleName + '&method=' + methodName + '&type=' + type, 'json');
+        var link = createLink('custom', 'ajaxGetMenu', 'module=' + moduleName + '&method=' + methodName + '&type=' + type, 'json');
         $loadingIcon.addClass('active');
         $.get(link, function(data)
         {
@@ -218,7 +218,7 @@ $(function()
 
         postData = $.map(postData, JSON.stringify);
 
-        $.post(createLink('custom', 'menu'), {menus: postData}, function(data)
+        $.post(createLink('custom', 'ajaxSetMenu'), {menus: postData}, function(data)
         {
             if(data.result === 'success') window.parent.location.reload()
             if(data.message) alert(data.message);

@@ -183,70 +183,90 @@ class custom extends control
     }
 
     /**
-     * Ajax get or set menu
+     * Custom menu view
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function menu($module = 'main', $method = '')
+    {
+        $this->view->module = $module;
+        $this->view->method = $method;
+        $this->display();
+    }
+
+    /**
+     * Ajax set menu
+     * 
+     * @param  string $module
+     * @param  string $method
+     * @param  string $menus
+     * @access public
+     * @return void
+     */
+    public function ajaxSetMenu($module = 'main', $method = '', $menus = '')
+    {
+        if($_POST)
+        {
+            if(!empty($_POST['menus']))  $menus  = $_POST['menus'];
+            if(!empty($_POST['module'])) $module = $_POST['module'];
+            if(!empty($_POST['method'])) $method = $_POST['method'];
+        }
+        else if(!empty($menus)) $menus = header::safe64Decode($menus);
+
+        if(empty($menus)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
+
+        if(is_array($menus))
+        {
+            foreach ($menus as $menu)
+            {
+                $menu = json_decode($menu);
+                $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
+            }
+        }
+        else
+        {
+            $this->custom->saveCustomMenu($menus, $module, $method);
+        }
+
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Ajax get menu
+     *
+     * @param  string $module
+     * @param  string $method
      * @param  string $type
      * @access public
      * @return void
      */
-    public function menu($module = 'main', $method = '', $type = '')
+    public function ajaxGetMenu($module = 'main', $method = '', $type = '')
     {
-        if($_POST)
+        if($type === 'all')
         {
-            $account = $this->app->user->account;
-            $menus   = $_POST['menus'];
-            
-            if(empty($menus)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
-
-            if(is_array($menus))
+            $menu = array();
+            $menu['main'] = customModel::getModuleMenu('main', true);
+            if($method)
             {
-                foreach ($menus as $menu)
-                {
-                    $menu = json_decode($menu);
-                    $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
-                }
+                $this->app->loadLang($module);
+                $this->loadModel('search')->mergeFeatureBar($module, $method);
             }
-            else
+            if($module !== 'main')
             {
-                if(!empty($_POST['module'])) $module = $_POST['module'];
-                if(!empty($_POST['method'])) $method = $_POST['method'];
-
-                $this->custom->saveCustomMenu($menus, $module, $method);
+                $menu['module']     = customModel::getModuleMenu($module, true);
+                $menu['feature']    = customModel::getFeatureMenu($module, $method);
+                $menu['moduleName'] = $module;
+                $menu['methodName'] = $method;
             }
-
-            $this->send(array('result' => 'success'));
-        }
-
-        if($this->viewType === 'json')
-        {
-            if($type === 'all')
-            {
-                $menu = array();
-                $menu['main'] = customModel::getModuleMenu('main', true);
-                if($method)
-                {
-                    $this->app->loadLang($module);
-                    $this->loadModel('search')->mergeFeatureBar($module, $method);
-                }
-                if($module !== 'main')
-                {
-                    $menu['module']     = customModel::getModuleMenu($module, true);
-                    $menu['feature']    = customModel::getFeatureMenu($module, $method);
-                    $menu['moduleName'] = $module;
-                    $menu['methodName'] = $method;
-                }
-            }
-            else
-            {
-                $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
-            }
-            die(json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu), JSON_HEX_QUOT | JSON_HEX_APOS));
         }
         else
-        { 
-            $this->view->module = $module;
-            $this->view->method = $method;
-            $this->display();
+        {
+            $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
         }
+        die(json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu), JSON_HEX_QUOT | JSON_HEX_APOS));
     }
 
     /**
