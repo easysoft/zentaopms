@@ -111,7 +111,6 @@
 $(function()
 {
     var data = $.parseJSON('<?php echo json_encode($tree);?>');
-    console.log(data);
     var options = {
         name: 'tree-<?php echo $viewType ?>-edit',
         initialState: 'preserve',
@@ -120,10 +119,6 @@ $(function()
         {
             var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browse', 'root=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
-            if(item.short)
-            {
-                $toggle.append('&nbsp; <span class="module-manager text-muted">(' + item.short + ')</span>');
-            }
             $li.append($toggle);
             if(item.nodeType) $li.addClass('tree-item-' + item.nodeType);
             return true;
@@ -140,13 +135,6 @@ $(function()
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=$viewType"); ?>',
                 title: '<?php echo $lang->tree->edit ?>',
                 template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-pencil"></i>'
-            },
-            add:
-            {
-                title: '<?php echo strpos($viewType, 'doc') !== false ? $lang->doc->addType : $lang->tree->manageChild;?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-sitemap"></i>',
-                linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&currentModuleID={0}&branch={1}"); ?>',
-                templateInList: false
             },
             "delete":
             {
@@ -169,11 +157,6 @@ $(function()
             else if(action.type === 'delete')
             {
                 window.open(action.linkTemplate.format(item.id), 'hiddenwin');
-            }
-            else if(action.type === 'add')
-            {
-                console.log('>', action.linkTemplate.format(item.id, item.branch));
-                window.location.href = action.linkTemplate.format(item.id, item.branch);
             }
             else if(action.type === 'sort')
             {
