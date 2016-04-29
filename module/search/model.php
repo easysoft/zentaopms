@@ -313,12 +313,12 @@ class searchModel extends model
      * Get records by the conditon.
      * 
      * @param  string    $module 
-     * @param  string    $moduleIds 
+     * @param  string    $moduleIdList
      * @param  string    $conditions 
      * @access public
      * @return array
      */
-    public function getBySelect($module, $moduleIds, $conditions)
+    public function getBySelect($module, $moduleIdList, $conditions)
     {
         if($module == 'story')
         {
@@ -348,7 +348,7 @@ class searchModel extends model
             $query .= $operator . ' ' . $this->dbh->quote($value) . ' ';
         }
         
-        foreach($moduleIds as $id)
+        foreach($moduleIdList as $id)
         {
             if(!$id) continue;
             $title = $this->dao->select($pairs)
