@@ -15,7 +15,7 @@
 <?php if($this->config->project->homepage != 'index'):?>
 $(function()
 {
-    $('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"project\", \"index\")'><i class='icon icon-home'></i><?php echo $lang->homepage?></a></li>")
+    $('#modulemenu .nav li.right:last').after("<li class='right'><a href='javascript:setHomepage(\"project\", \"index\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")
 });
 <?php endif;?>
 </script>

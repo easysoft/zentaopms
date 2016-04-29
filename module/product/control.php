@@ -56,6 +56,7 @@ class product extends control
 
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
+        unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = $this->session->branch;
         $this->product->setMenu($this->products, $productID, $branch);

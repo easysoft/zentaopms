@@ -26,6 +26,7 @@ class qa extends control
 
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
+        unset($this->lang->qa->menu->index);
         $this->loadModel('product');
         $this->products = $this->product->getPairs('nocode');
         $productID      = $this->product->saveState($productID, $this->products);
