@@ -167,7 +167,7 @@ $(function()
             var postData = [];
             $.each(setting, function(name, value) {if(value) postData.push(name);});
 
-            $.post('<?php echo inLink('index') ?>', {finish: postData.join(',')}, function(e)
+            $.post('<?php echo inLink('ajaxSetTasks') ?>', {finish: postData.join(',')}, function(e)
             {
                 if(e.result === 'success')
                 {
@@ -186,7 +186,7 @@ $(function()
 
     var resetTasks = function()
     {
-        $.post('<?php echo inLink('index') ?>', {finish: ''}, function(e)
+        $.post('<?php echo inLink('ajaxSetTasks') ?>', {finish: ''}, function(e)
         {
             if(e.result === 'success')
             {

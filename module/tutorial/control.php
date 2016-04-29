@@ -29,20 +29,7 @@ class tutorial extends control
      */
     public function index($referer = '', $task = '')
     {
-        if($_POST)
-        {
-            $account = $this->app->user->account;
-            $setting   = $_POST['finish'];
-            
-            $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $setting);
-            $this->send(array('result' => 'success'));
-        }
         $setting = isset($this->config->tutorial->tasks->setting) ? $this->config->tutorial->tasks->setting : '';
-
-        if($this->viewType === 'json')
-        {
-            die(json_encode(array('result' => isset($setting) ? 'success' : 'fail', 'setting' => $setting), JSON_HEX_QUOT | JSON_HEX_APOS));
-        }
 
         $this->session->set('tutorialMode', true);
 
@@ -54,7 +41,27 @@ class tutorial extends control
     }
 
     /**
-     * Exit tuturial mode
+     * Ajax set tasks
+     *
+     * @param  string $finish
+     * @access public
+     * @return void
+     */
+    public function ajaxSetTasks($finish = 'keepAll')
+    {
+        if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
+
+        if($finish == 'keepAll') $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
+
+        $account = $this->app->user->account;
+        $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $finish);
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Exit tutorial mode
+     * 
+     * @param  string $referer
      * @access public
      * @return void
      */
@@ -62,10 +69,19 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
 
-        if(!empty($referer))
-        {
-            die(js::locate($this->createLink('index'), 'parent'));
-        }
+        if(empty($referer)) $referer = $this->createLink('index');
+        die(js::locate($referer, 'parent'));
+    }
+
+    /**
+     * Ajax quit tutorial mode
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxQuit()
+    {
+        $this->session->set('tutorialMode', false);
         die(json_encode(array('result' => 'success')));
     }
 
