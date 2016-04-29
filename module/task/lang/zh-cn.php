@@ -13,6 +13,7 @@ $lang->task->index              = "任务一览";
 $lang->task->create             = "建任务";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量编辑";
+$lang->task->batchChangeModule  = "批量修改模块";
 $lang->task->edit               = "编辑";
 $lang->task->delete             = "删除";
 $lang->task->deleted            = "已删除";
@@ -31,7 +32,6 @@ $lang->task->export             = "导出数据";
 $lang->task->reportChart        = "报表统计";
 $lang->task->fromBug            = '来源Bug';
 $lang->task->confirmStoryChange = "确认需求变动";
-$lang->task->batchChangeModule  = "批量修改模块";
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';

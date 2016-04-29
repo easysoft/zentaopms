@@ -63,6 +63,7 @@ $lang->bug->lastEditedDateAB = 'Edited Date';
 $lang->bug->lastEditedDate   = 'Edited Date';
 $lang->bug->fromCase         = 'From case';
 $lang->bug->toCase           = 'To case';
+$lang->bug->colorTag         = 'Color tag';
 
 /* Actions. */
 $lang->bug->index              = 'Index';
@@ -72,6 +73,7 @@ $lang->bug->confirmBug         = 'Confirm Bug';
 $lang->bug->batchConfirm       = 'Batch confirm';
 $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch edit';
+$lang->bug->batchChangeModule  = 'Batch change module';
 $lang->bug->batchClose         = 'Batch close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->batchAssignTo      = 'Batch assign';
@@ -86,11 +88,9 @@ $lang->bug->export             = 'Export data';
 $lang->bug->delete             = 'Delete Bug';
 $lang->bug->deleted            = 'Deleted';
 $lang->bug->saveTemplate       = 'Save template';
+$lang->bug->setPublic          = 'Set public template';
 $lang->bug->deleteTemplate     = 'Delete template';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
-$lang->bug->setPublic          = 'Set public template';
-$lang->bug->colorTag         = 'Color tag';
-$lang->bug->batchChangeModule  = 'Batch change module';
 
 /* Browse tabs. */
 $lang->bug->assignToMe     = 'MyBugs';

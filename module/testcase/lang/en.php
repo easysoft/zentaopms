@@ -38,6 +38,7 @@ $lang->testcase->version          = 'Case version';
 $lang->testcase->lastRunner       = 'Runner';
 $lang->testcase->lastRunDate      = 'Run date';
 $lang->testcase->assignedTo       = 'Assigned to';
+$lang->testcase->colorTag         = 'Color tag';
 $lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->allProduct       = "All {$lang->productCommon}";
 $lang->testcase->fromBug          = 'From bug';
@@ -58,6 +59,7 @@ $lang->testcase->delete             = "Delete";
 $lang->testcase->view               = "Info";
 $lang->testcase->edit               = "Edit";
 $lang->testcase->batchEdit          = "Batch edit";
+$lang->testcase->batchChangeModule  = "Batch change module";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->batchDelete        = "Batch delete ";
 $lang->testcase->browse             = "Browse";
@@ -68,8 +70,6 @@ $lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export data";
 $lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
-$lang->testcase->colorTag           = 'Color tag';
-$lang->testcase->batchChangeModule  = "Batch change module";
 
 $lang->testcase->new = 'New';
   
