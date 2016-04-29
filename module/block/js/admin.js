@@ -15,12 +15,12 @@ function getBlocks(moduleID)
 
     if(moduleID.indexOf('hiddenBlock') != -1)
     {
-        getRssAndHtmlParams('html', moduleID.replace('hiddenBlock', ''));
+        getNotSourceParams('html', moduleID.replace('hiddenBlock', ''));
         return true;
     }
     if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart')
     {
-        getRssAndHtmlParams(moduleID);
+        getNotSourceParams(moduleID);
         return true;
     }
 
@@ -28,6 +28,7 @@ function getBlocks(moduleID)
     {
         $(moduleBlock).html(data);
         $(moduleBlock).show();
+        $.ajustModalPosition();
     })
 }
 
@@ -38,11 +39,13 @@ function getBlocks(moduleID)
  * @access public
  * @return void
  */
-function getRssAndHtmlParams(type)
+function getNotSourceParams(type, blockID)
 {
+    blockID = typeof(blockID) == 'undefined' ? 0 : blockID;
     $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type), function(data)
     {
         $('#blockParam').html(data);
+        $.ajustModalPosition();
     });
 }
 
@@ -60,6 +63,7 @@ function getBlockParams(type, moduleID)
     $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type + '&source=' + moduleID), function(data)
     {
         $('#blockParam').html(data);
+        $.ajustModalPosition();
     });
 }
 

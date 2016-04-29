@@ -36,6 +36,12 @@ class blockModel extends model
             ->setDefault('params', array())
             ->get();
 
+        if($type == 'html')
+        {
+            $data->params['html'] = $data->html;
+            unset($data->html);
+        }
+
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
     }

@@ -14,7 +14,8 @@ function deleteBlock(index)
             alert(data.message);
             return false;
         }
-        else {checkEmpty();}
+
+        checkEmpty();
     })  
 }
 
@@ -102,6 +103,26 @@ function checkRefreshProgress($dashboard, doneCallback)
 {
     if($dashboard.find('.panel-loading').length) setTimeout(function() {checkRefreshProgress($dashboard, doneCallback);}, 500);
     else doneCallback();
+}
+/**
+ * Hidden block.
+ *
+ * @param  index $index
+ * @access public
+ * @return void
+ */ 
+function hiddenBlock(index)
+{
+    $.getJSON(createLink('block', 'delete', 'index=' + index + '&module=' + module + '&type=hidden'), function(data)
+    {
+        if(data.result != 'success')
+        {
+            alert(data.message);
+            return false;
+        }
+
+        $('#dashboard #block' + index).addClass('hidden');
+    })
 }
 
 $(function()
