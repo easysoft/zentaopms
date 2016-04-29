@@ -1570,7 +1570,7 @@ class bugModel extends model
      */
     public function getUserBugTemplates($account)
     {
-        $templates = $this->dao->select('id,title,content,public')
+        $templates = $this->dao->select('id,account,title,content,public')
             ->from(TABLE_USERTPL)
             ->where('type')->eq('bug')
             ->andwhere('account', true)->eq($account)
