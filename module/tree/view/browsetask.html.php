@@ -109,8 +109,13 @@ $(function()
         data: data,
         itemCreator: function($li, item)
         {
+            
+            var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
+            
+
             var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
-            var $toggle = $('<span class="tree-toggle"><span class="module-name" data-id="' + item.id + '">' + title + '</span></span>');
+            var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browsetask', 'root=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
+            var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.short)
             {
                 $toggle.append('&nbsp; <span class="module-manager text-muted">(' + item.short + ')</span>');
@@ -124,6 +129,7 @@ $(function()
                 $li.addClass('story-item');
             }
             $li.append($toggle);
+            if(item.nodeType) $li.addClass('tree-item-' + item.nodeType);
             return true;
         },
         actions: 

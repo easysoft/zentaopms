@@ -3,8 +3,7 @@
 
 .tree li.has-list > .tree-actions > .tree-action[data-type="delete"] {display: none}
 .tree-toggle {cursor: pointer;}
-.tree li:hover > .tree-actions {opacity: 0}
-.tree li.hover > .tree-actions {opacity: 1}
+.tree-actions, .tree li.hover > .tree-actions {opacity: 1}
 
 #addChildModal form > .form-control {margin-bottom: 8px;}
 #addChildModal .modal-dialog {max-width: 360px;}

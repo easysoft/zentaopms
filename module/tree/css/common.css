@@ -11,8 +11,9 @@ table.copy td {padding: 0!important}
 table.copy td .form-control {border-right: 0}
 
 .tree-toggle {cursor: pointer;}
-.tree li:hover > .tree-actions {opacity: 0}
-.tree li.hover > .tree-actions {opacity: 1}
+.tree-actions, .tree li.hover > .tree-actions {opacity: 1}
+.tree-item-branch > .tree-actions [data-type='sort'] {display: none}
+.tree-item-branch > .tree-actions [data-type='add'] > .icon-plus:before {content: '\e6c7'}
 
 #childrenForm table .chosen-container .chosen-single {border-right-color: transparent}
 #childrenForm table .chosen-container .chosen-single {border-right-color: transparent}

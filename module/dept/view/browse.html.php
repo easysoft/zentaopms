@@ -107,7 +107,8 @@ $(function()
         data: data,
         itemCreator: function($li, item)
         {
-            var $toggle = $('<span class="tree-toggle"><span class="dept-name">' + item.name + '</span></span>');
+            var link = item.id !== undefined ? ('<a href="' + createLink('dept', 'browse', 'dept={0}'.format(item.id)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var $toggle = $('<span class="dept-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.manager)
             {
                 $toggle.append('&nbsp; <span class="dept-manager text-muted"><i class="icon icon-user"></i> ' + item.managerName + '</span>');
@@ -127,13 +128,6 @@ $(function()
                 linkTemplate: '<?php echo helper::createLink('dept', 'edit', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->edit ?>',
                 template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-pencil"></i>'
-            },
-            add:
-            {
-                title: '<?php echo $lang->dept->manageChild ?>',
-                linkTemplate: '<?php echo helper::createLink('dept', 'browse', "deptID={0}"); ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-sitemap"></i>',
-                templateInList: false
             },
             "delete":
             {
@@ -156,10 +150,6 @@ $(function()
             else if(action.type === 'delete')
             {
                 window.open(action.linkTemplate.format(item.id), 'hiddenwin');
-            }
-            else if(action.type === 'add')
-            {
-                window.location.href = action.linkTemplate.format(item.id);
             }
             else if(action.type === 'sort')
             {

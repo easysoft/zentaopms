@@ -22,10 +22,10 @@
   </ul>
 </div>
 <?php endif;?>
-<table class='table active-disabled table-condensed table-fixed table-custom' id='groupTable'>
+<table class='table active-disabled table-condensed table-fixed' id='groupTable'>
   <thead>
     <tr>
-      <th class='w-120px'>
+      <th class='w-120px text-left'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $lang->task->$groupBy, '', "class='expandAll' data-action='expand'")?>
         <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $lang->task->$groupBy, '', "class='collapseAll hidden' data-action='collapse'")?>
       </th>
@@ -64,6 +64,7 @@
     $groupLeft     = 0.0;
 
     $groupName = $groupKey;
+    if($groupBy == 'story' and $groupName == 0) $groupName = $this->lang->task->noStory;
     if(!empty($groupByList[$groupKey])) $groupName .= '::' . $groupByList[$groupKey];
   ?>
   <tbody>
