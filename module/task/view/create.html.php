@@ -132,16 +132,7 @@
             <span class='input-group-addon'><?php echo $lang->task->mailto;?></span>
             <?php endif;?>
             <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?>
-            <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
-            <?php
-            if(empty($contactLists))
-            {
-                echo '<span class="input-group-btn">';
-                echo '<a data-toggle="tooltip" title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new") . '" target="_blank" class="btn"><i class="icon icon-cog"></i></a>';
-                echo '<a data-toggle="tooltip" title="' . $lang->refresh . '" href="###" class="btn" onclick="ajaxGetContacts(this)"><i class="icon icon-refresh"></i></a>';
-                echo '</span>';
-            }
-            ?>
+            <?php echo $this->fetch('my', 'buildContactLists');?>
           </div>
         </td>
         <?php endif;?>

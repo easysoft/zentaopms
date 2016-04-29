@@ -134,7 +134,6 @@ class task extends control
         $users            = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $stories          = $this->story->getProjectStoryPairs($projectID);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-        $contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
@@ -154,7 +153,6 @@ class task extends control
         $this->view->users            = $users;
         $this->view->stories          = $stories;
         $this->view->members          = $members;
-        $this->view->contactLists     = $contactLists;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }
