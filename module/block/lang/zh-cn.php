@@ -122,13 +122,17 @@ $lang->block->orderBy  = '排序';
 
 $lang->block->availableBlocks = new stdclass();
 
-$lang->block->availableBlocks->todo    = '我的待办';
-$lang->block->availableBlocks->task    = '我的任务';
-$lang->block->availableBlocks->bug     = '我的Bug';
-$lang->block->availableBlocks->case    = '我的用例';
-$lang->block->availableBlocks->story   = '我的需求';
-$lang->block->availableBlocks->product = $lang->productCommon . '列表';
-$lang->block->availableBlocks->project = $lang->projectCommon . '列表';
+$lang->block->availableBlocks->todo     = '我的待办';
+$lang->block->availableBlocks->task     = '我的任务';
+$lang->block->availableBlocks->bug      = '我的Bug';
+$lang->block->availableBlocks->case     = '我的用例';
+$lang->block->availableBlocks->story    = '我的需求';
+$lang->block->availableBlocks->product  = $lang->productCommon . '列表';
+$lang->block->availableBlocks->project  = $lang->projectCommon . '列表';
+$lang->block->availableBlocks->plan     = '计划列表';
+$lang->block->availableBlocks->release  = '发布列表';
+$lang->block->availableBlocks->build    = '版本列表';
+$lang->block->availableBlocks->testtask = '测试版本列表';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;

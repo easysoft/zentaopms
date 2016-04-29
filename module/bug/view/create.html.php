@@ -84,7 +84,7 @@ js::set('refresh', $lang->refresh);
           </div>
         </td>
       </tr>
-      <?php $showOs      = strpos(",$showFields,", ',os,')      !== false;?>
+      <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
       <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
       <tr>
         <th><?php echo $lang->bug->type;?></th>
@@ -97,7 +97,7 @@ js::set('refresh', $lang->refresh);
             unset($lang->bug->typeList['trackthings']);
             echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
             ?>
-            <?php if($showOs):?>
+            <?php if($showOS):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
             <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
             <?php endif;?>
