@@ -65,7 +65,6 @@ $lang->duplicate       = '已有相同标题的%s';
 $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>抱歉，管理员限制当前IP登录，请联系管理员解除限制。</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
-$lang->hideNotCheck    = '页面隐藏取消选中字段';
 $lang->homepage        = '设为主页';
 $lang->tutorial        = '新手教程';
 $lang->feature         = '了解新功能';
