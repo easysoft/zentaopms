@@ -27,7 +27,11 @@
     {
         $wizardParams = helper::safe64Encode("project=$project->id");
         common::printIcon('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams", '', 'button', 'link', '', 'link-story-btn', false, '', $lang->project->linkStory);
-    } else common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
+    }
+    else
+    {
+        common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
+    }
     ?>
     </div>
   </div>
@@ -105,7 +109,11 @@
             {
                 $wizardParams = helper::safe64Encode($param);
                 common::printIcon('tutorial', 'wizard', "module=task&method=create&params=$wizardParams", '', 'list', 'list-ul', '', 'btn-task-create', false, '', $lang->project->wbs);
-            } else common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', 'btn-task-create');
+            }
+            else
+            {
+                common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', 'btn-task-create');
+            }
 
             $lang->task->batchCreate = $lang->project->batchWBS;
             common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');
