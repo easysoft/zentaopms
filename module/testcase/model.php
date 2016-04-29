@@ -179,19 +179,19 @@ class testcaseModel extends model
      * Get cases of a module.
      * 
      * @param  int    $productID 
-     * @param  int    $moduleIds 
+     * @param  int    $moduleIdList
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $branch = 0, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
+    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
