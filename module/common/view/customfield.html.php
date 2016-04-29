@@ -10,19 +10,25 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>
+#customModal .checkbox-inline{width:90px}
+#customModal .checkbox-inline+.checkbox-inline{margin-left:0px;}
+</style>
 <div class="modal fade" id="customModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-800px">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->customConfig?></h4>
-      </div>
-      <div class="modal-body">
-        <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
+      <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">
+            <i class="icon-cog"></i> <?php echo $lang->customConfig?>
+            <div class='pull-right' style='margin-right:15px;'><?php echo html::submitButton()?></div>
+          </h4>
+        </div>
+        <div class="modal-body">
           <p><?php echo html::checkbox('fields', $customFields, $showFields);?></p>
-          <p><?php echo html::submitButton() . ' ' . $lang->hideNotCheck?></p>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
