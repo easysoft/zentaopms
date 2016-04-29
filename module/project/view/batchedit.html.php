@@ -76,6 +76,6 @@ $minWidth = (count($hasFields) > 5) ? 'w-150px' : '';
   <tr><td colspan='<?php echo count($hasFields) + 6?>' class='text-center'><?php echo html::submitButton();?></td></tr>
 </table>
 </form>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=project&section=custom&key=batchedit')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=project&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

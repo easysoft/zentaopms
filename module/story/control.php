@@ -164,7 +164,7 @@ class story extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->story->custom->create;
+        $this->view->showFields   = $this->config->story->custom->createFields;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
@@ -250,9 +250,9 @@ class story extends control
         $sourceList['ditto'] = $this->lang->story->ditto;
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->story->list->batchCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->story->custom->batchcreate;
+        $this->view->showFields   = $this->config->story->custom->batchCreateFields;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->productName      = $product->name;
@@ -430,13 +430,13 @@ class story extends control
         $this->lang->story->reasonList['ditto'] = $this->lang->story->ditto;
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->story->list->batchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->story->custom->batchedit;
+        $this->view->showFields   = $this->config->story->custom->batchEditFields;
 
         /* Judge whether the editedStories is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), count(explode(',', $this->config->story->custom->batchedit)) + 3);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
