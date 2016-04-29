@@ -25,26 +25,6 @@ function computeEndDate(delta)
     beginDate = $('#begin').val();
     if(!beginDate) return;
 
-    endDate = convertStringToDate(beginDate).addDays(parseInt(delta));
-    endDate = endDate.toString('yyyy-MM-dd');
-    $('#end').val(endDate);
-}
-
-/**
- * when begin date input change and end date input is null
- * change end date input to begin's after day
- * 
- * @access public
- * @return void
- */
-function suitEndDate()
-{
-    beginDate = $('#begin').val();
-    if(!beginDate) return;
-    endDate = $('#end').val();
-    if(endDate) return;
-    
-    endDate = convertStringToDate(beginDate).addDays(1);
-    endDate = endDate.toString('yyyy-MM-dd');
+    endDate = convertStringToDate(beginDate).addDays(parseInt(delta)).toString('yyyy-MM-dd');
     $('#end').val(endDate);
 }

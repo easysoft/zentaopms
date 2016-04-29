@@ -214,14 +214,7 @@ js::set('refresh', $lang->refresh);
           <div class='input-group' id='contactListGroup'>
           <?php 
           echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
-          if($contactLists) echo html::select('', $contactLists, '', "class='form-control' style='min-width: 100px; margin-left: -1px' onchange=\"setMailto('mailto', this.value)\"");
-          if(empty($contactLists))
-          {
-              echo '<span class="input-group-btn">';
-              echo '<a href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new") . '" target="_blank" data-toggle="tooltip" class="btn" title="' . $lang->user->contacts->manage . '"><i class="icon icon-cog"></i></a>';
-              echo '<a href="###" onclick="ajaxGetContacts(this)" data-toggle="tooltip" class="btn" title="' . $lang->refresh . '"><i class="icon icon-refresh"></i></a>';
-              echo '</span>';
-          }
+          echo $this->fetch('my', 'buildContactLists');
           ?>
           </div>
         </td>

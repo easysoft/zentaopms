@@ -420,15 +420,25 @@ class my extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes")));
         }
         else
         {
             $this->user->deleteContactList($listID);
-            echo js::locate(inlink('manageContacts'), 'parent');
-            exit;
+            die(js::locate(inlink('manageContacts'), 'parent'));
         }
+    }
+
+    /**
+     * Build contact lists.
+     *
+     * @access public
+     * @return void
+     */
+    public function buildContactLists()
+    {
+        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $this->display();
     }
 
     /**

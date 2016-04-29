@@ -113,6 +113,7 @@ class tree extends control
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
+        $this->view->branch          = $branch;
         $this->view->tree            = $this->tree->getFullTrees($rootID, $viewType);
         $this->display();
     }
