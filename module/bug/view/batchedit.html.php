@@ -100,6 +100,6 @@ $columns = count($hasFields) + 2;
     </tfoot>
   </table>
 </form>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=bug&section=custom&key=batchedit')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=bug&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

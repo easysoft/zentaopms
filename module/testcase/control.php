@@ -303,7 +303,7 @@ class testcase extends control
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->testcase->custom->create;
+        $this->view->showFields   = $this->config->testcase->custom->createFields;
 
         $this->view->title            = $title;
         $this->view->caseTitle        = $caseTitle;
@@ -372,7 +372,7 @@ class testcase extends control
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->testcase->custom->batchcreate;
+        $this->view->showFields   = $this->config->testcase->custom->batchCreateFields;
 
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
@@ -600,7 +600,7 @@ class testcase extends control
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->testcase->custom->batchedit;
+        $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->common;

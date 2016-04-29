@@ -114,7 +114,7 @@ foreach(explode(',', $showFields) as $field)
     </tr>
   </tbody>
 </table>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=story&section=custom&key=batchcreate')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=story&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

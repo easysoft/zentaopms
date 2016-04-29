@@ -309,7 +309,7 @@ class bug extends control
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->bug->custom->create;
+        $this->view->showFields   = $this->config->bug->custom->createFields;
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -396,7 +396,7 @@ class bug extends control
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->bug->custom->batchcreate;
+        $this->view->showFields   = $this->config->bug->custom->batchCreateFields;
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
@@ -635,14 +635,14 @@ class bug extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), count(explode(',', $this->config->bug->custom->batchedit)) + 2);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Set Custom*/
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->bug->custom->batchedit;
+        $this->view->showFields   = $this->config->bug->custom->batchEditFields;
 
         /* Set users. */
         $users          = $this->user->getPairs('nodeleted,devfirst');

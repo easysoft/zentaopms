@@ -144,7 +144,7 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->create;
+        $this->view->showFields   = $this->config->task->custom->createFields;
 
         $this->view->title            = $title;
         $this->view->position         = $position;
@@ -187,9 +187,9 @@ class task extends control
         }
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->task->batchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->batchcreate;
+        $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
         $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, 0, 'short');
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
@@ -370,14 +370,14 @@ class task extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), count(explode(',', $this->config->task->custom->batchedit)) + 3);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->task->batchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->batchedit;
+        $this->view->showFields   = $this->config->task->custom->batchEditFields;
 
         /* Set ditto option for pri, status and type list. */
         $this->lang->task->priList['ditto']    = $this->lang->task->ditto;

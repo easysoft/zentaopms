@@ -118,7 +118,7 @@ foreach(explode(',', $showFields) as $field)
 </table>
 <?php js::set('mainField', 'name');?>
 <?php js::set('ditto', $lang->task->ditto);?> 
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=task&section=custom&key=batchcreate')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=task&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

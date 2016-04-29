@@ -21,14 +21,14 @@ $config->testcase->exportFields = '
     pri, type, stage, status, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version,linkCase';
 
-$config->testcase->customCreateFields      = 'stage,story,pri,keywords';
+$config->testcase->customCreateFields      = 'story,stage,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords';
 $config->testcase->customBatchEditFields   = 'module,stage,precondition,status,pri,keywords';
 
 $config->testcase->custom = new stdclass();
-$config->testcase->custom->create      = $config->testcase->customCreateFields;
-$config->testcase->custom->batchcreate = 'module,story';
-$config->testcase->custom->batchedit   = 'module,stage,status,pri';
+$config->testcase->custom->createFields      = $config->testcase->customCreateFields;
+$config->testcase->custom->batchCreateFields = 'module,story';
+$config->testcase->custom->batchEditFields   = 'module,stage,status,pri';
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';

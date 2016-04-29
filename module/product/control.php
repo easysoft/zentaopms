@@ -288,7 +288,7 @@ class product extends control
         /* Set custom. */
         foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->product->custom->batchedit;
+        $this->view->showFields   = $this->config->product->custom->batchEditFields;
 
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;

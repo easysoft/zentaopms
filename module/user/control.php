@@ -445,7 +445,7 @@ class user extends control
         /* Set custom. */
         foreach(explode(',', $this->config->user->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->user->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->user->custom->batchcreate;
+        $this->view->showFields   = $this->config->user->custom->batchCreateFields;
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
         $position[] = $this->lang->user->batchCreate;
@@ -518,7 +518,7 @@ class user extends control
         /* Set custom. */
         foreach(explode(',', $this->config->user->customBatchEditFields) as $field) $customFields[$field] = $this->lang->user->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->user->custom->batchedit;
+        $this->view->showFields   = $this->config->user->custom->batchEditFields;
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
         $this->view->position[] = $this->lang->user->batchEdit;

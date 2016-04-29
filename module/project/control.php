@@ -999,7 +999,7 @@ class project extends control
         /* Set custom. */
         foreach(explode(',', $this->config->project->customBatchEditFields) as $field) $customFields[$field] = $this->lang->project->$field;
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->project->custom->batchedit;
+        $this->view->showFields   = $this->config->project->custom->batchEditFields;
 
         $this->view->title         = $this->lang->project->batchEdit;
         $this->view->position[]    = $this->lang->project->batchEdit;

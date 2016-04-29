@@ -154,6 +154,6 @@
     <span id='responser'></span>
   </form>
 </div>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=task&section=custom&key=create')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=task&section=custom&key=createFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

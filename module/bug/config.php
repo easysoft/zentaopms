@@ -40,9 +40,9 @@ $config->bug->list->customBatchCreateFields = 'module,project,steps,type,pri,sev
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,status,resolvedBy,resolution,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
-$config->bug->custom->create      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchcreate = 'module,project,steps,type,severity,os,browser';
-$config->bug->custom->batchedit   = 'type,severity,pri,assignedTo,status,resolvedBy,resolution';
+$config->bug->custom->createFields      = $config->bug->list->customCreateFields;
+$config->bug->custom->batchCreateFields = 'module,project,steps,type,severity,os,browser';
+$config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
