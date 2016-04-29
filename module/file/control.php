@@ -16,11 +16,12 @@ class file extends control
      * 
      * @param  int    $fileCount 
      * @param  float  $percent 
-     * @param  array  $htmlTagName
+     * @param  string $filesName
+     * @param  string $labelsName
      * @access public
      * @return void
      */
-    public function buildForm($fileCount = 1, $percent = 0.9, $htmlTagName = array())
+    public function buildForm($fileCount = 1, $percent = 0.9, $filesName = 'files', $labelsName = 'labels')
     {
         if(!file_exists($this->file->savePath)) 
         {
@@ -31,16 +32,6 @@ class file extends control
         {
             printf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath);
             return false;
-        }
-
-        if(empty($htmlTagName))
-        {
-            $filesName  = 'files';
-            $labelsName = 'labels';
-        }
-        else
-        {
-            list($filesName, $labelsName) = $htmlTagName;
         }
 
         $this->view->fileCount  = $fileCount;

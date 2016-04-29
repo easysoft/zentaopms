@@ -446,7 +446,7 @@ class testtaskModel extends model
             $resultID = $this->dao->lastInsertID();
             if(!empty($stepResults))
             {
-                foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, array("files{$stepID}", "labels{$stepID}"));
+                foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
             }
             else
             {
