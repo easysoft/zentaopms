@@ -192,6 +192,11 @@ class todo extends control
             /* Set the sessions. */
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
 
+            /* Set Custom*/
+            foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->todo->custom->batchEditFields;
+
             /* Assign. */
             $title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
             $position[] = html::a($this->createLink('my', 'todo'), $this->lang->my->todo);
