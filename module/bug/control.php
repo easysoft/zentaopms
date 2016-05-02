@@ -612,7 +612,7 @@ class bug extends control
 
             /* Set plans. */
             $plans          = $this->loadModel('productplan')->getPairs($productID, $branch);
-            $plans['ditto'] = $this->lang->bug->ditto;
+            $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set product menu. */
             $this->bug->setMenu($this->products, $productID, $branch);
@@ -645,27 +645,21 @@ class bug extends control
         $this->view->showFields   = $this->config->bug->custom->batchEditFields;
 
         /* Set users. */
-        $users          = $this->user->getPairs('nodeleted,devfirst');
-        $users['ditto'] = $this->lang->bug->ditto;
-
-        /* Set ditto option for users and type, severity, pri, resolution list. */
-        $this->lang->bug->typeList['ditto']       = $this->lang->bug->ditto;
-        $this->lang->bug->priList['ditto']        = $this->lang->bug->ditto;
-        $this->lang->bug->resolutionList['ditto'] = $this->lang->bug->ditto;
-        $this->lang->bug->severityList['ditto']   = $this->lang->bug->ditto;
-        $this->lang->bug->statusList['ditto']     = $this->lang->bug->ditto;
-        $this->lang->bug->osList['ditto']         = $this->lang->bug->ditto;
-        $this->lang->bug->browserList['ditto']    = $this->lang->bug->ditto;
+        $users = $this->user->getPairs('nodeleted,devfirst');
+        $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
         $this->view->position[]     = $this->lang->bug->common;
         $this->view->position[]     = $this->lang->bug->batchEdit;
         $this->view->bugIDList      = $bugIDList;
         $this->view->productID      = $productID;
-        $this->view->typeList       = $this->lang->bug->typeList;
-        $this->view->priList        = (array)$this->lang->bug->priList;
-        $this->view->resolutionList = $this->lang->bug->resolutionList;
-        $this->view->severityList   = (array)$this->lang->bug->severityList;
+        $this->view->severityList   = array('ditto' => $this->lang->bug->ditto) + $this->lang->bug->severityList;
+        $this->view->typeList       = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->typeList;
+        $this->view->priList        = array('0' => '', 'ditto' => $this->lang->bug->ditto) + $this->lang->bug->priList;
+        $this->view->resolutionList = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->resolutionList;
+        $this->view->statusList     = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->statusList;
+        $this->view->osList         = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->osList;
+        $this->view->browserList    = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->browserList;
         $this->view->bugs           = $bugs;
         $this->view->branch         = $branch;
         $this->view->users          = $users;

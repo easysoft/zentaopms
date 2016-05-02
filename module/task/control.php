@@ -341,11 +341,11 @@ class task extends control
             $this->project->setMenu($this->project->getPairs(), $project->id);
 
             /* Set modules and members. */
-            $modules           = $this->tree->getTaskOptionMenu($projectID);
-            $modules['ditto']  = $this->lang->task->ditto;
-            $members           = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+            $modules = $this->tree->getTaskOptionMenu($projectID);
+            $modules = array('ditto' => $this->lang->task->ditto) + $modules;
+            $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+            $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
             $members['closed'] = 'Closed';
-            $members['ditto']  = $this->lang->task->ditto;
 
             $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
             $this->view->position[] = html::a($this->createLink('project', 'browse', "project=$project->id"), $project->name);
@@ -379,18 +379,13 @@ class task extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
 
-        /* Set ditto option for pri, status and type list. */
-        $this->lang->task->priList['ditto']    = $this->lang->task->ditto;
-        $this->lang->task->statusList['ditto'] = $this->lang->task->ditto;
-        $this->lang->task->typeList['ditto']   = $this->lang->task->ditto;
-
         /* Assign. */
         $this->view->position[]  = $this->lang->task->common;
         $this->view->position[]  = $this->lang->task->batchEdit;
         $this->view->projectID   = $projectID;
-        $this->view->priList     = (array)$this->lang->task->priList;
-        $this->view->statusList  = $this->lang->task->statusList;
-        $this->view->typeList    = $this->lang->task->typeList;
+        $this->view->priList     = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
+        $this->view->statusList  = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
+        $this->view->typeList    = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
         $this->view->taskIDList  = $taskIDList;
         $this->view->tasks       = $tasks;
         $this->view->projectName = isset($project) ? $project->name : '';

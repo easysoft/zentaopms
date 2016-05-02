@@ -388,10 +388,10 @@ class story extends control
             $product = $this->product->getByID($productID);
 
             /* Set modules and productPlans. */
-            $modules               = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
-            $modules['ditto']      = $this->lang->story->ditto;
-            $productPlans          = $this->productplan->getPairs($productID, $branch);
-            $productPlans['ditto'] = $this->lang->story->ditto;
+            $modules      = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+            $modules      = array('ditto' => $this->lang->story->ditto) + $modules;
+            $productPlans = $this->productplan->getPairs($productID, $branch);
+            $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
 
             $this->view->modules      = $modules;
             $this->view->productPlans = $productPlans;
@@ -421,13 +421,9 @@ class story extends control
             $this->view->title      = $this->lang->story->batchEdit;
         }
 
-        /* Set ditto option for users and pri, source, stage list. */
+        /* Set ditto option for users. */
         $users          = $this->loadModel('user')->getPairs('nodeleted');
-        $users['ditto'] = $this->lang->story->ditto;
-        $this->lang->story->priList['ditto']    = $this->lang->story->ditto;
-        $this->lang->story->sourceList['ditto'] = $this->lang->story->ditto;
-        $this->lang->story->stageList['ditto']  = $this->lang->story->ditto;
-        $this->lang->story->reasonList['ditto'] = $this->lang->story->ditto;
+        $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -443,10 +439,10 @@ class story extends control
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->users             = $users;
-        $this->view->priList           = (array)$this->lang->story->priList;
-        $this->view->sourceList        = $this->lang->story->sourceList;
-        $this->view->reasonList        = $this->lang->story->reasonList;
-        $this->view->stageList         = $this->lang->story->stageList;
+        $this->view->priList           = array('0' => '', 'ditto' => $this->lang->story->ditto) + $this->lang->story->priList;
+        $this->view->sourceList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->sourceList;
+        $this->view->reasonList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->reasonList;
+        $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
         $this->view->storyIDList       = $storyIDList;
         $this->view->branch            = $branch;

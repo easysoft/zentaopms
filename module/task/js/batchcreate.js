@@ -1,6 +1,8 @@
 /* Remove width in defaultChosenOptions. */
 delete defaultChosenOptions.width;
 
+$(document).ready(removeDitto());//Remove 'ditto' in first row.
+
 /* Get select of stories.*/
 function setStories(moduleID, projectID, num)
 {

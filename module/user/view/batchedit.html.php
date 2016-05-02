@@ -52,8 +52,8 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
         <th class='w-120px<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'>      <?php echo $lang->user->zipcode;?></th>
       </tr>
     </thead>
-    <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
-    <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
+    <?php $depts = array('ditto' => $lang->user->ditto) + $depts;?>
+    <?php $lang->user->roleList = array('' => '', 'ditto' => $lang->user->ditto) + $lang->user->roleList;?>
     <?php $first = true;?>
     <?php foreach($users as $user):?>
     <?php

@@ -1789,6 +1789,17 @@ function checkTutorial()
     }
 }
 
+/* Remove 'ditto' in first row when batch create or edit. */
+function removeDitto()
+{
+    $firstTr = $('.table-form').find('tbody tr:first');
+    console.log($firstTr);
+    $firstTr.find('td select').each(function()
+    {
+        $(this).find("option[value='ditto']").remove();
+        $(this).trigger("chosen:updated");
+    });
+}
 
 /* Ping the server every some minutes to keep the session. */
 needPing = true;

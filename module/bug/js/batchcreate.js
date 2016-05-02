@@ -1,6 +1,7 @@
 $(function()
 {
     $(".chosenBox select").chosen(defaultChosenOptions);
+    removeDitto();//Remove 'ditto' in first row.
 })
 
 /**

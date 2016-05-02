@@ -53,8 +53,8 @@ $columns = count($visibleFields) + 2;
       <?php
       if(!$productID)
       {
-          $plans          = $this->loadModel('productplan')->getPairs($bugs[$bugID]->product, $branch);
-          $plans['ditto'] = $this->lang->story->ditto;
+          $plans = $this->loadModel('productplan')->getPairs($bugs[$bugID]->product, $branch);
+          $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
       }
       /**
        * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
@@ -72,9 +72,9 @@ $columns = count($visibleFields) + 2;
         <td title='<?php echo $bugs[$bugID]->title?>'> <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?></td>
         <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
-        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $lang->bug->statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $lang->bug->osList, $bugs[$bugID]->os, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $lang->bug->browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $osList, $bugs[$bugID]->os, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
         <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bugs[$bugID]->keywords, 'class=form-control');?></td>
         <td class='text-left<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
         <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>

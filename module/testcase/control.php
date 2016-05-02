@@ -569,8 +569,8 @@ class testcase extends control
             $this->testcase->setMenu($this->products, $productID, $branch);
 
             /* Set modules. */
-            $modules          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-            $modules['ditto'] = $this->lang->testcase->ditto;
+            $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+            $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
             $this->view->modules    = $modules;
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -593,10 +593,6 @@ class testcase extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
-        /* Set pri and type list. */
-        $this->lang->testcase->priList['ditto']  = $this->lang->testcase->ditto;
-        $this->lang->testcase->typeList['ditto'] = $this->lang->testcase->ditto;
-
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
@@ -607,8 +603,8 @@ class testcase extends control
         $this->view->position[] = $this->lang->testcase->batchEdit;
         $this->view->caseIDList = $caseIDList;
         $this->view->productID  = $productID;
-        $this->view->priList    = (array)$this->lang->testcase->priList;
-        $this->view->typeList   = $this->lang->testcase->typeList;
+        $this->view->priList    = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
+        $this->view->typeList   = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
         $this->view->cases      = $cases;
 
         $this->display();

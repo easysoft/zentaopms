@@ -59,10 +59,10 @@ foreach(explode(',', $showFields) as $field)
           $prjInfo = $this->project->getById($tasks[$taskID]->project);
           $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
           foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
-          $modules['ditto'] = $this->lang->task->ditto;
+          $modules = array('ditto' => $this->lang->task->ditto) + $modules;
 
-          $members          = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
-          $members['ditto'] = $this->lang->task->ditto;
+          $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
+          $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
       }
       ?>
       <tr class='text-center'>

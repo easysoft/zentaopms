@@ -58,10 +58,10 @@ foreach(explode(',', $showFields) as $field)
           $product = $this->product->getByID($stories[$storyID]->product);
           $modules = $this->tree->getOptionMenu($stories[$storyID]->product, $viewType = 'story', 0, $branch);
           foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-          $modules['ditto'] = $this->lang->story->ditto;
+          $modules = array('ditto' => $this->lang->story->ditto) + $modules;
 
-          $productPlans          = $this->productplan->getPairs($stories[$storyID]->product, $branch);
-          $productPlans['ditto'] = $this->lang->story->ditto;
+          $productPlans = $this->productplan->getPairs($stories[$storyID]->product, $branch);
+          $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
       }
       ?>
       <tr class='text-center'>

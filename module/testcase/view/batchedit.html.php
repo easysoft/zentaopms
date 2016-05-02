@@ -51,7 +51,7 @@ foreach(explode(',', $showFields) as $field)
           $product = $this->product->getByID($cases[$caseID]->product);
           $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);
           foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-          $modules['ditto'] = $this->lang->testcase->ditto;
+          $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
       }
       ?>
       <tr class='text-center'>

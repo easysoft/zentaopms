@@ -21,6 +21,8 @@ function toggleCheck(obj, i)
     }
 }
 
+$(document).ready(removeDitto());//Remove 'ditto' in first row.
+
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');
