@@ -1555,7 +1555,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageMembers($projectID = 0, $team2Import = 0, $deptID = 0)
+    public function manageMembers($projectID = 0, $team2Import = 0, $dept = '')
     {
         if(!empty($_POST))
         {
@@ -1569,11 +1569,11 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $allUsers       = $this->user->getPairs('noclosed, nodeleted, devfirst');
-        $roles          = $this->user->getUserRoles(array_keys($allUsers));
+        $users          = $this->user->getPairs('noclosed, nodeleted, devfirst');
+        $roles          = $this->user->getUserRoles(array_keys($users));
+        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
-        $users          = $this->dept->getDeptUserPairs($deptID, 'devfirst');
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
         $teams2Import   = array($this->lang->project->copyTeam) + $teams2Import;
 
@@ -1588,9 +1588,10 @@ class project extends control
         $this->view->position       = $position;
         $this->view->project        = $project;
         $this->view->users          = $users;
-        $this->view->allUsers       = $allUsers;
+        $this->view->deptUsers      = $deptUsers;
         $this->view->roles          = $roles;
-        $this->view->deptTree       = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createPrjManageMemberLink'), array('projectID' => $projectID, 'team2Import' => $team2Import));
+        $this->view->dept           = $dept;
+        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
         $this->view->currentMembers = $currentMembers;
         $this->view->members2Import = $members2Import;
         $this->view->teams2Import   = $teams2Import;

@@ -45,3 +45,10 @@ function deleteItem(obj)
 {
     $(obj).closest('.addedItem').remove();
 }
+
+function setDeptUsers(obj)
+{
+    dept = $(obj).val();//Get dept ID.
+    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&team2Import=' + team2Import + '&dept=' + dept);//Create manageMembers link.
+    location.href=link;
+}

@@ -343,9 +343,10 @@ class deptModel extends model
      */
     public function getDeptUserPairs($deptID = 0)
     {
+        $childDepts = $this->getAllChildID($deptID);
         return $this->dao->select('account, realname')->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->beginIF($deptID)->andWhere('dept')->in($this->getAllChildID($deptID))->fi()
+            ->beginIF($deptID)->andWhere('dept')->in($childDepts)->fi()
             ->orderBy('account')
             ->fetchPairs();
     }

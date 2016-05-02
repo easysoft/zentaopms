@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $project->id);?>
+<?php js::set('team2Import', $team2Import);?>
 <?php js::set('roles', $roles);?>
 <div id='titlebar'>
   <div class='heading'>
@@ -19,16 +20,9 @@
     <strong> <?php echo $lang->project->manageMembers;?></strong>
     <small class='text-muted'><i class='icon icon-cogs'></i></small>
   </div>
+  <div><?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDept}'");?></div>
   <div class='actions'>
     <button class='btn' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?></button>
-  </div>
-</div>
-<div class='side'>
-  <div class='side-body'>
-    <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
-      <div class='panel-body'><?php echo $deptTree;?></div>
-    </div>
   </div>
 </div>
 <div class='main'>
@@ -46,7 +40,7 @@
       </thead>
       <?php $i = 1; $memberCount = 0;?>
       <?php foreach($currentMembers as $member):?>
-      <?php if(!isset($allUsers[$member->account])) continue;?>
+      <?php if(!isset($users[$member->account])) continue;?>
       <?php unset($users[$member->account]);?>
       <tr>
         <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $member->realname;?>' readonly class='form-control' /></td>
@@ -65,7 +59,7 @@
 
       <?php foreach($members2Import as $member2Import):?>
       <tr class='addedItem'>
-        <td><?php echo html::select("accounts[]", $allUsers, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+        <td><?php echo html::select("accounts[]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
         <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->role;?>' /></td>
         <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
@@ -78,13 +72,30 @@
       <?php $i ++; $memberCount ++;?>
       <?php endforeach;?>
 
+      <?php foreach($deptUsers as $deptAccount => $userName):?>
+      <?php if(!isset($users[$deptAccount])) continue;?>
+      <tr class='addedItem'>
+        <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+        <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
+        <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
+        <td>
+          <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $lang->project->workHours?>' />
+          <input type='hidden' name='modes[]' value='create' />
+        </td>
+        <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
+        <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
+      </tr>
+      <?php unset($users[$deptAccount]);?>
+      <?php $i ++; $memberCount ++;?>
+      <?php endforeach;?>
+
       <?php for($j = 0; $j < 5; $j ++):?>
       <tr class='addedItem'>
         <td><?php echo html::select("accounts[]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
         <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
         <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
-          <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='7' />
+          <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $lang->project->workHours?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
@@ -110,7 +121,7 @@
       <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
       <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
       <td>
-        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='7' />
+        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $lang->project->workHours?>' />
         <input type='hidden' name='modes[]' value='create' />
       </td>
       <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
