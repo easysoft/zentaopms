@@ -16,11 +16,10 @@
 <?php js::set('roles', $roles);?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['team']);?></span>
-    <strong> <?php echo $lang->project->manageMembers;?></strong>
-    <small class='text-muted'><i class='icon icon-cogs'></i></small>
+    <strong><?php echo $lang->project->manageMembers;?></strong>
+    <i class='icon icon-angle-right text-muted'></i>
   </div>
-  <div><?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDept}'");?></div>
+  <div id='deptSelector'><?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDept}'");?></div>
   <div class='actions'>
     <button class='btn' id='itBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copyTeam;?></button>
   </div>
