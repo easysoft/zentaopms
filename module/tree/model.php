@@ -467,7 +467,7 @@ class treeModel extends model
         if(!$this->isMergeModule($rootID, 'task') or !$products)
         {
             $extra['tip'] = false;
-            $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task'));
+            $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task', $startModule = 0));
             return $this->getFullTree($stmt, 'task');
         }
 

@@ -362,7 +362,7 @@ class file extends control
     public function buildExportTPL($module, $templateID = 0)
     {
         $templates       = $this->file->getExportTemplate($module);
-        $templatePairs[] = '';
+        $templatePairs[] = $this->lang->file->defaultTPL;
         foreach($templates as $template) $templatePairs[$template->id] = ($template->public ? "[{$this->lang->public}] " : '') . $template->title;
 
         $this->view->templates     = $templates;
