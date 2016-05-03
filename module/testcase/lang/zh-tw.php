@@ -146,8 +146,8 @@ $lang->testcase->noRequire   = "%s行的“%s”是必填欄位，不能為空";
 
 $lang->testcase->searchStories = '鍵入來搜索需求';
 
-$lang->testcase->featurebar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featurebar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featurebar['browse']['group']       = '分組查看';
-$lang->testcase->featurebar['browse']['zerocase']    = '零用例需求';
-$lang->testcase->featurebar['groupcase']             = $lang->testcase->featurebar['browse'];
+$lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
+$lang->testcase->featureBar['browse']['group']       = '分組查看';
+$lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
+$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

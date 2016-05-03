@@ -146,9 +146,8 @@ $lang->testcase->noRequire   = "In the row of %s, the %s is a required field";
 
 $lang->testcase->searchStories = 'Type to search stories';
 
-$lang->testcase->featurebar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featurebar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featurebar['browse']['group']       = '';
-$lang->testcase->featurebar['browse']['zerocase']    = '';
-$lang->testcase->featurebar['groupcase']             = $lang->testcase->featurebar['browse'];
-if(isset($lang->story))$lang->story->featurebar['zerocase'] = $lang->testcase->featurebar['browse'];
+$lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
+$lang->testcase->featureBar['browse']['group']       = '';
+$lang->testcase->featureBar['browse']['zerocase']    = '';
+$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

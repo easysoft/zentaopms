@@ -23,6 +23,7 @@ $lang->search->setQueryTitle = '请输入查询标题（保存之前请先查询
 $lang->search->select        = '需求/任务筛选';
 $lang->search->me            = '自己';
 $lang->search->noQuery       = '还没有保存查询！';
+$lang->search->onMenuBar     = '显示在菜单栏';
 
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';

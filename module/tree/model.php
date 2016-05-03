@@ -456,7 +456,7 @@ class treeModel extends model
      * @access public
      * @return object
      */
-    public function getFullTaskTree($rootID, $productID = 0, $manage = true) 
+    public function getTaskStructure($rootID, $productID = 0, $manage = true) 
     {
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
 
@@ -467,8 +467,8 @@ class treeModel extends model
         if(!$this->isMergeModule($rootID, 'task') or !$products)
         {
             $extra['tip'] = false;
-            $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task'));
-            return $this->getFullTree($stmt, 'task');
+            $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task', $startModule = 0));
+            return $this->getDataStructure($stmt, 'task');
         }
 
         /* if not manage, only get linked modules and ignore others. */
@@ -489,10 +489,10 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                if($branch == 0)$productTree   = $this->getFullTree($stmt, 'task', $projectModules);
+                if($branch == 0)$productTree   = $this->getDataStructure($stmt, 'task', $projectModules);
                 if($branch != 0)
                 {
-                    $children = $this->getFullTree($stmt, 'task', $projectModules);
+                    $children = $this->getDataStructure($stmt, 'task', $projectModules);
                     if($children) $branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $children);
                 }
             }
@@ -503,7 +503,7 @@ class treeModel extends model
         /* Get project module. */
         $query      = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task'")->orderBy('grade desc, type, `order`')->get();
         $stmt       = $this->dbh->query($query);
-        $taskTrees  = $this->getFullTree($stmt, 'task', $projectModules);
+        $taskTrees  = $this->getDataStructure($stmt, 'task', $projectModules);
         foreach($taskTrees as $taskModule) $fullTrees[] = $taskModule;
         return $fullTrees;
     }
@@ -1476,7 +1476,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getFullTrees($rootID, $viewType, $branch = 0, $currentModuleID = 0)
+    public function getProductStructure($rootID, $viewType, $branch = 0, $currentModuleID = 0)
     {
         $branches = array($branch => '');
         $product  = $this->loadModel('product')->getById($rootID);
@@ -1489,7 +1489,7 @@ class treeModel extends model
         if(isset($branches[0]))
         {
             $stmt      = $this->dbh->query($this->buildMenuQuery($rootID, $viewType, $currentModuleID, 'null'));
-            $fullTrees = $this->getFullTree($stmt, $viewType);
+            $fullTrees = $this->getDataStructure($stmt, $viewType);
             unset($branches[0]);
         }
         if($branches)
@@ -1498,7 +1498,7 @@ class treeModel extends model
             foreach($branches as $branchID => $branch)
             {
                 $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
-                $branchTrees[] = array('branch' => $branchID, 'id' => 0, 'name' => $branch, 'root' => $rootID, 'actions' => array('add' => true, 'edit' => false, 'delete' => false, 'sort' => true), 'nodeType' => 'branch', 'type' => 'branch', 'children' => $this->getFullTree($stmt, $viewType));
+                $branchTrees[] = array('branch' => $branchID, 'id' => 0, 'name' => $branch, 'root' => $rootID, 'actions' => array('add' => true, 'edit' => false, 'delete' => false, 'sort' => true), 'nodeType' => 'branch', 'type' => 'branch', 'children' => $this->getDataStructure($stmt, $viewType));
             }
             $fullTrees[] = array('name' => $this->lang->product->branchName[$product->type], 'root' => $rootID, 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
         }
@@ -1514,7 +1514,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getFullTree($stmt, $viewType, $keepModules = array()) 
+    public function getDataStructure($stmt, $viewType, $keepModules = array()) 
     {
         $parent = array();
         while($module = $stmt->fetch())

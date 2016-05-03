@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <script>
-var result = confirm('<?php printf($this->lang->custom->notice->indexPage, $lang->$module->common);?>');
+var result = confirm('<?php echo $this->lang->custom->notice->indexPage[$module];?>');
 $.get(createLink('custom', 'ajaxSetHomepage', 'module=<?php echo $module?>&page=' + (result ? 'index' : 'browse')), function(){location.reload(true)});
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>

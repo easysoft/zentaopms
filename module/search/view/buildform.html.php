@@ -50,7 +50,6 @@ include '../../common/view/chosen.html.php';
 #searchmore > i {position: relative; top: 4px;}
 #searchmore:hover, #searchlite:hover {color: #145CCD; background: #e5e5e5}
 
-.bootbox-prompt .modal-dialog {width: 500px; margin-top: 10%;}
 #groupAndOr {display: inline-block;}
 
 .outer > #querybox {margin: -20px -20px 20px; border-top: none; border-bottom: 1px solid #ddd}
@@ -231,22 +230,15 @@ function showlite(obj)
 }
 
 /**
- * Save the query.
+ * loadQueries.
  * 
+ * @param  queryID $queryID 
  * @access public
  * @return void
  */
-function saveQuery()
+function loadQueries(queryID)
 {
-    bootbox.prompt(setQueryTitle, function(r)
-    {
-        if(!r) return;
-        saveQueryLink = createLink('search', 'saveQuery');
-        $.post(saveQueryLink, {title: r, module: module}, function(data)
-        {
-            if(data) $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + data));
-        });
-    });
+    $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + queryID));
 }
 
 /**
@@ -408,7 +400,7 @@ foreach($fieldParams as $fieldName => $param)
       if($style != 'simple')
       {
           echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)');
-          echo html::commonButton($lang->save, 'onclick=saveQuery()');
+          if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module"), $lang->save, '', "class='saveQuery btn'");
       }
       echo '</div>';
       ?>
@@ -430,5 +422,6 @@ foreach($fieldParams as $fieldName => $param)
 </div>
 </form>
 <script language='Javascript'>
+$(".saveQuery").modalTrigger({width:650, type:'iframe', title:'<?php echo $lang->search->setQueryTitle?>'});
 <?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}('#{$module}-search')";?>
 </script>

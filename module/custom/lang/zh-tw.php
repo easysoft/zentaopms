@@ -74,12 +74,12 @@ $lang->custom->storyReview   = '評審流程';
 $lang->custom->reviewList[1] = '開啟';
 $lang->custom->reviewList[0] = '關閉';
 
-$lang->custom->productproject = new stdclass();
-$lang->custom->productproject->relation['0_0'] = '產品 - 項目';
-$lang->custom->productproject->relation['0_1'] = '產品 - 迭代';
-$lang->custom->productproject->relation['1_1'] = '項目 - 迭代';
+$lang->custom->productProject = new stdclass();
+$lang->custom->productProject->relation['0_0'] = '產品 - 項目';
+$lang->custom->productProject->relation['0_1'] = '產品 - 迭代';
+$lang->custom->productProject->relation['1_1'] = '項目 - 迭代';
 
-$lang->custom->productproject->notice = '請根據實際情況選擇適合自己團隊的概念。';
+$lang->custom->productProject->notice = '請根據實際情況選擇適合自己團隊的概念。';
 
 $lang->custom->menuTip  = '點擊導航項目來切換顯示或隱藏，拖動導航項目來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';

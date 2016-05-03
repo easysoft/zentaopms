@@ -57,10 +57,7 @@ $(document).ready(function()
 
             var $dropdown = $("<div class='datatable-menu-wrapper'><div class='dropdown datatable-menu'><button type='button' class='btn btn-link' data-toggle='dropdown'><i class='icon-cogs'></i> <span class='caret'></span></button></div></div>");
             var $dropmenu = $("<ul class='dropdown-menu pull-right'></ul>");
-            <?php if(!empty($setShowModule)):?>
-            $dropmenu.append("<li><a href='javascript:;' data-toggle='showModuleModal'><?php echo $lang->datatable->showModule?></a></li>");
-            <?php endif;?>
-            if(customMenu) $dropmenu.append("<li><a id='customBtn' href='<?php echo $this->createLink('datatable', 'custom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+            if(customMenu) $dropmenu.append("<li><a id='customBtn' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             $dropmenu.append("<li><a href='javascript:;' id='switchToTable'><?php echo $lang->datatable->switchToTable?></a></li>");
             $dropdown.children('.dropdown').append($dropmenu);
             this.$datatable.before($dropdown);

@@ -139,6 +139,7 @@ $(document).ready(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
+    /* Code for kanban following codes. */
     // ajust style for file box
     var ajustFilebox = function()
     {

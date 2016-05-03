@@ -520,7 +520,7 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
-        if(defined('KIZARD')) return $this->loadModel('tutorial')->getProjectPairs();
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
         $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
@@ -842,7 +842,7 @@ class projectModel extends model
      */
     public function getById($projectID, $setImgSize = false)
     {
-        if(defined('WIZARD')) return $this->loadModel('tutorial')->getProject();
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
 
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         if(!$project) return false;
@@ -905,7 +905,7 @@ class projectModel extends model
      */
     public function getProducts($projectID, $withBranch = true)
     {
-        if(defined('WIZARD'))
+        if(defined('TUTORIAL'))
         {
             if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
             return $this->loadModel('tutorial')->getProjectProducts();
@@ -2098,7 +2098,7 @@ class projectModel extends model
      */
     public function getProjectTree($projectID)
     {
-        $fullTrees = $this->loadModel('tree')->getFullTaskTree($projectID, 0, false);
+        $fullTrees = $this->loadModel('tree')->getTaskStructure($projectID, 0, $manage = false);
         array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $projectID));
         foreach($fullTrees as $i => $tree)
         {

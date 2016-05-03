@@ -89,6 +89,18 @@ function deleteTemplate()
     $('#tplBox #template').change();
 }
 
+/**
+ * Toggle export template box.
+ * 
+ * @access public
+ * @return void
+ */
+function setExportTPL()
+{
+    $('#customFields').toggle();
+    $('.mb-150px').toggle();
+}
+
 $(document).ready(function()
 {
     $('#fileType').change();
@@ -126,6 +138,18 @@ $(document).ready(function()
       </td>
       <td><?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?></td>
     </tr>
+    <?php if(!empty($customExport) and !empty($allExportFields)):?>
+    <tr>
+      <td colspan='5'>
+        <div class='input-group' style='width:100%'>
+          <span class='input-group-addon'><?php echo $lang->file->applyTemplate?></span>
+          <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
+          <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>
+          <span class='input-group-btn'><button type='button' onclick='setExportTPL()' class='btn'><?php echo $lang->file->setExportTPL?></button></span>
+        </div>
+      </td>
+    </tr>
+    <?php endif;?>
   </table>
   <?php if(!empty($customExport) and !empty($allExportFields)):?>
   <?php
@@ -141,27 +165,19 @@ $(document).ready(function()
       $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
   }
   ?>
-  <div class='panel' id='customFields' style='margin-bottom:150px'>
+  <div class='mb-150px' style='margin-bottom:150px'></div>
+  <div class='panel' id='customFields' style='margin-bottom:150px;display:none'>
     <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
     <div class='panel-body'>
       <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
-      <div class='row'>
-        <div class='col-xs-7'>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
-            <?php echo html::input('title', '', "class='form-control'")?>
-            <?php if(common::hasPriv('file', 'setPublic')):?>
-            <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
-            <?php endif?>
-            <span class='input-group-btn'><button id='saveTpl' type='button' onclick='saveTemplate()' class='btn btn-primary'><?php echo $lang->save?></button></span>
-          </div>
-        </div>
-        <div class='col-xs-5'>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->file->applyTemplate?></span>
-            <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
-            <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>
-          </div>
+      <div>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
+          <?php echo html::input('title', '', "class='form-control'")?>
+          <?php if(common::hasPriv('file', 'setPublic')):?>
+          <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
+          <?php endif?>
+          <span class='input-group-btn'><button id='saveTpl' type='button' onclick='saveTemplate()' class='btn btn-primary'><?php echo $lang->save?></button></span>
         </div>
       </div>
     </div>

@@ -1218,7 +1218,7 @@ class storyModel extends model
      */
     public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        if(defined('WIZARD')) return $this->loadModel('tutorial')->getStories();
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
         if(is_array($branch))
         {
@@ -1500,7 +1500,7 @@ class storyModel extends model
      */
     public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc', $type = 'byModule', $param = 0, $pager = null)
     {
-        if(defined('WIZARD')) return $this->loadModel('tutorial')->getProjectStories();
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
         $modules = ($type == 'byModule' and $param) ? $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$param,%")->andWhere('type')->eq('story')->fetchPairs('id', 'id') : array();
         $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -1544,7 +1544,7 @@ class storyModel extends model
      */
     public function getProjectStoryPairs($projectID = 0, $productID = 0, $branch = 0, $moduleIdList = 0, $type = 'full')
     {
-        if(defined('WIZARD')) return $this->loadModel('tutorial')->getProjectStoryPairs();
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStoryPairs();
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')

@@ -251,12 +251,12 @@ $lang->printKanban->taskStatus = '状态';
 $lang->printKanban->typeList['all']       = '全部';
 $lang->printKanban->typeList['increment'] = '增量';
 
-$lang->project->featurebar['task']['unclosed']     = $lang->project->unclosed;
-$lang->project->featurebar['task']['all']          = $lang->project->allTasks;
-$lang->project->featurebar['task']['finishedbyme'] = '我完成';
-$lang->project->featurebar['task']['delayed']      = '已延期';
-$lang->project->featurebar['task']['needconfirm']  = '需求变动';
-$lang->project->featurebar['task']['status']       = $lang->project->statusSelects[''];
+$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
+$lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['finishedbyme'] = '我完成';
+$lang->project->featureBar['task']['delayed']      = '已延期';
+$lang->project->featureBar['task']['needconfirm']  = '需求变动';
+$lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '产品视图');

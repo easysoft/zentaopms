@@ -114,7 +114,7 @@ class tree extends control
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
-        $this->view->tree            = $this->tree->getFullTrees($rootID, $viewType);
+        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
         $this->display();
     }
 
@@ -162,7 +162,7 @@ class tree extends control
         $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
-        $this->view->tree            = $this->tree->getFullTaskTree($rootID, $productID);
+        $this->view->tree            = $this->tree->getTaskStructure($rootID, $productID);
         $this->display();
     } 
 

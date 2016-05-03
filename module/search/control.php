@@ -61,13 +61,16 @@ class search extends control
      * @access public
      * @return void
      */
-    public function saveQuery()
+    public function saveQuery($module)
     {
-        $queryID = $this->search->saveQuery();
-
-        if(!$queryID) die(js::error(dao::getError()));
-
-        die($queryID);
+        if($_POST)
+        {
+            $queryID = $this->search->saveQuery();
+            if(!$queryID) die(js::error(dao::getError()));
+            die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID)}"));
+        }
+        $this->view->module = $module;
+        $this->display();
     }
 
     /**

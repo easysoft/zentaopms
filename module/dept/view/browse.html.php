@@ -15,7 +15,7 @@
   <div class='heading'><?php echo html::icon($lang->icons['dept']);?> <?php echo $lang->dept->common;?></div>
 </div>
 <div class='row'>
-  <div class='col-sm-4'>
+  <div class='col-sm-5'>
     <div class='panel'>
       <div class='panel-heading'>
         <?php echo html::icon($lang->icons['dept']);?> <strong><?php echo $title;?></strong>
@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class='col-sm-8'>
+  <div class='col-sm-7'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <i class='icon-sitemap'></i> <strong><?php echo $lang->dept->manageChild;?></strong>

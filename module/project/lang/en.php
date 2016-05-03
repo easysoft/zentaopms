@@ -251,12 +251,12 @@ $lang->printKanban->taskStatus = 'Status';
 $lang->printKanban->typeList['all']       = 'All';
 $lang->printKanban->typeList['increment'] = 'Increment';
 
-$lang->project->featurebar['task']['unclosed']     = $lang->project->unclosed;
-$lang->project->featurebar['task']['all']          = $lang->project->allTasks;
-$lang->project->featurebar['task']['finishedbyme'] = 'Finished by me';
-$lang->project->featurebar['task']['delayed']      = 'Delayed';
-$lang->project->featurebar['task']['needconfirm']  = 'Story changed';
-$lang->project->featurebar['task']['status']       = $lang->project->statusSelects[''];
+$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
+$lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['finishedbyme'] = 'Finished by me';
+$lang->project->featureBar['task']['delayed']      = 'Delayed';
+$lang->project->featureBar['task']['needconfirm']  = 'Story changed';
+$lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => 'Products view');

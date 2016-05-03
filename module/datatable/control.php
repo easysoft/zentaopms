@@ -40,24 +40,20 @@ class datatable extends control
             }
             $name = $account . '.datatable.' . $this->post->target . '.' . $this->post->name;
             $this->loadModel('setting')->setItem($name, $this->post->value);
-            if(dao::isError())
-            {
-                $this->send(array('result' => 'fail', 'message' => 'dao error.'));
-            }
-            else
-            {
-                $this->send(array('result' => 'success'));
-            }
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => 'dao error.'));
+            $this->send(array('result' => 'success'));
         }
     }
 
     /**
-     * Save config
+     * custom fields.
      * 
+     * @param  string $module 
+     * @param  string $method 
      * @access public
      * @return void
      */
-    public function custom($module, $method)
+    public function ajaxCustom($module, $method)
     {
         $account = $this->app->user->account;
         $name = 'owner=' . $account . '&module=datatable&section=' . $module . $method . '&key=cols';

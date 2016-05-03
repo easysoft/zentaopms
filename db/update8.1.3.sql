@@ -19,4 +19,3 @@ ALTER TABLE `zt_task` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFT
 ALTER TABLE `zt_story` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
 ALTER TABLE `zt_bug` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
 ALTER TABLE `zt_case` ADD `color` char(7) COLLATE 'utf8_general_ci' NOT NULL AFTER `status`;
-ALTER TABLE `zt_userquery` ADD `shortcut` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0';

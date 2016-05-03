@@ -116,10 +116,7 @@ class custom extends control
      */
     public function restore($module, $field, $confirm = 'no')
     {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
-        }
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
 
         $this->custom->deleteItems("module=$module&section=$field");
         die(js::reload('parent'));
@@ -135,9 +132,10 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.custom.productproject', $this->post->productproject);
+            $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
             die(js::reload('parent'));
         }
+
         $this->view->title      = $this->lang->custom->flow;
         $this->view->position[] = $this->lang->custom->flow;
         $this->display();
@@ -190,7 +188,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function menu($module = 'main', $method = '')
+    public function ajaxMenu($module = 'main', $method = '')
     {
         $this->view->module = $module;
         $this->view->method = $method;
@@ -214,7 +212,10 @@ class custom extends control
             if(!empty($_POST['module'])) $module = $_POST['module'];
             if(!empty($_POST['method'])) $method = $_POST['method'];
         }
-        else if(!empty($menus)) $menus = header::safe64Decode($menus);
+        elseif(!empty($menus))
+        {
+            $menus = header::safe64Decode($menus);
+        }
 
         if(empty($menus)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
 
@@ -280,7 +281,7 @@ class custom extends control
     {
         if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "confirm=yes")));
 
-        $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=common&section=menucustom");
+        $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=common&section=customMenu");
         die(js::reload('parent.parent'));
     }
 }
