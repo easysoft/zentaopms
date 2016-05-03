@@ -68,18 +68,20 @@ $lang->custom->confirmRestore = 'Are you sure to restore the default setting?';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole  = 'The length of key must be less than 20!';
-$lang->custom->notice->indexPage = "%s add the home page, whether to set it for the home page?";
+$lang->custom->notice->indexPage['product'] = "Add the product home page since 8.2 version, whether set it for default page?";
+$lang->custom->notice->indexPage['project'] = "Add the project home page since 8.2 version, whether set it for default page?";
+$lang->custom->notice->indexPage['qa']      = "Add the QA home page since 8.2 version, whether set it for default page?";
 
 $lang->custom->storyReview   = 'Reviewed procedure';
 $lang->custom->reviewList[1] = 'Open';
 $lang->custom->reviewList[0] = 'Close';
 
-$lang->custom->productproject = new stdclass();
-$lang->custom->productproject->relation['0_0'] = 'Product - Project';
-$lang->custom->productproject->relation['0_1'] = 'Product - Sprint';
-$lang->custom->productproject->relation['1_1'] = 'Project - Sprint';
+$lang->custom->productProject = new stdclass();
+$lang->custom->productProject->relation['0_0'] = 'Product - Project';
+$lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
+$lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
-$lang->custom->productproject->notice = 'You can change the name of product and project, and the corresponding name display';
+$lang->custom->productProject->notice = 'You can change the name of product and project, and the corresponding name display';
 
 $lang->custom->menuTip  = 'Click menu item to toggle display status, drag and drop to change display order.';
 $lang->custom->saveFail = 'Save failed.';

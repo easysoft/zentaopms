@@ -5,7 +5,7 @@
 .datatable-menu > .btn:hover {color: #002563!important}
 .datatable + .datatable-menu-wrapper .datatable-menu > .btn {padding: 5px 6px 6px;}
 </style>
-<?php $datatableId = $this->moduleName . $this->methodName;?>
+<?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
 <script>
 $(function()
 {

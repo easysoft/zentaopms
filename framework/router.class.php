@@ -38,7 +38,7 @@ class router extends baseRouter
         if($moduleName == 'common')
         {
             $productProject = false;
-            if($this->dbh and !empty($this->config->db->name)) $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productproject'")->fetch();
+            if($this->dbh and !empty($this->config->db->name)) $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
 
             $productCommon = $projectCommon = 0;
             if($productProject)

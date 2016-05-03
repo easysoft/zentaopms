@@ -175,7 +175,6 @@ class commonModel extends model
             if(stripos($method, 'ajax') !== false) return true;
             if(stripos($method, 'downnotify') !== false) return true;
             if($module == 'tutorial') return true;
-            if($module == 'custom' and $method == 'menu') return true;
         }
 
         if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
@@ -409,7 +408,7 @@ class commonModel extends model
             $link   = commonModel::createMenuLink($menuItem);
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
-        $customLink = helper::createLink('custom', 'menu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
+        $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
         if(!commonModel::isTutorialMode()) echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }

@@ -68,18 +68,20 @@ $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole  = '键的长度必须小于20个字符！';
-$lang->custom->notice->indexPage = "%s增加首页页面，是否设该页面为主页？";
+$lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
+$lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
+$lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
 
 $lang->custom->storyReview   = '评审流程';
 $lang->custom->reviewList[1] = '开启';
 $lang->custom->reviewList[0] = '关闭';
 
-$lang->custom->productproject = new stdclass();
-$lang->custom->productproject->relation['0_0'] = '产品 - 项目';
-$lang->custom->productproject->relation['0_1'] = '产品 - 迭代';
-$lang->custom->productproject->relation['1_1'] = '项目 - 迭代';
+$lang->custom->productProject = new stdclass();
+$lang->custom->productProject->relation['0_0'] = '产品 - 项目';
+$lang->custom->productProject->relation['0_1'] = '产品 - 迭代';
+$lang->custom->productProject->relation['1_1'] = '项目 - 迭代';
 
-$lang->custom->productproject->notice = '请根据实际情况选择适合自己团队的概念。';
+$lang->custom->productProject->notice = '请根据实际情况选择适合自己团队的概念。';
 
 $lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
 $lang->custom->saveFail = '保存失败！';

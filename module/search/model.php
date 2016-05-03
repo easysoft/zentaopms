@@ -247,17 +247,54 @@ class searchModel extends model
             ->add('form', serialize($this->session->$formVar))
             ->add('sql',  $sql)
             ->skipSpecial('sql,form')
+            ->remove('onMenuBar')
             ->get();
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
         if(!dao::isError())
         {
-            return $this->dao->lastInsertID();
+            $queryID = $this->dao->lastInsertID();
+            /* Set this query show on menu bar. */
+            if($this->post->onMenuBar)
+            {
+                $queryModule      = $query->module == 'task' ? 'project' : ($query->module == 'story' ? 'product' : $query->module);
+                $featureBarConfig = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq($this->app->user->account)->andWhere('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->like("feature_{$queryModule}_%")->fetch();
+
+                $this->app->loadLang($queryModule);
+                if(!isset($this->lang->$queryModule->featureBar)) return $queryID;
+
+                $method    = key($this->lang->$queryModule->featureBar);
+                $newConfig = array();
+                if(isset($featureBarConfig->id)) $newConfig = json_decode($featureBarConfig->value);
+                if(empty($newConfig))
+                {
+                    $order = 1;
+                    foreach($this->lang->$queryModule->featureBar[$method] as $menuKey => $menuName)
+                    {
+                        $menu = new stdclass();
+                        $menu->name  = $menuKey;
+                        $menu->order = $order;
+                        $newConfig[] = $menu;
+                        $order++;
+                    }
+                }
+
+                $menu = new stdclass();
+                $menu->name  = 'QUERY' . $queryID;
+                $menu->order = $order;
+                $newConfig[] = $menu;
+
+                $featureBarConfig = new stdclass();
+                $featureBarConfig->owner   = $this->app->user->account;
+                $featureBarConfig->module  = 'common';
+                $featureBarConfig->section = 'customMenu';
+                $featureBarConfig->key     = "feature_{$queryModule}_{$method}";
+                $featureBarConfig->value   = json_encode($newConfig);
+                $this->dao->replace(TABLE_CONFIG)->data($featureBarConfig)->exec();
+            }
+            return $queryID;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -401,13 +438,13 @@ class searchModel extends model
      */
     public function mergeFeatureBar($module, $method)
     {
-        if(!isset($this->lang->$module->featurebar[$method])) return;
+        if(!isset($this->lang->$module->featureBar[$method])) return;
         $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
         $shortcuts   = $this->dao->select('id, title')->from(TABLE_USERQUERY)->where('account')->eq($this->app->user->account)->andWhere('module')->eq($queryModule)->orderBy('id_asc')->fetchPairs();
         foreach($shortcuts as $id => $name)
         {
             $shortcutID = 'QUERY' . $id;
-            $this->lang->$module->featurebar[$method][$shortcutID] = $name;
+            $this->lang->$module->featureBar[$method][$shortcutID] = $name;
         }
     }
 }

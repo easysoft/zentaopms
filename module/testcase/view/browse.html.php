@@ -38,7 +38,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 <div class='main'>
   <form id='batchForm' method='post'>
     <?php
-    $datatableId  = $this->moduleName . $this->methodName;
+    $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
     $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
     $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";

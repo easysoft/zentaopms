@@ -138,7 +138,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('8.1'));
             case '8_1_3':
                 $this->execSQL($this->getUpgradeFile('8.1.3'));
-                $this->addPriv8_2();
+                $this->addPriv8_2_beta();
+                $this->adjustConfigSectionAndKey();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -842,50 +843,57 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function addPriv8_2()
+    public function addPriv8_2_beta()
     {
         $privTable = $this->config->db->prefix . 'grouppriv';
 
-        $groups = $this->dao->select('`group`')->from($privTable)
-            ->where("(`module`='bug' and `method`='browse')")
-            ->orWhere("(`module`='product' and `method`='browse')")
-            ->orWhere("(`module`='project' and `method`='task')")
-            ->orWhere("(`module`='testcase' and `method`='browse')")
-            ->orWhere("(`module`='testtask' and `method`='cases')")
-            ->fetchPairs('group', 'group');
-        foreach($groups as $group)
-        {
-            $this->dao->replace($privTable)->set('module')->eq('datatable')->set('method')->eq('custom')->set('`group`')->eq($group)->exec();
-        }
+        /* Change product-all priv. */
+        $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('product')->andWhere('`method`')->eq('index')->fetchPairs('group', 'group');
+        foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('product')->set('method')->eq('all')->set('`group`')->eq($group)->exec();
 
+        /* Change project-all priv. */
+        $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('project')->andWhere('`method`')->eq('index')->fetchPairs('group', 'group');
+        foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('all')->set('`group`')->eq($group)->exec();
+
+        /* Add kanban priv. */
         $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('project')->andWhere('`method`')->eq('task')->fetchPairs('group', 'group');
-        foreach($groups as $group)
-        {
-            $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
-        }
+        foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
 
+        /* Change manageContacts priv. */
         $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('user')->andWhere('`method`')->eq('manageContacts')->fetchPairs('group', 'group');
-        foreach($groups as $group)
-        {
-            $this->dao->insert($privTable)->set('module')->eq('my')->set('method')->eq('manageContacts')->set('`group`')->eq($group)->exec();
-        }
+        foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('my')->set('method')->eq('manageContacts')->set('`group`')->eq($group)->exec();
 
+        /* Change deleteContacts priv. */
         $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('user')->andWhere('`method`')->eq('deleteContacts')->fetchPairs('group', 'group');
-        foreach($groups as $group)
-        {
-            $this->dao->insert($privTable)->set('module')->eq('my')->set('method')->eq('deleteContacts')->set('`group`')->eq($group)->exec();
-        }
+        foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('my')->set('method')->eq('deleteContacts')->set('`group`')->eq($group)->exec();
 
+        /* Change batchChangeModule priv. */
         $oldPriv = $this->dao->select('*')->from($privTable)
             ->where("(`module`='story'      and `method`='edit')")
             ->orWhere("(`module`='task'     and `method`='edit')")
             ->orWhere("(`module`='bug'      and `method`='edit')")
             ->orWhere("(`module`='testcase' and `method`='edit')")
             ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->insert($privTable)->set('module')->eq($item->module)->set('method')->eq('batchChangeModule')->set('`group`')->eq($item->group)->exec();
-        }
+        foreach($oldPriv as $item) $this->dao->replace($privTable)->set('module')->eq($item->module)->set('method')->eq('batchChangeModule')->set('`group`')->eq($item->group)->exec();
+
+        return true;
+    }
+
+    /**
+     * Adjust config section and key.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustConfigSectionAndKey()
+    {
+        $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('productProject')->where('`key`')->eq('productproject')->andWhere('module')->eq('custom')->exec();
+
+        $this->dao->update(TABLE_CONFIG)->set('section')->eq('bugBrowse')->where('section')->eq('bugbrowse')->andWhere('module')->eq('datatable')->exec();
+        $this->dao->update(TABLE_CONFIG)->set('section')->eq('productBrowse')->where('section')->eq('productbrowse')->andWhere('module')->eq('datatable')->exec();
+        $this->dao->update(TABLE_CONFIG)->set('section')->eq('projectTask')->where('section')->eq('projecttask')->andWhere('module')->eq('datatable')->exec();
+        $this->dao->update(TABLE_CONFIG)->set('section')->eq('testcaseBrowse')->where('section')->eq('testcasebrowse')->andWhere('module')->eq('datatable')->exec();
+        $this->dao->update(TABLE_CONFIG)->set('section')->eq('testtaskCases')->where('section')->eq('testtaskcases')->andWhere('module')->eq('datatable')->exec();
 
         return true;
     }

@@ -47,7 +47,7 @@ class datatableModel extends model
      */
     public function getSetting($module)
     {
-        $datatableId = $module . $this->app->getMethodName();
+        $datatableId = $module . ucfirst($this->app->getMethodName());
 
         $module = zget($this->config->datatable->moduleAlias, $module, $module);
         if(!isset($this->config->$module)) $this->loadModel($module);

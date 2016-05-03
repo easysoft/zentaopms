@@ -34,7 +34,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   <form method='post' name='casesform' id='casesForm'>
     <?php
     $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-    $datatableId  = $this->moduleName . $this->methodName;
+    $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
     $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/casesdata.html.php';
 

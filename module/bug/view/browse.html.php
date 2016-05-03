@@ -98,7 +98,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
 <div class='main'>
   <form method='post' id='bugForm'>
     <?php
-    $datatableId  = $this->moduleName . $this->methodName;
+    $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
     $file2Include = $useDatatable ?  dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
     $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";

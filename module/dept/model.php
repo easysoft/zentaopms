@@ -415,12 +415,12 @@ class deptModel extends model
     }
 
     /**
-     * Get full department tree
+     * Get data structure
      * @param  integer $rootDeptID
      * @access public
      * @return object
      */
-    public function getFullTree($rootDeptID = 0) 
+    public function getDataStructure($rootDeptID = 0) 
     {
         $tree = array_values($this->getSons($rootDeptID));
         $users = $this->loadModel('user')->getPairs('nodeleted|noletter|noclosed');
@@ -429,7 +429,7 @@ class deptModel extends model
             foreach ($tree as $node)
             {
                 $node->managerName = $users[$node->manager];
-                $children = $this->getFullTree($node->id);
+                $children = $this->getDataStructure($node->id);
                 if(count($children))
                 {
                     $node->children = $children;
