@@ -359,9 +359,9 @@ class file extends control
      * @access public
      * @return void
      */
-    public function buildExportTpl($module, $templateID = 0)
+    public function buildExportTPL($module, $templateID = 0)
     {
-        $templates       = $this->file->getExportTpl($module);
+        $templates       = $this->file->getExportTemplate($module);
         $templatePairs[] = '';
         foreach($templates as $template) $templatePairs[$template->id] = ($template->public ? "[{$this->lang->public}] " : '') . $template->title;
 
@@ -383,15 +383,10 @@ class file extends control
         $templateID = $this->file->saveExportTemplate($module);
         if(dao::isError())
         {
-            $error = js::error(dao::getError());
-            /* Remove html and meta tag and only get script */
-            $error = substr($error, strpos($error, '<script'));
-            $error = substr($error, 0, strpos($error, '</script') + 9);
-            echo $error;
-
+            echo js::error(dao::getError(), $full = false);
             $templateID = 0;
         }
-        die($this->fetch('file', 'buildExportTpl', "module=$module&templateID=$templateID"));
+        die($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));
     }
 
     /**

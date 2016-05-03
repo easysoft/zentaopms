@@ -112,7 +112,6 @@ class bug extends control
         $bugs = $this->bug->processBuildForBugs($bugs);
 
         /* Build the search form. */
-        $this->config->bug->search['style'] = 'shortcut';
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->mergeFeatureBar('bug', 'browse');
@@ -1118,14 +1117,7 @@ class bug extends control
     public function saveTemplate()
     {
         $this->bug->saveUserBugTemplate();
-        if(dao::isError())
-        {
-            $error = js::error(dao::getError());
-            /* Remove html and meta tag and only get script */
-            $error = substr($error, strpos($error, '<script'));
-            $error = substr($error, 0, strpos($error, '</script') + 9);
-            echo $error;
-        }
+        if(dao::isError()) echo js::error(dao::getError(), $full = false);
         die($this->fetch('bug', 'buildTemplates'));
     }
 

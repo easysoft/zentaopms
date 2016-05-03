@@ -20,20 +20,11 @@
     $hasCasesPriv = common::hasPriv('testtask', 'cases');
     $hasGroupPriv = common::hasPriv('testtask', 'groupcase');
     ?>
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php
-    if(isset($menuItem->hidden)) continue;
-    $type = $menuItem->name;
-    if($hasCasesPriv and strpos($type, 'QUERY') === 0)
-    {
-        $queryID = (int)substr($type, 5);
-        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
-    }
-    elseif($hasCasesPriv and ($type == 'all' or $type == 'assignedtome'))
-    {
-        echo "<li id='{$type}Tab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=$type&param=0"), $menuItem->text) . "</li>";
-    }
-    elseif($hasGroupPriv and $type == 'group')
+    if($hasCasesPriv) echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
+    if($hasCasesPriv) echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
+
+    if($hasGroupPriv)
     {
         echo "<li id='groupTab' class='dropdown'>";
         $groupBy  = isset($groupBy) ? $groupBy : '';
@@ -49,11 +40,9 @@
         }
         echo '</ul></li>';
     }
-    ?>
-    <?php endforeach;?>
-    <?php
+
     if($this->methodName == 'cases') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
-    echo '<li>' . html::a(inlink('view', "taskID=$taskID"), $lang->testtask->view) . '</li>';
+    if(common::hasPriv('testtask', 'view')) echo '<li>' . html::a(inlink('view', "taskID=$taskID"), $lang->testtask->view) . '</li>';
     ?>
   </div>
   <div class='actions'>

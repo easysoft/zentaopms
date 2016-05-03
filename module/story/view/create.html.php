@@ -177,7 +177,7 @@
     <span id='responser'></span>
   </form>
 </div>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=story&section=custom&key=createFields')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=createFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php include '../../common/view/footer.html.php';?>

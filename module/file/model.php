@@ -185,11 +185,11 @@ class fileModel extends model
      * @access public
      * @return object
      */
-    public function getExportTpl($module)
+    public function getExportTemplate($module)
     {
         return $this->dao->select('id,title,content,public')->from(TABLE_USERTPL)
             ->where('type')->eq("export$module")
-            ->andwhere('account', true)->eq($this->app->user->account)
+            ->andwhere('account', $markLeft = true)->eq($this->app->user->account)
             ->orWhere('public')->eq('1')
             ->markRight(1)
             ->orderBy('id')

@@ -199,11 +199,11 @@ class misc extends control
     }
 
     /**
-     * Show version feature
+     * Show version changelog
      * @access public
      * @return viod
      */
-    public function feature($version = 'latest')
+    public function changeLog($version = 'latest')
     {
         $this->view->version = $version;
 

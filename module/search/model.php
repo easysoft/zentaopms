@@ -293,23 +293,6 @@ class searchModel extends model
     }
 
     /**
-     * Get shorcut query pairs.
-     * 
-     * @param  string $module 
-     * @access public
-     * @return array
-     */
-    public function getShorcutQueryPairs($module)
-    {
-        return $this->dao->select('id, title')->from(TABLE_USERQUERY)
-            ->where('account')->eq($this->app->user->account)
-            ->andWhere('module')->eq($module)
-            ->andWhere('shortcut')->eq(1)
-            ->orderBy('id_asc')
-            ->fetchPairs();
-    }
-
-    /**
      * Get records by the conditon.
      * 
      * @param  string    $module 
@@ -420,7 +403,7 @@ class searchModel extends model
     {
         if(!isset($this->lang->$module->featurebar[$method])) return;
         $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
-        $shortcuts = $this->getShorcutQueryPairs($queryModule);
+        $shortcuts   = $this->dao->select('id, title')->from(TABLE_USERQUERY)->where('account')->eq($this->app->user->account)->andWhere('module')->eq($queryModule)->orderBy('id_asc')->fetchPairs();
         foreach($shortcuts as $id => $name)
         {
             $shortcutID = 'QUERY' . $id;

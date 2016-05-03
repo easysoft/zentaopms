@@ -22,10 +22,7 @@ $lang->search->deleteQuery   = '删除查询';
 $lang->search->setQueryTitle = '请输入查询标题（保存之前请先查询）：';
 $lang->search->select        = '需求/任务筛选';
 $lang->search->me            = '自己';
-$lang->search->shortcut      = '快捷';
 $lang->search->noQuery       = '还没有保存查询！';
-
-$lang->search->noticeShortcut = '设置快捷访问，可以将保存的查询固定到列表导航，方便查看！';
 
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';

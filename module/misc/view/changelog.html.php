@@ -18,7 +18,7 @@ if(empty($features))
     <ul class='dropdown-menu'>
       <?php foreach ($lang->misc->feature->all as $versionName => $features):?>
       <li<?php echo $versionName === $version ? " class='active'" : '' ?>>
-        <?php echo html::a(helper::createLink('misc', 'feature', "version=$versionName"), $versionName === 'latest' ? $lang->misc->feature->lastest : ('v' . $versionName));?>
+        <?php echo html::a(helper::createLink('misc', 'changeLog', "version=$versionName"), $versionName === 'latest' ? $lang->misc->feature->lastest : ('v' . $versionName));?>
       </li>
       <?php endforeach; ?>
     </ul>

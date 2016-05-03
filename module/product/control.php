@@ -151,7 +151,6 @@ class product extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         /* Build search form. */
-        $this->config->product->search['style'] = 'shortcut';
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->mergeFeatureBar('product', 'browse');

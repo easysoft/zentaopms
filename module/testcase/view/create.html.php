@@ -180,7 +180,7 @@
     </div>
   </div>
 </div>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=testcase&section=custom&key=createFields');?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=createFields');?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php js::set('caseModule', $lang->testcase->module)?>
 <?php include '../../common/view/footer.html.php';?>

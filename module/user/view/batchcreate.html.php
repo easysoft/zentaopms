@@ -101,6 +101,6 @@ $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
     <tr><td colspan='<?php echo count($visibleFields) + 6?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=user&section=custom&key=batchCreateFields')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=user&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

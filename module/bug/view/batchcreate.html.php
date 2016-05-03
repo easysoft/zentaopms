@@ -143,7 +143,7 @@ foreach(explode(',', $showFields) as $field)
   </tbody>
 </table>
 <?php js::set('branch', $branch)?>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=bug&section=custom&key=batchCreateFields')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -74,7 +74,7 @@
     </tfoot>
   </table>
 </form>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=todo&section=custom&key=batchCreateFields')?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include './footer.html.php';?>
 <script language='Javascript'>

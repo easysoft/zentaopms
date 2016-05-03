@@ -144,7 +144,7 @@ class custom extends control
     }
 
     /**
-     * Ajax save custom.
+     * Ajax save custom fields.
      * 
      * @param  string $module 
      * @param  string $section 
@@ -152,7 +152,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxSaveCustom($module, $section, $key)
+    public function ajaxSaveCustomFields($module, $section, $key)
     {
         $account = $this->app->user->account;
         $fields  = $this->post->fields;

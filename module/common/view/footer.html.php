@@ -27,6 +27,15 @@ function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
 $(function(){showBrowserNotice()});
 </script>
 <?php endif;?>
+<?php if(!isset($config->global->novice) and $this->loadModel('tutorial')->checkNovice()):?>
+<script>
+novice = confirm('<?php echo $lang->tutorial->novice?>');
+$.get(createLink('tutorial', 'ajaxSaveNovice', 'novice=' + (novice ? 'true' : 'false')), function()
+{
+    if(novice) location.href=createLink('tutorial', 'index');
+});
+</script>
+<?php endif;?>
 
 <?php 
 js::set('onlybody', $onlybody);           // set the onlybody var.

@@ -16,7 +16,7 @@
   <div class='heading'><?php echo $lang->tree->common;?></div>
 </div>
 <div class='row'>
-  <div class='col-sm-6 col-md-4 col-lg-3'>
+  <div class='col-sm-5'>
     <div class='panel'>
       <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <div class='col-sm-6 col-md-8 col-lg-9'>
+  <div class='col-sm-7'>
     <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
       <div class='panel'>
         <div class='panel-heading'>
