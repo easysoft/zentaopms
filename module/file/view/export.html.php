@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<?php echo $this->app->loadLang('file');?>
+<?php $this->app->loadLang('file');?>
 <script>
 function setDownloading()
 {
@@ -44,27 +44,27 @@ function switchEncode(fileType)
 
 function saveTemplate()
 {
-        var $inputGroup = $('#customFields div.input-group');
-        var $publicBox  = $inputGroup.find('input[id^="public"]');
-        var title       = $inputGroup.find('#title').val();
-        var content     = $('#customFields #exportFields').val();
-        var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
-        if(!title || !content) return;
-        saveTemplateLink = '<?php echo $this->createLink('file', 'ajaxSaveTemplate', 'module=' . $this->moduleName);?>';
-        $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
+    var $inputGroup = $('#customFields div.input-group');
+    var $publicBox  = $inputGroup.find('input[id^="public"]');
+    var title       = $inputGroup.find('#title').val();
+    var content     = $('#customFields #exportFields').val();
+    var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
+    if(!title || !content) return;
+    saveTemplateLink = '<?php echo $this->createLink('file', 'ajaxSaveTemplate', 'module=' . $this->moduleName);?>';
+    $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
+    {
+        var defaultValue = $('#customFields #tplBox #template').val();
+        $('#customFields #tplBox').html(data);
+        if(data.indexOf('alert') >= 0) $('#customFields #tplBox #template').val(defaultValue);
+        $("#customFields #tplBox #template").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
         {
-            var defaultValue = $('#customFields #tplBox #template').val();
-            $('#customFields #tplBox').html(data);
-            if(data.indexOf('alert') >= 0) $('#customFields #tplBox #template').val(defaultValue);
-            $("#customFields #tplBox #template").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
-            {
-                var $this = $(this);
-                var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
-                var $drop = $chosen.find('.chosen-drop');
-                $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
-            });
-            $inputGroup.find('#title').val('');
+            var $this = $(this);
+            var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
+            var $drop = $chosen.find('.chosen-drop');
+            $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
         });
+        $inputGroup.find('#title').val('');
+    });
 }
 
 /* Set template. */
@@ -159,7 +159,7 @@ $(document).ready(function()
         <div class='col-xs-5'>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->file->applyTemplate?></span>
-            <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTpl', 'module=' . $this->moduleName);?></span>
+            <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
             <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>
           </div>
         </div>

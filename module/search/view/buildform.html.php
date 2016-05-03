@@ -398,7 +398,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </table>
     </td>
-    <td class='<?php echo $style == 'simple' ? 'w-80px' : ($style == 'shortcut' ? 'w-180px' : 'w-160px');?>'> 
+    <td class='<?php echo $style == 'simple' ? 'w-80px' : 'w-160px';?>'> 
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
@@ -410,7 +410,6 @@ foreach($fieldParams as $fieldName => $param)
           echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)');
           echo html::commonButton($lang->save, 'onclick=saveQuery()');
       }
-      if($style == 'shortcut') echo html::a($this->createLink('search', 'ajaxSaveShortcut', "module=$module"), $lang->search->shortcut, '', "class='btn' id='shortcutModal'");
       echo '</div>';
       ?>
     </td>
@@ -431,6 +430,5 @@ foreach($fieldParams as $fieldName => $param)
 </div>
 </form>
 <script language='Javascript'>
-if($('#shortcutModal').size() > 0) $("#shortcutModal").modalTrigger({width:650, type:'iframe'});
 <?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}('#{$module}-search')";?>
 </script>

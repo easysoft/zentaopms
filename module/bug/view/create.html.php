@@ -268,6 +268,6 @@ js::set('refresh', $lang->refresh);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustom', 'module=bug&section=custom&key=createFields');?>
+<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=createFields');?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

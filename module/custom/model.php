@@ -17,7 +17,7 @@ class customModel extends model
      * @access public
      * @return array
      */
-    public function getAll()
+    public function getAllLang()
     {
         $allCustomLang = $this->dao->select('*')->from(TABLE_LANG)->orderBy('lang,id')->fetchAll('id');
 
@@ -71,7 +71,7 @@ class customModel extends model
      */
     public function getItems($paramString)
     {
-        return $this->createDAO($this->parseItemParam($paramString), 'select')->orderBy('lang,id')->fetchAll('key');
+        return $this->prepareSQL($this->parseItemParam($paramString), 'select')->orderBy('lang,id')->fetchAll('key');
     }
 
     /**
@@ -83,7 +83,7 @@ class customModel extends model
      */
     public function deleteItems($paramString)
     {
-        $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
+        $this->prepareSQL($this->parseItemParam($paramString), 'delete')->exec();
     }
 
     /**
@@ -114,7 +114,7 @@ class customModel extends model
      * @access public
      * @return object
      */
-    public function createDAO($params, $method = 'select')
+    public function prepareSQL($params, $method = 'select')
     {
         return $this->dao->$method('*')->from(TABLE_LANG)->where('1 = 1')
             ->beginIF($params['lang'])->andWhere('lang')->in($params['lang'])->fi()
@@ -164,7 +164,7 @@ class customModel extends model
                     }
                 }
             }
-            else if(is_array($menuConfig))
+            elseif(is_array($menuConfig))
             {
                 foreach($menuConfig as $menuConfigItem)
                 {
@@ -219,6 +219,7 @@ class customModel extends model
                 }
 
                 $hidden = !$fixed && $isSetMenuConfig && isset($menuConfigMap[$name]) && isset($menuConfigMap[$name]->hidden) && $menuConfigMap[$name]->hidden;
+                if(strpos($name, 'QUERY') === 0 and !isset($menuConfigMap[$name])) $hidden = true;
 
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
@@ -293,7 +294,8 @@ class customModel extends model
         $menuConfig = '';
         if(!commonModel::isTutorialMode() && isset($config->menucustom->$configKey)) $menuConfig = $config->menucustom->$configKey;
         if(!empty($menuConfig) && is_string($menuConfig)) $menuConfig = json_decode($menuConfig);
-        return $allMenu ? self::buildMenuConfig($allMenu, $menuConfig) : null;
+        $menu =  $allMenu ? self::buildMenuConfig($allMenu, $menuConfig) : null;
+        return $menu;
     }
 
     /**

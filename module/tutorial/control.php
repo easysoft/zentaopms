@@ -68,6 +68,7 @@ class tutorial extends control
     public function quit($referer = '')
     {
         $this->session->set('tutorialMode', false);
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', false);
 
         if(empty($referer)) $referer = $this->createLink('index');
         die(js::locate($referer, 'parent'));
@@ -82,6 +83,7 @@ class tutorial extends control
     public function ajaxQuit()
     {
         $this->session->set('tutorialMode', false);
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', false);
         die(json_encode(array('result' => 'success')));
     }
 
@@ -108,5 +110,18 @@ class tutorial extends control
             die(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
         }
         die($this->fetch($module, $method, $params));
+    }
+
+    /**
+     * Ajax save novice result.
+     * 
+     * @param  string $novice 
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveNovice($novice = 'true', $reload = 'false')
+    {
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice);
+        if($reload == 'true') die(js::reload('parent'));
     }
 }

@@ -140,7 +140,7 @@ class commonModel extends model
     {
         if(defined('IN_UPGRADE')) return;
         if(!$this->config->db->name) return;
-        $records = $this->loadModel('custom')->getAll();
+        $records = $this->loadModel('custom')->getAllLang();
         if(!$records) return;
         $this->lang->db = new stdclass();
         $this->lang->db->custom = $records;
@@ -160,11 +160,15 @@ class commonModel extends model
         if($module == 'api'  and $method == 'getsessionid') return true;
         if($module == 'misc' and $method == 'ping')  return true;
         if($module == 'misc' and $method == 'checktable') return true;
-        if($module == 'block') return true;
+        if($module == 'misc' and $method == 'qrcode') return true;
+        if($module == 'misc' and $method == 'about') return true;
+        if($module == 'misc' and $method == 'checkupdate') return true;
+        if($module == 'misc' and $method == 'changelog') return true;
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;
         if($module == 'product' and $method == 'showerrornone') return true;
+        if($module == 'block') return true;
 
         if($this->loadModel('user')->isLogon())
         {
@@ -176,9 +180,6 @@ class commonModel extends model
 
         if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
         if(stripos($method, 'ajaxgetmatcheditems') !== false) return true;
-        if($module == 'misc' and $method == 'qrcode') return true;
-        if($module == 'misc' and $method == 'about') return true;
-        if($module == 'misc' and $method == 'checkupdate') return true;
         return false;
     }
 
@@ -297,7 +298,7 @@ class commonModel extends model
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
 
         if(!commonModel::isTutorialMode() and self::hasPriv('tutorial', 'start')) echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'");
-        echo html::a(helper::createLink('misc', 'feature'), $lang->feature, '', "class='iframe' data-width='800' data-headerless='true'");
+        echo html::a(helper::createLink('misc', 'changeLog'), $lang->feature, '', "class='iframe' data-width='800' data-headerless='true'");
         echo html::a('javascript:;', $lang->help, '', "class='open-help-tab'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
     }
