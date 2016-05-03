@@ -14,3 +14,7 @@
 .modal-dialog {margin-top: 10%;}
 
 .table-form thead > tr > th {background: none; border: none}
+
+#titlebar > .heading {float: left; padding-right: 10px!important}
+#titlebar > .heading > .icon {display: inline;}
+#deptSelector {float: left; min-width: 220px; position: relative; top: -7px}
