@@ -1,27 +1,30 @@
 <div id='featurebar'>
   <ul class='nav'>
     <?php
-    echo '<li><span>';
+    echo '<li>';
     if(!empty($productID))
     {
+        echo '<div class="label-angle with-close">';
         $product    = $this->product->getById($productID);
         $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
-        echo $product->name;
-        echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+        echo '<i class="icon icon-cube"></i> ' . $product->name;
+        echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
     }
     elseif(!empty($moduleID))
     {
+        echo '<div class="label-angle with-close">';
         $module     = $this->tree->getById($moduleID);
         $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
         echo $module->name;
-        echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+        echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
     }
     else
     {
+        echo '<div class="label-angle">';
         $this->app->loadLang('tree');
         echo $this->lang->tree->all;
     }
-    echo " <i class='icon-angle-right'></i>&nbsp; </span></li>";
+    echo "</div></li>";
 
     foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
     {

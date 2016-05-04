@@ -2,17 +2,16 @@
 <div id='featurebar'>
   <ul class='nav'>
     <li>
-      <span>
+      <div class='label-angle<?php if($moduleID) echo ' with-close';?>'>
         <?php
         echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
         if(!empty($moduleID))
         {
             $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+            echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
         }
-        echo " <i class='icon-angle-right'></i>&nbsp; ";
         ?>
-      </span>
+      </div>
     </li>
     <?php
     $hasBrowsePriv = common::hasPriv('testcase', 'browse');

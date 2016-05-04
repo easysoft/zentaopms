@@ -20,17 +20,16 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
 <div id='featurebar'>
   <ul class='nav'>
     <li>
-      <span>
+      <div class='label-angle<?php if($moduleID) echo ' with-close';?>'>
         <?php
         echo $moduleName;
         if($moduleID)
         {
             $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+            echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
         }
-        echo " <i class='icon-angle-right'></i>&nbsp; ";
         ?>
-      </span>
+      </div>
     </li>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>

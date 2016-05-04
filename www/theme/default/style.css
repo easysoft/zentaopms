@@ -60,8 +60,17 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 /* remove outline of links */
 a,a:focus,a:active {text-decoration: none; outline:none;}
 
-/* Lable */
+/* Label */
 .label-badge {padding: 2px 6px}
+.label-angle {background-color: #d3dff7; line-height: 24px; padding: 0 5px; position: relative; top: 2px; border: 1px solid #c6d2eb; margin-right: 18px; font-size: 13px; transition: all .2s; color: #114f8e}
+.label-angle > a {position: absolute; right: 0; top: 0; filter: alpha(opacity=0); opacity: 0}
+.label-angle.with-close:hover {padding-right: 18px;}
+.label-angle:hover > a {filter: alpha(opacity=100); opacity: 1}
+.label-angle:before, .label-angle:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 13px 0 13px 13px; border-color: transparent transparent transparent #c6d2eb; position: absolute; right: -13px; top: -1px; z-index: 1}
+.label-angle:after {border-width: 12px 0 12px 12px; top: 0px; z-index: 2; right: -11px; border-color: transparent transparent transparent #d3dff7;}
+
+/* Label in table */
+.table .label.label-info {background: #d3dff7; border: 1px solid #c6d2eb; color: #114f8e;}
 
 /* dropdown */
 .dropdown-menu {min-width: 80px; padding: 4px 0; z-index:1020;}
@@ -373,8 +382,8 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #mainmenu .nav > li > a {display: block; margin-right: 3px; white-space:nowrap; padding:7px 15px; color:#E5E5E5; font-size: 14px; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
 #mainmenu .nav > li > a:hover{background-color: #2e6dad;color: #fff; box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
 #mainmenu .nav > li.active > a { background-color:#e5e5e5;color:#21841d; font-weight:bold;}
-#mainmenu .nav > li.custom-item {opacity: 0; transition: opacity .4s .6s}
-#mainmenu:hover .nav > li.custom-item {opacity: 1;}
+#mainmenu .nav > li.custom-item {filter: alpha(opacity=0); opacity: 0; transition: opacity .4s .6s}
+#mainmenu:hover .nav > li.custom-item {filter: alpha(opacity=100); opacity: 1;}
 #mainmenu .nav > li.custom-item > a {background-color: transparent; box-shadow: none}
 #mainmenu .nav > li.custom-item > a:hover {background-color: #2e6dad;color: #fff; box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
 
