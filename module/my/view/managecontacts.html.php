@@ -40,23 +40,23 @@
         <div class='panel-body'>
           <table class='table table-form'> 
             <tr>
-              <th><?php echo $lang->user->contacts->listName;?></th>
+              <th class='w-80px'><?php echo $lang->user->contacts->listName;?></th>
               <td>
               <?php
               if($mode == 'new')
               {
-                  echo html::input('newList', '', "class='form-control'");
+                  echo html::input('newList', '', "class='form-control w-300px'");
               }
               else
               {
-                  echo html::input('listName', $list->listName, "class='form-control'");
+                  echo html::input('listName', $list->listName, "class='form-control w-300px'");
                   echo html::hidden('listID',  $list->id);
               }
               ?>
               </td>
             </tr>
             <tr>
-              <th class='w-80px'><?php echo $lang->user->contacts->selectedUsers;?></th>
+              <th><?php echo $lang->user->contacts->selectedUsers;?></th>
               <td>
               <?php
               if($mode == 'new')
