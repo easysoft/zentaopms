@@ -191,4 +191,25 @@ class tutorialModel extends model
         $story   = $stories[0];
         return array($story->id => $story->title);
     }
+
+    public function getTeamMembers()
+    {
+        $member = new stdclass();
+        $member->project    = 1;
+        $member->account    = $this->app->user->account;
+        $member->role       = $this->app->user->role;
+        $member->join       = $this->app->user->join;
+        $member->days       = 10;
+        $member->hours      = 7.0;
+        $member->totalHours = 70.0;
+        $member->realname   = $this->app->user->realname;
+        return array($member->account => $member);
+    }
+
+    public function getUserPairs()
+    {
+        $users[$this->app->user->account] = $this->app->user->account;
+        $users['test'] = 'Test';
+        return $users;
+    }
 }

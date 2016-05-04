@@ -15,11 +15,9 @@
   <div class='heading'><?php echo html::icon($lang->icons['dept']);?> <?php echo $lang->dept->common;?></div>
 </div>
 <div class='row'>
-  <div class='col-sm-5'>
+  <div class='col-sm-4'>
     <div class='panel'>
-      <div class='panel-heading'>
-        <?php echo html::icon($lang->icons['dept']);?> <strong><?php echo $title;?></strong>
-      </div>
+      <div class='panel-heading'><?php echo html::icon($lang->icons['dept']);?> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
         <div class='container'>
           <ul class='tree-lines' id='deptTree'></ul>
@@ -27,7 +25,7 @@
       </div>
     </div>
   </div>
-  <div class='col-sm-7'>
+  <div class='col-sm-8'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <i class='icon-sitemap'></i> <strong><?php echo $lang->dept->manageChild;?></strong>
@@ -121,19 +119,19 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->dept->dragAndSort ?>',
-                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><i class="icon icon-move"></i>'
+                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><i class="icon icon-move"></i></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('dept', 'edit', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->edit ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-pencil"></i>'
+                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->edit?></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('dept', 'delete', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->delete ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-trash"></i>'
+                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->delete?></a>'
             }
         },
         action: function(event)

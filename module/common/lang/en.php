@@ -67,7 +67,8 @@ $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = 'Set homepage';
 $lang->tutorial        = 'Novice tutorial';
-$lang->feature         = 'New features';
+$lang->changeLog       = 'Change log';
+$lang->manual          = 'Manual';
 $lang->customMenu      = 'Custom menu';
 $lang->tutorialConfirm = 'Detected you have not quit tutorial mode, quit now?';
 

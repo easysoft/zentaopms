@@ -106,7 +106,7 @@ class testcase extends control
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->mergeFeatureBar('testcase', 'browse');
 
-        $showModule = !empty($this->config->datatable->testcasebrowse->showModule) ? $this->config->datatable->testcasebrowse->showModule : '';
+        $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
 
         /* Assign. */

@@ -67,7 +67,8 @@ $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = '设为主页';
 $lang->tutorial        = '新手教程';
-$lang->feature         = '了解新功能';
+$lang->changeLog       = '修改日志';
+$lang->manual          = '手册';
 $lang->customMenu      = '自定义导航';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 

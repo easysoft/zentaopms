@@ -189,7 +189,7 @@ class project extends control
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
-        $showModule = !empty($this->config->datatable->projecttask->showModule) ? $this->config->datatable->projecttask->showModule : '';
+        $showModule = !empty($this->config->datatable->projectTask->showModule) ? $this->config->datatable->projectTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($projectID, 'task', $showModule) : array();
 
         /* Assign. */
@@ -226,7 +226,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function grouptask($projectID = 0, $groupBy = 'story')
+    public function grouptask($projectID = 0, $groupBy = 'story', $filter = '')
     {
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
@@ -296,6 +296,7 @@ class project extends control
         $this->view->users       = $users;
         $this->view->moduleID    = 0;
         $this->view->moduleName  = $this->lang->tree->all;
+        $this->view->filter      = $filter;
         $this->display();
     }
 
@@ -1560,7 +1561,6 @@ class project extends control
         {
             $this->project->manageMembers($projectID);
             $this->locate($this->createLink('project', 'team', "projectID=$projectID"));
-            exit;
         }
 
         /* Load model. */
