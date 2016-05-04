@@ -1,58 +1,56 @@
 <div id='featurebar'>
   <ul class='nav'>
     <?php
-    if($this->methodName === 'task')
+    echo '<li><span>';
+    if(!empty($productID))
     {
-        echo '<li><span>';
-        if($productID)
-        {
-            $product    = $this->product->getById($productID);
-            $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
-            echo $product->name;
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
-        }
-        elseif($moduleID)
-        {
-            $module     = $this->tree->getById($moduleID);
-            $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
-            echo $module->name;
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
-        }
-        else
-        {
-            echo $this->lang->tree->all;
-        }
-        echo " <i class='icon-angle-right'></i>&nbsp; </span></li>";
+        $product    = $this->product->getById($productID);
+        $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
+        echo $product->name;
+        echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+    }
+    elseif(!empty($moduleID))
+    {
+        $module     = $this->tree->getById($moduleID);
+        $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
+        echo $module->name;
+        echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+    }
+    else
+    {
+        $this->app->loadLang('tree');
+        echo $this->lang->tree->all;
+    }
+    echo " <i class='icon-angle-right'></i>&nbsp; </span></li>";
 
-        foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
+    foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
+    {
+        if(isset($menuItem->hidden)) continue;
+        $type = $menuItem->name;
+        if(strpos($type, 'QUERY') === 0)
         {
-            if(isset($menuItem->hidden)) continue;
-            $type = $menuItem->name;
-            if(strpos($type, 'QUERY') === 0)
+            $queryID = (int)substr($type, 5);
+            echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
+        }
+        elseif($type != 'status')
+        {
+            echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
+        }
+        elseif($type == 'status')
+        {
+            echo "<li id='statusTab' class='dropdown'>";
+            $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
+            $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
+            if(empty($current)) $current = $menuItem->text;
+            echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+            echo "<ul class='dropdown-menu'>";
+            foreach ($lang->project->statusSelects as $key => $value)
             {
-                $queryID = (int)substr($type, 5);
-                echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
+                if($key == '') continue;
+                echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
+                echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
             }
-            elseif($type != 'status')
-            {
-                echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
-            }
-            elseif($type == 'status')
-            {
-                echo "<li id='statusTab' class='dropdown'>";
-                $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
-                $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
-                if(empty($current)) $current = $menuItem->text;
-                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-                echo "<ul class='dropdown-menu'>";
-                foreach ($lang->project->statusSelects as $key => $value)
-                {
-                    if($key == '') continue;
-                    echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
-                    echo html::a($this->createLink('project', 'task', "project=$projectID&type=$key"), $value);
-                }
-                echo '</ul></li>';
-            }
+            echo '</ul></li>';
         }
     }
 

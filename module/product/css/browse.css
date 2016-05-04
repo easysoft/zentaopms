@@ -3,3 +3,5 @@
 .dropdown-menu > .menu-search .input-group {width:100%;}
 .dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
 .pl-5px{padding-left:5px;}
+a.removeModule{color:#ddd}
+a.removeModule:hover{color:red}

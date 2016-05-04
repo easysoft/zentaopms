@@ -374,11 +374,8 @@ class my extends control
             if($this->post->mode == 'new')
             {
                 $listID = $this->user->createContactList($this->post->newList, $this->post->users);
-                if(isonlybody())
-                {
-                    die(js::closeModal('parent.parent', '', 'function(){parent.parent.ajaxGetContacts(\'#mailtoGroup\')}'));
-                }
-                else die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
+                if(isonlybody()) die(js::closeModal('parent.parent', '', 'function(){parent.parent.ajaxGetContacts(\'#mailtoGroup\')}'));
+                die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
             }
             elseif($this->post->mode == 'edit')
             {
