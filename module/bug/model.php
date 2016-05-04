@@ -1787,7 +1787,7 @@ class bugModel extends model
     }
 
     /**
-     * Get unresolve bugs for long time. 
+     * Get unclosed bugs for long time. 
      * 
      * @param  int    $productID 
      * @param  int    $branch
@@ -1806,7 +1806,7 @@ class bugModel extends model
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
             ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->notin('resolved, closed')->orderBy($orderBy)->page($pager)->fetchAll();
+            ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /**
