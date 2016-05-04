@@ -421,7 +421,10 @@ foreach($fieldParams as $fieldName => $param)
   <?php echo html::hidden('formType', 'lite');?>
 </div>
 </form>
-<script language='Javascript'>
-$(".saveQuery").modalTrigger({width:650, type:'iframe', title:'<?php echo $lang->search->setQueryTitle?>'});
-<?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}('#{$module}-search')";?>
+<script>
+$(function()
+{
+   $(".saveQuery").modalTrigger({width:650, type:'iframe', title:'<?php echo $lang->search->setQueryTitle?>'});
+   <?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}('#{$module}-search')";?>
+});
 </script>
