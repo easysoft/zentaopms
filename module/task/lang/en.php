@@ -93,6 +93,9 @@ $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "Current task and task above it do not belong to same project!";
 $lang->task->selectAllUser = 'All';
 $lang->task->noStory       = 'No Story';
+$lang->task->noAssigned    = 'No assigned';
+$lang->task->noFinished    = 'No finished';
+$lang->task->noClosed      = 'No closed';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Pending';

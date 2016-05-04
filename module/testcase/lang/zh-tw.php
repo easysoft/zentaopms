@@ -38,6 +38,7 @@ $lang->testcase->version          = '用例版本';
 $lang->testcase->lastRunner       = '執行人';
 $lang->testcase->lastRunDate      = '執行時間';
 $lang->testcase->assignedTo       = '指派給';
+$lang->testcase->colorTag         = '顏色標籤';
 $lang->testcase->lastRunResult    = '結果';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '來源Bug';
@@ -58,6 +59,7 @@ $lang->testcase->delete             = "刪除用例";
 $lang->testcase->view               = "用例詳情";
 $lang->testcase->edit               = "編輯";
 $lang->testcase->batchEdit          = "批量編輯 ";
+$lang->testcase->batchChangeModule  = "批量修改模組";
 $lang->testcase->delete             = "刪除";
 $lang->testcase->batchDelete        = "批量刪除 ";
 $lang->testcase->browse             = "用例列表";
@@ -68,8 +70,6 @@ $lang->testcase->exportTemplet      = "導出模板";
 $lang->testcase->export             = "導出數據";
 $lang->testcase->confirmChange      = '確認用例變動';
 $lang->testcase->confirmStoryChange = '確認需求變動';
-$lang->testcase->colorTag           = '顏色標籤';
-$lang->testcase->batchChangeModule  = "批量修改模組";
 
 $lang->testcase->new = '新增';
 

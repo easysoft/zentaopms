@@ -21,8 +21,10 @@ $whiteList[] = 'admin-setflow';
 $whiteList[] = 'bug-buildtemplates';
 $whiteList[] = 'bug-sendmail';
 $whiteList[] = 'board-managechild';
+$whiteList[] = 'custom-menu';
 $whiteList[] = 'company-create';
 $whiteList[] = 'company-delete';
+$whiteList[] = 'file-buildexporttpl';
 $whiteList[] = 'file-buildform';
 $whiteList[] = 'file-printfiles';
 $whiteList[] = 'file-export2csv';
@@ -68,6 +70,12 @@ $whiteList[] = 'sso-binduser';
 $whiteList[] = 'sso-createuser';
 $whiteList[] = 'mail-asyncsend';
 $whiteList[] = 'user-reset';
+$whiteList[] = 'product-showerrornone';
+$whiteList[] = 'tutorial-start';
+$whiteList[] = 'tutorial-index';
+$whiteList[] = 'tutorial-quit';
+$whiteList[] = 'tutorial-wizard';
+$whiteList[] = 'my-buildcontactlists';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

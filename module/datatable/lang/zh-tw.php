@@ -14,7 +14,7 @@ $lang->datatable->required          = '必選';
 $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
 
-$lang->datatable->showModule             = '標題是否顯示模組';
+$lang->datatable->showModule             = '列表頁是否顯示模組名';
 $lang->datatable->showModuleList[]       = '不顯示';
-$lang->datatable->showModuleList['base'] = '根節點';
-$lang->datatable->showModuleList['end']  = '終極節點';
+$lang->datatable->showModuleList['base'] = '只顯示一級模組';
+$lang->datatable->showModuleList['end']  = '只顯示最後一級模組';

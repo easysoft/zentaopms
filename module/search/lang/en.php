@@ -23,6 +23,7 @@ $lang->search->setQueryTitle = 'Please input the title（execute searching befor
 $lang->search->select        = 'Stories/Tasks filter';
 $lang->search->me            = 'Me';
 $lang->search->noQuery       = 'Save no query!';
+$lang->search->onMenuBar     = 'Show on menu bar';
 
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';

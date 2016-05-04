@@ -63,6 +63,7 @@ $lang->bug->lastEditedDateAB = '修改日期';
 $lang->bug->lastEditedDate   = '修改日期';
 $lang->bug->fromCase         = '來源用例';
 $lang->bug->toCase           = '生成用例';
+$lang->bug->colorTag         = '顏色標籤';
 
 /* 方法列表。*/
 $lang->bug->index              = '首頁';
@@ -72,6 +73,7 @@ $lang->bug->confirmBug         = '確認';
 $lang->bug->batchConfirm       = '批量確認';
 $lang->bug->edit               = '編輯';
 $lang->bug->batchEdit          = '批量編輯';
+$lang->bug->batchChangeModule  = '批量修改模組';
 $lang->bug->batchClose         = '批量關閉';
 $lang->bug->assignTo           = '指派';
 $lang->bug->batchAssignTo      = '批量指派';
@@ -86,11 +88,9 @@ $lang->bug->export             = '導出數據';
 $lang->bug->delete             = '刪除';
 $lang->bug->deleted            = '已刪除';
 $lang->bug->saveTemplate       = '保存模板';
+$lang->bug->setPublic          = '設為公共模板';
 $lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->confirmStoryChange = '確認需求變動';
-$lang->bug->setPublic          = '設為公共模板';
-$lang->bug->colorTag           = '顏色標籤';
-$lang->bug->batchChangeModule  = '批量修改模組';
 
 /* 查詢條件列表。*/
 $lang->bug->assignToMe     = '指派給我';

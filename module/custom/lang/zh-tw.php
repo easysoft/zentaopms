@@ -68,7 +68,9 @@ $lang->custom->confirmRestore = '是否要恢復預設配置？';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole  = '鍵的長度必須小於20個字元！';
-$lang->custom->notice->indexPage = "%s增加首頁頁面，是否設該頁面為主頁？";
+$lang->custom->notice->indexPage['product'] = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
+$lang->custom->notice->indexPage['project'] = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
+$lang->custom->notice->indexPage['qa']      = "從8.2版本起增加了測試主頁視圖，是否預設進入測試主頁？";
 
 $lang->custom->storyReview   = '評審流程';
 $lang->custom->reviewList[1] = '開啟';
@@ -81,5 +83,5 @@ $lang->custom->productProject->relation['1_1'] = '項目 - 迭代';
 
 $lang->custom->productProject->notice = '請根據實際情況選擇適合自己團隊的概念。';
 
-$lang->custom->menuTip  = '點擊導航項目來切換顯示或隱藏，拖動導航項目來更改顯示順序。';
+$lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';
