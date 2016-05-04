@@ -28,3 +28,18 @@ function downloadFile(fileID)
     window.open(url, '_blank');
     return false;
 }
+
+/* Load files name when upload files. */
+function loadFilesName()
+{
+    $('#filesName').find('li').remove();//Remove file name in li label before uploading files every time.
+    $('.fileBox').each(function()
+    {
+        fileName  = $(this).find('input[type="file"]').val();
+        if(fileName.lastIndexOf('\\')) fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);//Process the file name.
+        labelName = $(this).find('input[type="text"]').val();
+        if(labelName) fileName = labelName;//If label name exits, set label name as file name.
+
+        if(fileName) $('#filesName').append("<li>" + fileName + '</li>');//Show file name.
+    })
+}

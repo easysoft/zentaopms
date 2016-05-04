@@ -4,3 +4,6 @@
 .btn-file {float:right; padding: 0px 5px!important}
 .fix-border td {border:0px;}
 .fix-position td {vertical-align: middle;}
+
+#filesName {float: right;}
+.nav > li {margin-right: 5px; display: inline-block; margin-top: 5px;}

@@ -73,6 +73,7 @@
           echo html::hidden('case',    $run->case->id);
           echo html::hidden('version', $run->case->currentVersion);
           ?>
+          <ul id='filesName' class='nav'></ul>
         </td>
       </tr>
     </table>
@@ -89,6 +90,9 @@
               <tr>
                 <td><?php echo $this->fetch('file', 'buildform');?></td>
               </tr>
+              <tr>
+                <td class='text-center'><button type="button" class="btn btn-default" onclick='loadFilesName()' data-dismiss="modal" aria-hidden="true"><?php echo $lang->save;?></button></td>
+              <tr>
             </table>
           </div>
         </div>
@@ -108,6 +112,9 @@
               <tr>
                 <td><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'filesName' => "files{$step->id}", 'labelsName' => "labels{$step->id}"));?></td>
               </tr>
+              <tr>
+                <td class='text-center'><button type="button" class="btn btn-default" onclick='loadFilesName()' data-dismiss="modal" aria-hidden="true"><?php echo $lang->save;?></button></td>
+              <tr>
             </table>
           </div>
         </div>

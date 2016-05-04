@@ -36,6 +36,7 @@
         <?php
         $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
         if($class != 'success') $failCount++;
+        $fileCount = '(' . count($result->files) . ')';
         ?>
         <tr class='result-item' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
@@ -43,7 +44,7 @@
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
           <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
-          <td class='w-40px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files, '', "data-toggle='modal' data-type='iframe'")?></td>
+          <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
         <tr class='result-detail hide'>
@@ -56,14 +57,17 @@
                   <th class='w-p25'><?php echo $lang->testcase->stepExpect;?></th>
                   <th class='text-center'><?php echo $lang->testcase->result;?></th>
                   <th class='w-p20'><?php echo $lang->testcase->real;?></th>
-                  <th class='w-50px'></th>
+                  <th class='w-60px'></th>
                 </tr>
               </thead>
               <?php 
               $i = 1;
               foreach($result->stepResults as $key => $stepResult):
               ?>
-              <?php $modalID = $result->id . '-' . $key;?>
+              <?php
+              $modalID   = $result->id . '-' . $key;
+              $fileCount = '(' . count($stepResult['files']) . ')';
+              ?>
               <tr>
                 <td class='w-30px text-center'><?php echo $i;?></td>
                 <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
@@ -71,7 +75,7 @@
                 <?php if(!empty($stepResult['result'])):?>
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
                 <td><?php echo $stepResult['real'];?></td>
-                <td class='text-center'><?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", $lang->files, '', "data-toggle='modal' data-type='iframe'")?></td>
+                <td class='text-center'><?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
               </tr>
                 <?php else:?>
                 <td></td>
