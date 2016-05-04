@@ -36,7 +36,7 @@
       <div class='start-icon'><i class='icon icon-certificate icon-back'></i><i class='icon icon-flag icon-front'></i></div>
       <h2><?php echo $lang->tutorial->common ?></h2>
       <div class='actions'>
-        <a href='<?php echo helper::createLink('tutorial', 'quit', 'referer=' . base64_encode($referer)) ?>' class='btn btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
+        <a href='<?php echo helper::createLink('tutorial', 'quit', 'referer=' . base64_encode($referer)) ?>' class='btn btn-danger btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
       </div>
     </header>
     <section id='current'>
