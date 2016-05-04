@@ -62,9 +62,9 @@ a,a:focus,a:active {text-decoration: none; outline:none;}
 
 /* Label */
 .label-badge {padding: 2px 6px}
-.label-angle {background-color: #d3dff7; line-height: 24px; padding: 0 5px; position: relative; top: 2px; border: 1px solid #c6d2eb; margin-right: 18px; font-size: 13px; transition: all .2s; color: #114f8e}
+.label-angle {background-color: #d3dff7; line-height: 24px; padding: 0 5px; position: relative; top: 2px; border: 1px solid #c6d2eb; margin-right: 18px; font-size: 13px; transition: margin .2s, padding .2s; color: #114f8e}
 .label-angle > a {position: absolute; right: 0; top: 0; filter: alpha(opacity=0); opacity: 0}
-.label-angle.with-close:hover {padding-right: 18px;}
+.label-angle.with-close:hover {padding-right: 18px; margin-right: 5px}
 .label-angle:hover > a {filter: alpha(opacity=100); opacity: 1}
 .label-angle:before, .label-angle:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 13px 0 13px 13px; border-color: transparent transparent transparent #c6d2eb; position: absolute; right: -13px; top: -1px; z-index: 1}
 .label-angle:after {border-width: 12px 0 12px 12px; top: 0px; z-index: 2; right: -11px; border-color: transparent transparent transparent #d3dff7;}
