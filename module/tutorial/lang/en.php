@@ -52,7 +52,7 @@ $lang->tutorial->tasks['createProject']['desc'] = "<p>Create a new project:</p><
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => 'Manage project team');
 $lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Manage team members');
-$lang->tutorial->tasks['manageTeam']['desc'] = "<p>Manage project team members:</p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Team</span> <i class='icon icon-angle-right'></i> Manage team members</span> Page；</li><li data-target='form'>Choose users for the team.</li><li data-target='submit'>Save team members information.</li></ul>";
+$lang->tutorial->tasks['manageTeam']['desc'] = "<p>Manage project team members:</p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Team <i class='icon icon-angle-right'></i> Manage team members</span> Page；</li><li data-target='form'>Choose users for the team.</li><li data-target='submit'>Save team members information.</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => 'Link story');
 $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Link Story');
