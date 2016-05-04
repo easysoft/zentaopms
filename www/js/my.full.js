@@ -1781,7 +1781,7 @@ function checkTutorial()
     {
         if(confirm(window.TUTORIAL.tip))
         {
-            $.getJSON(createLink('tutorial', 'quit'), function()
+            $.getJSON(createLink('tutorial', 'ajaxQuit'), function()
             {
                 window.location.reload();
             }).error(function(){alert(lang.timeout)});

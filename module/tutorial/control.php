@@ -32,6 +32,7 @@ class tutorial extends control
         $setting = isset($this->config->tutorial->tasks->setting) ? $this->config->tutorial->tasks->setting : '';
 
         $this->session->set('tutorialMode', true);
+        $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', true);
 
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
@@ -71,7 +72,7 @@ class tutorial extends control
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', false);
 
         if(empty($referer)) $referer = $this->createLink('index');
-        die(js::locate($referer, 'parent'));
+        die(js::locate(helper::safe64Decode($referer), 'parent'));
     }
 
     /**
