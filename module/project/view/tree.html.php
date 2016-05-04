@@ -146,8 +146,6 @@ $(function()
 
     var tree = $tree.data('zui.tree');
 
-    console.log(tree);
-
     // Expand all nodes when user visit at first time of this day.
     if(!tree.store.time || tree.store.time < (new Date().getTime() - 24*40*60*1000))
     {
