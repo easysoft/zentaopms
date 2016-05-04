@@ -259,7 +259,5 @@ $lang->project->featureBar['task']['needconfirm']  = 'Story changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => 'Products view');
-$lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => 'Modules view');
-$lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => 'Stories view');
-$lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => 'Tasks view');
+$lang->project->treeLevel['story']   = 'Show stories';
+$lang->project->treeLevel['task']    = 'Show Tasks';

@@ -259,7 +259,5 @@ $lang->project->featureBar['task']['needconfirm']  = '需求变动';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['product'] = array('icon' => 'icon-cube', 'text' => '产品视图');
-$lang->project->treeLevel['module']  = array('icon' => 'icon-bookmark-empty', 'text' => '模块视图');
-$lang->project->treeLevel['story']   = array('icon' => 'icon-lightbulb', 'text' => '需求视图');
-$lang->project->treeLevel['task']    = array('icon' => 'icon-tasks', 'text' => '任务视图');
+$lang->project->treeLevel['story']   = '显示需求';
+$lang->project->treeLevel['task']    = '显示任务';

@@ -22,7 +22,7 @@ include './taskheader.html.php';
       <div class='panel-actions pull-right'>
         <div class='btn-group'>
           <?php foreach ($lang->project->treeLevel as $name => $btnLevel):?>
-          <button type='button' class='btn btn-sm tree-view-btn' data-type='<?php echo $name ?>' data-toggle='tooltip' title='<?php echo $btnLevel['text'] ?>'><i class='icon <?php echo $btnLevel['icon'] ?>'></i></button>
+          <button type='button' class='btn btn-sm tree-view-btn' data-type='<?php echo $name ?>'><?php echo $btnLevel ?></button>
           <?php endforeach; ?>
         </div>
       </div>
@@ -56,12 +56,12 @@ $(function()
     var hoursFormat = '<?php echo $lang->project->hours  ?>';
     var viewLevel = '<?php echo $level ?>' || 'custom';
     var data = $.parseJSON('<?php echo json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
-    console.log('DATA', data);
     var $tree = $('#projectTree');
     var statusMap = $.parseJSON('<?php echo json_encode($lang->task->statusList);?>');
     var selectCustomLevel = function() {$('.tree-view-btn.active').removeClass('active').filter('[data-type="custom"]').addClass('active');};
     $tree.tree(
     {
+        name: 'projectTasksTree',
         initialState: !viewLevel || viewLevel === 'custom' ? 'preserve' : 'collapse',
         data: data,
         itemWrapper: true,
@@ -85,14 +85,14 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            $li.toggleClass('tree-toggle', item.type !== 'task').closest('li').addClass('item-type-' + item.type);
+            $li.toggleClass('tree-toggle', item.type !== 'task' && item.type !== 'story').closest('li').addClass('item-type-' + item.type);
             if(item.type === 'product')
             {
                 $li.append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>'));
             }
             else if(item.type === 'story')
             {
-                $li.append('<span class="text-muted"><i class="icon icon-lightbulb"></i> #' + item.storyId + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+                $li.append('<span class="text-muted"><?php echo $lang->story->common ?>#' + item.storyId + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.children && item.children.length)
                 {
                     if(item.tasksCount) $li.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
@@ -145,6 +145,15 @@ $(function()
     if(!$currentLevelBtn.length) selectCustomLevel();
 
     var tree = $tree.data('zui.tree');
+
+    console.log(tree);
+
+    // Expand all nodes when user visit at first time of this day.
+    if(!tree.store.time || tree.store.time < (new Date().getTime() - 24*40*60*1000))
+    {
+        tree.show($('.item-type-tasks, .item-type-task').parent().parent());
+    }
+
     $(document).on('click', '.tree-view-btn', function()
     {
         $('.tree-view-btn.active').removeClass('active');
