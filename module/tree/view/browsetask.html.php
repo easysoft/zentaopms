@@ -15,7 +15,7 @@
   <div class='heading'><?php echo $lang->tree->common;?></div>
 </div>
 <div class='row'>
-  <div class='col-sm-5'>
+  <div class='col-sm-4'>
     <div class='panel'>
       <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div class='col-sm-7'>
+  <div class='col-sm-8'>
     <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=task");?>'>
       <div class='panel'>
         <div class='panel-heading'>
@@ -114,20 +114,10 @@ $(function()
             
 
             var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
-            var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browsetask', 'root=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
+            var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browsetask', 'root=<?php echo $rootID ?>&viewType=task&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
-            if(item.short)
-            {
-                $toggle.append('&nbsp; <span class="module-manager text-muted">(' + item.short + ')</span>');
-            }
-            if(item.type === 'task')
-            {
-                $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
-            }
-            if(item.type === 'story')
-            {
-                $li.addClass('story-item');
-            }
+            if(item.type === 'task') $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
+            if(item.type === 'story') $li.addClass('story-item');
             $li.append($toggle);
             if(item.nodeType) $li.addClass('tree-item-' + item.nodeType);
             return true;
@@ -137,26 +127,19 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->tree->dragAndSort ?>',
-                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><i class="icon icon-move"></i>'
+                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><i class="icon icon-move"></i></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=task"); ?>',
                 title: '<?php echo $lang->tree->edit ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-pencil"></i>'
-            },
-            add:
-            {
-                title: '<?php echo $lang->tree->manageChild ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-sitemap"></i>',
-                linkTemplate: '<?php echo helper::createLink('tree', 'browsetask', "rootID=$rootID&productID=$productID&currentModuleID={0}"); ?>',
-                templateInList: false
+                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->edit?></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-trash"></i>'
+                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->delete?></a>'
             }
         },
         action: function(event)

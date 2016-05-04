@@ -31,7 +31,6 @@ $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '确定移除区块【{0}】吗？';
-$lang->block->emptyMessage       = '这里什么也没有。快来定制你的页面！';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
@@ -81,7 +80,7 @@ $lang->block->default['qa']['2']['grid']  = 4;
 
 $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
+$lang->block->default['qa']['2']['params']['type']    = 'assigntome';
 
 $lang->block->default['qa']['3']['title'] = '待测版本列表';
 $lang->block->default['qa']['3']['block'] = 'testtask';

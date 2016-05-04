@@ -50,16 +50,18 @@ $(function()
 });
 </script>
 <div class="modal fade" id="showModuleModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog w-800px">
+  <div class="modal-dialog w-600px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->customConfig?></h4>
+        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
-          <p><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></p>
-          <p><button type='button' id='setShowModule' class='btn btn-primary'><?php echo $lang->save?></button></p>
+          <p>
+            <span><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></span>
+            <button type='button' id='setShowModule' class='btn btn-primary'><?php echo $lang->save?></button>
+          </p>
         </form>
       </div>
     </div>

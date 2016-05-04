@@ -3,9 +3,9 @@
 #sidebar {position: absolute; right: 0; top: 0; bottom: 0; width: 300px; background: #f5f5f5; overflow-y: auto; padding-top: 66px; border-left: 1px solid #ddd}
 #sidebar > header {background: #3280FC; color: #fff; padding: 15px; position: fixed; top: 0; right: 0; z-index: 10; width: 300px; border-bottom: 1px solid #ddd}
 #sidebar > header > h2 {margin: 0 0 0 40px; font-size: 18px; padding: 0; line-height: 36px; color: #fff}
-#sidebar > header .start-icon {position: absolute; left: 12px; top: 15px; width: 36px; height: 36px;  text-align: center; margin-right: 5px;}
+#sidebar > header .start-icon {position: absolute; left: 20px; top: 15px; width: 36px; height: 36px;  text-align: center; margin-right: 5px;}
 #sidebar > header .start-icon > .icon-front {color: #3280FC; position: absolute; width: 36px; height: 36px; line-height: 36px; top: 0; left: 0; font-size: 12px}
-#sidebar > header .start-icon > .icon-back {font-size: 35px; color: #fff; line-height: 36px;}
+#sidebar > header .start-icon > .icon-back {font-size: 22px; color: #fff; line-height: 36px;}
 #sidebar > header > .actions {position: absolute; right: 15px; top: 15px}
 #sidebar > section {padding: 20px 10px; border-top: 1px solid #ddd}
 #sidebar > section > h4 {margin: 0 0 10px 0; font-size: 14px; color: #808080; font-weight: normal}

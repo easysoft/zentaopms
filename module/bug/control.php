@@ -116,7 +116,7 @@ class bug extends control
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->mergeFeatureBar('bug', 'browse');
 
-        $showModule = !empty($this->config->datatable->bugbrowse->showModule) ? $this->config->datatable->bugbrowse->showModule : '';
+        $showModule = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
 
         /* Set view. */

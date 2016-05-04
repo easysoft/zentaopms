@@ -18,7 +18,6 @@
     </div>
   </div>
   <div id='menuEditor'>
-    <p class='text-danger'><i class="icon icon-info-sign"></i> <?php echo $lang->custom->menuTip ?></p>
     <div class='panel'>
       <nav id='mainmenu'>
         <ul></ul>
@@ -30,10 +29,11 @@
         <ul></ul>
       </nav>
     </div>
-    <div class='text-center'>
+    <div class='text-left'>
       <button id='saveMenuBtn' type='button' class='btn btn-primary'><?php echo $lang->save ?></button> &nbsp;
       <button id='closeModalBtn' type='button' class='btn'><?php echo $lang->close ?></button> &nbsp;
       <?php echo html::a(inlink('ajaxRestoreMenu'), $lang->custom->restore, 'hiddenwin', "class='btn'")?>
+      <span class='text-danger'> &nbsp; <i class="icon icon-info-sign"></i> <?php echo $lang->custom->menuTip ?></span>
     </div>
   </div>
 </div>

@@ -93,6 +93,9 @@ $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";
 $lang->task->selectAllUser = '全部';
 $lang->task->noStory       = '无需求';
+$lang->task->noAssigned    = '未指派';
+$lang->task->noFinished    = '未完成';
+$lang->task->noClosed      = '未关闭';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';

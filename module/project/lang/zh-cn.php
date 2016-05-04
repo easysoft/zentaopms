@@ -148,15 +148,15 @@ $lang->project->groups['type']       = '类型分组';
 $lang->project->groups['deadline']   = '截止分组';
 
 $lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = '关联需求的任务';
+$lang->project->groupFilter['story']['linked']      = '已关联需求的任务';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['setted']        = '已设置';
 $lang->project->groupFilter['assignedTo']['undone'] = '未完成';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
-$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
 $lang->project->groupFilter['finishedBy']['done']   = '已完成';
-$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
 $lang->project->groupFilter['closedBy']['closed']   = '已关闭';
+$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
 $lang->project->groupFilter['deadline']['all']      = $lang->project->all;
 $lang->project->groupFilter['deadline']['setted']   = '已设置';
 

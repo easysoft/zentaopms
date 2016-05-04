@@ -155,7 +155,7 @@ class product extends control
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
         $this->loadModel('search')->mergeFeatureBar('product', 'browse');
 
-        $showModule = !empty($this->config->datatable->productbrowse->showModule) ? $this->config->datatable->productbrowse->showModule : '';
+        $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
 
         /* Assign. */

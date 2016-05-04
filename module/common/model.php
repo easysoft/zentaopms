@@ -296,9 +296,13 @@ class commonModel extends model
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
 
-        if(!commonModel::isTutorialMode() and self::hasPriv('tutorial', 'start')) echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'");
-        echo html::a(helper::createLink('misc', 'changeLog'), $lang->feature, '', "class='iframe' data-width='800' data-headerless='true'");
-        echo html::a('javascript:;', $lang->help, '', "class='open-help-tab'");
+        echo "<div class='dropdown'>";
+        echo "<a href='javascript:;' data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
+        echo "<ul class='dropdown-menu'>";
+        echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
+        if(!commonModel::isTutorialMode() and self::hasPriv('tutorial', 'start')) echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'") . "</li>";
+        echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true'") . '</li>';
+        echo "</ul></div>";
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
     }
 

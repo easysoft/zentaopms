@@ -71,6 +71,7 @@ class userModel extends model
      */
     public function getPairs($params = '', $usersToAppended = '')
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getUserPairs();
         /* Set the query fields and orderBy condition.
          *
          * If there's xxfirst in the params, use INSTR function to get the position of role fields in a order string,

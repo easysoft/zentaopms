@@ -33,11 +33,8 @@ class datatable extends control
         if(!empty($_POST))
         {
             $account = $this->app->user->account;
-            if($account == 'guest')
-            {
-                $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
-                return;
-            }
+            if($account == 'guest') $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
+
             $name = $account . '.datatable.' . $this->post->target . '.' . $this->post->name;
             $this->loadModel('setting')->setItem($name, $this->post->value);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => 'dao error.'));

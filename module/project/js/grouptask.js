@@ -34,9 +34,3 @@ $(function()
         $tbody.find('tr.group-collapse').addClass('hidden');
     });
 })
-
-function setFilter(groupBy, setting)
-{
-    $.cookie('groupFilter_' + groupBy, setting, {expires:config.cookieLife, path:config.webRoot});
-    location.href = removeAnchor(location.href);
-}

@@ -81,7 +81,7 @@ $lang->block->default['qa']['2']['grid']  = 4;
 
 $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
+$lang->block->default['qa']['2']['params']['type']    = 'assigntome';
 
 $lang->block->default['qa']['3']['title'] = 'Waiting test task';
 $lang->block->default['qa']['3']['block'] = 'testtask';

@@ -16,7 +16,7 @@
   <div class='heading'><?php echo $lang->tree->common;?></div>
 </div>
 <div class='row'>
-  <div class='col-sm-5'>
+  <div class='col-sm-4'>
     <div class='panel'>
       <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <div class='col-sm-7'>
+  <div class='col-sm-8'>
     <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
       <div class='panel'>
         <div class='panel-heading'>
@@ -128,19 +128,19 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->tree->dragAndSort ?>',
-                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><i class="icon icon-move"></i>'
+                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><i class="icon icon-move"></i></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=$viewType"); ?>',
                 title: '<?php echo $lang->tree->edit ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-pencil"></i>'
+                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->edit?></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-trash"></i>'
+                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->delete?></a>'
             }
         },
         action: function(event)
