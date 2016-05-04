@@ -51,9 +51,9 @@
 #tasksProgress.finish .progress-text {color: #38B03F; opacity: 1}
 
 #tasks {background: #fff;}
-#tasks > li > a > .pull-right {opacity: 0; transition: opacity .4s, transform .4s; transform: scale(2.5, 2); color: #38B03F}
+#tasks > li > a > .pull-right {filter: alpha(opacity=0); opacity: 0; transition: opacity .4s, transform .4s; transform: scale(2.5, 2); color: #38B03F}
 #tasks > li.finish > a, #tasks > li.finish.active > a {box-shadow: inset 2px 0 0 #38B03F; border-left-color: #38B03F; color: #808080}
-#tasks > li.finish > a > .pull-right {opacity: 1; transform: scale(1)}
+#tasks > li.finish > a > .pull-right {filter: alpha(opacity=100); opacity: 1; transform: scale(1)}
 #tasks > li.finish > a > .task-name {text-decoration: line-through;}
 #tasks > li.active > a, #tasks > li.active.finish > a {box-shadow: inset 2px 0 0 #114f8e; border-color: #ddd; border-left-color: #114f8e; color: #114f8e; background: #EBF2F9}
 #tasks > li.finish > a:hover, #tasks > li.active > a:hover {background-color: #f1f1f1}

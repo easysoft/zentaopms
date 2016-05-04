@@ -123,7 +123,6 @@ $(function()
     var iWindow = window.frames['iframePage'];
     var iframe  = $('#iframePage').get(0);
     var checkTaskId = null, modalShowTaskId;
-    var $lastTooltip;
 
     var showModal = function(showAll)
     {
@@ -202,6 +201,8 @@ $(function()
 
     var showToolTip = function($e, text, options)
     {
+        $e.closest('body').find('[data-toggle=tooltip]').tooltip('hide');
+        if(!$e.length) return;
         options = $.extend(
         {
             trigger: 'manual',
@@ -211,8 +212,6 @@ $(function()
             tipClass: 'tooltip-warning tooltip-max'
         }, options);
         $e = $e.first();
-        if($lastTooltip) $lastTooltip.tooltip('hide');
-        $lastTooltip = $e;
         if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options)
         $e.tooltip('show');
     };
@@ -372,7 +371,7 @@ $(function()
         tryCheckTask();
         var title = (iWindow.$ ? iWindow.$('head > title').text() : '') + $('head > title').text();
         var url = createLink('tutorial', 'index', 'referer=' + Base64.encode(iWindow.location.href) + '&task=' + current);
-        window.history.replaceState({}, title, url);
+        try{window.history.replaceState({}, title, url);}catch(e){}
     };
 
     var openIframePage = function(url)
