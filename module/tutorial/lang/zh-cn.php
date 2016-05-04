@@ -50,6 +50,10 @@ $lang->tutorial->tasks['createProject']         = array('title' => '创建项目
 $lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '添加项目');
 $lang->tutorial->tasks['createProject']['desc'] = "<p>在系统创建一个新的项目：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 项目 <i class='icon icon-angle-right'></i> 添加项目</span> 页面；</li><li data-target='form'>在表单中填写要创建的项目信息；</li><li data-target='submit'>保存项目信息。</li></ul>";
 
+$lang->tutorial->tasks['manageTeam']         = array('title' => '管理团队');
+$lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '团队管理');
+$lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理项目团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 项目 <i class='icon icon-angle-right'></i> 团队</span> <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
+
 $lang->tutorial->tasks['linkStory']         = array('title' => '关联需求');
 $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => '关联需求');
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>将需求关联到项目：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 项目 <i class='icon icon-angle-right'></i> 需求 <i class='icon icon-angle-right'></i> 关联需求</span> 页面；</li><li data-target='form'>在需求列表中勾选要关联的需求；</li><li data-target='submit'>保存关联的需求信息。</li></ul>";

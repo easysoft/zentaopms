@@ -27,7 +27,7 @@ $lang->tutorial->reloadTargetPage = 'Reload target page';
 $lang->tutorial->target           = 'Target';
 $lang->tutorial->targetPageTip     = 'Open【%s】page by this instruction';
 $lang->tutorial->requiredTip      = '【%s】is necessary';
-$lang->tutorial->congratulateTask = 'Congratulations!You have finished task【<span class="task-name-current"></span>】!';
+$lang->tutorial->congratulateTask = 'Congratulations! You have finished task【<span class="task-name-current"></span>】!';
 $lang->tutorial->serverErrorTip   = 'Some error has occurred.';
 $lang->tutorial->ajaxSetError     = 'Finished task must be defined. Set empty value to reset tasks.';
 $lang->tutorial->novice           = "You may use the ZenTao first, whether to enter the novice tutorial?";
@@ -49,6 +49,10 @@ $lang->tutorial->tasks['createStory']['desc'] = "<p>Create a new story:</p><ul><
 $lang->tutorial->tasks['createProject']         = array('title' => 'Create a project');
 $lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Create Project');
 $lang->tutorial->tasks['createProject']['desc'] = "<p>Create a new project:</p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> New</span> Page;</li><li data-target='form'>Fill the form with project information;</li><li data-target='submit'>Save project information.</li></ul>";
+
+$lang->tutorial->tasks['manageTeam']         = array('title' => 'Manage project team');
+$lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Manage team members');
+$lang->tutorial->tasks['manageTeam']['desc'] = "<p>Manage project team members:</p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Team</span> <i class='icon icon-angle-right'></i> Manage team members</span> Page；</li><li data-target='form'>Choose users for the team.</li><li data-target='submit'>Save team members information.</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => 'Link story');
 $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Link Story');

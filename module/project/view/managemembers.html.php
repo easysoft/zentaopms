@@ -25,7 +25,7 @@
   </div>
 </div>
 <div class='main'>
-  <form class='form-condensed' method='post'>
+  <form class='form-condensed' method='post' id='teamForm'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>

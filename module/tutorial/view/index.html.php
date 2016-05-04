@@ -252,6 +252,7 @@ $(function()
             highlight($formWrapper);
             showToolTip($formWrapper, $formTarget.text());
             var fieldSelector = '';
+            var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
 
             if(task.nav.formType === 'table')
             {
@@ -262,16 +263,17 @@ $(function()
                     targetStatus.waitFeild = $checkboxes.filter(':not(:checked):first').closest('td');
                 }
             }
-            else if(pageConfig.requiredFields)
+            else if(requiredFields)
             {
                 targetStatus.form = true;
-                var requiredFields = pageConfig.requiredFields.split(',');
+                requiredFields = requiredFields.split(',');
                 $.each(requiredFields, function(idx, requiredId)
                 {
                     fieldSelector += ',' + '#' + requiredId;
                     var $required = $$('#' + requiredId);
                     if($required.length)
                     {
+                        console.log($required, $required.val());
                         var val = $required.val();
                         if(val === undefined || val === null || val === '')
                         {

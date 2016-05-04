@@ -19,7 +19,17 @@
       <?php echo html::icon($lang->icons['team']);?> <?php echo $lang->project->team;?>
     </div>
     <div class='actions'>
-      <?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary'");?>
+      <?php
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("projectID=$project->id");
+          common::printLink('tutorial', 'wizard', "module=project&method=managemembers&params=$wizardParams", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+      }
+      else
+      {
+          common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+      }
+      ?>
     </div>
   </div>
   <table class='table tablesorter' id='memberList'>
