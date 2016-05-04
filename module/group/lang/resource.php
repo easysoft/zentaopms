@@ -1166,3 +1166,5 @@ $lang->changelog['8.1.3'][] = 'my-deleteContacts';
 $lang->changelog['8.2.beta'][] = 'product-all';
 $lang->changelog['8.2.beta'][] = 'project-tree';
 $lang->changelog['8.2.beta'][] = 'project-all';
+$lang->changelog['8.2.beta'][] = 'project-kanban';
+$lang->changelog['8.2.beta'][] = 'project-tree';

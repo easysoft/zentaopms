@@ -192,6 +192,12 @@ class tutorialModel extends model
         return array($story->id => $story->title);
     }
 
+    /**
+     * Get tutorial team members.
+     * 
+     * @access public
+     * @return array
+     */
     public function getTeamMembers()
     {
         $member = new stdclass();
@@ -206,10 +212,19 @@ class tutorialModel extends model
         return array($member->account => $member);
     }
 
+    /**
+     * Get tutorial user pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getUserPairs()
     {
-        $users[$this->app->user->account] = $this->app->user->account;
-        $users['test'] = 'Test';
+        $account = $this->app->user->account;
+
+        $users['']       = '';
+        $users[$account] = $account;
+        $users['test']   = 'Test';
         return $users;
     }
 }

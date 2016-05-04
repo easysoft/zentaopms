@@ -108,6 +108,7 @@ class tutorial extends control
             $target = 'parent';
             if(($module == 'story' or $module == 'task' or $module == 'bug') and $method == 'create') $target = 'self';
             if($module == 'project' and $method == 'linkStory') $target = 'self';
+            if($module == 'project' and $method == 'managemembers') $target = 'self';
             die(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
         }
         die($this->fetch($module, $method, $params));

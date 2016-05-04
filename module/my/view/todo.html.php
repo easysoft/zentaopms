@@ -22,7 +22,7 @@
         if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
         echo "<li id='$period'>" . html::a(inlink('todo', $vars), $label) . '</li>';
     }
-    echo "<li id='byDate' class='datepicker-wrapper datepicker-date'>" . html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)' autocomplete='off'") . '</li>';
+    echo "<li id='byDate'>" . html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)' autocomplete='off'") . '</li>';
 
     if(is_numeric($type)) 
     {

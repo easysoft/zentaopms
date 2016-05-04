@@ -4,17 +4,17 @@
   </div>
   <div class='nav'>
     <li>
-      <span>
+      <div class='label-angle <?php echo !empty($moduleID) ? 'with-close' : ''?>'>
         <?php
+        $this->app->loadLang('tree');
         echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
         if(!empty($moduleID))
         {
-            $removeLink = $browseType == 'bymodule' ? inlink('cases', "taskID=$taskID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-            echo '&nbsp;' . html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'") . '&nbsp;';
+            $removeLink = $browseType == 'bymodule' ? inlink('cases', "taskID=$taskID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskCaseModule")';
+            echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
         }
-        echo " <i class='icon-angle-right'></i>&nbsp; ";
         ?>
-      </span>
+      </div>
     </li>
     <?php
     $hasCasesPriv = common::hasPriv('testtask', 'cases');
