@@ -1498,7 +1498,7 @@ class treeModel extends model
             foreach($branches as $branchID => $branch)
             {
                 $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
-                $branchTrees[] = array('branch' => $branchID, 'id' => 0, 'name' => $branch, 'root' => $rootID, 'actions' => false, 'nodeType' => 'branch', 'type' => 'branch', 'children' => $this->getDataStructure($stmt, $viewType));
+                $branchTrees[] = array('branch' => $branchID, 'id' => 0, 'name' => $branch, 'root' => $rootID, 'actions' => array('sort' => true, 'add' => false, 'edit' => false, 'delete' => false), 'nodeType' => 'branch', 'type' => 'branch', 'children' => $this->getDataStructure($stmt, $viewType));
             }
             $fullTrees[] = array('name' => $this->lang->product->branchName[$product->type], 'root' => $rootID, 'type' => 'branch', 'actions' => false, 'children' => $branchTrees);
         }
