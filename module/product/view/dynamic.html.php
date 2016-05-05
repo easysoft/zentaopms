@@ -27,7 +27,7 @@
   </nav>
 </div>
 
-<table class='table'>
+<table class='table with-border'>
   <thead>
     <tr class='colhead'>
       <?php $vars = "productID={$productID}&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
