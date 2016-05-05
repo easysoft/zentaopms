@@ -53,7 +53,7 @@ class datatable extends control
     public function ajaxCustom($module, $method)
     {
         $account = $this->app->user->account;
-        $name = 'owner=' . $account . '&module=datatable&section=' . $module . $method . '&key=cols';
+        $name = 'owner=' . $account . '&module=datatable&section=' . $module . ucfirst($method) . '&key=cols';
         if($module == 'testtask')
         {
             $this->loadModel('testcase');

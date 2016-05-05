@@ -15,14 +15,14 @@
 .panel > .datatable, .panel-body > .datatable {margin-bottom: 0;}
 </style>
 <script> 
-<?php $dtId = $this->moduleName . $this->methodName;?>
+<?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
 $(document).ready(function()
 {
     'use strict';
 
-    var $datatable = $('table.datatable').first();
-    var dtId = $datatable.attr('id');
-    var dtSetting = $.cookie('datatable.<?php echo $dtId?>' + '.cols') || {};
+    var $datatable  = $('table.datatable').first();
+    var datatableId = $datatable.attr('id');
+    var dtSetting   = $.cookie('datatable.<?php echo $datatableId?>' + '.cols') || {};
     if(dtSetting === 'null') dtSetting = {};
     if(typeof dtSetting === 'string') dtSetting = $.parseJSON(dtSetting);
     var $modal = $('#customDatatable');
@@ -75,7 +75,7 @@ $(document).ready(function()
 
     window.saveDatatableConfig = function(name, value, reload)
     {
-        var datatableId = '<?php echo $dtId;?>';
+        var datatableId = '<?php echo $datatableId;?>';
         if(typeof value === 'object') value = JSON.stringify(value);
         if('<?php echo $this->app->user->account?>' == 'guest') return;
         $.ajax(
@@ -101,17 +101,19 @@ $(document).ready(function()
 function fixScroll()
 {
     var $scrollwrapper = $('div.datatable').first().find('.scroll-wrapper:first');
-    var $tfoot         = $('div.datatable').first().find('table tfoot:last');
-    var $scrollOffset  = $scrollwrapper.offset().top + $scrollwrapper.find('.scroll-slide').height();
-    if($tfoot.size() > 0) $scrollOffset += $tfoot.height();
-    if($('div.datatable.head-fixed').size() == 0) $scrollOffset -= '34';
+    if($scrollwrapper.size() == 0)return;
+
+    var $tfoot       = $('div.datatable').first().find('table tfoot:last');
+    var scrollOffset = $scrollwrapper.offset().top + $scrollwrapper.find('.scroll-slide').height();
+    if($tfoot.size() > 0) scrollOffset += $tfoot.height();
+    if($('div.datatable.head-fixed').size() == 0) scrollOffset -= '34';
     var windowH = $(window).height();
     var bottom  = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
-    if($scrollOffset > windowH + $(window).scrollTop()) $scrollwrapper.css({'position': 'fixed', 'bottom': bottom + 'px'});
+    if(scrollOffset > windowH + $(window).scrollTop()) $scrollwrapper.css({'position': 'fixed', 'bottom': bottom + 'px'});
     $(window).scroll(function()
     {
         newBottom = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
-       if($scrollOffset <= windowH + $(window).scrollTop()) 
+       if(scrollOffset <= windowH + $(window).scrollTop()) 
        {    
            $scrollwrapper.css({'position':'relative', 'bottom': '0px'});
        }    
