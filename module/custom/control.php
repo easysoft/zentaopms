@@ -254,6 +254,14 @@ class custom extends control
             {
                 $this->app->loadLang($module);
                 $this->loadModel('search')->mergeFeatureBar($module, $method);
+                /* Mark search query item. */
+                if(isset($this->lang->$module->featureBar[$method]))
+                {
+                    foreach($this->lang->$module->featureBar[$method] as $barKey => $barValue)
+                    {
+                        if(strpos($barKey, 'QUERY') === 0)$this->lang->$module->featureBar[$method][$barKey] = "<i class='icon icon-search'></i> " . $barValue;
+                    }
+                }
             }
             if($module !== 'main')
             {

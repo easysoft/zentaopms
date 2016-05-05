@@ -14,7 +14,7 @@ $lang->tutorial = new stdclass();
 $lang->tutorial->common           = '新手教程';
 $lang->tutorial->desc             = '通過完成一系列任務，快速瞭解禪道的基本使用方法。這可能會花費您10分鐘，你可以隨時退出任務。';
 $lang->tutorial->start            = '立即開始';
-$lang->tutorial->exit             = '退出任務';
+$lang->tutorial->exit             = '退出教程';
 $lang->tutorial->congratulation   = '恭喜，你已完成了所有任務！';
 $lang->tutorial->restart          = '重新開始';
 $lang->tutorial->currentTask      = '當前任務';
@@ -29,6 +29,8 @@ $lang->tutorial->targetPageTip    = '按此指示打開【%s】頁面';
 $lang->tutorial->requiredTip      = '【%s】為必填項';
 $lang->tutorial->congratulateTask = '恭喜，你完成了任務 【<span class="task-name-current"></span>】！';
 $lang->tutorial->serverErrorTip   = '發生了一些錯誤。';
+$lang->tutorial->ajaxSetError     = '必須指定已完成的任務，如果要重置任務，請設置值為空。';
+$lang->tutorial->novice           = "您可能初次使用禪道，是否進入新手教程";
 
 $lang->tutorial->tasks = array();
 
@@ -47,6 +49,10 @@ $lang->tutorial->tasks['createStory']['desc'] = "<p>在系統創建一個新的�
 $lang->tutorial->tasks['createProject']         = array('title' => '創建項目');
 $lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '添加項目');
 $lang->tutorial->tasks['createProject']['desc'] = "<p>在系統創建一個新的項目：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 項目 <i class='icon icon-angle-right'></i> 添加項目</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的項目信息；</li><li data-target='submit'>保存項目信息。</li></ul>";
+
+$lang->tutorial->tasks['manageTeam']         = array('title' => '管理團隊');
+$lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '團隊管理');
+$lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理項目團隊成員：</p><ul><li data-target='nav'>打開 <span class='task-nav'> 項目 <i class='icon icon-angle-right'></i> 團隊 <i class='icon icon-angle-right'></i> 團隊管理</span> 頁面；</li><li data-target='form'>選擇要加入團隊的成員；</li><li data-target='submit'>保存團隊成員信息。</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => '關聯需求');
 $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => '關聯需求');

@@ -123,8 +123,7 @@ $lang->project->batchUnlinkStory = '批量移除需求';
 $lang->project->importTask       = '转入任务';
 $lang->project->importBug        = '导入Bug';
 $lang->project->updateOrder      = '排序';
-$lang->project->tree             = '树视图';
-$lang->project->list             = '列表';
+$lang->project->tree             = '树状图';
 
 /* 分组浏览。*/
 $lang->project->allTasks             = '所有';

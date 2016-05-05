@@ -10,7 +10,7 @@ if(empty($features))
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
-      <strong><?php echo $lang->feature ?></strong>
+      <strong><?php echo $lang->changeLog ?></strong>
     </div>
   </div>
   <div class='dropdown' id='versionMenu'>

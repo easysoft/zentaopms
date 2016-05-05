@@ -215,6 +215,7 @@ class upgradeModel extends model
         case '8_0':
         case '8_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
         case '8_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('8.1'));
+        case '8_1_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.1.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -855,9 +856,13 @@ class upgradeModel extends model
         $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('project')->andWhere('`method`')->eq('index')->fetchPairs('group', 'group');
         foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('all')->set('`group`')->eq($group)->exec();
 
-        /* Add kanban priv. */
+        /* Add kanban and tree priv. */
         $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('project')->andWhere('`method`')->eq('task')->fetchPairs('group', 'group');
-        foreach($groups as $group) $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
+        foreach($groups as $group)
+        {
+            $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
+            $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('tree')->set('`group`')->eq($group)->exec();
+        }
 
         /* Change manageContacts priv. */
         $groups = $this->dao->select('`group`')->from($privTable)->where('`module`')->eq('user')->andWhere('`method`')->eq('manageContacts')->fetchPairs('group', 'group');

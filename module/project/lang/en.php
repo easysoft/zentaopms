@@ -124,7 +124,6 @@ $lang->project->importTask       = 'Transfer task';
 $lang->project->importBug        = 'Import bug';
 $lang->project->updateOrder      = 'Order';
 $lang->project->tree             = 'Tree';
-$lang->project->list             = 'List';
 
 /* Browse. */
 $lang->project->allTasks             = 'All';
@@ -153,10 +152,10 @@ $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['setted']        = 'Setted';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Undone';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
-$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
 $lang->project->groupFilter['finishedBy']['done']   = 'Done';
-$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
+$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
 $lang->project->groupFilter['closedBy']['closed']   = 'Closed';
+$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
 $lang->project->groupFilter['deadline']['all']      = $lang->project->all;
 $lang->project->groupFilter['deadline']['setted']   = '已设置';
 

@@ -2,7 +2,7 @@
 <div id='featurebar'>
   <ul class='nav'>
     <li>
-      <div class='label-angle<?php if($moduleID) echo ' with-close';?>'>
+      <div class='label-angle<?php if(!empty($moduleID)) echo ' with-close';?>'>
         <?php
         echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
         if(!empty($moduleID))

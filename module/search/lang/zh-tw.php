@@ -22,10 +22,8 @@ $lang->search->deleteQuery   = '刪除查詢';
 $lang->search->setQueryTitle = '請輸入查詢標題（保存之前請先查詢）：';
 $lang->search->select        = '需求/任務篩選';
 $lang->search->me            = '自己';
-$lang->search->shortcut      = '快捷';
 $lang->search->noQuery       = '還沒有保存查詢！';
-
-$lang->search->noticeShortcut = '設置快捷訪問，可以將保存的查詢固定到列表導航，方便查看！';
+$lang->search->onMenuBar     = '顯示在菜單欄';
 
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';

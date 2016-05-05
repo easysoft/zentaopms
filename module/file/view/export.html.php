@@ -118,8 +118,9 @@ $(document).ready(function()
     <strong><?php echo $lang->export;?></strong>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin' style='padding: 40px 5% 50px'>
-  <table class='w-p100'>
+<?php $isCustomExport = (!empty($customExport) and !empty($allExportFields));?>
+<form class='form-condensed' method='post' target='hiddenwin' style='padding: 40px 1% 50px'>
+  <table class='w-p100 table-fixed'>
     <tr>
       <td>
         <div class='input-group'>
@@ -127,31 +128,31 @@ $(document).ready(function()
           <?php echo html::input('fileName', '', 'class=form-control');?>
         </div>
       </td>
-      <td class='w-80px'>
+      <td class='w-60px'>
         <?php echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?>
       </td>
-      <td class='w-90px'>
+      <td class='w-80px'>
         <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control'");?>
       </td>
-      <td class='w-100px'>
+      <td class='w-90px'>
         <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
       </td>
-      <td><?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?></td>
-    </tr>
-    <?php if(!empty($customExport) and !empty($allExportFields)):?>
-    <tr>
-      <td colspan='5'>
-        <div class='input-group' style='width:100%'>
-          <span class='input-group-addon'><?php echo $lang->file->applyTemplate?></span>
-          <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
-          <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>
-          <span class='input-group-btn'><button type='button' onclick='setExportTPL()' class='btn'><?php echo $lang->file->setExportTPL?></button></span>
+      <?php if($isCustomExport):?>
+      <td class='w-110px' style='overflow:visible'>
+        <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
+      </td>
+      <?php endif?>
+      <td style='width:<?php echo $isCustomExport ? '94px' : '50px'?>'>
+        <div class='input-group'>
+          <?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?>
+          <?php if($isCustomExport):?>
+          <button type='button' onclick='setExportTPL()' class='btn'><?php echo $lang->file->setExportTPL?></button>
+          <?php endif;?>
         </div>
       </td>
     </tr>
-    <?php endif;?>
   </table>
-  <?php if(!empty($customExport) and !empty($allExportFields)):?>
+  <?php if($isCustomExport):?>
   <?php
   $allExportFields  = explode(',', $allExportFields);
   $selectedFields   = array();
@@ -166,7 +167,7 @@ $(document).ready(function()
   }
   ?>
   <div class='mb-150px' style='margin-bottom:150px'></div>
-  <div class='panel' id='customFields' style='margin-bottom:150px;display:none'>
+  <div class='panel' id='customFields' style='display:none'>
     <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
     <div class='panel-body'>
       <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
@@ -178,6 +179,7 @@ $(document).ready(function()
           <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
           <?php endif?>
           <span class='input-group-btn'><button id='saveTpl' type='button' onclick='saveTemplate()' class='btn btn-primary'><?php echo $lang->save?></button></span>
+          <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>
         </div>
       </div>
     </div>

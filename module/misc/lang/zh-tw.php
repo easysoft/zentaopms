@@ -62,8 +62,13 @@ $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest       = '最新版本';
-$lang->misc->feature->all = array();
+$lang->misc->feature->lastest         = '最新版本';
+$lang->misc->feature->all             = array();
 $lang->misc->feature->all['latest']   = array();
-$lang->misc->feature->all['latest'][] = array('title'=>'可自定義內容的首頁', 'desc' => '<p>你的地盤由你做主。現在開始，你可以向首頁添加多種多樣的內容區塊，而且還可以決定如何排列和顯示他們。</p>', 'img' => '1.gif');
-$lang->misc->feature->all['latest'][] = array('title'=>'完全定製所有導航內容', 'desc' => '<p>導航上顯示的項目現在完全由你來決定。將滑鼠懸浮在導航上稍後會在右側顯示定製按鈕，點擊打開定製對話框，通過點擊切換項目是否顯示，拖拽導航項目來更改顯示順序。</p>', 'img' => '2.gif');
+$lang->misc->feature->all['latest'][] = array('title'=>'首頁自定義', 'desc' => '<p>我的地盤由我做主。現在開始，你可以向首頁添加多種多樣的內容區塊，而且還可以決定如何排列和顯示他們。</p><p>我的地盤、產品、項目、測試模組下均支持首頁自定義功能。</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'導航定製', 'desc' => '<p>導航上顯示的項目現在完全由你來決定，不僅僅可以決定在導航上展示哪些內容，還可以決定展示的順序。</p><p>將滑鼠懸浮在導航上稍後會在右側顯示定製按鈕，點擊打開定製對話框，通過點擊切換是否顯示，拖放操作來更改顯示順序。</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'批量添加、編輯自定義', 'desc' => '<p>可以在批量添加和批量編輯頁面自定義操作的欄位。</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'添加需求、任務、Bug、用例自定義', 'desc' => '<p>可以在添加需求、任務、Bug、用例頁面，自定義部分欄位是否顯示。</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'導出自定義', 'desc' => '<p>在導出需求、任務、Bug、用例的時候，用戶可以自定義導出的欄位，也可以保存模板方便每次導出。</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'需求、任務、Bug、用例組合檢索功能', 'desc' => '<p>在需求、任務、Bug、用例列表頁面，可以實現模組和標籤的組合檢索。</p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'增加新手教程', 'desc' => '<p>增加新手教程，方便新用戶瞭解禪道使用。</p>');

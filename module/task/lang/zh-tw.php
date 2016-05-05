@@ -13,6 +13,7 @@ $lang->task->index              = "任務一覽";
 $lang->task->create             = "建任務";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量編輯";
+$lang->task->batchChangeModule  = "批量修改模組";
 $lang->task->edit               = "編輯";
 $lang->task->delete             = "刪除";
 $lang->task->deleted            = "已刪除";
@@ -31,7 +32,6 @@ $lang->task->export             = "導出數據";
 $lang->task->reportChart        = "報表統計";
 $lang->task->fromBug            = '來源Bug';
 $lang->task->confirmStoryChange = "確認需求變動";
-$lang->task->batchChangeModule  = "批量修改模組";
 
 $lang->task->common            = '任務';
 $lang->task->id                = '編號';
@@ -92,6 +92,10 @@ $lang->task->files             = '附件';
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "該任務與上一任務不屬於同一項目！";
 $lang->task->selectAllUser = '全部';
+$lang->task->noStory       = '無需求';
+$lang->task->noAssigned    = '未指派';
+$lang->task->noFinished    = '未完成';
+$lang->task->noClosed      = '未關閉';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未開始';

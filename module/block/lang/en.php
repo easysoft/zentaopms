@@ -31,7 +31,6 @@ $lang->block->createBlock        = 'Add block';
 $lang->block->editBlock          = 'Edit block';
 $lang->block->ordersSaved        = 'Sort have been saved';
 $lang->block->confirmRemoveBlock = 'Are you sure remove block [{0}] ?';
-$lang->block->emptyMessage       = 'Nothing here, custom it now!';
 $lang->block->refresh            = 'Refresh';
 $lang->block->hidden             = 'Hidden';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
