@@ -40,7 +40,7 @@
   </ul>
 </div>
 
-<table class='table table-fixed'>
+<table class='table table-fixed with-border'>
   <thead>
     <tr>
       <?php $vars = "projectID={$projectID}&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -52,6 +52,7 @@
       <th><?php echo $lang->action->objectName;?></th>
     </tr>
   </thead>
+  <?php if(count($actions)): ?>
   <tbody>
   <?php foreach($actions as $action):?>
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
@@ -65,6 +66,7 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <?php endif; ?>
   <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script>$('#<?php echo $type;?>').addClass('active')</script>
