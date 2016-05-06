@@ -9,5 +9,7 @@
  * @version     $Id$
  * @link        http://www.ranzhi.org
  */
-include "{$code}block.html.php";
+$viewDir      = dirname(__FILE__);
+$file2Include = file_exists(dirname($viewDir) . "/ext/view/{$code}block.html.php") ? dirname($viewDir) . "/ext/view/{$code}block.html.php" : "{$viewDir}/{$code}block.html.php";
+include $file2Include;
 ?>

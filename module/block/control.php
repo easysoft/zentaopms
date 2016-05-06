@@ -344,7 +344,14 @@ class block extends control
             $this->view->code = $this->get->blockid;
 
             $func = 'print' . ucfirst($code) . 'Block';
-            $this->$func($module);
+            if(method_exists('block', $func))
+            {
+                $this->$func($module);
+            }
+            else
+            {
+                $this->view->data = $this->block->$func($module, $params);
+            }
 
             $this->view->moreLink = '';
             if(isset($this->lang->block->modules[$module]->moreLinkList->{$code}))

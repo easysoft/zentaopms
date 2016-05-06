@@ -12,29 +12,29 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix pull-left'><?php echo html::icon($lang->icons['todo']);?></span>
-    <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->batchCreate;?></strong>
-    <div class='input-group w-200px pull-left' id='datepicker'>
-      <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
-      <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
-      <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
-    </div>
-    <div class='actions'>
-      <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
+<form class='form-condensed' method='post' target='hiddenwin' style='overflow:visible'>
+  <div id='titlebar'>
+    <div class='heading'>
+      <span class='prefix pull-left'><?php echo html::icon($lang->icons['todo']);?></span>
+      <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->batchCreate;?></strong>
+      <div class='input-group w-200px pull-left' id='datepicker'>
+        <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
+        <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
+        <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
+      </div>
+      <div class='actions'>
+        <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
+      </div>
     </div>
   </div>
-</div>
-<?php
-$visibleFields = array();
-foreach(explode(',', $showFields) as $field)
-{
-    if($field)$visibleFields[$field] = '';
-}
-$columns = count($visibleFields) + 2;
-?>
-<form class='form-condensed' method='post' target='hiddenwin'>
+  <?php
+  $visibleFields = array();
+  foreach(explode(',', $showFields) as $field)
+  {
+      if($field)$visibleFields[$field] = '';
+  }
+  $columns = count($visibleFields) + 2;
+  ?>
   <table class='table table-form table-fixed with-border'>
     <thead>
       <tr>
