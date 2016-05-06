@@ -12,8 +12,8 @@ body {background: #fafafa;}
 .dashboard .panel-action-more {font-size: 12px; font-weight: 200}
 .dashboard .panel-action:hover, .dashboard .panel-actions > .dropdown > a:hover {color: #333; background-color: #ddd; background-color: rgba(0,0,0,0.1)}
 .dashboard .panel-title {font-size: 13px; color: #333}
-.dashboard a.panel-title > .icon-double-angle-right {position: relative; opacity: 0; transition: opacity .2s, left .2s; left: -5px}
-.dashboard .panel:hover a.panel-title > .icon-double-angle-right {opacity: 1; left: 0}
+.dashboard a.panel-title > .icon-double-angle-right {position: relative; filter: alpha(opacity=0); opacity: 0; transition: opacity .2s, left .2s; left: -5px}
+.dashboard .panel:hover a.panel-title > .icon-double-angle-right {filter: alpha(opacity=100); opacity: 1; left: 0}
 .dashboard a.panel-title:hover {color: #1a53ff}
 .dashboard .panel {box-shadow: 0 1px 3px rgba(0,0,0,.05); position: relative;}
 .dashboard .panel-heading + .panel-body {position: absolute; left: 0; top: 30px; right: 0; bottom: 0}
