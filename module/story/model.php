@@ -170,6 +170,7 @@ class storyModel extends model
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
+            $this->setStage($storyID);
             $this->file->saveUpload('story', $storyID, $extra = 1);
 
             $data          = new stdclass();
