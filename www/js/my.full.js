@@ -646,12 +646,15 @@ function setComment()
 
 /**
  * Make table checkable by click row
- * 
+ *
+ * @param  $table
  * @access public
  * @return void
  */
-function checkTable()
+function checkTable($table)
 {
+    $table = $table || $('.tablesorter:not(.table-datatable)');
+
     var checkRow = function(checked)
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
@@ -667,11 +670,14 @@ function checkTable()
                 isChecked = checked === true || checked === false  ? checked : !isChecked;
                 $checkbox.prop('checked', isChecked);
             }
-            if(!$tr.hasClass('.active-disabled')) $tr.toggleClass('active', isChecked);
+            if(!$tr.hasClass('.active-disabled')) {
+                $tr.toggleClass('active', isChecked);
+            }
             $tr.closest('.table').find('.rows-selector').prop('checked', false);
         }
     };
-    $('.tablesorter:not(.table-datatable)').selectable(
+
+    $table.selectable(
     {
         selector: 'tbody > tr',
         trigger: 'tbody',
@@ -699,7 +705,7 @@ function checkTable()
         }
     }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'tbody a', function(e) {e.stopPropagation();});
 
-    $(document).on('change', '.rows-selector:checkbox', function()
+    $(document).off('change.checktable').on('change.checktable', '.rows-selector:checkbox', function()
     {
         var $checkbox = $(this);
         var $datatable = $checkbox.closest('.datatable');
@@ -1283,13 +1289,16 @@ function setModal4List(triggerClass, replaceID, callback, width)
                         $datatable.data('zui.datatable').load(idQuery);
                     }
 
-                    $list.find('tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
                     $list.find('[data-toggle=modal], a.iframe').modalTrigger();
                     try
                     {
-                        $(".date").datetimepicker(datepickerOptions);
+                        $('.date').datetimepicker(datepickerOptions);
                     }
                     catch(err){}
+
+                    if($list.is('.tablesorter:not(.table-datatable)')) checkTable($list);
+                    else $list.find('tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
+
                     if($.isFunction(callback)) callback();
                     $.cookie('selfClose', 0);
                 });
@@ -1793,7 +1802,6 @@ function checkTutorial()
 function removeDitto()
 {
     $firstTr = $('.table-form').find('tbody tr:first');
-    console.log($firstTr);
     $firstTr.find('td select').each(function()
     {
         $(this).find("option[value='ditto']").remove();

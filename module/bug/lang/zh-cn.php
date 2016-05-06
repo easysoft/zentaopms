@@ -120,13 +120,15 @@ $lang->bug->allUsers                    = '所有用户';
 $lang->bug->allBuilds                   = '所有';
 
 /* legend列表。*/
-$lang->bug->legendBasicInfo    = '基本信息';
-$lang->bug->legendAttatch      = '附件';
-$lang->bug->legendPrjStoryTask = $lang->projectCommon . '/需求/任务';
-$lang->bug->legendSteps        = '重现步骤';
-$lang->bug->legendComment      = '备注';
-$lang->bug->legendLife         = 'BUG的一生';
-$lang->bug->legendMisc         = '其他相关';
+$lang->bug->legendBasicInfo             = '基本信息';
+$lang->bug->legendAttatch               = '附件';
+$lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/需求/任务';
+$lang->bug->lblTypeAndSeverity          = '类型/严重程度';
+$lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
+$lang->bug->legendSteps                 = '重现步骤';
+$lang->bug->legendComment               = '备注';
+$lang->bug->legendLife                  = 'BUG的一生';
+$lang->bug->legendMisc                  = '其他相关';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm        = '确认';

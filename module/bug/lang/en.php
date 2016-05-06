@@ -120,13 +120,15 @@ $lang->bug->allUsers                    = 'All users';
 $lang->bug->allBuilds                   = 'All';
 
 /* Legends. */
-$lang->bug->legendBasicInfo    = 'Basic info';
-$lang->bug->legendAttatch      = 'Files';
-$lang->bug->legendPrjStoryTask = "{$lang->projectCommon}, story & task";
-$lang->bug->legendSteps        = 'Steps';
-$lang->bug->legendComment      = 'Comment';
-$lang->bug->legendLife         = 'Lifetime';
-$lang->bug->legendMisc         = 'Misc';
+$lang->bug->legendBasicInfo             = 'Basic info';
+$lang->bug->legendAttatch               = 'Files';
+$lang->bug->legendPrjStoryTask          = "{$lang->projectCommon}, story & task";
+$lang->bug->lblTypeAndSeverity          = 'Type&Severity';
+$lang->bug->lblSystemBrowserAndHardware = 'OS&Browser';
+$lang->bug->legendSteps                 = 'Steps';
+$lang->bug->legendComment               = 'Comment';
+$lang->bug->legendLife                  = 'Lifetime';
+$lang->bug->legendMisc                  = 'Misc';
 
 /* Action buttons. */
 $lang->bug->buttonConfirm        = 'Confirm';

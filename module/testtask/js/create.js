@@ -54,8 +54,7 @@ function suitEndDate()
     endDate = $('#end').val();
     if(endDate) return;
     
-    endDate = convertStringToDate(beginDate).addDays(1);
-    endDate = endDate.toString('yyyy-M-dd');
+    endDate = convertStringToDate(beginDate).addDays(1).toString('yyyy-MM-dd');
     $('#end').val(endDate);
 }
 

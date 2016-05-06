@@ -231,9 +231,8 @@ td.delayed, .status-delayed, td[class$="-delayed"] {background:#e84e0f!important
 td.blocked, .status-blocked, td[class$="-blocked"] {background:yellow!important;}
 td.fail, .status-fail, td[class$="-fail"]  {color:#d2322d}
 td.draft, .status-draft, td[class$="-draft"]  {color:#8957a1}
-.bug-active {color: #8957a1}
-.testcase-normal,
-.story-active {color: #333}
+td.bug-active, .bug-active {color: #8957a1}
+td.story-active, .testcase-normal, .story-active {color: #333}
 
 /* tabs */
 .nav-tabs > li > a {padding: 5px 10px; color: #333; line-height: 20px; max-height: 32px}
