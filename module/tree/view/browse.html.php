@@ -107,6 +107,10 @@
     </form>
   </div>
 </div> 
+<style>
+.tree-item-story > .tree-actions > .tree-action[data-type='sort'],
+.tree-item-story > .tree-actions > .tree-action[data-type='delete'] {display: none!important}
+</style>
 <script>
 $(function()
 {
@@ -119,8 +123,10 @@ $(function()
         {
             var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browse', 'root=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
+            if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
+            if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
             $li.append($toggle);
-            if(item.nodeType) $li.addClass('tree-item-' + item.nodeType);
+            if(item.nodeType || item.type) $li.addClass('tree-item-' + (item.nodeType || item.type));
             return true;
         },
         actions: 

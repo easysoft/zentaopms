@@ -94,9 +94,9 @@
   </div>
 </div>
 <style>
-.story-item .tree-action[data-type='sort'],
-.story-item .tree-action[data-type='edit'],
-.story-item .tree-action[data-type='delete'] {display: none!important}
+.story-item > .tree-actions > .tree-action[data-type='sort'],
+.story-item > .tree-actions > .tree-action[data-type='edit'],
+.story-item > .tree-actions > .tree-action[data-type='delete'] {display: none!important}
 </style>
 <script>
 $(function()
@@ -116,7 +116,11 @@ $(function()
             var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
             var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browsetask', 'root=<?php echo $rootID ?>&viewType=task&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
-            if(item.type === 'task') $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
+            if(item.type === 'task')
+            {
+                $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
+                $li.addClass('task-item');
+            }
             if(item.type === 'story') $li.addClass('story-item');
             $li.append($toggle);
             if(item.nodeType) $li.addClass('tree-item-' + item.nodeType);
