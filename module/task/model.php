@@ -1168,6 +1168,25 @@ class taskModel extends model
 
         return $task;
     }
+
+    /**
+     * Check whether need update status of bug.
+     *
+     * @param  object  $task
+     * @access public
+     * @return void
+     */
+    public function needUpdateBugStatus($task)
+    {
+        /* If task is not from bug, return false. */
+        if($task->fromBug == 0) return false;
+
+        /* If bug has been resolved, return false. */
+        $bug = $this->loadModel('bug')->getById($task->fromBug);
+        if($bug->status == 'resolved') return false;
+
+        return true;
+    }
     
     /**
      * Get story comments.

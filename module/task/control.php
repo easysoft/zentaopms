@@ -574,7 +574,7 @@ class task extends control
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
-            if($task->fromBug != 0)
+            if($changes and $this->task->needUpdateBugStatus($task))
             {
                 foreach($changes as $change)
                 {
@@ -615,7 +615,7 @@ class task extends control
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
-            if($changes and $task->fromBug != 0)
+            if($changes and $this->task->needUpdateBugStatus($task))
             {
                 foreach($changes as $change)
                 {
@@ -724,7 +724,7 @@ class task extends control
                 $this->sendmail($taskID, $actionID);
             }
 
-            if($task->fromBug != 0)
+            if($this->task->needUpdateBugStatus($task))
             {
                 foreach($changes as $change)
                 {

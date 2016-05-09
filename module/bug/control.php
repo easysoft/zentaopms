@@ -830,10 +830,15 @@ class bug extends control
             $bug = $this->bug->getById($bugID);
             if($bug->toTask != 0) 
             {
-                $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                unset($_GET['onlybody']);
-                $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                /* If task is not finished, update it's status. */
+                $task = $this->task->getById($bug->toTask);
+                if($task->status != 'done')
+                {
+                    $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                    unset($_GET['onlybody']);
+                    $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+                    die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                }
             } 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
