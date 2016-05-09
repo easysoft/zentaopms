@@ -311,6 +311,7 @@ class taskModel extends model
             $oldTask = $this->getById($taskID);
 
             $task = new stdclass();
+            $task->color          = $data->colors[$taskID];
             $task->name           = $data->names[$taskID];
             $task->module         = isset($data->modules[$taskID]) ? $data->modules[$taskID] : 0;
             $task->type           = $data->types[$taskID];

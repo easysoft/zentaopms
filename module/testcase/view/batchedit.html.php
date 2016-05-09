@@ -59,7 +59,12 @@ foreach(explode(',', $showFields) as $field)
         <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>   <?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
         <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules,   $cases[$caseID]->module, "class='form-control chosen'");?></td>
-        <td title='<?php echo $cases[$caseID]->title?>'><?php echo html::input("titles[$caseID]", $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?></td>
+        <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
+          <div class='input-group'>
+          <?php echo html::hidden("colors[$caseID]", $cases[$caseID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#titles\\[{$caseID}\\]'");?>
+          <?php echo html::input("titles[$caseID]", $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?>
+          </div>
+        </td>
         <td><?php echo html::select("types[$caseID]", $typeList, $cases[$caseID]->type, 'class=form-control');?></td>
         <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$caseID]", $cases[$caseID]->precondition, "rows='1' class='form-control autosize'")?></td>
         <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$caseID]", $cases[$caseID]->keywords, "class='form-control'");?></td>

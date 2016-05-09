@@ -69,7 +69,12 @@ $columns = count($visibleFields) + 2;
         <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$bugID]",      $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
         <td <?php echo zget($visibleFields, 'severity', "class='hidden'")?>><?php echo html::select("severities[$bugID]", $severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
         <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
-        <td title='<?php echo $bugs[$bugID]->title?>'> <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?></td>
+        <td style='overflow:visible' title='<?php echo $bugs[$bugID]->title?>'>
+          <div class='input-group'>
+          <?php echo html::hidden("colors[$bugID]", $bugs[$bugID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#names\\[{$bugID}\\]'");?>
+          <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?>
+          <div>
+        </td>
         <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
         <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $statusList, $bugs[$bugID]->status, 'class=form-control');?></td>

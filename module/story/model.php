@@ -520,6 +520,7 @@ class storyModel extends model
                 $story->lastEditedBy   = $this->app->user->account;
                 $story->lastEditedDate = $now;
                 $story->status         = $oldStory->status;
+                $story->color          = $data->colors[$storyID];
                 $story->title          = $data->titles[$storyID];
                 $story->estimate       = $data->estimates[$storyID];
                 $story->pri            = $data->pris[$storyID];

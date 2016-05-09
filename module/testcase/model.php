@@ -592,6 +592,7 @@ class testcaseModel extends model
             $case->pri            = $data->pris[$caseID];
             $case->status         = $data->statuses[$caseID];
             $case->module         = $data->modules[$caseID];
+            $case->color          = $data->colors[$caseID];
             $case->title          = $data->titles[$caseID];
             $case->precondition   = $data->precondition[$caseID];
             $case->keywords       = $data->keywords[$caseID];

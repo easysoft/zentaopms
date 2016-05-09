@@ -68,7 +68,12 @@ foreach(explode(',', $showFields) as $field)
         <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'>    <?php echo html::select("modules[$storyID]", $modules, $stories[$storyID]->module, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'>    <?php echo html::select("plans[$storyID]",   $productPlans, $stories[$storyID]->plan, "class='form-control chosen'");?></td>
-        <td title='<?php echo $stories[$storyID]->title?>'><?php echo html::input("titles[$storyID]",   $stories[$storyID]->title, 'class=form-control'); ?></td>
+        <td style='overflow:visible' title='<?php echo $stories[$storyID]->title?>'>
+          <div class='input-group'>
+            <?php echo html::hidden("colors[$storyID]", $stories[$storyID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#titles\\[{$storyID}\\]'");?>
+            <?php echo html::input("titles[$storyID]", $stories[$storyID]->title, 'class=form-control'); ?>
+          </div>
+        </td>
         <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$storyID]", $stories[$storyID]->estimate, "class='form-control' autocomplete='off'"); ?></td>
         <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$storyID]",     $priList, $stories[$storyID]->pri, 'class=form-control');?></td>
         <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTo[$storyID]",     $users, $stories[$storyID]->assignedTo, "class='form-control chosen'");?></td>
