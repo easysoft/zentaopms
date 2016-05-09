@@ -41,13 +41,14 @@ $("#myModal button[type='submit']").click(function()
                 $('form tbody tr').eq(index - 1).after(cloneTr);
                 $('form tbody tr').eq(index).find('td:first').html(index + 1);
                 $('form tbody tr').eq(index - 1).find('td').each(function()
-            {
-                if($(this).find('div.chosen-container').size() != 0)
                 {
-                    $('form tbody tr').eq(index).find("td").eq($(this).index()).find('select').chosen(defaultChosenOptions);
-                }
-            });
+                    if($(this).find('div.chosen-container').size() != 0)
+                    {
+                        $('form tbody tr').eq(index).find("td").eq($(this).index()).find('select').chosen(defaultChosenOptions);
+                    }
+                });
                 title = $('form tbody tr').eq(index).find("input[id*='" + mainField + "']");
+                $('#color\\[' + index + '\\]').colorPicker();//Update color picker.
             }
 
             index++;

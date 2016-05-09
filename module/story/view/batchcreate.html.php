@@ -61,7 +61,12 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo $i+1;?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
-      <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'") . html::hidden("uploadImage[$i]", $fileName);?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+        <?php echo html::input("title[$i]", $storyTitle, "class='form-control'") . html::hidden("uploadImage[$i]", $fileName);?>
+        </div>
+      </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><?php echo html::textarea("verify[$i]", '', "rows='1' class='form-control autosize'");?></td>
@@ -84,7 +89,12 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo $i+1;?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
-      <td><?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+        <?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?>
+        </div>
+      </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><?php echo html::textarea("verify[$i]", '', "rows='1' class='form-control autosize'");?></td>
@@ -103,7 +113,12 @@ foreach(explode(',', $showFields) as $field)
       <td>%s</td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[%s]", $plans, $planID, "class='form-control'");?></td>
-      <td><?php echo html::input("title[%s]", $storyTitle, "class='form-control'");?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[%s\\]'");?>
+        <?php echo html::input("title[%s]", $storyTitle, "class='form-control'");?>
+        </div>
+      </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[%s]", $sourceList, $source, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo html::textarea("verify[%s]", '', "rows='1' class='form-control autosize'");?></td>
