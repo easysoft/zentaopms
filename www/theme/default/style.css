@@ -68,6 +68,7 @@ a,a:focus,a:active {text-decoration: none; outline:none;}
 .label-angle:hover > a {filter: alpha(opacity=100); opacity: 1}
 .label-angle:before, .label-angle:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 13px 0 13px 13px; border-color: transparent transparent transparent #c6d2eb; position: absolute; right: -13px; top: -1px; z-index: 1}
 .label-angle:after {border-width: 12px 0 12px 12px; top: 0px; z-index: 2; right: -11px; border-color: transparent transparent transparent #d3dff7;}
+.label-branch {background-color: #dbcaee; border-color: #b29fc7; color: #6931a8}
 
 /* Label in table */
 .table .label.label-info {background: #d3dff7; border: 1px solid #c6d2eb; color: #114f8e;}
