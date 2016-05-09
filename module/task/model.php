@@ -1166,6 +1166,13 @@ class taskModel extends model
         $task->needConfirm = false;
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
 
+        /* Set product type for task. */
+        if(isset($task->product))
+        {
+            $product = $this->loadModel('product')->getById($task->product);
+            $task->productType = $product->type;
+        }
+
         return $task;
     }
 

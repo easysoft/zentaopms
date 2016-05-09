@@ -163,6 +163,7 @@ class product extends control
         $this->view->position[]    = $this->products[$productID];
         $this->view->position[]    = $this->lang->product->browse;
         $this->view->productID     = $productID;
+        $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;

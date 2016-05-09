@@ -40,8 +40,8 @@
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
         <td class='text-left' title="<?php echo $case->title?>">
-          <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span> "?>
-          <?php if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span> "?>
+          <?php if($case->branch) echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>{$branches[$case->branch]}</span> "?>
+          <?php if($modulePairs and $case->module) echo "<span title='{$lang->testcase->module}' class='label label-info label-badge'>{$modulePairs[$case->module]}</span> "?>
           <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
         </td>
         <?php if($browseType == 'needconfirm'):?>

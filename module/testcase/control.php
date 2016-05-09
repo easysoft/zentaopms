@@ -114,6 +114,7 @@ class testcase extends control
         $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testcase->common;
         $this->view->productID     = $productID;
+        $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);

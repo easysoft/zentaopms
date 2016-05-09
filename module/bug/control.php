@@ -124,6 +124,7 @@ class bug extends control
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->common;
         $this->view->productID     = $productID;
+        $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
