@@ -106,11 +106,13 @@
       </div>
     </form>
   </div>
-</div> 
+</div>
+<?php if($viewType !== 'story'): ?>
 <style>
 .tree-item-story > .tree-actions > .tree-action[data-type='sort'],
 .tree-item-story > .tree-actions > .tree-action[data-type='delete'] {display: none!important}
 </style>
+<?php endif;?>
 <script>
 $(function()
 {
