@@ -30,7 +30,7 @@ class qa extends control
         $this->loadModel('product');
         $this->products = $this->product->getPairs('nocode');
         $productID      = $this->product->saveState($productID, $this->products);
-        $branch         = $this->session->branch;
+        $branch         = $this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
         $this->view->title      = $this->lang->qa->index;

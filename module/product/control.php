@@ -58,7 +58,7 @@ class product extends control
 
         unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
-        $branch    = $this->session->branch;
+        $branch    = $this->cookie->preBranch;
         $this->product->setMenu($this->products, $productID, $branch);
 
         $this->view->title         = $this->lang->product->index;
@@ -115,10 +115,11 @@ class product extends control
 
         /* Set product, module and query. */
         $productID = $this->product->saveState($productID, $this->products);
-        $branch    = ($branch === '') ? $this->session->branch : $branch;
+        $branch    = ($branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot);
 
-        if($this->cookie->preProductID != $productID)
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['storyModule'] = 0;
             setcookie('storyModule', 0, $this->config->cookieLife, $this->config->webRoot);

@@ -66,7 +66,6 @@ class productModel extends model
         }
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
-        setCookie("lastBranch",  "$productID-$branch", $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
         $this->session->set('currentProductType', $currentProduct->type);
         $output  = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
@@ -97,13 +96,6 @@ class productModel extends model
         if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
         if(!isset($products[$this->session->product])) $this->session->set('product', key($products));
-
-        if($this->cookie->lastBranch)
-        {
-            list($lastProduct, $branch) = explode('-', $this->cookie->lastBranch);
-            $branch = $lastProduct == $this->session->product ? $branch : 0;
-            $this->session->set('branch', (int)$branch);
-        }
 
         return $this->session->product;
     }
