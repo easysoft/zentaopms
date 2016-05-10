@@ -31,6 +31,7 @@ $lang->tutorial->congratulateTask = 'Congratulations! You have finished task【<
 $lang->tutorial->serverErrorTip   = 'Some error has occurred.';
 $lang->tutorial->ajaxSetError     = 'Finished task must be defined. Set empty value to reset tasks.';
 $lang->tutorial->novice           = "You may use the ZenTao first, whether to enter the novice tutorial?";
+$lang->tutorial->dataNotSave      = "Data is not save in the task of tutorial.";
 
 $lang->tutorial->tasks = array();
 

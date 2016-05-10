@@ -53,6 +53,7 @@
             <div class='opened'><i class="icon icon-flag"></i> <?php echo $lang->tutorial->atTargetPage ?></div>
             <div class='reload'><i class="icon icon-repeat"></i> <?php echo $lang->tutorial->reloadTargetPage ?></div>
           </a>
+          <div class='alert-warning' style='padding:5px 10px;margin-bottom:0px'><?php echo $lang->tutorial->dataNotSave?></div>
         </div>
       </div>
       <div class='clearfix actions'>
