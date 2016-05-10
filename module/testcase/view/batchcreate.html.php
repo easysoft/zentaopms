@@ -67,7 +67,12 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo $i+1;?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
-      <td><?php echo html::input("title[$i]", '', "class='form-control'");?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+        <?php echo html::input("title[$i]", '', "class='form-control'");?>
+        </div>
+      </td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
@@ -86,7 +91,12 @@ foreach(explode(',', $showFields) as $field)
       <td>%s</td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
-      <td><?php echo html::input("title[%s]", '', "class='form-control'");?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[%s\\]'");?>
+        <?php echo html::input("title[%s]", '', "class='form-control'");?></td>
+        </div>
+      </td>
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>

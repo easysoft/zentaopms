@@ -2,8 +2,8 @@
 .outer .chosen-container-single {max-width: 160px; border-radius: 0}
 .outer .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px;}
 .outer .chosen-container-single + .input-group-btn > .btn {border-left: 0}
-.outer .input-group {display: block; padding-right: 29px; max-width: 100%;}
-.outer .input-group-btn {display: block; position: absolute; right: 0; width: 29px; top: 0}
+.outer .input-group > span {display: block; padding-right: 29px; max-width: 100%;}
+.outer .input-group-btn > a {display: block; position: absolute; right: 0; width: 29px; top: 0}
 .chosen-container[id^="story"] {width: 200px;}
 .chosen-container[id^="story"] .chosen-drop {min-width: 450px;!important}
 .chosen-container[id^="module"] .chosen-drop {min-width: 400px;!important}

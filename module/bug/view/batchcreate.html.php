@@ -81,7 +81,12 @@ foreach(explode(',', $showFields) as $field)
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>'  style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control chosen' multiple");?></td>
-        <td><?php echo html::input("title[$i]", $bugTitle, 'class=form-control') . html::hidden("uploadImage[$i]", $fileName);?></td>
+        <td style='overflow:visible'>
+          <div class='input-group'>
+          <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+          <?php echo html::input("title[$i]", $bugTitle, 'class=form-control') . html::hidden("uploadImage[$i]", $fileName);?>
+          </div>
+        </td>
         <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?></td>
         <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control'");?></td>
         <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>     <?php echo html::select("pris[$i]", $lang->bug->priList, $pri, "class='form-control'");?></td>
@@ -108,7 +113,12 @@ foreach(explode(',', $showFields) as $field)
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>'  style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
-        <td><?php echo html::input("title[$i]", '', 'class=form-control');?></td>
+        <td style='overflow:visible'>
+          <div class='input-group'>
+          <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+          <?php echo html::input("title[$i]", '', 'class=form-control');?>
+          </div>
+        </td>
         <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?></td>
         <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control'");?></td>
         <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>     <?php echo html::select("pris[$i]", $lang->bug->priList, $pri, "class='form-control'");?></td>
@@ -131,7 +141,12 @@ foreach(explode(',', $showFields) as $field)
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>'  style='overflow:visible'><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, \"%s\")'");?></td>
       <td class='text-left' style='overflow:visible' id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control' multiple");?></td>
-      <td><?php echo html::input("titles[%s]", '', 'class=form-control');?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#title\\[%s\\]'");?>
+        <?php echo html::input("title[%s]", '', 'class=form-control');?>
+        </div>
+      </td>
       <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[%s]", '', "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>    <?php echo html::select("types[%s]", $lang->bug->typeList, '', "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>     <?php echo html::select("pris[%s]", $lang->bug->priList, '', "class='form-control'");?></td>
