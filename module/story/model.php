@@ -271,6 +271,7 @@ class storyModel extends model
                 $data = new stdclass();
                 $data->module     = $stories->module[$i];
                 $data->plan       = $stories->plan[$i];
+                $data->color      = $stories->color[$i];
                 $data->title      = $stories->title[$i];
                 $data->source     = $stories->source[$i];
                 $data->pri        = $stories->pri[$i];
