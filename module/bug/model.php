@@ -135,6 +135,7 @@ class bugModel extends model
             $bug->module      = $data->modules[$i];
             $bug->project     = $data->projects[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
+            $bug->color       = $data->color[$i];
             $bug->title       = $data->title[$i];
             $bug->steps       = nl2br($data->stepses[$i]);
             $bug->type        = $data->types[$i];

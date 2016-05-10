@@ -73,13 +73,18 @@ foreach(explode(',', $showFields) as $field)
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'")?> style='overflow: visible'>
         <div class='input-group'>
-        <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
-        <span class='input-group-btn'>
-        <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
-        </span>
+          <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
+          <span class='input-group-btn'>
+            <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
+          </span>
         </div>
       </td>
-      <td><?php echo html::input("name[$i]", '', 'class=form-control');?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[{$i}\\]'");?>
+        <?php echo html::input("name[$i]", '', 'class=form-control');?>
+        </div>
+      </td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
       <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[$i]", '', "class='form-control text-center' autocomplete='off'");?></td>
@@ -105,7 +110,12 @@ foreach(explode(',', $showFields) as $field)
           </span>
         </div>
       </td>
-      <td><?php echo html::input("name[%s]", '', 'class=form-control');?></td>
+      <td style='overflow:visible'>
+        <div class='input-group'>
+        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[%s\\]'");?>
+        <?php echo html::input("name[%s]", '', 'class=form-control');?>
+        </div>
+      </td>
       <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>
       <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control'");?></td>
       <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[%s]", '', "class='form-control text-center' autocomplete='off'");?></td>

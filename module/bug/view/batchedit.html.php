@@ -71,7 +71,7 @@ $columns = count($visibleFields) + 2;
         <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
         <td style='overflow:visible' title='<?php echo $bugs[$bugID]->title?>'>
           <div class='input-group'>
-          <?php echo html::hidden("colors[$bugID]", $bugs[$bugID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#names\\[{$bugID}\\]'");?>
+          <?php echo html::hidden("colors[$bugID]", $bugs[$bugID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#titles\\[{$bugID}\\]'");?>
           <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?>
           <div>
         </td>

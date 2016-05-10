@@ -145,6 +145,7 @@ class taskModel extends model
             $data[$i]->type         = $tasks->type[$i];
             $data[$i]->module       = $tasks->module[$i];
             $data[$i]->assignedTo   = $tasks->assignedTo[$i];
+            $data[$i]->color        = $tasks->color[$i];
             $data[$i]->name         = $tasks->name[$i];
             $data[$i]->desc         = nl2br($tasks->desc[$i]);
             $data[$i]->pri          = $tasks->pri[$i];
