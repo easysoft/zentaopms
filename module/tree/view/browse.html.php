@@ -109,6 +109,7 @@
 </div>
 <?php if($viewType !== 'story'): ?>
 <style>
+<?php if($viewType != 'bug') echo ".tree-item-story > .tree-actions > .tree-action[data-type='edit'],";?>
 .tree-item-story > .tree-actions > .tree-action[data-type='sort'],
 .tree-item-story > .tree-actions > .tree-action[data-type='delete'] {display: none!important}
 </style>

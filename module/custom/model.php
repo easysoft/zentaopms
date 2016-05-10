@@ -130,16 +130,15 @@ class customModel extends model
      * @access public
      * @return array
      */
-    public static function setMenuByConfig($allMenu, $customMenu)
+    public static function setMenuByConfig($allMenu, $customMenu, $module = '')
     {
         global $app, $lang, $config;
-        $isSetMenuConfig = !empty($customMenu);
         $menu            = array();
         $order           = 1;
         $customMenuMap   = array();
         $isTutorialMode  = commonModel::isTutorialMode();
 
-        if($isSetMenuConfig)
+        if($customMenu)
         {
             if(is_string($customMenu))
             {
@@ -172,9 +171,21 @@ class customModel extends model
                     $customMenuMap[$customMenuItem->name] = $customMenuItem;
                 }
             }
-            else
+        }
+        elseif($module)
+        {
+            $menuOrder = $module == 'main' ? $lang->menuOrder : (isset($lang->$module->menuOrder) ? $lang->$module->menuOrder : array());
+            if($menuOrder)
             {
-                $isSetMenuConfig = false;
+                ksort($menuOrder);
+                foreach($menuOrder as $name)
+                {
+                    $item = new stdclass();
+                    $item->name   = $name;
+                    $item->hidden = false;
+                    $item->order  = $order++;
+                    $customMenuMap[$name] = $item;
+                }
             }
         }
 
@@ -218,24 +229,24 @@ class customModel extends model
                     if(isset($item['fixed'])) $fixed = $item['fixed'];
                 }
 
-                $hidden = !$fixed && $isSetMenuConfig && isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
+                $hidden = !$fixed && isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
                 if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = true;
 
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
                 $menuItem->link   = $itemLink;
                 $menuItem->text   = $label;
-                $menuItem->order  = $fixed ? 0 : ($isSetMenuConfig && isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
+                $menuItem->order  = $fixed ? -1 : (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
                 if($float)  $menuItem->float   = $float;
                 if($fixed)  $menuItem->fixed   = $fixed;
                 if($hidden) $menuItem->hidden  = $hidden;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
-                while(isset($menu[$menuItem->order])) $menuItem->order++;
                 $menu[$menuItem->order] = $menuItem;
             }
         }
 
+        while(isset($menu[$menuItem->order])) $menuItem->order++;
         ksort($menu, SORT_NUMERIC);
         return array_values($menu);
     }
@@ -253,13 +264,15 @@ class customModel extends model
 
         global $app, $lang, $config;
 
+        $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
+        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
+
+        if($module != 'main' and isset($lang->menugroup->$module)) $module = $lang->menugroup->$module;
         $customMenu = isset($config->customMenu->$module) ? $config->customMenu->$module : array();
         if(commonModel::isTutorialMode() && $module === 'main')$customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
 
-        $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
-        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
-        $menu = self::setMenuByConfig($allMenu, $customMenu);
+        $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
 
         return $menu;
     }

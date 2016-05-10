@@ -53,10 +53,10 @@ function saveTemplate()
     saveTemplateLink = '<?php echo $this->createLink('file', 'ajaxSaveTemplate', 'module=' . $this->moduleName);?>';
     $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
     {
-        var defaultValue = $('#customFields #tplBox #template').val();
-        $('#customFields #tplBox').html(data);
-        if(data.indexOf('alert') >= 0) $('#customFields #tplBox #template').val(defaultValue);
-        $("#customFields #tplBox #template").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
+        var defaultValue = $('#tplBox #template').val();
+        $('#tplBox').html(data);
+        if(data.indexOf('alert') >= 0) $('#tplBox #template').val(defaultValue);
+        $("#tplBox #template").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
         {
             var $this = $(this);
             var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
@@ -166,8 +166,8 @@ $(document).ready(function()
       $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
   }
   ?>
-  <div class='mb-150px' style='margin-bottom:150px'></div>
-  <div class='panel' id='customFields' style='display:none'>
+  <div class='mb-150px' style='margin-bottom:245px'></div>
+  <div class='panel' id='customFields' style='margin-bottom:150px;display:none'>
     <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
     <div class='panel-body'>
       <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
