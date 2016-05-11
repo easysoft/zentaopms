@@ -65,6 +65,7 @@ function resizeBlock(event)
     {
         if(data.result !== 'success') event.revert();
     });
+    initTableHeader();
 }
 
 /**
@@ -80,15 +81,26 @@ function initTableHeader()
         var $table = $panel.find('.table:first');
 
         if(!$table.length || !$table.children('thead').length) return;
+        var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
 
-        var $header = $panel.children('.table-header-fixed');
+        $panel.toggleClass('with-fixed-header', isFixed);
+        var $header = $panel.children('.table-header-fixed').toggle(isFixed);
+        if(!isFixed) return;
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed"><table class="table table-fixed"></table></div>').css('right', $panel.width() - $table.width()).css('min-width', $table.width());
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0;"><table class="table table-fixed"></table></div>').css('right', $panel.width() - $table.width()).css('min-width', $table.width());
             $header.find('.table').addClass($table.attr('class')).append($table.find('thead').css('visibility', 'hidden').clone().css('visibility', 'visible'));
             $panel.addClass('with-fixed-header').append($header);
             var $heading = $panel.children('.panel-heading');
             if($heading.length) $header.css('top', $heading.outerHeight());
+        }
+        else
+        {
+            var $fixedTh = $header.css('min-width', $table.width()).find('thead > tr > th');
+            $table.find('thead > tr > th').each(function(idx)
+            {
+                $fixedTh.eq(idx).width($(this).width());
+            });
         }
     });
 }

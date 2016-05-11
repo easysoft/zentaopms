@@ -15,7 +15,8 @@ body {background: #fafafa;}
 .dashboard a.panel-title > .icon-double-angle-right {position: relative; filter: alpha(opacity=0); opacity: 0; transition: opacity .2s, left .2s; left: -5px}
 .dashboard .panel:hover a.panel-title > .icon-double-angle-right {filter: alpha(opacity=100); opacity: 1; left: 0}
 .dashboard a.panel-title:hover {color: #1a53ff}
-.dashboard .panel {box-shadow: 0 1px 3px rgba(0,0,0,.05); position: relative;}
+.dashboard .panel {box-shadow: 0 1px 3px rgba(0,0,0,.05); position: relative; overflow-x: hidden;}
+.dashboard .panel.with-fixed-header {overflow-x: hidden;}
 .dashboard .panel-heading + .panel-body {position: absolute; left: 0; top: 30px; right: 0; bottom: 0}
 .dashboard .panel-dragging-shadow {position: absolute;}
 .dashboard-empty-message {text-align: center; margin-top: 100px;}
