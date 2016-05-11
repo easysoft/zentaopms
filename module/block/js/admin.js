@@ -20,7 +20,7 @@ function getBlocks(moduleID)
     }
     if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart')
     {
-        getNotSourceParams(moduleID);
+        getNotSourceParams(moduleID, blockID);
         return true;
     }
 

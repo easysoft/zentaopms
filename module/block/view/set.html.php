@@ -38,3 +38,10 @@ if($type == 'html')
     <tfoot><tr><td colspan='2' class='text-center'><?php echo html::submitButton()?></td></tr></tfoot>
   </table>
 </form>
+<script>
+$(function()
+{
+    options = $('#modules').find("option").text();
+    if($('#title').val() == '') $('#title').val($('#modules').find("option:selected").text());
+})
+</script>
