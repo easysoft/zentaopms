@@ -11,7 +11,6 @@
  */
 ?>
 <style>
-form{overflow-x:auto;}
 #customModal .checkbox-inline{width:90px}
 #customModal .checkbox-inline+.checkbox-inline{margin-left:0px;}
 </style>
@@ -35,4 +34,10 @@ form{overflow-x:auto;}
 </div>
 <script>
 $("button[data-toggle='customModal']").click(function(){$('#customModal').modal('show')});
+$(function()
+{
+    $table = $('.outer form table:first');
+    $form = $table.closest('form');
+    if($table.width() > $form.width())$form.css('overflow-x', 'auto')
+})
 </script>

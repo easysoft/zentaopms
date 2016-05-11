@@ -62,7 +62,7 @@ $themeRoot = $webRoot . "theme/";
 $(function()
 {
     options = $('#moduleBlock').find("option").text();
-    if(options.indexOf($('#title').val()) >= 0) $('#title').val($('#moduleBlock').find("option:selected").text());
+    if($('#title').val() == '') $('#title').val($('#moduleBlock').find("option:selected").text());
 })
 </script>
 <?php endif;?>

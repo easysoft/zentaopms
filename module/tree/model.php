@@ -1537,6 +1537,7 @@ class treeModel extends model
             foreach($module->children as $children)
             {
                 if($viewType == 'task' and isset($parentTypePairs[$children->parent]) and $parentTypePairs[$children->parent] != 'task') continue;
+                if($children->parent != 0) continue;//Filter project children modules.
                 $tree[] = $children;
             }
         }

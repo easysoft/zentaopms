@@ -62,10 +62,11 @@ class testcase extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID  = $this->product->saveState($productID, $this->products);
-        $branch     = ($branch === '') ? $this->session->branch : $branch;
+        $branch     = ($branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot);
 
-        if($this->cookie->preProductID != $productID)
+        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
             setcookie('caseModule', 0, $this->config->cookieLife, $this->config->webRoot);
@@ -146,7 +147,7 @@ class testcase extends control
     {
         $groupBy   = empty($groupBy) ? 'stroy' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->session->branch;
+        if($branch === '') $branch = $this->cookie->preBranch;
 
         $this->app->loadLang('testtask');
 
@@ -227,7 +228,7 @@ class testcase extends control
 
         /* Set productID and currentModuleID. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->session->branch;
+        if($branch === '') $branch = $this->cookie->preBranch;
         if($storyID and empty($moduleID))
         {
             $story    = $this->loadModel('story')->getByID($storyID);
@@ -350,7 +351,7 @@ class testcase extends control
 
         /* Set productID and currentModuleID. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->session->branch;
+        if($branch === '') $branch = $this->cookie->preBranch;
         if($storyID and empty($moduleID))
         {
             $story    = $this->loadModel('story')->getByID($storyID);
