@@ -211,9 +211,10 @@ class buildModel extends model
     public function update($buildID)
     {
         $oldBuild = $this->getByID($buildID);
-        $build = fixer::input('post')->setDefault('branch', $oldBuild->branch)->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+        $build = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->remove('allchecker,resolvedBy,files,labels')
             ->get();
+        if(!isset($build->branch)) $build->branch = $oldBuild->branch;
 
         $build = $this->loadModel('file')->processEditor($build, $this->config->build->editor->edit['id']);
         $this->dao->update(TABLE_BUILD)->data($build)
