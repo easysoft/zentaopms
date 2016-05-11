@@ -31,6 +31,7 @@ $lang->tutorial->congratulateTask = '恭喜，你完成了任務 【<span class=
 $lang->tutorial->serverErrorTip   = '發生了一些錯誤。';
 $lang->tutorial->ajaxSetError     = '必須指定已完成的任務，如果要重置任務，請設置值為空。';
 $lang->tutorial->novice           = "您可能初次使用禪道，是否進入新手教程";
+$lang->tutorial->dataNotSave      = "教程任務中，數據不會保存。";
 
 $lang->tutorial->tasks = array();
 

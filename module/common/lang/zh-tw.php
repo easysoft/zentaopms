@@ -65,7 +65,7 @@ $lang->duplicate       = '已有相同標題的%s';
 $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>抱歉，管理員限制當前IP登錄，請聯繫管理員解除限制。</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
-$lang->homepage        = '設為主頁';
+$lang->homepage        = '設為模組首頁';
 $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
@@ -190,7 +190,7 @@ $lang->product->menu->view    = array('link' => '概況|product|view|productID=%
 $lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
 $lang->product->menu->create  = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->productCommon}|product|create", 'float' => 'right');
 $lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp;所有{$lang->productCommon}|product|all|productID=%s", 'float' => 'right');
-$lang->product->menu->index   = array('link' => "<i class='icon-home'></i>產品主頁|product|index|locate=no", 'float' => 'right');
+$lang->product->menu->index   = array('link' => "<i class='icon-home'></i>{$lang->productCommon}主頁|product|index|locate=no", 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -219,7 +219,7 @@ $lang->project->menu->product   = $lang->productCommon . '|project|manageproduct
 $lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->projectCommon}|project|create", 'float' => 'right');
 $lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;所有{$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');
-$lang->project->menu->index     = array('link' => "<i class='icon-home'></i>項目主頁|project|index|locate=no", 'float' => 'right');
+$lang->project->menu->index     = array('link' => "<i class='icon-home'></i>{$lang->projectCommon}主頁|project|index|locate=no", 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
