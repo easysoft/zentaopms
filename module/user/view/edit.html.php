@@ -50,12 +50,15 @@
         <th class='w-90px'><?php echo $lang->user->account;?></th>
         <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control' autocomplete='off'");?></td>
         <th class='w-90px'><?php echo $lang->user->email;?></th>
-        <td><?php echo html::input('email', $user->email, "class='form-control'");?></td>
+        <td>
+          <?php echo html::input('email', $user->email, "class='form-control'");?>
+          <input type='text' style="display:none"> <!-- Disable input account by browser automatically. -->
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->user->password;?></th>
         <td>
-          <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
+          <input type='password' style="display:none"> <!-- Disable input password by browser automatically. -->
           <span class='input-group'>
             <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
