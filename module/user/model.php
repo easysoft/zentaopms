@@ -384,13 +384,13 @@ class userModel extends model
 
         if($this->post->groups)
         {
-            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
+            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->exec();
             foreach($this->post->groups as $groupID)
             {
                 $data          = new stdclass();
                 $data->account = $this->post->account;
                 $data->group   = $groupID;
-                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
             }
         }
         if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;

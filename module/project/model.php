@@ -1009,6 +1009,7 @@ class projectModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait, doing, pause, cancel')
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.product')->in(array_keys($branches))
             ->andWhere("(t1.story = 0 OR t2.branch in ('0','" . join("','", $branches) . "'))")
             ->fetchGroup('project', 'id');
         return $tasks;
@@ -1796,9 +1797,16 @@ class projectModel extends model
      */
     public function getProjectBranches($projectID)
     {
-        return $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
+        $productBranchPairs = $this->dao->select('product, branch')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
             ->fetchPairs();
+        $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
+        foreach($productBranchPairs as $product => $branch)
+        {
+            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = join(',', array_keys($branches[$product]));
+        }
+
+        return $productBranchPairs;
     }
 
     /**

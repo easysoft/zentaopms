@@ -217,7 +217,7 @@ $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = array('link' => "{$lang->productCommon}|project|manageproducts|projectID=%s", 'alias' => 'edit,start,suspend,delay,close');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
-$lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>New|project|create', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-plus">&nbsp;</span>New|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;{$lang->projectCommon}s|project|index|locate=no&status=undone&projectID=%s", 'float' => 'right');
 $lang->project->menu->index     = array('link' => "<i class='icon-home'></i>Homepage|project|index|locate=no", 'float' => 'right');
 
@@ -266,7 +266,7 @@ $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s', 'alias' =
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
 $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
 
 /* Report menu. */
 $lang->report = new stdclass();
@@ -286,9 +286,9 @@ $lang->company->menu->dept         = array('link' => 'Department|dept|browse', '
 $lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subModule' => 'group');
 $lang->company->menu->view         = array('link' => 'Company|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>Add Group|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-green-user-batchCreate">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<span class="icon-add">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<span class="icon-plus">&nbsp;</span>Add Group|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<span class="icon-plus-sign">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<span class="icon-plus">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();

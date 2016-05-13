@@ -50,9 +50,9 @@ class settingModel extends model
     public function setItem($path, $value = '')
     {
         /* fix bug when account has dot. */
-        $account = $this->app->user->account;
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
         $replace = false;
-        if(strpos($path, $account) === 0)
+        if($account and strpos($path, $account) === 0)
         {
             $replace = true;
             $path    = preg_replace("/^{$account}/", 'account', $path);
