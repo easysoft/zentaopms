@@ -50,6 +50,7 @@ function checkEmpty()
     var $dashboard = $('#dashboard');
     var hasBlocks = !!$dashboard.children('.row').children().length;
     $dashboard.find('.dashboard-empty-message').toggleClass('hide', hasBlocks);
+    if(!hasBlocks) $dashboard.find('.dashboard-actions').addClass('hide');
 }
 
 /**
