@@ -82,6 +82,7 @@ class convertModel extends model
         unset($userConstants['TABLE_TEAM']);
         unset($userConstants['TABLE_USERGROUP']);
         unset($userConstants['TABLE_STORYSTAGE']);
+        unset($userConstants['TABLE_SEARCHDICT']);
 
         /* Get max id of every table. */
         foreach($userConstants as $key => $value)
