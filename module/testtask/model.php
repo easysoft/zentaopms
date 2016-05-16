@@ -696,6 +696,9 @@ class testtaskModel extends model
             case 'lastRunResult':
                 if($run->lastRunResult) echo $this->lang->testcase->resultList[$run->lastRunResult];
                 break;
+            case 'story':
+                if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
+                break;
             case 'assignedTo':
                 $assignedTo = zget($users, $run->assignedTo, $run->assignedTo);
                 echo substr($assignedTo, strpos($assignedTo, ':') + 1);
