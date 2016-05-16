@@ -28,7 +28,7 @@ class qa extends control
             $this->fetch('custom', 'ajaxSetHomepage', "module=qa&page=index");
         }
 
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=qa")));
 
         $homepage = $this->config->qa->homepage;
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
