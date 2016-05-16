@@ -1016,7 +1016,7 @@ class testcaseModel extends model
                 if(common::hasPriv('testcase', 'delete'))
                 {
                     $deleteURL = helper::createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"batchForm\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
                 }
 
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe');

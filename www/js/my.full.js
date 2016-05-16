@@ -928,15 +928,12 @@ function ajaxDelete(url, replaceID, notice)
             {
                 if(data.result == 'success') 
                 {
-                    $('#' + replaceID).wrap("<div id='tmpDiv'></div>");
-                    $('#tmpDiv').load(document.location.href + ' #' + replaceID, function()
+                    $.get(document.location.href, function(data)
                     {
-                        $('#tmpDiv').replaceWith($('#tmpDiv').html());
-                        if(typeof sortTable == 'function')
-                        {
-                            sortTable(); 
-                        }
+                        $('#' + replaceID).html($(data).find('#' + replaceID).html());
+                        if(typeof sortTable == 'function') sortTable(); 
                         $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
+                        $('#' + replaceID).find('table.datatable').datatable();
                     });
                 }
             }

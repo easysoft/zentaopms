@@ -44,59 +44,60 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
     $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
     include $file2Include;
     ?>
-    <tfoot>
-      <tr>
-        <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 10;?>
-        <td colspan='<?php echo $mergeColums?>'>
-          <?php if($cases):?>
-          <div class='table-actions clearfix'>
-            <?php echo html::selectButton();?>
-            <div class='btn-group dropup'>
-              <?php
-              $class = "class='disabled'";
+      <tfoot>
+        <tr>
+          <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 10;?>
+          <td colspan='<?php echo $mergeColums?>'>
+            <?php if($cases):?>
+            <div class='table-actions clearfix'>
+              <?php echo html::selectButton();?>
+              <div class='btn-group dropup'>
+                <?php
+                $class = "class='disabled'";
 
-              $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
-              $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-              echo html::commonButton($lang->edit, $misc);
-              ?>
-              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
-              <ul class='dropdown-menu' id='moreActionMenu'>
-                <?php 
-                $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
-                $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
-                echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
-
-                $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-                $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-                echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
-
-                if(common::hasPriv('testcase', 'batchChangeModule'))
-                {
-                    $withSearch = count($modules) > 8;
-                    echo "<li class='dropdown-submenu'>";
-                    echo html::a('javascript:;', $lang->testcase->moduleAB, '', "id='moduleItem'");
-                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
-                    foreach($modules as $moduleId => $module)
-                    {
-                        $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
-                    }
-                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                    echo '</ul></li>';
-                }
-                else
-                {
-                    echo '<li>' . html::a('javascript:;', $lang->testcase->moduleAB, '', $class) . '</li>';
-                }
+                $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
+                $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                echo html::commonButton($lang->edit, $misc);
                 ?>
-              </ul>
+                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+                <ul class='dropdown-menu' id='moreActionMenu'>
+                  <?php 
+                  $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
+                  $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
+                  echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+
+                  $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
+                  $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+                  echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
+
+                  if(common::hasPriv('testcase', 'batchChangeModule'))
+                  {
+                      $withSearch = count($modules) > 8;
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->testcase->moduleAB, '', "id='moduleItem'");
+                      echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
+                      foreach($modules as $moduleId => $module)
+                      {
+                          $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
+                          echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                      }
+                      if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                      echo '</ul></li>';
+                  }
+                  else
+                  {
+                      echo '<li>' . html::a('javascript:;', $lang->testcase->moduleAB, '', $class) . '</li>';
+                  }
+                  ?>
+                </ul>
+              </div>
             </div>
-          </div>
-          <?php endif?>
-          <div class='text-right'><?php $pager->show();?></div>
-        </td>
-      </tr>
-    </tfoot>
+            <?php endif?>
+            <div class='text-right'><?php $pager->show();?></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
   </form>
 </div>
 <script>

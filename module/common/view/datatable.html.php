@@ -89,9 +89,7 @@ $(document).ready(function()
     };
     setTimeout(function(){fixScroll()}, 500);
 });
-</script>
-<?php endif;?>
-<script>
+
 /**
  * Fix scroll bar.
  * 
@@ -125,3 +123,4 @@ function fixScroll()
     });
 }
 </script>
+<?php endif;?>
