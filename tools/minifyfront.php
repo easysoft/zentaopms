@@ -19,7 +19,6 @@ $jsFiles[] = $jqueryRoot . 'chosen/min.js';
 $jsFiles[] = $jqueryRoot . 'treeview/min.js';
 $jsFiles[] = $jqueryRoot . 'datetimepicker/min.js';
 $jsFiles[] = $jsRoot     . 'chartjs/chart.min.js';
-$jsFiles[] = $jsRoot     . 'datatable/min.js';
 
 /* Combine these js files. */
 $allJSFile  = $jsRoot . 'all.js';
@@ -71,7 +70,6 @@ foreach($langs as $lang)
         $cssCode .= file_get_contents($jqueryRoot . 'chosen/min.css');
         $cssCode .= file_get_contents($themeRoot  . 'default/treeview.css');
         $cssCode .= file_get_contents($jqueryRoot . 'datetimepicker/min.css');
-        $cssCode .= file_get_contents($jsRoot     . 'datatable/min.css');
 
         /* Css file for current lang and current them. */
         $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
