@@ -132,6 +132,7 @@ $lang->project->assignedToMe         = 'To me';
 $lang->project->statusSelects['']             = 'More';
 $lang->project->statusSelects['wait']         = 'Wait';
 $lang->project->statusSelects['doing']        = 'Doing';
+$lang->project->statusSelects['finishedbyme'] = 'Finished by me';
 $lang->project->statusSelects['done']         = 'Done'; 
 $lang->project->statusSelects['closed']       = 'Closed';
 $lang->project->statusSelects['cancel']       = 'Cancel';
@@ -252,7 +253,6 @@ $lang->printKanban->typeList['increment'] = 'Increment';
 
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
-$lang->project->featureBar['task']['finishedbyme'] = 'Finished by me';
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
 $lang->project->featureBar['task']['needconfirm']  = 'Story changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
