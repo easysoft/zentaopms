@@ -298,7 +298,7 @@ class commonModel extends model
 
         echo "<div class='dropdown'>";
         echo "<a href='javascript:;' data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
-        echo "<ul class='dropdown-menu'>";
+        echo "<ul class='dropdown-menu pull-right'>";
         echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
         if(!commonModel::isTutorialMode() and self::hasPriv('tutorial', 'start')) echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'") . "</li>";
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true'") . '</li>';
