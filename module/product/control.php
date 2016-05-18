@@ -31,7 +31,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode');
-        if(empty($this->products) and strpos('create', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos(',create,index,showerrornone,', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
@@ -49,7 +49,13 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        if(!isset($this->config->product->homepage)) die($this->fetch('custom', 'ajaxSetHomepage', "module=product"));
+        if(!isset($this->config->product->homepage))
+        {
+            if($this->products) die($this->fetch('custom', 'ajaxSetHomepage', "module=product"));
+
+            $this->config->product->homepage = 'index';
+            $this->fetch('custom', 'ajaxSetHomepage', "module=product&page=index");
+        }
 
         $homepage = $this->config->product->homepage;
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';

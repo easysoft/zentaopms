@@ -24,7 +24,7 @@ class project extends control
         if($this->methodName != 'computeburn')
         {
             $this->projects = $this->project->getPairs('nocode');
-            if(!$this->projects and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
+            if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
         }
     }
 
@@ -39,15 +39,20 @@ class project extends control
      */
     public function index($locate = 'auto', $projectID = 0)
     {
-        if(!isset($this->config->project->homepage)) die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
+        if(!isset($this->config->project->homepage))
+        { 
+            if($this->projects) die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
+
+            $this->config->project->homepage = 'index';
+            $this->fetch('custom', 'ajaxSetHomepage', "module=project&page=index");
+        }
 
         $homepage = $this->config->project->homepage;
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
-
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         unset($this->lang->project->menu->index);
-        if($this->projects) $this->commonAction($projectID);
+        $this->project->setMenu($this->projects, key($this->projects));
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;

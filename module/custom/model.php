@@ -174,7 +174,7 @@ class customModel extends model
         }
         elseif($module)
         {
-            $menuOrder = $module == 'main' ? $lang->menuOrder : (isset($lang->$module->menuOrder) ? $lang->$module->menuOrder : array());
+            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->$module->menuOrder) ? $lang->$module->menuOrder : array());
             if($menuOrder)
             {
                 ksort($menuOrder);
@@ -271,6 +271,7 @@ class customModel extends model
         $customMenu = isset($config->customMenu->$module) ? $config->customMenu->$module : array();
         if(commonModel::isTutorialMode() && $module === 'main')$customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+        if($app->viewType == 'mhtml') $customMenu = array();
 
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
 

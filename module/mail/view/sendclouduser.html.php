@@ -86,11 +86,13 @@
         <tfoot>
           <tr>
             <td colspan='3'>
+              <div class='table-actions'>
               <?php
               echo html::selectButton();
               echo html::submitButton($lang->mail->remove);
               echo html::hidden('action', 'delete');
               ?>
+              </div>
              </td>
           </tr>
         </tfoot>

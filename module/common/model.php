@@ -299,9 +299,9 @@ class commonModel extends model
 
         echo "<div class='dropdown'>";
         echo "<a href='javascript:;' data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
-        echo "<ul class='dropdown-menu'>";
+        echo "<ul class='dropdown-menu pull-right'>";
         echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
-        if(!commonModel::isTutorialMode() and self::hasPriv('tutorial', 'start')) echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'") . "</li>";
+        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true'") . "</li>";
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true'") . '</li>';
         echo "</ul></div>";
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-class='modal-about'");
@@ -414,7 +414,7 @@ class commonModel extends model
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
         $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
-        if(!commonModel::isTutorialMode()) echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
+        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml') echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
