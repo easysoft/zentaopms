@@ -240,4 +240,22 @@ class sso extends control
             die('success');
         }
     }
+
+    /**
+     * Get todo list for ranzhi.
+     * 
+     * @param  string  $type 
+     * @param  string  $account 
+     * @access public
+     * @return void
+     */
+    public function getTodoList($type = '', $account = '')
+    {
+        $name   = $type == 'task' ? 'name' : 'title';
+        $table  = $type == 'task' ? TABLE_TASK : TABLE_BUG;
+        $status = $type == 'task' ? 'wait,doing' : 'active';
+
+        $datas = $this->dao->select("id, {$name}")->from($table)->where('assignedTo')->eq($account)->andWhere('status')->in($status)->fetchPairs();
+        die(json_encode($datas));
+    }
 }
