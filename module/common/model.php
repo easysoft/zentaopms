@@ -167,6 +167,7 @@ class commonModel extends model
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;
+        if($module == 'sso' and $method == 'gettodolist') return true;
         if($module == 'product' and $method == 'showerrornone') return true;
         if($module == 'block') return true;
 
