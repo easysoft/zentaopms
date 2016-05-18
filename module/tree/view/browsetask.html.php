@@ -102,8 +102,7 @@
 $(function()
 {
     var data = $.parseJSON('<?php echo json_encode($tree);?>');
-    var $tree = $('#modulesTree').tree(
-    {
+    var options = {
         name: 'tree-project-edit',
         initialState: 'preserve',
         data: data,
@@ -180,7 +179,13 @@ $(function()
                 });
             }
         }
-    });
+    };
+
+    if(<?php echo common::hasPriv('tree', 'updateorder') ? 'false' : 'true' ?>) options.actions["sort"] = false;
+    if(<?php echo common::hasPriv('tree', 'edit') ? 'false' : 'true' ?>) options.actions["edit"] = false;
+    if(<?php echo common::hasPriv('tree', 'delete') ? 'false' : 'true' ?>) options.actions["delete"] = false;
+
+    var $tree = $('#modulesTree').tree(options);
 
     var tree = $tree.data('zui.tree');
     if(!tree.store.time) tree.expand($tree.find('li:not(.tree-action-item)').first());

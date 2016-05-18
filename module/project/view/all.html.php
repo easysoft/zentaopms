@@ -29,7 +29,7 @@
 <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form id='projectsForm' class='form-condensed' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
 <table class='table table-fixed tablesorter' id='projectList'>
-  <?php $vars = "locate=no&status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+  <?php $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
       <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>

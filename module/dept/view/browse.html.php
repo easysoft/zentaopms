@@ -98,8 +98,7 @@
 $(function()
 {
     var data = $.parseJSON('<?php echo json_encode($tree);?>');
-    var $tree = $('#deptTree').tree(
-    {
+    var options = {
         name: 'deptTree',
         initialState: 'preserve',
         data: data,
@@ -164,7 +163,13 @@ $(function()
                 });
             }
         }
-    });
+    };
+
+    if(<?php echo common::hasPriv('dept', 'updateorder') ? 'false' : 'true' ?>) options.actions["sort"] = false;
+    if(<?php echo common::hasPriv('dept', 'edit') ? 'false' : 'true' ?>) options.actions["edit"] = false;
+    if(<?php echo common::hasPriv('dept', 'delete') ? 'false' : 'true' ?>) options.actions["delete"] = false;
+
+    var $tree = $('#deptTree').tree(options);
 
     var tree = $tree.data('zui.tree');
     if(!tree.store.time) tree.expand($tree.find('li:not(.tree-action-item)').first());
