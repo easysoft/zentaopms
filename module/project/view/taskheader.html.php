@@ -58,7 +58,10 @@
     }
 
     echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban) . '</li>';
-    if($project->type == 'sprint' or $project->type == 'waterfall') echo "<li id='burnTab'>"; common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); echo '</li>';
+    if($project->type == 'sprint' or $project->type == 'waterfall')
+    {
+        echo "<li id='burnTab'>"; common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); echo '</li>';
+    }
     echo "<li id='treeTab'>"; common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree); echo '</li>';
     echo "<li id='groupTab' class='dropdown'>";
     $groupBy = isset($groupBy) ? $groupBy : '';
