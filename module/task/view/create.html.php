@@ -74,8 +74,18 @@
               <div class="input-group">
                 <?php if(!$hiddenPri):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
-                <?php $isAllNumberPri = is_numeric(join($lang->task->priList));?>
-                <?php if(!$isAllNumberPri):?>
+                <?php
+                $hasCustomPri = false;
+                foreach($lang->task->priList as $priKey => $priValue)
+                {
+                    if($priKey != $priValue)
+                    {
+                        $hasCustomPri = true;
+                        break;
+                    }
+                }
+                ?>
+                <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', $lang->task->priList, '', "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
@@ -101,11 +111,11 @@
         <th><?php echo $lang->task->desc;?></th>
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
       </tr>  
-      <?php
-      $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
-      $hiddenDeadline   = strpos(",$showFields,", ',deadline,') === false;
-      $hiddenMailto     = strpos(",$showFields,", ',mailto,') === false;
-      ?>
+<?php
+            $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
+            $hiddenDeadline   = strpos(",$showFields,", ',deadline,') === false;
+            $hiddenMailto     = strpos(",$showFields,", ',mailto,') === false;
+?>
       <?php if(!$hiddenEstStarted or !$hiddenDeadline or !$hiddenMailto):?>
       <tr>
         <th><?php echo ($hiddenEstStarted and $hiddenDeadline) ? $lang->task->mailto : $lang->task->datePlan;?></th>
