@@ -1091,7 +1091,7 @@ class testcase extends control
     {
         if($_POST)
         {
-            $this->testcase->createFromImport($productID, $branch);
+            $this->testcase->createFromImport($productID, (int)$branch);
             die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
         }
 
