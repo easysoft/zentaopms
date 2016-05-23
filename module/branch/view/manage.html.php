@@ -22,11 +22,7 @@
       <td class="w-300px">
         <div id='branches'>
           <?php foreach($branches as $branchID => $branch):?>
-          <div class='input-group'>
-            <?php echo html::input("branch[$branchID]", $branch, "class='form-control'")?>
-             <span class='input-group-addon'><a href='javascript:;' onclick='addItem()'><i class='icon icon-plus'></i></a></span>
-             <span class='input-group-addon'><a href='<?php echo common::hasPriv('branch', 'delete') ? inlink('delete', "branch=$branchID") : '###';?>' class='<?php if(!common::hasPriv('branch', 'delete')) echo 'disabled'?>' target='hiddenwin'><i class='icon icon-remove'></i></a></span>
-          </div>
+          <div class='input-group'><?php echo html::input("branch[$branchID]", $branch, "class='form-control'")?></div>
           <?php endforeach;?>
           <?php for($i = 0; $i < 2; $i++):?>
           <div class='input-group'>
