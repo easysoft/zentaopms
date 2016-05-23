@@ -155,7 +155,6 @@ class projectModel extends model
                 }
             }
 
-
             $hasDone = false;
             foreach($projects as $project) 
             {
@@ -1710,8 +1709,8 @@ class projectModel extends model
      */
     public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y')
     {
-        $begin    = strtotime($begin);
-        $end      = strtotime($end);
+        $begin = strtotime($begin);
+        $end   = strtotime($end);
 
         $days = ($end - $begin) / 3600 / 24;
         if($type == 'noweekend')

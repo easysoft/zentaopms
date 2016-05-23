@@ -196,8 +196,8 @@ class taskModel extends model
             return false;
         }
 
-        $now     = helper::now();
-        $task    = fixer::input('post')
+        $now  = helper::now();
+        $task = fixer::input('post')
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('deadline', '0000-00-00')
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))

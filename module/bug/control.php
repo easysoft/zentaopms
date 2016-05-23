@@ -851,6 +851,7 @@ class bug extends control
         $users      = $this->user->getPairs('nodeleted');
         $assignedTo = $bug->openedBy;
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
+        unset($this->lang->bug->resolutionList['tostory']);
 
         $this->bug->setMenu($this->products, $productID, $bug->branch);
 
