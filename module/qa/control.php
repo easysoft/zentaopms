@@ -20,6 +20,7 @@ class qa extends control
     public function index($locate = 'auto', $productID = 0)
     {
         $this->products = $this->loadModel('product')->getPairs('nocode');
+        if($this->app->user->account == 'guest') $this->config->qa->homepage = 'index';
         if(!isset($this->config->qa->homepage))
         {
             if($this->products) die($this->fetch('custom', 'ajaxSetHomepage', "module=qa"));

@@ -39,6 +39,7 @@ class project extends control
      */
     public function index($locate = 'auto', $projectID = 0)
     {
+        if($this->app->user->account == 'guest') $this->config->project->homepage = 'index';
         if(!isset($this->config->project->homepage))
         { 
             if($this->projects) die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));

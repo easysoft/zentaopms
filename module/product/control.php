@@ -49,6 +49,7 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        if($this->app->user->account == 'guest') $this->config->product->homepage = 'index';
         if(!isset($this->config->product->homepage))
         {
             if($this->products) die($this->fetch('custom', 'ajaxSetHomepage', "module=product"));
