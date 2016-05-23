@@ -235,7 +235,7 @@ class block extends control
     public function dynamic()
     {
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today');
-        $this->view->users   = $this->loadModel('user')->getPairs();
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

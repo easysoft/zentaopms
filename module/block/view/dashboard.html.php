@@ -14,8 +14,9 @@ $webRoot   = $config->webRoot;
 $jsRoot    = $webRoot . "js/";
 $themeRoot = $webRoot . "theme/";
 if(isset($pageCSS)) css::internal($pageCSS);
+$useGuest = $this->app->user->account == 'guest';
 ?>
-<div class='dashboard dashboard-draggable' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
+<div class='dashboard<?php if(!$useGuest) echo ' dashboard-draggable'?>' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
   <div class='dashboard-actions'><a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' data-title='<?php echo $lang->block->createBlock?>'><i class='icon icon-plus' title='<?php echo $lang->block->createBlock?>' data-toggle='tooltip' data-placement='left'></i></a></div>
   <div class='dashboard-empty-message hide'>
     <a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' class='btn btn-primary'><i class='icon icon-plus'></i> <?php echo $lang->block->createBlock?></a>
@@ -33,7 +34,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
                 <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh ?></a></li>
-                <?php if($this->app->user->account != 'guest'):?>
+                <?php if(!$useGuest):?>
                 <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit; ?></a></li>
                 <?php if(!$block->source and $block->block == 'html'):?>
                 <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><i class='icon-eye-close'></i><?php echo $lang->block->hidden; ?></a></li>
@@ -55,7 +56,8 @@ if(isset($pageCSS)) css::internal($pageCSS);
 <script>
 config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';
 config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
-var module = '<?php echo $module?>';
+var module   = '<?php echo $module?>';
+var useGuest = <?php echo $useGuest?>;
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php if(isset($pageJS)) js::execute($pageJS);?>
