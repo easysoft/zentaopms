@@ -29,7 +29,7 @@ js::set('productID' , $bug->product);
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->bug->resolution;?></th>
-      <td class='w-p35-f'><?php unset($lang->bug->resolutionList['tostory']); echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td><td></td>
+      <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td><td></td>
     </tr>
     <tr id='duplicateBugBox' class='hide'>
       <th><?php echo $lang->bug->duplicateBug;?></th>
