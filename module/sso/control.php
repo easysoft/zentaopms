@@ -244,18 +244,15 @@ class sso extends control
     /**
      * Get todo list for ranzhi.
      * 
-     * @param  string  $type 
      * @param  string  $account 
      * @access public
      * @return void
      */
-    public function getTodoList($type = '', $account = '')
+    public function getTodoList($account = '')
     {
-        $name   = $type == 'task' ? 'name' : 'title';
-        $table  = $type == 'task' ? TABLE_TASK : TABLE_BUG;
-        $status = $type == 'task' ? 'wait,doing' : 'active';
-
-        $datas = $this->dao->select("id, {$name}")->from($table)->where('assignedTo')->eq($account)->andWhere('status')->in($status)->fetchPairs();
+        $datas = array();
+        $datas['task'] = $this->dao->select("id, name")->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('status')->in('wait,doing')->fetchPairs();
+        $datas['bug']  = $this->dao->select("id, title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->fetchPairs();
         die(json_encode($datas));
     }
 }
