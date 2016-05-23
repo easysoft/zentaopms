@@ -163,7 +163,6 @@ class cronModel extends model
     public function create()
     {
         $cron = fixer::input('post')
-            ->add('type', 'custom')
             ->add('status', 'normal')
             ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
