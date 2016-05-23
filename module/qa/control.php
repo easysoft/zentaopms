@@ -36,7 +36,7 @@ class qa extends control
 
         unset($this->lang->qa->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
-        $branch    = $this->cookie->preBranch;
+        $branch    = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
         $this->view->title      = $this->lang->qa->index;

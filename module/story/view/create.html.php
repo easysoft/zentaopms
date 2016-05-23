@@ -105,8 +105,18 @@
               <div class="input-group">
                 <?php if(!$hiddenPri):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->pri;?></span>
-                <?php $isAllNumberPri = is_numeric(join('', $lang->story->priList)); ?>
-                <?php if(!$isAllNumberPri):?>
+                <?php
+                $hasCustomPri = false;
+                foreach($lang->story->priList as $priKey => $priValue)
+                {
+                    if($priKey != $priValue)
+                    {
+                        $hasCustomPri = true;
+                        break;
+                    }
+                }
+                ?>
+                <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-set='0,1,2,3,4'>

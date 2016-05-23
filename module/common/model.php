@@ -169,13 +169,14 @@ class commonModel extends model
         if($module == 'sso' and $method == 'bind') return true;
         if($module == 'sso' and $method == 'gettodolist') return true;
         if($module == 'product' and $method == 'showerrornone') return true;
-        if($module == 'block') return true;
+        if($module == 'block' and $method == 'printblock') return true;
 
         if($this->loadModel('user')->isLogon())
         {
             if(stripos($method, 'ajax') !== false) return true;
             if(stripos($method, 'downnotify') !== false) return true;
             if($module == 'tutorial') return true;
+            if($module == 'block') return true;
         }
 
         if(stripos($method, 'ajaxgetdropmenu') !== false) return true;

@@ -1419,10 +1419,11 @@ class treeModel extends model
     public function checkUnique($rootID, $viewType, $parentModuleID, $modules = array(), $branches = array())
     {
         if(empty($branches)) $branches = $this->post->branch;
+        $branches = array_unique($branches);
 
         if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
 
-        $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->fetchAll();
+        $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->andWhere('branch')->in($branches)->fetchAll();
         $repeatName    = '';
         foreach($modules as $id => $name)
         {

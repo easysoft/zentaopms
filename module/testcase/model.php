@@ -736,8 +736,9 @@ class testcaseModel extends model
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('file');
-        $now  = helper::now();
-        $data = fixer::input('post')->get();
+        $now    = helper::now();
+        $branch = (int)$branch;
+        $data   = fixer::input('post')->get();
 
         if(!empty($_POST['id']))
         {

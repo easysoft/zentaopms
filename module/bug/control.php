@@ -66,9 +66,9 @@ class bug extends control
 
         /* Set productID, moduleID, queryID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
-        $branch    = ($branch == '') ? $this->cookie->preBranch  : $branch;
+        $branch    = ($branch == '') ? (int)$this->cookie->preBranch  : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
@@ -230,7 +230,7 @@ class bug extends control
 
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->cookie->preBranch;
+        if($branch === '') $branch = (int)$this->cookie->preBranch;
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
         $this->bug->setMenu($this->products, $productID, $branch);
 
@@ -367,7 +367,7 @@ class bug extends control
 
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->cookie->preBranch;
+        if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->bug->setMenu($this->products, $productID, $branch);
 
         /* If projectID is setted, get builds and stories of this project. */

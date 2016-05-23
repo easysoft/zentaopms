@@ -126,8 +126,18 @@ js::set('refresh', $lang->refresh);
               <div class='input-group'>
                 <?php if($showSeverity):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->severity;?></span>
-                <?php $isAllNumberSeverity = is_numeric(join($lang->bug->severityList));?>
-                <?php if(!$isAllNumberSeverity):?>
+                <?php
+                $hasCustomSeverity = false;
+                foreach($lang->bug->severityList as $severityKey => $severityValue)
+                {
+                    if($severityKey != $severityValue)
+                    {
+                        $hasCustomSeverity = true;
+                        break;
+                    }
+                }
+                ?>
+                <?php if($hasCustomSeverity):?>
                 <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-prefix='severity'>
@@ -141,8 +151,18 @@ js::set('refresh', $lang->refresh);
                 <?php endif;?>
                 <?php if($showPri):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->bug->pri;?></span>
-                <?php $isAllNumberPri = is_numeric(join($lang->bug->priList));?>
-                <?php if(!$isAllNumberPri):?>
+                <?php
+                $hasCustomPri = false;
+                foreach($lang->bug->priList as $priKey => $priValue)
+                {
+                    if($priKey != $priValue)
+                    {
+                        $hasCustomPri = true;
+                        break;
+                    }
+                }
+                ?>
+                <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', (array)$lang->bug->priList, '', "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
