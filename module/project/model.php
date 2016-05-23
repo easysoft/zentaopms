@@ -817,10 +817,11 @@ class projectModel extends model
 
             if(strpos($this->session->taskQuery, "deleted =") === false)   $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
-            $projectQuery = "`project`" . helper::dbIN(array_keys($projects));
-            $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
+            $taskQuery = $this->session->taskQuery;
             /* Limit current project when no project. */
             if(strpos($taskQuery, "`project` =") === false) $taskQuery = $taskQuery . " AND `project` = $projectID";
+            $projectQuery = "`project` " . helper::dbIN(array_keys($projects));
+            $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $sort);

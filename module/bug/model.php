@@ -1897,7 +1897,7 @@ class bugModel extends model
         {
             $products = array_keys($this->loadModel('product')->getPrivProducts());
             $bugQuery = str_replace($allProduct, '1', $this->session->bugQuery);
-            $bugQuery = $bugQuery . ' AND `product`' . helper::dbIN($products);
+            $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
         }
         if($branch) $bugQuery .= " AND `branch` in('0','$branch')";
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)

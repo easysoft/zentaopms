@@ -344,7 +344,7 @@ class testtaskModel extends model
             {
                 $products  = array_keys($this->loadModel('product')->getPrivProducts());
                 $caseQuery = str_replace($allProduct, '1', $this->session->testtaskQuery);
-                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+                $caseQuery = $caseQuery . ' AND `product `' . helper::dbIN(array_keys($products));
                 $queryProductID = 'all';
             }
 
@@ -353,6 +353,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($task->id)
+                ->beginIF($queryProductID != 'all')->andWhere('t2.product')->eq($queryProductID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
                 ->page($pager)

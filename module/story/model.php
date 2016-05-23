@@ -1432,7 +1432,7 @@ class storyModel extends model
             $storyQuery     = str_replace($allProduct, '1', $this->session->storyQuery);
             $queryProductID = 'all';
         }
-        $storyQuery = $storyQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+        $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
         if($projectID != '')
         {
             foreach($products as $product) $branches[$product->branch] = $product->branch;
@@ -1462,18 +1462,14 @@ class storyModel extends model
      */
     public function getBySQL($productID, $sql, $orderBy, $pager = null)
     {
-        $productIDs = array_keys($this->loadModel('product')->getPrivProducts());
-
         /* Get plans. */
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq('0')
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
-            ->beginIF($productID == 'all')->andWhere('product')->in($productIDs)->fi()
             ->fetchPairs();
 
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
-            ->beginIF($productID == 'all')->andWhere('product')->in($productIDs)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
