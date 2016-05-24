@@ -39,7 +39,7 @@
     </ul>
  
     <div>
-      <?php echo html::a($this->createLink('product', 'index', "locate=no&productID=$productID"), "<i class='icon-cubes mgr-5px'></i> " . $lang->product->allProduct)?>
+      <?php echo html::a($this->createLink('product', 'all', "productID=$productID"), "<i class='icon-cubes mgr-5px'></i> " . $lang->product->allProduct)?>
       <?php if($closeds):?>
       <div class='pull-right actions'><a id='more' href='javascript:switchMore()'><?php echo $lang->product->closed;?> <i class='icon-angle-right'></i></a></div>
       <?php endif;?>

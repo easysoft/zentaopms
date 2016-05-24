@@ -9,7 +9,7 @@ function showLink(buildID, type, param)
 
         var formID = type == 'story' ? '#unlinkedStoriesForm' : '#unlinkedBugsForm';
         setTimeout(function(){fixedTfootAction(formID)}, 100);
-        autoCheck();
+        checkTable($(formID).find('table'));
     });
 }
 $(function()

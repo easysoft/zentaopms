@@ -385,6 +385,7 @@ $lang->error->accessDenied    = 'No purview';
 $lang->error->pasteImg        = 'Your browser does not support the paste image!';
 $lang->error->noData          = 'No data';
 $lang->error->editedByOther   = 'The record may have been changed. Please refresh and re edit!';
+$lang->error->tutorialData    = 'Novice mode will not insert data, please exit it to operation';
 
 /* Pager. */
 $lang->pager = new stdclass();

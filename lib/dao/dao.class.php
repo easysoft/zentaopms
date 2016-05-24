@@ -20,6 +20,11 @@ helper::import(dirname(dirname(__FILE__)) . '/base/dao/dao.class.php');
  */
 class dao extends baseDAO
 {
+    public function exec($sql = '')
+    {
+        if(isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']) die(js::alert($this->lang->error->tutorialData));
+        return parent::exec($sql);
+    }
 }
 
 /**

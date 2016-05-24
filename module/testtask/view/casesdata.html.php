@@ -26,12 +26,13 @@
           <th class='w-120px {sorter: false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
+      <?php
+      $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+      $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
+      $canBatchRun    = common::hasPriv('testtask', 'batchRun');
+      ?>
+      <?php if($runs):?>
       <tbody>
-        <?php
-        $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
-        $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
-        $canBatchRun    = common::hasPriv('testtask', 'batchRun');
-        ?>
         <?php foreach($runs as $run):?>
         <tr class='text-center'>
           <td class='text-left'>
@@ -68,3 +69,4 @@
         </tr>
         <?php endforeach;?>
       </tbody>
+      <?php endif;?>

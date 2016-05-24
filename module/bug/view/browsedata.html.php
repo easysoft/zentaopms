@@ -41,6 +41,7 @@
         <?php endif;?>
       </tr>
       </thead>
+      <?php if($bugs):?>
       <tbody>
       <?php foreach($bugs as $bug):?>
       <?php $bugLink = inlink('view', "bugID=$bug->id");?>
@@ -96,3 +97,4 @@
       </tr>
       <?php endforeach;?>
       </tbody>
+      <?php endif;?>
