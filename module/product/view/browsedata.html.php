@@ -26,6 +26,7 @@
         <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
+      <?php if($stories):?>
       <tbody>
       <?php foreach($stories as $key => $story):?>
       <?php
@@ -76,3 +77,4 @@
       </tr>
       <?php endforeach;?>
       </tbody>
+      <?php endif;?>

@@ -37,6 +37,7 @@
           <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
+      <?php if($tasks):?>
       <tbody>
       <?php foreach($tasks as $task):?>
       <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
@@ -106,3 +107,4 @@
       </tr>
       <?php endforeach;?>
       </tbody>
+      <?php endif?>

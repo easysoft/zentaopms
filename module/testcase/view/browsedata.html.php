@@ -30,6 +30,7 @@
           <?php endif;?>
         </tr>
       </thead>
+      <?php if($cases):?>
       <tbody>
       <?php foreach($cases as $case):?>
       <tr class='text-center'>
@@ -74,3 +75,4 @@
       </tr>
       <?php endforeach;?>
       </tbody>
+      <?php endif;?>
