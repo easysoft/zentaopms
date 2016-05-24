@@ -385,6 +385,7 @@ $lang->error->accessDenied    = '您没有访问权限';
 $lang->error->pasteImg        = '您的浏览器不支持粘贴图片！';
 $lang->error->noData          = '没有数据';
 $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
+$lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();

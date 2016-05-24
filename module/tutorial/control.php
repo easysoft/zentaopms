@@ -31,8 +31,8 @@ class tutorial extends control
     {
         $setting = isset($this->config->tutorial->tasks->setting) ? $this->config->tutorial->tasks->setting : '';
 
-        $this->session->set('tutorialMode', true);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', true);
+        $this->session->set('tutorialMode', true);
 
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
@@ -55,7 +55,9 @@ class tutorial extends control
         if($finish == 'keepAll') $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
 
         $account = $this->app->user->account;
+        $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $finish);
+        $this->session->set('tutorialMode', true);
         $this->send(array('result' => 'success'));
     }
 
