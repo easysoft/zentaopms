@@ -170,6 +170,7 @@ class commonModel extends model
         if($module == 'sso' and $method == 'gettodolist') return true;
         if($module == 'product' and $method == 'showerrornone') return true;
         if($module == 'block' and $method == 'printblock') return true;
+        if($module == 'block' and $method == 'main') return true;
 
         if($this->loadModel('user')->isLogon())
         {

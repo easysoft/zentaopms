@@ -192,6 +192,7 @@ class sso extends control
      */
     public function getUserPairs()
     {
+        if(!$this->sso->checkKey()) return false;
         $users = $this->loadModel('user')->getPairs('noclosed,nodeleted');
         die(json_encode($users));
     }
@@ -204,6 +205,7 @@ class sso extends control
      */
     public function getBindUsers()
     {
+        if(!$this->sso->checkKey()) return false;
         $users = $this->sso->getBindUsers();
         die(json_encode($users));
     }
@@ -250,6 +252,8 @@ class sso extends control
      */
     public function getTodoList($account = '')
     {
+        if(!$this->sso->checkKey()) return false;
+
         $datas = array();
         $datas['task'] = $this->dao->select("id, name")->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('status')->in('wait,doing')->fetchPairs();
         $datas['bug']  = $this->dao->select("id, title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->fetchPairs();
