@@ -23,7 +23,7 @@
         <th width='45'><?php echo $lang->project->totalEstimate;?></th>
         <th width='45'><?php echo $lang->project->totalConsumed;?></th>
         <th width='45'><?php echo $lang->project->totalLeft;?></th>
-        <th width='100'><?php echo $lang->project->progess;?></th>
+        <th width='110'><?php echo $lang->project->progess;?></th>
         <th width='100'><?php echo $lang->project->burn;?></th>
       </tr>
     </thead>
@@ -46,7 +46,7 @@
         <td><?php echo $project->hours->totalConsumed;?></td>
         <td><?php echo $project->hours->totalLeft;?></td>
         <td class='text-left'>
-          <img class='progressbar' src='<?php echo $this->app->getWebRoot();?>theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress);?>'>
+          <img class='progressbar' src='<?php echo $this->app->getWebRoot();?>theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress * 0.7);?>'>
           <small><?php echo $project->hours->progress;?>%</small>
         </td>
         <td id='spark-<?php echo $id++?>' class='spark text-left pd-0' values='<?php echo join(',', $project->burns);?>'></td>
