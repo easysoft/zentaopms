@@ -68,6 +68,7 @@ $whiteList[] = 'sso-getuserpairs';
 $whiteList[] = 'sso-getbindusers';
 $whiteList[] = 'sso-binduser';
 $whiteList[] = 'sso-createuser';
+$whiteList[] = 'sso-gettodolist';
 $whiteList[] = 'mail-asyncsend';
 $whiteList[] = 'user-reset';
 $whiteList[] = 'product-showerrornone';
