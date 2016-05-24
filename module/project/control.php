@@ -323,7 +323,7 @@ class project extends control
 
         $project  = $this->commonAction($toProject);
         $branches = $this->project->getProjectBranches($toProject);
-        $tasks    = $this->project->getTasks2Imported($branches);
+        $tasks    = $this->project->getTasks2Imported($toProject, $branches);
         $projects = $this->project->getProjectsToImport(array_keys($tasks));
         unset($projects[$toProject]);
         unset($tasks[$toProject]);

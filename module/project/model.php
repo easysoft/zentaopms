@@ -997,20 +997,26 @@ class projectModel extends model
     /**
      * Get tasks can be imported.
      * 
+     * @param  int    $toProject
      * @param  array  $branches 
      * @access public
      * @return array
      */
-    public function getTasks2Imported($branches)
+    public function getTasks2Imported($toProject, $branches)
     {
         $this->loadModel('task');
+
+        $products = $this->getProducts($toProject);
+        $projects = $this->dao->select('product, project')->from(TABLE_PROJECTPRODUCT)->where('product')->in(array_keys($products))->fetchGroup('project');
+        $branches = str_replace(',', "','", $branches);
+
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait, doing, pause, cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.product')->in(array_keys($branches))
-            ->andWhere("(t1.story = 0 OR t2.branch in ('0','" . join("','", $branches) . "'))")
+            ->andWhere('t1.project')->in(array_keys($projects))
+            ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . join("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->fetchGroup('project', 'id');
         return $tasks;
     }
