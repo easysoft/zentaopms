@@ -57,7 +57,7 @@ $useGuest = $this->app->user->account == 'guest';
 config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';
 config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
-var useGuest = <?php echo $useGuest?>;
+var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php if(isset($pageJS)) js::execute($pageJS);?>

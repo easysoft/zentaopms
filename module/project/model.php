@@ -1687,9 +1687,9 @@ class projectModel extends model
         {
             $link = helper::createLink($module, $method, "projectID=%s&type=$extra");
         }
-        elseif($module == 'project' && $method == 'index')
+        elseif($module == 'project' && ($method == 'index' or $method == 'all'))
         {
-            $link = helper::createLink($module, $method, "locate=no&status=undone&projectID=%s");
+            $link = helper::createLink($module, 'task', "projectID=%s");
         }
         else
         {

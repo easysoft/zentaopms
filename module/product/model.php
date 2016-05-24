@@ -96,6 +96,11 @@ class productModel extends model
         if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
         if(!isset($products[$this->session->product])) $this->session->set('product', key($products));
+        if($this->cookie->preProductID != $productID)
+        {
+            $this->cookie->set('preBranch', 0);
+            setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
 
         return $this->session->product;
     }
@@ -778,7 +783,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('product,roadmap,bug,testcase,testtask,story', $module) !== false)
+        if(strpos('product,roadmap,bug,testcase,testtask,story,qa', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {
@@ -788,13 +793,13 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "productID=%s");
             }
-            elseif($module == 'product' && $method == 'index')
+            elseif($module == 'qa' && $method == 'index')
             {
-                $link = helper::createLink($module, $method, "locate=no&productID=%s");
+                $link = helper::createLink('bug', 'browse', "productID=%s" . ($branch ? "&branch=%s" : ''));
             }
-            elseif($module == 'product' && $method == 'browse')
+            elseif($module == 'product' && ($method == 'browse' or $method == 'index' or $method == 'all'))
             {
-                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
+                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : ''));
             }
             else
             {

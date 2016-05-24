@@ -53,7 +53,8 @@ class project extends control
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         unset($this->lang->project->menu->index);
-        $this->project->setMenu($this->projects, key($this->projects));
+        $this->commonAction($projectID);
+        //$this->project->setMenu($this->projects, key($this->projects));
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
