@@ -660,7 +660,7 @@ class user extends control
             if($this->post->account)  $account  = $this->post->account;
             if($this->get->account)   $account  = $this->get->account;
             if($this->post->password) $password = $this->post->password;
-            if($this->get->password)  $password = base64_decode($this->get->password);
+            if($this->get->password)  $password = $this->get->password;
 
             if($this->user->checkLocked($account))
             {
