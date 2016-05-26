@@ -8,4 +8,5 @@ function changeGroup(role)
     {
         $('#group').val(''); 
     }
+    $('#group').trigger("chosen:updated");
 }
