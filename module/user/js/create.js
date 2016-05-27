@@ -1,6 +1,6 @@
 function changeGroup(role)
 {
-    if(role || roleGroup[role])
+    if(role && roleGroup[role])
     {
         $('#group').val(roleGroup[role]); 
     }
