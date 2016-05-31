@@ -89,6 +89,7 @@ class sendcloud
     {
         $url = 'http://api.notice.sendcloud.net/linkmanMember/list';
         $param['accessKey'] = $this->accessKey;
+        $param['pageSize']  = 1000;
 
         $result = $this->querySendcloud($url, $param);
         if($result->result == false and $result->statusCode != '481')
