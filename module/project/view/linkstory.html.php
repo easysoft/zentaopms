@@ -49,7 +49,7 @@
       </td>
       <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
-      <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left nobr' title="<?php echo $story->title?>"><span class='label label-info'><?php echo zget($modules, $story->module, '')?></span> <?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <?php if($productType != 'normal'):?>
       <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
