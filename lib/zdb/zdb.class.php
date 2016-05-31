@@ -58,7 +58,14 @@ class zdb
         }
 
         /* Dump all tables when tables is empty. */
-        if(empty($tables)) $tables = $allTables;
+        if(empty($tables))
+        {
+            $tables = $allTables;
+        }
+        else
+        {
+            foreach($tables as $table) $tables[$table] = $allTables[$table];
+        }
 
         /* Check file. */
         if(empty($fileName))
