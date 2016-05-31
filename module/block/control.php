@@ -187,6 +187,7 @@ class block extends control
      */
     public function dashboard($module)
     {
+        $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module);
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
