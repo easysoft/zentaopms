@@ -1,6 +1,6 @@
 function changeGroup(role, i)
 {
-    if(role || roleGroup[role])
+    if(role && roleGroup[role])
     {
         $('#group' + i).val(roleGroup[role]); 
     }
@@ -8,6 +8,7 @@ function changeGroup(role, i)
     {
         $('#group' + i).val(''); 
     }
+    $('#group' + i).trigger('chosen:updated');
 }
 function toggleCheck(obj, i)
 {
