@@ -30,6 +30,7 @@ class search extends control
         $fieldParams  = empty($fieldParams) ?  json_decode($this->session->searchParams['fieldParams'], true)  : $fieldParams;
         $actionURL    = empty($actionURL) ?    $this->session->searchParams['actionURL'] : $actionURL;
         $style        = isset($_SESSION['searchParams']['style']) ? $this->session->searchParams['style'] : '';
+        $onMenuBar    = isset($_SESSION['searchParams']['onMenuBar']) ? $this->session->searchParams['onMenuBar'] : '';
         $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->view->module       = $module;
@@ -40,6 +41,7 @@ class search extends control
         $this->view->queries      = $this->search->getQueryPairs($module);
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
+        $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
         $this->display();
     }
 
@@ -61,7 +63,7 @@ class search extends control
      * @access public
      * @return void
      */
-    public function saveQuery($module)
+    public function saveQuery($module, $onMenuBar = 'no')
     {
         if($_POST)
         {
@@ -69,7 +71,8 @@ class search extends control
             if(!$queryID) die(js::error(dao::getError()));
             die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID)}"));
         }
-        $this->view->module = $module;
+        $this->view->module    = $module;
+        $this->view->onMenuBar = $onMenuBar;
         $this->display();
     }
 

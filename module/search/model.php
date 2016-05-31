@@ -28,6 +28,7 @@ class searchModel extends model
         $searchParams['fieldParams']  = json_encode($searchConfig['params']);
         $searchParams['actionURL']    = $searchConfig['actionURL'];
         $searchParams['style']        = zget($searchConfig, 'style', 'full');
+        $searchParams['onMenuBar']    = zget($searchConfig, 'onMenuBar', 'no');
         $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
         $this->session->set('searchParams', $searchParams);

@@ -14,7 +14,7 @@
 <form target='hiddenwin' method='post' style='padding: 20px 5% 30px'>
   <div class='input-group'>
     <input name='title' id='title' class="form-control" autocomplete="off" type="text">
-    <?php if($module != 'user'):?>
+    <?php if($onMenuBar == 'yes'):?>
     <span class='input-group-addon'>
       <label class="checkbox-inline">
         <input type="checkbox" name="onMenuBar" value="1" id="onMenuBar" />

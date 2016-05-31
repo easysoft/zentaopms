@@ -189,6 +189,7 @@ class project extends control
 
        /* Build the search form. */
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
+        $this->config->project->search['onMenuBar'] = 'yes';
         $this->project->buildSearchForm($projectID, $this->projects, $queryID, $actionURL);
         $this->loadModel('search')->mergeFeatureBar('project', 'task');
 
@@ -1682,6 +1683,8 @@ class project extends control
         $productType  = 'normal';
         $productNum   = count($products);
         $branches     = array();
+        $modules      = array();
+        $this->loadModel('tree');
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
@@ -1703,14 +1706,16 @@ class project extends control
                     $branchPairs += $productBranches;
                 }
             }
+            foreach($this->tree->getOptionMenu($product->id) as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
         }
 
         /* Build search form. */
-        unset($this->config->product->search['fields']['module']);
+        if(count($products) >= 2) unset($this->config->product->search['fields']['module']);
         $this->config->product->search['actionURL'] = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+        if(count($products) == 1) $this->config->product->search['params']['module']['values'] = $modules;
         unset($this->lang->story->statusList['draft']);
         if($productType == 'normal')
         {
@@ -1748,6 +1753,7 @@ class project extends control
         $this->view->prjStories   = $prjStories;
         $this->view->browseType   = $browseType;
         $this->view->productType  = $productType;
+        $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
         $this->display();

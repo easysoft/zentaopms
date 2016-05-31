@@ -400,7 +400,7 @@ foreach($fieldParams as $fieldName => $param)
       if($style != 'simple')
       {
           echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)');
-          if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module"), $lang->save, '', "class='saveQuery btn'");
+          if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='saveQuery btn'");
       }
       echo '</div>';
       ?>
