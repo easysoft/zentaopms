@@ -490,7 +490,7 @@ function setOuterBox()
     var resetOuterHeight = function()
     {
         var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
-        var height = Math.max(sideH, $(window).height() - $('#header').height() - $('#footer').height() - 33);
+        var height = Math.max(sideH, $(window).height() - $('#header').outerHeight() - ($('#footer').outerHeight() || 0) - 20);
         if(navigator.userAgent.indexOf("MSIE 8.0") >= 0) height -= 40;
         $('#wrap .outer').css('min-height', height);
     }
