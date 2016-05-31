@@ -167,8 +167,9 @@ class customModel extends model
             {
                 foreach($customMenu as $customMenuItem)
                 {
-                    if(!isset($customMenuItem->order)) $customMenuItem->order = $order++;
+                    if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
                     $customMenuMap[$customMenuItem->name] = $customMenuItem;
+                    $order++;
                 }
             }
         }
@@ -242,11 +243,11 @@ class customModel extends model
                 if($hidden) $menuItem->hidden  = $hidden;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
+                while(isset($menu[$menuItem->order])) $menuItem->order++;
                 $menu[$menuItem->order] = $menuItem;
             }
         }
 
-        while(isset($menu[$menuItem->order])) $menuItem->order++;
         ksort($menu, SORT_NUMERIC);
         return array_values($menu);
     }
