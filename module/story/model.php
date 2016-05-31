@@ -1427,9 +1427,9 @@ class storyModel extends model
         $allProduct     = "`product` = 'all'";
         $storyQuery     = $this->session->storyQuery;
         $queryProductID = $productID;
-        if(strpos($this->session->storyQuery, $allProduct) !== false)
+        if(strpos($storyQuery, $allProduct) !== false)
         {
-            $storyQuery     = str_replace($allProduct, '1', $this->session->storyQuery);
+            $storyQuery     = str_replace($allProduct, '1', $storyQuery);
             $queryProductID = 'all';
         }
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));

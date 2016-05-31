@@ -821,7 +821,7 @@ class projectModel extends model
             /* Limit current project when no project. */
             if(strpos($taskQuery, "`project` =") === false) $taskQuery = $taskQuery . " AND `project` = $projectID";
             $projectQuery = "`project` " . helper::dbIN(array_keys($projects));
-            $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
+            $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $taskQuery); // Search all project.
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $sort);

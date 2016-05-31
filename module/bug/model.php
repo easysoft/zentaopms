@@ -1896,7 +1896,7 @@ class bugModel extends model
         if(strpos($bugQuery, $allProduct) !== false)
         {
             $products = array_keys($this->loadModel('product')->getPrivProducts());
-            $bugQuery = str_replace($allProduct, '1', $this->session->bugQuery);
+            $bugQuery = str_replace($allProduct, '1', $bugQuery);
             $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
         }
         if($branch) $bugQuery .= " AND `branch` in('0','$branch')";
