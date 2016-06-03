@@ -297,6 +297,19 @@ class userModel extends model
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
 
+                /* Change for append field, such as feedback.*/
+                if(!empty($this->config->user->batchAppendFields))
+                {
+                    $appendFields = explode(',', $this->config->user->batchAppendFields);
+                    foreach($appendFields as $appendField)
+                    {
+                        if(empty($appendField)) continue;
+                        if(!isset($users->$appendField)) continue;
+                        $fieldList = $users->$appendField;
+                        $data[$i]->$appendField = $fieldList[$i];
+                    }
+                }
+
                 $accounts[$i]     = $data[$i]->account;
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
