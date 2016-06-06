@@ -313,7 +313,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($stories[$storyID]) ? $stories[$storyID]->module : 0);
+        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($story->module) ? $story->module : 0);
         $this->view->stories          = $stories;
         $this->view->type             = $type;
         $this->view->stage            = $stage;
