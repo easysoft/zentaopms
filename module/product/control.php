@@ -632,6 +632,7 @@ class product extends control
     public function all($productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->session->set('productList', $this->app->getURI(true));
+        $productID = $this->product->saveState($productID, $this->products);
         if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
 
         /* Load pager and get tasks. */
