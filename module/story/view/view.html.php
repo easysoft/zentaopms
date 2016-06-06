@@ -162,11 +162,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->source;?></th>
-                <td><?php echo $lang->story->sourceList[$story->source];?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->story->sourceNote;?></th>
-                <td id='sourceNote'><?php echo $story->sourceNote;?></td>
+                <td id='source'><?php echo $lang->story->sourceList[$story->source] . ' ' . $story->sourceNote;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
