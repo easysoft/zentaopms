@@ -72,6 +72,8 @@
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->story->source?></span>
             <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
+            <span class='input-group-addon fix-border'><?php echo $lang->comment?></span>
+            <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
           </div>
         </td>
         <?php endif;?>

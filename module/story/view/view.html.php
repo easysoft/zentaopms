@@ -165,6 +165,10 @@
                 <td><?php echo $lang->story->sourceList[$story->source];?></td>
               </tr>
               <tr>
+                <th><?php echo $lang->story->sourceNote;?></th>
+                <td id='sourceNote'><?php echo $story->sourceNote;?></td>
+              </tr>
+              <tr>
                 <th><?php echo $lang->story->status;?></th>
                 <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
               </tr>
