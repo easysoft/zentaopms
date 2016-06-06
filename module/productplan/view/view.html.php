@@ -99,7 +99,7 @@
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                    <td class='text-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
+                    <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
                     <td><?php echo $story->estimate;?></td>
@@ -194,7 +194,7 @@
                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                    <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+                    <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo zget($users, $bug->assignedTo);?></td>
                     <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
