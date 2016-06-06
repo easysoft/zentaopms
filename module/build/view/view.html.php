@@ -80,7 +80,7 @@
                   <?php echo sprintf('%03d', $story->id);?>
                 </td>
                 <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='text-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
+                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
                 <td><?php echo $users[$story->openedBy];?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
@@ -137,7 +137,7 @@
                   <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                   <?php endif;?>
                   <?php echo sprintf('%03d', $bug->id);?>
-                <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
                 <td><?php echo $users[$bug->openedBy];?></td>
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>
@@ -186,7 +186,7 @@
               <tr class='text-center'>
                 <td><?php echo sprintf('%03d', $bug->id);?></td>
                 <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
-                <td class='text-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
                 <td><?php echo $users[$bug->openedBy];?></td>
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>

@@ -42,7 +42,7 @@ include '../../common/view/tablesorter.html.php';
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td><?php echo $story->planTitle;?></td>
-        <td class='text-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+        <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
         <td><?php echo zget($users, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>
