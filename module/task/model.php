@@ -511,11 +511,6 @@ class taskModel extends model
             $task->status = 'doing';
         }
 
-        $this->dao->update(TABLE_TASK)->data($task)
-            ->autoCheck()
-            ->check('consumed,left', 'float')
-            ->where('id')->eq((int)$taskID)->exec();
-
         /* Record consumed and left. */
         $estimate = fixer::input('post')
             ->setDefault('account', $this->app->user->account) 
@@ -524,6 +519,11 @@ class taskModel extends model
             ->remove('realStarted,comment')->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
         $this->addTaskEstimate($estimate);
+
+        $this->dao->update(TABLE_TASK)->data($task)
+            ->autoCheck()
+            ->check('consumed,left', 'float')
+            ->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
