@@ -21,12 +21,13 @@
   <div id='querybox' class='show'></div>
 </div>
 <form method='post' class='form-condensed' id='linkStoryForm'>
-  <table class='table tablesorter table-fixed'> 
+  <table class='table tablesorter table-fixed' id='linkStoryList'> 
     <thead>
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->story->product;?></th>
+      <th><?php echo $lang->story->module;?></th>
       <th><?php echo $lang->story->title;?></th>
       <th><?php echo $lang->story->plan;?></th>
       <?php if($productType != 'normal'):?>
@@ -48,8 +49,9 @@
         <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
       </td>
       <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-      <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
-      <td class='text-left nobr' title="<?php echo $story->title?>"><span class='label label-info'><?php echo zget($modules, $story->module, '')?></span> <?php echo html::a($storyLink, $story->title);?></td>
+      <td class='text-left'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
+      <td class='text-left'><?php echo zget($modules, $story->module, '')?></td>
+      <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <?php if($productType != 'normal'):?>
       <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
@@ -80,6 +82,7 @@
 $(function()
 {
     ajaxGetSearchForm()
+    setTimeout(function(){fixedTheadOfList('#linkStoryList')}, 500);
     setTimeout(function(){fixedTfootAction('#linkStoryForm')}, 500);
 });
 </script>
