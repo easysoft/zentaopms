@@ -23,7 +23,7 @@
       if(commonModel::isTutorialMode())
       {
           $wizardParams = helper::safe64Encode("projectID=$project->id");
-          common::printLink('tutorial', 'wizard', "module=project&method=managemembers&params=$wizardParams", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+          echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=managemembers&params=$wizardParams"), $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
       }
       else
       {

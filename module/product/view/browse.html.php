@@ -61,7 +61,7 @@
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-        common::printIcon('tutorial', 'wizard', "module=story&method=create&params=$wizardParams", 'btn', 'button', 'plus', '', 'create-story-btn', false, '', $lang->story->create);
+        echo html::a($this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams"), "<i class='icon-plus'></i> {$lang->story->create}",'', "class='btn create-story-btn'");
     }
     else
     {
@@ -277,7 +277,7 @@ if($shortcut.size() > 0)
     $('#querybox').removeClass('show');
 }
 <?php endif;?>
-<?php if($this->config->product->homepage != 'browse'):?>
+<?php if(isset($this->config->product->homepage) and $this->config->product->homepage != 'browse'):?>
 $('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"product\", \"browse\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")
 <?php endif;?>
 </script>

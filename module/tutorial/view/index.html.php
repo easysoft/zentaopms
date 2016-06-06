@@ -274,7 +274,6 @@ $(function()
                     var $required = $$('#' + requiredId);
                     if($required.length)
                     {
-                        console.log($required, $required.val());
                         var val = $required.val();
                         if(val === undefined || val === null || val === '')
                         {

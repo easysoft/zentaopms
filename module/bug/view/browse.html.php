@@ -67,7 +67,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
       if(commonModel::isTutorialMode())
       {
           $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-          common::printIcon('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams", 'btn', 'button', 'plus', '', 'btn-bug-create', '', false, $lang->bug->create);
+          echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i> {$lang->bug->create}",'', "class='btn btn-bug-create'");
       }
       else
       {
@@ -237,7 +237,7 @@ if($shortcut.size() > 0)
 }
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
-<?php if($this->config->qa->homepage != 'browse'):?>
+<?php if(isset($this->config->qa->homepage) and $this->config->qa->homepage != 'browse'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
 </script>
