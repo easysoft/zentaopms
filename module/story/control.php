@@ -118,6 +118,7 @@ class story extends control
 
         /* Init vars. */
         $source     = '';
+        $sourceNote = '';
         $pri        = 0;
         $estimate   = '';
         $title      = '';
@@ -177,6 +178,7 @@ class story extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $branch, 'unexpired');
         $this->view->planID           = $planID;
         $this->view->source           = $source;
+        $this->view->sourceNote       = $sourceNote;
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
