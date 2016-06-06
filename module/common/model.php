@@ -970,7 +970,7 @@ class commonModel extends model
         }
         else
         {
-            $queryObjects = $this->dao->query($queryCondition . " ORDER BY $orderBy");
+            $queryObjects = $this->dao->query($queryCondition . (empty($orderBy) ? " ORDER BY $orderBy" : ''));
         }
 
         $preObj  = false;

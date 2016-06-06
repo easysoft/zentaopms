@@ -279,8 +279,8 @@ class testcaseModel extends model
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
                 ->andWhere('t1.product')->eq($productID)
-                ->beginIF($branch)->andWhere('t1.branch')->eq($branch)
-                ->beginIF($modules)->andWhere('t1.module')->in($modules)
+                ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
