@@ -144,6 +144,7 @@ class mailModel extends model
         if(!$connection) return false;
         fclose($connection); 
 
+        $config = new stdclass();
         $config->username = $username;
         $config->host     = $host;
         $config->auth     = 1;
