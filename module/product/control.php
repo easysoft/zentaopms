@@ -145,7 +145,8 @@ class product extends control
         setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        /* set rule to number when order by plan. */
+        $sort = $this->loadModel('common')->appendOrder(strpos($orderBy, 'plan') !== false ? str_replace('plan', '`plan`+0', $orderBy) : $orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -162,7 +163,6 @@ class product extends control
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-        $this->loadModel('search')->mergeFeatureBar('product', 'browse');
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
