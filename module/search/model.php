@@ -428,24 +428,4 @@ class searchModel extends model
         }
         return $query;
     }
-
-    /**
-     * Merge shortcut query in featureBar.
-     * 
-     * @param  string $module 
-     * @param  string $method 
-     * @access public
-     * @return void
-     */
-    public function mergeFeatureBar($module, $method)
-    {
-        if(!isset($this->lang->$module->featureBar[$method])) return;
-        $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
-        $shortcuts   = $this->dao->select('id, title')->from(TABLE_USERQUERY)->where('account')->eq($this->app->user->account)->andWhere('module')->eq($queryModule)->orderBy('id_asc')->fetchPairs();
-        foreach($shortcuts as $id => $name)
-        {
-            $shortcutID = 'QUERY' . $id;
-            $this->lang->$module->featureBar[$method][$shortcutID] = $name;
-        }
-    }
 }

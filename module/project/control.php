@@ -191,7 +191,6 @@ class project extends control
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['onMenuBar'] = 'yes';
         $this->project->buildSearchForm($projectID, $this->projects, $queryID, $actionURL);
-        $this->loadModel('search')->mergeFeatureBar('project', 'task');
 
         /* team member pairs. */
         $memberPairs = array();

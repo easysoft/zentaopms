@@ -301,6 +301,7 @@ class customModel extends model
     {
         global $app, $lang, $config;
         $app->loadLang($module);
+        customModel::mergeFeatureBar($module, $method);
 
         $configKey  = 'feature_' . $module . '_' . $method;
         $allMenu    = isset($lang->$module->featureBar[$method]) ? $lang->$module->featureBar[$method] : null;
@@ -308,6 +309,27 @@ class customModel extends model
         if(!commonModel::isTutorialMode() && isset($config->customMenu->$configKey)) $customMenu = $config->customMenu->$configKey;
         if(!empty($customMenu) && is_string($customMenu)) $customMenu = json_decode($customMenu);
         return $allMenu ? self::setMenuByConfig($allMenu, $customMenu) : null;
+    }
+
+    /**
+     * Merge shortcut query in featureBar.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @access public
+     * @return void
+     */
+    public static function mergeFeatureBar($module, $method)
+    {
+        global $lang, $app, $dbh;
+        if(!isset($lang->$module->featureBar[$method])) return;
+        $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
+        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where `account` = '{$app->user->account}' AND `module` = '{$queryModule}' order by id")->fetchAll();
+        foreach($shortcuts as $shortcut)
+        {
+            $shortcutID = 'QUERY' . $shortcut->id;
+            $lang->$module->featureBar[$method][$shortcutID] = $shortcut->title;
+        }
     }
 
     /**

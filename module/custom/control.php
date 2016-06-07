@@ -253,7 +253,7 @@ class custom extends control
             if($method)
             {
                 $this->app->loadLang($module);
-                $this->loadModel('search')->mergeFeatureBar($module, $method);
+                customModel::mergeFeatureBar($module, $method);
                 /* Mark search query item. */
                 if(isset($this->lang->$module->featureBar[$method]))
                 {

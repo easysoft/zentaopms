@@ -634,7 +634,6 @@ class commonModel extends model
         }
         else
         {
-
             $orderBy   = "" . trim($fieldName, '`') . "" . '_' . 'asc';
             $className = 'header';
         }
