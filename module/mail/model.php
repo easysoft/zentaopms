@@ -304,8 +304,12 @@ class mailModel extends model
         catch (phpmailerException $e) 
         {
             $mailError = ob_get_contents();
-            $encoding  = mb_detect_encoding($mailError, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5')); 
-            $this->errors[] = nl2br(trim(strip_tags($e->errorMessage()))) . '<br />' . mb_convert_encoding($mailError, 'utf8', $encoding);
+            if(extension_loaded('mbstring'))
+            {
+                $encoding = mb_detect_encoding($mailError, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
+                if($encoding != 'UTF-8') $mailError = mb_convert_encoding($mailError, 'utf8', $encoding);
+            }
+            $this->errors[] = nl2br(trim(strip_tags($e->errorMessage()))) . '<br />' . $mailError;
         } 
         catch (Exception $e) 
         {
