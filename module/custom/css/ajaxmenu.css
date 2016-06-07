@@ -6,7 +6,7 @@
 #modulemenu, #featurebar {margin: 0; border-left: 1px solid #ddd; border-right: 1px solid #ddd; padding-left: 10px; padding-right: 10px;}
 #mainmenu {padding-left: 10px; padding-right: 10px;}
 #featurebar {border-top: 1px solid #ddd}
-#featurebar > .nav {width: 100%}
+#featurebar > .nav {width: 100%; height:auto;}
 #menuEditor .nav > li > a {cursor: move}
 #menuEditor .nav > li > a .item-hidden-icon {display: none}
 #menuEditor .nav > li.menu-hidden > a .item-hidden-icon {display: inline-block; margin-left: 5px;}
