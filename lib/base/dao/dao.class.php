@@ -1915,12 +1915,12 @@ class baseSQL
             {
                 $value = trim($value);
                 if(empty($value) or strtolower($value) == 'desc' or strtolower($value) == 'asc') continue;
-                $field = trim($value, '`');
 
+                $field = $value;
                 /* such as t1.id field. */
                 if(strpos($value, '.') !== false) list($table, $field) = explode('.', $field);
                 /* Ignore order with function e.g. order by length(tag) asc. */
-                if(strpos($field, '(') === false) $field = "`$field`";
+                if(strpos($field, '(') === false and strpos($field, '`') === false) $field = "`$field`";
 
                 $orderParse[$key] = isset($table) ? $table . '.' . $field :  $field;
                 unset($table);
