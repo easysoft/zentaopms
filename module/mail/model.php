@@ -303,7 +303,9 @@ class mailModel extends model
         }
         catch (phpmailerException $e) 
         {
-            $this->errors[] = nl2br(trim(strip_tags($e->errorMessage()))) . '<br />' . ob_get_contents();
+            $mailError = ob_get_contents();
+            $encoding  = mb_detect_encoding($mailError, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5')); 
+            $this->errors[] = nl2br(trim(strip_tags($e->errorMessage()))) . '<br />' . mb_convert_encoding($mailError, 'utf8', $encoding);
         } 
         catch (Exception $e) 
         {
