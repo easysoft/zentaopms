@@ -695,6 +695,7 @@ function checkTable($table)
                 }
             });
         },
+        clickBehavior: 'multi',
         select: function(e)
         {
             checkRow.call(e.target, true);

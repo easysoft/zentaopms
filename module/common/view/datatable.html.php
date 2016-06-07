@@ -50,6 +50,7 @@ $(document).ready(function()
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
         storage       : false,
+        selectable    : {clickBehavior: 'multi'},
         ready: function()
         {
             if(!this.$table) return;
