@@ -424,7 +424,7 @@ class mail extends control
                 $result = $this->mail->syncSendCloud($action, $email, $realnameAndEmail->realname);
                 if(!$result->result)
                 {
-                    echo(js::alert($this->lang->mail->sendCloudFail . $result->message . "(CODE: $result->statusCode)"));
+                    echo(js::alert($this->lang->mail->sendCloudFail . str_replace("'", '"', $result->message) . "(CODE: $result->statusCode)"));
                     die(js::reload('parent'));
                 }
 
