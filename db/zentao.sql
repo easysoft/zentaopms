@@ -483,6 +483,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `module` mediumint(8) unsigned NOT NULL default '0',
   `plan` text NOT NULL default '',
   `source` varchar(20) NOT NULL,
+  `sourceNote` varchar(255) NOT NULL,
   `fromBug` mediumint(8) unsigned NOT NULL default '0',
   `title` varchar(255) NOT NULL,
   `keywords` varchar(255) NOT NULL,
