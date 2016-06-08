@@ -64,7 +64,7 @@ class userModel extends model
     /**
      * Get the account=>relaname pairs.
      * 
-     * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest|pofirst|devfirst|qafirst|pmfirst, can be sets of theme
+     * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
      * @param  string $usersToAppended  account1,account2 
      * @access public
      * @return array
@@ -98,7 +98,7 @@ class userModel extends model
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
             if(strpos($params, 'noletter') !== false) $firstLetter =  '';
-            $users[$account] =  $firstLetter . ($user->deleted ? $account : ($user->realname ? $user->realname : $account));
+            $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $account : ($user->realname ? $user->realname : $account));
         }
 
         /* Append empty, closed, and guest users. */
