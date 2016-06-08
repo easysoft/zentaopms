@@ -25,7 +25,7 @@ class tutorialModel extends model
         $count = $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->eq($account)->fetch('count');
         if($count < 10) return true;
 
-        $this->loadModel('setting')->setItem($account . '.common.global.nevice', 'false');
+        $this->loadModel('setting')->setItem($account . '.common.global.novice', 'false');
         return false;
 
     }
