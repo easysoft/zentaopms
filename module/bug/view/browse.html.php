@@ -112,7 +112,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
           <td colspan='<?php echo $columns;?>'>
             <?php if(!empty($bugs)):?>
             <div class='table-actions clearfix'>
-              <?php if(!$useDatatable) echo html::selectButton();?>
+              <?php echo html::selectButton();?>
               <div class='btn-group dropup'>
                 <?php
                 $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");

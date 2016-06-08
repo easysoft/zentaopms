@@ -100,7 +100,7 @@
         <td colspan='11'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
-            <?php if(!$useDatatable) echo html::selectButton();?>
+            <?php echo html::selectButton();?>
             <?php
             $canBatchEdit  = common::hasPriv('story', 'batchEdit');
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";

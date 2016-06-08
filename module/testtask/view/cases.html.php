@@ -50,7 +50,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php if($runs):?>
             <div class='table-actions clearfix'>
             <?php 
-            if(!$useDatatable and $hasCheckbox) echo html::selectButton();
+            if($hasCheckbox) echo html::selectButton();
             if($canBatchEdit)
             {
                 $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
