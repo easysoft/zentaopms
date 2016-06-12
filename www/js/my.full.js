@@ -34,7 +34,7 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     }
 
     /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-    if((typeof(onlybody) != 'undefined' && onlybody == 'yes') || isOnlyBody)
+    if((typeof(config.onlybody) != 'undefined' && config.onlybody == 'yes') || isOnlyBody)
     {
         var onlybody = config.requestType != 'GET' ? "?onlybody=yes" : '&onlybody=yes';
         link = link + onlybody;

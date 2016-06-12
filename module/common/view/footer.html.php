@@ -37,8 +37,8 @@ $.get(createLink('tutorial', 'ajaxSaveNovice', 'novice=' + (novice ? 'true' : 'f
 </script>
 <?php endif;?>
 
+<script>config.onlybody = '<?php echo $onlybody?>';</script>
 <?php 
-js::set('onlybody', $onlybody);           // set the onlybody var.
 if($this->loadModel('cron')->runable()) js::execute('startCron()');
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
 
