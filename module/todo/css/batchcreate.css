@@ -4,3 +4,4 @@
 .body-modal .outer > form, .body-modal .outer > .container > form {margin: 0;padding: 0 20px 20px;}
 .body-modal #titlebar {margin: 0 -20px 20px}
 .body-modal #titlebar + .table-form {border: 1px solid #ddd}
+#titlebar input#date{background:#F8FAFE;box-shadow:none}
