@@ -62,7 +62,7 @@ class userModel extends model
     }
 
     /**
-     * Get the account=>relaname pairs.
+     * Get the account=>realname pairs.
      * 
      * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
      * @param  string $usersToAppended  account1,account2 
