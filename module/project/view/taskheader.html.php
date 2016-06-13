@@ -29,17 +29,17 @@
     foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
-        $type = $menuItem->name;
-        if(strpos($type, 'QUERY') === 0)
+        $menuType = $menuItem->name;
+        if(strpos($menuType, 'QUERY') === 0)
         {
-            $queryID = (int)substr($type, 5);
-            echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
+            $queryID = (int)substr($menuType, 5);
+            echo "<li id='{$menuType}Tab'>" . html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text) . '</li>' ;
         }
-        elseif($type != 'status')
+        elseif($menuType != 'status')
         {
-            echo "<li id='{$type}Tab'>" . html::a(inlink('task', "project=$projectID&type=$type"), $menuItem->text) . '</li>' ;
+            echo "<li id='{$menuType}Tab'>" . html::a(inlink('task', "project=$projectID&type=$menuType"), $menuItem->text) . '</li>' ;
         }
-        elseif($type == 'status')
+        elseif($menuType == 'status')
         {
             echo "<li id='statusTab' class='dropdown'>";
             $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';

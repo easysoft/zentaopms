@@ -21,17 +21,17 @@
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
     if(isset($menuItem->hidden)) continue;
-    $type = $menuItem->name;
-    if($hasBrowsePriv and strpos($type, 'QUERY') === 0)
+    $menyType = $menuItem->name;
+    if($hasBrowsePriv and strpos($menyType, 'QUERY') === 0)
     {
-        $queryID = (int)substr($type, 5);
-        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
+        $queryID = (int)substr($menyType, 5);
+        echo "<li id='{$menyType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
     }
-    elseif($hasBrowsePriv and ($type == 'all' or $type == 'needconfirm'))
+    elseif($hasBrowsePriv and ($menyType == 'all' or $menyType == 'needconfirm'))
     {
-        echo "<li id='{$type}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$type"), $menuItem->text) . "</li>";
+        echo "<li id='{$menyType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menyType"), $menuItem->text) . "</li>";
     }
-    elseif($hasGroupPriv and $type == 'group')
+    elseif($hasGroupPriv and $menyType == 'group')
     {
         echo "<li id='groupTab' class='dropdown'>";
         $groupBy  = isset($groupBy) ? $groupBy : '';
@@ -47,7 +47,7 @@
         }
         echo '</ul></li>';
     }
-    elseif($hasZeroPriv and $type == 'zerocase')
+    elseif($hasZeroPriv and $menyType == 'zerocase')
     {
         echo "<li id='zerocaseTab'>" . html::a($this->createLink('story', 'zeroCase', "productID=$productID"), $lang->story->zeroCase) . '</li>';
     }
