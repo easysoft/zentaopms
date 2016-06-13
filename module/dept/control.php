@@ -131,4 +131,18 @@ class dept extends control
             die(js::reload('parent'));
         }
     }
+
+    /**
+     * Ajax get users 
+     * 
+     * @param  int    $dept 
+     * @param  string $user 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUsers($dept, $user = '')
+    {
+        $users = array('' => '') + $this->dept->getDeptUserPairs($dept);
+        die(html::select('user', $users, $user, "class='form-control chosen'"));
+    }
 }
