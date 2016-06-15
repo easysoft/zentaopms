@@ -1,5 +1,5 @@
 table th.col-closed {width:15%}
-#kanbanHeader th{border: 1px solid #ddd;}
+#kanbanHeader th{border: 1px solid #ddd; padding:8px;}
 #kanbanHeader .dropdown {display: inline-block; margin-left: 10px;}
 #kanbanHeader .dropdown > a {color: #036}
 #kanbanHeader  th.col-closed {position: relative}

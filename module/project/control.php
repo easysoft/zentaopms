@@ -1220,6 +1220,12 @@ class project extends control
      */
     public function kanban($projectID, $orderBy = 'pri_asc')
     {
+        /* Save to session. */
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('taskList',  $uri);
+        $this->app->session->set('storyList', $uri);
+        $this->app->session->set('bugList',   $uri);
+
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
