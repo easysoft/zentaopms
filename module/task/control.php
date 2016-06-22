@@ -628,6 +628,11 @@ class task extends control
                     }
                 }
             }
+            if($this->cookie->reload2Parent)
+            {
+                setcookie('reload2Parent', false, 0, $this->config->webRoot);
+                die(js::reload('parent'));
+            }
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
