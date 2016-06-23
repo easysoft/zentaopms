@@ -99,7 +99,7 @@ $config->task->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->task->datatable->fieldList['openedBy']['width']    = '70';
 $config->task->datatable->fieldList['openedBy']['required'] = 'no';
 
-$config->task->datatable->fieldList['openedDate']['title']    = 'openedDateAB';
+$config->task->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->task->datatable->fieldList['openedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['openedDate']['width']    = '90';
 $config->task->datatable->fieldList['openedDate']['required'] = 'no';
