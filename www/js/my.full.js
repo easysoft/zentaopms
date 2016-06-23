@@ -1807,6 +1807,41 @@ function removeDitto()
     });
 }
 
+/**
+ * Revert module cookie.
+ * 
+ * @access public
+ * @return void
+ */
+function revertModuleCookie()
+{
+    if($('#mainmenu .nav li[data-id="project"]').hasClass('active'))
+    {
+        $('#modulemenu .nav li[data-id="task"] a').click(function()
+        {
+            $.cookie('moduleBrowseParam', 0, {expires:config.cookieLife, path:config.webRoot});
+        });
+    }
+    if($('#mainmenu .nav li[data-id="product"]').hasClass('active'))
+    {
+        $('#modulemenu .nav li[data-id="story"] a').click(function()
+        {
+            $.cookie('storyModule', 0, {expires:config.cookieLife, path:config.webRoot});
+        });
+    }
+    if($('#mainmenu .nav li[data-id="qa"]').hasClass('active'))
+    {
+        $('#modulemenu .nav li[data-id="bug"] a').click(function()
+        {
+            $.cookie('bugModule', 0, {expires:config.cookieLife, path:config.webRoot});
+        });
+        $('#modulemenu .nav li[data-id="testcase"] a').click(function()
+        {
+            $.cookie('caseModule', 0, {expires:config.cookieLife, path:config.webRoot});
+        });
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1859,4 +1894,5 @@ $(document).ready(function()
     initHotKey();
     initHelpLink();
     checkTutorial();
+    revertModuleCookie();
 });
