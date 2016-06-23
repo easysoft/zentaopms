@@ -1550,7 +1550,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
+            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($branch)->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->fetchAll();
