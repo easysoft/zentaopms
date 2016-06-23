@@ -13,18 +13,18 @@ $(function()
     {
         $(this).click(function()
         {
-            var saveRecord = false;
-            $('#recordForm .form-date').each(function()
+            var hasRecord = false;
+            $('#recordForm').find('input[name^="dates"], input[name^="consumed"], input[name^="left"], textarea[name^="work"]').each(function()
             {
                 if($(this).val() !== '')
                 {
-                    saveRecord = confirm(confirmSaveRecord);
+                    hasRecord = true;
                     return false;
                 }
             });
-            if(saveRecord)
+            if(hasRecord)
             {
-                $.cookie('reload2Parent', true, {path:config.webRoot});
+                alert(noticeSaveRecord);
                 return false;
             }
         });

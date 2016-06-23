@@ -69,12 +69,12 @@ table th.col-closed {width:15%}
 .story-pri.pri-4 {background-color:#795523;}
 
 .board-story {background: #dd7503}
-.board-story.stage-projected  {background-color:#808080;}
-.board-story.stage-developing {background-color:#d2322d;}
-.board-story.stage-developed  {background-color:#229E70;}
-.board-story.stage-testing    {background-color:#e84e0f;}
-.board-story.stage-tested     {background-color:#795523;}
-.board-story.stage-released   {background-color:#8957a1;}
+.board-story.stage-projected  {background-color:#777;}
+.board-story.stage-developing {background-color:#D2322D;}
+.board-story.stage-developed  {background-color:#229F24;}
+.board-story.stage-testing    {background-color:#EF6C00;}
+.board-story.stage-tested     {background-color:#827717;}
+.board-story.stage-released   {background-color:#9C27B0;}
 
 .bug-pri,.task-pri {display: inline-block; width: 16px; height: 16px; text-align: center; border-radius: 8px; border: 1px solid #ddd; font-size: 12px}
 
