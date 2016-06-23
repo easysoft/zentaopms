@@ -70,6 +70,7 @@ $lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出数据";
 $lang->testcase->confirmChange      = '确认用例变动';
 $lang->testcase->confirmStoryChange = '确认需求变动';
+$lang->testcase->copy               = '复制用例';
 
 $lang->testcase->new = '新增';
 

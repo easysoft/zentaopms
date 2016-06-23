@@ -70,6 +70,7 @@ $lang->testcase->exportTemplet      = "Export templet";
 $lang->testcase->export             = "Export data";
 $lang->testcase->confirmChange      = 'Confirm case change';
 $lang->testcase->confirmStoryChange = 'Confirm story change';
+$lang->testcase->copy               = 'Copy case';
 
 $lang->testcase->new = 'New';
   
