@@ -15,6 +15,7 @@
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 <style>
 table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}
+table th,table td{padding:5px;}
 </style>
 <title><?php echo $fileName;?></title>
 <body>

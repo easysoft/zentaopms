@@ -94,7 +94,7 @@ $lang->extension->errorPackageFileExists       = 'There is already a file with t
 $lang->extension->errorDownloadFailed          = 'Download failed, please try again. Or you can download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'The downloawd files checking failed, Please download it manually and upload it to install';
 $lang->extension->errorExtracted               = 'The package file <strong> %s </strong> extracted failed. The error is:<br />%s';
-$lang->extension->errorCheckIncompatible       = 'This extenion is not compatible with current zentao version. <h3>You can <a href="%s">Force %s</a> or <a href="#" onclick=parent.location.href="%s">Cancel</a></h3>.';
+$lang->extension->errorCheckIncompatible       = 'This extenion is not compatible with current version. %s may be not use. <h3>You can <a href="%s">Force %s</a> or <a href="#" onclick=parent.location.href="%s">Cancel</a></h3>.';
 $lang->extension->errorFileConflicted          = 'There are some files conflicted: <br />%s <h3>You can <a href="%s">Overide them</a> or <a href="#" onclick=parent.location.href="%s">Cancel</a></h3>.';
 $lang->extension->errorPackageNotFound         = 'The package file <strong>%s </strong> not found, perhaps download failed, try again.';
 $lang->extension->errorTargetPathNotWritable   = 'Target path <strong>%s </strong>not writable.';
