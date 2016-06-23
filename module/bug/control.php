@@ -98,7 +98,7 @@ class bug extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Get projects. */
-        $projects = $this->loadModel('project')->getPairs('empty');
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
 
         /* Get bugs. */
         $bugs = $this->bug->getBugs($productID, $projects, $branch, $browseType, $moduleID, $queryID, $sort, $pager);

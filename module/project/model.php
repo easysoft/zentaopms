@@ -526,7 +526,7 @@ class projectModel extends model
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
-            ->andWhere('deleted')->eq(0)
+            ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();

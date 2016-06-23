@@ -91,6 +91,7 @@ $lang->bug->saveTemplate       = 'Save template';
 $lang->bug->setPublic          = 'Set public template';
 $lang->bug->deleteTemplate     = 'Delete template';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
+$lang->bug->copy               = 'Copy bug';
 
 /* Browse tabs. */
 $lang->bug->assignToMe     = 'MyBugs';
