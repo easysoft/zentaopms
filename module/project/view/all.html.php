@@ -28,7 +28,7 @@
 </div>
 <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form id='projectsForm' class='form-condensed' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>'>
-<table class='table table-fixed tablesorter' id='projectList'>
+<table class='table table-fixed tablesorter table-datatable' id='projectList'>
   <?php $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
   <thead>
     <tr>
