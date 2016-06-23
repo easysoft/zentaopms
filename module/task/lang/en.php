@@ -144,7 +144,7 @@ $lang->task->remindBug             = "This task from Bug, update the Bug:%s or n
 $lang->task->confirmChangeProject  = "Change {$lang->projectCommon} will change module, story and assignedTo also, are you sure?";
 $lang->task->confirmFinish         = '"Left" is zero, this task will be done. Are you sure?';
 $lang->task->confirmRecord         = '"Left" is zero, this task will be done. Are you sure?';
-$lang->task->confirmSaveRecord     = 'Please save the estimate record which has not been saved.';
+$lang->task->noticeSaveRecord      = 'Please save the estimate record which has not been saved.';
 $lang->task->commentActions        = '%s. %s, commented by<strong>%s</strong>.';
 
 $lang->task->error = new stdclass();
