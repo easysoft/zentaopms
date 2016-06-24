@@ -144,6 +144,7 @@ $lang->task->remindBug             = "該任務為Bug轉化得到，是否更新
 $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？";
 $lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
 $lang->task->confirmRecord         = '"剩餘"為0，任務將標記為"已完成"，您確定嗎？';
+$lang->task->noticeSaveRecord      = '您有尚未保存的工時記錄，請先將其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
 
 $lang->task->error = new stdclass();

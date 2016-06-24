@@ -171,7 +171,6 @@ $lang->project->aboveAllProject = "Above all {$lang->projectCommon}s";
 $lang->project->selectProject   = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd     = 'Begin and end';
 $lang->project->lblStats        = 'Stats';
-$lang->project->workHours       = '7.0';
 $lang->project->stats           = 'Total work hours is 『%s』hours, <br />Total estimate is『%s』hours,<br />Total confused is『%s』hours<br />Total left is『%s』hours';
 $lang->project->taskSummary     = "<strong>%s</strong> tasks in this page. Pending: <strong>%s</strong>. doing: <strong>%s</strong>. Est: <strong>%s</strong> h. Consumed: <strong>%s</strong> h. Left: <strong>%s</strong>.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";

@@ -171,7 +171,6 @@ $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 $lang->project->selectProject   = "請選擇{$lang->projectCommon}";
 $lang->project->beginAndEnd     = '起止時間';
 $lang->project->lblStats        = '工時統計';
-$lang->project->workHours       = '7.0';
 $lang->project->stats           = '可用工時<strong>%s</strong>工時<br />總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
 $lang->project->taskSummary     = "本頁共 <strong>%s</strong> 個任務，未開始 <strong>%s</strong>，進行中 <strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->memberHours     = "%s共有 <strong>%s</strong> 個可用工時，";

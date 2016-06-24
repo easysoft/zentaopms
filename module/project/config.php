@@ -1,6 +1,6 @@
 <?php
 $config->project = new stdclass();
-$config->project->defaultWorkhours = 7;
+$config->project->defaultWorkhours = '7.0';
 $config->project->orderBy          = 'isDone,status,order_desc';
 $config->project->maxBurnDay       = '31';
 

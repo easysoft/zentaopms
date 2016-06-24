@@ -78,7 +78,7 @@
         <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
         <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
-          <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $lang->project->workHours?>' />
+          <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
@@ -94,7 +94,7 @@
         <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
         <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
         <td>
-          <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $lang->project->workHours?>' />
+          <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
@@ -120,7 +120,7 @@
       <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
       <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
       <td>
-        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $lang->project->workHours?>' />
+        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
         <input type='hidden' name='modes[]' value='create' />
       </td>
       <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>

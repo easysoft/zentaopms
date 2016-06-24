@@ -91,6 +91,7 @@ $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->setPublic          = '設為公共模板';
 $lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->confirmStoryChange = '確認需求變動';
+$lang->bug->copy               = '複製Bug';
 
 /* 查詢條件列表。*/
 $lang->bug->assignToMe     = '指派給我';
