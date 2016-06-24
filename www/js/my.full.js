@@ -1404,7 +1404,11 @@ function computePasswordStrength(password)
  */
 function checkOnlybodyPage()
 {
-    if(location.href == top.location.href) location.href = location.href.replace('onlybody=yes', '');
+    if(location.href == top.location.href)
+    {
+        href = location.href.replace('?onlybody=yes', '');
+        location.href = href.replace('&onlybody=yes', '');
+    }
 }
 
 /**
@@ -1848,7 +1852,7 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    if(typeof(onlybody) != 'undefined' && onlybody == 'yes') checkOnlybodyPage();
+    if(typeof(config.onlybody) != 'undefined' && config.onlybody == 'yes') checkOnlybodyPage();
     $('body').addClass('m-{currentModule}-{currentMethod}'.format(config));
 
     setModal();
