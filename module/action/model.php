@@ -492,6 +492,20 @@ class actionModel extends model
         $beginAndEnd = $this->computeBeginAndEnd($period);
         extract($beginAndEnd);
 
+        /* Build has priv condition. */
+        if($productID == 'all') $products = $this->loadModel('product')->getPairs();
+        if($projectID == 'all') $projects = $this->loadModel('project')->getPairs();
+        if($productID == 'all' or $projectID == 'all')
+        {
+            $projectCondition = $projectID == 'all' ? "project " . helper::dbIN(array_keys($projects)) : '';
+            $productCondition = $productID == 'all' ? "INSTR('," . join(',', array_keys($products)) . ",', product) > 0" : '';
+
+            $condition = "(product =',0,' AND project = '0')";
+            if($projectCondition) $condition .= ' OR ' . $projectCondition;
+            if($productCondition) $condition .= ' OR ' . $productCondition;
+            if(strpos($this->app->company->admins, ',' . $this->app->user->account . ',') !== false) $condition = 1; 
+        }
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -502,6 +516,7 @@ class actionModel extends model
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
+            ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("($condition)")->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
@@ -674,7 +689,7 @@ class actionModel extends model
     {
         $this->app->loadClass('date');
 
-        $today      = date::today();
+        $today      = date('Y-m-d');
         $tomorrow   = date::tomorrow();
         $yesterday  = date::yesterday();
         $twoDaysAgo = date::twoDaysAgo();
