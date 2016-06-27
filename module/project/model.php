@@ -766,9 +766,13 @@ class projectModel extends model
         $this->loadModel('task');
 
         /* Set modules and $browseType. */
-        $modules = 0;
-        if($productID) $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
-        if($moduleID)  $modules = $this->loadModel('tree')->getAllChildID($moduleID);
+        $modules = array();
+        if($productID)
+        {
+            $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
+            $modules[0] = 0;
+        }
+        if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
         if($browseType == 'bymodule' or $browseType == 'byproduct')
         {
             if(($this->session->taskBrowseType) and ($this->session->taskBrowseType != 'bysearch')) $browseType = $this->session->taskBrowseType;
@@ -793,7 +797,7 @@ class projectModel extends model
                 unset($queryStatus['closed']);
                 $queryStatus = array_keys($queryStatus);
             }
-            $tasks = $this->task->getProjectTasks($projectID, $queryStatus, $modules, $sort, $pager);
+            $tasks = $this->task->getProjectTasks($projectID, $productID, $queryStatus, $modules, $sort, $pager);
         }
         else
         {
@@ -1234,7 +1238,7 @@ class projectModel extends model
         $versions = $this->loadModel('story')->getVersions($this->post->stories);
         foreach($this->post->stories as $key => $storyID)
         {
-            $productID = $this->post->products[$key];
+            $productID = $this->post->products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;

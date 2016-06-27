@@ -158,8 +158,8 @@ class project extends control
 
         /* Set queryID, moduleID and productID. */
         $queryID   = ($browseType == 'bysearch')  ? (int)$param : 0;
-        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : ($browseType == 'bysearch' ? 0 : $this->cookie->moduleBrowseParam);
-        $productID = ($browseType == 'byproduct') ? (int)$param : ($browseType == 'bysearch' ? 0 : $this->cookie->productBrowseParam);
+        $moduleID  = ($browseType == 'bymodule')  ? (int)$param : (($browseType == 'bysearch' or $browseType == 'byproduct') ? 0 : $this->cookie->moduleBrowseParam);
+        $productID = ($browseType == 'byproduct') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bymodule')  ? 0 : $this->cookie->productBrowseParam);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -249,7 +249,7 @@ class project extends control
 
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
-        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $modules = 0, $groupBy);
+        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $productID = 0, $status = 'all', $modules = 0, $groupBy);
         $groupBy     = str_replace('`', '', $groupBy);
         $taskLang    = $this->lang->task;
         $groupByList = array();
