@@ -167,7 +167,7 @@ class block extends control
         if($block)
         {
             $block->grid = $grid;
-            $block->params = helper::jsonEncode($block->params);
+            $block->params = helper::jsonEncode($block->params, $options = 0, $addslashes = true);
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
             if(dao::isError()) $this->send(array('result' => 'fail', 'code' => 500));
             $this->send(array('result' => 'success'));

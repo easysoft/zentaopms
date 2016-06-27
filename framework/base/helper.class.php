@@ -369,9 +369,13 @@ class baseHelper
      * @access  public
      * @return  string  decoded string.
      */
-    static public function jsonEncode($data)
+    static public function jsonEncode($data, $options = 0, $addslashes = false)
     {
-        return (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) ? addslashes(json_encode($data)) : json_encode($data);
+        $json = ($addslashes and version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) ? addslashes(json_encode($data, $options)) : json_encode($data, $options);
+
+        $escapers     = array("\\",     "/",   "\"",  "\n",  "\r",  "\t", "\x08", "\x0c");
+        $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t",  "\\f",  "\\b");
+        return str_replace($escapers, $replacements, $json);
     }
 
     /**
