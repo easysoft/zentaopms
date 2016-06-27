@@ -1217,7 +1217,7 @@ class treeModel extends model
             {
                 $module          = new stdClass();
                 $module->root    = $rootID;
-                $module->name    = strip_tags($moduleName);
+                $module->name    = strip_tags(trim($moduleName));
                 $module->parent  = $parentModuleID;
                 $module->branch  = $branches[$moduleID];
                 $module->short   = $shorts[$moduleID];
@@ -1234,7 +1234,7 @@ class treeModel extends model
             {
                 $short    = $shorts[$moduleID];
                 $moduleID = str_replace('id', '', $moduleID);
-                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags($moduleName))->set('short')->eq($short)->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags(trim($moduleName)))->set('short')->eq($short)->where('id')->eq($moduleID)->limit(1)->exec();
             }
         }
     }
@@ -1253,6 +1253,7 @@ class treeModel extends model
         $this->checkUnique($self->root, $self->type, $self->parent, array("id{$self->id}" => $module->name), array("id{$self->id}" => $self->branch));
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
+        $module->name  = strip_tags(trim($module->name));
         $module->grade = $parent ? $parent->grade + 1 : 1;
         $module->path  = $parent ? $parent->path . $moduleID . ',' : ',' . $moduleID . ',';
         $this->dao->update(TABLE_MODULE)->data($module)->autoCheck()->check('name', 'notempty')->where('id')->eq($moduleID)->exec();
