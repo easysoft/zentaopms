@@ -1320,13 +1320,13 @@ class bugModel extends model
                 {
                     if(isset($datas[$buildID])) 
                     {
-                        $datas[$buildID]->value++;
+                        $datas[$buildID]->value += $data->value;
                     }
                     else
                     {
                         if(!isset($datas[$buildID])) $datas[$buildID] = new stdclass();
                         $datas[$buildID]->name  = $buildID;
-                        $datas[$buildID]->value = 1;
+                        $datas[$buildID]->value = $data->value;
                     }
                 }
                 unset($datas[$buildIDList]);
