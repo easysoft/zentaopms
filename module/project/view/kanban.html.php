@@ -53,7 +53,7 @@
     <tbody>
       <?php $rowIndex = 0; ?>
       <?php foreach($stories as $story):?>
-      <?php if(empty(get_object_vars($story))) continue;?>
+      <?php if(count(get_object_vars($story)) == 0) continue;?>
       <tr data-id='<?php echo $rowIndex++?>'>
         <?php if($hasStory):?>
         <td class='col-story'>
