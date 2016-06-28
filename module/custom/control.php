@@ -275,7 +275,7 @@ class custom extends control
         {
             $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
         }
-        die(json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu), JSON_HEX_QUOT | JSON_HEX_APOS));
+        die(str_replace("'", '\u0027', json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu))));
     }
 
     /**
