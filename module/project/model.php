@@ -728,7 +728,7 @@ class projectModel extends model
             $project->end = date("Y-m-d", strtotime($project->end));
 
             /* Judge whether the project is delayed. */
-            if($project->status != 'done')
+            if($project->status != 'done' and $project->status != 'suspended')
             {
                 $delay = helper::diffDate(helper::today(), $project->end);
                 if($delay > 0) $project->delay = $delay;
@@ -853,7 +853,7 @@ class projectModel extends model
         if(!$project) return false;
 
         /* Judge whether the project is delayed. */
-        if($project->status != 'done')
+        if($project->status != 'done' and $project->status != 'suspended')
         {
             $delay = helper::diffDate(helper::today(), $project->end);
             if($delay > 0) $project->delay = $delay;
