@@ -103,7 +103,7 @@ $(function()
         return settings;
     };
 
-    var tasks        = $.parseJSON('<?php echo helper::jsonEncode($tasks, JSON_HEX_QUOT | JSON_HEX_APOS) ?>');
+    var tasks        = $.parseJSON('<?php echo helper::jsonEncode4Parse($tasks, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
     var current      = '<?php echo $current ?>';
     var setting      = formatSetting('<?php echo $setting ?>');
     var lang         = 

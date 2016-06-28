@@ -117,7 +117,7 @@
 <script>
 $(function()
 {
-    var data = $.parseJSON('<?php echo helper::jsonEncode($tree);?>');
+    var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
     var options = {
         name: 'tree-<?php echo $viewType ?>-edit',
         initialState: 'preserve',

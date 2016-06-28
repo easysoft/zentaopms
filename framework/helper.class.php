@@ -56,4 +56,29 @@ class helper extends baseHelper
         if(isset($viewType) and strpos($config->views, ',' . $viewType . ',') === false) $viewType = $config->default->view;
         return isset($viewType) ? $viewType : $config->default->view;
     }
+
+    /**
+     * Encode json for $.parseJSON
+     * 
+     * @param  array  $data 
+     * @param  int    $options 
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function jsonEncode4Parse($data, $options = 0)
+    {
+        $json = json_encode($data, $options);
+
+        /* json_encode is not support options befor PHP5.3. */
+        if($data and $options and empty($json))
+        {
+            $json = json_encode($data);
+            $json = str_replace(array("'", '"'), array('\u0027', '\u0022'), $json);
+        }
+
+        $escapers =     array("\\",     "/",   "\"",  "\n",  "\r",  "\t", "\x08", "\x0c");
+        $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t",  "\\f",  "\\b");
+        return str_replace($escapers, $replacements, $json);
+    }
 }

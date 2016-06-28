@@ -55,9 +55,9 @@ $(function()
 {
     var hoursFormat = '<?php echo $lang->project->hours  ?>';
     var viewLevel = '<?php echo $level ?>' || 'custom';
-    var data = $.parseJSON('<?php echo helper::jsonEncode($tree, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
+    var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
     var $tree = $('#projectTree');
-    var statusMap = $.parseJSON('<?php echo helper::jsonEncode($lang->task->statusList);?>');
+    var statusMap = $.parseJSON('<?php echo helper::jsonEncode4Parse($lang->task->statusList);?>');
     var selectCustomLevel = function() {$('.tree-view-btn.active').removeClass('active').filter('[data-type="custom"]').addClass('active');};
     $tree.tree(
     {

@@ -42,7 +42,7 @@ class blockModel extends model
             unset($data->html);
         }
 
-        $data->params = helper::jsonEncode($data->params, $options = 0, $addslashes = true);
+        $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
     }
 
@@ -155,7 +155,7 @@ class blockModel extends model
             $block['order']   = $index;
             $block['module']  = $module;
             $block['account'] = $account;
-            $block['params']  = isset($block['params']) ? helper::jsonEncode($block['params'], $options = 0, $addslashes = true) : '';
+            $block['params']  = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             if(!isset($block['source'])) $block['source'] = $module;
 
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
