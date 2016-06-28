@@ -145,6 +145,7 @@ class upgradeModel extends model
             case '8_2_1':
                 $this->execSQL($this->getUpgradeFile('8.2.1'));
             case '8_2_2':
+            case '8_2_3':
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -225,6 +226,7 @@ class upgradeModel extends model
         case '8_2':
         case '8_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.1'));
         case '8_2_2':
+        case '8_2_3':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
