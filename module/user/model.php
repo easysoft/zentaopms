@@ -427,30 +427,31 @@ class userModel extends model
      */
     public function batchEdit()
     {
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+        $data = fixer::input('post')->get();
+        if(empty($_POST['verifyPassword']) or md5($data->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
 
-        $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchAll('id');
-        $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($this->post->account)->fetchGroup('account', 'id');
+        $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
+        $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
 
         $accounts = array();
-        foreach($this->post->account as $id => $account)
+        foreach($data->account as $id => $account)
         {
             $users[$id]['account']  = $account;
-            $users[$id]['realname'] = $this->post->realname[$id];
-            $users[$id]['commiter'] = $this->post->commiter[$id];
-            $users[$id]['email']    = $this->post->email[$id];
-            $users[$id]['join']     = $this->post->join[$id];
-            $users[$id]['skype']    = $this->post->skype[$id];
-            $users[$id]['qq']       = $this->post->qq[$id];
-            $users[$id]['yahoo']    = $this->post->yahoo[$id];
-            $users[$id]['gtalk']    = $this->post->gtalk[$id];
-            $users[$id]['wangwang'] = $this->post->wangwang[$id];
-            $users[$id]['mobile']   = $this->post->mobile[$id];
-            $users[$id]['phone']    = $this->post->phone[$id];
-            $users[$id]['address']  = $this->post->address[$id];
-            $users[$id]['zipcode']  = $this->post->zipcode[$id];
-            $users[$id]['dept']     = $this->post->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $this->post->dept[$id];
-            $users[$id]['role']     = $this->post->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $this->post->role[$id];
+            $users[$id]['realname'] = $data->realname[$id];
+            $users[$id]['commiter'] = $data->commiter[$id];
+            $users[$id]['email']    = $data->email[$id];
+            $users[$id]['join']     = $data->join[$id];
+            $users[$id]['skype']    = $data->skype[$id];
+            $users[$id]['qq']       = $data->qq[$id];
+            $users[$id]['yahoo']    = $data->yahoo[$id];
+            $users[$id]['gtalk']    = $data->gtalk[$id];
+            $users[$id]['wangwang'] = $data->wangwang[$id];
+            $users[$id]['mobile']   = $data->mobile[$id];
+            $users[$id]['phone']    = $data->phone[$id];
+            $users[$id]['address']  = $data->address[$id];
+            $users[$id]['zipcode']  = $data->zipcode[$id];
+            $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
+            $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 
             if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
             if(in_array($account, $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));

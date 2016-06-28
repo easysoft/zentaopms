@@ -335,24 +335,25 @@ class projectModel extends model
     {
         $projects    = array();
         $allChanges  = array();
+        $data        = fixer::input('post')->get(); 
         $oldProjects = $this->getByIdList($this->post->projectIDList);
-        foreach($this->post->projectIDList as $projectID)
+        foreach($data->projectIDList as $projectID)
         {
             $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name   = $this->post->names[$projectID];
-            $projects[$projectID]->code   = $this->post->codes[$projectID];
-            $projects[$projectID]->PM     = $this->post->PMs[$projectID];
-            $projects[$projectID]->PO     = $this->post->POs[$projectID];
-            $projects[$projectID]->QD     = $this->post->QDs[$projectID];
-            $projects[$projectID]->RD     = $this->post->RDs[$projectID];
-            $projects[$projectID]->type   = $this->post->types[$projectID];
-            $projects[$projectID]->status = $this->post->statuses[$projectID];
-            $projects[$projectID]->begin  = $this->post->begins[$projectID];
-            $projects[$projectID]->end    = $this->post->ends[$projectID];
-            $projects[$projectID]->team   = $this->post->teams[$projectID];
-            $projects[$projectID]->desc   = $this->post->descs[$projectID];
-            $projects[$projectID]->days   = $this->post->dayses[$projectID];
-            $projects[$projectID]->order  = $this->post->orders[$projectID];
+            $projects[$projectID]->name   = $data->names[$projectID];
+            $projects[$projectID]->code   = $data->codes[$projectID];
+            $projects[$projectID]->PM     = $data->PMs[$projectID];
+            $projects[$projectID]->PO     = $data->POs[$projectID];
+            $projects[$projectID]->QD     = $data->QDs[$projectID];
+            $projects[$projectID]->RD     = $data->RDs[$projectID];
+            $projects[$projectID]->type   = $data->types[$projectID];
+            $projects[$projectID]->status = $data->statuses[$projectID];
+            $projects[$projectID]->begin  = $data->begins[$projectID];
+            $projects[$projectID]->end    = $data->ends[$projectID];
+            $projects[$projectID]->team   = $data->teams[$projectID];
+            $projects[$projectID]->desc   = $data->descs[$projectID];
+            $projects[$projectID]->days   = $data->dayses[$projectID];
+            $projects[$projectID]->order  = $data->orders[$projectID];
         }
 
         foreach($projects as $projectID => $project)
@@ -1238,7 +1239,7 @@ class projectModel extends model
         $versions = $this->loadModel('story')->getVersions($this->post->stories);
         foreach($this->post->stories as $key => $storyID)
         {
-            $productID = $this->post->products[$storyID];
+            $productID = (int)$this->post->products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;

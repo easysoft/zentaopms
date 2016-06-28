@@ -237,14 +237,15 @@ class buildModel extends model
     public function updateLinkedBug($build)
     {
         $bugs = empty($build->bugs) ? '' : $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
+        $data = fixer::input('post')->get();
         $now  = helper::now();
 
         $resolvedPairs = array();
         if(isset($_POST['bugs']))
         {
-            foreach($this->post->bugs as $key => $bugID)
+            foreach($data->bugs as $key => $bugID)
             {
-                if(isset($_POST['resolvedBy'][$key]))$resolvedPairs[$bugID] = $this->post->resolvedBy[$key];
+                if(isset($_POST['resolvedBy'][$key]))$resolvedPairs[$bugID] = $data->resolvedBy[$key];
             }
         }
 

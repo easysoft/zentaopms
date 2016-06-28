@@ -292,19 +292,20 @@ class productModel extends model
     {
         $products    = array();
         $allChanges  = array();
+        $data        = fixer::input('post')->get();
         $oldProducts = $this->getByIdList($this->post->productIDList);
-        foreach($this->post->productIDList as $productID)
+        foreach($data->productIDList as $productID)
         {
             $products[$productID] = new stdClass();
-            $products[$productID]->name   = $this->post->names[$productID];
-            $products[$productID]->code   = $this->post->codes[$productID];
-            $products[$productID]->PO     = $this->post->POs[$productID];
-            $products[$productID]->QD     = $this->post->QDs[$productID];
-            $products[$productID]->RD     = $this->post->RDs[$productID];
-            $products[$productID]->type   = $this->post->types[$productID];
-            $products[$productID]->status = $this->post->statuses[$productID];
-            $products[$productID]->desc   = $this->post->descs[$productID];
-            $products[$productID]->order  = $this->post->orders[$productID];
+            $products[$productID]->name   = $data->names[$productID];
+            $products[$productID]->code   = $data->codes[$productID];
+            $products[$productID]->PO     = $data->POs[$productID];
+            $products[$productID]->QD     = $data->QDs[$productID];
+            $products[$productID]->RD     = $data->RDs[$productID];
+            $products[$productID]->type   = $data->types[$productID];
+            $products[$productID]->status = $data->statuses[$productID];
+            $products[$productID]->desc   = $data->descs[$productID];
+            $products[$productID]->order  = $data->orders[$productID];
         }
 
         foreach($products as $productID => $product)

@@ -734,7 +734,8 @@ class storyModel extends model
         $stories     = array();
         $allChanges  = array();
         $now         = helper::now();
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
+        $data        = fixer::input('post')->get();
+        $storyIDList = $data->storyIDList ? $data->storyIDList : array();
 
         /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
         if($this->session->showSuhosinInfo) array_pop($storyIDList);
@@ -753,9 +754,9 @@ class storyModel extends model
             $story->assignedDate   = $now;
             $story->status         = 'closed';
 
-            $story->closedReason   = $this->post->closedReasons[$storyID];
-            $story->duplicateStory = $this->post->duplicateStoryIDList[$storyID] ? $this->post->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
-            $story->childStories   = $this->post->childStoriesIDList[$storyID] ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
+            $story->closedReason   = $data->closedReasons[$storyID];
+            $story->duplicateStory = $data->duplicateStoryIDList[$storyID] ? $data->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
+            $story->childStories   = $data->childStoriesIDList[$storyID] ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
 
             if($story->closedReason == 'done') $story->stage = 'released';
             if($story->closedReason != 'done') $story->plan  = 0;
