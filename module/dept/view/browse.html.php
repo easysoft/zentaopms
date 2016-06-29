@@ -97,7 +97,7 @@
 <script>
 $(function()
 {
-    var data = $.parseJSON4Parse('<?php echo helper::jsonEncode($tree);?>');
+    var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
     var options = {
         name: 'deptTree',
         initialState: 'preserve',
