@@ -48,7 +48,7 @@
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
-      <?php if($doc->type == 'url'):?>
+      <?php if($doc->type == 'url' and $doc->url):?>
       <fieldset>
         <legend><?php echo $lang->doc->url;?></legend>
         <div>
