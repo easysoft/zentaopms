@@ -6,7 +6,7 @@
     {
         echo '<div class="label-angle with-close">';
         $product    = $this->product->getById($productID);
-        $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
+        $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
         echo '<i class="icon icon-cube"></i> ' . $product->name;
         echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
     }
@@ -14,7 +14,7 @@
     {
         echo '<div class="label-angle with-close">';
         $module     = $this->tree->getById($moduleID);
-        $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
+        $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
         echo $module->name;
         echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
     }
