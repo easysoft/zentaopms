@@ -28,7 +28,17 @@ class tree extends control
         if(strpos('story|bug|case', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($product->id);
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getPairs($product->id);
+                if($currentModuleID)
+                {
+                    $branchName = $branches[$branch];
+                    unset($branches);
+                    $branches[$branch] = $branchName;
+                }
+                $this->view->branches = $branches;
+            }
             $this->view->root = $product;
         }
         /* The viewType is doc. */
