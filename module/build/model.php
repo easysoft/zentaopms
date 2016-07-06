@@ -141,6 +141,7 @@ class buildModel extends model
         {
             $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
                 ->where('build')->in(array_keys($builds))
+                ->andWhere('product')->in($products)
                 ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchPairs();
