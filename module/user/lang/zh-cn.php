@@ -41,7 +41,7 @@ $lang->user->join        = '入职日期';
 $lang->user->visits      = '访问次数';
 $lang->user->ip          = '最后IP';
 $lang->user->last        = '最后登录';
-$lang->user->ranzhi      = '然之账号';
+$lang->user->ranzhi      = '然之帐号';
 $lang->user->ditto       = '同上';
 $lang->user->originalPassword = '原密码';
 $lang->user->verifyPassword   = '请输入你的密码';
@@ -119,7 +119,7 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 
 $lang->user->keepLogin['on']      = '保持登录';
-$lang->user->loginWithDemoUser    = '使用demo账号登录：';
+$lang->user->loginWithDemoUser    = '使用demo帐号登录：';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
