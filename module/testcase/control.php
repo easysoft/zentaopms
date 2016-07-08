@@ -1030,18 +1030,19 @@ class testcase extends control
             move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
 
             $fileName = $this->file->savePath . $file['pathname'];
-            $fields   = $this->testcase->getImportFields();
             $rows     = $this->file->parseCSV($fileName);
             $header   = $rows[0];
+            $fields   = $this->testcase->getImportFields();
+            $fields   = array_flip($fields);
             unset($rows[0]);
 
             $columnKey = array();
             foreach($header as $title)
             {
-                $field = array_search($title, $fields);
-                if(!$field) continue;
-                $columnKey[] = $field;
+                if(!isset($fields[$title])) continue;
+                $columnKey[] = $fields[$title];
             }
+
             if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
             {
                 $fc     = file_get_contents($fileName);
@@ -1060,16 +1061,16 @@ class testcase extends control
                 }
                 file_put_contents($fileName, $fc);
 
-                $rows     = $this->file->parseCSV($fileName);
-                $header   = $rows[0];
+                $rows      = $this->file->parseCSV($fileName);
+                $header    = $rows[0];
+                $columnKey = array();
                 unset($rows[0]);
                 foreach($header as $title)
                 {
-                    $field = array_search($title, $fields);
-                    if(!$field) continue;
-                    $columnKey[] = $field;
+                    if(!isset($fields[$title])) continue;
+                    $columnKey[] = $fields[$title];
                 }
-                if(empty($columnKey)) die(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('importFile', $fileName);
@@ -1102,6 +1103,7 @@ class testcase extends control
         $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields();
+        $fields     = array_flip($fields);
 
         $rows   = $this->loadModel('file')->parseCSV($file);
         $header = $rows[0];
@@ -1109,12 +1111,11 @@ class testcase extends control
 
         foreach($header as $title)
         {
-            $field = array_search($title, $fields);
-            if(!$field) continue;
-            $columnKey[] = $field;
+            if(!isset($fields[$title])) continue;
+            $columnKey[] = $fields[$title];
         }
 
-        $endField = $field;
+        $endField = end($fields);
         $caseData = array();
         $stepData = array();
         foreach($rows as $row => $data)
