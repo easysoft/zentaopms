@@ -68,15 +68,8 @@ class helper extends baseHelper
      */
     static public function jsonEncode4Parse($data, $options = 0)
     {
-        if(version_compare(PHP_VERSION, '5.3', '>'))
-        {
-            $json = json_encode($data, $options);
-        }
-        else
-        {
-            $json = json_encode($data);
-            if($options) $json = str_replace(array("'", '"'), array('\u0027', '\u0022'), $json);
-        }
+        $json = json_encode($data);
+        if($options) $json = str_replace(array("'", '"'), array('\u0027', '\u0022'), $json);
 
         $escapers     = array("\\",  "/",   "\"", "'", "\n",  "\r",  "\t", "\x08", "\x0c", "\\\\u");
         $replacements = array("\\\\", "\\/", "\\\"", "\'", "\\n", "\\r", "\\t",  "\\f",  "\\b", "\\u");
