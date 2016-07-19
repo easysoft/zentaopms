@@ -214,16 +214,26 @@ class build extends control
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
     {
         $branch = $branch ? "0,$branch" : $branch;
+        $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         { 
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
-            die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, $branch, $params), $build, 'size=4 class=form-control multiple'));
+            $builds = $this->build->getProductBuildPairs($productID, $branch, $params);
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select($varName . '[]', $builds, $build, 'size=4 class=form-control multiple'));
         }
-        if($varName == 'openedBuilds' ) die(html::select($varName . "[$index][]", $this->build->getProductBuildPairs($productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
+        if($varName == 'openedBuilds' )
+        {
+            $builds = $this->build->getProductBuildPairs($productID, $branch, 'noempty');
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select($varName . "[$index][]", $builds, $build, 'size=4 class=form-control multiple'));
+        }
         if($varName == 'resolvedBuild')
         { 
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
-            die(html::select($varName, $this->build->getProductBuildPairs($productID, $branch, $params), $build, "class='form-control'"));
+            $builds = $this->build->getProductBuildPairs($productID, $branch, $params);
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select($varName, $builds, $build, "class='form-control'"));
         }
     }
 
@@ -243,19 +253,33 @@ class build extends control
     public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
     {
         $branch = $branch ? "0,$branch" : $branch;
+        $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params);
-            die(html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple'));
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select($varName . '[]', $builds , $build, 'size=4 class=form-control multiple'));
         }
-        if($varName == 'openedBuilds') die(html::select($varName . "[$index][]", $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, 'size=4 class=form-control multiple'));
+        if($varName == 'openedBuilds')
+        {
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
+        }
         if($varName == 'resolvedBuild')
         { 
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
-            die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params), $build, "class='form-control'"));
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params);
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select($varName, $builds, $build, "class='form-control'"));
         }
-        if($varName == 'testTaskBuild') die(html::select('build', $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty'), $build, "class='form-control'"));
+        if($varName == 'testTaskBuild')
+        {
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
+            if($isJsonView) die(json_encode($builds));
+            else die(html::select('build', $builds, $build, "class='form-control'"));
+        }
     }
 
     /**

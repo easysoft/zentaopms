@@ -1919,8 +1919,15 @@ class project extends control
     public function ajaxGetMembers($projectID, $assignedTo = '')
     {
         $users      = $this->project->getTeamMemberPairs($projectID);
-        $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
-        die(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
+        if($this->app->getViewType() === 'json')
+        {
+            die(json_encode($users));
+        }
+        else
+        {
+            $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
+            die(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
+        }
     }
 
     /**
