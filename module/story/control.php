@@ -1057,8 +1057,15 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
         $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
-        $storyName = $number === '' ? 'story' : "story[$number]";
-        die(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
+        if($this->app->getViewType() === 'json')
+        {
+            die(json_encode($stories));
+        }
+        else
+        {
+            $storyName = $number === '' ? 'story' : "story[$number]";
+            die(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
+        }
     }
 
     /**

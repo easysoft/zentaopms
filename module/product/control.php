@@ -513,6 +513,8 @@ class product extends control
         {
             $projects = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : $branch, $params = 'nodeleted');
         }
+        if($this->app->getViewType() == 'json') die(json_encode($projects));
+        
         die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
     }
 
