@@ -119,7 +119,7 @@ class productModel extends model
         if(strpos($this->app->company->admins, $account) !== false) return true; 
 
         $acls = $this->app->user->rights['acls'];
-        if(!empty($acls['products'])) return !in_array($product->id, $acls['products']) ? false : true;
+        if(!empty($acls['products']) and !in_array($product->id, $acls['products'])) return false;
 
         /* Product is open, return true. */
         if($product->acl == 'open') return true;

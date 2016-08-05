@@ -568,7 +568,7 @@ class baseDAO
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL()
+    public function processSQL($saveQuery = true)
     {
         $sql = $this->sqlobj->get();
 
@@ -625,7 +625,7 @@ class baseDAO
             }
         }
 
-        self::$querys[] = $this->processKeywords($sql);
+        if($saveQuery) self::$querys[] = $this->processKeywords($sql);
         return $sql;
     }
 
@@ -773,7 +773,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql = $this->processSQL();
+        $sql = $this->processSQL($saveQuery = false);
         $key = md5($sql);
         if(isset(dao::$cache['fetch'][$key][$field])) return dao::$cache['fetch'][$key][$field];
 
@@ -803,7 +803,7 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
-        $sql = $this->processSQL();
+        $sql = $this->processSQL($saveQuery = false);
         $key = md5($sql);
         if(isset(dao::$cache['fetchAll'][$key][$keyField])) return dao::$cache['fetchAll'][$key][$keyField];
 
@@ -831,7 +831,7 @@ class baseDAO
      */
     public function fetchGroup($groupField, $keyField = '')
     {
-        $sql = $this->processSQL();
+        $sql = $this->processSQL($saveQuery = false);
         $key = md5($sql);
         if(isset(dao::$cache['fetchGroup'][$key][$groupField][$keyField])) return dao::$cache['fetchGroup'][$key][$groupField][$keyField];
 
@@ -862,7 +862,7 @@ class baseDAO
         $keyField   = trim($keyField, '`');
         $valueField = trim($valueField, '`');
 
-        $sql = $this->processSQL();
+        $sql = $this->processSQL($saveQuery = false);
         $key = md5($sql);
         if(isset(dao::$cache['fetchPairs'][$key][$keyField][$valueField])) return dao::$cache['fetchPairs'][$key][$keyField][$valueField];
 
