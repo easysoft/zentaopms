@@ -41,7 +41,7 @@ $lang->user->join        = '入職日期';
 $lang->user->visits      = '訪問次數';
 $lang->user->ip          = '最後IP';
 $lang->user->last        = '最後登錄';
-$lang->user->ranzhi      = '然之賬號';
+$lang->user->ranzhi      = '然之帳號';
 $lang->user->ditto       = '同上';
 $lang->user->originalPassword = '原密碼';
 $lang->user->verifyPassword   = '請輸入你的密碼';
@@ -119,7 +119,7 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 
 $lang->user->keepLogin['on']      = '保持登錄';
-$lang->user->loginWithDemoUser    = '使用demo賬號登錄：';
+$lang->user->loginWithDemoUser    = '使用demo帳號登錄：';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、數字和下劃線的組合，三位以上';

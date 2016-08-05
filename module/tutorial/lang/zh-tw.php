@@ -35,9 +35,9 @@ $lang->tutorial->dataNotSave      = "教程任務中，數據不會保存。";
 
 $lang->tutorial->tasks = array();
 
-$lang->tutorial->tasks['createAccount']         = array('title' => '創建賬號');
+$lang->tutorial->tasks['createAccount']         = array('title' => '創建帳號');
 $lang->tutorial->tasks['createAccount']['nav']  = array('module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'addUser', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '添加用戶');
-$lang->tutorial->tasks['createAccount']['desc'] = "<p>在系統創建一個新的用戶賬號：</p><ul><li data-target='nav'>打開 <span class='task-nav'>組織 <i class='icon icon-angle-right'></i> 用戶 <i class='icon icon-angle-right'></i> 添加用戶</span> 頁面；</li><li data-target='form'>在添加用戶表單中填寫新用戶信息；</li><li data-target='submit'>保存用戶信息。</li></ul>";
+$lang->tutorial->tasks['createAccount']['desc'] = "<p>在系統創建一個新的用戶帳號：</p><ul><li data-target='nav'>打開 <span class='task-nav'>組織 <i class='icon icon-angle-right'></i> 用戶 <i class='icon icon-angle-right'></i> 添加用戶</span> 頁面；</li><li data-target='form'>在添加用戶表單中填寫新用戶信息；</li><li data-target='submit'>保存用戶信息。</li></ul>";
 
 $lang->tutorial->tasks['createProduct']         = array('title' => '創建產品');
 $lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '新增產品');
