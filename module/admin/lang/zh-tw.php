@@ -31,11 +31,11 @@ $lang->admin->register->click      = '點擊此處';
 $lang->admin->register->lblAccount = '請設置您的用戶名，英文字母和數字的組合，三位以上。';
 $lang->admin->register->lblPasswd  = '請設置您的密碼。數字和字母的組合，六位以上。';
 $lang->admin->register->submit     = '登記';
-$lang->admin->register->bind       = "如果您已經擁有社區賬號，%s關聯賬戶";
+$lang->admin->register->bind       = "如果您已經擁有社區帳號，%s關聯賬戶";
 $lang->admin->register->success    = "登記賬戶成功";
 
 $lang->admin->bind = new stdclass();
-$lang->admin->bind->caption = '關聯社區賬號';
+$lang->admin->bind->caption = '關聯社區帳號';
 $lang->admin->bind->success = "關聯賬戶成功";
 
 $lang->admin->safe = new stdclass();
@@ -51,7 +51,7 @@ $lang->admin->safe->modeList[1] = '中';
 $lang->admin->safe->modeList[2] = '強';
 
 $lang->admin->safe->reasonList['weak']     = '常用弱口令';
-$lang->admin->safe->reasonList['account']  = '與賬號相同';
+$lang->admin->safe->reasonList['account']  = '與帳號相同';
 $lang->admin->safe->reasonList['mobile']   = '與手機相同';
 $lang->admin->safe->reasonList['phone']    = '與電話相同';
 $lang->admin->safe->reasonList['birthday'] = '與生日相同';
