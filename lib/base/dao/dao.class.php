@@ -568,7 +568,7 @@ class baseDAO
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL($saveQuery = true)
+    public function processSQL()
     {
         $sql = $this->sqlobj->get();
 
@@ -625,7 +625,7 @@ class baseDAO
             }
         }
 
-        if($saveQuery) self::$querys[] = $this->processKeywords($sql);
+        self::$querys[] = $this->processKeywords($sql);
         return $sql;
     }
 
@@ -684,18 +684,18 @@ class baseDAO
 
             if($this->slaveDBH and $method == 'select')
             {
-                if(isset(dao::$cache['query'][$key])) return dao::$cache['query'][$key];
+                if(isset(dao::$cache[$key])) return dao::$cache[$key];
                 $result = $this->slaveDBH->query($sql);
-                dao::$cache['query'][$key] = $result;
+                dao::$cache[$key] = $result;
                 return $result;
             }
             else
             {
                 if($this->method == 'select')
                 {
-                    if(isset(dao::$cache['query'][$key])) return dao::$cache['query'][$key];
+                    if(isset(dao::$cache[$key])) return dao::$cache[$key];
                     $result = $this->slaveDBH->query($sql);
-                    dao::$cache['query'][$key] = $result;
+                    dao::$cache[$key] = $result;
                     return $result;
                 }
 
@@ -773,23 +773,10 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql = $this->processSQL($saveQuery = false);
-        $key = md5($sql);
-        if(isset(dao::$cache['fetch'][$key][$field])) return dao::$cache['fetch'][$key][$field];
-
-        if(empty($field))
-        {
-            $result = $this->query()->fetch();
-            dao::$cache['fetch'][$key][$field] = $result;
-            return $result;
-        }
+        if(empty($field)) return $this->query()->fetch();
         $this->setFields($field);
         $result = $this->query()->fetch(PDO::FETCH_OBJ);
-        if($result)
-        {
-            dao::$cache['fetch'][$key][$field] = $result->$field;
-            return $result->$field;
-        }
+        if($result) return $result->$field;
     }
 
     /**
@@ -803,20 +790,10 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
-        $sql = $this->processSQL($saveQuery = false);
-        $key = md5($sql);
-        if(isset(dao::$cache['fetchAll'][$key][$keyField])) return dao::$cache['fetchAll'][$key][$keyField];
-
         $stmt = $this->query();
-        if(empty($keyField))
-        {
-            $result = $stmt->fetchAll();
-            dao::$cache['fetchAll'][$key][$keyField] = $result;
-            return $result;
-        }
+        if(empty($keyField)) return $stmt->fetchAll();
         $rows = array();
         while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
-        dao::$cache['fetchAll'][$key][$keyField] = $rows;
         return $rows;
     }
 
@@ -831,17 +808,12 @@ class baseDAO
      */
     public function fetchGroup($groupField, $keyField = '')
     {
-        $sql = $this->processSQL($saveQuery = false);
-        $key = md5($sql);
-        if(isset(dao::$cache['fetchGroup'][$key][$groupField][$keyField])) return dao::$cache['fetchGroup'][$key][$groupField][$keyField];
-
         $stmt = $this->query();
         $rows = array();
         while($row = $stmt->fetch())
         {
             empty($keyField) ?  $rows[$row->$groupField][] = $row : $rows[$row->$groupField][$row->$keyField] = $row;
         }
-        dao::$cache['fetchGroup'][$key][$groupField][$keyField] = $rows;
         return $rows;
     }
 
@@ -862,10 +834,6 @@ class baseDAO
         $keyField   = trim($keyField, '`');
         $valueField = trim($valueField, '`');
 
-        $sql = $this->processSQL($saveQuery = false);
-        $key = md5($sql);
-        if(isset(dao::$cache['fetchPairs'][$key][$keyField][$valueField])) return dao::$cache['fetchPairs'][$key][$keyField][$valueField];
-
         $pairs = array();
         $ready = false;
         $stmt  = $this->query();
@@ -884,7 +852,6 @@ class baseDAO
 
             $pairs[$row[$keyField]] = $row[$valueField];
         }
-        dao::$cache['fetchPairs'][$key][$keyField][$valueField] = $pairs;
         return $pairs;
     }
 
