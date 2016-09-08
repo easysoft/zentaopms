@@ -237,7 +237,7 @@
                       $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
                       echo html::select('assignedTo', $users, '', 'class="hidden"');
                       echo "<li class='dropdown-submenu'>";
-                      echo html::a('javascript::', $lang->story->assignedTo, 'id="assignItem"');
+                      echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
                       echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       foreach ($users as $key => $value)
                       {

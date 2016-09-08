@@ -298,7 +298,7 @@ class mail extends control
         foreach($queueList as $queue)
         {
             $mailStatus = $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queue->id)->fetch('status');
-            if(empty($mailStatus) or $mailStatus != 'wait') break;
+            if(empty($mailStatus) or $mailStatus != 'wait') continue;
 
             $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->eq($queue->id)->exec();
             $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);

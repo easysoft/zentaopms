@@ -1031,9 +1031,14 @@ class testcase extends control
 
             $fileName = $this->file->savePath . $file['pathname'];
             $rows     = $this->file->parseCSV($fileName);
-            $header   = $rows[0];
             $fields   = $this->testcase->getImportFields();
             $fields   = array_flip($fields);
+            $header   = array();
+            foreach($rows[0] as $i => $rowValue)
+            {
+                if(empty($rowValue)) break;
+                $header[$i] = $rowValue;
+            }
             unset($rows[0]);
 
             $columnKey = array();
@@ -1062,8 +1067,13 @@ class testcase extends control
                 file_put_contents($fileName, $fc);
 
                 $rows      = $this->file->parseCSV($fileName);
-                $header    = $rows[0];
                 $columnKey = array();
+                $header   = array();
+                foreach($rows[0] as $i => $rowValue)
+                {
+                    if(empty($rowValue)) break;
+                    $header[$i] = $rowValue;
+                }
                 unset($rows[0]);
                 foreach($header as $title)
                 {
@@ -1106,7 +1116,12 @@ class testcase extends control
         $fields     = array_flip($fields);
 
         $rows   = $this->loadModel('file')->parseCSV($file);
-        $header = $rows[0];
+        $header   = array();
+        foreach($rows[0] as $i => $rowValue)
+        {
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
+        }
         unset($rows[0]);
 
         foreach($header as $title)
