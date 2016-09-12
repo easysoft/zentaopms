@@ -69,3 +69,6 @@ $lang->doc->errorEmptyProject  = "{$lang->projectCommon} is empty, can not creat
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'url';
+
+$lang->doclib = new stdclass();
+$lang->doclib->name = 'Library Name';
