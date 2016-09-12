@@ -395,6 +395,8 @@ class userModel extends model
             }
         }
 
+        if(empty($this->post->groups)) $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->exec();
+
         if($this->post->groups)
         {
             $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->exec();
