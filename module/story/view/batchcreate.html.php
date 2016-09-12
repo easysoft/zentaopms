@@ -100,7 +100,7 @@ foreach(explode(',', $showFields) as $field)
       <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><?php echo html::textarea("verify[$i]", '', "rows='1' class='form-control autosize'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input("estimate[$i]", $estimate, "class='form-control' autocomplete='off'");?></td>
-      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->story->reviewList, $needReview, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <?php endfor;?>
@@ -124,7 +124,7 @@ foreach(explode(',', $showFields) as $field)
       <td class='<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo html::textarea("verify[%s]", '', "rows='1' class='form-control autosize'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select("pri[%s]", $priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo html::input("estimate[%s]", $estimate, "class='form-control autocomplete='off''");?></td>
-      <td class='<?php echo zget($visibleFields, 'review', ' hidden')?>'><?php echo html::select("needReview[%s]", $lang->story->reviewList, 0, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', ' hidden')?>'><?php echo html::select("needReview[%s]", $lang->story->reviewList, $needReview, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo html::input("keywords[%s]", '', "class='form-control autocomplete='off''");?></td>
     </tr>
   </tbody>

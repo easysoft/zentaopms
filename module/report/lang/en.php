@@ -40,6 +40,7 @@ $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
 $lang->report->bugOpenedDate    = 'Bug opened date';
 $lang->report->taskAssignedDate = 'Date';
+$lang->report->beginAndEnd      = 'Date';
 $lang->report->dept             = 'Dept';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';

@@ -15,7 +15,8 @@
   </div>
 </div>
 <div class='main'>
-  <div class='input-group w-300px input-group-sm'>
+  <div class='input-group w-400px input-group-sm'>
+    <span class='input-group-addon'><?php echo $lang->projectCommon . $lang->report->beginAndEnd;?></span>
     <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
     <span class='input-group-addon'><?php echo $lang->report->to;?></span>
     <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
