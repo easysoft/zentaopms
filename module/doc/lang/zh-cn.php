@@ -69,3 +69,6 @@ $lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
+
+$lang->doclib = new stdclass();
+$lang->doclib->name = '文档库名称';
