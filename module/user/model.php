@@ -428,7 +428,7 @@ class userModel extends model
     public function batchEdit()
     {
         $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or md5($data->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
 
         $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
