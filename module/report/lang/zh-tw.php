@@ -40,6 +40,7 @@ $lang->report->workload         = '員工負載表';
 $lang->report->workloadAB       = '工作負載';
 $lang->report->bugOpenedDate    = 'Bug創建時間';
 $lang->report->taskAssignedDate = '起止時間';
+$lang->report->beginAndEnd      = '起止時間';
 $lang->report->dept             = '部門';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差報表|report|projectdeviation';

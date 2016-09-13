@@ -35,6 +35,6 @@ $lang->file->errorSuffix      = '壓縮包格式錯誤，只能上傳zip壓縮�
 $lang->file->errorExtract     = '解壓縮失敗！可能檔案已經損壞，或壓縮包裡含有非法上傳檔案。';
 $lang->file->uploadImagesExplain = <<<EOD
 <p>1、上傳檔案為包含圖片的zip壓縮包，程序會以檔案名作為標題，以圖片作為內容。</p>
-<p>2、如果檔案名可以開頭含有 數字+下劃線，以方便排序，程序會將他們忽略。</p>
+<p>2、如果檔案名開頭含有 數字+下劃線，以方便排序，程序會將他們忽略。</p>
 <p>3、圖片格式：jpg|jpeg|gif|png。</p>
 EOD;
