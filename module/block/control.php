@@ -587,7 +587,7 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $num   = isset($this->params->num) ? $this->params->num : 0;
         $pager = pager::init(0, $num , 1);
-        $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '');
+        $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $this->params->type);
     }
 
     /**
