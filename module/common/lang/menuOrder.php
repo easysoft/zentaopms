@@ -77,10 +77,10 @@ $lang->testtask->menuOrder = $lang->testcase->menuOrder;
 
 /* doc menu order. */
 $lang->doc->menuOrder[5]  = 'list';
-$lang->doc->menuOrder[10]  = 'browse';
-$lang->doc->menuOrder[15] = 'edit';
-$lang->doc->menuOrder[20] = 'module';
-$lang->doc->menuOrder[25] = 'delete';
+$lang->doc->menuOrder[10] = 'index';
+$lang->doc->menuOrder[15] = 'product';
+$lang->doc->menuOrder[20] = 'project';
+$lang->doc->menuOrder[25] = 'custom';
 $lang->doc->menuOrder[30] = 'create';
 
 /* report menu order. */

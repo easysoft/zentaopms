@@ -262,10 +262,10 @@ $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
 $lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s', 'alias' => 'view,create,edit');
-$lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
-$lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
-$lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->index   = 'Index|doc|index|';
+$lang->doc->menu->product = array('link' => $lang->productCommon . '|doc|browse|type=product');
+$lang->doc->menu->project = array('link' => $lang->projectCommon . '|doc|browse|type=project');
+$lang->doc->menu->custom  = array('link' => 'Custom|doc|browse|type=custom');
 $lang->doc->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
 
 /* Report menu. */
