@@ -1149,6 +1149,71 @@ class upgradeModel extends model
     }
 
     /**
+     * Adjust doc module.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustDocModule()
+    {
+        $productDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('productdoc')->orderBy('grade,id')->fetchAll('id');
+        $allProductIdList  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'id');
+        foreach($allProductIdList as $productID)
+        {
+            $relation = array();
+            foreach($productDocModules as $moduleID => $module)
+            {
+                unset($module->id);
+                $module->root = $productID;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+                $newModuleID = $this->dao->lastInsertID();
+                $relation[$moduleID] = $newModuleID;
+                $newPaths = array();
+                foreach(explode(',', trim($module->path, ',')) as $path)
+                {
+                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
+                }
+
+                $newPaths = join(',', $newPaths);
+                $newPaths = ",$newPaths,";
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
+                $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('product')->eq($productID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('product')->exec();
+            }
+        }
+        $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($productDocModules))->exec();
+
+        $projectDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('projectdoc')->orderBy('grade,id')->fetchAll('id');
+        $allProjectIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs('id', 'id');
+        foreach($allProjectIdList as $projectID)
+        {
+            $relation = array();
+            foreach($projectDocModules as $moduleID => $module)
+            {
+                unset($module->id);
+                $module->root = $projectID;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+                $newModuleID = $this->dao->lastInsertID();
+                $relation[$moduleID] = $newModuleID;
+                $newPaths = array();
+                foreach(explode(',', trim($module->path, ',')) as $path)
+                {
+                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
+                }
+
+                $newPaths = join(',', $newPaths);
+                $newPaths = ",$newPaths,";
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
+                $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('project')->exec();
+            }
+        }
+        $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($projectDocModules))->exec();
+
+        return true;
+    }
+
+    /**
      * Judge any error occers.
      * 
      * @access public
