@@ -342,8 +342,8 @@ class commonModel extends model
         if($role == 'top')
         {
             $this->config->locate->module = 'project';
-            $this->config->locate->method = 'index';
-            $this->config->locate->params = 'locate=no&status=doing';
+            $this->config->locate->method = 'all';
+            $this->config->locate->params = 'status=isdoing';
         }
 
         unset($this->lang->menuOrder);
@@ -969,7 +969,7 @@ class commonModel extends model
         }
         else
         {
-            $queryObjects = $this->dao->query($queryCondition . (empty($orderBy) ? " ORDER BY $orderBy" : ''));
+            $queryObjects = $this->dao->query($queryCondition . (empty($orderBy) ? '' : " ORDER BY $orderBy"));
         }
 
         $preObj  = false;
