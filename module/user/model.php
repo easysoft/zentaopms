@@ -968,18 +968,10 @@ class userModel extends model
      */
     public function getDataInJSON($user)
     {
-        $data                   = array();
-        $data['user']           = new stdclass();
-        $data['user']->id       = $user->id;
-        $data['user']->account  = $user->account;
-        $data['user']->email    = $user->email;
-        $data['user']->realname = $user->realname;
-        $data['user']->gender   = $user->gender;
-        $data['user']->dept     = $user->dept;
-        $data['user']->role     = $user->role;
-        $data['user']->company  = $this->app->company->name;
-
-        return $data;
+        unset($user->password);
+        unset($user->deleted);
+        $user->company = $this->app->company->name;
+        return array('user' => $user);
     }
 
     /**
