@@ -1,1 +1,4 @@
 .outer{overflow:auto}
+.lib{border:1px solid #ddd; padding:5px;white-space:nowrap;overflow:hidden}
+.panel-heading{white-space:nowrap;overflow:hidden}
+.lib a{display:block;}

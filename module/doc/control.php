@@ -25,7 +25,6 @@ class doc extends control
         $this->loadModel('action');
         $this->loadModel('product');
         $this->loadModel('project');
-        $this->libs = $this->doc->getLibs();
     }
 
     /**
@@ -36,7 +35,25 @@ class doc extends control
      */
     public function index()
     {
-        $this->locate(inlink('browse'));
+        $products[] = $this->lang->doc->systemLibs['product'];
+
+        unset($this->lang->doc->menu->index);
+        $this->doc->setMenu($products);
+
+        $limit = 6;
+        $products   = $this->doc->getLimitLibs('product');
+        $projects   = $this->doc->getLimitLibs('project');
+        $customLibs = $this->doc->getLimitLibs('custom');
+        $subLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($products));
+        $subLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($projects));
+
+        $this->view->title      = $this->lang->doc->index;
+        $this->view->position[] = $this->lang->doc->index;
+        $this->view->products   = $products;
+        $this->view->projects   = $projects;
+        $this->view->customLibs = $customLibs;
+        $this->view->subLibs    = $subLibs;
+        $this->display();
     }
 
     /**
@@ -53,16 +70,32 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function browse($libID = 'product', $moduleID = 0, $productID = 0, $projectID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {  
+    public function browse($libID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
         $this->loadModel('search');
 
         /* Set browseType.*/ 
         $browseType = strtolower($browseType);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+
+        $type = 'custom';
+        if($libID)
+        {
+            $lib = $this->doc->getLibByID($libID);
+            if($lib->product or $lib->project) $type = $lib->product ? 'product' : 'project';
+        }
+        if(empty($libID)) $type = 'product';
+
+        $this->libs = $this->doc->getLibs($type);
+        if(empty($libID))
+        {
+            $libID = key($this->libs);
+            $lib = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->orderBy('id')->fetch();
+        }
 
         /* Set menu, save session. */
-        $this->doc->setMenu($this->libs, $libID, 'doc');
+        $this->doc->setMenu($this->libs, $libID, $type);
         $this->session->set('docList',   $this->app->getURI(true));
 
         /* Set header and position. */
@@ -77,14 +110,14 @@ class doc extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
  
         /* Get docs by browse type. */
-        $docs = $this->doc->getDocsByBrowseType($productID, $projectID, $browseType, $libID, $queryID, $moduleID, $sort, $pager);
+        $docs = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
 
         /* Get the tree menu. */
         $moduleTree = $this->doc->getDocTreeMenu($libID);
        
         /* Build the search form. */
-        $actionURL = $this->createLink('doc', 'browse', "libID=$libID&moduleID=$moduleID&procuctID=$productID&projectID=$projectID&browseType=bySearch&queryID=myQueryID");
-        $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL);
+        $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID");
+        $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
         $this->view->libID         = $libID;
         $this->view->libName       = $this->libs[$libID];
@@ -95,10 +128,9 @@ class doc extends control
         $this->view->pager         = $pager;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy       = $orderBy;
-        $this->view->productID     = $productID;
-        $this->view->projectID     = $projectID;
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
+        $this->view->type          = $type;
 
         $this->display();
     }
@@ -124,6 +156,8 @@ class doc extends control
                 echo js::error(dao::getError());
             }
         }
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->loadModel('user')->getPairs();
         die($this->display());
     }
 
@@ -409,5 +443,112 @@ class doc extends control
             }
             die(js::locate($this->session->docList, 'parent'));
         }
+    }
+
+    /**
+     * Ajax get drop menu.
+     * 
+     * @param  int    $productID 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($libID, $module, $method, $extra)
+    {
+        $this->view->link   = $this->doc->getDocLink($module, $method, $extra);
+        $this->view->libID  = $libID;
+        $this->view->module = $module;
+        $this->view->method = $method;
+        $this->view->extra  = $extra;
+        $this->view->libs   = $this->doc->getLibs($extra);
+
+        $this->display();
+    }
+
+    /**
+     * The results page of search.
+     * 
+     * @param  string  $keywords 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
+    {
+        $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)
+            ->andWhere('name')->like("%$keywords%")
+            ->beginIF($extra == 'product' or $extra == 'project')->andWhere($extra)->ne(0)->fi()
+            ->orderBy('`id` desc')
+            ->fetchAll();
+        foreach($libs as $key => $lib)
+        {
+            if(!$this->doc->checkPriv($lib)) unset($libs[$key]);
+        }
+
+        $this->view->link     = $this->doc->getDocLink($module, $method, $extra);
+        $this->view->libs     = $libs;
+        $this->view->keywords = $keywords;
+        $this->display();
+    }
+
+    /**
+     * Show all libs by type.
+     * 
+     * @param  string $type 
+     * @param  string $extra 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
+        $this->doc->setMenu(array($libName), 0, $type);
+
+        $this->view->title      = $libName;
+        $this->view->position[] = $libName;
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $libs    = $this->doc->getAllLibs($type, $pager, $extra);
+        $subLibs = array();
+        if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs), $limit = 0);
+
+        $this->view->type    = $type;
+        $this->view->libs    = $libs;
+        $this->view->subLibs = $subLibs;
+        $this->view->pager   = $pager;
+        $this->display();
+    }
+
+    /**
+     * Show libs for product or project
+     * 
+     * @param  string $type 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function showLibs($type, $objectID)
+    {
+        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        $this->doc->setMenu(array($object->name), 0, $type);
+
+        $this->view->title      = $object->name;
+        $this->view->position[] = $object->name;
+
+        $this->view->type   = $type;
+        $this->view->object = $object;
+        $this->view->libs   = $this->doc->getLibsByObject($type, $objectID);
+        $this->display();
     }
 }

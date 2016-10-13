@@ -268,6 +268,18 @@ class projectModel extends model
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
 
+            /* Create doc lib. */
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name    = $project->name;
+            if($project->acl == 'custom') $lib->groups = $project->whitelist;
+            if($project->acl == 'private')
+            {
+                $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
+                $lib->users = join(',', $teams);
+            }
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
             return $projectID;
         } 
     }
@@ -322,7 +334,20 @@ class projectModel extends model
                 }
             }
         }
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        if(!dao::isError())
+        {
+            if($project->acl != $oldProject->acl)
+            {
+                if($project->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('project')->eq($projectID)->exec();
+                if($project->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($project->whitelist)->where('project')->eq($projectID)->exec();
+                if($project->acl == 'private')
+                {
+                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
+                    $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $teams))->set('groups')->eq('')->where('project')->eq($projectID)->exec();
+                }
+            }
+            return common::createChanges($oldProject, $project);
+        }
     }
 
     /**
@@ -1392,7 +1417,20 @@ class projectModel extends model
                 $member->join    = helper::today();
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
-        }        
+        }
+
+        $acl = $this->dao->select('acl')->from(TABLE_PROJECT)->where('project')->eq($projectID)->fetch('acl');
+        if($acl == 'private')
+        {
+            $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->where('project')->eq($projectID)->fetchAll('id');
+            foreach($docLibs as $lib)
+            {
+                if(empty($lib->users)) continue;
+                $docUsers = $accounts + explode(',', $lib->users);
+                $docUsers = array_unique($docUsers);
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
+            }
+        }
     }
 
     /**
@@ -1706,6 +1744,8 @@ class projectModel extends model
         {
             $link = helper::createLink($module, $method, "projectID=%s");
         }
+
+        if($module == 'doc') $link = helper::createLink($module, $method, "type=project&libID=%s");
         return $link;
     }
 

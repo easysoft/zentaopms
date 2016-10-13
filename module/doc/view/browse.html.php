@@ -15,6 +15,7 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
+var type       = '<?php echo $type;?>';
 </script>
 <div id='featurebar'>
   <ul class='nav'>
@@ -22,7 +23,7 @@ var browseType = '<?php echo $browseType;?>';
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
   </ul>
   <div class='actions'>
-    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc");?>
+    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&from=doc");?>
   </div>
   <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
@@ -44,7 +45,7 @@ var browseType = '<?php echo $browseType;?>';
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='docList'>
     <thead>
       <tr>
-        <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+        <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
         <th>                <?php common::printOrderLink('title',     $orderBy, $vars, $lang->doc->title);?></th>
         <th class='w-100px'><?php common::printOrderLink('type',      $orderBy, $vars, $lang->doc->type);?></th>

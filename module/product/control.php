@@ -387,6 +387,7 @@ class product extends control
         else
         {
             $this->product->delete(TABLE_PRODUCT, $productID);
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
             $this->session->set('product', '');     // 清除session。
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }

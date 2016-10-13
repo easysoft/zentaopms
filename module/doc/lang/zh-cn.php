@@ -46,6 +46,8 @@ $lang->doc->manageType     = '维护分类';
 $lang->doc->addType        = '增加分类';
 
 $lang->doc->libName        = '文档库名称';
+$lang->doc->custom         = '自定义文档库';
+$lang->doc->subLib         = '子文档库';
 $lang->doc->createLib      = '创建文档库';
 $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';

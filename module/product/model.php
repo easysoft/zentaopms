@@ -253,6 +253,15 @@ class productModel extends model
 
         $productID = $this->dao->lastInsertID();
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+
+        /* Create doc lib. */
+        $lib = new stdclass();
+        $lib->product = $productID;
+        $lib->name = $product->name;
+        if($product->acl == 'custom') $lib->groups = $product->whitelist;
+        if($product->acl == 'private') $lib->users = $this->app->user->account;
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
         return $productID;
     }
 
@@ -279,7 +288,16 @@ class productModel extends model
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldProduct, $product);
+        if(!dao::isError())
+        {
+            if($product->acl != $oldProduct->acl)
+            {
+                if($product->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('product')->eq($productID)->exec();
+                if($product->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($product->whitelist)->where('product')->eq($productID)->exec();
+                if($product->acl == 'private') $this->dao->update(TABLE_DOCLIB)->set('users')->eq($oldProduct->createdBy)->set('groups')->eq('')->where('product')->eq($productID)->exec();
+            }
+            return common::createChanges($oldProduct, $product);
+        }
     }
 
     /**
@@ -816,6 +834,11 @@ class productModel extends model
         {
             $link = helper::createLink($module, $method, "productID=%s&type=$extra&currentModuleID=0" . ($branch ? "&branch=%s" : ''));
         }
+        else if($module == 'doc')
+        {
+            $link = helper::createLink($module, $method, "type=product&libID=%s");
+        }
+
         return $link;
     }
 

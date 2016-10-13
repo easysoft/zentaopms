@@ -22,19 +22,12 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($libs, $libID, $extra = '')
+    public function setMenu($libs, $libID = 0, $extra = 'product')
     {
-        $currentModule = $this->app->getModuleName();
-        $currentMethod = $this->app->getMethodName();
+        $currentModule = 'doc';
+        $currentMethod = 'browse';
 
-        $selectHtml = "<div class='dropdown'>" . html::a('javascript:;', $libs[$libID] . " <span class='caret'></span>", '', "data-toggle='dropdown'") . "<ul class='dropdown-menu'>";
-        foreach ($libs as $key => $value)
-        {
-            $class = $libID == $key ? 'active' : '';
-            $selectHtml .= "<li class='$class'>" . html::a("javascript:switchDocLib(\"$key\", \"$currentModule\", \"$currentMethod\", \"$extra\");", $value) . '</li>';
-        }
-        $selectHtml .= '</ul></div>';
-
+        $selectHtml = "<a id='currentItem' href=\"javascript:showDropMenu('doc', '$libID', '$currentModule', '$currentMethod', '$extra')\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
         foreach($this->lang->doc->menu as $key => $menu)
         {
@@ -60,10 +53,23 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibs()
+    public function getLibs($type = '')
     {
-        $libs = $this->dao->select('id, name')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->fetchPairs();
-        return $this->lang->doc->systemLibs + $libs;
+        if($type == 'product' or $type == 'project')
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->ne(0)->andWhere('deleted')->eq(0)->query();
+        }
+        else
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->query();
+        }
+
+        $libPairs = array();
+        while($lib = $stmt->fetch())
+        {
+            if($this->checkPriv($lib)) $libPairs[$lib->id] = $lib->name;
+        }
+        return $libPairs;
     }
 
     /**
@@ -120,13 +126,13 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsByBrowseType($productID, $projectID, $browseType, $libID, $queryID, $moduleID, $sort, $pager)
+    public function getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager)
     {
         if($browseType == "bymodule")
         {
             $modules = 0;
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
-            $docs = $this->getDocs($libID, $productID, $projectID, $modules, $sort, $pager);
+            $docs = $this->getDocs($libID, $modules, $sort, $pager);
         }
         elseif($browseType == "bysearch")
         {
@@ -170,23 +176,11 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function getDocs($libID, $productID, $projectID, $module, $orderBy, $pager)
+    public function getDocs($libID, $module, $orderBy, $pager)
     {
-        $products = $this->loadModel('product')->getPairs();
-        $projects = $this->loadModel('project')->getPairs();
-        $keysOfProducts = array_keys($products);
-        $keysOfProjects = array_keys($projects);
-        $allKeysOfProjects = $keysOfProjects;
-        $allKeysOfProjects[] = 0;
-
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
-            ->beginIF(is_numeric($libID))->andWhere('lib')->eq($libID)->fi()
-            ->beginIF($libID == 'product')->andWhere('product')->in($keysOfProducts)->andWhere('project')->in($allKeysOfProjects)->fi()
-            ->beginIF($libID == 'project')->andWhere('project')->in($keysOfProjects)->fi()
-            ->beginIF($productID > 0)->andWhere('product')->eq($productID)->fi()
-            ->beginIF($projectID > 0)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF((string)$projectID == 'int')->andWhere('project')->gt(0)->fi()
+            ->andWhere('lib')->in($libID)
             ->beginIF($module)->andWhere('module')->in($module)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -306,7 +300,7 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($libID, $libs, $queryID, $actionURL)
+    public function buildSearchForm($libID, $libs, $queryID, $actionURL, $type)
     {
         $this->config->doc->search['actionURL'] = $actionURL;
         $this->config->doc->search['queryID']   = $queryID;
@@ -316,7 +310,7 @@ class docModel extends model
         $this->config->doc->search['params']['type']['values']    = array(''=>'') + $this->config->doc->search['params']['type']['values'];
 
         /* Get the modules. */
-        if($libID == 'product' or $libID == 'project')
+        if($type == 'product' or $type == 'project')
         {
             $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
         }
@@ -441,5 +435,204 @@ class docModel extends model
             }
         }
         return $css;
+    }
+
+    /**
+     * Check priv.
+     * 
+     * @param  object $docLib 
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($docLib)
+    {
+        if(empty($docLib->groups) and empty($docLib->users)) return true;
+
+        $account = ',' . $this->app->user->account . ',';
+        if(strpos($this->app->company->admins, $account) !== false) return true;
+        if(strpos(",$docLib->users,", $account) !== false) return true;
+
+        $userGroups = $this->app->user->groups;
+        foreach($userGroups as $groupID)
+        {
+            if(strpos(",$docLib->groups,", ",$groupID,") !== false) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get doc link.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @access public
+     * @return string
+     */
+    public function getDocLink($module, $method, $extra = '')
+    {
+        return helper::createLink($module, $method, "type=custom&libID=%s");
+    }
+
+    /**
+     * Get all libs by type.
+     * 
+     * @param  string $type 
+     * @param  int    $pager 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
+    public function getAllLibs($type, $pager = null, $extra = '')
+    {
+        if($extra)
+        {
+            parse_str($extra);
+            if(isset($product) and $type == 'project') $projects = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->fetchPairs('project', 'project');
+
+        }
+
+        $key = ($type == 'product' or $type == 'project') ? $type : 'id';
+        $stmt = $this->dao->select("DISTINCT $key")->from(TABLE_DOCLIB)->where('deleted')->eq(0);
+        if($type == 'product' or $type == 'project')
+        {
+            $stmt = $stmt->andWhere($type)->ne(0);
+        }
+        else
+        {
+            $stmt = $stmt->andWhere('project')->eq(0)->andWhere('product')->eq(0);
+        }
+        if(isset($projects)) $stmt = $stmt->andWhere('project')->in($projects);
+
+        $condition = '';
+        $account   = ',' . $this->app->user->account . ',';
+        if(strpos($this->app->company->admins, $account) === false)
+        {
+            $condition .= "(groups='' and users='')";
+            foreach($this->app->user->groups as $groupID) $condition .= " OR (CONCAT(',', groups, ',') like '%,$groupID,%')";
+            $condition .= " OR (CONCAT(',', users, ',') like '%$account%')";
+        }
+        $idList = $stmt->beginIF($condition)->andWhere("($condition)")->fi()->orderBy("{$key}_desc")->page($pager)->fetchPairs($key, $key);
+
+        if($type == 'product' or $type == 'project')
+        {
+            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $libs = $this->dao->select('id,name')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->fetchAll('id');
+        }
+        else
+        {
+            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('id desc')->fetchAll('id');
+        }
+
+        return $libs;
+    }
+
+    /**
+     * Get limit libs.
+     * 
+     * @param  string $type 
+     * @param  int    $limit 
+     * @access public
+     * @return array
+     */
+    public function getLimitLibs($type, $limit = 6)
+    {
+        if($type == 'product' or $type == 'project')
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->ne(0)->orderBy("$type desc")->query();
+        }
+        else
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('project')->eq(0)->andWhere('product')->eq(0)->orderBy('id desc')->query();
+        }
+
+        $i    = 1;
+        $libs = array();
+        while($docLib = $stmt->fetch())
+        {
+            if($i > $limit) break;
+            $key = ($type == 'product' or $type == 'project') ? $type : 'id';
+            if($this->checkPriv($docLib) and !isset($libs[$docLib->$key]))
+            {
+                $libs[$docLib->$key] = $docLib->name;
+                $i++;
+            }
+        }
+
+        if($type == 'product' or $type == 'project')
+        {
+            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $libs = $this->dao->select('id,name')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
+        }
+
+        return $libs;
+    }
+
+    /**
+     * Get project or product libs groups. 
+     * 
+     * @param  string $type 
+     * @param  array  $idList 
+     * @param  int    $limit 
+     * @access public
+     * @return array
+     */
+    public function getSubLibGroups($type, $idList, $limit = 3)
+    {
+        $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id desc')->fetchGroup($type, 'id');
+        if($type == 'product')
+        {
+            $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in($idList)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs('product', 'product');
+        }
+        $buildGroups = array();
+        foreach($libGroups as $objectID => $libs)
+        {
+            $i = 1;
+            foreach($libs as $lib)
+            {
+                if($limit and $i > $limit) break;
+                if($this->checkPriv($lib))
+                {
+                    $buildGroups[$objectID][$lib->id] = $lib->name;
+                    $i++;
+                }
+            }
+            if($type == 'product' and isset($hasProject[$objectID])) $buildGroups[$objectID]['project'] = $this->lang->doc->systemLibs['project'];
+        }
+
+        return $buildGroups;
+    }
+
+    /**
+     * Get libs by object.
+     * 
+     * @param  string $type 
+     * @param  int    $objectID 
+     * @access public
+     * @return array
+     */
+    public function getLibsByObject($type, $objectID)
+    {
+        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id desc')->fetchAll('id');
+        if($type == 'product')
+        {
+            $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($objectID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs('product', 'product');
+        }
+        $libs = array();
+        foreach($objectLibs as $lib)
+        {
+            if($this->checkPriv($lib)) $libs[$lib->id] = $lib->name;
+        }
+        if($type == 'product' and isset($hasProject[$objectID])) $libs['project'] = $this->lang->doc->systemLibs['project'];
+
+        return $libs;
     }
 }

@@ -1410,6 +1410,7 @@ class project extends control
         else
         {
             $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->session->set('project', '');
             die(js::locate(inlink('index'), 'parent'));
         }

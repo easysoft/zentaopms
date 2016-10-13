@@ -32,5 +32,5 @@ $(document).ready(function()
 {
     $('[data-id="create"] a').modalTrigger({type: 'iframe', width: 500});
     $('[data-id="edit"] a').modalTrigger({type: 'iframe', width: 500});
-    if(config.currentMethod == 'browse')$('#modulemenu .nav li.active').removeClass('active');
+    if(typeof(type) != 'undefined') $('#modulemenu .nav li[data-id="' + type + '"]').addClass('active');
 });

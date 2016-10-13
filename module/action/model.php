@@ -795,6 +795,12 @@ class actionModel extends model
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
+        /* Revert doclib when undelet product or project. */
+        if($action->objectType == 'project' or $action->objectType == 'product')
+        {
+            $this->dao->update(TABLE_DOCLIT)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
+        }
+
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'undeleted');

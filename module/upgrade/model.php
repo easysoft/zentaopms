@@ -1157,14 +1157,26 @@ class upgradeModel extends model
     public function adjustDocModule()
     {
         $productDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('productdoc')->orderBy('grade,id')->fetchAll('id');
-        $allProductIdList  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'id');
-        foreach($allProductIdList as $productID)
+        $allProductIdList  = $this->dao->select('id,name,acl,whitelist,createdBy')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchAll('id');
+        foreach($allProductIdList as $productID => $product)
         {
+            $this->dao->delete()->from(TABLE_DOCLIB)->where('product')->eq($productID)->exec();
+
+            $lib = new stdclass();
+            $lib->product = $productID;
+            $lib->name = $product->name;
+            if($product->acl == 'custom') $lib->groups = $product->whitelist;
+            if($product->acl == 'private') $lib->users = $product->createdBy;
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+            $libID = $this->dao->lastInsertID();
+
             $relation = array();
             foreach($productDocModules as $moduleID => $module)
             {
+
                 unset($module->id);
-                $module->root = $productID;
+                $module->root = $libID;
+                $module->type = 'doc';
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
 
                 $newModuleID = $this->dao->lastInsertID();
@@ -1180,18 +1192,34 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('product')->eq($productID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('product')->exec();
             }
+            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('product')->eq($productID)->andWhere('lib')->eq('product')->exec();
         }
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($productDocModules))->exec();
 
         $projectDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('projectdoc')->orderBy('grade,id')->fetchAll('id');
-        $allProjectIdList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs('id', 'id');
-        foreach($allProjectIdList as $projectID)
+        $allProjectIdList  = $this->dao->select('id,name,acl,whitelist')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchAll('id');
+        foreach($allProjectIdList as $projectID => $project)
         {
+            $this->dao->delete()->from(TABLE_DOCLIB)->where('project')->eq($projectID)->exec();
+
+            $lib = new stdclass();
+            $lib->project = $projectID;
+            $lib->name = $project->name;
+            if($project->acl == 'custom') $lib->groups = $project->whitelist;
+            if($project->acl == 'private')
+            {
+                $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
+                $lib->users = join(',', $teams);
+            }
+            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+            $libID = $this->dao->lastInsertID();
+
             $relation = array();
             foreach($projectDocModules as $moduleID => $module)
             {
                 unset($module->id);
-                $module->root = $projectID;
+                $module->root = $libID;
+                $module->type = 'doc';
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
 
                 $newModuleID = $this->dao->lastInsertID();
@@ -1207,6 +1235,7 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('project')->exec();
             }
+            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('project')->eq($projectID)->andWhere('lib')->eq('project')->exec();
         }
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($projectDocModules))->exec();
 
