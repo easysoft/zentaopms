@@ -45,20 +45,9 @@ class tree extends control
         elseif(strpos($viewType, 'doc') !== false)
         {
             $this->loadModel('doc');
-            if($rootID == 'product' or $rootID == 'project')
-            {
-                $viewType = $rootID . 'doc';
-                $lib = new stdclass();
-                $lib->id   = $rootID;
-                $lib->name = $this->lang->doc->systemLibs[$rootID];
-                $this->view->root = $lib;
-            }
-            else
-            {
-                $viewType = 'customdoc';
-                $lib = $this->loadModel('doc')->getLibById($rootID);
-                $this->view->root = $lib;
-            }
+            $viewType = 'doc';
+            $lib = $this->doc->getLibById($rootID);
+            $this->view->root = $lib;
         }
 
         if($viewType == 'story')
@@ -104,7 +93,8 @@ class tree extends control
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
-            $this->doc->setMenu($this->doc->getLibs(), $rootID, 'doc');
+            $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+            $this->doc->setMenu($this->doc->getLibs($type), $rootID, $type);
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
             $this->lang->set('menugroup.tree', 'doc');

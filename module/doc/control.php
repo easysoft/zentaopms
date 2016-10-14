@@ -111,9 +111,6 @@ class doc extends control
  
         /* Get docs by browse type. */
         $docs = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
-
-        /* Get the tree menu. */
-        $moduleTree = $this->doc->getDocTreeMenu($libID);
        
         /* Build the search form. */
         $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID");
@@ -122,7 +119,7 @@ class doc extends control
         $this->view->libID         = $libID;
         $this->view->libName       = $this->libs[$libID];
         $this->view->moduleID      = $moduleID;
-        $this->view->moduleTree    = $moduleTree;
+        $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($libID, $viewType = 'doc', $startModuleID = 0, array('treeModel', 'createDocLink'));
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->docs          = $docs;
         $this->view->pager         = $pager;

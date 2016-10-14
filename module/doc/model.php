@@ -350,17 +350,6 @@ class docModel extends model
     }
 
     /**
-     * Get pairs of product modules.
-     * 
-     * @access public
-     * @return array
-     */
-    public function getProductModulePairs()
-    {
-        return $this->dao->findByType('productdoc')->from(TABLE_MODULE)->fetchPairs('id', 'name');
-    }
-
-    /**
      * Get pairs of project modules.
      * 
      * @access public
@@ -368,32 +357,11 @@ class docModel extends model
      */
     public function getProjectModulePairs()
     {
-        return $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->andWhere('type')->eq('projectdoc')->fetchPairs('id', 'name');
-    }
-
-    /**
-     * Get doc tree menu.
-     *
-     * @param  string $libID
-     * @access public
-     * @return array
-     */
-    public function getDocTreeMenu($libID)
-    {
-        if($libID == 'product')
-        {
-            $moduleTree = $this->loadModel('tree')->getProductDocTreeMenu();
-        }
-        elseif($libID == 'project')
-        {
-            $moduleTree = $this->loadModel('tree')->getProjectDocTreeMenu();
-        }
-        else
-        {
-            $moduleTree = $this->loadModel('tree')->getTreeMenu($libID, $viewType = 'customdoc', $startModuleID = 0, array('treeModel', 'createDocLink'));
-        }
-
-        return $moduleTree;
+        return $this->dao->select('t1.id,t1.name')->from(TABLE_MODULE)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.root = t2.id')
+            ->andWhere('t1.type')->eq('doc')
+            ->andWhere('t2.project')->ne('0')
+            ->fetchPairs('id', 'name');
     }
 
     /**
