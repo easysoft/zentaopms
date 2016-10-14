@@ -35,6 +35,8 @@ var type       = '<?php echo $type;?>';
       <div class='panel-body'>
         <?php echo $moduleTree;?>
         <div class='text-right'>
+          <?php common::printLink('doc', 'editLib', "rootID=$libID", $lang->edit, '', "data-toggle='modal' data-type='iframe' data-width='600px'");?>
+          <?php common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->delete, 'hiddenwin');?>
           <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
         </div>
       </div>

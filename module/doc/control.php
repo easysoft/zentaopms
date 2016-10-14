@@ -149,15 +149,17 @@ class doc extends control
             if(!dao::isError())
             {
                 $this->loadModel('action')->create('docLib', $libID, 'Created');
-                die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
+                die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent.parent'));
             }
             else
             {
                 echo js::error(dao::getError());
             }
         }
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->loadModel('user')->getPairs();
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->user->getPairs('nocode');
+        $this->view->products = $this->product->getPairs('nocode');
+        $this->view->projects = $this->project->getPairs('nocode');
         die($this->display());
     }
 
@@ -179,11 +181,15 @@ class doc extends control
                 $actionID = $this->loadModel('action')->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
+            die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent.parent'));
         }
         
         $lib = $this->doc->getLibByID($libID);
-        $this->view->libName = empty($lib) ? $libID : $lib->name;
+        if(!empty($lib->product)) $this->view->product = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
+        if(!empty($lib->project)) $this->view->project = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($lib->project)->fetch();
+        $this->view->lib     = $lib;
+        $this->view->groups  = $this->loadModel('group')->getPairs();
+        $this->view->users   = $this->user->getPairs('nocode');
         $this->view->libID   = $libID;
         
         die($this->display());
@@ -206,6 +212,13 @@ class doc extends control
         }
         else
         {
+            $lib = $this->doc->getLibByID($libID);
+            if(!empty($lib->product) or !empty($lib->project))
+            {
+                $type  = !empty($lib->product) ? 'product' : 'project';
+                $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where($type)->eq($lib->$type)->fetch('count');
+                if($count == 1)die(js::alert($this->lang->doc->errorEmptySysLib));
+            }
             $this->doc->delete(TABLE_DOCLIB, $libID);
             die(js::locate($this->createLink('doc', 'browse'), 'parent'));
         }

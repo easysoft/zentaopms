@@ -29,10 +29,6 @@ class docModel extends model
 
         $selectHtml = "<a id='currentItem' href=\"javascript:showDropMenu('doc', '$libID', '$currentModule', '$currentMethod', '$extra')\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
-        foreach($this->lang->doc->menu as $key => $menu)
-        {
-            if($key != 'list') common::setMenuVars($this->lang->doc->menu, $key, $libID);
-        }
     }
 
     /**
@@ -57,11 +53,11 @@ class docModel extends model
     {
         if($type == 'product' or $type == 'project')
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->ne(0)->andWhere('deleted')->eq(0)->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->ne(0)->andWhere('deleted')->eq(0)->orderBy('id desc')->query();
         }
         else
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->orderBy('id desc')->query();
         }
 
         $libPairs = array();
@@ -80,12 +76,15 @@ class docModel extends model
      */
     public function createLib()
     {
-        $lib = fixer::input('post')->get();
-        $this->dao->insert(TABLE_DOCLIB)
-            ->data($lib)
-            ->autoCheck()
+        $lib = fixer::input('post')
+            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->remove('libType')
+            ->get();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
-            ->check('name', 'unique')
             ->exec();
         return $this->dao->lastInsertID();
     }
@@ -101,12 +100,9 @@ class docModel extends model
     {
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
-        $lib = fixer::input('post')->get();
-        $this->dao->update(TABLE_DOCLIB)
-            ->data($lib)
-            ->autoCheck()
+        $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();
+        $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
-            ->check('name', 'unique', "id != $libID")
             ->where('id')->eq($libID)
             ->exec();
         if(!dao::isError()) return common::createChanges($oldLib, $lib);
@@ -517,7 +513,7 @@ class docModel extends model
         if($type == 'product' or $type == 'project')
         {
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->fetchAll('id');
         }
         else
         {
@@ -562,7 +558,7 @@ class docModel extends model
         if($type == 'product' or $type == 'project')
         {
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
         }
 
         return $libs;

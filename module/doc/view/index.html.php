@@ -36,7 +36,7 @@
             }
             else
             {
-                echo html::a(inlink('browse', "type=custom&libID=$libID"), $libName);
+                echo html::a(inlink('browse', "libID=$libID"), $libName);
             }
             ?>
             </div>
@@ -66,7 +66,7 @@
         <?php if(isset($subLibs['project'][$project->id])):?>
           <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
           <div class='col-md-4'>
-            <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "type=custom&libID=$libID"), $libName);?></div>
+            <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "libID=$libID"), $libName);?></div>
           </div>
           <?php endforeach?>
         <?php endif?>
@@ -84,7 +84,7 @@
   <div class='panel-body row'>
     <?php foreach($customLibs as $libID => $libName):?>
       <div class='col-md-4'>
-        <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "type=custom&libID=$libID"), $libName);?></div>
+        <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "libID=$libID"), $libName);?></div>
       </div>
     <?php endforeach;?>
   </div>

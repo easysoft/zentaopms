@@ -46,8 +46,8 @@ $lang->doc->manageType     = '维护分类';
 $lang->doc->addType        = '增加分类';
 
 $lang->doc->libName        = '文档库名称';
+$lang->doc->libType        = '文档库类型';
 $lang->doc->custom         = '自定义文档库';
-$lang->doc->subLib         = '子文档库';
 $lang->doc->createLib      = '创建文档库';
 $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
@@ -55,6 +55,10 @@ $lang->doc->deleteLib      = '删除文档库';
 /* 查询条件列表 */
 $lang->doc->allProduct     = '所有' . $lang->productCommon;
 $lang->doc->allProject     = '所有' . $lang->projectCommon;
+
+$lang->doc->libTypeList['product'] = $lang->productCommon . '文档库';
+$lang->doc->libTypeList['project'] = $lang->projectCommon . '文档库';
+$lang->doc->libTypeList['custom']  = '自定义文档库';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon . '文档库';
 $lang->doc->systemLibs['project'] = $lang->projectCommon . '文档库';
@@ -68,9 +72,13 @@ $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
 $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct  = "没有{$lang->productCommon}，无法创建文档";
 $lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文档";
+$lang->doc->errorEmptySysLib   = "系统文档库不能全部删除！";
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name = '文档库名称';
+$lang->doclib->name  = '文档库名称';
+$lang->doclib->acl   = '文档库权限';
+$lang->doclib->group = '分组';
+$lang->doclib->user  = '用户';
