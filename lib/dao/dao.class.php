@@ -25,6 +25,12 @@ class dao extends baseDAO
         if(isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']) die(js::alert($this->lang->error->tutorialData));
         return parent::exec($sql);
     }
+
+    public function data($data, $skipFields = '')
+    {
+        $skipFields .= ',uid';
+        return parent::data($data, $skipFields);
+    }
 }
 
 /**

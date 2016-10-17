@@ -43,7 +43,7 @@ class actionModel extends model
         $action->actor      = $actor;
         $action->action     = $actionType;
         $action->date       = helper::now();
-        $action->comment    = $this->loadModel('file')->pasteImage(trim(strip_tags($comment, $this->config->allowedTags)));
+        $action->comment    = $this->loadModel('file')->pasteImage(trim(strip_tags($comment, $this->config->allowedTags)), $this->post->uid);
         $action->extra      = $extra;
 
         /* Get product and project for this object. */
@@ -52,6 +52,7 @@ class actionModel extends model
         $action->project    = $productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
+        $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
         return $this->dbh->lastInsertID();
     }
 
@@ -846,11 +847,13 @@ class actionModel extends model
      */
     public function updateComment($actionID)
     {
-        $comment = $this->loadModel('file')->pasteImage(trim(strip_tags($this->post->lastComment, $this->config->allowedTags)));
+        $comment = $this->loadModel('file')->pasteImage(trim(strip_tags($this->post->lastComment, $this->config->allowedTags)), $this->post->uid);
+        $action = $this->getById($actionID);
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
             ->set('comment')->eq($comment)
             ->where('id')->eq($actionID)
             ->exec();
+        $this->file->updateObjectID($this->post->uid, $action->objectID, $action->objectType);
     }
 }

@@ -36,8 +36,8 @@ class taskModel extends model
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
-            ->remove('after,files,labels,assignedTo')
             ->join('mailto', ',')
+            ->remove('after,files,labels,assignedTo,uid')
             ->get();
 
         foreach($this->post->assignedTo as $assignedTo)
@@ -58,7 +58,7 @@ class taskModel extends model
                 }
             }
 
-            $task = $this->file->processEditor($task, $this->config->task->editor->create['id']);
+            $task = $this->file->processEditor($task, $this->config->task->editor->create['id'], $this->post->uid);
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
@@ -70,6 +70,7 @@ class taskModel extends model
             {
                 $taskID = $this->dao->lastInsertID();
                 if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
+                $this->file->updateObjectID($this->post->uid, $taskID, 'task');
                 if(!empty($taskFile))
                 {
                     $taskFile->objectID = $taskID;
@@ -221,9 +222,9 @@ class taskModel extends model
 
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->remove('comment,files,labels')
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
+            ->remove('comment,files,labels,uid')
             ->get();
 
         if($task->consumed < $oldTask->consumed) 
@@ -241,7 +242,7 @@ class taskModel extends model
             $this->addTaskEstimate($estimate);
         }
 
-        $task = $this->loadModel('file')->processEditor($task, $this->config->task->editor->edit['id']);
+        $task = $this->loadModel('file')->processEditor($task, $this->config->task->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
@@ -263,7 +264,11 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)->exec();
 
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
+            return common::createChanges($oldTask, $task);
+        }
     }
 
     /**

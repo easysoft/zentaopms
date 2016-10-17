@@ -1243,6 +1243,60 @@ class upgradeModel extends model
     }
 
     /**
+     * Update file objectID in editor.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function updateFileObjectID()
+    {
+        $smtm  = $this->dao->select('id,objectType,objectID,comment')->from(TABLE_ACTION)->where('comment')->ne('')->query();
+        while($action = $smtm->fetch())
+        {
+            $files = array();
+            preg_match_all('/"data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $action->comment, $output);
+            foreach($output[1] as $path)$files[$path] = $path;
+            $this->dao->update(TABLE_FILE)->set('objectType')->eq($action->objectType)->set('objectID')->eq($action->objectID)->where('pathname')->in($files)->exec();
+        }
+
+        $editors['doc']         = array('table' => TABLE_DOC,         'fields' => 'id,`content`,`digest`');
+        $editors['project']     = array('table' => TABLE_PROJECT,     'fields' => 'id,`desc`');
+        $editors['bug']         = array('table' => TABLE_BUG,         'fields' => 'id,`steps`');
+        $editors['release']     = array('table' => TABLE_RELEASE,     'fields' => 'id,`desc`');
+        $editors['productplan'] = array('table' => TABLE_PRODUCTPLAN, 'fields' => 'id,`desc`');
+        $editors['product']     = array('table' => TABLE_PRODUCT,     'fields' => 'id,`desc`');
+        $editors['story']       = array('table' => TABLE_STORYSPEC,   'fields' => 'story,`spec`,`verify`');
+        $editors['testtask']    = array('table' => TABLE_TESTTASK,    'fields' => 'id,`desc`,`report`');
+        $editors['todo']        = array('table' => TABLE_TODO,        'fields' => 'id,`desc`');
+        $editors['task']        = array('table' => TABLE_TASK,        'fields' => 'id,`desc`');
+        foreach($editors as $objectType => $editor)
+        {
+            $smtm = $this->dao->select($editor['fields'])->from($editor['table'])->query();
+            while($object = $smtm->fetch())
+            {
+                $files    = array();
+                $objectID = 0;
+                $fields   = explode(',', $editor['fields']);
+                foreach($fields as $field)
+                {
+                    if(strpos($field, '`') === false)
+                    {
+                        $objectID = $object->$field;
+                    }
+                    else
+                    {
+                        $field = trim($field, '`');
+                        preg_match_all('/"\/?data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $object->$field, $output);
+                        foreach($output[1] as $path)$files[$path] = $path;
+                    }
+                }
+                if($files) $this->dao->update(TABLE_FILE)->set('objectType')->eq($objectType)->set('objectID')->eq($objectID)->where('pathname')->in($files)->exec();
+            }
+        }
+        return true;
+    }
+
+    /**
      * Judge any error occers.
      * 
      * @access public

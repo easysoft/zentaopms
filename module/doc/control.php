@@ -234,7 +234,10 @@ class doc extends control
      */
     public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0, $from = 'doc')
     {
-        $projectID = (int)$projectID;
+        $projectID  = (int)$projectID;
+        $lib        = $this->doc->getLibByID($libID);
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $this->libs = $this->doc->getLibs($type);
         if(!empty($_POST))
         {
             $docResult = $this->doc->create();

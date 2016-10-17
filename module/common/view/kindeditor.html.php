@@ -8,6 +8,10 @@ $editor = $config->$module->editor->$method;
 $editor['id'] = explode(',', $editor['id']);
 $editorLangs  = array('en' => 'en', 'zh-cn' => 'zh_CN', 'zh-tw' => 'zh_TW');
 $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->getClientLang()] : 'en';
+
+/* set uid for upload. */
+$uid = uniqid('');
+js::set('kuid', $uid);
 ?>
 <link rel="stylesheet" href="<?php echo $jsRoot;?>kindeditor/themes/default/default.css" />
 <script src='<?php echo $jsRoot;?>kindeditor/kindeditor-min.js' type='text/javascript'></script>
@@ -38,6 +42,7 @@ var fullTools =
 $(document).ready(initKindeditor);
 function initKindeditor(afterInit)
 {
+    $(':input[type=submit]').after("<input type='hidden' id='uid' name='uid' value=" + kuid + ">");
     var nextFormControl = 'input:not([type="hidden"]), textarea:not(.ke-edit-textarea), button[type="submit"], select';
     $.each(editor.id, function(key, editorID)
     {
@@ -54,7 +59,7 @@ function initKindeditor(afterInit)
             filterMode: true, 
             bodyClass:'article-content',
             urlType:'relative', 
-            uploadJson: createLink('file', 'ajaxUpload'),
+            uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
             allowFileManager:true,
             langType:'<?php echo $editorLang?>',
             afterBlur: function(){this.sync();$editor.prev('.ke-container').removeClass('focus');},
@@ -106,7 +111,7 @@ function initKindeditor(afterInit)
                                 var contentType = arr[0].split(";")[0].split(":")[1];
 
                                 html = '<img src="' + result + '" alt="" />';
-                                $.post(createLink('file', 'ajaxPasteImage'), {editor: html}, function(data){cmd.inserthtml(data);});
+                                $.post(createLink('file', 'ajaxPasteImage', 'uid=' + kuid), {editor: html}, function(data){cmd.inserthtml(data);});
                             };
                             reader.readAsDataURL(file);
                         }
@@ -123,7 +128,7 @@ function initKindeditor(afterInit)
                             if(html.search(/<img src="data:.+;base64,/) > -1)
                             {
                                 K(doc.body).html(html.replace(/<img src="data:.+;base64,.*".*\/>/, ''));
-                                $.post(createLink('file', 'ajaxPasteImage'), {editor: html}, function(data){K(doc.body).html(data);});
+                                $.post(createLink('file', 'ajaxPasteImage', 'uid=' + kuid), {editor: html}, function(data){K(doc.body).html(data);});
                             }
                         }, 80);
                     });

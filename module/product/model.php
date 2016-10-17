@@ -243,8 +243,9 @@ class productModel extends model
              ->setDefault('createdVersion', $this->config->version)
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
+            ->remove('uid')
             ->get();
-        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->create['id']);
+        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck('name,code', 'notempty')
             ->check('name', 'unique', "deleted = '0'")
@@ -252,6 +253,7 @@ class productModel extends model
             ->exec();
 
         $productID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $productID, 'product');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
         /* Create doc lib. */
@@ -280,8 +282,9 @@ class productModel extends model
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
+            ->remove('uid')
             ->get();
-        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->edit['id']);
+        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck('name,code', 'notempty')
             ->check('name', 'unique', "id != $productID and deleted = '0'")
@@ -296,6 +299,7 @@ class productModel extends model
                 if($product->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($product->whitelist)->where('product')->eq($productID)->exec();
                 if($product->acl == 'private') $this->dao->update(TABLE_DOCLIB)->set('users')->eq($oldProduct->createdBy)->set('groups')->eq('')->where('product')->eq($productID)->exec();
             }
+            $this->file->updateObjectID($this->post->uid, $productID, 'product');
             return common::createChanges($oldProduct, $product);
         }
     }

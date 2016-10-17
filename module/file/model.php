@@ -136,7 +136,7 @@ class fileModel extends model
             {
                 if(empty($filename)) continue;
                 if(!validater::checkFileName($filename)) continue;
-                $title             = $_POST[$labelsName][$id];
+                $title             = isset($_POST[$labelsName][$id]) ? $_POST[$labelsName][$id] : '';
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
                 $file['title']     = !empty($title) ? htmlspecialchars($title) : str_replace('.' . $file['extension'], '', $filename);
@@ -151,7 +151,7 @@ class fileModel extends model
             if(empty($_FILES[$htmlTagName]['name'])) return $files;
             extract($_FILES[$htmlTagName]);
             if(!validater::checkFileName($name)) return array();;
-            $title             = $_POST[$labelsName][0];
+            $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
             $file['title']     = !empty($title) ? htmlspecialchars($title) : substr($name, 0, strpos($name, $file['extension']) - 1);
@@ -312,7 +312,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function pasteImage($data)
+    public function pasteImage($data, $uid = '')
     {
         if(empty($data)) return '';
         $data = str_replace('\"', '"', $data);
@@ -335,6 +335,7 @@ class fileModel extends model
 
             file_put_contents($this->savePath . $file['pathname'], $imageData);
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
+            if($uid) $_SESSION['album'][$uid][] = $this->dao->lastInsertID();
 
             $data = str_replace($out[1][$key], $this->webPath . $file['pathname'], $data);
         }
@@ -521,13 +522,13 @@ class fileModel extends model
      * @access public
      * @return object
      */
-    public function processEditor($data, $editorList)
+    public function processEditor($data, $editorList, $uid = '')
     {
         foreach(explode(',', $editorList) as $editorID)
         {
             $editorID = trim($editorID);
             if(empty($editorID) or !isset($data->$editorID)) continue;
-            $data->$editorID = $this->pasteImage($data->$editorID);
+            $data->$editorID = $this->pasteImage($data->$editorID, $uid);
         }
         return $data;
     }
@@ -624,5 +625,30 @@ class fileModel extends model
         $b = ord($str[1]);
         $c = ord($str[2]);
         return $c * 256 * 256 + $b * 256 + $a;
+    }
+
+    /**
+     * Update objectID.
+     * 
+     * @param  int    $uid 
+     * @param  int    $objectID 
+     * @param  string $objectType 
+     * @access public
+     * @return bool
+     */
+    public function updateObjectID($uid, $objectID, $objectType)
+    {
+        if(empty($uid)) return true;
+
+        $data = new stdclass();
+        $data->objectID   = $objectID;
+        $data->objectType = $objectType;
+        if(isset($_SESSION['album'][$uid]) and $_SESSION['album'][$uid])
+        {
+            $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album'][$uid])->exec();
+            if(dao::isError()) return false;
+            unset($_SESSION['album'][$uid]);
+            return !dao::isError();
+        }
     }
 }

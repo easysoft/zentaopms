@@ -110,7 +110,7 @@ class releaseModel extends model
                 ->add('builder', $this->app->user->account)
                 ->add('branch', $branch)
                 ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-                ->remove('build,files,labels')
+                ->remove('build,files,labels,uid')
                 ->get();
             $build = $this->loadModel('file')->processEditor($build, $this->config->release->editor->create['id']);
             $this->dao->insert(TABLE_BUILD)->data($build)
@@ -129,10 +129,10 @@ class releaseModel extends model
             ->join('bugs', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-            ->remove('allchecker,files,labels')
+            ->remove('allchecker,files,labels,uid')
             ->get();
 
-        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->create['id']);
+        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
@@ -142,7 +142,8 @@ class releaseModel extends model
         if(!dao::isError())
         {
             $releaseID = $this->dao->lastInsertID();
-            $this->loadModel('file')->saveUpload('release', $releaseID);
+            $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
+            $this->file->saveUpload('release', $releaseID);
             if(!dao::isError()) return $releaseID;
         }
 
@@ -163,16 +164,20 @@ class releaseModel extends model
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
-            ->remove('files,labels,allchecker')
+            ->remove('files,labels,allchecker,uid')
             ->get();
-        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->edit['id']);
+        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "id != $releaseID AND product = {$release->product} AND branch = $branch AND deleted = '0'")
             ->where('id')->eq((int)$releaseID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldRelease, $release);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
+            return common::createChanges($oldRelease, $release);
+        }
     }
 
     /**

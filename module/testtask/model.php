@@ -41,8 +41,8 @@ class testtaskModel extends model
      */
     function create()
     {
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->join('mailto', ',')->get();
-        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->create['id']);
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid')->get();
+        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
@@ -50,7 +50,12 @@ class testtaskModel extends model
             ->checkIF($task->end   != '', 'end', 'date')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
             ->exec();
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $taskID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+            return $taskID;
+        }
     }
 
     /**
@@ -170,15 +175,19 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->get();
-        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->edit['id']);
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid')->get();
+        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
             ->where('id')->eq($taskID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+            return common::createChanges($oldTask, $task);
+        }
     }
 
     /**
@@ -216,15 +225,20 @@ class testtaskModel extends model
             ->setDefault('status', 'done')
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('comment')->get();
+            ->remove('comment,uid')
+            ->get();
 
-        $testtask = $this->loadModel('file')->processEditor($testtask, $this->config->testtask->editor->close['id']);
+        $testtask = $this->loadModel('file')->processEditor($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+            return common::createChanges($oldTesttask, $testtask);
+        }
     }
 
     /**

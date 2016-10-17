@@ -158,19 +158,20 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,needNotReview,newStory')
+            ->remove('files,labels,needNotReview,newStory,uid')
             ->get();
 
         /* Check repeat story. */
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id']);
+        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
             $this->setStage($storyID);
+            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             $this->file->saveUpload('story', $storyID, $extra = 1);
 
             $data          = new stdclass();
@@ -391,9 +392,9 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,comment,needNotReview')
+            ->remove('files,labels,comment,needNotReview,uid')
             ->get();
-        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->change['id']);
+        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
@@ -415,6 +416,7 @@ class storyModel extends model
                 unset($story->spec);
                 unset($oldStory->spec);
             }
+            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             return common::createChanges($oldStory, $story);
         }
     }

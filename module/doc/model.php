@@ -228,14 +228,14 @@ class docModel extends model
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
             ->encodeURL('url')
             ->cleanInt('product, project, module')
-            ->remove('files, labels')
+            ->remove('files, labels,uid')
             ->get();
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
         $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->create['id']);
+        $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_DOC)
             ->data($doc)
             ->autoCheck()
@@ -245,7 +245,8 @@ class docModel extends model
         if(!dao::isError())
         {
             $docID = $this->dao->lastInsertID();
-            $this->loadModel('file')->saveUpload('doc', $docID);
+            $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+            $this->file->saveUpload('doc', $docID);
             return array('status' => 'new', 'id' => $docID);
         }
         return false;
@@ -272,18 +273,22 @@ class docModel extends model
             ->encodeURL('url')
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
-            ->remove('comment,files, labels')
+            ->remove('comment,files, labels,uid')
             ->get();
 
         $condition = "lib = '$doc->lib' AND module = $doc->module AND id != $docID";
-        $doc       = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id']);
+        $doc       = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_DOC)->data($doc)
             ->autoCheck()
             ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
             ->check('title', 'unique', $condition)
             ->where('id')->eq((int)$docID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldDoc, $doc);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+            return common::createChanges($oldDoc, $doc);
+        }
     }
 
     /**
@@ -435,7 +440,7 @@ class docModel extends model
      */
     public function getDocLink($module, $method, $extra = '')
     {
-        return helper::createLink($module, $method, "type=custom&libID=%s");
+        return helper::createLink($module, $method, "libID=%s");
     }
 
     /**

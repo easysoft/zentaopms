@@ -218,9 +218,9 @@ class projectModel extends model
             ->setDefault('team', substr($this->post->name,0, 30))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch')
+            ->remove('products, workDays, delta, branch,uid')
             ->get();
-        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->create['id']);
+        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->create->requiredFields, 'notempty')
@@ -240,6 +240,7 @@ class projectModel extends model
 
             /* Save order. */
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
+            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             /* Copy team of project. */
             if($copyProjectID != '') 
@@ -304,9 +305,9 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products,branch')
+            ->remove('products,branch,uid')
             ->get();
-        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->edit['id']);
+        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
@@ -346,6 +347,7 @@ class projectModel extends model
                     $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $teams))->set('groups')->eq('')->where('project')->eq($projectID)->exec();
                 }
             }
+            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }

@@ -47,7 +47,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxUpload()
+    public function ajaxUpload($uid = '')
     {
         $file = $this->file->getUpload('imgFile');
         $file = $file[0];
@@ -65,6 +65,7 @@ class file extends control
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                 $url = $this->file->webPath . $file['pathname'];
+                if($uid) $_SESSION['album'][$uid][] = $this->dao->lastInsertID();
                 die(json_encode(array('error' => 0, 'url' => $url)));
             }
             else
@@ -308,11 +309,11 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxPasteImage()
+    public function ajaxPasteImage($uid = '')
     {
         if($_POST)
         {
-            echo $this->file->pasteImage($this->post->editor);
+            echo $this->file->pasteImage($this->post->editor, $uid);
         }
     }
 

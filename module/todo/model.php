@@ -33,16 +33,21 @@ class todoModel extends model
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-            ->remove('bug, task')
+            ->remove('bug, task,uid')
             ->get();
-        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->create['id']);
+        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
             ->checkIF($todo->type == 'bug'  and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->checkIF($todo->type == 'task' and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->exec();
-        return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $todoID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
+            return $todoID;
+        }
     }
 
     /**
@@ -119,13 +124,19 @@ class todoModel extends model
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
+            ->remove('uid')
             ->get();
-        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->edit['id']);
+        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')->where('id')->eq($todoID)
+            ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
+            ->where('id')->eq($todoID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldTodo, $todo);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
+            return common::createChanges($oldTodo, $todo);
+        }
     }
 
     /**

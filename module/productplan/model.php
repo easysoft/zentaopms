@@ -117,15 +117,20 @@ class productplanModel extends model
      */
     public function create()
     {
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)->remove('delta')->get();
-        $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->create['id']);
+        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)->remove('delta,uid')->get();
+        $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
             ->check('end', 'gt', $plan->begin)
             ->exec();
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $planID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $planID, 'plan');
+            return $planID;
+        }
     }
 
     /**
@@ -138,8 +143,8 @@ class productplanModel extends model
     public function update($planID)
     {
         $oldPlan = $this->getById($planID);
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta')->get();
-        $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->edit['id']);
+        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta,uid')->get();
+        $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
@@ -147,7 +152,11 @@ class productplanModel extends model
             ->check('end', 'gt', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
-        if(!dao::isError()) return common::createChanges($oldPlan, $plan);
+        if(!dao::isError())
+        {
+            $this->file->updateObjectID($this->post->uid, $planID, 'plan');
+            return common::createChanges($oldPlan, $plan);
+        }
     }
 
     /**
