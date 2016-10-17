@@ -30,6 +30,7 @@ $lang->doc->editedBy       = '由谁编辑';
 $lang->doc->editedDate     = '编辑时间';
 $lang->doc->basicInfo      = '基本信息';
 $lang->doc->deleted        = '已删除';
+$lang->doc->fileObject     = '所属对象';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -82,3 +83,4 @@ $lang->doclib->name  = '文档库名称';
 $lang->doclib->acl   = '文档库权限';
 $lang->doclib->group = '分组';
 $lang->doclib->user  = '用户';
+$lang->doclib->files = '附件库';

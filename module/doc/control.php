@@ -519,7 +519,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 21, $pageID = 1)
     {
         $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
         $this->doc->setMenu(array($libName), 0, $type);
@@ -533,7 +533,7 @@ class doc extends control
 
         $libs    = $this->doc->getAllLibs($type, $pager, $extra);
         $subLibs = array();
-        if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs), $limit = 0);
+        if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
 
         $this->view->type    = $type;
         $this->view->libs    = $libs;
@@ -562,6 +562,34 @@ class doc extends control
         $this->view->type   = $type;
         $this->view->object = $object;
         $this->view->libs   = $this->doc->getLibsByObject($type, $objectID);
+        $this->display();
+    }
+
+    /**
+     * Show files for product or project.
+     * 
+     * @param  int    $type 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function showFiles($type, $objectID)
+    {
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('taskList',    $uri);
+        $this->app->session->set('storyList',   $uri);
+        $this->app->session->set('docList',   $uri);
+
+        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        $this->doc->setMenu(array($this->lang->doclib->files), 0, $type);
+
+        $this->view->title      = $object->name;
+        $this->view->position[] = $object->name;
+
+        $this->view->type   = $type;
+        $this->view->object = $object;
+        $this->view->files  = $this->doc->getLibFiles($type, $objectID);
         $this->display();
     }
 }

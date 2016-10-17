@@ -560,7 +560,8 @@ class docModel extends model
         $buildGroups = array();
         foreach($libGroups as $objectID => $libs)
         {
-            $i = 1;
+            $i = common::hasPriv('doc', 'showFiles') ? 2 : 1;
+            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $i += 1;
             foreach($libs as $lib)
             {
                 if($limit and $i > $limit) break;
@@ -570,7 +571,8 @@ class docModel extends model
                     $i++;
                 }
             }
-            if($type == 'product' and isset($hasProject[$objectID])) $buildGroups[$objectID]['project'] = $this->lang->doc->systemLibs['project'];
+            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $buildGroups[$objectID]['project'] = $this->lang->doc->systemLibs['project'];
+            if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;
         }
 
         return $buildGroups;
@@ -600,8 +602,45 @@ class docModel extends model
         {
             if($this->checkPriv($lib)) $libs[$lib->id] = $lib->name;
         }
-        if($type == 'product' and isset($hasProject[$objectID])) $libs['project'] = $this->lang->doc->systemLibs['project'];
+        if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $libs['project'] = $this->lang->doc->systemLibs['project'];
+        if(common::hasPriv('doc', 'showFiles')) $libs['files'] = $this->lang->doclib->files;
 
         return $libs;
+    }
+
+    /**
+     * Get lib files.
+     * 
+     * @param  string $type 
+     * @param  int    $objectID 
+     * @access public
+     * @return array
+     */
+    public function getLibFiles($type, $objectID)
+    {
+        $this->loadModel('file');
+        $joinTable  = $type == 'project' ? TABLE_TASK : TABLE_STORY;
+        $objectType = $type == 'project' ? 'task' : 'story';
+        $files = $this->dao->select('t1.*')->from(TABLE_FILE)->alias('t1')
+            ->leftJoin($joinTable)->alias('t2')->on('t1.objectID=t2.id')
+            ->where("t2.$type")->eq($objectID)
+            ->andWhere('t1.objectType')->eq($objectType)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+
+        $docFiles = $this->dao->select('t1.*')->from(TABLE_FILE)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.objectID=t2.id')
+            ->where("t2.$type")->eq($objectID)
+            ->andWhere('t1.objectType')->eq('doc')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+        foreach($docFiles as $fileID => $file) $files[$fileID] = $file;
+        foreach($files as $fileID => $file)
+        {
+            $file->realPath = $this->file->savePath . $file->pathname;
+            $file->webPath  = $this->file->webPath . $file->pathname;
+        }
+
+        return $files;
     }
 }

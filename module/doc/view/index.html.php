@@ -34,6 +34,10 @@
             {
                 echo html::a(inlink('allLibs', "type=project&extra=product=$product->id"), $libName);
             }
+            elseif($libID == 'files')
+            {
+                echo html::a(inlink('showFiles', "type=product&objectID=$product->id"), $libName);
+            }
             else
             {
                 echo html::a(inlink('browse', "libID=$libID"), $libName);
@@ -66,7 +70,18 @@
         <?php if(isset($subLibs['project'][$project->id])):?>
           <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
           <div class='col-md-4'>
-            <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "libID=$libID"), $libName);?></div>
+            <div class='lib' title='<?php echo $libName?>'>
+            <?php
+            if($libID == 'files')
+            {
+                echo html::a(inlink('showFiles', "type=project&objectID=$project->id"), $libName);
+            }
+            else
+            {
+                echo html::a(inlink('browse', "libID=$libID"), $libName);
+            }
+            ?>
+            </div>
           </div>
           <?php endforeach?>
         <?php endif?>

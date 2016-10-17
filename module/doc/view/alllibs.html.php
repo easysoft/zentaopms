@@ -34,6 +34,10 @@
             {
                 echo html::a(inlink('allLibs', "type=project&extra=product=$lib->id"), $subLibName);
             }
+            elseif($subLibID == 'files')
+            {
+                echo html::a(inlink('showFiles', "type=$type&objectID=$lib->id"), $subLibName);
+            }
             else
             {
                 echo html::a(inlink('browse', "libID=$subLibID"), $subLibName);
