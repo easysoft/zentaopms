@@ -19,7 +19,9 @@ var type       = '<?php echo $type;?>';
 </script>
 <div id='featurebar'>
   <ul class='nav'>
-    <li id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></li>
+    <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy"), $lang->doc->allDoc)?></li>
+    <li id='bymoduleTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=byModule&param=0&orderBy=$orderBy"), $lang->doc->moduleDoc)?></li>
+    <li id='openedbymeTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=openedByMe&param=0&orderBy=$orderBy"), $lang->doc->openedByMe)?></li>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
   </ul>
   <div class='actions'>
@@ -52,6 +54,7 @@ var type       = '<?php echo $type;?>';
         <th>                <?php common::printOrderLink('title',     $orderBy, $vars, $lang->doc->title);?></th>
         <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
         <th class='w-120px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+        <th class='w-120px'><?php common::printOrderLink('editedDate', $orderBy, $vars, $lang->doc->editedDate);?></th>
         <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -65,7 +68,8 @@ var type       = '<?php echo $type;?>';
         <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
         <td class='text-left' title="<?php echo $doc->title?>"><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
         <td><?php isset($users[$doc->addedBy]) ? print($users[$doc->addedBy]) : print($doc->addedBy);?></td>
-        <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
+        <td><?php echo substr($doc->addedDate, 5, 11);?></td>
+        <td><?php echo substr($doc->editedDate, 5, 11);?></td>
         <td>
           <?php 
           common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
@@ -79,7 +83,7 @@ var type       = '<?php echo $type;?>';
       </tr>
       <?php endforeach;?>
     </tbody>
-    <tfoot><tr><td colspan='5'><?php $pager->show();?></td></tr></tfoot>
+    <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
   </table>
 </div>
 <?php include '../../common/view/footer.html.php';?>

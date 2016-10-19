@@ -135,7 +135,23 @@ class docModel extends model
      */
     public function getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager)
     {
-        if($browseType == "bymodule")
+        if($browseType == "all")
+        {
+            $docs = $this->getDocs($libID, 0, $sort, $pager);
+        }
+        elseif($browseType == "openedbyme")
+        {
+            $condition = $this->buildConditionSQL();
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('lib')->in($libID)
+                ->andWhere('addedBy')->eq($this->app->user->account)
+                ->beginIF($condition)->andWhere("($condition)")->fi()
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
+        }
+        elseif($browseType == "bymodule")
         {
             $modules = 0;
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
@@ -328,7 +344,7 @@ class docModel extends model
             ->join('users', ',')
             ->remove('comment,files,labels,uid')
             ->get();
-        if($doc->acl == 'private') $doc->users = $this->app->user->account;
+        if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
