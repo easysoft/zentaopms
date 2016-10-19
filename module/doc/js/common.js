@@ -1,34 +1,23 @@
-/* Load the products of the roject. */
-function loadProducts(project)
+function loadModules(libID)
 {
-    link = createLink('project', 'ajaxGetProducts', 'projectID=' + project);
-    $('#productBox').load(link, function(){$('#productBox').find('select').chosen(defaultChosenOptions)});
+    link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen(defaultChosenOptions)});
 }
 
-/* Set doc type. */
-function setType(type)
+function toggleAcl(acl)
 {
-    if(type == 'url')
+    if(acl == 'custom')
     {
-        $('#urlBox').show();
-        $('#fileBox').hide();
-        $('#contentBox').hide();
-    }
-    else if(type == 'text')
-    {
-        $('#urlBox').hide();
-        $('#fileBox').hide();
-        $('#contentBox').show();
+        $('#whiteListBox').removeClass('hidden');
     }
     else
     {
-        $('#urlBox').hide();
-        $('#fileBox').show();
-        $('#contentBox').hide();
+        $('#whiteListBox').addClass('hidden');
     }
 }
 
 $(document).ready(function()
 {
+    $('[data-id="create"] a').modalTrigger({type: 'iframe', width: 800});
     if(typeof(type) != 'undefined') $('#modulemenu .nav li[data-id="' + type + '"]').addClass('active');
 });

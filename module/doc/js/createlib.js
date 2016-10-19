@@ -19,4 +19,5 @@ $(function()
             $('table tr.project').addClass('hidden');
         }
     })
+    toggleAcl($('#acl').val());
 });

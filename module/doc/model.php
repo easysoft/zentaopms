@@ -26,6 +26,15 @@ class docModel extends model
     {
         $currentModule = 'doc';
         $currentMethod = 'browse';
+        if($libID)
+        {
+            $lib = $this->getLibById($libID);
+            if(!$this->checkPriv($lib)) 
+            {
+                echo(js::alert($this->lang->doc->accessDenied));
+                die(js::locate('back'));
+            }
+        }
 
         $selectHtml = "<a id='currentItem' href=\"javascript:showDropMenu('doc', '$libID', '$currentModule', '$currentMethod', '$extra')\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
@@ -83,6 +92,7 @@ class docModel extends model
             ->join('users', ',')
             ->remove('libType')
             ->get();
+        if($lib->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
             ->exec();
@@ -101,6 +111,7 @@ class docModel extends model
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
         $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();
+        if($lib->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
             ->where('id')->eq($libID)
@@ -149,9 +160,14 @@ class docModel extends model
             {
                 if($this->session->docQuery == false) $this->session->set('docQuery', ' 1 = 1');
             }
-            $docQuery = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
-            $docQuery = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
-            $docs     = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)->andWhere('deleted')->eq(0)->orderBy($sort)->page($pager)->fetchAll();
+            $docQuery  = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
+            $docQuery  = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
+            $condition = $this->buildConditionSQL();
+            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
+                ->beginIF($condition)->andWhere("($condition)")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($sort)->page($pager)
+                ->fetchAll();
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
@@ -174,9 +190,11 @@ class docModel extends model
      */
     public function getDocs($libID, $module, $orderBy, $pager)
     {
+        $condition = $this->buildConditionSQL();
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('lib')->in($libID)
+            ->beginIF($condition)->andWhere("($condition)")->fi()
             ->beginIF($module)->andWhere('module')->in($module)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -191,21 +209,42 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function getById($docID, $setImgSize = false)
+    public function getById($docID, $version = 0, $setImgSize = false)
     {
-        $doc = $this->dao->select('*')
-            ->from(TABLE_DOC)
-            ->where('id')->eq((int)$docID)
-            ->fetch();
-        if(!$doc) return false;
-        if($setImgSize) $doc->content = $this->loadModel('file')->setImgSize($doc->content);
-        $doc->files = $this->loadModel('file')->getByObject('doc', $docID);
+        $doc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
+        if(!$doc or !$this->checkPriv($doc)) return false;
+        $version = $version ? $version : $doc->version;
+        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
 
-        $doc->libName     = '';
+        /* When file change then version add one. */
+        $files = $this->loadModel('file')->getByObject('doc', $docID);
+        $docFiles = array();
+        foreach($files as $file)
+        {
+            $file->webPath  = $this->file->webPath . $file->pathname;
+            $file->realPath = $this->file->savePath . $file->pathname;
+            if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
+        }
+
+        if($version == $doc->version and ((empty($docContent->files) and $docFiles) OR ($docContent->files and count(explode(',', $docContent->files)) != count($docFiles))))
+        {
+            unset($docContent->id);
+            $doc->version        += 1;
+            $docContent->version  = $doc->version;
+            $docContent->files    = join(',', array_keys($docFiles));
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
+        }
+
+        $doc->digest  = isset($docContent->digest)  ? $docContent->digest  : '';
+        $doc->content = isset($docContent->content) ? $docContent->content : '';
+        $doc->type    = isset($docContent->type)    ? $docContent->type : '';
+        if($setImgSize) $doc->content = $this->loadModel('file')->setImgSize($doc->content);
+        $doc->files = $docFiles;
+
         $doc->productName = '';
         $doc->projectName = '';
         $doc->moduleName  = '';
-        if($doc->lib)     $doc->libName     = $this->dao->findByID($doc->lib)->from(TABLE_DOCLIB)->fetch('name');
         if($doc->product) $doc->productName = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
         if($doc->project) $doc->projectName = $this->dao->findByID($doc->project)->from(TABLE_PROJECT)->fetch('name');
         if($doc->module)  $doc->moduleName  = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
@@ -224,29 +263,46 @@ class docModel extends model
         $doc = fixer::input('post')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
-            ->setDefault('product, project, module', 0)
+            ->add('version', 1)
+            ->setDefault('product,project,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->encodeURL('url')
-            ->cleanInt('product, project, module')
-            ->remove('files, labels,uid')
+            ->cleanInt('product,project,module')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->remove('files,labels,uid')
             ->get();
+        if($doc->acl == 'private') $doc->users = $this->app->user->account;
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
         $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_DOC)
-            ->data($doc)
-            ->autoCheck()
+        $doc->product = $lib->product;
+        $doc->project = $lib->project;
+
+        $docContent = new stdclass();
+        $docContent->title   = $doc->title;
+        $docContent->digest  = $doc->digest;
+        $docContent->content = $doc->content;
+        $docContent->version = 1;
+        $docContent->type    = 'html';
+        unset($doc->digest);
+        unset($doc->content);
+
+        $this->dao->insert(TABLE_DOC)->data($doc)->autoCheck()
             ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
-            ->check('title', 'unique', $condition)
             ->exec();
         if(!dao::isError())
         {
             $docID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-            $this->file->saveUpload('doc', $docID);
+            $files = $this->file->saveUpload('doc', $docID);
+
+            $docContent->doc   = $docID;
+            $docContent->files = join(',', array_keys($files));
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             return array('status' => 'new', 'id' => $docID);
         }
         return false;
@@ -263,31 +319,58 @@ class docModel extends model
     {
         $oldDoc = $this->getById($docID);
         $now = helper::now();
-        $doc = fixer::input('post')
-            ->cleanInt('module')
-            ->setDefault('module', 0)
-            ->setIF($this->post->lib == 'product', 'project', 0)
-            ->setIF(($this->post->lib != 'product' and $this->post->lib != 'project'), 'project', 0)
-            ->setIF(($this->post->lib != 'product' and $this->post->lib != 'project'), 'product', 0)
+        $doc = fixer::input('post')->setDefault('module', 0)
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
-            ->encodeURL('url')
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
-            ->remove('comment,files, labels,uid')
+            ->cleanInt('module')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->remove('comment,files,labels,uid')
             ->get();
+        if($doc->acl == 'private') $doc->users = $this->app->user->account;
 
-        $condition = "lib = '$doc->lib' AND module = $doc->module AND id != $docID";
-        $doc       = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+        $lib = $this->getLibByID($doc->lib);
+        $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+        $doc->product = $lib->product;
+        $doc->project = $lib->project;
+
+        $files   = $this->file->saveUpload('doc', $docID);
+        $changes = common::createChanges($oldDoc, $doc);
+        $changed = false;
+        if($files) $changed = true;
+        foreach($changes as $change)
+        {
+            if($change['field'] == 'content' or $change['field'] == 'title' or $change['field'] == 'digest') $changed = true;
+        }
+
+        if($changed)
+        {
+            $oldDocContent = $this->dao->select('files,type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
+            $doc->version  = $oldDoc->version + 1;
+            $docContent = new stdclass();
+            $docContent->doc     = $docID;
+            $docContent->title   = $doc->title;
+            $docContent->digest  = $doc->digest;
+            $docContent->content = $doc->content;
+            $docContent->version = $doc->version;
+            $docContent->type    = $oldDocContent->type;
+            $docContent->files   = $oldDocContent->files;
+            if($files) $docContent->files .= ',' . join(',', array_keys($files));
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+        }
+        unset($doc->digest);
+        unset($doc->content);
+
         $this->dao->update(TABLE_DOC)->data($doc)
             ->autoCheck()
             ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
-            ->check('title', 'unique', $condition)
             ->where('id')->eq((int)$docID)
             ->exec();
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-            return common::createChanges($oldDoc, $doc);
+            return array('changes' => $changes, 'files' => $files);
         }
     }
 
@@ -308,17 +391,9 @@ class docModel extends model
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode') + array('all'=>$this->lang->doc->allProduct);
         $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode') + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'') + $libs;
-        $this->config->doc->search['params']['type']['values']    = array(''=>'') + $this->config->doc->search['params']['type']['values'];
 
         /* Get the modules. */
-        if($type == 'product' or $type == 'project')
-        {
-            $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
-        }
-        else
-        {
-            $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
-        }
+        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID . 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
@@ -333,10 +408,11 @@ class docModel extends model
      */
     public function getProductDocs($productID)
     {
-        return $this->dao->select('t1.*, t2.name as module')
-            ->from(TABLE_DOC)->alias('t1')
+        $condition = $this->buildConditionSQL('t1');
+        return $this->dao->select('t1.*, t2.name as module')->from(TABLE_DOC)->alias('t1')
             ->leftjoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
             ->where('t1.product')->eq($productID)
+            ->beginIF($condition)->andWhere("($condition)")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id_desc')
             ->fetchAll();
@@ -351,7 +427,13 @@ class docModel extends model
      */
     public function getProjectDocs($projectID)
     {
-        return $this->dao->findByProject($projectID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchAll();
+        $condition = $this->buildConditionSQL();
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('project')->eq($projectID)
+            ->beginIF($condition)->andWhere("($condition)")->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchAll();
     }
 
     /**
@@ -409,22 +491,26 @@ class docModel extends model
     /**
      * Check priv.
      * 
-     * @param  object $docLib 
+     * @param  object $object 
      * @access public
      * @return bool
      */
-    public function checkPriv($docLib)
+    public function checkPriv($object)
     {
-        if(empty($docLib->groups) and empty($docLib->users)) return true;
+        if($object->acl == 'public') return true;
 
         $account = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) !== false) return true;
-        if(strpos(",$docLib->users,", $account) !== false) return true;
-
-        $userGroups = $this->app->user->groups;
-        foreach($userGroups as $groupID)
+        if($object->acl == 'private' and $object->users == $this->app->user->account) return true;
+        if($object->acl == 'custom')
         {
-            if(strpos(",$docLib->groups,", ",$groupID,") !== false) return true;
+            if(strpos(",$object->users,", $account) !== false) return true;
+
+            $userGroups = $this->app->user->groups;
+            foreach($userGroups as $groupID)
+            {
+                if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
+            }
         }
         return false;
     }
@@ -473,14 +559,7 @@ class docModel extends model
         }
         if(isset($projects)) $stmt = $stmt->andWhere('project')->in($projects);
 
-        $condition = '';
-        $account   = ',' . $this->app->user->account . ',';
-        if(strpos($this->app->company->admins, $account) === false)
-        {
-            $condition .= "(groups='' and users='')";
-            foreach($this->app->user->groups as $groupID) $condition .= " OR (CONCAT(',', groups, ',') like '%,$groupID,%')";
-            $condition .= " OR (CONCAT(',', users, ',') like '%$account%')";
-        }
+        $condition = $this->buildConditionSQL();
         $idList = $stmt->beginIF($condition)->andWhere("($condition)")->fi()->orderBy("{$key}_desc")->page($pager)->fetchPairs($key, $key);
 
         if($type == 'product' or $type == 'project')
@@ -583,10 +662,11 @@ class docModel extends model
      * 
      * @param  string $type 
      * @param  int    $objectID 
+     * @param  string $mode 
      * @access public
      * @return array
      */
-    public function getLibsByObject($type, $objectID)
+    public function getLibsByObject($type, $objectID, $mode = '')
     {
         $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id desc')->fetchAll('id');
         if($type == 'product')
@@ -602,8 +682,12 @@ class docModel extends model
         {
             if($this->checkPriv($lib)) $libs[$lib->id] = $lib->name;
         }
-        if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $libs['project'] = $this->lang->doc->systemLibs['project'];
-        if(common::hasPriv('doc', 'showFiles')) $libs['files'] = $this->lang->doclib->files;
+
+        if(strpos($mode, 'onlylib') === false)
+        {
+            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $libs['project'] = $this->lang->doc->systemLibs['project'];
+            if(common::hasPriv('doc', 'showFiles')) $libs['files'] = $this->lang->doclib->files;
+        }
 
         return $libs;
     }
@@ -642,5 +726,29 @@ class docModel extends model
         }
 
         return $files;
+    }
+
+    /**
+     * Build condition SQL for priv.
+     * 
+     * @param  string $table 
+     * @access public
+     * @return string
+     */
+    public function buildConditionSQL($table = '')
+    {
+        if($table) $table .= '.';
+        $condition = '';
+        $account   = ',' . $this->app->user->account . ',';
+        if(strpos($this->app->company->admins, $account) === false)
+        {
+            $condition .= "{$table}acl='public'";
+            $condition .= " OR ({$table}acl='private' and {$table}users='{$this->app->user->account}')";
+            $condition .= " OR ({$table}acl='custom' and (";
+            foreach($this->app->user->groups as $groupID) $condition .= "(CONCAT(',', {$table}groups, ',') like '%,$groupID,%') OR ";
+            $condition .= "(CONCAT(',', {$table}users, ',') like '%$account%')";
+            $condition .= "))";
+        }
+        return $condition;
     }
 }

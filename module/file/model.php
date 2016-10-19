@@ -45,8 +45,10 @@ class fileModel extends model
         return $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
+            ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->eq($extra)
-            ->orderBy('id')->fetchAll();
+            ->orderBy('id')
+            ->fetchAll('id');
     }
 
     /**
@@ -643,6 +645,7 @@ class fileModel extends model
         $data = new stdclass();
         $data->objectID   = $objectID;
         $data->objectType = $objectType;
+        $data->extra      = 'editor';
         if(isset($_SESSION['album'][$uid]) and $_SESSION['album'][$uid])
         {
             $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album'][$uid])->exec();

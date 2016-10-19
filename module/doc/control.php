@@ -234,16 +234,13 @@ class doc extends control
      */
     public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0, $from = 'doc')
     {
-        $projectID  = (int)$projectID;
-        $lib        = $this->doc->getLibByID($libID);
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
-        $this->libs = $this->doc->getLibs($type);
         if(!empty($_POST))
         {
             $docResult = $this->doc->create();
             if(!$docResult or dao::isError()) die(js::error(dao::getError()));
 
             $docID = $docResult['id'];
+            $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
                 echo js::alert(sprintf($this->lang->duplicate, $this->lang->doc->common));
@@ -251,34 +248,33 @@ class doc extends control
             }
             $this->action->create('doc', $docID, 'Created');
 
-            if($from == 'product') $link = $this->createLink('product', 'doc', "productID={$this->post->product}");
-            if($from == 'project') $link = $this->createLink('project', 'doc', "projectID={$this->post->project}");
+            if($from == 'product') $link = $this->createLink('product', 'doc', "productID={$lib->product}");
+            if($from == 'project') $link = $this->createLink('project', 'doc', "projectID={$lib->project}");
             if($from == 'doc')
             {
-                $productID = intval($this->post->product);
-                $projectID = intval($this->post->project);
-                $vars = "libID=$libID&moduleID={$this->post->module}&productID=$productID&projectID=$projectID";
+                $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}";
                 $link = $this->createLink('doc', 'browse', $vars);
             }
             die(js::locate($link, 'parent'));
         }
 
-        $this->loadModel('product');
-        $this->loadModel('project');
+        $lib        = $this->doc->getLibByID($libID);
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $this->libs = $this->doc->getLibs($type);
 
         /* According the from, set menus. */
         if($from == 'product')
         {
             $this->lang->doc->menu      = $this->lang->product->menu;
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
-            $this->product->setMenu($this->product->getPairs(), $productID);
+            $this->product->setMenu($this->product->getPairs(), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
         }
         elseif($from == 'project')
         {
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
-            $this->project->setMenu($this->project->getPairs('nocode'), $projectID);
+            $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
         else
@@ -286,28 +282,14 @@ class doc extends control
             $this->doc->setMenu($this->libs, $libID);
         }
 
-        /* Get the modules. */
-        if($libID == 'product' or $libID == 'project')
+        $libs = $this->libs;
+        if($productID)
         {
-            $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
+            $libs = $this->doc->getLibsByObject('product', $productID, 'onlylib');
         }
-        else
+        elseif($projectID)
         {
-            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
-        }
-
-        $products = $projectID == 0 ? $this->product->getPairs() : $this->project->getProducts($projectID, false);
-        if($libID == 'product' and empty($products))
-        {
-            echo js::alert($this->lang->doc->errorEmptyProduct);
-            die(js::locate('back'));
-        }
-
-        $projects = $this->project->getPairs('all');
-        if($libID == 'project' and empty($projects))
-        {
-            echo js::alert($this->lang->doc->errorEmptyProject);
-            die(js::locate('back'));
+            $libs = $this->doc->getLibsByObject('project', $projectID, 'onlylib');
         }
 
         $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
@@ -315,12 +297,12 @@ class doc extends control
         $this->view->position[] = $this->lang->doc->create;
 
         $this->view->libID            = $libID;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->libs             = $libs;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID;
-        $this->view->productID        = $productID;
-        $this->view->projectID        = $projectID;
-        $this->view->products         = $products;
-        $this->view->projects         = $projects;
+        $this->view->type             = $type;
+        $this->view->groups           = $this->loadModel('group')->getPairs();
+        $this->view->users            = $this->user->getPairs('nocode');
 
         $this->display();
     }
@@ -336,9 +318,10 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            $changes  = $this->doc->update($docID);
+            $result = $this->doc->update($docID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('doc', $docID);
+            $changes = $result['changes'];
+            $files   = $result['files'];
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
@@ -353,28 +336,22 @@ class doc extends control
         /* Get doc and set menu. */
         $doc = $this->doc->getById($docID);
         $libID = $doc->lib;
-        $this->doc->setMenu($this->libs, $libID);
 
-        /* Get modules. */
-        if($libID == 'product' or $libID == 'project')
-        {
-            $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
-        }
-        else
-        {
-            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
-        }
+        $lib        = $this->doc->getLibByID($libID);
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $this->libs = $this->doc->getLibs($type);
+        $this->doc->setMenu($this->libs, $libID);
 
         $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
         $this->view->position[] = $this->lang->doc->edit;
 
         $this->view->doc              = $doc;
-        $this->view->libID            = $libID;
         $this->view->libs             = $this->libs;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->products         = $doc->project == 0 ? $this->product->getPairs() : $this->project->getProducts($doc->project, false);
-        $this->view->projects         = $this->loadModel('project')->getPairs('all');
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->type             = $type;
+        $this->view->groups           = $this->loadModel('group')->getPairs();
+        $this->view->users            = $this->user->getPairs('nocode');
         $this->display();
     }
 
@@ -385,27 +362,19 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function view($docID)
+    public function view($docID, $version = 0)
     {
         /* Get doc. */
-        $doc = $this->doc->getById($docID, true);
+        $doc = $this->doc->getById($docID, $version, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Check priv when lib is product or project. */
-        $systemLib = ($doc->lib == 'project' or $doc->lib == 'product') ? $doc->lib : '';
-        if($systemLib and $doc->{$systemLib} and !$this->{$systemLib}->checkPriv($this->{$systemLib}->getById($doc->{$systemLib})))
-        {
-            echo(js::alert($this->lang->error->accessDenied));
-            die(js::locate('back'));
-        }
-
-        /* Get library. */
-        $lib = $doc->libName;
-        if($doc->lib == 'product') $lib = $doc->productName;
-        if($doc->lib == 'project') $lib = $doc->productName . $this->lang->arrow . $doc->projectName;
+        $lib  = $this->doc->getLibByID($doc->lib);
+        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $this->libs = $this->doc->getLibs($type);
 
         /* Set menu. */
-        $this->doc->setMenu($this->libs, $doc->lib);
+        $this->doc->setMenu($this->libs, $doc->lib, $type);
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $this->libs[$doc->lib];
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
@@ -413,6 +382,8 @@ class doc extends control
 
         $this->view->doc        = $doc;
         $this->view->lib        = $lib;
+        $this->view->type       = $type;
+        $this->view->version    = $version ? $version : $doc->version;
         $this->view->actions    = $this->loadModel('action')->getList('doc', $docID);
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
@@ -506,6 +477,19 @@ class doc extends control
         $this->view->libs     = $libs;
         $this->view->keywords = $keywords;
         $this->display();
+    }
+
+    /**
+     * Ajax get modules by libID.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetModules($libID)
+    {
+        $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        die(html::select('module', $moduleOptionMenu, 0, "class='form-control'"));
     }
 
     /**

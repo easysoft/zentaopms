@@ -1,1 +1,4 @@
-loadProducts($('#project').val());
+$(function()
+{
+    toggleAcl($('#acl').val());
+})

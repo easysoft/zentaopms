@@ -38,7 +38,16 @@
         <td><?php echo html::input('name', '', "class='form-control'")?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->doclib->acl;?></th>
+        <th><?php echo $lang->doclib->control;?></th>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->doclib->acl?></span>
+            <?php echo html::select('acl', $lang->doc->aclList, 'public', "class='form-control' onchange='toggleAcl(this.value)'")?>
+          </div>
+        </td>
+      </tr>
+      <tr id='whiteListBox' class='hidden'>
+        <th><?php echo $lang->doc->whiteList;?></th>
         <td>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->doclib->group?></span>
@@ -49,7 +58,7 @@
             <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
           </div>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <td></td>
         <td class='text-center'><?php echo html::submitButton();?></td>

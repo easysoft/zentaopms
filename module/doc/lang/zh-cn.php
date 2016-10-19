@@ -28,9 +28,11 @@ $lang->doc->addedBy        = '由谁添加';
 $lang->doc->addedDate      = '添加时间';
 $lang->doc->editedBy       = '由谁编辑';
 $lang->doc->editedDate     = '编辑时间';
+$lang->doc->version        = '版本号';
 $lang->doc->basicInfo      = '基本信息';
 $lang->doc->deleted        = '已删除';
 $lang->doc->fileObject     = '所属对象';
+$lang->doc->whiteList      = '白名单';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -64,9 +66,9 @@ $lang->doc->libTypeList['custom']  = '自定义文档库';
 $lang->doc->systemLibs['product'] = $lang->productCommon . '文档库';
 $lang->doc->systemLibs['project'] = $lang->projectCommon . '文档库';
 
-$lang->doc->types['file'] = '文件';
-$lang->doc->types['url']  = '链接';
-$lang->doc->types['text'] = '网页';
+$lang->doc->aclList['public']  = '公开';
+$lang->doc->aclList['custom']  = '自定义';
+$lang->doc->aclList['private'] = '私有';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
@@ -74,13 +76,16 @@ $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct  = "没有{$lang->productCommon}，无法创建文档";
 $lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文档";
 $lang->doc->errorEmptySysLib   = "系统文档库不能全部删除！";
+$lang->doc->accessDenied       = "您没有权限访问该文档库！";
+$lang->doc->noMatched          = '找不到包含"%s"的文档库';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name  = '文档库名称';
-$lang->doclib->acl   = '文档库权限';
-$lang->doclib->group = '分组';
-$lang->doclib->user  = '用户';
+$lang->doclib->name    = '文档库名称';
+$lang->doclib->control = '访问控制';
+$lang->doclib->acl     = '权限';
+$lang->doclib->group   = '分组';
+$lang->doclib->user    = '用户';
 $lang->doclib->files = '附件库';

@@ -1256,7 +1256,7 @@ class upgradeModel extends model
             $files = array();
             preg_match_all('/"data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $action->comment, $output);
             foreach($output[1] as $path)$files[$path] = $path;
-            $this->dao->update(TABLE_FILE)->set('objectType')->eq($action->objectType)->set('objectID')->eq($action->objectID)->where('pathname')->in($files)->exec();
+            $this->dao->update(TABLE_FILE)->set('objectType')->eq($action->objectType)->set('objectID')->eq($action->objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
         }
 
         $editors['doc']         = array('table' => TABLE_DOC,         'fields' => 'id,`content`,`digest`');
@@ -1290,9 +1290,40 @@ class upgradeModel extends model
                         foreach($output[1] as $path)$files[$path] = $path;
                     }
                 }
-                if($files) $this->dao->update(TABLE_FILE)->set('objectType')->eq($objectType)->set('objectID')->eq($objectID)->where('pathname')->in($files)->exec();
+                if($files) $this->dao->update(TABLE_FILE)->set('objectType')->eq($objectType)->set('objectID')->eq($objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
             }
         }
+        return true;
+    }
+
+    /**
+     * Move doc content to table zt_doccontent.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function moveDocContent()
+    {
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
+        $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
+        $fileGroups = $this->dao->select('id,objectID')->from(TABLE_FILE)->where('objectType')->eq('doc')->fetchGroup('objectID', 'id');
+        while($doc = $stmt->fetch())
+        {
+            $url = empty($doc->url) ? '' : urldecode($doc->url);
+            $docContent = new stdclass();
+            $docContent->doc      = $doc->id;
+            $docContent->title    = $doc->title;
+            $docContent->digest   = $doc->digest;
+            $docContent->content  = $doc->content;
+            $docContent->content .= empty($url) ? '' : '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+            $docContent->version  = 1;
+            $docContent->type     = 'html';
+            if(isset($fileGroups[$doc->id])) $docContent->files = join(',', array_keys($fileGroups[$doc->id]));
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+        }
+        $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `digest`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `content`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `url`');
         return true;
     }
 
