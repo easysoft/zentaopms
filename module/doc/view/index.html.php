@@ -11,43 +11,39 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div id="featurebar"><strong><?php echo $lang->doclib->all?></strong></div>
 <div class='panel'>
   <div class='panel-heading'>
     <strong><?php echo $lang->doc->systemLibs['product']?></strong>
     <div class='panel-actions pull-right'><?php if(common::hasPriv('doc', 'allLibs')) echo html::a(inlink('allLibs', "type=product"), $lang->more, '', "class='btn btn-sm'")?></div>
   </div>
-  <div class='panel-body row'>
+  <div class='panel-body'>
     <?php foreach($products as $product):?>
-    <div class='col-md-4'>
-      <div class='panel'>
-        <div class='panel-heading'>
-          <?php echo $product->name?>
-          <div class='panel-actions pull-right'><?php if(common::hasPriv('doc', 'showLibs')) echo html::a(inlink('showLibs', "type=product&objectID=$product->id"), $lang->more, '', "class='btn btn-sm'")?></div>
-        </div>
-        <div class='panel-body row'>
+    <div>
+      <div class='lib-heading product'><strong><i class='icon icon-cube-alt'></i> <?php echo $product->name?></strong></div>
+      <div class='libs row'>
         <?php if(isset($subLibs['product'][$product->id])):?>
-          <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
-          <div class='col-md-4'>
-            <div class='lib' title='<?php echo $libName?>'>
-            <?php
-            if($libID == 'project')
-            {
-                echo html::a(inlink('allLibs', "type=project&extra=product=$product->id"), $libName);
-            }
-            elseif($libID == 'files')
-            {
-                echo html::a(inlink('showFiles', "type=product&objectID=$product->id"), $libName);
-            }
-            else
-            {
-                echo html::a(inlink('browse', "libID=$libID"), $libName);
-            }
-            ?>
-            </div>
+        <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
+        <div class='col-md-2'>
+          <div class='lib' title='<?php echo $libName?>'>
+          <?php
+          if($libID == 'project')
+          {
+              echo html::a(inlink('allLibs', "type=project&extra=product=$product->id"), $libName);
+          }
+          elseif($libID == 'files')
+          {
+              echo html::a(inlink('showFiles', "type=product&objectID=$product->id"), $libName);
+          }
+          else
+          {
+              echo html::a(inlink('browse', "libID=$libID"), $libName);
+          }
+          ?>
           </div>
-          <?php endforeach?>
-        <?php endif?>
         </div>
+        <?php endforeach?>
+        <?php endif?>
       </div>
     </div>
     <?php endforeach;?>
@@ -58,34 +54,29 @@
     <strong><?php echo $lang->doc->systemLibs['project']?></strong>
     <div class='panel-actions pull-right'><?php if(common::hasPriv('doc', 'allLibs')) echo html::a(inlink('allLibs', "type=project"), $lang->more, '', "class='btn btn-sm'")?></div>
   </div>
-  <div class='panel-body row'>
+  <div class='panel-body'>
     <?php foreach($projects as $project):?>
-    <div class='col-md-4'>
-      <div class='panel'>
-        <div class='panel-heading'>
-          <?php echo $project->name?>
-          <div class='panel-actions pull-right'><?php if(common::hasPriv('doc', 'showLibs')) echo html::a(inlink('showLibs', "type=project&objectID=$project->id"), $lang->more, '', "class='btn btn-sm'")?></div>
-        </div>
-        <div class='panel-body row'>
-        <?php if(isset($subLibs['project'][$project->id])):?>
-          <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
-          <div class='col-md-4'>
-            <div class='lib' title='<?php echo $libName?>'>
-            <?php
-            if($libID == 'files')
-            {
-                echo html::a(inlink('showFiles', "type=project&objectID=$project->id"), $libName);
-            }
-            else
-            {
-                echo html::a(inlink('browse', "libID=$libID"), $libName);
-            }
-            ?>
-            </div>
+    <div>
+      <div class='lib-heading project'><strong><i class='icon icon-folder-close-alt'></i> <?php echo $project->name?></strong></div>
+      <div class='libs row'>
+      <?php if(isset($subLibs['project'][$project->id])):?>
+        <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
+        <div class='col-md-2'>
+          <div class='lib' title='<?php echo $libName?>'>
+          <?php
+          if($libID == 'files')
+          {
+              echo html::a(inlink('showFiles', "type=project&objectID=$project->id"), $libName);
+          }
+          else
+          {
+              echo html::a(inlink('browse', "libID=$libID"), $libName);
+          }
+          ?>
           </div>
-          <?php endforeach?>
-        <?php endif?>
         </div>
+        <?php endforeach?>
+      <?php endif?>
       </div>
     </div>
     <?php endforeach;?>
@@ -96,11 +87,11 @@
     <strong><?php echo $lang->doc->custom?></strong>
     <div class='panel-actions pull-right'><?php if(common::hasPriv('doc', 'allLibs')) echo html::a(inlink('allLibs', "type=custom"), $lang->more, '', "class='btn btn-sm'")?></div>
   </div>
-  <div class='panel-body row'>
+  <div class='panel-body libs row'>
     <?php foreach($customLibs as $libID => $libName):?>
-      <div class='col-md-4'>
-        <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "libID=$libID"), $libName);?></div>
-      </div>
+    <div class='col-md-2'>
+      <div class='lib' title='<?php echo $libName?>'><?php echo html::a(inlink('browse', "libID=$libID"), $libName);?></div>
+    </div>
     <?php endforeach;?>
   </div>
 </div>

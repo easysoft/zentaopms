@@ -16,7 +16,7 @@
 <div id='titlebar'>
   <div class='heading'><i class='icon-file-text'></i> <?php echo $lang->product->doc;?>  </div>
   <div class='actions'>
-    <?php common::printIcon('doc', 'create', "libID=product&moduleID=0&productID={$product->id}&projectID=0&from=product");?>
+    <?php common::printIcon('doc', 'create', "libID=" . key($libs) . "&moduleID=0&productID={$product->id}&projectID=0&from=product");?>
   </div>
 </div>
 <table class='table' id='docList'>

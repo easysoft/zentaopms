@@ -839,6 +839,7 @@ class project extends control
         $this->view->position[] = $this->lang->project->doc;
         $this->view->project    = $project;
         $this->view->docs       = $this->loadModel('doc')->getProjectDocs($projectID);
+        $this->view->libs       = $this->doc->getLibByObject('project', $projectID);
         $this->view->modules    = $this->doc->getProjectModulePairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();

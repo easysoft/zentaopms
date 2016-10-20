@@ -40,7 +40,6 @@ class doc extends control
         unset($this->lang->doc->menu->index);
         $this->doc->setMenu($products);
 
-        $limit = 6;
         $products   = $this->doc->getLimitLibs('product');
         $projects   = $this->doc->getLimitLibs('project');
         $customLibs = $this->doc->getLimitLibs('custom');
@@ -518,34 +517,17 @@ class doc extends control
         $libs    = $this->doc->getAllLibs($type, $pager, $extra);
         $subLibs = array();
         if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
+        if($extra)
+        {
+            parse_str($extra);
+            if(isset($product)) $this->view->product = $this->product->getById($product);
+        }
 
         $this->view->type    = $type;
         $this->view->libs    = $libs;
         $this->view->subLibs = $subLibs;
         $this->view->pager   = $pager;
-        $this->display();
-    }
-
-    /**
-     * Show libs for product or project
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
-     * @access public
-     * @return void
-     */
-    public function showLibs($type, $objectID)
-    {
-        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
-        $this->doc->setMenu(array($object->name), 0, $type);
-
-        $this->view->title      = $object->name;
-        $this->view->position[] = $object->name;
-
-        $this->view->type   = $type;
-        $this->view->object = $object;
-        $this->view->libs   = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->extra   = $extra;
         $this->display();
     }
 

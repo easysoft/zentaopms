@@ -411,6 +411,7 @@ class product extends control
         $this->view->position[] = $this->lang->product->doc;
         $this->view->product    = $product;
         $this->view->docs       = $this->loadModel('doc')->getProductDocs($productID);
+        $this->view->libs       = $this->doc->getLibByObject('product', $productID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }

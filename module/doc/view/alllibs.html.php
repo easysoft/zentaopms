@@ -11,23 +11,15 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='panel'>
-  <div class='panel-heading'>
-    <strong><?php echo isset($lang->doc->systemLibs[$type]) ? $lang->doc->systemLibs[$type] : $lang->doc->custom?></strong>
-  </div>
-  <div class='panel-body row'>
+<div id='featurebar'><strong><?php echo isset($lang->doc->systemLibs[$type]) ? $lang->doc->systemLibs[$type] : $lang->doc->custom?></strong></div>
     <?php foreach($libs as $lib):?>
-    <div class='col-md-4'>
+    <div>
       <?php if($type == 'project' or $type == 'product'):?>
-      <div class='panel'>
-        <div class='panel-heading'>
-          <?php echo $lib->name?>
-          <div class='panel-actions pull-right'><?php if(common::hasPriv('doc', 'showLibs')) echo html::a(inlink('showLibs', "type=$type&objectID=$lib->id"), $lang->more, '', "class='btn btn-sm'")?></div>
-        </div>
-        <div class='panel-body row'>
+      <div class='lib-heading <?php echo $type?>'><strong><i class='icon <?php echo $type == 'product' ? 'icon-cube-alt' : 'icon-folder-close-alt'?>'></i> <?php echo $lib->name?></strong></div>
+        <div class='libs row'>
         <?php if(isset($subLibs[$lib->id])):?>
           <?php foreach($subLibs[$lib->id] as $subLibID => $subLibName):?>
-          <div class='col-md-4'>
+          <div class='col-md-2'>
             <div class='lib' title='<?php echo $subLibName?>'>
             <?php
             if($subLibID == 'project')
@@ -48,14 +40,13 @@
           <?php endforeach?>
         <?php endif?>
         </div>
-      </div>
       <?php else:?>
+          <div class='col-md-2'>
         <div class='lib' title='<?php echo $lib->name?>'><?php echo html::a(inlink('browse', "libID=$lib->id"), $lib->name);?></div>
+        </div>
       <?php endif;?>
     </div>
     <?php endforeach;?>
-  </div>
   <div class='panel-footer'><?php $pager->show();?><div style='clear:both'></div></div>
-</div>
 <?php js::set('type', $type);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -53,6 +53,19 @@ class docModel extends model
     }
 
     /**
+     * Get lib by object.
+     * 
+     * @param  string $type 
+     * @param  int    $objectID 
+     * @access public
+     * @return array
+     */
+    public function getLibByObject($type, $objectID)
+    {
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->fetchAll('id');
+    }
+
+    /**
      * Get libraries.
      * 
      * @access public
@@ -603,7 +616,12 @@ class docModel extends model
     {
         if($type == 'product' or $type == 'project')
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->ne(0)->orderBy("$type desc")->query();
+            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
+                ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
+                ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
+                ->orderBy("t2.`order` desc, id desc")
+                ->query();
         }
         else
         {
@@ -623,11 +641,7 @@ class docModel extends model
             }
         }
 
-        if($type == 'product' or $type == 'project')
-        {
-            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
-        }
+        if($type == 'product' or $type == 'project') $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
 
         return $libs;
     }
@@ -641,7 +655,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getSubLibGroups($type, $idList, $limit = 3)
+    public function getSubLibGroups($type, $idList)
     {
         $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id desc')->fetchGroup($type, 'id');
         if($type == 'product')
@@ -655,16 +669,9 @@ class docModel extends model
         $buildGroups = array();
         foreach($libGroups as $objectID => $libs)
         {
-            $i = common::hasPriv('doc', 'showFiles') ? 2 : 1;
-            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $i += 1;
             foreach($libs as $lib)
             {
-                if($limit and $i > $limit) break;
-                if($this->checkPriv($lib))
-                {
-                    $buildGroups[$objectID][$lib->id] = $lib->name;
-                    $i++;
-                }
+                if($this->checkPriv($lib)) $buildGroups[$objectID][$lib->id] = $lib->name;
             }
             if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $buildGroups[$objectID]['project'] = $this->lang->doc->systemLibs['project'];
             if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;

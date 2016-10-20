@@ -1,4 +1,8 @@
 .outer{overflow:auto}
-.lib{border:1px solid #ddd; padding:5px;white-space:nowrap;overflow:hidden}
-.panel-heading{white-space:nowrap;overflow:hidden}
+.lib-heading{font-size:14px;}
+.lib-heading.product{color:#6E3566}
+.lib-heading.project{color:#64856A}
+.libs {margin:10px -10px;}
+.libs .col-md-2{padding-right:0px;}
+.lib{border:1px solid #ddd; padding:8px;white-space:nowrap;overflow:hidden;background:#F8FAFE}
 .lib a{display:block;}
