@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/ueditor.html.php';?>
 <?php js::set('type', $type)?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
@@ -37,15 +37,15 @@
       </tr> 
       <tr id='contentBox'>
         <th><?php echo $lang->doc->content;?></th>
-        <td colspan='2'><?php echo html::textarea('content', $doc->content, "class='form-control' rows='5' style='width:90%; height:200px'");?></td>
+        <td colspan='2'><?php echo html::textarea('content', $doc->content, "style='width:100%; height:200px'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->digest;?></th>
-        <td colspan='2'><?php echo html::textarea('digest', $doc->digest, "class='form-control' rows=2");?></td>
+        <td colspan='2'><?php echo html::textarea('digest', $doc->digest, "style='width:100%;' rows=2");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->comment;?></th>
-        <td colspan='2'><?php echo html::textarea('comment','', "class='form-control' rows=2");?></td>
+        <td colspan='2'><?php echo html::textarea('comment','', "style='width:100%;' rows=2");?></td>
       </tr> 
       <tr>
         <th><?php echo $lang->doc->keywords;?></th>

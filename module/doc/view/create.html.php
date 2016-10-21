@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/ueditor.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', $type);?>
 <div class='container mw-1400px'>
@@ -37,11 +37,11 @@
       </tr> 
       <tr id='contentBox'>
         <th><?php echo $lang->doc->content;?></th>
-        <td colspan='2'><?php echo html::textarea('content', '', "class='form-control' style='width:90%; height:200px'");?></td>
+        <td colspan='2'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->doc->digest;?></th>
-        <td colspan='2'><?php echo html::textarea('digest', '', "class='form-control' rows=3");?></td>
+        <td colspan='2'><?php echo html::textarea('digest', '', "style='width:100%' rows=3");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->keywords;?></th>
