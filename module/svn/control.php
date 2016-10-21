@@ -132,7 +132,6 @@ class svn extends control
             $log->revision = $revision;
             $log->files    = $parsedFiles;
             $this->svn->saveAction2PMS($objects, $log, $repoUrl);
-            if($revision) $this->svn->saveLastRevision($revision);
         }
         die();
     }
