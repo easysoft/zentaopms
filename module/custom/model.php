@@ -190,6 +190,12 @@ class customModel extends model
             }
         }
 
+        /* Merge fileMenu and customMenu. */
+        foreach($customMenuMap as $name => $item)
+        {
+            if(!isset($allMenu->$name))$allMenu->$name = $item;
+        }
+
         foreach($allMenu as $name => $item)
         {
             $label  = '';
@@ -198,7 +204,11 @@ class customModel extends model
             $float  = '';
             $fixed  = '';
 
-            $link    = is_array($item) ? $item['link'] : $item;
+            $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
+            $link = (is_object($item) and isset($item->link)) ? $item->link : $link;
+            /* The variable of item has not link and is not link then ignore it. */
+            if(!is_string($link)) continue;
+
             $label   = $link;
             $hasPriv = true;
             if(strpos($link, '|') !== false)

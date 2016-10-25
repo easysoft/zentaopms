@@ -115,6 +115,12 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
+        $this->view->fixedMenu = false;
+        foreach(customModel::getModuleMenu('doc') as $item)
+        {
+            if($item->name == "custom$libID" and empty($item->hidden)) $this->view->fixedMenu = true;
+        }
+
         $this->view->libID         = $libID;
         $this->view->libName       = $this->libs[$libID];
         $this->view->moduleID      = $moduleID;
@@ -502,6 +508,48 @@ class doc extends control
     {
         $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         die(html::select('module', $moduleOptionMenu, 0, "class='form-control'"));
+    }
+
+    /**
+     * Ajax fixed menu.
+     * 
+     * @param  int    $libID 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function ajaxFixedMenu($libID, $type = 'fixed')
+    {
+        $customMenus = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=customMenu&key=doc");
+        if($customMenus) $customMenus = json_decode($customMenus);
+        if(empty($customMenus))
+        {
+            if($type == 'remove') die(js::reload('parent'));
+            $i = 0;
+            foreach($this->lang->doc->menu as $name => $item)
+            {
+                if($name == 'list') continue;
+                $customMenu = new stdclass();
+                $customMenu->name = $name; 
+                $customMenu->order = $i; 
+                $customMenus[] = $customMenu;
+                $i++;
+            }
+        }
+
+        foreach($customMenus as $i => $customMenu)
+        {
+            if(isset($customMenu->link) and strpos($customMenu->link, "|libID=$libID") !== false) unset($customMenus[$i]);
+        }
+
+        $lib = $this->doc->getLibByID($libID);
+        $customMenu = new stdclass();
+        $customMenu->name = "custom{$libID}";
+        $customMenu->link = "$lib->name|doc|browse|libID=$libID";
+        $customMenu->order = count($customMenus); 
+        if($type == 'fixed') $customMenus[] = $customMenu;
+        $this->setting->setItem("{$this->app->user->account}.common.customMenu.doc", json_encode($customMenus));
+        die(js::reload('parent'));
     }
 
     /**

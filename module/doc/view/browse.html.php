@@ -13,9 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
+<?php if(!$fixedMenu) js::set('type', $type);?>;
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
-var type       = '<?php echo $type;?>';
 </script>
 <div id='featurebar'>
   <ul class='nav'>
@@ -40,6 +40,7 @@ var type       = '<?php echo $type;?>';
           <?php common::printLink('doc', 'editLib', "rootID=$libID", $lang->edit, '', "data-toggle='modal' data-type='iframe' data-width='600px'");?>
           <?php common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->delete, 'hiddenwin');?>
           <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType);?>
+          <?php echo '<br />' . html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin");?>
         </div>
       </div>
     </div>

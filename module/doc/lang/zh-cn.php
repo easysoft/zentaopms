@@ -56,6 +56,8 @@ $lang->doc->custom         = '自定义文档库';
 $lang->doc->createLib      = '创建文档库';
 $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
+$lang->doc->fixedMenu      = '固定到菜单栏';
+$lang->doc->removeMenu     = '从菜单栏移除';
 
 /* 查询条件列表 */
 $lang->doc->allProduct     = '所有' . $lang->productCommon;
