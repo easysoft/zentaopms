@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/ueditor.html.php';?>
+<?php include '../../common/view/markdown.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', $type);?>
 <div class='container mw-1400px'>
@@ -25,23 +26,33 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->doc->lib;?></th>
-        <td class='w-p25-f'><?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange='loadModules(this.value)'");?></td><td></td>
+        <td class='w-400px'><?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange='loadModules(this.value)'");?></td><td></td>
       </tr>  
       <tr>
         <th class='w-80px'><?php echo $lang->doc->module;?></th>
-        <td class='w-p25-f'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td><td></td>
+        <td><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->title;?></th>
         <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
       </tr> 
+      <tr>
+        <th><?php echo $lang->doc->contentType;?></th>
+        <td><?php echo html::select('type', $lang->doc->contentTypeList, 'html', "class='form-control'");?></td>
+      </tr> 
       <tr id='contentBox'>
         <th><?php echo $lang->doc->content;?></th>
-        <td colspan='2'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></td>
+        <td colspan='2'>
+          <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></div>
+          <div class='contentmarkdown hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;height:200px'");?></div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->doc->digest;?></th>
-        <td colspan='2'><?php echo html::textarea('digest', '', "style='width:100%' rows=3");?></td>
+        <td colspan='2'>
+          <div class='contenthtml'><?php echo html::textarea('digest', '', "style='width:100%' rows=3");?></div>
+          <div class='contentmarkdown hidden'><?php echo html::textarea('digestMarkdown', '', "style='width:100%' rows=3");?></div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->keywords;?></th>

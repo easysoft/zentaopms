@@ -33,6 +33,7 @@ $lang->doc->basicInfo      = '基本信息';
 $lang->doc->deleted        = '已删除';
 $lang->doc->fileObject     = '所属对象';
 $lang->doc->whiteList      = '白名单';
+$lang->doc->contentType    = '文档格式';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -70,6 +71,9 @@ $lang->doc->systemLibs['project'] = $lang->projectCommon . '文档库';
 $lang->doc->aclList['public']  = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
+
+$lang->doc->contentTypeList['html']     = 'HTML';
+$lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";

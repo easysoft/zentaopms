@@ -295,6 +295,7 @@ class docModel extends model
             ->add('version', 1)
             ->setDefault('product,project,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
+            ->stripTags($this->config->doc->markdown->create['id'], $this->config->allowedTags)
             ->cleanInt('product,project,module')
             ->join('groups', ',')
             ->join('users', ',')
@@ -313,12 +314,15 @@ class docModel extends model
 
         $docContent = new stdclass();
         $docContent->title   = $doc->title;
-        $docContent->digest  = $doc->digest;
-        $docContent->content = $doc->content;
+        $docContent->digest  = $doc->type == 'html' ? $doc->digest  : $doc->digestMarkdown;
+        $docContent->content = $doc->type == 'html' ? $doc->content : $doc->contentMarkdown;
+        $docContent->type    = $doc->type;
         $docContent->version = 1;
-        $docContent->type    = 'html';
         unset($doc->digest);
+        unset($doc->digestMarkdown);
         unset($doc->content);
+        unset($doc->contentMarkdown);
+        unset($doc->type);
 
         $this->dao->insert(TABLE_DOC)->data($doc)->autoCheck()
             ->batchCheck($this->config->doc->create->requiredFields, 'notempty')

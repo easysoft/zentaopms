@@ -336,6 +336,12 @@ class doc extends control
         $doc = $this->doc->getById($docID);
         $libID = $doc->lib;
 
+        if($doc->type == 'markdown')
+        {
+            $this->config->doc->markdown->edit = array('id' => 'content,digest');
+            $this->config->doc->editor->edit['id'] = 'comment';
+        }
+
         $lib        = $this->doc->getLibByID($libID);
         $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
         $this->libs = $this->doc->getLibs($type);

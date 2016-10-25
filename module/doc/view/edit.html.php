@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/ueditor.html.php';?>
+<?php if($doc->type == 'markdown') include '../../common/view/markdown.html.php';?>
 <?php js::set('type', $type)?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
@@ -25,11 +26,11 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->doc->lib;?></th>
-        <td class='w-p25-f'><?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange='loadModules(this.value)'");?></td><td></td>
+        <td class='w-400px'><?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange='loadModules(this.value)'");?></td><td></td>
       </tr>  
       <tr>
-        <th class='w-80px'><?php echo $lang->doc->module;?></th>
-        <td class='w-p25-f'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></span></td><td></td>
+        <th><?php echo $lang->doc->module;?></th>
+        <td><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></span></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->title;?></th>

@@ -16,6 +16,9 @@ $config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content,digest', 'tools' => 'fullTools');
 $config->doc->editor->edit   = array('id' => 'content,digest,comment', 'tools' => 'fullTools');
 
+$config->doc->markdown = new stdclass();
+$config->doc->markdown->create = array('id' => 'contentMarkdown,digestMarkdown');
+
 $config->doc->search['module']                   = 'doc';
 $config->doc->search['fields']['title']          = $lang->doc->title;
 $config->doc->search['fields']['id']             = $lang->doc->id;
