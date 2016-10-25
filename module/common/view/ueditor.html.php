@@ -49,6 +49,10 @@ function initUeditor(afterInit)
         if(!window.editor) window.editor = {};
         ueditor = UE.getEditor(editorID, options);
         window.editor['#'] = window.editor[editorID] = ueditor;
+        ueditor.addListener('ready', function()
+        {
+            $('#' + editorID).find('.edui-editor').css('z-index', '5');
+        });
     });
 
     if($.isFunction(afterInit)) afterInit();

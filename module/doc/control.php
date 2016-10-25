@@ -373,6 +373,13 @@ class doc extends control
         $doc = $this->doc->getById($docID, $version, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        if($doc->type == 'markdown')
+        {
+            $hyperdown    = $this->app->loadClass('hyperdown');
+            $doc->content = $hyperdown->makeHtml($doc->content);
+            $doc->digest  = $hyperdown->makeHtml($doc->digest);
+        }
+
         /* Check priv when lib is product or project. */
         $lib  = $this->doc->getLibByID($doc->lib);
         $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');

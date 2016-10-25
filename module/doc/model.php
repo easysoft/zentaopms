@@ -318,6 +318,11 @@ class docModel extends model
         $docContent->content = $doc->type == 'html' ? $doc->content : $doc->contentMarkdown;
         $docContent->type    = $doc->type;
         $docContent->version = 1;
+        if($doc->type == 'markdown')
+        {
+            $docContent->content = str_replace('&gt;', '>', $docContent->content);
+            $docContent->digest  = str_replace('&gt;', '>', $docContent->digest);
+        }
         unset($doc->digest);
         unset($doc->digestMarkdown);
         unset($doc->content);
@@ -362,6 +367,11 @@ class docModel extends model
             ->remove('comment,files,labels,uid')
             ->get();
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
+        if($oldDoc->type == 'markdown')
+        {
+            $doc->content = str_replace('&gt;', '>', $doc->content);
+            $doc->digest  = str_replace('&gt;', '>', $doc->digest);
+        }
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
