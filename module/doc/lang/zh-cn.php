@@ -77,6 +77,11 @@ $lang->doc->aclList['private'] = '私有';
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
+$lang->doc->browseType             = '浏览方式';
+$lang->doc->browseTypeList['list'] = '列表';
+$lang->doc->browseTypeList['menu'] = '目录';
+$lang->doc->browseTypeList['tree'] = '树状图';
+
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
 $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";

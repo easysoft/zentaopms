@@ -75,8 +75,9 @@ class doc extends control
 
         /* Set browseType.*/ 
         $browseType = strtolower($browseType);
+        if(($this->cookie->browseType == 'bymenu' or $this->cookie->browseType == 'bytree') and $browseType != 'bysearch') $browseType = $this->cookie->browseType;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+        $moduleID   = ($browseType == 'bymodule' or $browseType == 'bymenu') ? (int)$param : 0;
 
         $type = 'custom';
         if($libID)
@@ -121,11 +122,23 @@ class doc extends control
             if($item->name == "custom$libID" and empty($item->hidden)) $this->view->fixedMenu = true;
         }
 
+        if($this->cookie->browseType == 'bymenu')
+        {
+            $this->view->modules = $this->doc->getDocMenu($libID, $moduleID);
+            $this->view->parents = $this->loadModel('tree')->getParents($moduleID);
+        }
+        elseif($this->cookie->browseType == 'bytree')
+        {
+            $this->view->tree = $this->doc->getDocTree($libID);
+        }
+        else
+        {
+            $this->view->moduleTree = $this->loadModel('tree')->getTreeMenu($libID, $viewType = 'doc', $startModuleID = 0, array('treeModel', 'createDocLink'));
+        }
+
         $this->view->libID         = $libID;
         $this->view->libName       = $this->libs[$libID];
         $this->view->moduleID      = $moduleID;
-        $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($libID, $viewType = 'doc', $startModuleID = 0, array('treeModel', 'createDocLink'));
-        $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->docs          = $docs;
         $this->view->pager         = $pager;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');

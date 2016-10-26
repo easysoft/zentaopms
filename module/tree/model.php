@@ -509,6 +509,20 @@ class treeModel extends model
     }
 
     /**
+     * Get tree structure.
+     * 
+     * @param  int    $rootID 
+     * @param  string $type 
+     * @access public
+     * @return array
+     */
+    public function getTreeStructure($rootID, $type)
+    {
+        $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule = 0));
+        return $this->getDataStructure($stmt, $type);
+    }
+
+    /**
      * Get project story tree menu.
      * 
      * @param  int    $rootID 

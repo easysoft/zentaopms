@@ -12,11 +12,18 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
-<?php if(!$fixedMenu) js::set('type', $type);?>;
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
+<?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
+<?php js::set('fixedMenu', $fixedMenu);?>
+<?php js::set('libID', $libID);?>
+<?php if(!$fixedMenu) js::set('type', $type);?>
+<?php if($this->cookie->browseType == 'bymenu'):?>
+<?php include __DIR__ . '/browsebymenu.html.php';?>
+<?php elseif($this->cookie->browseType == 'bytree'):?>
+<?php include __DIR__ . '/browsebytree.html.php';?>
+<?php else:?>
 <div id='featurebar'>
   <ul class='nav'>
     <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy"), $lang->doc->allDoc)?></li>
@@ -25,6 +32,14 @@ var browseType = '<?php echo $browseType;?>';
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
   </ul>
   <div class='actions'>
+    <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-list'></i> <?php echo $lang->doc->browseTypeList['list']?> <span class="caret"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
+        <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
+        <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-tags'></i> {$lang->doc->browseTypeList['tree']}");?></li>
+      </ul>
+    </div>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&product=0&prject=0&from=doc");?>
   </div>
   <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
@@ -87,4 +102,5 @@ var browseType = '<?php echo $browseType;?>';
     <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
   </table>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

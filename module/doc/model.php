@@ -170,6 +170,20 @@ class docModel extends model
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
             $docs = $this->getDocs($libID, $modules, $sort, $pager);
         }
+        elseif($browseType == "bymenu")
+        {
+            $condition = $this->buildConditionSQL();
+            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('deleted')->eq(0)->andWhere('lib')->in($libID)
+                ->andWhere('module')->eq($moduleID)
+                ->beginIF($condition)->andWhere("($condition)")->fi()
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
+        }
+        elseif($browseType == 'bytree')
+        {
+            return array();
+        }
         elseif($browseType == "bysearch")
         {
             if($queryID)
@@ -495,6 +509,22 @@ class docModel extends model
     }
 
     /**
+     * Get doc menu.
+     * 
+     * @param  int    $libID 
+     * @param  int    $parent 
+     * @access public
+     * @return void
+     */
+    public function getDocMenu($libID, $parent)
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($libID)
+            ->andWhere('type')->eq('doc')
+            ->andWhere('parent')->eq($parent)
+            ->fetchAll('id');
+    }
+
+    /**
      * Extract css styles for tables created in kindeditor.
      *
      * Like this: <table class="ke-table1" style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
@@ -787,5 +817,80 @@ class docModel extends model
             $condition .= "))";
         }
         return $condition;
+    }
+
+    /**
+     * Get doc tree.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return array
+     */
+    public function getDocTree($libID)
+    {
+        $fullTrees = $this->loadModel('tree')->getTreeStructure($libID, 'doc');
+        array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'doc', 'actions' => false, 'root' => $libID));
+        foreach($fullTrees as $i => $tree)
+        {
+            $tree = (object)$tree;
+            $fullTrees[$i] = $this->fillDocsInTree($tree, $libID);
+        }
+        if(empty($fullTrees[0]->children)) array_shift($fullTrees);
+        return $fullTrees;
+    }
+
+    /**
+     * Fill docs in tree.
+     * 
+     * @param  object $node 
+     * @param  int    $libID 
+     * @access public
+     * @return array
+     */
+    public function fillDocsInTree($node, $libID)
+    {
+        $node = (object)$node;
+        static $docGroups;
+        if(empty($docGroups))
+        {
+            $condition = $this->buildConditionSQL();
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('lib')->eq((int)$libID)
+                ->beginIF($condition)->andWhere("($condition)")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
+            $docGroups = array();
+            foreach($docs as $doc) $docGroups[$doc->module][$doc->id] = $doc;
+        }
+
+        if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillDocsInTree($child, $libID);
+        if(!isset($node->id))$node->id = 0;
+
+        $node->type = 'module';
+        $docs = isset($docGroups[$node->id]) ? $docGroups[$node->id] : array();
+        if(!empty($docs))
+        {
+            $docItems = array();
+            foreach($docs as $doc)
+            {
+                $docItem = new stdclass();
+                $docItem->type         = 'doc';
+                $docItem->id           = $doc->id;
+                $docItem->title        = $doc->title;
+                $docItem->url          = helper::createLink('doc', 'view', "doc=$doc->id");
+
+                $buttons  = '';
+                $buttons .= common::buildIconButton('doc', 'edit',    "docID=$doc->id", '', 'list');
+                if(common::hasPriv('doc', 'delete'))$buttons .= html::a(helper::createLink('doc', 'delete', "docID=$doc->id"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
+                $docItem->buttons = $buttons;
+                $docItem->actions = false;
+                $docItems[] = $docItem;
+            }
+            $node->docsCount = count($docItems);
+            $node->children  = $docItems;
+        }
+
+        $node->actions = false;
+        return $node;
     }
 }
