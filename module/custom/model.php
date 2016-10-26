@@ -205,7 +205,7 @@ class customModel extends model
             $fixed  = '';
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
-            $link = (is_object($item) and isset($item->link)) ? $item->link : $link;
+            $link = (is_object($item) and isset($item->buildLink)) ? $item->buildLink : $link;
             /* The variable of item has not link and is not link then ignore it. */
             if(!is_string($link)) continue;
 
@@ -251,6 +251,7 @@ class customModel extends model
                 if($float)  $menuItem->float   = $float;
                 if($fixed)  $menuItem->fixed   = $fixed;
                 if($hidden) $menuItem->hidden  = $hidden;
+                if(is_object($item) and isset($item->buildLink)) $menuItem->buildLink = $item->buildLink;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 while(isset($menu[$menuItem->order])) $menuItem->order++;

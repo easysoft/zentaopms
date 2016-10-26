@@ -106,12 +106,9 @@ $(function()
     {
         return $.map(items, function(item)
         {
-            link = '';
-            if(item.link) link = item.text + '|' + item.link.module + '|' + item.link.method;
-            if(typeof(item.link.vars) != 'undefined') link = link + '|' + item.link.vars;
             var data = {name: item.name, order: parseInt(item.order)};
             if(item.hidden) data.hidden = true;
-            if(link) data.link = link;
+            if(item.buildLink) data.buildLink = item.buildLink;
             return data;
         });
     };
