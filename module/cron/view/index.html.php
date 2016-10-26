@@ -14,7 +14,7 @@
 <div id='titlebar'>
   <div class='heading'><?php echo $lang->cron->common;?></div>
   <div class='actions'>
-    <?php if(common::hasPriv('cron', 'openProcess')) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn'")?>
+    <?php if(common::hasPriv('cron', 'openProcess') and !empty($config->global->cron)) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn'")?>
     <?php if(common::hasPriv('cron', 'turnon') and !empty($config->global->cron)) echo html::a(inlink('turnon'), $lang->cron->turnonList[0], 'hiddenwin', "class='btn'");?>
   </div>
 </div>
