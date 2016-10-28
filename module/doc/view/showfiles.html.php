@@ -11,36 +11,39 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='panel'>
-  <div class='panel-heading'>
-    <strong><?php echo $object->name?></strong>
-  </div>
-  <div class='panel-body cards'>
-    <?php foreach($files as $file):?>
-    <div class='col-md-3'>
-      <div class='card' title='<?php echo $file->title . '.' . $file->extension?>'>
-        <?php
-        $downloadLink = $this->createLink('file', 'download', "fileID=$file->id&mouse=left");
-        if(in_array($file->extension, $config->file->imageExtensions))
-        {
-            echo html::a($downloadLink, "<img src='$file->webPath' />", '_blank', "class='file'");
-        }
-        else
-        {
-            $iconClass = 'icon-file';
-            if(strpos('zip,tar,gz,bz2,rar', $file->extension) !== false) $iconClass = 'icon-file-archive';
-            if(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
-            if(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
-            if(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
-            if(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
-            echo html::a($downloadLink, "<i class='icon $iconClass'></i>", '_blank', "class='file'");
-        }
-        ?>
-        <div class="card-heading"><strong><?php echo html::a($this->createLink($file->objectType, 'view', "objectID=$file->objectID"), $lang->doc->fileObject . ' ' . strtoupper($file->objectType) . ' #' . $file->objectID)?></strong></div>
-      </div>
+<div id='featurebar'><strong><?php echo $object->name . ': ' . $lang->doclib->files?></strong></div>
+<div class='lib-files cards'>
+  <?php foreach($files as $file):?>
+  <div class='col-md-3'>
+    <div class='card lib-file'>
+      <a class='media-wrapper' target='_blank' href='<?php echo $this->createLink('file', 'download', "fileID=$file->id&mouse=left") ?>'>
+      <?php
+      $downloadLink = $this->createLink('file', 'download', "fileID=$file->id&mouse=left");
+      if(in_array($file->extension, $config->file->imageExtensions))
+      {
+          echo "<div class='img-holder' style='background-image: url($file->webPath)'><img src='$file->webPath'/></div>";
+      }
+      else
+      {
+          $iconClass = 'icon-file';
+          if(strpos('zip,tar,gz,bz2,rar', $file->extension) !== false) $iconClass = 'icon-file-archive';
+          else if(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
+          else if(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
+          else if(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
+          else if(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
+          else if(strpos('mp3,ogg,wav', $file->extension) !== false) $iconClass = 'icon-file-audio';
+          else if(strpos('avi,mp4,mov', $file->extension) !== false) $iconClass = 'icon-file-movie';
+          else if(strpos('txt,md', $file->extension) !== false) $iconClass = 'icon-file-text-o';
+          else if(strpos('html,htm', $file->extension) !== false) $iconClass = 'icon-globe';
+          echo "<i class='icon-holder icon $iconClass'></i>";
+      }
+      ?>
+        <i class='icon icon-download'></i>
+      </a>
+      <a class='card-heading' href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID"); ?>'><?php echo $lang->doc->fileObject . ' ' . strtoupper($file->objectType) . ' #' . $file->objectID ?> <i class='icon icon-chevron-right pull-right'></i></a>
     </div>
-    <?php endforeach;?>
   </div>
+  <?php endforeach;?>
 </div>
 <?php js::set('type', $type);?>
 <?php include '../../common/view/footer.html.php';?>

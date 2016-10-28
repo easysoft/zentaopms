@@ -1,2 +1,25 @@
-.card a.file{display:block; text-align:center;} 
-.card a.file i.icon{display:block; font-size:61px; margin:10px} 
+@keyframes flash-icon
+{
+  0% {color: #666;}
+  100% {color: #fff;}
+}
+.lib-file .media-wrapper {height: 200px; position: relative;}
+.lib-file .media-wrapper .img-holder {height: 200px; background-repeat: none; background-size: cover; background-position: center;}
+.lib-file .media-wrapper .img-holder img {display: none}
+.lib-file .media-wrapper > .icon {font-size: 56px; display: block; text-align: center; position: absolute; top: 0; right: 0; left: 0; bottom: 0; line-height: 200px; opacity: 0; transition: opacity .2s; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
+.lib-file .media-wrapper:hover > .icon-download {opacity: .9; animation: flash-icon 1s linear alternate infinite}
+.lib-file .card-heading > .icon-download {opacity: .5; position: relative; top: 2px}
+.lib-file .card-heading {color: #114f8e}
+.lib-file .card-heading:hover {background-color: #EBF2F9; color: #2e6dad}
+.lib-file .media-wrapper > .icon-holder {font-size: 105px; opacity: 1; color: rgba(255,255,255,.7); opacity: .6}
+.lib-file .media-wrapper > .icon-holder.icon-file {background-color: #999}
+.lib-file .media-wrapper > .icon-holder.icon-file-archive {background-color: #8666B8}
+.lib-file .media-wrapper > .icon-holder.icon-file-excel {background-color: #38B03F}
+.lib-file .media-wrapper > .icon-holder.icon-file-powerpoint {background-color: #EA644A}
+.lib-file .media-wrapper > .icon-holder.icon-file-word {background-color: #3280FC}
+.lib-file .media-wrapper > .icon-holder.icon-file-pdf {background-color: #BD7B46}
+.lib-file .media-wrapper > .icon-holder.icon-file-audio {background-color: #F1A325}
+.lib-file .media-wrapper > .icon-holder.icon-file-movie {background-color: #EA644A}
+.lib-file .media-wrapper > .icon-holder.icon-file-text-o {background-color: #145CCD}
+.lib-file .media-wrapper > .icon-holder.icon-globe {background-color: #03B8CF}
+.lib-files {padding: 0}

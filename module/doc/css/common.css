@@ -1,8 +1,16 @@
 .outer{overflow:auto}
-.lib-heading{font-size:14px;}
-.lib-heading.product{color:#6E3566}
-.lib-heading.project{color:#64856A}
-.libs {margin:10px -10px;}
-.libs .col-md-2{padding-right:0px;}
-.lib{border:1px solid #ddd; padding:8px;white-space:nowrap;overflow:hidden;background:#F8FAFE}
-.lib a{display:block;}
+.libs-heading {display: block; margin: 10px 0; background: #f1f1f1; color: #808080; position: relative;}
+.libs-heading-text {display: inline-block; padding: 8px 12px; font-weight: bold; color: #2e6dad}
+.libs-heading:hover {background-color: #EBF2F9}
+.libs-heading:hover .libs-heading-text {background-color: #2e6dad; color: #fff}
+.libs-heading > .icon {display: block; right: 0; top: 0; bottom: 0; position: absolute; line-height: 33px; width: 34px; text-align: center; opacity: .6}
+.libs-heading:hover > .icon {opacity: 1}
+.libs-group-heading {color: #808080; margin: 10px 0}
+.libs {margin-bottom: 15px;}
+.libs.collapsed .libs-group,
+.libs.collapsed .libs-group-heading {display: none}
+.libs.collapsed .libs-heading {background: #ddd;}
+.libs.collapsed .libs-heading > .icon {opacity: 1}
+.libs.collapsed .libs-heading > .icon:before {content: '\e726'}
+.lib {float: left; width: 200px; display: block; border: 1px solid #ddd; margin: 0 15px 15px 0; padding: 10px 15px; text-align: center; color: #333; border-radius: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
