@@ -207,7 +207,12 @@ class editorModel extends model
             $langFile = dirname(key($files)) . DS . 'lang' . DS . $this->cookie->lang. '.php';
             if(file_exists($langFile))
             {
-                if(!isset($lang)) $lang = new stdclass();
+                if(!isset($lang))
+                {
+                    $lang = new stdclass();
+                    $lang->projectCommon = $this->lang->projectCommon;
+                    $lang->productCommon = $this->lang->productCommon;
+                }
                 if(!isset($lang->$module)) $lang->$module = new stdclass();
                 include_once $langFile;
             }

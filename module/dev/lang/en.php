@@ -82,6 +82,11 @@ $lang->dev->tableList['upgrade']        = 'Upgrade';
 $lang->dev->tableList['cron']           = 'Cron';
 $lang->dev->tableList['mailqueue']      = 'Mail queue';
 $lang->dev->tableList['datatable']      = 'Data table';
+$lang->dev->tableList['block']          = 'Block';
+$lang->dev->tableList['branch']         = 'Branch';
+$lang->dev->tableList['doccontent']     = 'Doc content';
+$lang->dev->tableList['storystage']     = 'Story stage';
+$lang->dev->tableList['tutorial']       = 'Tutorial';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
