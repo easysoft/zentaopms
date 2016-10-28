@@ -20,7 +20,7 @@
     <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
     <?php endif; ?>
   </div>
-  <div class='actions'><?php html::backButton(); ?></div>
+  <div class='actions'><?php echo html::backButton(); ?></div>
 </div>
 <div class='row-table'>
   <table class='table table-data alldiff'>
