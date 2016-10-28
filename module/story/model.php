@@ -276,7 +276,7 @@ class storyModel extends model
                 $data->title      = $stories->title[$i];
                 $data->source     = $stories->source[$i];
                 $data->pri        = $stories->pri[$i];
-                $data->estimate   = (int)$stories->estimate[$i];
+                $data->estimate   = $stories->estimate[$i];
                 $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
                 $data->keywords   = $stories->keywords[$i];
                 $data->product    = $productID;
