@@ -47,6 +47,7 @@ $lang->doc->edit           = '编辑文档';
 $lang->doc->delete         = '删除文档';
 $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
+$lang->doc->diff           = '对比';
 $lang->doc->manageType     = '维护分类';
 $lang->doc->addType        = '增加分类';
 
@@ -90,6 +91,7 @@ $lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文
 $lang->doc->errorEmptySysLib   = "系统文档库不能全部删除！";
 $lang->doc->accessDenied       = "您没有权限访问该文档库！";
 $lang->doc->noMatched          = '找不到包含"%s"的文档库';
+$lang->doc->versionNotFount    = '该版本文档不存在';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';

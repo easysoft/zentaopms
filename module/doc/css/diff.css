@@ -1,0 +1,11 @@
+table.alldiff th{width:70px;border-right:1px solid #ddd;}
+table.table.alldiff td:last-child{padding:0px;}
+table.table.diff {border:none}
+table.alldiff table.table.diff td{border:none;}
+table.alldiff table.table.diff .num{border-right:1px solid #ddd; text-align:right; width:20px;}
+table.alldiff table.table.diff .oldLine{border-right:1px solid #ddd;}
+table.table.diff td.newLine{padding:3px;}
+table.table.diff td.oldLine{padding:3px;}
+table.table.diff td.line{padding-left:20px;}
+table.table.diff td.diffline.newLine{background: #8eff8e}
+table.table.diff td.diffline.oldLine{background: #f6b2b2}

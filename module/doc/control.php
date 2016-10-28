@@ -424,6 +424,79 @@ class doc extends control
     }
 
     /**
+     * Diff doc. 
+     * 
+     * @param  int    $docID 
+     * @param  int    $newVersion 
+     * @param  int    $oldVersion 
+     * @access public
+     * @return void
+     */
+    public function diff($docID, $newVersion, $oldVersion = '')
+    {
+        if(empty($oldVersion)) $oldVersion = $newVersion - 1;
+        if(empty($oldVersion) or empty($newVersion)) die(js::error($this->lang->doc->versionNotFound) . js::locate('back'));
+
+        $newDoc = $this->doc->getById($docID, $newVersion, true);
+        $oldDoc = $this->doc->getById($docID, $oldVersion, true);
+        if(!$newDoc) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        /* Merge files in doc. */
+        $dbOldDocFiles = $this->dao->select('files')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldVersion)->fetch('files');
+        $dbOldDocFiles = explode(',', $dbOldDocFiles);
+        sort($dbOldDocFiles);
+        $oldDocFiles = array();
+        foreach($dbOldDocFiles as $fileID)
+        {
+            $file = isset($oldDoc->files[$fileID]) ? $oldDoc->files[$fileID] : '';
+            $oldDocFiles[$fileID] = 'File #' . $fileID;
+            if($file) $oldDocFiles[$fileID] .= ' ' . $file->title . '.' . $file->extension;
+        }
+        $oldDoc->files = join("\n", $oldDocFiles);
+
+        $dbNewDocFiles = $this->dao->select('files')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($newVersion)->fetch('files');
+        $dbNewDocFiles = explode(',', $dbNewDocFiles);
+        sort($dbNewDocFiles);
+        $newDocFiles = array();
+        foreach($dbNewDocFiles as $fileID)
+        {
+            $file = isset($newDoc->files[$fileID]) ? $newDoc->files[$fileID] : '';
+            $newDocFiles[$fileID] = 'File #' . $fileID;
+            if($file) $newDocFiles[$fileID] .= ' ' . $file->title . '.' . $file->extension;
+        }
+        $newDoc->files = join("\n", $newDocFiles);
+
+        /* Get diff. */
+        $diff = new stdclass();
+        $diff->content = $this->doc->diff($oldDoc->content, $newDoc->content);
+        $diff->digest  = $this->doc->diff($oldDoc->digest, $newDoc->digest);
+        $diff->files   = $this->doc->diff($oldDoc->files, $newDoc->files);
+
+        /* Check priv when lib is product or project. */
+        $lib  = $this->doc->getLibByID($newDoc->lib);
+        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $this->libs = $this->doc->getLibs($type);
+
+        /* Set menu. */
+        $this->doc->setMenu($this->libs, $newDoc->lib, $type);
+
+        $this->view->title      = "DOC #$newDoc->id $newDoc->title - " . $this->libs[$newDoc->lib];
+        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$newDoc->lib"), $this->libs[$newDoc->lib]);
+        $this->view->position[] = $this->lang->doc->view;
+
+        $this->view->newDoc     = $newDoc;
+        $this->view->oldDoc     = $oldDoc;
+        $this->view->docID      = $docID;
+        $this->view->lib        = $lib;
+        $this->view->type       = $type;
+        $this->view->newVersion = $newVersion;
+        $this->view->oldVersion = $oldVersion;
+        $this->view->diff       = $diff;
+
+        $this->display();
+    }
+
+    /**
      * Delete a doc.
      * 
      * @param  int    $docID 

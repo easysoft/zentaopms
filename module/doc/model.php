@@ -279,6 +279,7 @@ class docModel extends model
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
+        $doc->title   = isset($docContent->title)   ? $docContent->title  : '';
         $doc->digest  = isset($docContent->digest)  ? $docContent->digest  : '';
         $doc->content = isset($docContent->content) ? $docContent->content : '';
         $doc->type    = isset($docContent->type)    ? $docContent->type : '';
@@ -892,5 +893,165 @@ class docModel extends model
 
         $node->actions = false;
         return $node;
+    }
+
+    /**
+     * Diff doc. 
+     * 
+     * @param  string $text1 
+     * @param  string $text2 
+     * @access public
+     * @return array
+     */
+    public function diff($text1, $text2)
+    {
+        $text1     = explode("\n", trim($text1));
+        $text2     = explode("\n", trim($text2));
+        $text1Len  = count($text1);
+        $text2Len  = count($text2);
+        $trace     = array();
+        $trace[-1] = array_fill(-1, $text2Len + 1, +1);
+        $lcs0      = array_fill(-1, $text2Len + 1, 0);
+        $lcs1[-1]  = 0;
+
+        foreach($text1 as $line)
+        {
+            $temp     = array();
+            $temp[-1] = -1;
+            for($i = 0; $i < $text2Len; $i++)
+            {
+                if($line == $text2[$i])
+                {
+                    $lcs1[$i] = $lcs0[$i - 1] + 1;
+                    $temp[$i] = 0;
+                }
+                elseif($lcs0[$i] > $lcs1[$i - 1])
+                {
+                    $lcs1[$i] = $lcs0[$i];
+                    $temp[$i] = -1;
+                }
+                else
+                {
+                    $lcs1[$i] = $lcs1[$i - 1];
+                    $temp[$i] = +1;
+                }
+            }
+            array_push($trace, $temp);
+            $temp = $lcs1;
+            $lcs1 = $lcs0;
+            $lcs0 = $temp;
+        }
+
+        $same = 0;
+        $out  = false;
+        $ret  = array();
+        for($i = $text1Len - 1, $j = $text2Len - 1; $i != -1 || $j != -1;)
+        {
+            if($trace[$i][$j] == 0)
+            {
+                $same++;
+                if($out && $same > 0)
+                {
+                    $outbegina = $i + $same;
+                    $outbeginb = $j + $same;
+                    for($k = $i + $same - 1; $k >= $outbegina; $k--) array_push($ret, array('cmd' => ' ', 'dat' => $text1[$k]));
+                    $dat = array($outbegina, $outenda - $outbegina + 1, $outbeginb, $outendb - $outbeginb + 1);
+                    array_push($ret, array('cmd' => '@', 'dat'=> $dat));
+                    $out = false;
+                }
+                $i--;
+                $j--;
+            }
+            else
+            {
+                if(!$out)
+                {
+                    $same    = min($same, 0);
+                    $out     = true;
+                    $outenda = $i + $same;
+                    $outendb = $j + $same;
+                }
+                for($k = $i + $same; $k > $i; $k--) array_push($ret, array('cmd' => ' ', 'dat' => $text1[$k]));
+                $same = 0;
+                if($trace[$i][$j] == -1)
+                {
+                    array_push($ret, array('cmd' => '-', 'dat' => $text1[$i]));
+                    $i--;
+                }
+                else
+                {
+                    array_push($ret, array('cmd' => '+', 'dat' => $text2[$j]));
+                    $j--;
+                }
+            }
+        }
+
+        if($out)
+        {
+            $outbegina = max(0, $same);
+            $outbeginb = max(0, $same);
+            for($k = $same - 1; $k >= $outbegina; $k--) array_push($ret, array('cmd' => ' ', 'dat' => $text1[$k]));
+            $dat = array($outbegina, $outenda - $outbegina + 1, $outbeginb, $outendb - $outbeginb + 1);
+            array_push($ret, array('cmd' => '@', 'dat'=> $dat));
+        }
+
+        $diffs = array_reverse($ret);  
+        if(empty($diffs)) return array();
+
+        $processedDiff = array();
+        foreach($diffs as $i => $diff)
+        {
+            if($diff['cmd'] == '@')
+            {
+                $max = max($diff['dat'][1], $diff['dat'][3]);
+                for($number = 0; $number < $max; $number++)
+                {
+                    $oldLineNO = $diff['dat'][0] + $number;
+                    $newLineNO = $diff['dat'][2] + $number;
+                    $oldLine = '';
+                    $newLine = '';
+                    if($diff['dat'][1] > 0 and $diff['dat'][1] >= $number + 1) $oldLine = $diffs[$i + $number + 1]['dat'];
+                    if($diff['dat'][3] > 0 and $diff['dat'][3] >= $number + 1) $newLine = $diffs[$i + $number + 1 + $diff['dat'][1]]['dat'];
+                    $processedDiff['old'][$oldLineNO] = $oldLine;
+                    $processedDiff['new'][$newLineNO] = $newLine;
+                }
+
+            }
+        }
+        return $processedDiff;
+    }
+
+    /**
+     * Get line number by diff.
+     * 
+     * @param  array  $diff 
+     * @param  int    $i 
+     * @param  int    $lineNO 
+     * @access public
+     * @return array
+     */
+    public function getLineNumber($diff, $i, $lineNO)
+    {
+        $action = '';
+        if(isset($diff[$i]))
+        {
+            if(empty($diff[$i]))
+            {
+                $showNumber = '';
+                $action     = '';
+            }
+            else
+            {
+                $showNumber = $lineNO + 1;
+                $action     = 'diff';
+            }
+        }
+        else
+        {
+            $showNumber = $lineNO + 1;
+            $action     = '';
+        }
+
+        return array($showNumber, $action, 'number' => $showNumber, 'action' => $action);
     }
 }

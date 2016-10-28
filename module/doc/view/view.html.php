@@ -41,6 +41,19 @@
     if(!$doc->deleted)
     {
         ob_start();
+        if($doc->version > 1 and common::hasPriv('doc', 'diff'))
+        {
+            echo "<div class='btn-group'>";
+            echo "<button data-toggle='dropdown' type='button' class='btn dropdown-toggle'>{$lang->doc->diff} <span class='caret'></span></button>";
+            echo "<ul class='dropdown-menu'>";
+            for($i = $doc->version; $i >= 1; $i --)
+            {
+                if($i == $version) continue;
+                echo '<li>' . html::a(inlink('diff', "docID=$doc->id&newVersion=$version&version=$i"), '#' . $i) . '</li>';
+            }
+            echo "</ul>";
+            echo "</div>";
+        }
         echo "<div class='btn-group'>";
         common::printIcon('doc', 'edit', $params);
         common::printIcon('doc', 'delete', $params, '', 'button', '', 'hiddenwin');
