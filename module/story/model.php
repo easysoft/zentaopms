@@ -170,7 +170,6 @@ class storyModel extends model
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
-            $this->setStage($storyID);
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             $this->file->saveUpload('story', $storyID, $extra = 1);
 
@@ -225,6 +224,7 @@ class storyModel extends model
                     }
                 }
             }
+            $this->setStage($storyID);
             return array('status' => 'created', 'id' => $storyID);
         }
         return false;
@@ -276,7 +276,7 @@ class storyModel extends model
                 $data->title      = $stories->title[$i];
                 $data->source     = $stories->source[$i];
                 $data->pri        = $stories->pri[$i];
-                $data->estimate   = (int)$stories->estimate[$i];
+                $data->estimate   = $stories->estimate[$i];
                 $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
                 $data->keywords   = $stories->keywords[$i];
                 $data->product    = $productID;

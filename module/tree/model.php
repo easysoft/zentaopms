@@ -561,7 +561,7 @@ class treeModel extends model
             {
                 $treeMenu = array();
                 $query = $this->dao->select('*')->from(TABLE_MODULE)->where("(root = $id and type = 'story')")
-                    ->andWhere('branch')->eq($branch)
+                    ->beginIF(count($branchGroups[$id]) > 1)->andWhere('branch')->eq($branch)->fi()
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                     ->orderBy('grade desc, branch, type, `order`')
                     ->get();

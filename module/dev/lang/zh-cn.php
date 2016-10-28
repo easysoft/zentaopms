@@ -82,6 +82,11 @@ $lang->dev->tableList['upgrade']        = '更新';
 $lang->dev->tableList['cron']           = '定时任务';
 $lang->dev->tableList['mailqueue']      = '邮件队列';
 $lang->dev->tableList['datatable']      = '数据表格';
+$lang->dev->tableList['block']          = '区块';
+$lang->dev->tableList['branch']         = '平台/分支';
+$lang->dev->tableList['doccontent']     = '文档内容';
+$lang->dev->tableList['storystage']     = '需求阶段';
+$lang->dev->tableList['tutorial']       = '新手教程';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;
