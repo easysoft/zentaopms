@@ -170,7 +170,6 @@ class storyModel extends model
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
-            $this->setStage($storyID);
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             $this->file->saveUpload('story', $storyID, $extra = 1);
 
@@ -225,6 +224,7 @@ class storyModel extends model
                     }
                 }
             }
+            $this->setStage($storyID);
             return array('status' => 'created', 'id' => $storyID);
         }
         return false;
