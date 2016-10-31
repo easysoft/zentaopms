@@ -1555,7 +1555,7 @@ function initPrioritySelector()
                 set = $dropdown.data('set');
                 set = set ? set.split(',') : [0,1,2,3,4];
             }
-            set.sort();
+            set.sort(function(a,b){return a - b});
             for(var i = 0; i < set.length; ++i)
             {
                 var v = set[i];
