@@ -32,7 +32,7 @@
   <?php else: ?>
   <div class='libs-group clearfix'>
     <?php foreach($libs as $lib):?>
-    <a class='lib' title='<?php echo $lib->name?>' href='<?php echo inlink('browse', "libID=$libID") ?>'><?php echo $lib->name?></a>
+    <a class='lib' title='<?php echo $lib->name?>' href='<?php echo inlink('browse', "libID=$lib->id") ?>'><?php echo $lib->name?></a>
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
