@@ -151,9 +151,9 @@ class upgradeModel extends model
             case '8_2_6':
                 $this->execSQL($this->getUpgradeFile('8.2.1'));
                 $this->adjustDocModule();
-                $this->updateFileObjectID();
                 $this->moveDocContent();
                 $this->adjustPriv8_3();
+                $this->updateFileObjectID();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -1266,7 +1266,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_FILE)->set('objectType')->eq($action->objectType)->set('objectID')->eq($action->objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
         }
 
-        $editors['doc']         = array('table' => TABLE_DOC,         'fields' => 'id,`content`,`digest`');
+        $editors['doc']         = array('table' => TABLE_DOCCONTENT,  'fields' => 'doc,`content`,`digest`');
         $editors['project']     = array('table' => TABLE_PROJECT,     'fields' => 'id,`desc`');
         $editors['bug']         = array('table' => TABLE_BUG,         'fields' => 'id,`steps`');
         $editors['release']     = array('table' => TABLE_RELEASE,     'fields' => 'id,`desc`');
@@ -1350,7 +1350,7 @@ class upgradeModel extends model
      */
     public function adjustPriv8_3()
     {
-        $docPrivGroups = $this->dao->select('group')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
+        $docPrivGroups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
         foreach($docPrivGroups as $groupID)
         {
             $data = new stdclass();
