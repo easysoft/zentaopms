@@ -148,6 +148,11 @@ class upgradeModel extends model
             case '8_2_3':
             case '8_2_4':
             case '8_2_5':
+            case '8_2_6':
+                $this->execSQL($this->getUpgradeFile('8.2.1'));
+                $this->adjustDocModule();
+                $this->updateFileObjectID();
+                $this->moveDocContent();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -231,6 +236,7 @@ class upgradeModel extends model
         case '8_2_3':
         case '8_2_4':
         case '8_2_5':
+        case '8_2_6':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.6'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1304,6 +1310,15 @@ class upgradeModel extends model
      */
     public function moveDocContent()
     {
+        $descDoc = $this->dao->query('DESC ' .  TABLE_DOC)->fetchAll();
+        $processFields = 0;
+        foreach($descDoc as $field)
+        {
+            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++; 
+        }
+        if($processFields < 3) return true;
+
+
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
         $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
         $fileGroups = $this->dao->select('id,objectID')->from(TABLE_FILE)->where('objectType')->eq('doc')->fetchGroup('objectID', 'id');
