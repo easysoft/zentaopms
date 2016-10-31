@@ -681,6 +681,7 @@ function checkTable($table)
     {
         selector: 'tbody > tr',
         trigger: 'tbody',
+        ignoreVal: 10,
         start: function(e)
         {
             if($(e.target).is(':checkbox,a')) return false;
