@@ -241,7 +241,7 @@
                       echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       foreach ($users as $key => $value)
                       {
-                          if(empty($key)) continue;
+                          if(empty($key) or $key == 'closed') continue;
                           echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                       }
                       if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
