@@ -1,7 +1,11 @@
 <style>
+#treeActions {margin-top: -8px}
+#treeActions .btn {color: #114f8e; display: block; float: right; padding: 5px 7px;}
+#treeActions .btn:hover,
+#treeActions .btn:focus,
+#treeActions .btn:active {color: #2e6dad; background-color: #ddd;}
 #docTree {margin-bottom: 0}
 #docTree > .tree-action-item {display: none!important}
-#docTree li > .tree-item-wrapper > .tree-toggle {display: block}
 #docTree li > .tree-item-wrapper:hover {background-color: #edf3fe; cursor: pointer; margin-left: -20px; padding-left: 20px;}
 #docTree li {line-height: 30px; padding-top: 0; padding-bottom: 0}
 #docTree > li.open > .tree-item-wrapper {border-bottom: none}
@@ -12,15 +16,19 @@
 #docTree.tree ul > li:last-child:before {bottom: auto; height: 25px}
 #docTree.tree ul > li > .tree-item-wrapper:before {display: block; content: ' '; position: absolute; width: 7px; height: 7px; top: 10px; left: 8px; background-color: #ddd}
 #docTree.tree ul > li.has-list > .tree-item-wrapper:before {display: none;}
-#docTree.tree ul > li.item-type-doc > .tree-item-wrapper {padding-left: 15px; margin-left: -15px;}
+#docTree.tree ul > li.item-type-doc > .tree-item-wrapper {padding-left: 20px; margin-left: -25px;}
 #docTree.tree ul > li.item-type-doc > .tree-item-wrapper:hover {background-color: #edf3fe}
 #docTree.tree ul > li.item-type-doc > .tree-item-wrapper:before {left: 0; z-index: 2}
 #docTree.tree li>.list-toggle {top: 2px}
 #docTree.tree li:before {display: none}
 #docTree .doc-info {display: none;}
-#docTree .doc-info > div {display: inline-block; margin: 0 5px;} 
+#docTree .doc-info > div {display: inline-block; margin: 0 5px;}
 #docTree .doc-info > div.buttons {position: relative; top: 2px}
 #docTree .item-type-doc:hover .doc-info {display: inline-block; margin-left:10px;}
+#docTree .icon-dir {position: relative; top: 1px;}
+#docTree li.open .icon-dir:before {content: '\e6f0'}
+#docTree.tree ul > li.item-type-doc > .tree-item-wrapper .icon-file {position: relative; left: -3px; display: inline-block; color: #2e6dad}
+#docTree.tree ul > li.item-type-doc > .tree-item-wrapper > a {cursor: pointer;}
 </style>
 <div id='featurebar'>
   <ul class='nav'><li><?php echo $lang->doc->browseTypeList['tree']?></li></ul>
@@ -40,12 +48,12 @@
   <div class='panel'>
     <div class='panel-heading'>
       <i class='icon icon-folder-close-alt'></i> <strong><?php echo $libName;?></strong>
-	  <div class='panel-actions pull-right'>
-        <?php common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-sm' data-toggle='modal' data-type='iframe' data-width='600px'");?>
-        <?php common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-sm'");?>
-        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-sm'");?>
-        <?php echo html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin", "class='btn btn-sm'");?>
-	  </div>
+      <div class='panel-actions pull-right' id='treeActions'>
+        <?php common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-sm btn-link' data-toggle='modal' data-type='iframe' data-width='600px'");?>
+        <?php common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-sm btn-link'");?>
+        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-sm btn-link'");?>
+        <?php echo html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin", "class='btn btn-sm btn-link'");?>
+      </div>
     </div>
     <div class='panel-body'>
       <ul id='docTree' class='tree-lines'></ul>
@@ -65,29 +73,19 @@ $(function()
         initialState: 'preserve',
         data: data,
         itemWrapper: true,
-        actions:
-        {
-            add:
-            {
-                title: '<?php echo $lang->doc->create ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><i class="icon icon-sitemap"></i>',
-                templateInList: false,
-                linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=doc"); ?>'
-            },
-        },
         itemCreator: function($li, item)
         {
             $li.toggleClass('tree-toggle', item.type !== 'doc').closest('li').addClass('item-type-' + item.type);
             if(item.type === 'doc')
             {
-                $li.append('<span class="text-muted">#' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title));
+                $li.append('<span><i class="text-muted icon icon-file"></i> </span>').append($('<a>').attr({href: item.url}).text(item.title));
                 var $info = $('<div class="doc-info clearfix"/>');
                 $info.append($('<div class="buttons"/>').html(item.buttons));
                 $li.append($info);
             }
             else
             {
-                $li.append($('<span class="tree-toggle"><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
+                $li.append($('<div><i class="icon icon-dir icon-folder-close-alt text-muted"></i> ' + (item.title || item.name) + '</div>'));
             }
         }
     });

@@ -3,7 +3,6 @@
 #filesPanel a:hover,
 #filesPanel a:focus,
 #filesPanel a:active {color: #2e6dad}
-#filesPanel a {color: #114f8e}
 #filesPanel .panel-footer {position: relative; padding: 5px; height: 40px}
 #filesPanel .panel-footer > a {display: block; float: left; padding: 5px; line-height: 20px;}
 #filesPanel .panel-footer > a:hover {background-color: #e5e5e5;}
