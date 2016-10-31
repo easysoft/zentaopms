@@ -1348,7 +1348,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function adjustPriv8_3();
+    public function adjustPriv8_3()
     {
         $docPrivGroups = $this->dao->select('group')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
         foreach($docPrivGroups as $groupID)
