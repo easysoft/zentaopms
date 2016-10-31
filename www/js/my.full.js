@@ -705,7 +705,7 @@ function checkTable($table)
         {
             checkRow.call(e.target, false);
         }
-    }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click', 'tbody a', function(e) {e.stopPropagation();});
+    }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click mousedown mousemove mouseup', 'tbody a,tbody select,tbody input', function(e) {e.stopPropagation();});
 
     $(document).off('change.checktable').on('change.checktable', '.rows-selector:checkbox', function()
     {
