@@ -153,6 +153,7 @@ class upgradeModel extends model
                 $this->adjustDocModule();
                 $this->updateFileObjectID();
                 $this->moveDocContent();
+                $this->adjustPriv8_3();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -1318,7 +1319,6 @@ class upgradeModel extends model
         }
         if($processFields < 3) return true;
 
-
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
         $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
         $fileGroups = $this->dao->select('id,objectID')->from(TABLE_FILE)->where('objectType')->eq('doc')->fetchGroup('objectID', 'id');
@@ -1339,6 +1339,32 @@ class upgradeModel extends model
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `digest`');
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `content`');
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `url`');
+        return true;
+    }
+
+    /**
+     * Adjust priv 8.3 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv8_3();
+    {
+        $docPrivGroups = $this->dao->select('group')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
+        foreach($docPrivGroups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'doc';
+            $data->method = 'allLibs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'showFiles';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'diff';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
         return true;
     }
 

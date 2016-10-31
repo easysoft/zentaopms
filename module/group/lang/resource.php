@@ -572,6 +572,9 @@ $lang->resource->doc->create    = 'create';
 $lang->resource->doc->view      = 'view';
 $lang->resource->doc->edit      = 'edit';
 $lang->resource->doc->delete    = 'delete';
+$lang->resource->doc->allLibs   = 'allLibs';
+$lang->resource->doc->showFiles = 'showFiles';
+$lang->resource->doc->diff      = 'diff';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -582,6 +585,9 @@ $lang->doc->methodOrder[25] = 'create';
 $lang->doc->methodOrder[30] = 'view';
 $lang->doc->methodOrder[35] = 'edit';
 $lang->doc->methodOrder[40] = 'delete';
+$lang->doc->methodOrder[45] = 'allLibs';
+$lang->doc->methodOrder[50] = 'showFiles';
+$lang->doc->methodOrder[55] = 'diff';
 
 /* mail. */
 $lang->resource->mail = new stdclass();
