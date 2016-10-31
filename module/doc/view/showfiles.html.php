@@ -11,7 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'><strong><?php echo $object->name . ': ' . $lang->doclib->files?></strong></div>
+<div id='featurebar'>
+  <strong><?php echo $object->name . ': ' . $lang->doclib->files?></strong>
+  <div class='actions'><?php echo html::backButton();?></div>
+</div>
 <div class='lib-files cards'>
   <?php foreach($files as $file):?>
   <div class='col-md-3'>

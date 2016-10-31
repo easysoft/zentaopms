@@ -78,6 +78,9 @@ class searchModel extends model
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
 
+            /* Escape char. */
+            $value = str_replace(array('\\', '%', '_'), array('\\\\', '\\%', '\\_'), $value);
+
             if($operator == "include")
             {
                 $where .= ' LIKE ' . $this->dbh->quote("%$value%");

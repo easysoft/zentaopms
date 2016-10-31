@@ -148,6 +148,12 @@ class upgradeModel extends model
             case '8_2_3':
             case '8_2_4':
             case '8_2_5':
+            case '8_2_6':
+                $this->execSQL($this->getUpgradeFile('8.2.1'));
+                $this->adjustDocModule();
+                $this->updateFileObjectID();
+                $this->moveDocContent();
+                $this->adjustPriv8_3();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -231,6 +237,7 @@ class upgradeModel extends model
         case '8_2_3':
         case '8_2_4':
         case '8_2_5':
+        case '8_2_6':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.6'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1304,6 +1311,14 @@ class upgradeModel extends model
      */
     public function moveDocContent()
     {
+        $descDoc = $this->dao->query('DESC ' .  TABLE_DOC)->fetchAll();
+        $processFields = 0;
+        foreach($descDoc as $field)
+        {
+            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++; 
+        }
+        if($processFields < 3) return true;
+
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
         $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
         $fileGroups = $this->dao->select('id,objectID')->from(TABLE_FILE)->where('objectType')->eq('doc')->fetchGroup('objectID', 'id');
@@ -1324,6 +1339,32 @@ class upgradeModel extends model
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `digest`');
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `content`');
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `url`');
+        return true;
+    }
+
+    /**
+     * Adjust priv 8.3 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv8_3();
+    {
+        $docPrivGroups = $this->dao->select('group')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
+        foreach($docPrivGroups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'doc';
+            $data->method = 'allLibs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'showFiles';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'diff';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
         return true;
     }
 

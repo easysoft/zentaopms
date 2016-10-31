@@ -269,7 +269,8 @@ class docModel extends model
             if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
         }
 
-        if($version == $doc->version and ((empty($docContent->files) and $docFiles) OR ($docContent->files and count(explode(',', $docContent->files)) != count($docFiles))))
+        /* Check file change. */
+        if($version == $doc->version and ((empty($docContent->files) and $docFiles) OR ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
             $doc->version        += 1;
@@ -415,6 +416,7 @@ class docModel extends model
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
+            $docContent->files   = trim($docContent->files, ',');
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
         unset($doc->digest);
@@ -657,7 +659,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLimitLibs($type, $limit = 6)
+    public function getLimitLibs($type, $limit = 3)
     {
         if($type == 'product' or $type == 'project')
         {

@@ -1099,7 +1099,7 @@ class treeModel extends model
         $parentModule = $this->getByID($parentModuleID);
 
         $data     = fixer::input('post')->get();
-        $branches = $data->branch;
+        $branches = isset($data->branch) ? $data->branch : array();
         $shorts   = $data->shorts;
         if($parentModule)
         {
@@ -1123,7 +1123,7 @@ class treeModel extends model
                 $module->root    = $rootID;
                 $module->name    = strip_tags(trim($moduleName));
                 $module->parent  = $parentModuleID;
-                $module->branch  = $branches[$moduleID];
+                $module->branch  = isset($branches[$moduleID]) ? $branches[$moduleID] : 0;
                 $module->short   = $shorts[$moduleID];
                 $module->grade   = $grade;
                 $module->type    = $type;

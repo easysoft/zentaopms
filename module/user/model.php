@@ -362,7 +362,7 @@ class userModel extends model
             ->remove('password1, password2, groups,verifyPassword')
             ->get();
 
-        if(isset($this->config->safe->mode) and $user->password and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode)
+        if(isset($this->config->safe->mode) and isset($user->password) and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode)
         {
             dao::$errors['password1'][] = $this->lang->user->weakPassword;
             return false;

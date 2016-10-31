@@ -448,7 +448,8 @@ class doc extends control
         $oldDocFiles = array();
         foreach($dbOldDocFiles as $fileID)
         {
-            $file = isset($oldDoc->files[$fileID]) ? $oldDoc->files[$fileID] : '';
+            if(!isset($oldDoc->files[$fileID])) continue;
+            $file = $oldDoc->files[$fileID];
             $oldDocFiles[$fileID] = 'File #' . $fileID;
             if($file) $oldDocFiles[$fileID] .= ' ' . $file->title . '.' . $file->extension;
         }
@@ -460,7 +461,8 @@ class doc extends control
         $newDocFiles = array();
         foreach($dbNewDocFiles as $fileID)
         {
-            $file = isset($newDoc->files[$fileID]) ? $newDoc->files[$fileID] : '';
+            if(!isset($newDoc->files[$fileID])) continue;
+            $file = $newDoc->files[$fileID];
             $newDocFiles[$fileID] = 'File #' . $fileID;
             if($file) $newDocFiles[$fileID] .= ' ' . $file->title . '.' . $file->extension;
         }

@@ -319,7 +319,7 @@ class mail extends control
 
         /* Delete sended mail. */
         $lastMail  = $this->dao->select('id,status')->from(TABLE_MAILQUEUE)->orderBy('id_desc')->limit(1)->fetch();
-        if($lastMail->id > 1000000)
+        if(!empty($lastMail) and $lastMail->id > 1000000)
         {
             $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_MAILQUEUE)->where('status')->eq('wait')->fetch('count');
             if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_MAILQUEUE);
