@@ -126,7 +126,7 @@
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
                   </button>
                   <ul class='dropdown-menu pull-right'></ul>
-                  <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='hide'");?> 
+                  <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='hide'");?>
                 </div>
                 <?php endif; ?>
                 <?php endif;?>
