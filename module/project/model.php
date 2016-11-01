@@ -198,7 +198,6 @@ class projectModel extends model
         if($projectID > 0) $this->session->set('project', (int)$projectID);
         if($projectID == 0 and $this->cookie->lastProject)    $this->session->set('project', (int)$this->cookie->lastProject);
         if($projectID == 0 and $this->session->project == '') $this->session->set('project', $projects[0]);
-        if(!in_array($this->session->project, $projects)) $this->session->set('project', $projects[0]);
         return $this->session->project;
     }
 

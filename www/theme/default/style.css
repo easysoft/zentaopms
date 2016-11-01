@@ -622,6 +622,7 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 .outer.hide-side .side{width: 0; border: none;}
 .outer.hide-side .side .side-handle {right: -15px;}
+.outer.hide-side .side .side-body {display:none;}
 .outer.with-side.hide-side .main, .outer.with-side.hide-side .side + form, .outer.with-side.hide-side .main, .outer.with-side .side + table {margin-left: 0px}
 
 /* Form in outer */

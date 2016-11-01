@@ -1110,7 +1110,7 @@ class taskModel extends model
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->fetch();
         $consumed  = $task->consumed - $estimate->consumed;
-        $left      = $lastEstimate ? $lastEstimate->left : 0;
+        $left      = $lastEstimate->left ? $lastEstimate->left : $estimate->left;
         $oldStatus = $task->status;
         if($left == 0 and $consumed != 0) $task->status = 'done'; 
         $this->dao->update(TABLE_TASK)
