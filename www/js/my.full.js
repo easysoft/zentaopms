@@ -98,7 +98,8 @@ function showDropMenu(objectType, objectID, module, method, extra)
         $(document).click(function() {li.removeClass('show');});
         li.click(function(e){e.stopPropagation();});
 
-        $dropMenu.on('keydown', '#search', function(e){
+        $dropMenu.on('keydown', '#search', function(e)
+        {
             var code = e.which;
             var $this = $dropMenu.find('#searchResult > .search-list > ul > li.active');
             if(code === 38) // up
@@ -141,7 +142,8 @@ function showDropMenu(objectType, objectID, module, method, extra)
             {
                 if($this.length) window.location.href = $this.children('a').attr('href');
             }
-        }).on('change keyup paste input propertychange', '#search', function(){
+        }).on('change keyup paste input propertychange', '#search', function()
+        {
             var $search = $(this);
             var searchKey = $search.val();
             if(searchKey === $dropMenu.data('lastSearchKey')) return;
@@ -251,7 +253,7 @@ function switchDocLib(libID, module, method, extra)
     {
         if(method != 'view' && method != 'edit')
         {
-            link = createLink(module, method, "rootID=" + libID);
+            link = createLink(module, method, 'rootID=' + libID);
         }
         else
         {
@@ -260,9 +262,9 @@ function switchDocLib(libID, module, method, extra)
     }
     else if(module == 'tree')
     {
-        link = createLink(module, method, "rootID=" + libID + '&type=' + extra);
+        link = createLink(module, method, 'rootID=' + libID + '&type=' + extra);
     }
-    location.href=link;
+    location.href = link;
 }
 
 /**
@@ -330,7 +332,7 @@ function setHelpLink()
  */
 function setPlaceholder()
 {
-    if(typeof(holders) != "undefined")
+    if(typeof(holders) != 'undefined')
     {
         for(var key in holders)
         {
