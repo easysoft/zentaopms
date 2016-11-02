@@ -77,6 +77,9 @@ $lang->doc->aclList['public']  = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
 
+$lang->doc->types['text'] = '网页';
+$lang->doc->types['url']  = '链接';
+
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
@@ -106,3 +109,4 @@ $lang->doclib->group   = '分组';
 $lang->doclib->user    = '用户';
 $lang->doclib->files   = '附件库';
 $lang->doclib->all     = '所有文档库';
+$lang->doclib->select  = '选择文档库';

@@ -12,5 +12,9 @@
 .libs.collapsed .libs-heading {background: #ddd;}
 .libs.collapsed .libs-heading > .icon {opacity: 1}
 .libs.collapsed .libs-heading > .icon:before {content: '\e726'}
-.lib {float: left; width: 200px; display: block; border: 1px solid #ddd; margin: 0 15px 15px 0; padding: 10px 15px; text-align: center; color: #333; border-radius: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.lib {float: left; display: block; margin: 0 15px 0 0; padding: 10px 15px; text-align: center; color: #333; border-radius: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
+.col-md-4{overflow:hidden;}
+
+#modulemenu .nav > li > .dropdown > a#libType{display:inline-block;}
+#modulemenu .nav > li > .dropdown.open > a#libType{background:#e5e5e5;}

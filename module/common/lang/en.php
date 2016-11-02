@@ -261,10 +261,8 @@ $lang->testtask->menu = $lang->testcase->menu;
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
+$lang->doc->menu->type    = array('link' => "%s", 'fixed' => true);
 $lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->product = array('link' => $lang->productCommon . '|doc|browse|type=product');
-$lang->doc->menu->project = array('link' => $lang->projectCommon . '|doc|browse|type=project');
-$lang->doc->menu->custom  = array('link' => 'Custom|doc|browse|type=custom');
 $lang->doc->menu->index   = array('link' => '<i class="icon-home"></i>&nbsp;Homepage|doc|index|', 'float' => 'right');
 $lang->doc->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
 

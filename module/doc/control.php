@@ -38,7 +38,7 @@ class doc extends control
         $products[] = $this->lang->doc->systemLibs['product'];
 
         unset($this->lang->doc->menu->index);
-        $this->doc->setMenu($products);
+        $this->doc->setMenu(array($this->lang->doclib->select));
 
         $products   = $this->doc->getLimitLibs('product');
         $projects   = $this->doc->getLimitLibs('project');
@@ -46,7 +46,7 @@ class doc extends control
         $subLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($products));
         $subLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($projects));
 
-        $this->view->title      = $this->lang->doc->index;
+        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[] = $this->lang->doc->index;
         $this->view->products   = $products;
         $this->view->projects   = $projects;
@@ -654,7 +654,7 @@ class doc extends control
     public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 21, $pageID = 1)
     {
         $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
-        $this->doc->setMenu(array($libName), 0, $type);
+        $this->doc->setMenu(array($this->lang->doclib->select), 0, $type);
 
         $this->view->title      = $libName;
         $this->view->position[] = $libName;

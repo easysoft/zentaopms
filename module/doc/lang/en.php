@@ -77,6 +77,9 @@ $lang->doc->aclList['public']  = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';
 
+$lang->doc->types['text'] = 'Text';
+$lang->doc->types['url']  = 'Url';
+
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
@@ -106,3 +109,4 @@ $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
 $lang->doclib->all     = 'All library';
+$lang->doclib->select  = 'Select library';

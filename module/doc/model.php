@@ -38,6 +38,15 @@ class docModel extends model
 
         $selectHtml = "<a id='currentItem' href=\"javascript:showDropMenu('doc', '$libID', '$currentModule', '$currentMethod', '$extra')\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
+
+        $libTypeSelect  = "<div class='dropdown'><a id='libType' class='dropdown-toggle' data-toggle='dropdown' href='###'>{$this->lang->doc->libTypeList[$extra]} <span class='icon-caret-down'></span></a> {$this->lang->arrow} ";
+        $libTypeSelect .= "<ul class='dropdown-menu' role='menu'>";
+        foreach($this->lang->doc->libTypeList as $libType => $libName)
+        {
+            $libTypeSelect .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=$libType"), $libName) . '</li>';
+        }
+        $libTypeSelect .= "</ul></div>";
+        common::setMenuVars($this->lang->doc->menu, 'type', $libTypeSelect);
     }
 
     /**
@@ -659,7 +668,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLimitLibs($type, $limit = 3)
+    public function getLimitLibs($type, $limit = 6)
     {
         if($type == 'product' or $type == 'project')
         {

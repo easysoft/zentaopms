@@ -261,10 +261,8 @@ $lang->testtask->menu = $lang->testcase->menu;
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
+$lang->doc->menu->type    = array('link' => "%s", 'fixed' => true);
 $lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->product = array('link' => $lang->productCommon . '|doc|allLibs|type=product');
-$lang->doc->menu->project = array('link' => $lang->projectCommon . '|doc|allLibs|type=project');
-$lang->doc->menu->custom  = array('link' => '自定义|doc|allLibs|type=custom');
 $lang->doc->menu->index   = array('link' => '<i class="icon-home"></i>&nbsp;文档主页|doc|index|', 'float' => 'right');
 $lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
 
