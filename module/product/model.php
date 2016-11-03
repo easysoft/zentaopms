@@ -259,7 +259,9 @@ class productModel extends model
         /* Create doc lib. */
         $lib = new stdclass();
         $lib->product = $productID;
-        $lib->name = $product->name;
+        $lib->name    = $product->name;
+        $lib->main    = '1';
+        $lib->acl     = $product->acl;
         if($product->acl == 'custom') $lib->groups = $product->whitelist;
         if($product->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
@@ -295,6 +297,7 @@ class productModel extends model
         {
             if($product->acl != $oldProduct->acl)
             {
+                $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($product->acl)->where('product')->eq($productID)->exec();
                 if($product->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('product')->eq($productID)->exec();
                 if($product->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($product->whitelist)->where('product')->eq($productID)->exec();
                 if($product->acl == 'private') $this->dao->update(TABLE_DOCLIB)->set('users')->eq($oldProduct->createdBy)->set('groups')->eq('')->where('product')->eq($productID)->exec();

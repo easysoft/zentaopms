@@ -272,6 +272,8 @@ class projectModel extends model
             $lib = new stdclass();
             $lib->project = $projectID;
             $lib->name    = $project->name;
+            $lib->main    = '1';
+            $lib->acl     = $project->acl;
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
             if($project->acl == 'private')
             {
@@ -338,6 +340,7 @@ class projectModel extends model
         {
             if($project->acl != $oldProject->acl)
             {
+                $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl)->where('project')->eq($projectID)->exec();
                 if($project->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('project')->eq($projectID)->exec();
                 if($project->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($project->whitelist)->where('project')->eq($projectID)->exec();
                 if($project->acl == 'private')
