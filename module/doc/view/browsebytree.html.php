@@ -78,14 +78,13 @@ $(function()
             $li.toggleClass('tree-toggle', item.type !== 'doc').closest('li').addClass('item-type-' + item.type);
             if(item.type === 'doc')
             {
-                $li.append('<span><i class="text-muted icon icon-file"></i> </span>').append($('<a>').attr({href: item.url}).text(item.title));
                 var $info = $('<div class="doc-info clearfix"/>');
                 $info.append($('<div class="buttons"/>').html(item.buttons));
-                $li.append($info);
+                $li.find('.tree-item-wrapper').append('<span><i class="text-muted icon icon-file"></i> </span>').append($('<a>').attr({href: item.url}).text(item.title)).append($info);
             }
             else
             {
-                $li.append($('<div><i class="icon icon-dir icon-folder-close-alt text-muted"></i> ' + (item.title || item.name) + '</div>'));
+                $li.find('.tree-item-wrapper').addClass('tree-toggle').append($('<div><i class="icon icon-dir icon-folder-close-alt text-muted"></i> ' + (item.title || item.name) + '</div>'));
             }
         }
     });
