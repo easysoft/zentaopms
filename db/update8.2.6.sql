@@ -18,6 +18,6 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
 ALTER TABLE `zt_doc` ADD `version` smallint unsigned NOT NULL DEFAULT '1' AFTER `editedDate`;
 ALTER TABLE `zt_doc` ADD `groups` varchar(255) NOT NULL AFTER `editedDate`,
 ADD `users` text NOT NULL AFTER `groups`;
-ALTER TABLE `zt_doc` DROP `type`;
-ALTER TABLE `zt_doclib` ADD `acl` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'public' AFTER `name`;
-ALTER TABLE `zt_doc` ADD `acl` varchar(10) NOT NULL DEFAULT 'public' AFTER `editedDate`;
+ALTER TABLE `zt_doclib` ADD `acl` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'open' AFTER `name`;
+ALTER TABLE `zt_doc` ADD `acl` varchar(10) NOT NULL DEFAULT 'open' AFTER `editedDate`;
+ALTER TABLE `zt_doclib` ADD `main` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0' AFTER `users`;
