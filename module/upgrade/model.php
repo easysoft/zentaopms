@@ -1171,7 +1171,9 @@ class upgradeModel extends model
 
             $lib = new stdclass();
             $lib->product = $productID;
-            $lib->name = $product->name;
+            $lib->name    = $product->name;
+            $lib->main    = 1;
+            $lib->acl     = $product->acl;
             if($product->acl == 'custom') $lib->groups = $product->whitelist;
             if($product->acl == 'private') $lib->users = $product->createdBy;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
@@ -1199,7 +1201,7 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('product')->eq($productID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('product')->exec();
             }
-            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('product')->eq($productID)->andWhere('lib')->eq('product')->exec();
+            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('product')->eq($productID)->exec();
         }
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($productDocModules))->exec();
 
@@ -1211,7 +1213,9 @@ class upgradeModel extends model
 
             $lib = new stdclass();
             $lib->project = $projectID;
-            $lib->name = $project->name;
+            $lib->name    = $project->name;
+            $lib->main    = 1;
+            $lib->acl     = $project->acl;
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
             if($project->acl == 'private')
             {
@@ -1240,9 +1244,9 @@ class upgradeModel extends model
                 $newPaths = join(',', $newPaths);
                 $newPaths = ",$newPaths,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
-                $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('project')->exec();
+                $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->exec();
             }
-            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('project')->eq($projectID)->andWhere('lib')->eq('project')->exec();
+            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('project')->eq($projectID)->exec();
         }
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($projectDocModules))->exec();
 
@@ -1330,7 +1334,7 @@ class upgradeModel extends model
             $docContent->title    = $doc->title;
             $docContent->digest   = $doc->digest;
             $docContent->content  = $doc->content;
-            $docContent->content .= empty($url) ? '' : '<a href="' . $url . '" target="_blank">' . $url . '</a>';
+            $docContent->content .= empty($url) ? '' : $url;
             $docContent->version  = 1;
             $docContent->type     = 'html';
             if(isset($fileGroups[$doc->id])) $docContent->files = join(',', array_keys($fileGroups[$doc->id]));
