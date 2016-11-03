@@ -22,6 +22,8 @@
   <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
   <div class='actions'>
     <ul class='nav'>
+      <li <?php if($orderBy == 'addedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=addedDate_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->doc->orderByOpen)?></li>
+      <li <?php if($orderBy == 'editedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=editedDate_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->doc->orderByEdit)?></li>
       <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
     </ul>
     <div class="btn-group">

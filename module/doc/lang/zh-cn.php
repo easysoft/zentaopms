@@ -39,6 +39,8 @@ $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
 $lang->doc->allDoc         = '所有文档';
 $lang->doc->openedByMe     = '由我创建';
+$lang->doc->orderByOpen    = '最近添加';
+$lang->doc->orderByEdit    = '最近修改';
 
 /* 方法列表。*/
 $lang->doc->index          = '首页';
