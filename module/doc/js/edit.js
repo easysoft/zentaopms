@@ -1,11 +1,18 @@
 $(function()
 {
     toggleAcl($('#acl').val());
-    if(typeof(window.editor['content']) != 'undefined')
+    $('input[name="type"]').change(function()
     {
-        window.editor['content'].addListener('focus', function()
+        var type = $(this).val();
+        if(type == 'text')
         {
-            this.ui.setFullScreen(true);
-        });
-    }
+            $('#contentBox').removeClass('hidden');
+            $('#urlBox').addClass('hidden');
+        }
+        else if(type == 'url')
+        {
+            $('#contentBox').addClass('hidden');
+            $('#urlBox').removeClass('hidden');
+        }
+    })
 })

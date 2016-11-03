@@ -73,7 +73,7 @@ $lang->doc->libTypeList['custom']  = 'Custom library';
 $lang->doc->systemLibs['product'] = "{$lang->productCommon} doc";
 $lang->doc->systemLibs['project'] = "{$lang->projectCommon} doc";
 
-$lang->doc->aclList['public']  = 'Public';
+$lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';
 

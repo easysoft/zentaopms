@@ -49,6 +49,8 @@ $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
 $lang->doc->diff           = '对比';
 $lang->doc->manageType     = '维护分类';
+$lang->doc->editType       = '编辑分类';
+$lang->doc->deleteType     = '删除分类';
 $lang->doc->addType        = '增加分类';
 
 $lang->doc->libName        = '文档库名称';
@@ -73,7 +75,7 @@ $lang->doc->libTypeList['custom']  = '自定义文档库';
 $lang->doc->systemLibs['product'] = $lang->productCommon . '文档库';
 $lang->doc->systemLibs['project'] = $lang->projectCommon . '文档库';
 
-$lang->doc->aclList['public']  = '公开';
+$lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
 

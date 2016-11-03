@@ -1,20 +1,9 @@
-.outer{overflow:auto}
-.libs-heading {display: block; margin: 10px 0; background: #f1f1f1; color: #808080; position: relative;}
-.libs-heading-text {display: inline-block; padding: 8px 12px; font-weight: bold; color: #2e6dad}
-.libs-heading:hover {background-color: #EBF2F9}
-.libs-heading:hover .libs-heading-text {background-color: #2e6dad; color: #fff}
-.libs-heading > .icon {display: block; right: 0; top: 0; bottom: 0; position: absolute; line-height: 33px; width: 34px; text-align: center; opacity: .6}
-.libs-heading:hover > .icon {opacity: 1}
-.libs-group-heading {color: #808080; margin: 10px 0}
-.libs {margin-bottom: 15px;}
-.libs.collapsed .libs-group,
-.libs.collapsed .libs-group-heading {display: none}
-.libs.collapsed .libs-heading {background: #ddd;}
-.libs.collapsed .libs-heading > .icon {opacity: 1}
-.libs.collapsed .libs-heading > .icon:before {content: '\e726'}
-.lib {float: left; display: block; margin: 0 15px 0 0; padding: 10px 15px; text-align: center; color: #333; border-radius: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.libs-group-heading {color: #808080; border-bottom:1px solid #ddd; padding:8px; text-align:center; background:#DDF3F5}
+.libs-group{padding:10px 10px 10px 10px;}
+.lib {float: left; display: block; width:80px; padding: 5px; margin:0px 3px; text-align: center; color: #333; overflow: hidden; text-overflow: ellipsis;}
+.lib .file-icon{font-size:30px;}
+.lib .lib-name{height: 2em; line-height: 14px; overflow: hidden;}
 .lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
-.col-md-4{overflow:hidden;}
 
 #modulemenu .nav > li > .dropdown > a#libType{display:inline-block;}
 #modulemenu .nav > li > .dropdown.open > a#libType{background:#e5e5e5;}

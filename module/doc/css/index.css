@@ -1,1 +1,9 @@
 .lib-heading{border-right:1px solid #ddd;}
+#libs table td.row{padding:0px;}
+#libs table td.lib-more{border-left:1px solid #ddd;}
+.table.project,.table.product{border:0px;}
+.table.project tbody td,.table.product tbody td{border-right:1px solid #ddd; width:33.3%;vertical-align: top; padding:0px;}
+.table.project tbody tr > td:first-child,.table.product tbody tr > td:first-child{padding:0px;}
+.table.project tbody tr > td:last-child,.table.product tbody tr > td:last-child{padding:0px;}
+.table.project td:last-child,.table.product td:last-child{border-right:0px;}
+.table.project tbody > tr:last-child td,.table.product tbody > tr:last-child td{border-bottom:0px;}

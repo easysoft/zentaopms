@@ -25,62 +25,63 @@
   <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <table class='table table-form'> 
       <tr>
-        <th class='w-80px'><?php echo $lang->doc->lib;?></th>
-        <td class='w-400px'><?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange='loadModules(this.value)'");?></td><td></td>
-      </tr>  
-      <tr>
         <th class='w-80px'><?php echo $lang->doc->module;?></th>
-        <td><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span></td><td></td>
+        <td class='w-400px'>
+          <?php echo html::hidden('lib', $libID);?>
+          <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
+        </td>
+        <td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->doc->title;?></th>
         <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
       </tr> 
       <tr>
-        <th><?php echo $lang->doc->contentType;?></th>
-        <td><?php echo html::select('type', $lang->doc->contentTypeList, 'html', "class='form-control'");?></td>
+        <th><?php echo $lang->doc->keywords;?></th>
+        <td colspan='2'><?php echo html::input('keywords', '', "class='form-control'");?></td>
+      </tr>  
+      <tr>
+        <th><?php echo $lang->doc->type;?></th>
+        <td><?php echo html::radio('type', $lang->doc->types, 'text');?></td>
       </tr> 
       <tr id='contentBox'>
         <th><?php echo $lang->doc->content;?></th>
         <td colspan='2'>
           <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></div>
           <div class='contentmarkdown hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;height:200px'");?></div>
+          <?php echo html::hidden('contentType', 'html');?>
         </td>
       </tr>
-      <tr>
-        <th><?php echo $lang->doc->digest;?></th>
+      <tr id='urlBox' class='hidden'>
+        <th><?php echo $lang->doc->url;?></th>
         <td colspan='2'>
-          <div class='contenthtml'><?php echo html::textarea('digest', '', "style='width:100%' rows=3");?></div>
-          <div class='contentmarkdown hidden'><?php echo html::textarea('digestMarkdown', '', "style='width:100%' rows=3");?></div>
+          <?php echo html::input('url', '', "class='form-control'");?>
         </td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->doc->keywords;?></th>
-        <td colspan='2'><?php echo html::input('keywords', '', "class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr id='fileBox'>
         <th><?php echo $lang->doc->files;?></th>
         <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <td>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->acl?></span>
-            <?php echo html::select('acl', $lang->doc->aclList, 'public', "class='form-control' onchange='toggleAcl(this.value)'")?>
-          </div>
-        </td>
+        <td><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value)'")?></td>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList;?></th>
         <td colspan='2'>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->group?></span>
-            <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
-          </div>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-            <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+          <div class='row-table'>
+            <div class='col-table w-p50'>
+              <div class='input-group w-p100'>
+                <span class='input-group-addon'><?php echo $lang->doclib->group?></span>
+                <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
+              </div>
+            </div>
+            <div class='col-table'>
+              <div class='input-group w-p100'>
+                <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
+                <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+              </div>
+            </div>
           </div>
         </td>
       </tr>

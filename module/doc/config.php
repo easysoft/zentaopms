@@ -13,11 +13,12 @@ $config->doc->create->requiredFields = 'title';
 $config->doc->edit->requiredFields   = 'title';
 
 $config->doc->editor = new stdclass();
-$config->doc->editor->create = array('id' => 'content,digest', 'tools' => 'fullTools');
-$config->doc->editor->edit   = array('id' => 'content,digest,comment', 'tools' => 'fullTools');
+$config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');
+$config->doc->editor->edit   = array('id' => 'content', 'tools' => 'fullTools');
+$config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'fullTools');
 
 $config->doc->markdown = new stdclass();
-$config->doc->markdown->create = array('id' => 'contentMarkdown,digestMarkdown');
+$config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');
 
 $config->doc->search['module']                   = 'doc';
 $config->doc->search['fields']['title']          = $lang->doc->title;

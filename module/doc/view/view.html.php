@@ -11,11 +11,12 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/ueditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix' title='DOC'><?php echo html::icon($lang->icons['doc']);?> <strong><?php echo $doc->id;?></strong></span>
-    <strong><?php echo $doc->title;?></strong>
+    <strong class='crumb'><?php echo $crumb;?></strong>
     <?php if($doc->deleted):?>
     <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
     <?php endif; ?>
@@ -41,20 +42,21 @@
     if(!$doc->deleted)
     {
         ob_start();
-        if($doc->version > 1 and common::hasPriv('doc', 'diff'))
-        {
-            echo "<div class='btn-group'>";
-            echo "<button data-toggle='dropdown' type='button' class='btn dropdown-toggle'>{$lang->doc->diff} <span class='caret'></span></button>";
-            echo "<ul class='dropdown-menu'>";
-            for($i = $doc->version; $i >= 1; $i --)
-            {
-                if($i == $version) continue;
-                echo '<li>' . html::a(inlink('diff', "docID=$doc->id&newVersion=$version&version=$i"), '#' . $i) . '</li>';
-            }
-            echo "</ul>";
-            echo "</div>";
-        }
+        //if($doc->version > 1 and common::hasPriv('doc', 'diff'))
+        //{
+        //    echo "<div class='btn-group'>";
+        //    echo "<button data-toggle='dropdown' type='button' class='btn dropdown-toggle'>{$lang->doc->diff} <span class='caret'></span></button>";
+        //    echo "<ul class='dropdown-menu'>";
+        //    for($i = $doc->version; $i >= 1; $i --)
+        //    {
+        //        if($i == $version) continue;
+        //        echo '<li>' . html::a(inlink('diff', "docID=$doc->id&newVersion=$version&version=$i"), '#' . $i) . '</li>';
+        //    }
+        //    echo "</ul>";
+        //    echo "</div>";
+        //}
         echo "<div class='btn-group'>";
+        common::printCommentIcon('doc');
         common::printIcon('doc', 'edit', $params);
         common::printIcon('doc', 'delete', $params, '', 'button', '', 'hiddenwin');
         echo '</div>';
@@ -79,15 +81,15 @@
         <legend><?php echo $lang->doc->content;?></legend>
         <div class='content'>
           <?php
-          preg_match_all('/^<a +.*href="([^"]+)".*>[^<]+<\/a>$/Ui', trim($doc->content), $output);
-          $href = isset($output[1][0]) ? $output[1][0] : '';
+          $content = $doc->content;
+          if($doc->type == 'url')
+          {
+              $url = $doc->content;
+              if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
+              $content = html::a($url, $doc->content, '_blank');
+          }
+          echo $content;
           ?>
-          <?php echo $doc->content;?>
-          <?php if($href):?>
-          <!-- Remove referer -->
-          <iframe src="javascript:location.replace('<?php echo $href;?>' + (parent.location.hash||''))" width='100%'frameborder='0' id='url-content'></iframe>
-          <?php endif;?>
-
           <?php foreach($doc->files as $file):?>
           <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
           <a href="<?php echo $file->webPath?>" target="_blank">
@@ -103,6 +105,14 @@
         </div>
       </fieldset>
       <div class='actions'><?php if(!$doc->deleted) echo $actionLinks;?></div>
+      <?php include '../../common/view/action.html.php';?>
+      <fieldset id='commentBox' class='hide'>
+        <legend><?php echo $lang->comment;?></legend>
+        <form method='post' action='<?php echo inlink('edit', "docID=$doc->id&comment=true")?>'>
+          <div class="form-group"><?php echo html::textarea('comment', '',"style='width:100%;height:100px'");?></div>
+          <?php echo html::submitButton() . html::backButton();?>
+        </form>
+      </fieldset>
     </div>
   </div>
   <div class='col-side'>
@@ -152,7 +162,6 @@
           </tr>
         </table>
       </fieldset>
-      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

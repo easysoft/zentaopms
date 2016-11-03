@@ -12,15 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'><strong><?php echo isset($lang->doc->systemLibs[$type]) ? $lang->doc->systemLibs[$type] : $lang->doc->custom?></strong></div>
-<div class='libs'>
+<div id='libs'>
   <?php if(($type == 'project' or $type == 'product')):?>
   <?php $i = 0;?>
-  <table class='table'>
+  <table class='table table-data'>
     <?php foreach($libs as $lib):?>
     <?php if(isset($subLibs[$lib->id])): ?>
-    <?php if($i % 3 == 0) echo "<tr><td class='row'>"?>
-      <div class='col-md-4'>
-      <div class='libs-group-heading libs-<?php echo $type?>-heading'><i class='icon <?php echo $type == 'product' ? 'icon-cube-alt' : 'icon-folder-close-alt'?>'></i> <strong><?php echo $lib->name?></strong></div>
+    <?php if($i % 3 == 0) echo "<tr>"?>
+      <td>
+      <div class='libs-group-heading libs-<?php echo $type?>-heading'><strong><?php echo $lib->name?></strong></div>
       <div class='libs-group clearfix'>
         <?php foreach($subLibs[$lib->id] as $subLibID => $subLibName):?>
         <?php
@@ -28,14 +28,28 @@
         elseif($subLibID == 'files') $libLink = inlink('showFiles', "type=$type&objectID=$lib->id");
         else                         $libLink = inlink('browse', "libID=$subLibID");
         ?>
-        <a class='lib' title='<?php echo $subLibName?>' href='<?php echo $libLink ?>'><?php echo $subLibName?></a>
+        <a class='lib' title='<?php echo $subLibName?>' href='<?php echo $libLink ?>'>
+          <i class='file-icon icon icon-folder-close-alt'></i>
+          <div class='lib-name' title='<?php echo $subLibName?>'><?php echo $subLibName?></div>
+        </a>
         <?php endforeach; ?>
       </div>
-      </div>
+      </td>
     <?php $i++;?>
-    <?php if($i % 3 == 0) echo "</td></tr>"?>
+    <?php if($i % 3 == 0) echo "</tr>"?>
     <?php endif; ?>
     <?php endforeach; ?>
+    <?php
+    if($i % 3 != 0)
+    {
+        while($i % 3 != 0)
+        {
+            echo "<td class='none'></td>";
+            $i++;
+        }
+        echo "</tr>";
+    }
+    ?>
   </table>
   <?php else: ?>
   <div class='libs-group clearfix'>

@@ -39,23 +39,24 @@
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <td>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->acl?></span>
-            <?php echo html::select('acl', $lang->doc->aclList, 'public', "class='form-control' onchange='toggleAcl(this.value)'")?>
-          </div>
-        </td>
+        <td><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value)'")?></td>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList;?></th>
         <td>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->group?></span>
-            <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
-          </div>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-            <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+          <div class='row-table'>
+            <div class='col-table w-p50'>
+              <div class='input-group w-p100'>
+                <span class='input-group-addon'><?php echo $lang->doclib->group?></span>
+                <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
+              </div>
+            </div>
+            <div class='col-table'>
+              <div class='input-group w-p100'>
+                <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
+                <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+              </div>
+            </div>
           </div>
         </td>
       </tr>

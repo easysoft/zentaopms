@@ -146,6 +146,7 @@ class doc extends control
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
         $this->view->type          = $type;
+        $this->view->crumb         = $this->doc->getCrumbs($libID, $moduleID);
 
         $this->display();
     }
@@ -297,7 +298,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($this->libs, $libID);
+            $this->doc->setMenu($this->libs, $libID, $type);
         }
 
         $libs = $this->libs;
@@ -332,21 +333,24 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function edit($docID)
+    public function edit($docID, $comment = false)
     {
         if(!empty($_POST))
         {
-            $result = $this->doc->update($docID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            $changes = $result['changes'];
-            $files   = $result['files'];
+            if($comment == false)
+            {
+                $result = $this->doc->update($docID);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $changes = $result['changes'];
+                $files   = $result['files'];
+            }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
@@ -355,16 +359,12 @@ class doc extends control
         $doc = $this->doc->getById($docID);
         $libID = $doc->lib;
 
-        if($doc->type == 'markdown')
-        {
-            $this->config->doc->markdown->edit = array('id' => 'content,digest');
-            $this->config->doc->editor->edit['id'] = 'comment';
-        }
+        if($doc->contentType == 'markdown') $this->config->doc->markdown->edit = array('id' => 'content', 'tools' => 'toolbar');
 
         $lib        = $this->doc->getLibByID($libID);
         $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
         $this->libs = $this->doc->getLibs($type);
-        $this->doc->setMenu($this->libs, $libID);
+        $this->doc->setMenu($this->libs, $libID, $type);
 
         $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
@@ -392,7 +392,7 @@ class doc extends control
         $doc = $this->doc->getById($docID, $version, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($doc->type == 'markdown')
+        if($doc->contentType == 'markdown')
         {
             $hyperdown    = $this->app->loadClass('hyperdown');
             $doc->content = $hyperdown->makeHtml($doc->content);
@@ -419,6 +419,7 @@ class doc extends control
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->keTableCSS = $this->doc->extractKETableCSS($doc->content);
+        $this->view->crumb      = $this->doc->getCrumbs($lib->id, $doc->module, $docID);
 
         $this->display();
     }
@@ -651,7 +652,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 21, $pageID = 1)
+    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
         $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
         $this->doc->setMenu(array($this->lang->doclib->select), 0, $type);

@@ -1,22 +1,37 @@
 $(function()
 {
     toggleAcl($('#acl').val());
-    window.editor['content'].addListener('focus', function()
-    {
-        this.ui.setFullScreen(true);
-    });
-    $('#type').change(function()
+    $('input[name="type"]').change(function()
     {
         var type = $(this).val();
-        if(type == 'html')
+        if(type == 'text')
         {
-            $('.contenthtml').removeClass('hidden');
-            $('.contentmarkdown').addClass('hidden');
+            $('#contentBox').removeClass('hidden');
+            $('#urlBox').addClass('hidden');
         }
-        else if(type == 'markdown')
+        else if(type == 'url')
         {
-            $('.contenthtml').addClass('hidden');
-            $('.contentmarkdown').removeClass('hidden');
+            $('#contentBox').addClass('hidden');
+            $('#urlBox').removeClass('hidden');
         }
     })
+    window.editor['content'].addListener('ready', function()
+    {
+        $('div#content .edui-toolbar').append("<div class='edui-box edui-button edui-for-markdown edui-default'><button type='button' class='edui-default' onclick='toggleEditor(\"markdown\")'>Markdown</button></div>");
+    });
 })
+
+function toggleEditor(type)
+{
+    if(type == 'html')
+    {
+        $('.contenthtml').removeClass('hidden');
+        $('.contentmarkdown').addClass('hidden');
+    }
+    else if(type == 'markdown')
+    {
+        $('.contenthtml').addClass('hidden');
+        $('.contentmarkdown').removeClass('hidden');
+    }
+    $('#contentType').val(type);
+}

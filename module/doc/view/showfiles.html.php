@@ -20,7 +20,7 @@
   <?php if(empty($file->pathname)) continue;?>
   <div class='col-md-3'>
     <div class='card lib-file'>
-      <a class='media-wrapper' target='_blank' href='<?php echo $this->createLink('file', 'download', "fileID=$file->id&mouse=left") ?>'>
+      <a class='media-wrapper' title='<?php echo $file->title  . '.' . $file->extension?>' target='_blank' href='<?php echo $this->createLink('file', 'download', "fileID=$file->id&mouse=left") ?>'>
         <?php
         $downloadLink = $this->createLink('file', 'download', "fileID=$file->id&mouse=left");
         if(in_array($file->extension, $config->file->imageExtensions))
@@ -44,7 +44,11 @@
         ?>
         <i class='icon icon-download'></i>
       </a>
-      <a class='card-heading' href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID"); ?>'><?php echo $lang->doc->fileObject . ' ' . strtoupper($file->objectType) . ' #' . $file->objectID ?> <i class='icon icon-chevron-right pull-right'></i></a>
+      <div class='card-heading'>
+        <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID"); ?>'><?php echo $lang->doc->fileObject . ' ' . strtoupper($file->objectType) . ' #' . $file->objectID ?></a>
+        <i class='icon icon-chevron-right pull-right'></i>
+        <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete pull-right'><i class='icon icon-remove'></i></a>
+      </div>
     </div>
   </div>
   <?php endforeach;?>

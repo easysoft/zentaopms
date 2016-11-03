@@ -84,7 +84,14 @@ class docModel extends model
     {
         if($type == 'product' or $type == 'project')
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->ne(0)->andWhere('deleted')->eq(0)->orderBy('id desc')->query();
+            $table   = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $stmt    = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
+                ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
+                ->where("t1.$type")->ne(0)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy("t2.order desc, t1.id")
+                ->query();
+            $objects = $this->dao->select('id,name')->from($table)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         }
         else
         {
@@ -94,7 +101,12 @@ class docModel extends model
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
-            if($this->checkPriv($lib)) $libPairs[$lib->id] = $lib->name;
+            if($this->checkPriv($lib))
+            {
+                $libName = $lib->name;
+                if(($type == 'product' or $type == 'project') and $lib->main == 0 and isset($objects[$lib->$type])) $libName = $objects[$lib->$type] . ' / ' . $libName;
+                $libPairs[$lib->id] = $libName;
+            }
         }
         return $libPairs;
     }
@@ -289,10 +301,10 @@ class docModel extends model
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
-        $doc->title   = isset($docContent->title)   ? $docContent->title  : '';
-        $doc->digest  = isset($docContent->digest)  ? $docContent->digest  : '';
-        $doc->content = isset($docContent->content) ? $docContent->content : '';
-        $doc->type    = isset($docContent->type)    ? $docContent->type : '';
+        $doc->title       = isset($docContent->title)   ? $docContent->title  : '';
+        $doc->digest      = isset($docContent->digest)  ? $docContent->digest  : '';
+        $doc->content     = isset($docContent->content) ? $docContent->content : '';
+        $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
         if($setImgSize) $doc->content = $this->loadModel('file')->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -336,23 +348,22 @@ class docModel extends model
         $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->product = $lib->product;
         $doc->project = $lib->project;
+        if($doc->type == 'url')
+        {
+            $doc->content     = $doc->url;
+            $doc->contentType = 'html';
+        }
 
         $docContent = new stdclass();
         $docContent->title   = $doc->title;
-        $docContent->digest  = $doc->type == 'html' ? $doc->digest  : $doc->digestMarkdown;
-        $docContent->content = $doc->type == 'html' ? $doc->content : $doc->contentMarkdown;
-        $docContent->type    = $doc->type;
+        $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
+        $docContent->type    = $doc->contentType;
         $docContent->version = 1;
-        if($doc->type == 'markdown')
-        {
-            $docContent->content = str_replace('&gt;', '>', $docContent->content);
-            $docContent->digest  = str_replace('&gt;', '>', $docContent->digest);
-        }
-        unset($doc->digest);
-        unset($doc->digestMarkdown);
+        if($doc->contentType == 'markdown') $docContent->content = str_replace('&gt;', '>', $docContent->content);
         unset($doc->content);
         unset($doc->contentMarkdown);
-        unset($doc->type);
+        unset($doc->contentType);
+        unset($doc->url);
 
         $this->dao->insert(TABLE_DOC)->data($doc)->autoCheck()
             ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
@@ -392,16 +403,14 @@ class docModel extends model
             ->remove('comment,files,labels,uid')
             ->get();
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
-        if($oldDoc->type == 'markdown')
-        {
-            $doc->content = str_replace('&gt;', '>', $doc->content);
-            $doc->digest  = str_replace('&gt;', '>', $doc->digest);
-        }
+        if($oldDoc->contentType == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
         $doc->product = $lib->product;
         $doc->project = $lib->project;
+        if($doc->type == 'url') $doc->content = $doc->url;
+        unset($doc->url);
 
         $files   = $this->file->saveUpload('doc', $docID);
         $changes = common::createChanges($oldDoc, $doc);
@@ -409,7 +418,7 @@ class docModel extends model
         if($files) $changed = true;
         foreach($changes as $change)
         {
-            if($change['field'] == 'content' or $change['field'] == 'title' or $change['field'] == 'digest') $changed = true;
+            if($change['field'] == 'content' or $change['field'] == 'title') $changed = true;
         }
 
         if($changed)
@@ -419,7 +428,6 @@ class docModel extends model
             $docContent = new stdclass();
             $docContent->doc     = $docID;
             $docContent->title   = $doc->title;
-            $docContent->digest  = $doc->digest;
             $docContent->content = $doc->content;
             $docContent->version = $doc->version;
             $docContent->type    = $oldDocContent->type;
@@ -428,8 +436,8 @@ class docModel extends model
             $docContent->files   = trim($docContent->files, ',');
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
-        unset($doc->digest);
         unset($doc->content);
+        unset($doc->contentType);
 
         $this->dao->update(TABLE_DOC)->data($doc)
             ->autoCheck()
@@ -582,7 +590,7 @@ class docModel extends model
      */
     public function checkPriv($object)
     {
-        if($object->acl == 'public') return true;
+        if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) !== false) return true;
@@ -713,7 +721,7 @@ class docModel extends model
      */
     public function getSubLibGroups($type, $idList)
     {
-        $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id desc')->fetchGroup($type, 'id');
+        $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
             $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -821,7 +829,7 @@ class docModel extends model
         $account   = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) === false)
         {
-            $condition .= "{$table}acl='public'";
+            $condition .= "{$table}acl='open'";
             $condition .= " OR ({$table}acl='private' and {$table}users='{$this->app->user->account}')";
             $condition .= " OR ({$table}acl='custom' and (";
             foreach($this->app->user->groups as $groupID) $condition .= "(CONCAT(',', {$table}groups, ',') like '%,$groupID,%') OR ";
@@ -1064,5 +1072,35 @@ class docModel extends model
         }
 
         return array($showNumber, $action, 'number' => $showNumber, 'action' => $action);
+    }
+
+    /**
+     * Get crumbs. 
+     * 
+     * @param  int    $libID 
+     * @param  int    $moduleID 
+     * @param  int    $docID 
+     * @access public
+     * @return string
+     */
+    public function getCrumbs($libID, $moduleID = 0, $docID = 0)
+    {
+        $lib        = $this->getLibById($libID);
+        $parents    = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
+        $doc        = $docID ? $this->getById($docID) : array();
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $objectName = '';
+        if($type != 'custom' and empty($lib->main))
+        {
+            $table      = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $objectName = $this->dao->select('name')->from($table)->where('id')->eq($lib->$type)->fetch('name');
+        }
+        $crumb = '';
+        if($objectName) $crumb .= $objectName . $this->lang->arrow;
+        $crumb .= html::a(helper::createLink('doc', 'browse', "libID=$libID"), $lib->name);
+        foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id"), $module->name);
+        if($doc) $crumb .= $this->lang->arrow . $doc->title; 
+
+        return $crumb;
     }
 }
