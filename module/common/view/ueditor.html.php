@@ -19,16 +19,14 @@ js::set('kuid', $uid);
 var editor = <?php echo json_encode($editor);?>;
 
 var toolbars = [[
-    'fullscreen', 'source', '|',
-    'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', '|',
     'paragraph', 'fontfamily', 'fontsize', '|',
-    'indent', '|',
-    'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
-    'simpleupload', 'emotion', 'insertvideo', 'map', 'insertcode', '|',
-    'link', 'unlink', 'anchor', '|',
-    'horizontal', 'date', 'time', '|',
+    'forecolor', 'backcolor', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'blockquote', 'pasteplain', '|',
+    'insertorderedlist', 'insertunorderedlist', 'justifyleft', 'justifycenter', 'justifyright', '|',
+    'simpleupload', 'insertvideo', 'insertcode', '|',
+    'link', 'unlink', '|',
     'inserttable', '|',
-    'preview', 'searchreplace', 'drafts', 'help'
+    'fullscreen', 'source', '|',
+    'preview', 'help'
 ]];
 
 $(document).ready(initUeditor);
@@ -47,12 +45,15 @@ function initUeditor(afterInit)
     $.each(editor.id, function(key, editorID)
     {
         if(!window.editor) window.editor = {};
-        ueditor = UE.getEditor(editorID, options);
-        window.editor['#'] = window.editor[editorID] = ueditor;
-        ueditor.addListener('ready', function()
+        if($('#' + editorID).size() != 0)
         {
-            $('#' + editorID).find('.edui-editor').css('z-index', '5');
-        });
+            ueditor = UE.getEditor(editorID, options);
+            window.editor['#'] = window.editor[editorID] = ueditor;
+            ueditor.addListener('ready', function()
+            {
+                $('#' + editorID).find('.edui-editor').css('z-index', '5');
+            });
+        }
     });
 
     if($.isFunction(afterInit)) afterInit();

@@ -161,7 +161,7 @@ $(function()
         <div class='hide' id='lastCommentBox'>
           <form method='post' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>
             <table align='center' class='table table-form bd-0'>
-              <tr><td style='padding-right: 0'><?php echo html::textarea('lastComment', htmlspecialchars($action->comment),"rows='5' class='form-control'");?></td></tr>
+              <tr><td style='padding-right: 0'><?php echo html::textarea('lastComment', htmlspecialchars($action->comment), "style='width:100%;height:100px'");?></td></tr>
               <tr><td><?php echo html::submitButton() . html::a("javascript:toggleComment($action->id)", $lang->goback, '', "class='btn'");?></td></tr>
             </table>
           </form>

@@ -14,20 +14,23 @@ $editor['id'] = explode(',', $editor['id']);
 
 <script language='javascript'>
 var markdownEditor = <?php echo json_encode($editor);?>;
+var toolbar    = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "code", "table", "|", "preview", "side-by-side", "fullscreen", "|", "guide"];
+var withchange = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "code", "table", "|", "preview", "side-by-side", "fullscreen", "|", "guide", {name: "html", action: function customFunction(editor){toggleEditor("html")}, className:'fa fa-exchange', title:"HTML"}];
 $(document).ready(initMarkdown);
 function initMarkdown(afterInit)
 {
     $.each(markdownEditor.id, function(key, markdownEditorID)
     {
+        if(typeof(markdownEditor.tools) != 'undefined' && markdownEditor.tools == 'withchange') toolbar = withchange;
         var options = 
         {
+            toolbar:toolbar,
             element:document.getElementById(markdownEditorID),
             status: false
         };
         if(!window.markdownEditor) window.markdownEditor = {};
         markdown = new SimpleMDE(options);
         window.markdownEditor['#'] = window.markdownEditor[markdownEditorID] = markdown;
-        console.log(markdown);
         markdown.codemirror.on("focus", function()
         {
             window.markdownEditor[markdownEditorID].toggleSideBySide();
