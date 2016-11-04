@@ -53,5 +53,5 @@
   </div>
   <?php endforeach;?>
 </div>
-<?php js::set('type', $type);?>
+<?php js::set('type', 'doc');?>
 <?php include '../../common/view/footer.html.php';?>

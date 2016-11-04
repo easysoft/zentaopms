@@ -34,7 +34,7 @@
   <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
   <div class='actions'>
     <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-ellipsis-h'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-cog'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <?php
         if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='600px'") . '</li>';
@@ -52,7 +52,7 @@
         <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-tags'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
-    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&product=0&prject=0&from=doc");?>
+    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID");?>
   </div>
 </div>
 <div class='main'>

@@ -843,7 +843,7 @@ class productModel extends model
         }
         else if($module == 'doc')
         {
-            $link = helper::createLink($module, $method, "type=product&libID=%s");
+            $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=%s&from=product");
         }
 
         return $link;

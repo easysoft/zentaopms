@@ -1749,7 +1749,7 @@ class projectModel extends model
             $link = helper::createLink($module, $method, "projectID=%s");
         }
 
-        if($module == 'doc') $link = helper::createLink($module, $method, "type=project&libID=%s");
+        if($module == 'doc') $link = helper::createLink('doc', 'objectLibs', "type=project&objectID=%s&from=project");
         return $link;
     }
 

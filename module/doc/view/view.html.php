@@ -28,7 +28,7 @@
         for($i = $doc->version; $i >= 1; $i --)
         {
             $class = $i == $version ? " class='active'" : '';
-            echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i"), '#' . $i) . '</li>';
+            echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id"), '#' . $i) . '</li>';
         }
         ?>
       </ul>
@@ -165,6 +165,6 @@
     </div>
   </div>
 </div>
-<?php js::set('type', $type)?>
+<?php js::set('type', 'doc')?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

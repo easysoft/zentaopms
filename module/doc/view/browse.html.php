@@ -18,7 +18,7 @@ var browseType = '<?php echo $browseType;?>';
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
 <?php js::set('fixedMenu', $fixedMenu);?>
 <?php js::set('libID', $libID);?>
-<?php if(!$fixedMenu) js::set('type', $type);?>
+<?php if(!$fixedMenu and $this->from != 'doc') js::set('type', 'doc');?>
 <?php if($this->cookie->browseType == 'bymenu'):?>
 <?php include __DIR__ . '/browsebymenu.html.php';?>
 <?php elseif($this->cookie->browseType == 'bytree'):?>
@@ -26,14 +26,14 @@ var browseType = '<?php echo $browseType;?>';
 <?php else:?>
 <div id='featurebar'>
   <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
+  <ul class='nav'>
+  <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy&from=$from"), $lang->doc->allDoc)?></li>
+  <li id='openedbymeTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=openedByMe&param=0&orderBy=$orderBy&from=$from"), $lang->doc->openedByMe)?></li>
+  <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
+  </ul>
   <div class='actions'>
-    <ul class='btn-group nav'>
-    <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy"), $lang->doc->allDoc)?></li>
-    <li id='openedbymeTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=openedByMe&param=0&orderBy=$orderBy"), $lang->doc->openedByMe)?></li>
-    <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
-    </ul>
     <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-ellipsis-h'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-cog'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <?php
         if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='600px'") . '</li>';
@@ -50,7 +50,7 @@ var browseType = '<?php echo $browseType;?>';
         <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-tags'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
-    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&product=0&prject=0&from=doc");?>
+    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID");?>
   </div>
   <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
@@ -70,7 +70,7 @@ var browseType = '<?php echo $browseType;?>';
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='docList'>
     <thead>
       <tr>
-        <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+        <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&from=$from&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
         <th>                <?php common::printOrderLink('title',     $orderBy, $vars, $lang->doc->title);?></th>
         <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>

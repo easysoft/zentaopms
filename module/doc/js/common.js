@@ -21,9 +21,4 @@ $(document).ready(function()
     $('[data-id="create"] a').modalTrigger({type: 'iframe', width: 800});
     $('#modulemenu .nav li').removeClass('active');
     if(typeof(type) != 'undefined') $('#modulemenu .nav li[data-id="' + type + '"]').addClass('active');
-
-    $('.libs').on('click', '.libs-heading', function()
-    {
-        $(this).closest('.libs').toggleClass('collapsed');
-    });
 });

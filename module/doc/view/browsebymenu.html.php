@@ -1,4 +1,5 @@
 <style>
+#filesPanel {margin-bottom:0px;}
 #filesPanel a {color: #114f8e}
 #filesPanel a:hover,
 #filesPanel a:focus,
@@ -20,14 +21,14 @@
 </style>
 <div id='featurebar'>
   <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
+  <ul class='nav'>
+    <li <?php if($orderBy == 'addedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=addedDate_desc&from=$from"), $lang->doc->orderByOpen)?></li>
+    <li <?php if($orderBy == 'editedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=editedDate_desc&from=$from"), $lang->doc->orderByEdit)?></li>
+    <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
+  </ul>
   <div class='actions'>
-    <ul class='nav'>
-      <li <?php if($orderBy == 'addedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=addedDate_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->doc->orderByOpen)?></li>
-      <li <?php if($orderBy == 'editedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=editedDate_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->doc->orderByEdit)?></li>
-      <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
-    </ul>
     <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-ellipsis-h'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-cog'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <?php if(empty($moduleID)):?>
         <?php
@@ -40,7 +41,7 @@
         if(common::hasPriv('tree', 'delete')) echo '<li>' . html::a($this->createLink('tree', 'delete', "rootID=$libID&moduleID=$moduleID"), $lang->doc->deleteType, 'hiddenwin') . '</li>';
         ?>
         <?php endif;?>
-        <?php if(common::hasPriv('tree', 'browse')) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc"), $lang->doc->manageType) . '</li>';?>
+        <?php if(common::hasPriv('tree', 'browse')) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc&moduleID=$moduleID"), $lang->doc->manageType) . '</li>';?>
         <li><?php echo html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin");?></li>
       </ul>
     </div>
@@ -52,17 +53,16 @@
         <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-tags'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
-    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&product=0&prject=0&from=doc");?>
+    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID");?>
   </div>
   <div id='querybox' class='<?php if($browseType == 'bysearch') echo 'show';?>'></div>
 </div>
 <div class='main'>
-  <?php if($modules or $docs):?>
   <div class='panel' id='filesPanel'>
     <div class='panel-body clearfix'>
       <?php foreach($modules as $module):?>
       <div class='file file-dir'>
-        <a href='<?php echo inlink('browse', "libID=$libID&browseType=bymenu&param=$module->id")?>'>
+        <a href='<?php echo inlink('browse', "libID=$libID&browseType=bymenu&param=$module->id&orderBy=$orderBy&from=$from")?>'>
           <i class='file-icon icon icon-folder-close-alt'></i>
           <div class='file-name' title='<?php echo $module->name?>'><?php echo $module->name?></div>
         </a>
@@ -81,5 +81,10 @@
     <div class='panel-footer'><?php $pager->show();?></div>
     <?php endif;?>
   </div>
-  <?php endif;?>
 </div>
+<script>
+$(function()
+{
+    $('#filesPanel .panel-body').css('min-height', $('.outer').height() - $('#featurebar').height() - 60);
+})
+</script>

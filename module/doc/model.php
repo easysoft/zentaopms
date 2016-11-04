@@ -1083,7 +1083,7 @@ class docModel extends model
      * @access public
      * @return string
      */
-    public function getCrumbs($libID, $moduleID = 0, $docID = 0)
+    public function getCrumbs($libID, $moduleID = 0, $docID = 0, $from = 'doc')
     {
         $lib        = $this->getLibById($libID);
         $parents    = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
@@ -1097,8 +1097,8 @@ class docModel extends model
         }
         $crumb = '';
         if($objectName) $crumb .= $objectName . $this->lang->arrow;
-        $crumb .= html::a(helper::createLink('doc', 'browse', "libID=$libID"), $lib->name);
-        foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id"), $module->name);
+        $crumb .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from"), $lib->name);
+        foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc&from=$from"), $module->name);
         if($doc) $crumb .= $this->lang->arrow . $doc->title; 
 
         return $crumb;

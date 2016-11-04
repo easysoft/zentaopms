@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if($doc->contentType == 'html')     include '../../common/view/ueditor.html.php';?>
 <?php if($doc->contentType == 'markdown') include '../../common/view/markdown.html.php';?>
-<?php js::set('type', $type)?>
+<?php js::set('type', 'doc')?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
