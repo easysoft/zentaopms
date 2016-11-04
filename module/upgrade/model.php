@@ -1366,7 +1366,7 @@ class upgradeModel extends model
             $data->method = 'showFiles';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
-            $data->method = 'diff';
+            $data->method = 'objectLibs';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
         return true;

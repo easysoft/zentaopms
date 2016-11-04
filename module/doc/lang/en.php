@@ -56,6 +56,7 @@ $lang->doc->libType        = 'Library type';
 $lang->doc->custom         = 'Custom library';
 $lang->doc->createLib      = 'Create library';
 $lang->doc->allLibs        = 'Browse library';
+$lang->doc->objectLibs     = "Browse {$lang->productCommon}/{$lang->projectCommon} library";
 $lang->doc->showFiles      = 'File library';
 $lang->doc->editLib        = 'Edit library';
 $lang->doc->deleteLib      = 'Delete library';

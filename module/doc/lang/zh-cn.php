@@ -60,6 +60,7 @@ $lang->doc->libType        = '文档库类型';
 $lang->doc->custom         = '自定义文档库';
 $lang->doc->createLib      = '创建文档库';
 $lang->doc->allLibs        = '文档库列表';
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon}库列表";
 $lang->doc->showFiles      = '附件库';
 $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
