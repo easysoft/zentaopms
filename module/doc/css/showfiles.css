@@ -11,7 +11,7 @@
 .lib-file .card-heading > .icon-download {opacity: .5; position: relative; top: 2px}
 .lib-file .card-heading {color: #114f8e}
 .lib-file .card-heading:hover {background-color: #EBF2F9; color: #2e6dad}
-.lib-file .card-heading > .delete {opacity: 0; margin-top:-1px; margin-right:5px}
+.lib-file .card-heading > .delete {opacity: 0.2; margin-top:-1px; margin-right:5px}
 .lib-file .card-heading > .delete .icon{font-size:16px;}
 .lib-file .card-heading:hover > .delete{opacity:1}
 .lib-file .media-wrapper > .icon-holder {font-size: 105px; opacity: 1; color: rgba(255,255,255,.7); opacity: .6}

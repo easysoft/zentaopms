@@ -149,7 +149,7 @@ class upgradeModel extends model
             case '8_2_4':
             case '8_2_5':
             case '8_2_6':
-                $this->execSQL($this->getUpgradeFile('8.2.1'));
+                $this->execSQL($this->getUpgradeFile('8.2.6'));
                 $this->adjustDocModule();
                 $this->moveDocContent();
                 $this->adjustPriv8_3();

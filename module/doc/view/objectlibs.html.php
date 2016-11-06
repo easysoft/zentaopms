@@ -17,17 +17,17 @@
 </div>
 <div id='libs'>
   <div class='libs-group clearfix'>
-    <?php foreach($libs as $libID => $lib):?>
+    <?php foreach($libs as $libID => $libName):?>
     <?php
     if($libID == 'project' and $from != 'doc') continue;
 
-    $libLink = inlink('browse', "libID=$lib->id&browseType=all&param=0&orderBy=id_desc&from=$from");
-    if($libID == 'project') $libLink = inlink('allLibs', "type=project&extra=product=$lib->id");
-    if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$lib->id");
+    $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");
+    if($libID == 'project') $libLink = inlink('allLibs', "type=project&extra=product=$object->id");
+    if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");
     ?>
-    <a class='lib' title='<?php echo $lib->name?>' href='<?php echo $libLink?>'>
+    <a class='lib' title='<?php echo $libName?>' href='<?php echo $libLink?>'>
       <i class='file-icon icon icon-folder-close-alt'></i>
-      <div class='lib-name' title='<?php echo $lib->name?>'><?php echo $lib->name?></div>
+      <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
     </a>
     <?php endforeach; ?>
   </div>

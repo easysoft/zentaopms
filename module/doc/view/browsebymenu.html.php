@@ -15,9 +15,12 @@
 #filesPanel .file-icon {display: block; height: 60px; text-align: center; line-height: 60px; font-size: 50px; opacity: .7}
 #filesPanel .file:hover .file-icon {opacity: 1}
 #filesPanel .file-name {text-align: center; height: 2em; line-height: 14px; overflow: hidden;}
-#filesPanel .file > .actions {position: absolute; bottom: -30px; left: -1px; right: -1px; background-color: #333; background-color: rgba(0,0,0,.5); margin: 0; opacity: 0; transition: opacity .2s;}
-#filesPanel .file:hover > .actions {opacity: 1}
-#filesPanel .file > .actions > a {line-height: 30px; display: inline-block; padding: 0 8px; color: #fff;}
+#filesPanel .file.create {height:88px;}
+#filesPanel .file.create a{height:100%;}
+#filesPanel .file.create .file-icon {height:100%; opacity: 0.5; color:#ddd;}
+#filesPanel .file.create .icon-plus {font-size: 18px; display: block; text-align: center; position: absolute; top: 0; right: 0; left: 0; bottom: 0; line-height: 60px; opacity: 0.5; transition: opacity .2s; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
+#filesPanel .file.create:hover .icon-plus {opacity: .9; animation: flash-icon 1s linear alternate infinite}
+#filesPanel .file.create:hover .file-icon {opacity: .9; animation: flash-icon 1s linear alternate infinite}
 </style>
 <div id='featurebar'>
   <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
@@ -68,6 +71,12 @@
         </a>
       </div>
       <?php endforeach;?>
+      <div class='file file-dir create'>
+        <a href='<?php echo $this->createLink('tree', 'browse', "rootID=$libID&view=doc&moduleID=$moduleID")?>' title='<?php echo $lang->doc->addType?>'>
+          <i class='file-icon icon icon-folder-close-alt'></i>
+          <i class='icon icon-plus'></i>
+        </a>
+      </div>
       <?php foreach($docs as $doc):?>
       <div class='file'>
         <a href='<?php echo inlink('view', "docID=$doc->id")?>'>
@@ -76,6 +85,12 @@
         </a>
       </div>
       <?php endforeach;?>
+      <div class='file create'>
+        <a href='<?php echo inlink('create', "libID=$libID&moduleID=$moduleID")?>' title='<?php echo $lang->doc->create?>'>
+          <i class='file-icon icon icon-file'></i>
+          <i class='icon icon-plus'></i>
+        </a>
+      </div>
     </div>
     <?php if($docs):?>
     <div class='panel-footer'><?php $pager->show();?></div>

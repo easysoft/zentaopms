@@ -18,8 +18,7 @@
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['doc']);?></span>
-      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->doc->create;?></strong>
+      <strong><i class='icon icon-tags'></i> <?php echo $crumb . $lang->arrow . $lang->doc->create;?></strong>
     </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>

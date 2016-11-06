@@ -20,7 +20,7 @@
     <?php if(isset($subLibs[$lib->id])): ?>
     <?php if($i % 3 == 0) echo "<tr>"?>
       <td>
-      <div class='libs-group-heading libs-<?php echo $type?>-heading'><strong><?php echo html::a(inlink('objectLibs', "type=$type&objectID=$lib->id&from=doc"), $lib->name)?></strong></div>
+      <div class='libs-group-heading libs-<?php echo $type?>-heading'><strong><?php echo html::a(inlink('objectLibs', "type=$type&objectID=$lib->id&from=doc"), $lib->name, '', "title='{$lib->name}'")?></strong></div>
       <div class='libs-group clearfix'>
         <?php foreach($subLibs[$lib->id] as $subLibID => $subLibName):?>
         <?php

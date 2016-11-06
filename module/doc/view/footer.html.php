@@ -1,9 +1,12 @@
-<script language='Javascript'>
-$(document).ready(function()
+<style>
+#modulemenu .nav > li > .dropdown > a#libType {display: inline-block;}
+</style>
+<?php $crumbs = $this->doc->getCrumbs($rootID, $currentModuleID, $docID = 0, $this->cookie->from)?>
+<script>
+$(function()
 {
-    $(".right a").modalTrigger({width:500, height:200, type:'iframe'});  // The create lib link.
-    $("#modulemenu a:contains('<?php echo $lang->doc->editLib;?>')").modalTrigger({width:500, height:200, type:'iframe'});   // The edit lib link.
-});
+    $('#featurebar .heading').prepend("<i class='icon icon-tags'></i> " + <?php echo json_encode($crumbs)?> + <?php echo json_encode($lang->arrow)?>);
+})
 </script>
 <?php include '../../common/view/footer.html.php';?>
 

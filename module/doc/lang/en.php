@@ -39,6 +39,8 @@ $lang->doc->moduleDoc      = 'By module';
 $lang->doc->searchDoc      = 'By search';
 $lang->doc->allDoc         = 'All doc';
 $lang->doc->openedByMe     = 'Added by me';
+$lang->doc->orderByOpen    = 'Last added';
+$lang->doc->orderByEdit    = 'Last edited';
 
 /* Actions. */
 $lang->doc->index          = 'Index';
@@ -49,6 +51,8 @@ $lang->doc->browse         = 'Browse doc';
 $lang->doc->view           = 'View doc';
 $lang->doc->diff           = 'Diff';
 $lang->doc->manageType     = 'Manage type';
+$lang->doc->editType       = 'Edit type';
+$lang->doc->deleteType     = 'Delete type';
 $lang->doc->addType        = 'Add type';
 
 $lang->doc->libName        = 'Library name';

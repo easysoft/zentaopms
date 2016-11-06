@@ -755,7 +755,7 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '')
     {
-        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id desc')->fetchAll('id');
+        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id')->fetchAll('id');
         if($type == 'product')
         {
             $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1096,7 +1096,7 @@ class docModel extends model
             $objectName = $this->dao->select('name')->from($table)->where('id')->eq($lib->$type)->fetch('name');
         }
         $crumb = '';
-        if($objectName) $crumb .= $objectName . $this->lang->arrow;
+        if($objectName) $crumb .= html::a(helper::createLink('doc', 'objectLibs', "type=$type&objectID={$lib->$type}&from=$from"), $objectName) . $this->lang->arrow;
         $crumb .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from"), $lib->name);
         foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc&from=$from"), $module->name);
         if($doc) $crumb .= $this->lang->arrow . $doc->title; 

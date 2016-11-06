@@ -18,7 +18,7 @@
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['doc']);?> <strong><?php echo $doc->id;?></strong></span>
-      <strong><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title);?></strong>
+      <strong><?php echo $crumb . $lang->arrow . html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title);?></strong>
       <small class='text-muted'> <?php echo html::icon($lang->icons['edit']) . ' ' . $lang->doc->edit;?></small>
     </div>
   </div>
@@ -45,7 +45,7 @@
       </tr> 
       <tr id='contentBox' <?php if($doc->type == 'url') echo "class='hidden'"?>>
         <th><?php echo $lang->doc->content;?></th>
-        <td colspan='2'><?php echo html::textarea('content', htmlspecialchars($doc->content), "style='width:100%; height:200px'") . html::hidden('contentType', $doc->contentType);?></td>
+        <td colspan='2'><?php echo html::textarea('content', $doc->type == 'url' ? '' : htmlspecialchars($doc->content), "style='width:100%; height:200px'") . html::hidden('contentType', $doc->contentType);?></td>
       </tr>  
       <tr id='urlBox' <?php if($doc->type != 'url') echo "class='hidden'"?>>
         <th><?php echo $lang->doc->url;?></th>

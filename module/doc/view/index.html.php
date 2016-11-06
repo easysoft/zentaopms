@@ -31,7 +31,7 @@
         <?php if(isset($subLibs['product'][$product->id])):?>
         <?php if($i % 3 == 0) echo '<tr>'?>
         <td>
-          <div class='libs-group-heading libs-product-heading'><strong><?php echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), $product->name)?></strong></div>
+          <div class='libs-group-heading libs-product-heading'><strong><?php echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), $product->name, '', "title='{$product->name}'")?></strong></div>
           <div class='libs-group clearfix'>
             <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
             <?php
@@ -68,7 +68,7 @@
         <?php if(isset($subLibs['project'][$project->id])):?>
         <?php if($i % 3 == 0) echo '<tr>'?>
         <td>
-          <div class='libs-group-heading libs-project-heading'><strong><?php echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), $project->name)?></strong></div>
+          <div class='libs-group-heading libs-project-heading'><strong><?php echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), $project->name, '', "title='{$project->name}'")?></strong></div>
           <div class='libs-group clearfix'>
             <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
             <?php

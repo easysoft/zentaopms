@@ -324,6 +324,7 @@ class doc extends control
         $this->view->type             = $type;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode');
+        $this->view->crumb            = $this->doc->getCrumbs($libID, $moduleID, $docID = 0, $this->from);
 
         $this->display();
     }
@@ -378,6 +379,7 @@ class doc extends control
         $this->view->type             = $type;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode');
+        $this->view->crumb            = $this->doc->getCrumbs($libID, $doc->module, $docID = 0, $this->from);
         $this->display();
     }
 
@@ -752,7 +754,7 @@ class doc extends control
         $this->view->type   = $type;
         $this->view->object = $object;
         $this->view->from   = $from;
-        $this->view->libs   = $this->doc->getLibByObject($type, $objectID);
+        $this->view->libs   = $this->doc->getLibsByObject($type, $objectID);
         $this->display();
     }
 }

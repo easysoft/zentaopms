@@ -1,6 +1,6 @@
 $(function()
 {
-    toggleAcl($('#acl').val());
+    toggleAcl($('input[name="acl"]:checked').val());
     $('input[name="type"]').change(function()
     {
         var type = $(this).val();
