@@ -1215,9 +1215,9 @@ class upgradeModel extends model
             $lib->project = $projectID;
             $lib->name    = $project->name;
             $lib->main    = 1;
-            $lib->acl     = $project->acl;
+            $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
-            if($project->acl == 'private')
+            if($project->acl == 'private' or $project->acl == 'custom')
             {
                 $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
                 $lib->users = join(',', $teams);

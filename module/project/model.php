@@ -275,7 +275,7 @@ class projectModel extends model
             $lib->main    = '1';
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
-            if($project->acl == 'private')
+            if($project->acl == 'private' or $project->acl == 'custom')
             {
                 $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
                 $lib->users = join(',', $teams);
@@ -342,7 +342,11 @@ class projectModel extends model
             {
                 $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl == 'open' ? 'open' : 'custom')->where('project')->eq($projectID)->exec();
                 if($project->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('project')->eq($projectID)->exec();
-                if($project->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($project->whitelist)->where('project')->eq($projectID)->exec();
+                if($project->acl == 'custom')
+                {
+                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
+                    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($project->whitelist)->set('users')->eq(join(',', $teams))->where('project')->eq($projectID)->exec();
+                }
                 if($project->acl == 'private')
                 {
                     $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
