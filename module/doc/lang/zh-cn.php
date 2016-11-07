@@ -109,7 +109,6 @@ $lang->doc->placeholder->url = '相应的链接地址';
 $lang->doclib = new stdclass();
 $lang->doclib->name    = '文档库名称';
 $lang->doclib->control = '访问控制';
-$lang->doclib->acl     = '权限';
 $lang->doclib->group   = '分组';
 $lang->doclib->user    = '用户';
 $lang->doclib->files   = '附件库';

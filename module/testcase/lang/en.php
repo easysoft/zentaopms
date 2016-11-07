@@ -15,36 +15,36 @@ $lang->testcase->module           = 'Module';
 $lang->testcase->moduleAB         = 'Module';
 $lang->testcase->story            = 'Story';
 $lang->testcase->title            = 'Title';
-$lang->testcase->precondition     = 'precondition';
+$lang->testcase->precondition     = 'Prerequisite';
 $lang->testcase->pri              = 'Priority';
 $lang->testcase->type             = 'Type';
 $lang->testcase->status           = 'Status';
 $lang->testcase->steps            = 'Steps';
-$lang->testcase->openedBy         = 'Opened by';
-$lang->testcase->openedDate       = 'Opened date';
-$lang->testcase->lastEditedBy     = 'Last edited by';
+$lang->testcase->openedBy         = 'Opened By';
+$lang->testcase->openedDate       = 'Opened Date';
+$lang->testcase->lastEditedBy     = 'Last Edited by';
 $lang->testcase->result           = 'Result';
 $lang->testcase->real             = 'Real';
 $lang->testcase->keywords         = 'Keywords';
 $lang->testcase->files            = 'Files';
-$lang->testcase->linkCase         = 'Related cases';
-$lang->testcase->linkCases        = 'Link related cases';
-$lang->testcase->unlinkCase       = 'unlink related case';
+$lang->testcase->linkCase         = 'Linked Cases';
+$lang->testcase->linkCases        = 'Link Cases';
+$lang->testcase->unlinkCase       = 'Unlink Case';
 $lang->testcase->stage            = 'Stage';
-$lang->testcase->lastEditedByAB   = 'Last edited by';
-$lang->testcase->lastEditedDateAB = 'Last edited date';
-$lang->testcase->lastEditedDate   = 'Last edited date';
-$lang->testcase->version          = 'Case version';
-$lang->testcase->lastRunner       = 'Runner';
-$lang->testcase->lastRunDate      = 'Run date';
-$lang->testcase->assignedTo       = 'Assigned to';
-$lang->testcase->colorTag         = 'Color tag';
+$lang->testcase->lastEditedByAB   = 'Last Edited By';
+$lang->testcase->lastEditedDateAB = 'Last Edited Date';
+$lang->testcase->lastEditedDate   = 'Last Edited Date';
+$lang->testcase->version          = 'Case Version';
+$lang->testcase->lastRunner       = 'Last Run By';
+$lang->testcase->lastRunDate      = 'Run Date';
+$lang->testcase->assignedTo       = 'Assigned To';
+$lang->testcase->colorTag         = 'Color Tag';
 $lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->allProduct       = "All {$lang->productCommon}";
-$lang->testcase->fromBug          = 'From bug';
-$lang->testcase->toBug            = 'To bug';
+$lang->testcase->fromBug          = 'From Bug';
+$lang->testcase->toBug            = 'To Bug';
 $lang->testcase->changed          = 'Changed';
-$lang->testcase->createBug        = 'Transform bug';
+$lang->testcase->createBug        = 'Transfer Bug';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID     = 'ID';
@@ -53,55 +53,55 @@ $lang->testcase->stepExpect = 'Expect';
 
 $lang->testcase->common             = 'Case';
 $lang->testcase->index              = "Index";
-$lang->testcase->create             = "Create case";
-$lang->testcase->batchCreate        = "Batch create";
+$lang->testcase->create             = "Create Case";
+$lang->testcase->batchCreate        = "Batch Create";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->view               = "Info";
 $lang->testcase->edit               = "Edit";
-$lang->testcase->batchEdit          = "Batch edit";
-$lang->testcase->batchChangeModule  = "Batch change module";
+$lang->testcase->batchEdit          = "Batch Edit ";
+$lang->testcase->batchChangeModule  = "Batch Change Module";
 $lang->testcase->delete             = "Delete";
-$lang->testcase->batchDelete        = "Batch delete ";
-$lang->testcase->browse             = "Browse";
-$lang->testcase->groupCase          = "View case by group";
+$lang->testcase->batchDelete        = "Batch Delete ";
+$lang->testcase->browse             = "Case List";
+$lang->testcase->groupCase          = "Group View";
 $lang->testcase->import             = "Import";
-$lang->testcase->showImport         = "Show import";
-$lang->testcase->exportTemplet      = "Export templet";
-$lang->testcase->export             = "Export data";
-$lang->testcase->confirmChange      = 'Confirm case change';
-$lang->testcase->confirmStoryChange = 'Confirm story change';
-$lang->testcase->copy               = 'Copy case';
+$lang->testcase->showImport         = "Show Import";
+$lang->testcase->exportTemplet      = "Export Template";
+$lang->testcase->export             = "Export Data";
+$lang->testcase->confirmChange      = 'Confirm Case Change';
+$lang->testcase->confirmStoryChange = 'Confirm Story Change';
+$lang->testcase->copy               = 'Duplicate Case';
 
 $lang->testcase->new = 'New';
-  
-$lang->testcase->num    = 'The number of cases';
+
+$lang->testcase->num    = 'Case Count:';
 
 $lang->testcase->deleteStep   = 'Delete';
-$lang->testcase->insertBefore = 'Insert before';
-$lang->testcase->insertAfter  = 'Insert after';
+$lang->testcase->insertBefore = 'Inserted Before';
+$lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe    = 'Cases to me';
-$lang->testcase->openedByMe    = 'My Opened cases';
-$lang->testcase->allCases      = 'All case';
-$lang->testcase->needConfirm   = 'Story changed';
-$lang->testcase->bySearch      = 'By search';
+$lang->testcase->assignToMe    = 'Assigned to Me';
+$lang->testcase->openedByMe    = 'Created by Me';
+$lang->testcase->allCases      = 'All';
+$lang->testcase->needConfirm   = 'Story Change';
+$lang->testcase->bySearch      = 'Search';
 
 $lang->testcase->lblStory                    = 'Story';
-$lang->testcase->lblLastEdited               = 'Last edited';
-$lang->testcase->lblTypeValue                = 'List of type';
-$lang->testcase->lblStageValue               = 'List of stage';
-$lang->testcase->lblStatusValue              = 'List of status';
+$lang->testcase->lblLastEdited               = 'Last Edit';
+$lang->testcase->lblTypeValue                = 'Type List';
+$lang->testcase->lblStageValue               = 'Stage List';
+$lang->testcase->lblStatusValue              = 'Status List';
 
-$lang->testcase->legendBasicInfo    = 'Basic info';
-$lang->testcase->legendAttatch      = 'Files';
+$lang->testcase->legendBasicInfo    = 'Basic Info';
+$lang->testcase->legendAttatch      = 'File';
 $lang->testcase->legendLinkBugs     = 'Bug';
-$lang->testcase->legendOpenAndEdit  = 'Open & edit';
-$lang->testcase->legendComment      = 'Comment';
+$lang->testcase->legendOpenAndEdit  = 'Create/Edit';
+$lang->testcase->legendComment      = 'Remark';
 
-$lang->testcase->confirmDelete      = 'Are you sure to delete this case?';
-$lang->testcase->confirmBatchDelete = 'Are you sure to batch delete there cases?';
+$lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
+$lang->testcase->confirmBatchDelete = 'Do you want to batch delete thess Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
-$lang->testcase->dittoNotice        = 'Current case and case above it do not belong to same product!';
+$lang->testcase->dittoNotice        = 'This Case does not belong to the Product as the previous one!';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
@@ -119,20 +119,20 @@ $lang->testcase->typeList['interface']   = 'Interface';
 $lang->testcase->typeList['other']       = 'Other';
 
 $lang->testcase->stageList['']            = '';
-$lang->testcase->stageList['unittest']    = 'Unit testing';
-$lang->testcase->stageList['feature']     = 'Feature testing';
-$lang->testcase->stageList['intergrate']  = 'Integrate testing';
-$lang->testcase->stageList['system']      = 'System testing';
-$lang->testcase->stageList['smoke']       = 'Smoking testing';
-$lang->testcase->stageList['bvt']         = 'BVT testing';
+$lang->testcase->stageList['unittest']    = 'Unit Testing';
+$lang->testcase->stageList['feature']     = 'Feature Testing';
+$lang->testcase->stageList['intergrate']  = 'Integration Testing';
+$lang->testcase->stageList['system']      = 'System Testing';
+$lang->testcase->stageList['smoke']       = 'Smoking Testing';
+$lang->testcase->stageList['bvt']         = 'BVT Testing';
 
-$lang->testcase->groups['']      = 'Group view';
-$lang->testcase->groups['story'] = 'Group by story';
+$lang->testcase->groups['']      = 'Group ';
+$lang->testcase->groups['story'] = 'Story Group';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
-$lang->testcase->statusList['investigate'] = 'Investigate';
+$lang->testcase->statusList['investigate'] = 'Investigating';
 
 $lang->testcase->resultList['n/a']     = 'N/A';
 $lang->testcase->resultList['pass']    = 'Pass';
@@ -141,11 +141,11 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
-$lang->testcase->errorEncode = 'No data, please select right encode and upload again!';
-$lang->testcase->noFunction  = 'Iconv and mb_convert_encoding does not exist, you can not turn the data into the desired coding!';
-$lang->testcase->noRequire   = "In the row of %s, the %s is a required field";
+$lang->testcase->errorEncode = 'No Data. Please select right encoding and upload again!';
+$lang->testcase->noFunction  = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
+$lang->testcase->noRequire   = "Row %s has“%s”which is a required field and it should not be blank.";
 
-$lang->testcase->searchStories = 'Type to search stories';
+$lang->testcase->searchStories = 'Enter to searcu Story';
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;

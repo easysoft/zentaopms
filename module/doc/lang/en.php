@@ -17,101 +17,100 @@ $lang->doc->project        = $lang->projectCommon;
 $lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Module';
 $lang->doc->title          = 'Title';
-$lang->doc->digest         = 'Digest';
-$lang->doc->comment        = 'Comment';
+$lang->doc->digest         = 'Summary';
+$lang->doc->comment        = 'Remark';
 $lang->doc->type           = 'Type';
-$lang->doc->content        = 'Content';
-$lang->doc->keywords       = 'Keywords';
+$lang->doc->content        = 'Text';
+$lang->doc->keywords       = 'Keyword';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
-$lang->doc->addedBy        = 'Added by';
-$lang->doc->addedDate      = 'Added date';
-$lang->doc->editedBy       = 'Edited by';
-$lang->doc->editedDate     = 'Edited date';
+$lang->doc->addedBy        = 'Added By';
+$lang->doc->addedDate      = 'Added Date';
+$lang->doc->editedBy       = 'Edited By';
+$lang->doc->editedDate     = 'Edited Date';
 $lang->doc->version        = 'Version';
 $lang->doc->basicInfo      = 'Basic Info';
 $lang->doc->deleted        = 'Deleted';
-$lang->doc->fileObject     = 'File object';
-$lang->doc->whiteList      = 'White list';
-$lang->doc->contentType    = 'Doc type';
+$lang->doc->fileObject     = 'The Object';
+$lang->doc->whiteList      = 'White List';
+$lang->doc->contentType    = 'Document Format';
 
-$lang->doc->moduleDoc      = 'By module';
-$lang->doc->searchDoc      = 'By search';
-$lang->doc->allDoc         = 'All doc';
-$lang->doc->openedByMe     = 'Added by me';
-$lang->doc->orderByOpen    = 'Last added';
-$lang->doc->orderByEdit    = 'Last edited';
+$lang->doc->moduleDoc      = 'By Module';
+$lang->doc->searchDoc      = 'By Search';
+$lang->doc->allDoc         = 'All Document';
+$lang->doc->openedByMe     = 'Opened By Me';
+$lang->doc->orderByOpen    = 'Recently Added';
+$lang->doc->orderByEdit    = 'Recently Modifie';
 
-/* Actions. */
-$lang->doc->index          = 'Index';
-$lang->doc->create         = 'Create doc';
-$lang->doc->edit           = 'Edit doc';
-$lang->doc->delete         = 'Delete doc';
-$lang->doc->browse         = 'Browse doc';
-$lang->doc->view           = 'View doc';
+/* 方法列表。*/
+$lang->doc->index          = 'Homepage';
+$lang->doc->create         = 'Create';
+$lang->doc->edit           = 'Edit';
+$lang->doc->delete         = 'Delete';
+$lang->doc->browse         = 'List';
+$lang->doc->view           = 'Details';
 $lang->doc->diff           = 'Diff';
-$lang->doc->manageType     = 'Manage type';
-$lang->doc->editType       = 'Edit type';
-$lang->doc->deleteType     = 'Delete type';
-$lang->doc->addType        = 'Add type';
+$lang->doc->manageType     = 'Type';
+$lang->doc->editType       = 'Edit Type';
+$lang->doc->deleteType     = 'Delete Type';
+$lang->doc->addType        = 'Add Type';
 
-$lang->doc->libName        = 'Library name';
-$lang->doc->libType        = 'Library type';
-$lang->doc->custom         = 'Custom library';
-$lang->doc->createLib      = 'Create library';
-$lang->doc->allLibs        = 'Browse library';
-$lang->doc->objectLibs     = "Browse {$lang->productCommon}/{$lang->projectCommon} library";
-$lang->doc->showFiles      = 'File library';
-$lang->doc->editLib        = 'Edit library';
-$lang->doc->deleteLib      = 'Delete library';
-$lang->doc->fixedMenu      = 'Fixed in Menu';
-$lang->doc->removeMenu     = 'Move from menu';
+$lang->doc->libName        = 'Library Name';
+$lang->doc->libType        = 'Library Type';
+$lang->doc->custom         = 'Custom Library';
+$lang->doc->createLib      = 'Create Library';
+$lang->doc->allLibs        = 'Library List';
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";
+$lang->doc->showFiles      = 'Files Library';
+$lang->doc->editLib        = 'Edit Library';
+$lang->doc->deleteLib      = 'Delete Library';
+$lang->doc->fixedMenu      = 'Fixed In Menu';
+$lang->doc->removeMenu     = 'Remove From Menu';
 
-/* Browse tabs. */
-$lang->doc->allProduct     = "All {$lang->productCommon}s";
-$lang->doc->allProject     = "All {$lang->projectCommon}s";
+/* 查询条件列表 */
+$lang->doc->allProduct     = 'All' . $lang->productCommon;
+$lang->doc->allProject     = 'All' . $lang->projectCommon;
 
-$lang->doc->libTypeList['product'] = "{$lang->productCommon} doc";
-$lang->doc->libTypeList['project'] = "{$lang->projectCommon} doc";
-$lang->doc->libTypeList['custom']  = 'Custom library';
+$lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
+$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Library';
+$lang->doc->libTypeList['custom']  = 'Custom Library';
 
-$lang->doc->systemLibs['product'] = "{$lang->productCommon} doc";
-$lang->doc->systemLibs['project'] = "{$lang->projectCommon} doc";
+$lang->doc->systemLibs['product'] = $lang->productCommon . 'DocumentLibrary';
+$lang->doc->systemLibs['project'] = $lang->projectCommon . 'DocumentLibrary';
 
 $lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';
 
-$lang->doc->types['text'] = 'Text';
-$lang->doc->types['url']  = 'Url';
+$lang->doc->types['text'] = 'Html';
+$lang->doc->types['url']  = 'Link';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
-$lang->doc->browseType             = 'Browse type';
+$lang->doc->browseType             = 'Browse Type';
 $lang->doc->browseTypeList['list'] = 'List';
 $lang->doc->browseTypeList['menu'] = 'Menu';
 $lang->doc->browseTypeList['tree'] = 'Tree';
 
-$lang->doc->confirmDelete      = "Are you sure to delete this doc?";
-$lang->doc->confirmDeleteLib   = " Are you sure to delete this doc library?";
-$lang->doc->errorEditSystemDoc = "System doc library needn't edit";
-$lang->doc->errorEmptyProduct  = "{$lang->productCommon} is empty, can not create doc.";
-$lang->doc->errorEmptyProject  = "{$lang->projectCommon} is empty, can not create doc.";
-$lang->doc->errorMainSysLib    = "Do not delete this library in system library";
-$lang->doc->accessDenied       = "Access to this library denied.";
-$lang->doc->noMatched          = "No matched library including '%s'";
-$lang->doc->versionNotFount    = 'Do not found doc in this version';
+$lang->doc->confirmDelete      = "Do you want to delete this document?";
+$lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
+$lang->doc->errorEditSystemDoc = "System Doc Lib needs no modifications.";
+$lang->doc->errorEmptyProduct  = "No {$lang->productCommon}. Document cannot be created.";
+$lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. Document cannot be created.";
+$lang->doc->errorMainSysLib    = "Can not delete this library.";
+$lang->doc->accessDenied       = "Access to library denied!";
+$lang->doc->noMatched          = "No library including '%s' can be found.";
+$lang->doc->versionNotFount    = 'The document is not exist in this version.';
 
 $lang->doc->placeholder = new stdclass();
-$lang->doc->placeholder->url = 'url';
+$lang->doc->placeholder->url = 'Url';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name    = 'Library Name';
-$lang->doclib->control = 'Control';
-$lang->doclib->acl     = 'Power';
+$lang->doclib->name = 'Library Name';
+$lang->doclib->control = 'Access Control';
 $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
-$lang->doclib->all     = 'All library';
-$lang->doclib->select  = 'Select library';
+$lang->doclib->all     = 'All Libraries';
+$lang->doclib->select  = 'Select Library';

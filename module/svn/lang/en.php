@@ -12,6 +12,6 @@
 /* Methods. */
 $lang->svn = new stdclass();
 $lang->svn->common  = 'Subversion';
-$lang->svn->cat     = 'View code';
-$lang->svn->diff    = 'Diff code';
-$lang->svn->apiSync = 'API: sync svn log';
+$lang->svn->cat     = 'View Code';
+$lang->svn->diff    = 'Diff Code';
+$lang->svn->apiSync = 'API: Sync svn log';

@@ -12,6 +12,6 @@
 /* Methods. */
 $lang->git = new stdclass();
 $lang->git->common  = 'Git';
-$lang->git->cat     = 'View code';
-$lang->git->diff    = 'Diff code';
-$lang->git->apiSync = 'API: sync git log';
+$lang->git->cat     = 'View Code';
+$lang->git->diff    = 'Diff Code';
+$lang->git->apiSync = 'API: Sync Git Log';

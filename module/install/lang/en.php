@@ -17,146 +17,146 @@ $lang->install->pre     = 'Back';
 $lang->install->reload  = 'Reload';
 $lang->install->error   = 'Error ';
 
-$lang->install->start            = 'Start install';
-$lang->install->keepInstalling   = 'Keep install this version';
-$lang->install->seeLatestRelease = 'See the latest release.';
-$lang->install->welcome          = 'Welcome to use ZenTaoPMS.';
-$lang->install->license          = 'ZentaoPMS use license of Z PUBLIC LICENSE(ZPL) 1.2';
+$lang->install->start            = 'Start to Install';
+$lang->install->keepInstalling   = 'Continue installing this version.';
+$lang->install->seeLatestRelease = 'View Latest Version';
+$lang->install->welcome          = 'Welcome to ZenTao Project Management Software!';
+$lang->install->license          = 'ZenTao PMS is under  Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTaoPMS is an opensource project management software licensed under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It has product manage, project mange, testing mange features, also with organization manage and affair manage.
+ZenTao Project Management Software (ZenTao PMS) is originated in China and under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It us an open source and free project management software, integrated with Product Management、Project Management、Testing Management, as weel as To-Dos Management, Company Managementetc, which is the best choice for small and medium organizations to manage projects.
 
-ZenTaoPMS is developped by PHH and mysql under the zentaophp framework developped by the same team. Through the framework, ZenTaoPMS can be customed and extended very easily.
+ZenTao PMS uses PHP + MySQL as programming langugages and is based on ZenTaoPHP,  an independent framwork developed by our team. Third party developers/organizations can develop extensions or customization tailored to their needs.
 EOT;
 $lang->install->links = <<<EOT
-ZenTaoPMS is developped by <strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a></strong>。
-The official website of ZenTaoPMS is <a href='http://en.zentao.net' target='_blank'>http://en.zentao.net</a>
-twitter:zentaopms
+ZenTao PMS is developed by <strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>Qingdao Nature Easy Soft Co., LTD</a></strong>.
+Officila Wensite <a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
+Technical Support <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
+新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
 
-
-The version of current release is <strong class='red'>%s</strong>。
+You are installing ZenTao <strong class='text-danger'>%s</strong> Version.
 EOT;
 
-$lang->install->newReleased= "<strong class='red'>Notice</strong>：There is a new version <strong class='red'>%s</strong>, released on %s。";
-$lang->install->or         = 'or';
-$lang->install->checking   = 'System checking';
-$lang->install->ok         = 'OK(√)';
+$lang->install->newReleased= "<strong class='text-danger'>Notice</strong>：Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
+$lang->install->or         = 'Or';
+$lang->install->checking   = 'System Checking';
+$lang->install->ok         = 'Passed(√)';
 $lang->install->fail       = 'Failed(×)';
 $lang->install->loaded     = 'Loaded';
-$lang->install->unloaded   = 'Not loaded';
-$lang->install->exists     = 'Exists ';
-$lang->install->notExists  = 'Not exists ';
+$lang->install->unloaded   = 'Not Loaded';
+$lang->install->exists     = 'Found ';
+$lang->install->notExists  = 'Not found ';
 $lang->install->writable   = 'Writable ';
-$lang->install->notWritable= 'Not writable ';
-$lang->install->phpINI     = 'PHP ini file';
-$lang->install->checkItem  = 'Items';
-$lang->install->current    = 'Current';
-$lang->install->result     = 'Result';
-$lang->install->action     = 'How to fix';
+$lang->install->notWritable= 'Not Writable ';
+$lang->install->phpINI     = 'PHP ini File';
+$lang->install->checkItem  = 'Item';
+$lang->install->current    = 'Current Settings';
+$lang->install->result     = 'Results';
+$lang->install->action     = 'Actions';
 
-$lang->install->phpVersion = 'PHP version';
-$lang->install->phpFail    = 'Must > 5.2.0';
+$lang->install->phpVersion = 'PHP Version';
+$lang->install->phpFail    = 'PHP Version has to be 5.2.0+';
 
-$lang->install->pdo          = 'PDO extension';
-$lang->install->pdoFail      = 'Edit the php.ini file to load PDO extsion.';
-$lang->install->pdoMySQL     = 'PDO_MySQL extension';
-$lang->install->pdoMySQLFail = 'Edit the php.ini file to load PDO_MySQL extsion.';
-$lang->install->json         = 'JSON extension';
-$lang->install->jsonFail     = 'Edit the php.ini file to load JSON extension';
-$lang->install->tmpRoot      = 'Temp directory';
-$lang->install->dataRoot     = 'Upload directory.';
-$lang->install->session      = 'Session save path';
-$lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path';
-$lang->install->mkdir        = '<p>Should creat the directory %s。<br /> Under linux, can try<br /> mkdir -p %s</p>';
-$lang->install->chmod        = 'Should change the permission of "%s".<br />Under linux, can try<br />chmod o=rwx -R %s';
+$lang->install->pdo          = 'PDO';
+$lang->install->pdoFail      = 'Edit PHP ini file to load PDO extsion.';
+$lang->install->pdoMySQL     = 'PDO_MySQL';
+$lang->install->pdoMySQLFail = 'Edit PHP ini file to load PDO_MySQL extsion.';
+$lang->install->json         = 'JSON Extension';
+$lang->install->jsonFail     = 'Edit the php.ini file to load JSON extension.';
+$lang->install->tmpRoot      = 'Temp File Directory';
+$lang->install->dataRoot     = 'Uploaded File Directory';
+$lang->install->session      = 'Session Save Path';
+$lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path.';
+$lang->install->mkdir        = '<p>%s directory has to be created.<br /> Run <br /> mkdir -p %s</p> in Linux.';
+$lang->install->chmod        = ' "%s" privilege has to be modified.<br /> Run <br />chmod o=rwx -R %s in Linux.';
 
-$lang->install->defaultLang    = 'Default Language';
-$lang->install->dbHost         = 'Database host';
-$lang->install->dbHostNote     = 'If 127.0.0.1 can not connect, try localhost';
-$lang->install->dbPort         = 'Host port';
-$lang->install->dbUser         = 'Database user';
-$lang->install->dbPassword     = 'Database password';
-$lang->install->dbName         = 'Database name';
-$lang->install->dbPrefix       = 'Table prefix';
-$lang->install->clearDB        = 'Clear data if database exists.';
-$lang->install->importDemoData = 'Import demo data if database exists.';
+$lang->install->defaultLang    = 'Default Lang';
+$lang->install->dbHost         = 'Database Host';
+$lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';
+$lang->install->dbPort         = 'host Port';
+$lang->install->dbUser         = 'Database User';
+$lang->install->dbPassword     = 'Database Password';
+$lang->install->dbName         = 'Database Library';
+$lang->install->dbPrefix       = 'Database Table Prefix';
+$lang->install->clearDB        = 'Clear Database';
+$lang->install->importDemoData = 'Import Demo Data';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
-$lang->install->errorConnectDB      = 'Database connect failed.';
-$lang->install->errorDBName         = 'The database name cannot contain "."';
-$lang->install->errorCreateDB       = 'Database create failed.';
-$lang->install->errorTableExists    = 'The same tables alread exists, to continue install, go back and check the clear db box.';
-$lang->install->errorCreateTable    = 'Table create failed.';
-$lang->install->errorImportDemoData = 'Import demo data.';
+$lang->install->errorConnectDB      = 'Connection to database Failed. ';
+$lang->install->errorDBName         = 'Database name should exclude “.” ';
+$lang->install->errorCreateDB       = 'Database creation failed.';
+$lang->install->errorTableExists    = 'Data table has existed. If ZenTao has been installed before, please go back to clear data and continue installation.';
+$lang->install->errorCreateTable    = 'Table creation failed.';
+$lang->install->errorImportDemoData = 'Import demo data failed.';
 
-$lang->install->setConfig  = 'Create config file';
+$lang->install->setConfig  = 'Create Config File';
 $lang->install->key        = 'Item';
 $lang->install->value      = 'Value';
-$lang->install->saveConfig = 'Save config';
-$lang->install->save2File  = '<div class="alert alert-warning">Copy the text of the textareaand save to "<strong> %s </strong>".</div>';
-$lang->install->saved2File = 'The config file has saved to "<strong>%s</strong> ".';
-$lang->install->errorNotSaveConfig = "Hasn't save the config file. ";
+$lang->install->saveConfig = 'Save Config';
+$lang->install->save2File  = '<div class="alert alert-warning">Copy content in the text box above and save it to "<strong> %s </strong>". You can change this config file later.</div>';
+$lang->install->saved2File = 'Config file has been saved to " <strong>%s</strong> ". You can change this file later.';
+$lang->install->errorNotSaveConfig = 'Config file is not saved.';
 
-$lang->install->getPriv  = 'Set admin';
-$lang->install->company  = 'Company name';
-$lang->install->account  = 'Administrator';
-$lang->install->password = 'Admin password';
-$lang->install->errorEmptyPassword = "Can't be empty";
+$lang->install->getPriv  = 'Set Admin';
+$lang->install->company  = 'Company Name';
+$lang->install->account  = 'Admin Account';
+$lang->install->password = 'Admin Password';
+$lang->install->errorEmptyPassword = 'Password should not be blank.';
 
-$lang->install->groupList['ADMIN']['name']  = 'Administrator';
-$lang->install->groupList['ADMIN']['desc']  = 'for administrator';
-$lang->install->groupList['DEV']['name']    = 'Developer';
-$lang->install->groupList['DEV']['desc']    = 'for developers';
-$lang->install->groupList['QA']['name']     = 'tester';
-$lang->install->groupList['QA']['desc']     = 'for testers';
-$lang->install->groupList['PM']['name']     = 'Project manager';
-$lang->install->groupList['PM']['desc']     = 'for project managers';
-$lang->install->groupList['PO']['name']     = 'Product manager';
-$lang->install->groupList['PO']['desc']     = 'for product managers';
-$lang->install->groupList['TD']['name']     = 'Technical director';
-$lang->install->groupList['TD']['desc']     = 'for technical director';
-$lang->install->groupList['PD']['name']     = 'Product director';
-$lang->install->groupList['PD']['desc']     = 'for product director';
-$lang->install->groupList['QD']['name']     = 'Quality director';
-$lang->install->groupList['QD']['desc']     = 'for quality director';
-$lang->install->groupList['TOP']['name']    = 'Top manager';
-$lang->install->groupList['TOP']['desc']    = 'for top manager';
-$lang->install->groupList['OTHERS']['name'] = 'Others';
-$lang->install->groupList['OTHERS']['desc'] = 'for others';
+$lang->install->groupList['ADMIN']['name']  = 'Admin';
+$lang->install->groupList['ADMIN']['desc']  = 'System Admin';
+$lang->install->groupList['DEV']['name']    = 'R&D';
+$lang->install->groupList['DEV']['desc']    = 'R&D Team';
+$lang->install->groupList['QA']['name']     = 'Testing';
+$lang->install->groupList['QA']['desc']     = 'Testing Team';
+$lang->install->groupList['PM']['name']     = 'Project Manager';
+$lang->install->groupList['PM']['desc']     = 'for Project Manager';
+$lang->install->groupList['PO']['name']     = 'Product Owner';
+$lang->install->groupList['PO']['desc']     = 'for Product Owner';
+$lang->install->groupList['TD']['name']     = 'R&D Supervisor';
+$lang->install->groupList['TD']['desc']     = 'for R&D Supervisor';
+$lang->install->groupList['PD']['name']     = 'Product Supervisor';
+$lang->install->groupList['PD']['desc']     = 'for Product Supervisor';
+$lang->install->groupList['QD']['name']     = 'Testing Supervisor';
+$lang->install->groupList['QD']['desc']     = 'for Testing Supervisor';
+$lang->install->groupList['TOP']['name']    = 'Senior Manager';
+$lang->install->groupList['TOP']['desc']    = 'for Senior Manager';
+$lang->install->groupList['OTHERS']['name'] = 'Other';
+$lang->install->groupList['OTHERS']['desc'] = 'for Other';
 
-$lang->install->success  = "Success installed";
-$lang->install->login    = 'Sign into ZentaoPMS';
-$lang->install->register = 'Register Zentao community website';
+$lang->install->success  = "Installed!";
+$lang->install->login    = 'Login ZenTao';
+$lang->install->register = 'Register in ZenTao';
 
 $lang->install->joinZentao = <<<EOT
-<p>You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>.</p>
-<i>Tips: For you get zentao news in time, please register Zetao community(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>).</i> 
+<p>Tou have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>).</p>
+
 EOT;
 
-$lang->install->promotion = "Other products of Nature EasySoft: ";
+$lang->install->promotion = "Products of Nature Easy Soft:";
 $lang->install->chanzhi   = new stdclass();
-$lang->install->chanzhi->name = '蝉知企业门户系统';
+$lang->install->chanzhi->name = 'Changer CMS';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
-  <li>专业的企业营销门户系统</li>
-  <li>功能丰富，操作简洁方便</li>
-  <li>大量细节针对SEO优化</li>
-  <li>开源免费，不限商用！</li>
+  <li>Professional Content Management Sysytem</li>
+  <li>Rich functionality and simple to operate</li>
+  <li>Aims at detaild for SEO</li>
+  <li>Open source and free</li>
 </ul>
 EOD;
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name = '然之协同管理系统';
+$lang->install->ranzhi->name = 'Ranger Collaborative System';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
-  <li>客户管理，订单跟踪</li>
-  <li>项目任务，公告文档</li>
-  <li>收入支出，出帐入账</li>
-  <li>论坛博客，动态消息</li>
+  <li>Customer Management and Order Tracking</li>
+  <li>Project/Task and Announcement/Document</li>
+  <li>Income/Expenditur and Account In/Out </li>
+  <li>Forum/Blog and Dynamic/News</li>
 </ul>
 EOD;
 $lang->install->yidou = new stdclass();
-$lang->install->yidou->name = '亿斗进销存管理运营系统';
+$lang->install->yidou->name = '亿斗进销存Management运营系统';
 $lang->install->yidou->desc = <<<EOD
 <ul>
   <li>销售订单处理，信息及时反馈</li>

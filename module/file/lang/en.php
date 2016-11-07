@@ -10,31 +10,31 @@
  * @link        http://www.zentao.net
  */
 $lang->file = new stdclass();
-$lang->file->common        = 'File';
-$lang->file->uploadImages  = 'Upload images';
-$lang->file->download      = 'Download';
-$lang->file->edit          = 'Edit file name';
-$lang->file->inputFileName = 'Input file name';
-$lang->file->delete        = 'Delete';
-$lang->file->label         = 'Title: ';
+$lang->file->common        = 'Attachment';
+$lang->file->uploadImages  = 'Batch Upload Images';
+$lang->file->download      = 'Download Files';
+$lang->file->edit          = 'Rename';
+$lang->file->inputFileName = 'Enter a File Name';
+$lang->file->delete        = 'Delete File';
+$lang->file->label         = 'Label:';
 $lang->file->maxUploadSize = "<span class='red'>%s</span>";
-$lang->file->applyTemplate = "Apply";
-$lang->file->tplTitle      = "Title";
-$lang->file->setPublic     = "Set public template";
-$lang->file->exportFields  = "To export fields";
-$lang->file->defaultTPL    = "Default template";
-$lang->file->setExportTPL  = "Setting";
+$lang->file->applyTemplate = "Apply a Template";
+$lang->file->tplTitle      = "Template Name";
+$lang->file->setPublic     = "Set Public Template";
+$lang->file->exportFields  = "Fileds to be Exported";
+$lang->file->defaultTPL    = "Default Template";
+$lang->file->setExportTPL  = "Settings";
 
-$lang->file->errorNotExists   = "<span class='red'>The directory '%s' is no exist</span>";
-$lang->file->errorCanNotWrite = "<span class='red'>The directory '%s' is unwritable, please change it's permission. Command in linux:sudo -R chmod 777 '%s'</span>";
-$lang->file->confirmDelete    = " Are you sure to delete this file?";
-$lang->file->errorFileSize    = " The file size exceeds the limit, might not be able to upload!";
-$lang->file->errorFileUpload  = " Failed to upload files, file size may exceed the limit!";
-$lang->file->dangerFile       = " The file exists security risk, will be canceled upload!";
-$lang->file->errorSuffix      = 'Compressed packet format error, can only upload zip!';
-$lang->file->errorExtract     = 'Decompression failure! The file may have been damaged';
+$lang->file->errorNotExists   = "<span class='red'>'%s' is not found.</span>";
+$lang->file->errorCanNotWrite = "<span class='red'>'%s' is not writable. Please change its permission. Enter sudo chmod -R 777 '%s'</span> in Linux.";
+$lang->file->confirmDelete    = " Do you want to delete it?";
+$lang->file->errorFileSize    = " File size exceeds the limit. It cannot be uploaded!";
+$lang->file->errorFileUpload  = " Uploading failed. File size might exceeds the limit.";
+$lang->file->dangerFile       = " File has been rejected to upload for security issues.";
+$lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
+$lang->file->errorExtract     = 'Extracting file failed. File might be damaged or invalid files in the zip package.';
 $lang->file->uploadImagesExplain = <<<EOD
-<p>1. Upload file to contain pictures of zip package, the program will take the file name as a title, as content with pictures</p>
-<p>2. The file name at the beginning contains 'digital+underline', generation of title will they ignore.</p>
-<p>3、Image format : jpg|jpeg|gif|png.</p>
+<p>1. If the uploaded file is image zip package, the file name will be the label and images will be the content.</p>
+<p>2. If the file name containing numbers/underlines, they will be omitted.</p>
+<p>3. Image formate: jpg, jpeg, gif, png.</p>
 EOD;

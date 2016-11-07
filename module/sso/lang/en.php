@@ -11,28 +11,28 @@
  */
 $lang->sso = new stdclass();
 $lang->sso->settings = 'Settings';
-$lang->sso->turnon   = 'Turnon';
+$lang->sso->turnon   = 'Turn On';
 $lang->sso->code     = 'Code';
 $lang->sso->key      = 'Key';
 $lang->sso->addr     = 'Address';
-$lang->sso->bind     = 'Bind user';
-$lang->sso->addrNotice = 'Example: http://www.ranzhi.com/sys/sso-check.html';
+$lang->sso->bind     = 'User Binding';
+$lang->sso->addrNotice = 'Example http://www.ranzhi.com/sys/sso-check.html';
 
 $lang->sso->turnonList = array();
-$lang->sso->turnonList[1] = 'on';
-$lang->sso->turnonList[0] = 'off';
+$lang->sso->turnonList[1] = 'On';
+$lang->sso->turnonList[0] = 'Off';
 
-$lang->sso->bindType = 'Bind type';
-$lang->sso->bindUser = 'Bind user';
+$lang->sso->bindType = 'Binding Type';
+$lang->sso->bindUser = 'User Binding';
 
-$lang->sso->bindTypeList['bind'] = 'Binding existing user';
-$lang->sso->bindTypeList['add']  = 'Add new user';
+$lang->sso->bindTypeList['bind'] = 'Bind to existing User';
+$lang->sso->bindTypeList['add']  = 'Add User';
 
 $lang->sso->help = <<<EOD
-<p>1. Fill in Address, PATH_INFO ：http://ranzhi site/sys/sso-check.html, GET：http://ranzhi site/sys/index.php?m=sso&f=check</p>
-<p>2. Code and Key must be the same of setting of RanZhi.</p>
+<p>1. Interface address is required. If use PATH_INFO, it is http://YOUR RANGER ADDRESS/sys/sso-check.html If GET, it is http://YOUR RANGER ADDRESS/sys/index.php?m=sso&f=check</p>
+<p>2. Code and Key must be the same as set in Ranger.</p>
 EOD;
-$lang->sso->bindNotice     = 'Add new user do not have power. Contact the ZenTao administrator, to the user assigned authority.';
-$lang->sso->bindNoPassword = 'Password can not empty';
-$lang->sso->bindNoUser     = "The user's login password error, or the user does not exist!";
-$lang->sso->bindHasAccount = 'The user name already exists, please change the user name, or bind to the user.';
+$lang->sso->bindNotice     = 'User just added has no rivilege. You have to ask ZenTao Admin to grant permissions to the User.';
+$lang->sso->bindNoPassword = 'Password should not be blank.';
+$lang->sso->bindNoUser     = 'Password is wrong, or this User cannot be found!';
+$lang->sso->bindHasAccount = 'This username already exists. Change your username or bind to it.';

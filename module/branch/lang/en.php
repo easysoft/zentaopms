@@ -1,9 +1,9 @@
 <?php
 $lang->branch->common = 'Branch';
-$lang->branch->manage = 'Branch manage';
-$lang->branch->delete = 'Branch delete';
+$lang->branch->manage = 'Manage a Branch';
+$lang->branch->delete = 'Delete Branch';
 
-$lang->branch->manageTitle = '%s Manage';
-$lang->branch->all = 'All ';
+$lang->branch->manageTitle = '%s Management';
+$lang->branch->all         = 'All';
 
-$lang->branch->confirmDelete = '@branch@ deletion, will affect the @branch@ of the demand, module, plan, release, Bug, testcase and so on, please consider carefully. Are you sure delete the @branch@?';
+$lang->branch->confirmDelete = '@branch@ Delete will affect @branch@ related Story、Module、Planning、Release、Bug、Case, etc. Please think before you delete this @branch@.';

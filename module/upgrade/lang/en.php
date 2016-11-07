@@ -11,37 +11,37 @@
  */
 $lang->upgrade->common  = 'Upgrade';
 $lang->upgrade->result  = 'Result';
-$lang->upgrade->fail    = 'Fail';
-$lang->upgrade->success = 'Success';
+$lang->upgrade->fail    = 'Failed';
+$lang->upgrade->success = 'Upgraded';
 $lang->upgrade->tohome  = 'Visit ZenTao';
-$lang->upgrade->license = 'The license of ZentaoPMS has changed to Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning= 'Warning';
-$lang->upgrade->checkExtension  = 'Check extension';
+$lang->upgrade->license = 'Zentao PMS has started using Z PUBLIC LICENSE(ZPL) 1.2.';
+$lang->upgrade->warnning= 'Warning!';
+$lang->upgrade->checkExtension  = 'Check Extension';
 $lang->upgrade->warnningContent = <<<EOT
-Warning! Upgradinng is dangeous, backup your database first.<br />
+<p>Please backup your database before upgrading ZenTao!</p>
+<pre>
+1. Use phpMyAdmin to backup.
+2. Use mysqlCommand to backup.
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   Change the red text into corresponding Username and Database name.
+   e.g. mysqldump -u root -p zentao >zentao.bak
+</pre>
 EOT;
-
-
-
-
-
-
-
-$lang->upgrade->setStatusFile = "<p>For security reason, we will check file <strong>%s</strong><br />
-                                 But this file doesn't exist or out of date. You can use the flowing command to create(update)it <br />
-                                 For linux:<strong>touch %s;</strong> <br />
-                                 For windows:<strong>echo ok > %s</strong></p>
-                                 I have done this work, <a href='upgrade.php'>continue upgrade</a>";
-
-
-$lang->upgrade->selectVersion = 'Select version';
+$lang->upgrade->setStatusFile = '<h4>Please execute the following command</h4>
+                                 <ul>
+                                 <li>Windows: Open command line and execute<strong>echo ok > %s</strong></li>
+                                 <li>Linux: <strong>touch %s;</strong></li>
+                                 <li>Or delete "%s" and create ok.txt and leave it blank.</li>
+                                 </ul>
+                                 <strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue update.</a></strong>';
+$lang->upgrade->selectVersion = 'Select Version';
 $lang->upgrade->continue      = 'Continue';
-$lang->upgrade->noteVersion   = "Must select the correct version";
-$lang->upgrade->fromVersion   = 'From version';
-$lang->upgrade->toVersion     = 'To version';
-$lang->upgrade->confirm       = 'Confirm the sql to executed.';
+$lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
+$lang->upgrade->fromVersion   = 'From Version';
+$lang->upgrade->toVersion     = 'Upgrade to Version';
+$lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
-$lang->upgrade->forbiddenExt  = 'Because it is incompatible with this version, the following extension automatically disabled, ：';
+$lang->upgrade->forbiddenExt  = 'Extension is not compatible with the upgraded version. It has been deactivated:';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';

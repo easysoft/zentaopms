@@ -9,25 +9,25 @@
  * @version     $Id: en.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon        = '::';
-$lang->comma        = ',';
-$lang->dot          = '.';
-$lang->at           = ' at ';
-$lang->downArrow    = '↓';
-$lang->null         = '空';
-$lang->ellipsis     = '...';
+$lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
+$lang->colon     = '::';
+$lang->comma     = ',';
+$lang->dot       = '.';
+$lang->at        = ' on ';
+$lang->downArrow = '↓';
+$lang->null      = 'null';
+$lang->ellipsis  = '…';
 
-$lang->zentaoPMS      = 'zentao';
+$lang->zentaoPMS      = 'ZenTao';
 $lang->welcome        = "%s PMS";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
-$lang->aboutZenTao    = 'About';
+$lang->aboutZenTao    = 'About ZenTao';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
-$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
-$lang->agreement      = "I Agree to the <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z PUBLIC LICENSE 1.2</a>, <span class='text-danger'>and promise to keep the logo, link of ZenTao.</span>";
+$lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
+$lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide, or cover any logos/links of ZenTao.</span>";
 
 $lang->reset        = 'Reset';
 $lang->refresh      = 'Refresh';
@@ -37,7 +37,7 @@ $lang->close        = 'Close';
 $lang->unlink       = 'Unlink';
 $lang->import       = 'Import';
 $lang->export       = 'Export';
-$lang->setFileName  = 'Filename:';
+$lang->setFileName  = 'File Name';
 $lang->submitting   = 'Saving...';
 $lang->save         = 'Save';
 $lang->confirm      = 'Confirm';
@@ -50,147 +50,147 @@ $lang->customConfig = 'Custom';
 $lang->public       = 'Public';
 
 $lang->actions         = 'Actions';
-$lang->comment         = 'Comment';
+$lang->comment         = 'Note';
 $lang->history         = 'History';
-$lang->attatch         = 'Attatch';
+$lang->attatch         = 'Attachment';
 $lang->reverse         = 'Reverse';
 $lang->switchDisplay   = 'Toggle Show';
-$lang->addFiles        = 'Add Files';
-$lang->files           = 'Files ';
-$lang->pasteText       = 'Paste text';
-$lang->uploadImages    = 'Upload images ';
-$lang->timeout         = 'Timed out, please check the network, or retry!';
-$lang->repairTable     = 'The table may be damaged, please repair by phpmyadmin or myisamchk!';
-$lang->duplicate       = '%s has the same title';
-$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP is limited by Administrator. Please contact the Administrator to lift the restrictions.</body></html>";
+$lang->addFiles        = 'Add';
+$lang->files           = 'File ';
+$lang->pasteText       = 'Paste';
+$lang->uploadImages    = 'Upload';
+$lang->timeout         = 'Timeout. Pease check your network settings, or try it again!';
+$lang->repairTable     = 'Database table might be damaged. Please use phpmyadmin or myisamchk to fix it.';
+$lang->duplicate       = '%s has the same title as existing file.';
+$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to unrestrict it.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
-$lang->homepage        = 'Set homepage';
-$lang->tutorial        = 'Novice tutorial';
-$lang->changeLog       = 'Change log';
+$lang->homepage        = 'Set as Homepage';
+$lang->tutorial        = 'Tutorial';
+$lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
-$lang->customMenu      = 'Custom menu';
-$lang->tutorialConfirm = 'Detected you have not quit tutorial mode, quit now?';
+$lang->customMenu      = 'Custom Menu';
+$lang->tutorialConfirm = 'You are using tutorial. Do you want to exit right now？';
 
-$lang->preShortcutKey  = '[Shortcut key:←]';
-$lang->nextShortcutKey = '[Shortcut key:→]';
+$lang->preShortcutKey  = '[Shortcut:←]';
+$lang->nextShortcutKey = '[Shortcut:→]';
 
 $lang->select        = 'Select';
-$lang->selectAll     = 'All';
-$lang->selectReverse = 'Inverse';
-$lang->loading       = 'Wait...';
-$lang->notFound      = 'Sorry, the object not found.';
-$lang->showAll       = "[[Show all {$lang->projectCommon}s]]";
+$lang->selectAll     = 'Select All';
+$lang->selectReverse = 'Select Reverse';
+$lang->loading       = 'Loading...';
+$lang->notFound      = 'Not found!';
+$lang->showAll       = '[[Show All]]';
 
-$lang->future       = 'Future';
+$lang->future       = 'Coming';
 $lang->year         = 'Year';
-$lang->workingHour  = 'Hour';
+$lang->workingHour  = 'Man-Hour';
 
 $lang->idAB         = 'ID';
-$lang->priAB        = 'P';
+$lang->priAB        = 'Privilege';
 $lang->statusAB     = 'Status';
 $lang->openedByAB   = 'Open';
 $lang->assignedToAB = 'To';
 $lang->typeAB       = 'Type';
 
 $lang->common = new stdclass();
-$lang->common->common = 'Common module';
+$lang->common->common = 'Common Module';
 
-/* The main menu. */
+/* 主导航菜单。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<i class="icon-home"></i> <span>Dashboard</span>|my|index';
-$lang->menu->product  = "{$lang->productCommon}|product|index";
-$lang->menu->project  = "{$lang->projectCommon}|project|index";
-$lang->menu->qa       = 'Test|qa|index';
-$lang->menu->doc      = 'Doc|doc|index';
+$lang->menu->my       = '<i class="icon-home"></i><span> My Zone</span>|my|index';
+$lang->menu->product  = $lang->productCommon . '|product|index';
+$lang->menu->project  = $lang->projectCommon . '|project|index';
+$lang->menu->qa       = 'Testing|qa|index';
+$lang->menu->doc      = 'Document|doc|index';
 $lang->menu->report   = 'Report|report|index';
 $lang->menu->company  = 'Company|company|index';
-$lang->menu->admin    = 'Admin|admin|index';
+$lang->menu->admin    = 'Administration|admin|index';
 
-/* The objects in the search box. */
+/* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
-$lang->searchObjects['testcase']    = 'Test Case';
+$lang->searchObjects['testcase']    = 'Case';
 $lang->searchObjects['project']     = $lang->projectCommon;
 $lang->searchObjects['product']     = $lang->productCommon;
 $lang->searchObjects['user']        = 'User';
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
-$lang->searchObjects['productplan'] = 'Plan';
-$lang->searchObjects['testtask']    = 'Test Build';
-$lang->searchObjects['doc']         = 'Doc';
-$lang->searchTips                   = 'Id here(ctrl+g)';
+$lang->searchObjects['productplan'] = $lang->productCommon . 'Planning';
+$lang->searchObjects['testtask']    = 'Testing Build';
+$lang->searchObjects['doc']         = 'Document';
+$lang->searchTips                   = 'ID (ctrl+g)';
 
-/* Encode list of impot. */
+/* 导入支持的编码格式。*/
 $lang->importEncodeList['gbk']   = 'GBK';
 $lang->importEncodeList['big5']  = 'BIG5';
 $lang->importEncodeList['utf-8'] = 'UTF-8';
 
-/* File type list of export. */
+/* 导出文件的类型列表。*/
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
-$lang->exportTypeList['all']      = 'All records';
-$lang->exportTypeList['selected'] = 'Only checked';
+$lang->exportTypeList['all']      = 'All';
+$lang->exportTypeList['selected'] = 'Selected';
 
-/* Language. */
+/* 语言 */
 $lang->lang = 'Language';
 
-/* Themes. */
-$lang->theme                = 'Theme';
-$lang->themes['default']    = 'Default';
-$lang->themes['green']      = 'Green';
-$lang->themes['red']        = 'Red';
-$lang->themes['lightblue']  = 'Light Blue';
-$lang->themes['blackberry'] = 'Blackberry';
+/* 风格列表。*/
+$lang->theme                 = 'Theme';
+$lang->themes['default']     = 'Default';
+$lang->themes['green']       = 'Green';
+$lang->themes['red']         = 'Red';
+$lang->themes['lightblue']   = 'Bright Blue';
+$lang->themes['blackberry']  = 'Blackberry';
 
-/* Index mododule menu. */
+/* 首页菜单设置。*/
 $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
-$lang->index->menu->product = "{$lang->productCommon}s|product|browse";
-$lang->index->menu->project = "{$lang->projectCommon}s|project|browse";
+$lang->index->menu->product = "View{$lang->productCommon}|product|browse";
+$lang->index->menu->project = "View{$lang->projectCommon}|project|browse";
 
-/* Dashboard menu. */
+/* 我的地盘菜单设置。*/
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->account        = array('link' => '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>', 'fixed' => true);
-$lang->my->menu->index          = 'Index|my|index';
-$lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->index          = 'Homepage|my|index';
+$lang->my->menu->todo           = array('link' => 'To-Do|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
-$lang->my->menu->testtask       = array('link' => 'Test|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->testtask       = array('link' => 'Testing|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
-$lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = 'Change Password|my|changepassword|';
-$lang->my->menu->manageContacts = 'Contacts|my|managecontacts|';
+$lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
+$lang->my->menu->changePassword = 'Password|my|changepassword';
+$lang->my->menu->manageContacts = 'Contact|my|managecontacts';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
-/* Product menu. */
+/* 产品视图设置。*/
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
 $lang->product->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
-$lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->plan    = array('link' => 'Planning|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
-$lang->product->menu->doc     = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->product->menu->doc     = array('link' => 'Document|product|doc|productID=%s', 'subModule' => 'doc');
 $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
-$lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
-$lang->product->menu->view    = array('link' => 'Info|product|view|productID=%s', 'alias' => 'edit');
-$lang->product->menu->project = "{$lang->projectCommon}s|product|project|status=all&productID=%s";
-$lang->product->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-cubes">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
-$lang->product->menu->index   = array('link' => "<i class='icon-home'></i>Homepage|product|index|locate=no", 'float' => 'right');
+$lang->product->menu->module  = 'Module|tree|browse|productID=%s&view=story';
+$lang->product->menu->view    = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->product->menu->create  = array('link' => "<i class='icon-plus'></i>&nbsp;Add{$lang->productCommon}|product|create", 'float' => 'right');
+$lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp;All{$lang->productCommon}|product|all|productID=%s", 'float' => 'right');
+$lang->product->menu->index   = array('link' => "<i class='icon-home'></i>{$lang->productCommon}Homepage|product|index|locate=no", 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -202,31 +202,31 @@ $lang->story->menu       = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 $lang->release->menu     = $lang->product->menu;
 
-/* Project menu. */
+/* 项目视图菜单设置。*/
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
 $lang->project->menu->list      = array('link' => '%s', 'fixed' => true);
-$lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,burn');
+$lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban,tree');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = 'Testtask|project|testtask|projectID=%s';
+$lang->project->menu->testtask  = 'Testing|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->doc       = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->product   = array('link' => "{$lang->productCommon}|project|manageproducts|projectID=%s", 'alias' => 'edit,start,suspend,delay,close');
-$lang->project->menu->view      = 'Info|project|view|projectID=%s';
-$lang->project->menu->create    = array('link' => '<span class="icon-plus">&nbsp;</span>New|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;{$lang->projectCommon}s|project|index|locate=no&status=undone&projectID=%s", 'float' => 'right');
-$lang->project->menu->index     = array('link' => "<i class='icon-home'></i>Homepage|project|index|locate=no", 'float' => 'right');
+$lang->project->menu->doc       = array('link' => 'Document|project|doc|porjectID=%s', 'subModule' => 'doc');
+$lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->view      = array('link' => 'Overview|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;Add{$lang->projectCommon}|project|create", 'float' => 'right');
+$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;All{$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');
+$lang->project->menu->index     = array('link' => "<i class='icon-home'></i>{$lang->projectCommon}Homepage|project|index|locate=no", 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
 
-/* QA menu. */
+/* QA视图菜单设置。*/
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
@@ -234,7 +234,7 @@ $lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->qa->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
 $lang->qa->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');
-$lang->qa->menu->index    = array('link' => "<i class='icon-home'></i>Homepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->qa->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
@@ -243,7 +243,7 @@ $lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
 $lang->bug->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');
-$lang->bug->menu->index    = array('link' => "<i class='icon-home'></i>Homepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->bug->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
@@ -252,41 +252,41 @@ $lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
-$lang->testcase->menu->index    = array('link' => "<i class='icon-home'></i>Homepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->testcase->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
 
-/* Doc menu. */
+/* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
 $lang->doc->menu->type    = array('link' => "%s", 'fixed' => true);
 $lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->doc->menu->index   = array('link' => '<i class="icon-home"></i>&nbsp;Homepage|doc|index|', 'float' => 'right');
-$lang->doc->menu->create  = array('link' => '<span class="icon-plus">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;Add Doc Lib|doc|createLib', 'float' => 'right');
 
-/* Report menu. */
+/* 统计视图菜单设置。*/
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
-$lang->report->menu->product = array('link' => "{$lang->productCommon}|report|productsummary");
-$lang->report->menu->prj     = array('link' => "{$lang->projectCommon}|report|projectdeviation");
-$lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' => 'bugassign');
+$lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
+$lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
+$lang->report->menu->test    = array('link' => 'Testing|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
-/* Company menu. */
+/* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
 $lang->company->menu->name         = array('link' => '%s' . $lang->arrow, 'fixed' => true);
-$lang->company->menu->browseUser   = array('link' => 'Users|company|browse', 'subModule' => 'user');
+$lang->company->menu->browseUser   = array('link' => 'User|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subModule' => 'group');
 $lang->company->menu->view         = array('link' => 'Company|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<span class="icon-plus">&nbsp;</span>Add Group|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-plus-sign">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<span class="icon-plus">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<i class="icon-group"></i>&nbsp;Add Group|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus-sign"></i>&nbsp;Batch Add|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;Add User|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
@@ -296,20 +296,20 @@ $lang->dept->menu  = $lang->company->menu;
 $lang->group->menu = $lang->company->menu;
 $lang->user->menu  = $lang->company->menu;
 
-/* Admin menu. */
+/* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => 'Index|admin|index');
+$lang->admin->menu->index     = array('link' => 'Homepage|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|index', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
-$lang->admin->menu->safe      = array('link' => 'Safe|admin|safe', 'alias' => 'checkweak');
+$lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
-$lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->sso       = 'Integrate RanZhi|admin|sso';
+$lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
+$lang->admin->menu->dev       = array('link' => 'Reproduct|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
+$lang->admin->menu->sso       = 'RangerTeam|admin|sso';
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -334,7 +334,7 @@ $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
 
-/* Groups. */
+/* 菜单分组。*/
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
@@ -361,62 +361,62 @@ $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->dev         = 'admin';
 
-/* Error info. */
+/* 错误提示信息。*/
 $lang->error = new stdclass();
-$lang->error->companyNotFound = "The domain %s does not exist.";
-$lang->error->length          = array("『%s』length should be『%s』", "『%s』length should between『%s』and 『%s』.");
-$lang->error->reg             = "『%s』should like『%s』";
-$lang->error->unique          = "『%s』has『%s』already. If you are sure this record has been deleted, you can restore it in admin panel, trash page.";
-$lang->error->gt              = "『%s』must greater than『%s』.";
-$lang->error->ge              = "『%s』must greater than or equal『%s』.";
-$lang->error->notempty        = "『%s』can not be empty.";
-$lang->error->empty           = "『%s』 must be empty.";
-$lang->error->equal           = "『%s』must be『%s』.";
-$lang->error->int             = array("『%s』should be interger", "『%s』should between『%s-%s』.");
-$lang->error->float           = "『%s』should be a interger or float.";
-$lang->error->email           = "『%s』should be email.";
-$lang->error->date            = "『%s』should be date";
-$lang->error->account         = "『%s』should be a valid account.";
-$lang->error->passwordsame    = "Two passwords must be the same";
-$lang->error->passwordrule    = "Password should more than six letters.";
-$lang->error->accessDenied    = 'No purview';
-$lang->error->pasteImg        = 'Your browser does not support the paste image!';
-$lang->error->noData          = 'No data';
-$lang->error->editedByOther   = 'The record may have been changed. Please refresh and re edit!';
-$lang->error->tutorialData    = 'Novice mode will not insert data, please exit it to operation';
+$lang->error->companyNotFound = "The domain %s cannot be found!";
+$lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >=『%s』.");
+$lang->error->reg             = "『%s』Format Error. It should be『%s』.";
+$lang->error->unique          = "『%s』『%s』existed. Please go to Admin->Recycle to restore it, if you are sure it has been deleted.";
+$lang->error->gt              = "『%s』should be >『%s』.";
+$lang->error->ge              = "『%s』should be >=『%s』.";
+$lang->error->notempty        = "『%s』should not be blank.";
+$lang->error->empty           = "『%s』should be null.";
+$lang->error->equal           = "『%s』has to be『%s』.";
+$lang->error->int             = array("『%s』has to be numbers", "『%s』should be 『%s-%s』.");
+$lang->error->float           = "『%s』should be numbers, decimals included.";
+$lang->error->email           = "『%s』should be valid EMAIL.";
+$lang->error->date            = "『%s』should be valid date.";
+$lang->error->account         = "『%s』should be valid account.";
+$lang->error->passwordsame    = "Two passwords should be consistent.";
+$lang->error->passwordrule    = "Password should meet requirements. It should be 6 characters at least.";
+$lang->error->accessDenied    = 'Access is denied.';
+$lang->error->pasteImg        = 'Paste Image is not allowed in your browser!';
+$lang->error->noData          = 'No Data';
+$lang->error->editedByOther   = 'This record might have been modified. Please refresh and try to edit again!';
+$lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
-/* Pager. */
+/* 分页信息。*/
 $lang->pager = new stdclass();
-$lang->pager->noRecord  = "No records yet.";
-$lang->pager->digest    = "<strong>%s</strong> records, %s <strong>%s/%s</strong> &nbsp; ";
-$lang->pager->recPerPage= "<strong>%s</strong> per page";
-$lang->pager->first     = "<i class='icon-step-backward' title='First'></i>";
-$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='Previous'></i>";
-$lang->pager->next      = "<i class='icon-play' title='Next'></i>";
-$lang->pager->last      = "<i class='icon-step-forward' title='Last'></i>";
+$lang->pager->noRecord  = "No History";
+$lang->pager->digest    = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage= " <strong>%s</strong> per page";
+$lang->pager->first     = "<i class='icon-step-backward' title='Homepage'></i>";
+$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
+$lang->pager->next      = "<i class='icon-play' title='Next Page'></i>";
+$lang->pager->last      = "<i class='icon-step-forward' title='Last Page'></i>";
 $lang->pager->locate    = "GO!";
 
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='text-important'>PRO <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
-$lang->downNotify     = "Down notify";
+$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->downNotify     = "Download Desktop Notification";
 
-$lang->suhosinInfo   = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
-$lang->pasteTextInfo = "Paste the text into a text field, each line of text as a data header.";
-$lang->noticeImport  = "<p style='font-size:14px'>Import data, containing the existing system of data, please confirm these data to cover or insert</p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Cover</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>Insert</a></p>";
+$lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger value) in php.ini, then save and restart Apache, or some data will not be saved.";
+$lang->pasteTextInfo = "Paste text into text field. Each line will be a header of each data record. ";
+$lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data that has already existed in system. Please confirm you actions on the date </p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Override</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>New Insertion</a></p>";
 
-$lang->noResultsMatch    = "No results match";
-$lang->searchMore        = "Search more results with the key:";
-$lang->chooseUsersToMail = "Choose users to mail...";
-$lang->browserNotice     = 'Using the browser may not be able to get the best browsing effect, it is recommended to use chrome, Firefox, IE9 +, opera, Safari browser.';
+$lang->noResultsMatch     = "No results match!";
+$lang->searchMore         = "More results：";
+$lang->chooseUsersToMail  = "Choose users you want send Email to...";
+$lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
 
-/* Date times. */
+/* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
 define('DT_DATETIME2',  'y-m-d H:i');
 define('DT_MONTHTIME1', 'n/d H:i');
-define('DT_MONTHTIME2', 'F j, H:i');
+define('DT_MONTHTIME2', 'n月d日 H:i');
 define('DT_DATE1',     'Y-m-d');
 define('DT_DATE2',     'Ymd');
-define('DT_DATE3',     'F j, Y ');
-define('DT_DATE4',     'M j');
+define('DT_DATE3',     'Y年m月d日');
+define('DT_DATE4',     'n月j日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
 
@@ -424,25 +424,25 @@ define('DT_TIME2',     'H:i');
 $lang->datepicker = new stdclass();
 
 $lang->datepicker->dpText = new stdclass();
-$lang->datepicker->dpText->TEXT_OR          = 'Or ';
-$lang->datepicker->dpText->TEXT_PREV_YEAR   = 'Last year';
-$lang->datepicker->dpText->TEXT_PREV_MONTH  = 'Last month';
-$lang->datepicker->dpText->TEXT_PREV_WEEK   = 'Last week';
+$lang->datepicker->dpText->TEXT_OR          = 'or ';
+$lang->datepicker->dpText->TEXT_PREV_YEAR   = 'Last Year';
+$lang->datepicker->dpText->TEXT_PREV_MONTH  = 'Last Month';
+$lang->datepicker->dpText->TEXT_PREV_WEEK   = 'Last Week';
 $lang->datepicker->dpText->TEXT_YESTERDAY   = 'Yesterday';
-$lang->datepicker->dpText->TEXT_THIS_MONTH  = 'This month';
-$lang->datepicker->dpText->TEXT_THIS_WEEK   = 'This week';
+$lang->datepicker->dpText->TEXT_THIS_MONTH  = 'This Month';
+$lang->datepicker->dpText->TEXT_THIS_WEEK   = 'This Week';
 $lang->datepicker->dpText->TEXT_TODAY       = 'Today';
-$lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next year';
-$lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next month';
+$lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next Year';
+$lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next Month';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
-$lang->datepicker->dpText->TEXT_DATE        = 'Please select date range';
-$lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose date';
+$lang->datepicker->dpText->TEXT_DATE        = 'Choose Time';
+$lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose Date';
 
-$lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-$lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-$lang->datepicker->monthNames   = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+$lang->datepicker->dayNames     = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
+$lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
+$lang->datepicker->monthNames   = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
-/* Common action icons */
+/* Common action icons 通用动作图标 */
 $lang->icons['todo']      = 'check';
 $lang->icons['product']   = 'cube';
 $lang->icons['bug']       = 'bug';
