@@ -130,7 +130,12 @@ class docModel extends model
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
             ->exec();
-        return $this->dao->lastInsertID();
+        $libID = $this->dao->lastInsertID();
+
+        $libType = $this->post->libType;
+        if($lib->acl != 'private' and ($libType == 'project' or $libType == 'product')) $this->setLibUsers($libType, $lib->$libType);
+
+        return $libID;
     }
 
     /**
@@ -594,7 +599,7 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) !== false) return true;
-        if($object->acl == 'private' and $object->users == $this->app->user->account) return true;
+        if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
         {
             if(strpos(",$object->users,", $account) !== false) return true;
@@ -830,7 +835,7 @@ class docModel extends model
         if(strpos($this->app->company->admins, $account) === false)
         {
             $condition .= "{$table}acl='open'";
-            $condition .= " OR ({$table}acl='private' and {$table}users='{$this->app->user->account}')";
+            $condition .= " OR ({$table}acl='private' and CONCAT(',', {$table}users, ',') like '%$account%')";
             $condition .= " OR ({$table}acl='custom' and (";
             foreach($this->app->user->groups as $groupID) $condition .= "(CONCAT(',', {$table}groups, ',') like '%,$groupID,%') OR ";
             $condition .= "(CONCAT(',', {$table}users, ',') like '%$account%')";
@@ -1102,5 +1107,41 @@ class docModel extends model
         if($doc) $crumb .= $this->lang->arrow . $doc->title; 
 
         return $crumb;
+    }
+
+    /**
+     * Set lib users.
+     * 
+     * @param  string $type 
+     * @param  int    $objectID 
+     * @access public
+     * @return bool
+     */
+    public function setLibUsers($type, $objectID)
+    {
+        if($type != 'project' and $type != 'product') return true;
+
+        $libs  = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->fetchAll();
+
+        if($type == 'product')
+        {
+            $teams = $this->dao->select('t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+                ->where('t2.product')->eq($objectID)
+                ->andWhere('t3.deleted')->eq('0')
+                ->fetchPairs('account', 'account');
+        }
+        elseif($type == 'project')
+        {
+            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($objectID)->fetchPairs('account', 'account');
+        }
+
+        foreach($libs as $lib)
+        {
+            foreach(explode(',', $lib->users) as $account) $teams[$account] = $account;
+            $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $teams))->where('id')->eq($lib->id)->exec();
+        }
+        return true;
     }
 }

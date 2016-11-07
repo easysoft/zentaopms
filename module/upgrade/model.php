@@ -1173,9 +1173,9 @@ class upgradeModel extends model
             $lib->product = $productID;
             $lib->name    = $product->name;
             $lib->main    = 1;
-            $lib->acl     = $product->acl;
+            $lib->acl     = $product->acl == 'open' ? 'open' : 'custom';
+            $lib->users   = $product->createdBy;
             if($product->acl == 'custom') $lib->groups = $product->whitelist;
-            if($product->acl == 'private') $lib->users = $product->createdBy;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             $libID = $this->dao->lastInsertID();
 
@@ -1216,14 +1216,24 @@ class upgradeModel extends model
             $lib->name    = $project->name;
             $lib->main    = 1;
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
+
+            $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
+            $lib->users = join(',', $teams);
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
-            if($project->acl == 'private' or $project->acl == 'custom')
-            {
-                $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
-                $lib->users = join(',', $teams);
-            }
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             $libID = $this->dao->lastInsertID();
+
+            $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product=t2.product')
+                ->where('t2.project')->eq($projectID)
+                ->andWhere('t1.acl')->eq('custom')
+                ->fetchAll('id');
+            foreach($docLibs as $lib)
+            {
+                $docUsers = $teams + explode(',', $lib->users);
+                $docUsers = array_unique($docUsers);
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
+            }
 
             $relation = array();
             foreach($projectDocModules as $moduleID => $module)

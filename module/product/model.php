@@ -261,9 +261,9 @@ class productModel extends model
         $lib->product = $productID;
         $lib->name    = $product->name;
         $lib->main    = '1';
-        $lib->acl     = $product->acl;
+        $lib->acl     = $product->acl == 'open' ? 'open' : 'custom';
+        $lib->users   = $this->app->user->account;
         if($product->acl == 'custom') $lib->groups = $product->whitelist;
-        if($product->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         return $productID;
@@ -297,10 +297,11 @@ class productModel extends model
         {
             if($product->acl != $oldProduct->acl)
             {
-                $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($product->acl)->where('product')->eq($productID)->exec();
-                if($product->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('product')->eq($productID)->exec();
+                $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($product->acl == 'open' ? 'open' : 'custom')->where('product')->eq($productID)->exec();
+                if($product->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->where('product')->eq($productID)->exec();
                 if($product->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($product->whitelist)->where('product')->eq($productID)->exec();
-                if($product->acl == 'private') $this->dao->update(TABLE_DOCLIB)->set('users')->eq($oldProduct->createdBy)->set('groups')->eq('')->where('product')->eq($productID)->exec();
+                if($product->acl == 'private') $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->where('product')->eq($productID)->exec();
+                if($product->acl != 'open')    $this->loadModel('doc')->setLibUsers('product', $productID);
             }
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
             return common::createChanges($oldProduct, $product);

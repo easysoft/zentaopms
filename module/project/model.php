@@ -274,13 +274,23 @@ class projectModel extends model
             $lib->name    = $project->name;
             $lib->main    = '1';
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
+
+            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
+            $lib->users = join(',', $teams);
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
-            if($project->acl == 'private' or $project->acl == 'custom')
-            {
-                $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
-                $lib->users = join(',', $teams);
-            }
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+            $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product=t2.product')
+                ->where('t2.project')->eq($projectID)
+                ->andWhere('t1.acl')->eq('custom')
+                ->fetchAll('id');
+            foreach($docLibs as $lib)
+            {
+                $docUsers = $teams + explode(',', $lib->users);
+                $docUsers = array_unique($docUsers);
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
+            }
 
             return $projectID;
         } 
@@ -341,7 +351,7 @@ class projectModel extends model
             if($project->acl != $oldProject->acl)
             {
                 $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl == 'open' ? 'open' : 'custom')->where('project')->eq($projectID)->exec();
-                if($project->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->set('users')->eq('')->where('project')->eq($projectID)->exec();
+                if($project->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->where('project')->eq($projectID)->exec();
                 if($project->acl == 'custom')
                 {
                     $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
@@ -989,16 +999,26 @@ class projectModel extends model
      */
     public function updateProducts($projectID)
     {
+        $deletedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchPairs('product', 'product');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
         $products = $_POST['products'];
         $branches = $_POST['branch'];
 
         $existedProducts = array();
+        $addedProducts   = array();
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
             if(isset($existedProducts[$productID])) continue;
+            if(isset($deletedProducts[$productID]))
+            {
+                unset($deletedProducts[$productID]);
+            }
+            else
+            {
+                $addedProducts[$productID] = $productID;
+            }
 
             $data = new stdclass();
             $data->project = $projectID;
@@ -1007,6 +1027,10 @@ class projectModel extends model
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
         }
+
+        $this->loadModel('doc');
+        foreach($deletedProducts as $productID) $this->doc->setLibUsers('product', $productID);
+        foreach($addedProducts as $productID)   $this->doc->setLibUsers('product', $productID);
     }
 
     /**
@@ -1428,16 +1452,18 @@ class projectModel extends model
         }
 
         $acl = $this->dao->select('acl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('acl');
-        if($acl == 'private')
+        if($acl != 'open') $this->loadModel('doc')->setLibUsers('project', $projectID);
+
+        $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product=t2.product')
+            ->where('t2.project')->eq($projectID)
+            ->andWhere('t1.acl')->eq('custom')
+            ->fetchAll('id');
+        foreach($docLibs as $lib)
         {
-            $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->where('project')->eq($projectID)->fetchAll('id');
-            foreach($docLibs as $lib)
-            {
-                if(empty($lib->users)) continue;
-                $docUsers = $accounts + explode(',', $lib->users);
-                $docUsers = array_unique($docUsers);
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
-            }
+            $docUsers = $accounts + explode(',', $lib->users);
+            $docUsers = array_unique($docUsers);
+            $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
         }
     }
 
@@ -1452,6 +1478,20 @@ class projectModel extends model
     public function unlinkMember($projectID, $account)
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
+
+        $acl = $this->dao->select('acl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('acl');
+        if($acl != 'open') $this->loadModel('doc')->setLibUsers('project', $projectID);
+
+        $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product=t2.product')
+            ->where('t2.project')->eq($projectID)
+            ->andWhere('t1.acl')->eq('custom')
+            ->fetchAll('id');
+        foreach($docLibs as $lib)
+        {
+            $docUsers = str_replace(",$account,", '', ",{$lib->users},");
+            $this->dao->update(TABLE_DOCLIB)->set('users')->eq($docUsers)->where('id')->eq($lib->id)->exec();
+        }
     }
 
     /**
