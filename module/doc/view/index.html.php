@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'><strong><?php echo $lang->doclib->all?></strong></div>
 <div id='libs'>
-  <table class='table'>
   <?php
   $libs = array();
   $libs['product'] = $products;
@@ -21,97 +20,139 @@
   $libs['custom']  = $customLibs;
   ?>
   <?php foreach ($libs as $libsName => $libs):?>
-  <?php $i = 0;?>
-  <tr>
-    <th class='w-100px lib-heading'><?php echo $lang->doc->libTypeList[$libsName]?></th>
-    <td class='row'>
     <?php if($libsName === 'product'): ?>
-      <table class='table product table-data'>
+      <div class='row'>
+      <?php
+      $objectNum   = 1;
+      $objectCount = count($libs);
+      ?>
       <?php foreach($libs as $product):?>
+        <?php if($objectCount > 8 and $objectNum == 8):?>
+        <div class='col-md-3'>
+          <div class='libs-group clearfix lib-more'>
+            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+          </div>
+        </div>
+        <?php break;?>
+        <?php endif;?>
         <?php if(isset($subLibs['product'][$product->id])):?>
-        <?php if($i % 3 == 0) echo '<tr>'?>
-        <td>
-          <div class='libs-group-heading libs-product-heading'><strong><?php echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), $product->name, '', "title='{$product->name}'")?></strong></div>
+        <div class='col-md-3'>
+          <?php
+          $i = 0;
+          $subLibCount = count($subLibs['product'][$product->id]);
+          ?>
+          <div class='libs-group-heading libs-product-heading'>
+            <?php
+            $label = $objectNum == 1 ? "<span class='label label-primary'>{$lang->productCommon}</span> " : '';
+            echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), $label . $product->name, '', "title='{$product->name}'");
+            if($subLibCount > 3) echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='{$lang->more}' class='pull-right'");
+            ?>
+          </div>
           <div class='libs-group clearfix'>
+            <?php
+            $widthClass = 'w-lib-p100';
+            if($subLibCount == 2) $widthClass = 'w-lib-p50';
+            if($subLibCount >= 3) $widthClass = 'w-lib-p33';
+            ?>
             <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
             <?php
             if($libID == 'project')   $libLink = inlink('allLibs', "type=project&extra=product=$product->id");
             elseif($libID == 'files') $libLink = inlink('showFiles', "type=product&objectID=$product->id");
             else                      $libLink = inlink('browse', "libID=$libID");
             ?>
-            <a class='lib' title='<?php echo $libName?>' href='<?php echo $libLink ?>'>
-              <i class='file-icon icon icon-folder-close-alt'></i>
+            <a class='lib <?php echo $widthClass?>' title='<?php echo $libName?>' href='<?php echo $libLink ?>'>
+              <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
               <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
             </a>
+            <?php if($i >= 2) break;?>
+            <?php $i++;?>
             <?php endforeach; ?>
           </div>
-        </td>
-        <?php $i ++;?>
-        <?php if($i % 3 == 0) echo '</tr>'?>
+        </div>
+        <?php $objectNum++;?>
         <?php endif; ?>
       <?php endforeach; ?>
-      <?php
-      if($i % 3 != 0)
-      {
-          while($i % 3 != 0)
-          {
-              echo "<td class='none'></td>";
-              $i++;
-          }
-          echo "</tr>";
-      }
-      ?>
-    </table>
+    </div>
+    <hr />
     <?php elseif($libsName === 'project'): ?>
-    <table class='table project table-data'>
+    <div class='row'>
+      <?php
+      $objectNum   = 1;
+      $objectCount = count($libs);
+      ?>
       <?php foreach($libs as $project):?>
+        <?php if($objectCount > 8 and $objectNum == 8):?>
+        <div class='col-md-3'>
+          <div class='libs-group clearfix lib-more'>
+            <?php echo html::a(inlink('allLibs', "type=$libsName"), $lang->more . "<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+          </div>
+        </div>
+        <?php break;?>
+        <?php endif;?>
         <?php if(isset($subLibs['project'][$project->id])):?>
-        <?php if($i % 3 == 0) echo '<tr>'?>
-        <td>
-          <div class='libs-group-heading libs-project-heading'><strong><?php echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), $project->name, '', "title='{$project->name}'")?></strong></div>
+        <div class='col-md-3'>
+          <?php
+          $i = 0;
+          $subLibCount = count($subLibs['project'][$project->id]);
+          ?>
+          <div class='libs-group-heading libs-project-heading'>
+            <?php
+            $label = $objectNum == 1 ? "<span class='label label-success'>{$lang->projectCommon}</span> " : '';
+            echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), $label . $project->name, '', "title='{$project->name}'");
+            if($subLibCount > 3) echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='{$lang->more}' class='pull-right'");
+            ?>
+          </div>
           <div class='libs-group clearfix'>
+            <?php
+            $widthClass = 'w-lib-p100';
+            if($subLibCount == 2) $widthClass = 'w-lib-p50';
+            if($subLibCount >= 3) $widthClass = 'w-lib-p33';
+            ?>
             <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
             <?php
             if($libID == 'files') $libLink = inlink('showFiles', "type=project&objectID=$project->id");
             else                  $libLink = inlink('browse', "libID=$libID");
             ?>
-            <a class='lib' title='<?php echo $libName?>' href='<?php echo $libLink ?>'>
-              <i class='file-icon icon icon-folder-close-alt'></i>
+            <a class='lib <?php echo $widthClass?>' title='<?php echo $libName?>' href='<?php echo $libLink ?>'>
+              <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
               <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
             </a>
+            <?php if($i >= 2) break;?>
+            <?php $i++;?>
             <?php endforeach; ?>
           </div>
-        </td>
-        <?php $i++;?>
-        <?php if($i % 3 == 0) echo "</td>";?>
+        </div>
+        <?php $objectNum++;?>
         <?php endif; ?>
       <?php endforeach; ?>
+    </div>
+    <hr />
+    <?php else:?>
+      <div class='clearfix'>
       <?php
-      if($i % 3 != 0)
-      {
-          while($i % 3 != 0)
-          {
-              echo "<td class='none'></td>";
-              $i++;
-          }
-          echo "</tr>";
-      }
+      $objectNum   = 1;
+      $objectCount = count($libs);
       ?>
-    </table>
-    <?php else: ?>
-      <div class='libs-group'>
       <?php foreach($libs as $libID => $libName):?>
-        <a class='lib' title='<?php echo $libName?>' href='<?php echo inlink('browse', "libID=$libID") ?>'>
-          <i class='file-icon icon icon-folder-close-alt'></i>
-          <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
-        </a>
+        <?php if($objectCount > 8 and $objectNum == 8):?>
+        <div class='col-md-3'>
+          <div class='libs-group clearfix lib-more'>
+            <?php echo html::a(inlink('allLibs', "type=$libsName"), $lang->more . "<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+          </div>
+        </div>
+        <?php break;?>
+        <?php endif;?>
+        <div class='col-md-3'>
+          <div class='libs-group-heading libs-custom-heading'>
+            <?php
+            $label = $objectNum == 1 ? "<span class='label label-info'>{$lang->doc->customAB}</span> " : '';
+            echo html::a(inlink('browse', "libID=$libID"), $label . $libName, '', "title='{$libName}'")
+            ?>
+          </div>
+        </div>
+        <?php $objectNum++;?>
       <?php endforeach; ?>
-      </div>
     <?php endif; ?>
-    </td>
-    <td class='w-20px lib-more'><?php echo html::a(inlink('allLibs', "type=$libsName"), $lang->more, '', "title='$lang->more' class='more'")?></td>
-  </tr>
   <?php endforeach;?>
-</table>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -41,9 +41,9 @@ class doc extends control
         unset($this->lang->doc->menu->index);
         $this->doc->setMenu(array($this->lang->doclib->select));
 
-        $products   = $this->doc->getLimitLibs('product');
-        $projects   = $this->doc->getLimitLibs('project');
-        $customLibs = $this->doc->getLimitLibs('custom');
+        $products   = $this->doc->getLimitLibs('product', '9');
+        $projects   = $this->doc->getLimitLibs('project', '9');
+        $customLibs = $this->doc->getLimitLibs('custom', '9');
         $subLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($products));
         $subLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($projects));
 
@@ -646,6 +646,17 @@ class doc extends control
     }
 
     /**
+     * Ajax get all libs 
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAllLibs()
+    {
+        die(json_encode($this->doc->getAllLibGroups()));
+    }
+
+    /**
      * Show all libs by type.
      * 
      * @param  string $type 
@@ -656,7 +667,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
         $this->doc->setMenu(array($this->lang->doclib->select), 0, $type);
@@ -668,7 +679,7 @@ class doc extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $libs    = $this->doc->getAllLibs($type, $pager, $extra);
+        $libs    = $this->doc->getAllLibsByType($type, $pager, $extra);
         $subLibs = array();
         if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
         if($extra)

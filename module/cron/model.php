@@ -121,7 +121,8 @@ class cronModel extends model
      */
     public function getLastTime()
     {
-        return $this->dao->select('*')->from(TABLE_CRON)->orderBy('lastTime desc')->limit(1)->fetch('lastTime');
+        $cron = $this->dao->select('*')->from(TABLE_CRON)->orderBy('lastTime desc')->limit(1)->fetch();
+        return isset($cron->lastTime) ? $cron->lastTime : $cron->lasttime;
     }
 
     /**

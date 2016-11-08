@@ -26,7 +26,7 @@
     if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");
     ?>
     <a class='lib' title='<?php echo $libName?>' href='<?php echo $libLink?>'>
-      <i class='file-icon icon icon-folder-close-alt'></i>
+      <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
       <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
     </a>
     <?php endforeach; ?>

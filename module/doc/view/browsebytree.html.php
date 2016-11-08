@@ -31,13 +31,13 @@
 #docTree.tree ul > li.item-type-doc > .tree-item-wrapper > a {cursor: pointer;}
 </style>
 <div id='featurebar'>
-  <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
+  <div class='crumb pull-left'> <?php echo $crumb;?></div>
   <div class='actions'>
     <div class="btn-group">
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-cog'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <?php
-        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='600px'") . '</li>';
+        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='800px'") . '</li>';
         if(common::hasPriv('doc', 'deleteLib')) echo '<li>' . html::a(inlink('deleteLib', "rootID=$libID"), $lang->doc->deleteLib, 'hiddenwin') . '</li>';
         ?>
         <?php if(common::hasPriv('tree', 'browse')) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc"), $lang->doc->manageType) . '</li>';?>

@@ -137,16 +137,16 @@ class devModel extends model
         $apis = array();
         foreach($methods as $method)
         {
-            if($method->class == 'control' or $method->name == '__construct') continue;
+            if($method->class == 'baseControl' or $method->class == 'control' or $method->name == '__construct') continue;
 
             $api = array('name' => $method->name, 'post' => false, 'default' => array());
             $methodReflect = new ReflectionMethod($module, $method->name);
             foreach($methodReflect->getParameters() as $key => $param)
             {
-                if($param->isOptional())
+                try
                 {
                     $api['default'][$param->getName()] = $param->getDefaultValue();
-                }
+                }catch(ReflectionException $e){}
             }
             $startLine = $methodReflect->getStartLine();
             $endLine   = $methodReflect->getEndLine();

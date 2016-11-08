@@ -9,21 +9,21 @@
 #filesPanel .panel-footer > a:hover {background-color: #e5e5e5;}
 #filesPanel .pager {position: absolute; top: 4px; right: 4px}
 #filesPanel .panel-heading > a {font-weight: bold;}
-#filesPanel .file {float: left; width: 90px; position: relative; background-color: transparent; margin: 0 10px 10px 0; border: 1px solid transparent; transition: all .2s;}
+#filesPanel .file {float: left; width: 90px; position: relative; background-color: transparent; margin: 0 10px 10px 0; border: 1px solid transparent; transition: all .2s; text-align:center;}
 #filesPanel .file:hover {border-color: #ddd; background-color: #EBF2F9}
-#filesPanel .file > a {display: block;}
-#filesPanel .file-icon {display: block; height: 60px; text-align: center; line-height: 60px; font-size: 50px; opacity: .7}
+#filesPanel .file > a {display: block}
+#filesPanel .file-icon {height: 60px; text-align: center; line-height: 60px; opacity: .7; margin-bottom:5px;}
 #filesPanel .file:hover .file-icon {opacity: 1}
-#filesPanel .file-name {text-align: center; height: 2em; line-height: 14px; overflow: hidden;}
-#filesPanel .file.create {height:88px;}
-#filesPanel .file.create a{height:100%;}
+#filesPanel .file-name {text-align: center; overflow: hidden; white-space:nowrap;}
+#filesPanel .file.create {height:88px; border:1px dashed #ddd; width:75px;}
+#filesPanel .file.create .addbtn{display:block;margin-top:22px;padding-top:10px;}
 #filesPanel .file.create .file-icon {height:100%; opacity: 0.5; color:#ddd;}
-#filesPanel .file.create .icon-plus {font-size: 18px; display: block; text-align: center; position: absolute; top: 0; right: 0; left: 0; bottom: 0; line-height: 60px; opacity: 0.5; transition: opacity .2s; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
+#filesPanel .file.create .icon-plus {font-size: 18px; display: block; opacity: 0.5; transition: opacity .2s; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
 #filesPanel .file.create:hover .icon-plus {opacity: .9; animation: flash-icon 1s linear alternate infinite}
 #filesPanel .file.create:hover .file-icon {opacity: .9; animation: flash-icon 1s linear alternate infinite}
 </style>
 <div id='featurebar'>
-  <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
+  <div class='crumb pull-left'> <?php echo $crumb;?></div>
   <ul class='nav'>
     <li <?php if($orderBy == 'addedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=addedDate_desc&from=$from"), $lang->doc->orderByOpen)?></li>
     <li <?php if($orderBy == 'editedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=editedDate_desc&from=$from"), $lang->doc->orderByEdit)?></li>
@@ -35,7 +35,7 @@
       <ul class="dropdown-menu" role="menu">
         <?php if(empty($moduleID)):?>
         <?php
-        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='600px'") . '</li>';
+        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='800px'") . '</li>';
         if(common::hasPriv('doc', 'deleteLib')) echo '<li>' . html::a(inlink('deleteLib', "rootID=$libID"), $lang->doc->deleteLib, 'hiddenwin') . '</li>';
         ?>
         <?php else:?>
@@ -66,30 +66,27 @@
       <?php foreach($modules as $module):?>
       <div class='file file-dir'>
         <a href='<?php echo inlink('browse', "libID=$libID&browseType=bymenu&param=$module->id&orderBy=$orderBy&from=$from")?>'>
-          <i class='file-icon icon icon-folder-close-alt'></i>
+          <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-module.png'?>' class='file-icon' />
           <div class='file-name' title='<?php echo $module->name?>'><?php echo $module->name?></div>
         </a>
       </div>
       <?php endforeach;?>
-      <div class='file file-dir create'>
-        <a href='<?php echo $this->createLink('tree', 'browse', "rootID=$libID&view=doc&moduleID=$moduleID")?>' title='<?php echo $lang->doc->addType?>'>
-          <i class='file-icon icon icon-folder-close-alt'></i>
-          <i class='icon icon-plus'></i>
-        </a>
-      </div>
       <?php foreach($docs as $doc):?>
       <div class='file'>
         <a href='<?php echo inlink('view', "docID=$doc->id")?>'>
-          <i class='file-icon icon icon-file'></i>
+          <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-file.png'?>' class='file-icon' />
           <div class='file-name' title='<?php echo $doc->title?>'><?php echo $doc->title?></div>
         </a>
       </div>
       <?php endforeach;?>
       <div class='file create'>
-        <a href='<?php echo inlink('create', "libID=$libID&moduleID=$moduleID")?>' title='<?php echo $lang->doc->create?>'>
-          <i class='file-icon icon icon-file'></i>
-          <i class='icon icon-plus'></i>
-        </a>
+          <div class="dropdown">
+            <a href="###" class="addbtn dropdown-toggle" data-toggle="dropdown"> <i class='icon icon-plus'></i></a>
+            <ul class="dropdown-menu" role="menu">
+              <?php if(common::hasPriv('tree', 'browse')) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc&moduleID=$moduleID"), $lang->doc->addType) . '</li>';?>
+              <?php if(common::hasPriv('doc', 'create')) echo '<li>' . html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID"), $lang->doc->create) . '</li>';?>
+            </ul>
+          </div>
       </div>
     </div>
     <?php if($docs):?>

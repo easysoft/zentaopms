@@ -25,7 +25,7 @@ var browseType = '<?php echo $browseType;?>';
 <?php include __DIR__ . '/browsebytree.html.php';?>
 <?php else:?>
 <div id='featurebar'>
-  <div class='crumb pull-left'><i class='icon icon-tags'></i> <?php echo $crumb;?></div>
+  <div class='crumb pull-left'><?php echo $crumb;?></div>
   <ul class='nav'>
   <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy&from=$from"), $lang->doc->allDoc)?></li>
   <li id='openedbymeTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=openedByMe&param=0&orderBy=$orderBy&from=$from"), $lang->doc->openedByMe)?></li>
@@ -36,7 +36,7 @@ var browseType = '<?php echo $browseType;?>';
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-cog'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <?php
-        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='600px'") . '</li>';
+        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='800px'") . '</li>';
         if(common::hasPriv('doc', 'deleteLib')) echo '<li>' . html::a(inlink('deleteLib', "rootID=$libID"), $lang->doc->deleteLib, 'hiddenwin') . '</li>';
         ?>
         <li><?php echo html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin");?></li>

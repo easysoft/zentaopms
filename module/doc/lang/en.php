@@ -58,6 +58,7 @@ $lang->doc->addType        = 'Add Type';
 $lang->doc->libName        = 'Library Name';
 $lang->doc->libType        = 'Library Type';
 $lang->doc->custom         = 'Custom Library';
+$lang->doc->customAB       = 'Custom';
 $lang->doc->createLib      = 'Create Library';
 $lang->doc->allLibs        = 'Library List';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";

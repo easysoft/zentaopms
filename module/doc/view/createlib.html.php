@@ -19,7 +19,7 @@
   </div>
 </div>
 <div class='main'>
-  <form method='post' target='hiddenwin' class='form-condensed' style='margin: 60px 0 115px 0'>
+  <form method='post' target='hiddenwin' class='form-condensed' style='margin: 40px 0 160px 0'>
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libType?></th>
@@ -62,7 +62,7 @@
       </tr>
       <tr>
         <td></td>
-        <td class='text-center'><?php echo html::submitButton();?></td>
+        <td><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

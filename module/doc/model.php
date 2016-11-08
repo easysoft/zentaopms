@@ -634,9 +634,9 @@ class docModel extends model
      * @param  int    $pager 
      * @param  string $extra 
      * @access public
-     * @return void
+     * @return array
      */
-    public function getAllLibs($type, $pager = null, $extra = '')
+    public function getAllLibsByType($type, $pager = null, $extra = '')
     {
         if($extra)
         {
@@ -658,7 +658,7 @@ class docModel extends model
         if(isset($projects)) $stmt = $stmt->andWhere('project')->in($projects);
 
         $condition = $this->buildConditionSQL();
-        $idList = $stmt->beginIF($condition)->andWhere("($condition)")->fi()->orderBy("{$key}_desc")->page($pager)->fetchPairs($key, $key);
+        $idList = $stmt->beginIF($condition)->andWhere("($condition)")->fi()->orderBy("{$key}_desc")->page($pager, $key)->fetchPairs($key, $key);
 
         if($type == 'product' or $type == 'project')
         {
@@ -674,6 +674,65 @@ class docModel extends model
     }
 
     /**
+     * Get all lib groups.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getAllLibGroups()
+    {
+        $condition = $this->buildConditionSQL();
+        $stmt = $this->dao->select("id,product,project,name")->from(TABLE_DOCLIB)
+            ->where('deleted')->eq(0)
+            ->beginIF($condition)->andWhere("($condition)")->fi()
+            ->orderBy("product desc,project desc, id asc")
+            ->query();
+
+        $customLibs  = array();
+        $productLibs = array();
+        $projectLibs = array();
+        while($lib = $stmt->fetch())
+        {
+            if($lib->product)
+            {
+                $productLibs[$lib->product][$lib->id] = $lib->name;
+            }
+            elseif($lib->project)
+            {
+                $projectLibs[$lib->project][$lib->id] = $lib->name;
+            }
+            else
+            {
+                $customLibs[$lib->id] = $lib->name;
+            }
+        }
+        $productIdList = array_keys($productLibs);
+        $products      = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchPairs('id', 'name');
+        $hasProject    = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchPairs('product', 'product');
+
+        $hasLibsPriv  = common::hasPriv('doc', 'allLibs');
+        $hasFilesPriv = common::hasPriv('doc', 'showFiles');
+        foreach($products as $productID => $productName)
+        {
+            foreach($productLibs[$productID] as $libID => $libName) $productLibs[$productID][$libID] = $productName . ' / ' . $libName;
+            if(isset($hasProject[$productID]) and $hasLibsPriv) $productLibs[$productID]['project'] = $productName . ' / ' . $this->lang->doc->systemLibs['project'];
+            if($hasFilesPriv) $productLibs[$productID]['files'] = $productName . ' / ' . $this->lang->doclib->files;
+        }
+        $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectLibs))->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchPairs('id', 'name');
+        foreach($projects as $projectID => $projectName)
+        {
+            foreach($projectLibs[$projectID] as $libID => $libName) $projectLibs[$projectID][$libID] = $projectName . ' / ' . $libName;
+            if($hasFilesPriv) $projectLibs[$projectID]['files'] = $productName . ' / ' . $this->lang->doclib->files;
+        }
+
+        return array('product' => $productLibs, 'project' => $projectLibs, 'custom' => $customLibs);
+    }
+
+    /**
      * Get limit libs.
      * 
      * @param  string $type 
@@ -681,7 +740,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLimitLibs($type, $limit = 6)
+    public function getLimitLibs($type, $limit = 4)
     {
         if($type == 'product' or $type == 'project')
         {

@@ -1,2 +1,3 @@
-#libs table td{border-right:1px solid #ddd; width:33%;vertical-align: top; padding:0px; overflow:hidden}
-#libs table td.none{border-right:0px}
+#libs .libs-group-heading{border:1px solid #ddd;overflow:hidden}
+#libs .libs-group{border:1px solid #ddd; border-top:0px;overflow:hidden; margin-bottom:20px;}
+#libs .lib-custom{width:130px; margin-bottom:10px;}
