@@ -104,7 +104,7 @@ class docModel extends model
             if($this->checkPriv($lib))
             {
                 $libName = $lib->name;
-                if(($type == 'product' or $type == 'project') and $lib->main == 0 and isset($objects[$lib->$type])) $libName = $objects[$lib->$type] . ' / ' . $libName;
+                if(($type == 'product' or $type == 'project') and isset($objects[$lib->$type])) $libName = $objects[$lib->$type] . ' / ' . $libName;
                 $libPairs[$lib->id] = $libName;
             }
         }
@@ -726,7 +726,7 @@ class docModel extends model
         foreach($projects as $projectID => $projectName)
         {
             foreach($projectLibs[$projectID] as $libID => $libName) $projectLibs[$projectID][$libID] = $projectName . ' / ' . $libName;
-            if($hasFilesPriv) $projectLibs[$projectID]['files'] = $productName . ' / ' . $this->lang->doclib->files;
+            if($hasFilesPriv) $projectLibs[$projectID]['files'] = $projectName . ' / ' . $this->lang->doclib->files;
         }
 
         return array('product' => $productLibs, 'project' => $projectLibs, 'custom' => $customLibs);
@@ -851,25 +851,17 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibFiles($type, $objectID)
+    public function getLibFiles($type, $objectID, $pager = null)
     {
         $this->loadModel('file');
-        $joinTable  = $type == 'project' ? TABLE_TASK : TABLE_STORY;
-        $objectType = $type == 'project' ? 'task' : 'story';
-        $files = $this->dao->select('t1.*')->from(TABLE_FILE)->alias('t1')
-            ->leftJoin($joinTable)->alias('t2')->on('t1.objectID=t2.id')
-            ->where("t2.$type")->eq($objectID)
-            ->andWhere('t1.objectType')->eq($objectType)
-            ->andWhere('t2.deleted')->eq(0)
+        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where("(objectType = '$type' and objectID = '$objectID')")
+            ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
+            ->andWhere('size')->gt('0')
+            ->page($pager)
             ->fetchAll('id');
 
-        $docFiles = $this->dao->select('t1.*')->from(TABLE_FILE)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.objectID=t2.id')
-            ->where("t2.$type")->eq($objectID)
-            ->andWhere('t1.objectType')->eq('doc')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchAll('id');
-        foreach($docFiles as $fileID => $file) $files[$fileID] = $file;
         foreach($files as $fileID => $file)
         {
             $file->realPath = $this->file->savePath . $file->pathname;
