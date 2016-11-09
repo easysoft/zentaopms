@@ -5,10 +5,10 @@ function showLibMenu()
     var $menu = $('#dropMenu');
 
     if($li.hasClass('show')) {$li.removeClass('show'); return;}
+    var $search = $('#searchLib');
     if(!$li.data('showagain'))
     {
         $menu.addClass('loading');
-        var $search = $('#searchLib');
         var isBigMode = false;
         var items = {};
         var itemIdSeed = $.zui.uuid();
@@ -167,7 +167,8 @@ function showLibMenu()
         $(document).click(function(){$li.removeClass('show');});
     }
     $menu.find('.lib-menu-list').css('max-height', $(window).height() - 210);
-    $li.addClass('show')
+    $li.addClass('show');
+    $search.focus();
 }
 
 function loadModules(libID)
