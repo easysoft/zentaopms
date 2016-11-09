@@ -168,8 +168,6 @@ function showLibMenu()
     $li.addClass('show')
 }
 
-showLibMenu();
-
 function loadModules(libID)
 {
     link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
