@@ -5,11 +5,11 @@ function showLibMenu()
     var $menu = $('#dropMenu');
 
     if($li.hasClass('show')) {$li.removeClass('show'); return;}
-    var isBigMode = false;
     if(!$li.data('showagain'))
     {
         $menu.addClass('loading');
         var $search = $('#searchLib');
+        var isBigMode = false;
         var items = {};
         var itemIdSeed = $.zui.uuid();
         var orderSeed = 1;
@@ -31,6 +31,7 @@ function showLibMenu()
                     productCount++;
                 });
             });
+            $list.toggleClass('lib-list-bg', productCount > 4);
 
             $list = $('#libMenuProjectGroup > .lib-menu-list');
             $.each(data.project, function(idx, project)
@@ -45,6 +46,7 @@ function showLibMenu()
                     projectCount++;
                 });
             });
+            $list.toggleClass('lib-list-bg', projectCount > 4);
 
             $list = $('#libMenuCustomGroup > .lib-menu-list');
             $.each(data.custom, function(libId, libName)
@@ -55,12 +57,13 @@ function showLibMenu()
                 items[itemId] = {type: 'custom', id: libId, name: libName, search: libName.toLowerCase()};
                 customCount++;
             });
+            $list.toggleClass('lib-list-bg', customCount > 4);
+
             var $items = $menu.find('.list-menu-item');
             $items.filter('[data-id="' + $item.data('libId') + '"]').addClass('current');
             $items.first().addClass('active');
 
-            isBigMode = productCount > 8 && projectCount > 8 && customCount > 8;
-            $menu.toggleClass('lib-menu-lg', isBigMode && $(window).width() > 1200);
+            $menu.toggleClass('lib-menu-lg', productCount > 9 || projectCount > 9 || customCount > 9);
 
             var lastSearchKey = $search.val();
             $search.on('change keyup paste input propertychange', function()
@@ -156,14 +159,13 @@ function showLibMenu()
             {
                 var libType = $(this).data('type');
                 var showFilter = $menu.attr('data-filter') != libType;
-                $menu.attr('data-filter', showFilter ? libType : '');
+                $menu.attr('data-filter', showFilter ? libType : null);
             });
         });
         $li.data('showagain', true);
         $li.on('click', function(e){e.stopPropagation();});
         $(document).click(function(){$li.removeClass('show');});
     }
-    $menu.toggleClass('lib-menu-lg', isBigMode && $(window).width() > 1200);
     $menu.find('.lib-menu-list').css('max-height', $(window).height() - 210);
     $li.addClass('show')
 }

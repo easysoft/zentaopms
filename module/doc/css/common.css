@@ -16,45 +16,84 @@
 #dropMenu.loading > #libMenu,
 #dropMenu > .icon {display: none}
 #dropMenu.loading > .icon {display: block}
-#dropMenu {min-width: 600px; transition: min-width .2s;}
+#dropMenu {min-width: 600px; box-sizing: content-box; padding: 0;}
 
-#libMenu {display: block; margin: -10px -15px; position: relative;}
+#libMenu {display: block; margin: 0; position: relative;}
 #libMenuHeading {padding: 10px;}
-#libMenuGroups {display: table; width: 100%; margin-bottom: 10px;}
-.lib-menu-group {display: table-cell; width: 33.333333%; padding: 0 10px}
+#libMenuGroups {display: table; width: 100%; margin-bottom: 10px; table-layout: fixed;}
+.lib-menu-group {display: table-cell; width: 33.333333%; padding: 0}
 .lib-menu-group + .lib-menu-group {border-left: 1px dotted #ddd;}
-.lib-menu-list-heading {background-color: #fafafa; color: #808080; padding: 0 10px; text-align: center; display: inline-block; margin-bottom: 10px; border: 1px solid #ddd; line-height: 20px; border-radius: 10px;}
+.lib-menu-list-heading {background-color: #fafafa; color: #808080; padding: 0 10px; text-align: center; display: inline-block; margin: 0 0 10px 10px; border: 1px solid #ddd; line-height: 20px; border-radius: 10px;}
 .lib-menu-list-heading:hover {border-color: #114f8e; cursor: pointer; color: #114f8e;}
 .lib-menu-list-heading > .icon {display: none}
 .lib-menu-list {max-height: 500px; overflow-y: auto; min-height: 100px;}
-.list-menu-item-heading {padding: 0 10px 0 0; font-weight: bold; color: #a1a1a1; background-color: #fff; border-bottom: 1px dotted #ddd; float: left; width: 100%;}
-.list-menu-item-heading > .icon {display: inline-block; width: 20px;}
-.list-menu-item + .list-menu-item-heading {border-top: 1px solid #ddd;}
-.list-menu-item {padding: 0 10px 0 20px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; float: left;}
+.list-menu-item-heading {padding: 0 10px; font-weight: bold; color: #a1a1a1; float: left; width: 100%;}
+.list-menu-item-heading > .icon {display: inline-block; width: 18px;}
+.list-menu-item + .list-menu-item-heading {border-top: 1px dotted #ddd;}
+.list-menu-item {padding: 0 4px 0 26px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; float: left; width: 100%}
+#libMenuCustomGroup .list-menu-item {padding-left: 15px}
 .list-menu-item.current {background-color: #EBF2F9;}
 .list-menu-item.active,
 .list-menu-item:hover {background-color: #e5e5e5; color: #1a53ff}
 #searchLib {padding: 2px 8px; height: 28px; max-width: 190px;}
 
-#dropMenu.lib-menu-lg {min-width: 1200px;}
-#dropMenu.lib-menu-lg .list-menu-item {width: 50%; float: left;}
-
-#dropMenu[data-filter="project"] #libMenuProjectGroup,
-#dropMenu[data-filter="custom"] #libMenuCustomGroup,
-#dropMenu[data-filter="product"] #libMenuProductGroup {display: block; width: 100%}
-#dropMenu[data-filter="project"] #libMenuProjectGroup .lib-menu-list-heading,
-#dropMenu[data-filter="custom"] #libMenuCustomGroup .lib-menu-list-heading,
-#dropMenu[data-filter="product"] #libMenuProductGroup .lib-menu-list-heading {position: absolute; top: 13px; left: 215px; padding-right: 25px; background-color: #114f8e; color: #fff; border-color: #114f8e;}
-#dropMenu[data-filter="project"] #libMenuProjectGroup .lib-menu-list-heading > .icon,
-#dropMenu[data-filter="custom"] #libMenuCustomGroup .lib-menu-list-heading > .icon,
-#dropMenu[data-filter="product"] #libMenuProductGroup .lib-menu-list-heading > .icon {position: absolute; right: 3px; top: 2px; display: block;}
-#dropMenu[data-filter="project"] #libMenuProjectGroup .list-menu-item,
-#dropMenu[data-filter="custom"] #libMenuCustomGroup .list-menu-item,
-#dropMenu[data-filter="product"] #libMenuProductGroup .list-menu-item {width: 33.33333%;}
-#dropMenu.lib-menu-lg[data-filter="product"] #libMenuProductGroup .list-menu-item {width: 16.666667%;}
+#dropMenu[data-filter] #libMenuGroups {table-layout: auto;}
 #dropMenu[data-filter="project"] #libMenuProductGroup,
 #dropMenu[data-filter="project"] #libMenuCustomGroup,
 #dropMenu[data-filter="custom"] #libMenuProjectGroup,
 #dropMenu[data-filter="custom"] #libMenuProductGroup,
 #dropMenu[data-filter="product"] #libMenuProjectGroup,
 #dropMenu[data-filter="product"] #libMenuCustomGroup {display: none;}
+
+#dropMenu[data-filter] .lib-menu-group {display: block; width: 100%}
+#dropMenu[data-filter] .lib-menu-list-heading {position: absolute; top: 13px; left: 215px; padding-right: 25px; background-color: #114f8e; color: #fff; border-color: #114f8e;}
+#dropMenu[data-filter] .lib-menu-list-heading > .icon {position: absolute; right: 3px; top: 2px; display: block;}
+#dropMenu[data-filter] .list-menu-item {width: 33.33333%;}
+
+
+@media (min-width: 760px)
+{
+    #dropMenu {min-width: 720px;}
+}
+@media (min-width: 880px)
+{
+    #dropMenu {min-width: 850px;}
+    .lib-menu-lg .lib-list-bg .list-menu-item {width: 50%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 25%;}
+}
+@media (min-width: 1000px)
+{
+    #dropMenu {min-width: 960px;}
+    #dropMenu .lib-list-bg .list-menu-item {width: 50%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 20%;}
+}
+@media (min-width: 1120px)
+{
+    #dropMenu {min-width: 1080px;}
+    #dropMenu .list-menu-item {width: 50%;}
+    #dropMenu .lib-list-bg .list-menu-item {width: 33.33333333%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 16.666667%;}
+}
+@media (min-width: 1240px)
+{
+    #dropMenu {min-width: 1200px;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 12.5%;}
+}
+@media (min-width: 1360px)
+{
+    #dropMenu {min-width: 1340px;}
+    #dropMenu .lib-list-bg .list-menu-item {width: 25%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 10%;}
+}
+@media (min-width: 1480px)
+{
+    #dropMenu {min-width: 1360px;}
+    #dropMenu .list-menu-item {width: 33.3333333%;}
+    #dropMenu .lib-list-bg .list-menu-item {width: 20%;}
+}
+@media (min-width: 1600px)
+{
+    #dropMenu {min-width: 1480px;}
+    #dropMenu .list-menu-item {width: 25%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 8.333333%;}
+}
