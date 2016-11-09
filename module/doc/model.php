@@ -683,19 +683,11 @@ class docModel extends model
         {
             if($lib->product)
             {
-                if(empty($productLibs[$lib->product]))
-                {
-                    $productLibs[$lib->product] = array('id' => $lib->product, 'libs' => array());
-                }
-                $productLibs[$lib->product]['libs'][$lib->id] = $lib->name;
+                $productLibs[$lib->product][$lib->id] = $lib->name;
             }
             elseif($lib->project)
             {
-                if(empty($projectLibs[$lib->project]))
-                {
-                    $projectLibs[$lib->project] = array('id' => $lib->project, 'libs' => array());
-                }
-                $projectLibs[$lib->project]['libs'][$lib->id] = $lib->name;
+                $projectLibs[$lib->project][$lib->id] = $lib->name;
             }
             else
             {
@@ -712,20 +704,32 @@ class docModel extends model
 
         $hasLibsPriv  = common::hasPriv('doc', 'allLibs');
         $hasFilesPriv = common::hasPriv('doc', 'showFiles');
-        foreach ($productLibs as $productID => $productLib)
+        $productOrderLibs = array();
+        foreach($products as $productID => $productName)
         {
-            $productLibs[$productID]['name'] = $products[$productID];
-            if(isset($hasProject[$productID]) and $hasLibsPriv) $productLibs[$productID]['libs']['project'] = $this->lang->doc->systemLibs['project'];
-            if($hasFilesPriv) $productLibs[$productID]['libs']['files'] = $this->lang->doclib->files;
+            if(isset($productLibs[$productID]))
+            {
+                $productOrderLibs[$productID]['id']   = $productID;
+                $productOrderLibs[$productID]['name'] = $productName;
+                foreach($productLibs[$productID] as $libID => $libName) $productOrderLibs[$productID]['libs'][$libID] = $libName;
+                if(isset($hasProject[$productID]) and $hasLibsPriv) $productOrderLibs[$productID]['libs']['project'] = $this->lang->doc->systemLibs['project'];
+                if($hasFilesPriv) $productOrderLibs[$productID]['libs']['files'] = $this->lang->doclib->files;
+            }
         }
         $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectLibs))->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchPairs('id', 'name');
-        foreach($projectLibs as $projectID => $projectName)
+        $projectOrderLibs = array();
+        foreach($projects as $projectID => $projectName)
         {
-            $projectLibs[$projectID]['name'] = $projects[$projectID];
-            if($hasFilesPriv) $projectLibs[$projectID]['libs']['files'] = $this->lang->doclib->files;
+            if(isset($projectLibs[$projectID]))
+            {
+                $projectOrderLibs[$projectID]['id']   = $projectID;
+                $projectOrderLibs[$projectID]['name'] = $projectName;
+                foreach($projectLibs[$projectID] as $libID => $libName) $projectOrderLibs[$projectID]['libs'][$libID] = $libName;
+                if($hasFilesPriv) $projectOrderLibs[$projectID]['libs']['files'] = $this->lang->doclib->files;
+            }
         }
 
-        return array('product' => array_values($productLibs), 'project' => array_values($projectLibs), 'custom' => $customLibs);
+        return array('product' => array_values($productOrderLibs), 'project' => array_values($projectOrderLibs), 'custom' => $customLibs);
     }
 
     /**
