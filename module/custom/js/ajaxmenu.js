@@ -108,6 +108,7 @@ $(function()
         {
             var data = {name: item.name, order: parseInt(item.order)};
             if(item.hidden) data.hidden = true;
+            if(item.float) data.float = item.float;
             if(item.buildLink) data.buildLink = item.buildLink;
             return data;
         });

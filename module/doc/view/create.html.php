@@ -18,7 +18,7 @@
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
-      <strong> <?php echo $crumb . $lang->arrow . $lang->doc->create;?></strong>
+      <strong> <?php echo $lang->doc->create;?></strong>
     </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>

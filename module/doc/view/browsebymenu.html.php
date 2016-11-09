@@ -23,8 +23,17 @@
 #filesPanel .file.create:hover .file-icon {opacity: .9; animation: flash-icon 1s linear alternate infinite}
 </style>
 <div id='featurebar'>
-  <div class='crumb pull-left'> <?php echo $crumb;?></div>
   <ul class='nav'>
+    <li>
+      <div class="dropdown">
+        <a href="###" class="dropdown-toggle" data-toggle="dropdown"><i class='icon icon-th'></i> <?php echo $lang->doc->browseTypeList['menu']?> <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+          <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
+          <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
+          <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-branch'></i> {$lang->doc->browseTypeList['tree']}");?></li>
+        </ul>
+      </div>
+    </li>
     <li <?php if($orderBy == 'addedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=addedDate_desc&from=$from"), $lang->doc->orderByOpen)?></li>
     <li <?php if($orderBy == 'editedDate_desc') echo "class='active'";?>><?php echo html::a(inlink('browse', "libID=$libID&browseType=$browseType&param=$param&orderBy=editedDate_desc&from=$from"), $lang->doc->orderByEdit)?></li>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
@@ -46,14 +55,6 @@
         <?php endif;?>
         <?php if(common::hasPriv('tree', 'browse')) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc&moduleID=$moduleID"), $lang->doc->manageType) . '</li>';?>
         <li><?php echo html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin");?></li>
-      </ul>
-    </div>
-    <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-th'></i> <?php echo $lang->doc->browseTypeList['menu']?> <span class="caret"></span></button>
-      <ul class="dropdown-menu" role="menu">
-        <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
-        <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
-        <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-branch'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID");?>

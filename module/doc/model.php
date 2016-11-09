@@ -18,11 +18,11 @@ class docModel extends model
      * 
      * @param  array  $libs 
      * @param  int    $libID 
-     * @param  string $extra 
+     * @param  string $moduleID 
      * @access public
      * @return void
      */
-    public function setMenu($libs, $libID = 0, $extra = 'product')
+    public function setMenu($libs, $libID = 0, $moduleID = 0)
     {
         $currentModule = 'doc';
         $currentMethod = 'browse';
@@ -38,7 +38,7 @@ class docModel extends model
 
         $selectHtml = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i><div id='libMenu'><div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div><div id='libMenuGroups' class='clearfix'><div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div><div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div><div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div></div></div></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
-        common::setMenuVars($this->lang->doc->menu, 'type', '');
+        common::setMenuVars($this->lang->doc->menu, 'crumb', $this->getCrumbs($libID, $moduleID));
     }
 
     /**
@@ -1140,24 +1140,13 @@ class docModel extends model
      * @access public
      * @return string
      */
-    public function getCrumbs($libID, $moduleID = 0, $docID = 0, $from = 'doc')
+    public function getCrumbs($libID, $moduleID = 0)
     {
-        $lib        = $this->getLibById($libID);
-        $parents    = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
-        $doc        = $docID ? $this->getById($docID) : array();
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
-        $objectName = '';
-        if($type != 'custom' and empty($lib->main))
-        {
-            $table      = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $objectName = $this->dao->select('name')->from($table)->where('id')->eq($lib->$type)->fetch('name');
-        }
-        $crumb = '';
-        if($objectName) $crumb .= html::a(helper::createLink('doc', 'objectLibs', "type=$type&objectID={$lib->$type}&from=$from"), $objectName) . $this->lang->arrow;
-        $crumb .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from"), $lib->name);
-        foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc&from=$from"), $module->name);
-        if($doc) $crumb .= $this->lang->arrow . $doc->title; 
+        if(empty($libID)) return '';
 
+        $parents = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
+        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), '/');
+        foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc"), $module->name);
         return $crumb;
     }
 

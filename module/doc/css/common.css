@@ -5,11 +5,11 @@
 .lib .file-icon{margin-bottom:5px;}
 .lib .lib-name{overflow: hidden; white-space: nowrap;}
 .lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
-.crumb{margin-right:10px;}
 .w-lib-p100{width:100%;}
 .w-lib-p50{width:47%;}
 .w-lib-p33{width:31%;}
 #titlebar > .heading > strong > i{display:inline;} 
+#modulemenu .nav > li > a{display: inline-block;}
 
 #groups_chosen .chosen-choices {border-right:0px;}
 
@@ -80,19 +80,19 @@
 }
 @media (min-width: 1360px)
 {
-    #dropMenu {min-width: 1340px;}
+    #dropMenu {min-width: 1320px;}
     #dropMenu .lib-list-bg .list-menu-item {width: 25%;}
     #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 10%;}
 }
 @media (min-width: 1480px)
 {
-    #dropMenu {min-width: 1360px;}
+    #dropMenu {min-width: 1340px;}
     #dropMenu .list-menu-item {width: 33.3333333%;}
     #dropMenu .lib-list-bg .list-menu-item {width: 20%;}
 }
 @media (min-width: 1600px)
 {
-    #dropMenu {min-width: 1480px;}
+    #dropMenu {min-width: 1460px;}
     #dropMenu .list-menu-item {width: 25%;}
     #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 8.333333%;}
 }

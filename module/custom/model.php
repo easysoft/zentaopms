@@ -239,6 +239,11 @@ class customModel extends model
                     if(isset($item['float'])) $float = $item['float'];
                     if(isset($item['fixed'])) $fixed = $item['fixed'];
                 }
+                if(is_object($item))
+                {
+                    if(isset($item->float)) $float = $item->float;
+                    if(isset($item->fixed)) $fixed = $item->fixed;
+                }
 
                 $hidden = !$fixed && isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
                 if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = true;

@@ -25,11 +25,20 @@ var browseType = '<?php echo $browseType;?>';
 <?php include __DIR__ . '/browsebytree.html.php';?>
 <?php else:?>
 <div id='featurebar'>
-  <div class='crumb pull-left'><?php echo $crumb;?></div>
   <ul class='nav'>
-  <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy&from=$from"), $lang->doc->allDoc)?></li>
-  <li id='openedbymeTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=openedByMe&param=0&orderBy=$orderBy&from=$from"), $lang->doc->openedByMe)?></li>
-  <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
+    <li>
+      <div class="dropdown">
+        <a href="###" class="dropdown-toggle" data-toggle="dropdown"><i class='icon icon-list'></i> <?php echo $lang->doc->browseTypeList['list']?> <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+          <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
+          <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
+          <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-branch'></i> {$lang->doc->browseTypeList['tree']}");?></li>
+        </ul>
+      </div>
+    </li>
+    <li id='allTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=$orderBy&from=$from"), $lang->doc->allDoc)?></li>
+    <li id='openedbymeTab'><?php echo html::a(inlink('browse', "libID=$libID&browseType=openedByMe&param=0&orderBy=$orderBy&from=$from"), $lang->doc->openedByMe)?></li>
+    <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->doc->searchDoc;?></a></li>
   </ul>
   <div class='actions'>
     <div class="btn-group">
@@ -40,14 +49,6 @@ var browseType = '<?php echo $browseType;?>';
         if(common::hasPriv('doc', 'deleteLib')) echo '<li>' . html::a(inlink('deleteLib', "rootID=$libID"), $lang->doc->deleteLib, 'hiddenwin') . '</li>';
         ?>
         <li><?php echo html::a(inlink('ajaxFixedMenu', "libID=$libID&type=" . ($fixedMenu ? 'remove' : 'fixed')), $fixedMenu ? $lang->doc->removeMenu : $lang->doc->fixedMenu, "hiddenwin");?></li>
-      </ul>
-    </div>
-    <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-list'></i> <?php echo $lang->doc->browseTypeList['list']?> <span class="caret"></span></button>
-      <ul class="dropdown-menu" role="menu">
-        <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
-        <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
-        <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-branch'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID");?>
