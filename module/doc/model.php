@@ -531,13 +531,14 @@ class docModel extends model
      * @param  int    $libID 
      * @param  int    $parent 
      * @access public
-     * @return void
+     * @return array
      */
-    public function getDocMenu($libID, $parent)
+    public function getDocMenu($libID, $parent, $orderBy = 'name_asc')
     {
         return $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($libID)
             ->andWhere('type')->eq('doc')
             ->andWhere('parent')->eq($parent)
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 

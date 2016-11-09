@@ -128,6 +128,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
+        if($browseType == 'bymenu' and strtolower($orderBy) != 'editeddate_desc' and strtolower($orderBy) != 'addeddate_desc') $orderBy = 'title_asc';
         $sort = $this->loadModel('common')->appendOrder($orderBy);
  
         /* Get docs by browse type. */
@@ -145,7 +146,7 @@ class doc extends control
 
         if($this->cookie->browseType == 'bymenu')
         {
-            $this->view->modules = $this->doc->getDocMenu($libID, $moduleID);
+            $this->view->modules = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc');
             $this->view->parents = $this->loadModel('tree')->getParents($moduleID);
         }
         elseif($this->cookie->browseType == 'bytree')
@@ -704,23 +705,47 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID)
+    public function showFiles($type, $objectID, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',  $uri);
         $this->app->session->set('storyList', $uri);
         $this->app->session->set('docList',   $uri);
 
+        /* According the from, set menus. */
+        if($this->from == 'product')
+        {
+            $this->lang->doc->menu      = $this->lang->product->menu;
+            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
+            $this->product->setMenu($this->product->getPairs(), $objectID);
+            $this->lang->set('menugroup.doc', 'product');
+        }
+        elseif($this->from == 'project')
+        {
+            $this->lang->doc->menu      = $this->lang->project->menu;
+            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
+            $this->project->setMenu($this->project->getPairs('nocode'), $objectID);
+            $this->lang->set('menugroup.doc', 'project');
+        }
+        else
+        {
+            $this->doc->setMenu(array($this->lang->doclib->files), 0, $type);
+        }
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
-        $this->doc->setMenu(array($this->lang->doclib->files), 0, $type);
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
         $this->view->type   = $type;
         $this->view->object = $object;
-        $this->view->files  = $this->doc->getLibFiles($type, $objectID);
+        $this->view->files  = $this->doc->getLibFiles($type, $objectID, $pager);
+        $this->view->pager  = $pager;
         $this->display();
     }
 

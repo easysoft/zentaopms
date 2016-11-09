@@ -115,3 +115,6 @@ $lang->doclib->user    = '用户';
 $lang->doclib->files   = '附件库';
 $lang->doclib->all     = '所有文档库';
 $lang->doclib->select  = '选择文档库';
+
+$lang->doclib->main['product'] = $lang->productCommon . '库';
+$lang->doclib->main['project'] = $lang->projectCommon . '库';

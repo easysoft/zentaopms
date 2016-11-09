@@ -90,5 +90,4 @@
     <?php endforeach;?>
   </table>
 </div>
-<?php js::set('type', 'doc')?>
 <?php include '../../common/view/footer.html.php';?>

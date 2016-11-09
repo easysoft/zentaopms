@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'><strong><?php echo $lang->doclib->all?></strong></div>
 <div id='libs'>
   <?php
   $libs = array();
@@ -30,7 +29,7 @@
         <?php if($objectCount > 8 and $objectNum == 8):?>
         <div class='col-md-3'>
           <div class='libs-group clearfix lib-more'>
-            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}{$lang->doc->libTypeList['product']}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
           </div>
         </div>
         <?php break;?>
@@ -84,7 +83,7 @@
         <?php if($objectCount > 8 and $objectNum == 8):?>
         <div class='col-md-3'>
           <div class='libs-group clearfix lib-more'>
-            <?php echo html::a(inlink('allLibs', "type=$libsName"), $lang->more . "<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}{$lang->doc->libTypeList['project']}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
           </div>
         </div>
         <?php break;?>
@@ -137,7 +136,7 @@
         <?php if($objectCount > 8 and $objectNum == 8):?>
         <div class='col-md-3'>
           <div class='libs-group clearfix lib-more'>
-            <?php echo html::a(inlink('allLibs', "type=$libsName"), $lang->more . "<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}{$lang->doc->libTypeList['custom']}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
           </div>
         </div>
         <?php break;?>
