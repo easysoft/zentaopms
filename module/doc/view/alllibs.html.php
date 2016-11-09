@@ -36,7 +36,7 @@
         ?>
         <?php foreach($subLibs[$lib->id] as $subLibID => $subLibName):?>
         <?php
-        if($subLibID == 'project')   $libLink = inlink('allLibs', "type=project&extra=product=$lib->id");
+        if($subLibID == 'project')   $libLink = inlink('allLibs', "type=project&product=$lib->id");
         elseif($subLibID == 'files') $libLink = inlink('showFiles', "type=$type&objectID=$lib->id");
         else                         $libLink = inlink('browse', "libID=$subLibID");
         ?>

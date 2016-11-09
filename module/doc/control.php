@@ -538,56 +538,6 @@ class doc extends control
     }
 
     /**
-     * Ajax get drop menu.
-     * 
-     * @param  int    $productID 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetDropMenu($libID, $module, $method, $extra)
-    {
-        $this->view->link   = $this->doc->getDocLink($module, $method, $extra);
-        $this->view->libID  = $libID;
-        $this->view->module = $module;
-        $this->view->method = $method;
-        $this->view->extra  = $extra;
-        $this->view->libs   = $this->doc->getLibs($extra);
-
-        $this->display();
-    }
-
-    /**
-     * The results page of search.
-     * 
-     * @param  string  $keywords 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
-    {
-        $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)
-            ->andWhere('name')->like("%$keywords%")
-            ->beginIF($extra == 'product' or $extra == 'project')->andWhere($extra)->ne(0)->fi()
-            ->orderBy('`id` desc')
-            ->fetchAll();
-        foreach($libs as $key => $lib)
-        {
-            if(!$this->doc->checkPriv($lib)) unset($libs[$key]);
-        }
-
-        $this->view->link     = $this->doc->getDocLink($module, $method, $extra);
-        $this->view->libs     = $libs;
-        $this->view->keywords = $keywords;
-        $this->display();
-    }
-
-    /**
      * Ajax get modules by libID.
      * 
      * @param  int    $libID 
@@ -658,39 +608,40 @@ class doc extends control
      * Show all libs by type.
      * 
      * @param  string $type 
-     * @param  string $extra 
+     * @param  string $product 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
      * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function allLibs($type, $extra = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function allLibs($type, $product = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
-        $this->doc->setMenu(array($this->lang->doclib->select), 0);
+        if($product)
+        {
+            $this->view->product = $this->product->getById($product);
+            $libName = $this->view->product->name;
+        }
 
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
+
+        $this->doc->setMenu(array($product ? $libName : $this->lang->doclib->select), 0);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $libs    = $this->doc->getAllLibsByType($type, $pager, $extra);
+        $libs    = $this->doc->getAllLibsByType($type, $pager, $product);
         $subLibs = array();
         if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
-        if($extra)
-        {
-            parse_str($extra);
-            if(isset($product)) $this->view->product = $this->product->getById($product);
-        }
 
         $this->view->type    = $type;
         $this->view->libs    = $libs;
         $this->view->subLibs = $subLibs;
         $this->view->pager   = $pager;
-        $this->view->extra   = $extra;
+        $this->view->product = $product;
         $this->display();
     }
 
@@ -709,6 +660,9 @@ class doc extends control
         $this->app->session->set('storyList', $uri);
         $this->app->session->set('docList',   $uri);
 
+        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+
         /* According the from, set menus. */
         if($this->from == 'product')
         {
@@ -726,15 +680,12 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu(array($this->lang->doclib->files), 0);
+            $this->doc->setMenu(array($object->name), 0);
         }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;

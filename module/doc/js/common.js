@@ -21,22 +21,24 @@ function showLibMenu()
             var productCount = 0, projectCount = 0, customCount = 0;
             $.each(data.product, function(idx, product)
             {
-                $list.append('<div class="list-menu-item-heading" data-product="' + product.id + '"><i class="icon icon-cube"></i>' + product.name + '</div>');
+                $list.append('<div class="list-menu-item-heading" data-product="' + product.id + '">' + product.name + '</div>');
                 $.each(product.libs, function(libId, libName)
                 {
                     var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=product&objectID=' + product.id) : createLink('doc', 'browse', 'libID=' + libId);
+                    var url = libId === 'project' ? createLink('doc', 'allLibs', 'type=project&extra=' + product.id) : url;
                     var itemId = 'lib-' + itemIdSeed++;
                     $list.append('<a data-order="' + (orderSeed++) + '" title="' + product.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="product" data-product="' + product.id + '" data-id="' + libId + '">' + libName + '</a>');
                     items[itemId] = {type: 'product', id: libId, name: libName, objectId: product.id, product: product.name, search: (libName + ' ' + product.name).toLowerCase()};
                     productCount++;
                 });
+                $list.append('<div class="list-menu-item-footer" data-product="' + product.id + '"></div>');
             });
             $list.toggleClass('lib-list-bg', productCount > 4);
 
             $list = $('#libMenuProjectGroup > .lib-menu-list');
             $.each(data.project, function(idx, project)
             {
-                $list.append('<div class="list-menu-item-heading" data-product="' + project.id + '"><i class="icon icon-folder-close-alt"></i>' + project.name + '</div>');
+                $list.append('<div class="list-menu-item-heading" data-project="' + project.id + '">' + project.name + '</div>');
                 $.each(project.libs, function(libId, libName)
                 {
                     var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=project&objectID=' + project.id) : createLink('doc', 'browse', 'libID=' + libId);
@@ -45,6 +47,7 @@ function showLibMenu()
                     items[itemId] = {type: 'project', id: libId, name: libName, objectId: project.id, project: project.name, search: (libName + ' ' + project.name).toLowerCase()};
                     projectCount++;
                 });
+                $list.append('<div class="list-menu-item-footer" data-project="' + project.id + '"></div>');
             });
             $list.toggleClass('lib-list-bg', projectCount > 4);
 
@@ -75,6 +78,7 @@ function showLibMenu()
                 if(searchKey)
                 {
                     var $menuHeadings = $menu.find('.list-menu-item-heading').addClass('hidden');
+                    var $menuFooters  = $menu.find('.list-menu-item-footer').addClass('hidden');
                     searchKey = searchKey.toLowerCase();
                     $.each(items, function(itemId, item)
                     {
@@ -83,12 +87,13 @@ function showLibMenu()
                         if(isMatch && item.type !== 'custom' && item.objectId)
                         {
                             $menuHeadings.filter('[data-' + item.type + '="' + item.objectId + '"]').removeClass('hidden');
+                            $menuFooters.filter('[data-' + item.type + '="' + item.objectId + '"]').removeClass('hidden');
                         }
                     });
                 }
                 else
                 {
-                    $menu.find('.list-menu-item.hidden,.list-menu-item-heading.hidden').removeClass('hidden');
+                    $menu.find('.list-menu-item.hidden,.list-menu-item-heading.hidden,.list-menu-item-footer.hidden').removeClass('hidden');
                 }
                 $menu.find('.list-menu-item:not(.hidden)').first().addClass('active');
             }).on('keydown', function(e)

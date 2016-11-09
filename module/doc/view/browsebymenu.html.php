@@ -14,7 +14,7 @@
 #filesPanel .file > a {display: block}
 #filesPanel .file-icon {height: 60px; text-align: center; line-height: 60px; opacity: .7; margin-bottom:5px;}
 #filesPanel .file:hover .file-icon {opacity: 1}
-#filesPanel .file-name {text-align: center; overflow: hidden; white-space:nowrap;}
+#filesPanel .file-name {text-align: center; overflow: hidden; white-space:nowrap; text-overflow: ellipsis;}
 #filesPanel .file.create {height:88px; border:1px dashed #ddd; width:75px;}
 #filesPanel .file.create .addbtn{display:block;margin-top:22px;padding-top:10px;}
 #filesPanel .file.create .file-icon {height:100%; opacity: 0.5; color:#ddd;}

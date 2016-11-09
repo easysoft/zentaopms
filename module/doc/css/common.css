@@ -1,9 +1,9 @@
 .libs-group-heading {color: #808080; border-bottom:1px solid #ddd; padding:8px;}
-.libs-group-heading a{overflow: hidden; white-space: nowrap;}
+.libs-group-heading a{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .libs-group{padding:10px 10px 10px 10px;}
 .lib {float: left; display: block; width:80px; padding: 5px; margin:0px 3px; text-align: center; color: #333; overflow: hidden; text-overflow: ellipsis;}
 .lib .file-icon{margin-bottom:5px;}
-.lib .lib-name{overflow: hidden; white-space: nowrap;}
+.lib .lib-name{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
 .w-lib-p100{width:100%;}
 .w-lib-p50{width:47%;}
@@ -27,13 +27,13 @@
 .lib-menu-list-heading:hover {border-color: #114f8e; cursor: pointer; color: #114f8e;}
 .lib-menu-list-heading > .icon {display: none}
 .lib-menu-list {max-height: 500px; overflow-y: auto; min-height: 100px;}
-.list-menu-item-heading {padding: 0 10px; font-weight: bold; color: #a1a1a1; float: left; width: 100%;}
+.list-menu-item-heading {padding: 0 10px; font-weight: bold; color: #141414; white-space: nowrap; text-overflow: ellipsis; overflow:hidden; float: left; max-width:50%}
 .list-menu-item-heading > .icon {display: inline-block; width: 18px;}
-.list-menu-item + .list-menu-item-heading {border-top: 1px dotted #ddd;}
-.list-menu-item {padding: 0 8px 0 10px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; float: left; width: 100%}
+.list-menu-item {padding: 0 8px 0 10px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; float: left}
 .list-menu-item.current {background-color: #EBF2F9;}
 .list-menu-item.active,
 .list-menu-item:hover {background-color: #e5e5e5; color: #1a53ff}
+.list-menu-item-footer {clear:left; border-top: 1px dotted #ddd;}
 #searchLib {padding: 2px 8px; height: 28px; max-width: 190px;}
 
 #dropMenu[data-filter] #libMenuGroups {table-layout: auto;}
@@ -57,42 +57,42 @@
 @media (min-width: 880px)
 {
     #dropMenu {min-width: 850px;}
-    .lib-menu-lg .lib-list-bg .list-menu-item {width: 50%;}
-    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 25%;}
+    .lib-menu-lg .lib-list-bg .list-menu-item {max-width: 50%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {max-width: 25%;}
 }
 @media (min-width: 1000px)
 {
     #dropMenu {min-width: 960px;}
-    #dropMenu .lib-list-bg .list-menu-item {width: 50%;}
-    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 20%;}
+    #dropMenu .lib-list-bg .list-menu-item {max-width: 50%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {max-width: 20%;}
 }
 @media (min-width: 1120px)
 {
     #dropMenu {min-width: 1080px;}
-    #dropMenu .list-menu-item {width: 50%;}
-    #dropMenu .lib-list-bg .list-menu-item {width: 33.33333333%;}
-    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 16.666667%;}
+    #dropMenu .list-menu-item {max-width: 50%;}
+    #dropMenu .lib-list-bg .list-menu-item {max-width: 33.33333333%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {max-width: 16.666667%;}
 }
 @media (min-width: 1240px)
 {
     #dropMenu {min-width: 1200px;}
-    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 12.5%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {max-width: 12.5%;}
 }
 @media (min-width: 1360px)
 {
     #dropMenu {min-width: 1320px;}
-    #dropMenu .lib-list-bg .list-menu-item {width: 25%;}
-    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 10%;}
+    #dropMenu .lib-list-bg .list-menu-item {max-width: 25%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {max-width: 10%;}
 }
 @media (min-width: 1480px)
 {
     #dropMenu {min-width: 1340px;}
-    #dropMenu .list-menu-item {width: 33.3333333%;}
-    #dropMenu .lib-list-bg .list-menu-item {width: 20%;}
+    #dropMenu .list-menu-item {max-width: 33.3333333%;}
+    #dropMenu .lib-list-bg .list-menu-item {max-width: 20%;}
 }
 @media (min-width: 1600px)
 {
     #dropMenu {min-width: 1460px;}
-    #dropMenu .list-menu-item {width: 25%;}
-    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {width: 8.333333%;}
+    #dropMenu .list-menu-item {max-width: 25%;}
+    #dropMenu.lib-menu-lg[data-filter] .list-menu-item {max-width: 8.333333%;}
 }

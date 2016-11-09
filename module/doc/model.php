@@ -24,8 +24,6 @@ class docModel extends model
      */
     public function setMenu($libs, $libID = 0, $moduleID = 0)
     {
-        $currentModule = 'doc';
-        $currentMethod = 'browse';
         if($libID)
         {
             $lib = $this->getLibById($libID);
@@ -33,6 +31,14 @@ class docModel extends model
             {
                 echo(js::alert($this->lang->doc->accessDenied));
                 die(js::locate('back'));
+            }
+
+            if($lib->product or $lib->project)
+            {
+                $table    = $lib->product ? TABLE_PRODUCT : TABLE_PROJECT;
+                $objectID = $lib->product ? $lib->product : $lib->project;
+                $object   = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+                if($object) $libs[$libID] = $object->name . ' / ' . $lib->name;
             }
         }
 
@@ -83,7 +89,6 @@ class docModel extends model
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy("t2.order desc, t1.id")
                 ->query();
-            $objects = $this->dao->select('id,name')->from($table)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         }
         else
         {
@@ -93,12 +98,7 @@ class docModel extends model
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
-            if($this->checkPriv($lib))
-            {
-                $libName = $lib->name;
-                if(($type == 'product' or $type == 'project') and isset($objects[$lib->$type])) $libName = $objects[$lib->$type] . ' / ' . $libName;
-                $libPairs[$lib->id] = $libName;
-            }
+            if($this->checkPriv($lib)) $libPairs[$lib->id] = $lib->name;
         }
         return $libPairs;
     }
@@ -629,14 +629,9 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getAllLibsByType($type, $pager = null, $extra = '')
+    public function getAllLibsByType($type, $pager = null, $product = '')
     {
-        if($extra)
-        {
-            parse_str($extra);
-            if(isset($product) and $type == 'project') $projects = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->fetchPairs('project', 'project');
-
-        }
+        if($product and $type == 'project') $projects = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->fetchPairs('project', 'project');
 
         $key = ($type == 'product' or $type == 'project') ? $type : 'id';
         $stmt = $this->dao->select("DISTINCT $key")->from(TABLE_DOCLIB)->where('deleted')->eq(0);
@@ -1145,7 +1140,7 @@ class docModel extends model
         if(empty($libID)) return '';
 
         $parents = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
-        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), '/');
+        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), 'ROOT');
         foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc"), $module->name);
         return $crumb;
     }

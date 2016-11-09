@@ -55,7 +55,7 @@
             ?>
             <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
             <?php
-            if($libID == 'project')   $libLink = inlink('allLibs', "type=project&extra=product=$product->id");
+            if($libID == 'project')   $libLink = inlink('allLibs', "type=project&product=$product->id");
             elseif($libID == 'files') $libLink = inlink('showFiles', "type=product&objectID=$product->id");
             else                      $libLink = inlink('browse', "libID=$libID");
             ?>
@@ -127,7 +127,7 @@
     </div>
     <hr />
     <?php else:?>
-      <div class='clearfix'>
+      <div class='row clearfix'>
       <?php
       $objectNum   = 1;
       $objectCount = count($libs);
@@ -144,8 +144,8 @@
         <div class='col-md-3'>
           <div class='libs-group-heading libs-custom-heading'>
             <?php
-            $label = $objectNum == 1 ? "<span class='label label-info'>{$lang->doc->customAB}</span> " : '';
-            echo html::a(inlink('browse', "libID=$libID"), $label . $libName, '', "title='{$libName}'")
+            if($objectNum == 1) echo "<span class='label label-info lable-custom'>{$lang->doc->customAB}</span> ";
+            echo html::a(inlink('browse', "libID=$libID"), $libName, '', "title='{$libName}'")
             ?>
           </div>
         </div>
