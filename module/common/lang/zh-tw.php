@@ -183,7 +183,7 @@ $lang->product->menu->dynamic = '動態|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => '計劃|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
-$lang->product->menu->doc     = array('link' => '文檔|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->doc     = array('link' => '文檔|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
@@ -214,7 +214,7 @@ $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->testtask  = '測試|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
+$lang->project->menu->doc       = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->projectCommon}|project|create", 'float' => 'right');
@@ -262,10 +262,7 @@ $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
 $lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->browse  = array('link' => '文檔|doc|browse|libID=%s', 'alias' => 'view,create,edit');
-$lang->doc->menu->edit    = '編輯|doc|editLib|libID=%s';
-$lang->doc->menu->module  = '分類|tree|browse|libID=%s&viewType=doc';
-$lang->doc->menu->delete  = array('link' => '刪除|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->crumb   = array('link' => '%s', 'fixed' => true);
 $lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加文檔庫|doc|createLib', 'float' => 'right');
 
 /* 統計視圖菜單設置。*/

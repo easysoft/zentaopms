@@ -1140,7 +1140,7 @@ class docModel extends model
         if(empty($libID)) return '';
 
         $parents = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
-        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), 'ROOT');
+        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), '&nbsp;/&nbsp;');
         foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc"), $module->name);
         return $crumb;
     }

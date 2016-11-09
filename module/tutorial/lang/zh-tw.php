@@ -9,7 +9,6 @@
  * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z sunhao@cnezsoft.com $
  * @link        http://www.zentao.net
  */
-
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = '新手教程';
 $lang->tutorial->desc             = '通過完成一系列任務，快速瞭解禪道的基本使用方法。這可能會花費您10分鐘，你可以隨時退出任務。';
