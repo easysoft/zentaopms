@@ -257,9 +257,10 @@ class productModel extends model
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
         /* Create doc lib. */
+        $this->app->loadLang('doc');
         $lib = new stdclass();
         $lib->product = $productID;
-        $lib->name    = $product->name;
+        $lib->name    = $this->lang->doclib->main['product'];
         $lib->main    = '1';
         $lib->acl     = $product->acl == 'open' ? 'open' : 'custom';
         $lib->users   = $this->app->user->account;

@@ -5,7 +5,7 @@
 <script>
 $(function()
 {
-    $('#featurebar .heading').prepend("<i class='icon icon-tags'></i> " + <?php echo json_encode($crumbs)?> + <?php echo json_encode($lang->arrow)?>);
+    $('#featurebar .heading').prepend(<?php echo json_encode($crumbs)?> + <?php echo json_encode($lang->arrow)?>);
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

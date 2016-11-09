@@ -1163,6 +1163,7 @@ class upgradeModel extends model
      */
     public function adjustDocModule()
     {
+        $this->app->loadLang('doc');
         $productDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('productdoc')->orderBy('grade,id')->fetchAll('id');
         $allProductIdList  = $this->dao->select('id,name,acl,whitelist,createdBy')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchAll('id');
         foreach($allProductIdList as $productID => $product)
@@ -1171,7 +1172,7 @@ class upgradeModel extends model
 
             $lib = new stdclass();
             $lib->product = $productID;
-            $lib->name    = $product->name;
+            $lib->name    = $this->lang->doclib->main['product'];
             $lib->main    = 1;
             $lib->acl     = $product->acl == 'open' ? 'open' : 'custom';
             $lib->users   = $product->createdBy;
@@ -1213,7 +1214,7 @@ class upgradeModel extends model
 
             $lib = new stdclass();
             $lib->project = $projectID;
-            $lib->name    = $project->name;
+            $lib->name    = $this->lang->doclib->main['project'];
             $lib->main    = 1;
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
 

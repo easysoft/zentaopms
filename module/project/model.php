@@ -271,7 +271,7 @@ class projectModel extends model
             /* Create doc lib. */
             $lib = new stdclass();
             $lib->project = $projectID;
-            $lib->name    = $project->name;
+            $lib->name    = $this->lang->doclib->main['project'];
             $lib->main    = '1';
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
 

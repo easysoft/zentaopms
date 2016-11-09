@@ -63,8 +63,7 @@
   </div>
   <?php endif; ?>
 </div>
-<div class='clearfix pager-wrapper'><?php $pager->show('left');?></div>
-<?php js::set('type', $type);?>
+<div class='clearfix pager-wrapper'><?php $pager->show();?></div>
 <script>
 $(function()
 {

@@ -80,7 +80,8 @@
               <td></td>
               <td colspan='2'>
                 <?php 
-                echo html::submitButton() . html::backButton();
+                echo html::submitButton();
+                echo $this->session->taskList ? html::linkButton($this->lang->goback, $this->session->taskList) : html::backButton();
                 echo html::hidden('parentModuleID', $currentModuleID);
                 echo html::hidden('maxOrder', $maxOrder);
                 ?>      

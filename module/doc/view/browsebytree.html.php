@@ -45,11 +45,11 @@
       </ul>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-tags'></i> <?php echo $lang->doc->browseTypeList['tree']?> <span class="caret"></span></button>
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-branch'></i> <?php echo $lang->doc->browseTypeList['tree']?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
         <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
-        <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-tags'></i> {$lang->doc->browseTypeList['tree']}");?></li>
+        <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-branch'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
     <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID");?>

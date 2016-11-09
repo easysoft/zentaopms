@@ -115,3 +115,6 @@ $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
 $lang->doclib->all     = 'All Libraries';
 $lang->doclib->select  = 'Select Library';
+
+$lang->doclib->main['product'] = $lang->productCommon . ' Library';
+$lang->doclib->main['project'] = $lang->projectCommon . ' Library';

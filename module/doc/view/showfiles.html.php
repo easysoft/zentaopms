@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
-  <strong><?php echo html::a(inlink('objectLibs', "type=$type&objectID={$object->id}&from={$this->from}"), $object->name) . $lang->arrow . $lang->doclib->files?></strong>
+  <strong><?php echo $lang->doclib->files?></strong>
   <div class='actions'><?php echo html::backButton();?></div>
 </div>
 <div class='lib-files cards'>
@@ -46,12 +46,12 @@
       </a>
       <div class='card-heading'>
         <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID"); ?>'><?php echo $lang->doc->fileObject . ' ' . strtoupper($file->objectType) . ' #' . $file->objectID ?></a>
-        <i class='icon icon-chevron-right pull-right'></i>
         <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete pull-right'><i class='icon icon-remove'></i></a>
       </div>
     </div>
   </div>
   <?php endforeach;?>
 </div>
+<div class='clearfix pager-wrapper'><?php $pager->show();?></div>
 <?php js::set('type', 'doc');?>
 <?php include '../../common/view/footer.html.php';?>
