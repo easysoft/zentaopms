@@ -16,6 +16,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix' title='DOC'><?php echo html::icon($lang->icons['doc']);?> <strong><?php echo $doc->id;?></strong></span>
+    <strong><?php echo $doc->title;?></strong>
     <?php if($doc->deleted):?>
     <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
     <?php endif; ?>

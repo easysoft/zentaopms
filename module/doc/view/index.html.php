@@ -42,7 +42,7 @@
           ?>
           <div class='libs-group-heading libs-product-heading'>
             <?php
-            $label = $objectNum == 1 ? "<span class='label label-primary'>{$lang->productCommon}</span> " : '';
+            $label = $objectNum == 1 ? "<span class='label label-primary'>{$lang->doclib->main['product']}</span> " : '';
             echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), $label . $product->name, '', "title='{$product->name}'");
             if($subLibCount > 3) echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='{$lang->more}' class='pull-right'");
             ?>
@@ -96,7 +96,7 @@
           ?>
           <div class='libs-group-heading libs-project-heading'>
             <?php
-            $label = $objectNum == 1 ? "<span class='label label-success'>{$lang->projectCommon}</span> " : '';
+            $label = $objectNum == 1 ? "<span class='label label-success'>{$lang->doclib->main['project']}</span> " : '';
             echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), $label . $project->name, '', "title='{$project->name}'");
             if($subLibCount > 3) echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='{$lang->more}' class='pull-right'");
             ?>

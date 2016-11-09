@@ -21,7 +21,7 @@ function showLibMenu()
             var productCount = 0, projectCount = 0, customCount = 0;
             $.each(data.product, function(idx, product)
             {
-                $list.append('<div class="list-menu-item-heading" data-product="' + product.id + '">' + product.name + '</div>');
+                $list.append('<div class="list-menu-item-heading" data-product="' + product.id + '">[ ' + product.name + ' ]</div>');
                 $.each(product.libs, function(libId, libName)
                 {
                     var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=product&objectID=' + product.id) : createLink('doc', 'browse', 'libID=' + libId);
@@ -38,7 +38,7 @@ function showLibMenu()
             $list = $('#libMenuProjectGroup > .lib-menu-list');
             $.each(data.project, function(idx, project)
             {
-                $list.append('<div class="list-menu-item-heading" data-project="' + project.id + '">' + project.name + '</div>');
+                $list.append('<div class="list-menu-item-heading" data-project="' + project.id + '">[ ' + project.name + ' ]</div>');
                 $.each(project.libs, function(libId, libName)
                 {
                     var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=project&objectID=' + project.id) : createLink('doc', 'browse', 'libID=' + libId);

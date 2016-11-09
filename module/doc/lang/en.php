@@ -58,7 +58,7 @@ $lang->doc->addType        = 'Add Type';
 $lang->doc->libName        = 'Library Name';
 $lang->doc->libType        = 'Library Type';
 $lang->doc->custom         = 'Custom Library';
-$lang->doc->customAB       = 'Custom';
+$lang->doc->customAB       = 'Custom Library';
 $lang->doc->createLib      = 'Create Library';
 $lang->doc->allLibs        = 'Library List';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";
@@ -108,7 +108,7 @@ $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name = 'Library Name';
+$lang->doclib->name    = 'Library Name';
 $lang->doclib->control = 'Access Control';
 $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';

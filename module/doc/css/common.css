@@ -26,14 +26,14 @@
 .lib-menu-list-heading {background-color: #fafafa; color: #808080; padding: 0 10px; text-align: center; display: inline-block; margin: 0 0 10px 10px; border: 1px solid #ddd; line-height: 20px; border-radius: 10px;}
 .lib-menu-list-heading:hover {border-color: #114f8e; cursor: pointer; color: #114f8e;}
 .lib-menu-list-heading > .icon {display: none}
-.lib-menu-list {max-height: 500px; overflow-y: auto; min-height: 100px;}
-.list-menu-item-heading {padding: 0 10px; font-weight: bold; color: #141414; white-space: nowrap; text-overflow: ellipsis; overflow:hidden; float: left; max-width:50%}
+.lib-menu-list {max-height: 500px; overflow-y: auto; min-height: 100px; line-height:25px;}
+.list-menu-item-heading {padding: 0 3px 0 0px; color: #141414; white-space: nowrap; overflow:hidden; float: left; width:35%;text-align:right;}
 .list-menu-item-heading > .icon {display: inline-block; width: 18px;}
-.list-menu-item {padding: 0 8px 0 10px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; float: left}
-.list-menu-item.current {background-color: #EBF2F9;}
+.list-menu-item {padding: 0 8px 0 5px; display: block; overflow: hidden; white-space: nowrap; float: left; color:#3280FC;}
+.list-menu-item.current {background-color: #EBF2F9; color:red}
 .list-menu-item.active,
-.list-menu-item:hover {background-color: #e5e5e5; color: #1a53ff}
-.list-menu-item-footer {clear:left; border-top: 1px dotted #ddd;}
+.list-menu-item:hover {color: #1a53ff}
+.list-menu-item-footer {clear:left}
 #searchLib {padding: 2px 8px; height: 28px; max-width: 190px;}
 
 #dropMenu[data-filter] #libMenuGroups {table-layout: auto;}

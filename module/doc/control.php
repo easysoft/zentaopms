@@ -38,7 +38,6 @@ class doc extends control
     {
         $products[] = $this->lang->doc->systemLibs['product'];
 
-        unset($this->lang->doc->menu->index);
         $this->doc->setMenu(array($this->lang->doclib->select));
 
         $products   = $this->doc->getLimitLibs('product', '9');

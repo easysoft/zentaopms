@@ -263,7 +263,6 @@ $lang->doc->menu = new stdclass();
 
 $lang->doc->menu->list    = array('link' => '%s', 'fixed' => true);
 $lang->doc->menu->crumb   = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->index   = array('link' => '<i class="icon-home"></i>&nbsp;文档主页|doc|index|', 'float' => 'right');
 $lang->doc->menu->create  = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
 
 /* 统计视图菜单设置。*/
