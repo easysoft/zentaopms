@@ -11,6 +11,50 @@
 .w-lib-p33{width:31%;}
 #titlebar > .heading > strong > i{display:inline;} 
 
-#modulemenu .nav > li > .dropdown > a#libType{display:inline-block;}
-#modulemenu .nav > li > .dropdown.open > a#libType{background:#e5e5e5;}
 #groups_chosen .chosen-choices {border-right:0px;}
+
+#dropMenu.loading > #libMenu,
+#dropMenu > .icon {display: none}
+#dropMenu.loading > .icon {display: block}
+#dropMenu {min-width: 600px; transition: min-width .2s;}
+
+#libMenu {display: block; margin: -10px -15px; position: relative;}
+#libMenuHeading {padding: 10px;}
+#libMenuGroups {display: table; width: 100%; margin-bottom: 10px;}
+.lib-menu-group {display: table-cell; width: 33.333333%; padding: 0 10px}
+.lib-menu-group + .lib-menu-group {border-left: 1px dotted #ddd;}
+.lib-menu-list-heading {background-color: #fafafa; color: #808080; padding: 0 10px; text-align: center; display: inline-block; margin-bottom: 10px; border: 1px solid #ddd; line-height: 20px; border-radius: 10px;}
+.lib-menu-list-heading:hover {border-color: #114f8e; cursor: pointer; color: #114f8e;}
+.lib-menu-list-heading > .icon {display: none}
+.lib-menu-list {max-height: 500px; overflow-y: auto; min-height: 100px;}
+.list-menu-item-heading {padding: 0 10px 0 0; font-weight: bold; color: #a1a1a1; background-color: #fff; border-bottom: 1px dotted #ddd; float: left; width: 100%;}
+.list-menu-item-heading > .icon {display: inline-block; width: 20px;}
+.list-menu-item + .list-menu-item-heading {border-top: 1px solid #ddd;}
+.list-menu-item {padding: 0 10px 0 20px; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; float: left;}
+.list-menu-item.current {background-color: #EBF2F9;}
+.list-menu-item.active,
+.list-menu-item:hover {background-color: #e5e5e5; color: #1a53ff}
+#searchLib {padding: 2px 8px; height: 28px; max-width: 190px;}
+
+#dropMenu.lib-menu-lg {min-width: 1200px;}
+#dropMenu.lib-menu-lg .list-menu-item {width: 50%; float: left;}
+
+#dropMenu[data-filter="project"] #libMenuProjectGroup,
+#dropMenu[data-filter="custom"] #libMenuCustomGroup,
+#dropMenu[data-filter="product"] #libMenuProductGroup {display: block; width: 100%}
+#dropMenu[data-filter="project"] #libMenuProjectGroup .lib-menu-list-heading,
+#dropMenu[data-filter="custom"] #libMenuCustomGroup .lib-menu-list-heading,
+#dropMenu[data-filter="product"] #libMenuProductGroup .lib-menu-list-heading {position: absolute; top: 13px; left: 215px; padding-right: 25px; background-color: #114f8e; color: #fff; border-color: #114f8e;}
+#dropMenu[data-filter="project"] #libMenuProjectGroup .lib-menu-list-heading > .icon,
+#dropMenu[data-filter="custom"] #libMenuCustomGroup .lib-menu-list-heading > .icon,
+#dropMenu[data-filter="product"] #libMenuProductGroup .lib-menu-list-heading > .icon {position: absolute; right: 3px; top: 2px; display: block;}
+#dropMenu[data-filter="project"] #libMenuProjectGroup .list-menu-item,
+#dropMenu[data-filter="custom"] #libMenuCustomGroup .list-menu-item,
+#dropMenu[data-filter="product"] #libMenuProductGroup .list-menu-item {width: 33.33333%;}
+#dropMenu.lib-menu-lg[data-filter="product"] #libMenuProductGroup .list-menu-item {width: 16.666667%;}
+#dropMenu[data-filter="project"] #libMenuProductGroup,
+#dropMenu[data-filter="project"] #libMenuCustomGroup,
+#dropMenu[data-filter="custom"] #libMenuProjectGroup,
+#dropMenu[data-filter="custom"] #libMenuProductGroup,
+#dropMenu[data-filter="product"] #libMenuProjectGroup,
+#dropMenu[data-filter="product"] #libMenuCustomGroup {display: none;}

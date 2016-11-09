@@ -36,17 +36,9 @@ class docModel extends model
             }
         }
 
-        $selectHtml = "<a id='currentItem' href=\"javascript:showDropMenu('doc', '$libID', '$currentModule', '$currentMethod', '$extra')\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $selectHtml = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i><div id='libMenu'><div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div><div id='libMenuGroups' class='clearfix'><div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div><div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div><div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div></div></div></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
-
-        $libTypeSelect  = "<div class='dropdown'><a id='libType' class='dropdown-toggle' data-toggle='dropdown' href='###'>{$this->lang->doc->libTypeList[$extra]} <span class='icon-caret-down'></span></a> {$this->lang->arrow} ";
-        $libTypeSelect .= "<ul class='dropdown-menu' role='menu'>";
-        foreach($this->lang->doc->libTypeList as $libType => $libName)
-        {
-            $libTypeSelect .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=$libType"), $libName) . '</li>';
-        }
-        $libTypeSelect .= "</ul></div>";
-        common::setMenuVars($this->lang->doc->menu, 'type', $libTypeSelect);
+        common::setMenuVars($this->lang->doc->menu, 'type', '');
     }
 
     /**
@@ -695,11 +687,19 @@ class docModel extends model
         {
             if($lib->product)
             {
-                $productLibs[$lib->product][$lib->id] = $lib->name;
+                if(empty($productLibs[$lib->product]))
+                {
+                    $productLibs[$lib->product] = array('id' => $lib->product, 'libs' => array());
+                }
+                $productLibs[$lib->product]['libs'][$lib->id] = $lib->name;
             }
             elseif($lib->project)
             {
-                $projectLibs[$lib->project][$lib->id] = $lib->name;
+                if(empty($projectLibs[$lib->project]))
+                {
+                    $projectLibs[$lib->project] = array('id' => $lib->project, 'libs' => array());
+                }
+                $projectLibs[$lib->project]['libs'][$lib->id] = $lib->name;
             }
             else
             {
@@ -716,20 +716,20 @@ class docModel extends model
 
         $hasLibsPriv  = common::hasPriv('doc', 'allLibs');
         $hasFilesPriv = common::hasPriv('doc', 'showFiles');
-        foreach($products as $productID => $productName)
+        foreach ($productLibs as $productID => $productLib)
         {
-            foreach($productLibs[$productID] as $libID => $libName) $productLibs[$productID][$libID] = $productName . ' / ' . $libName;
-            if(isset($hasProject[$productID]) and $hasLibsPriv) $productLibs[$productID]['project'] = $productName . ' / ' . $this->lang->doc->systemLibs['project'];
-            if($hasFilesPriv) $productLibs[$productID]['files'] = $productName . ' / ' . $this->lang->doclib->files;
+            $productLibs[$productID]['name'] = $products[$productID];
+            if(isset($hasProject[$productID]) and $hasLibsPriv) $productLibs[$productID]['libs']['project'] = $this->lang->doc->systemLibs['project'];
+            if($hasFilesPriv) $productLibs[$productID]['libs']['files'] = $this->lang->doclib->files;
         }
         $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectLibs))->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchPairs('id', 'name');
-        foreach($projects as $projectID => $projectName)
+        foreach($projectLibs as $projectID => $projectName)
         {
-            foreach($projectLibs[$projectID] as $libID => $libName) $projectLibs[$projectID][$libID] = $projectName . ' / ' . $libName;
-            if($hasFilesPriv) $projectLibs[$projectID]['files'] = $projectName . ' / ' . $this->lang->doclib->files;
+            $projectLibs[$projectID]['name'] = $projects[$projectID];
+            if($hasFilesPriv) $projectLibs[$projectID]['libs']['files'] = $this->lang->doclib->files;
         }
 
-        return array('product' => $productLibs, 'project' => $projectLibs, 'custom' => $customLibs);
+        return array('product' => array_values($productLibs), 'project' => array_values($projectLibs), 'custom' => $customLibs);
     }
 
     /**

@@ -1,3 +1,175 @@
+function showLibMenu()
+{
+    var $item = $('#currentItem');
+    var $li   = $item.closest('li');
+    var $menu = $('#dropMenu');
+
+    if($li.hasClass('show')) {$li.removeClass('show'); return;}
+    var isBigMode = false;
+    if(!$li.data('showagain'))
+    {
+        $menu.addClass('loading');
+        var $search = $('#searchLib');
+        var items = {};
+        var itemIdSeed = $.zui.uuid();
+        var orderSeed = 1;
+        $.getJSON(createLink('doc', 'ajaxGetAllLibs'), function(data)
+        {
+            $menu.removeClass('loading');
+
+            var $list = $('#libMenuProductGroup > .lib-menu-list');
+            var productCount = 0, projectCount = 0, customCount = 0;
+            $.each(data.product, function(idx, product)
+            {
+                $list.append('<div class="list-menu-item-heading" data-product="' + product.id + '"><i class="icon icon-cube"></i>' + product.name + '</div>');
+                $.each(product.libs, function(libId, libName)
+                {
+                    var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=product&objectID=' + product.id) : createLink('doc', 'browse', 'libID=' + libId);
+                    var itemId = 'lib-' + itemIdSeed++;
+                    $list.append('<a data-order="' + (orderSeed++) + '" title="' + product.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="product" data-product="' + product.id + '" data-id="' + libId + '">' + libName + '</a>');
+                    items[itemId] = {type: 'product', id: libId, name: libName, objectId: product.id, product: product.name, search: (libName + ' ' + product.name).toLowerCase()};
+                    productCount++;
+                });
+            });
+
+            $list = $('#libMenuProjectGroup > .lib-menu-list');
+            $.each(data.project, function(idx, project)
+            {
+                $list.append('<div class="list-menu-item-heading" data-product="' + project.id + '"><i class="icon icon-folder-close-alt"></i>' + project.name + '</div>');
+                $.each(project.libs, function(libId, libName)
+                {
+                    var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=project&objectID=' + project.id) : createLink('doc', 'browse', 'libID=' + libId);
+                    var itemId = 'lib-' + itemIdSeed++;
+                    $list.append('<a data-order="' + (orderSeed++) + '" title="' + project.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="project" data-project="' + project.id + '" data-id="' + libId + '">' + libName + '</a>');
+                    items[itemId] = {type: 'project', id: libId, name: libName, objectId: project.id, project: project.name, search: (libName + ' ' + project.name).toLowerCase()};
+                    projectCount++;
+                });
+            });
+
+            $list = $('#libMenuCustomGroup > .lib-menu-list');
+            $.each(data.custom, function(libId, libName)
+            {
+                var url = createLink('doc', 'browse', 'libID=' + libId);
+                var itemId = 'lib-' + itemIdSeed++;
+                $list.append('<a data-order="' + (orderSeed++) + '" title="' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="custom" data-id="' + libId + '">' + libName + '</a>');
+                items[itemId] = {type: 'custom', id: libId, name: libName, search: libName.toLowerCase()};
+                customCount++;
+            });
+            var $items = $menu.find('.list-menu-item');
+            $items.filter('[data-id="' + $item.data('libId') + '"]').addClass('current');
+            $items.first().addClass('active');
+
+            isBigMode = productCount > 8 && projectCount > 8 && customCount > 8;
+            $menu.toggleClass('lib-menu-lg', isBigMode && $(window).width() > 1200);
+
+            var lastSearchKey = $search.val();
+            $search.on('change keyup paste input propertychange', function()
+            {
+                var searchKey = $search.val();
+                if(searchKey == lastSearchKey) return;
+                lastSearchKey = searchKey;
+                $menu.find('.list-menu-item.active').removeClass('active');
+                if(searchKey)
+                {
+                    var $menuHeadings = $menu.find('.list-menu-item-heading').addClass('hidden');
+                    searchKey = searchKey.toLowerCase();
+                    $.each(items, function(itemId, item)
+                    {
+                        var isMatch = item.search.indexOf(searchKey) > -1 || '@' + item.type === searchKey || item.id === searchKey;
+                        $('#' + itemId).toggleClass('hidden', !isMatch);
+                        if(isMatch && item.type !== 'custom' && item.objectId)
+                        {
+                            $menuHeadings.filter('[data-' + item.type + '="' + item.objectId + '"]').removeClass('hidden');
+                        }
+                    });
+                }
+                else
+                {
+                    $menu.find('.list-menu-item.hidden,.list-menu-item-heading.hidden').removeClass('hidden');
+                }
+                $menu.find('.list-menu-item:not(.hidden)').first().addClass('active');
+            }).on('keydown', function(e)
+            {
+                $items = $menu.find('.list-menu-item');
+
+                var code = e.which;
+                var $this = $items.filter('.list-menu-item.active');
+                if(code === 38) // up
+                {
+                    $this.removeClass('active');
+                    if($this.length)
+                    {
+                        var order = $this.data('order') - 1;
+                        if(order > 0)
+                        {
+                            var $prev = $items.filter('.list-menu-item[data-order="' + order + '"]');
+                            while($prev.hasClass('hidden') && order > 1)
+                            {
+                                order -= 1;
+                                $prev = $items.filter('.list-menu-item[data-order="' + order + '"]');
+                            }
+                            if($prev.length)
+                            {
+                                $prev.addClass('active');
+                                return;
+                            }
+                        }
+                    }
+                    $items.last(':not(.hidden)').addClass('active');
+                }
+                else if(code === 40) // down
+                {
+                    $this.removeClass('active');
+                    if($this.length)
+                    {
+                        var order = $this.data('order') + 1;
+                        if(order <= $items.length)
+                        {
+                            var $next = $items.filter('.list-menu-item[data-order="' + order + '"]');
+                            while($next.hasClass('hidden') && order <= $items.length)
+                            {
+                                order += 1;
+                                $next = $items.filter('.list-menu-item[data-order="' + order + '"]');
+                            }
+                            if($next.length)
+                            {
+                                $next.addClass('active');
+                                return;
+                            }
+                        }
+                    }
+                    $items.first(':not(.hidden)').addClass('active');
+                }
+                else if(code === 13) // enter
+                {
+                    if($this.length) window.location.href = $this.attr('href');
+                }
+            });
+
+            $menu.on('mouseenter', '.list-menu-item', function()
+            {
+                $menu.find('.list-menu-item.active').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $menu.on('click', '.lib-menu-list-heading', function()
+            {
+                var libType = $(this).data('type');
+                var showFilter = $menu.attr('data-filter') != libType;
+                $menu.attr('data-filter', showFilter ? libType : '');
+            });
+        });
+        $li.data('showagain', true);
+        $li.on('click', function(e){e.stopPropagation();});
+        $(document).click(function(){$li.removeClass('show');});
+    }
+    $menu.toggleClass('lib-menu-lg', isBigMode && $(window).width() > 1200);
+    $menu.find('.lib-menu-list').css('max-height', $(window).height() - 210);
+    $li.addClass('show')
+}
+
+showLibMenu();
+
 function loadModules(libID)
 {
     link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
