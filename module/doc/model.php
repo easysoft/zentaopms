@@ -221,11 +221,21 @@ class docModel extends model
             {
                 if($this->session->docQuery == false) $this->session->set('docQuery', ' 1 = 1');
             }
-            $docQuery  = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
+
+            $libCond    = strpos($this->session->docQuery, "`lib` = ") !== false;
+            $allLibCond = strpos($this->session->docQuery, "`lib` = 'all'") !== false;
+
+            $docQuery  = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all product.
             $docQuery  = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
+            $docQuery  = str_replace("`lib` = 'all'", '1', $docQuery);                // Search all lib.
+
             $condition = $this->buildConditionSQL();
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
+            $libIdList = $this->dao->select('id')->from(TABLE_DOCLIB)->beginIF($condition)->where("($condition)")->fi()->get();
+
+            $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
                 ->beginIF($condition)->andWhere("($condition)")->fi()
+                ->beginIF(!$libCond)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF($allLibCond and $condition)->andWhere("lib in ($libIdList)")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)
                 ->fetchAll();
@@ -464,7 +474,7 @@ class docModel extends model
         $this->config->doc->search['queryID']   = $queryID;
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode') + array('all'=>$this->lang->doc->allProduct);
         $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode') + array('all'=>$this->lang->doc->allProject);
-        $this->config->doc->search['params']['lib']['values']     = array(''=>'') + $libs;
+        $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => $libs[$libID], 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID . 'doc', $startModuleID = 0);
@@ -604,20 +614,6 @@ class docModel extends model
             }
         }
         return false;
-    }
-
-    /**
-     * Get doc link.
-     * 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
-     * @access public
-     * @return string
-     */
-    public function getDocLink($module, $method, $extra = '')
-    {
-        return helper::createLink($module, $method, "libID=%s");
     }
 
     /**

@@ -13,12 +13,13 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='libs'>
   <?php
-  $libs = array();
-  $libs['product'] = $products;
-  $libs['project'] = $projects;
-  $libs['custom']  = $customLibs;
+  $allLibs = array();
+  $allLibs['product'] = $products;
+  $allLibs['project'] = $projects;
+  $allLibs['custom']  = $customLibs;
   ?>
-  <?php foreach ($libs as $libsName => $libs):?>
+  <?php foreach($allLibs as $libsName => $libs):?>
+    <?php if(empty($libs)) continue;?>
     <?php if($libsName === 'product'): ?>
       <div class='row'>
       <?php

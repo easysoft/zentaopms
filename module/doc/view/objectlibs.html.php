@@ -22,7 +22,7 @@
     if($libID == 'project' and $from != 'doc') continue;
 
     $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");
-    if($libID == 'project') $libLink = inlink('allLibs', "type=project&extra=product=$object->id");
+    if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");
     if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");
     ?>
     <a class='lib' title='<?php echo $libName?>' href='<?php echo $libLink?>'>

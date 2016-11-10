@@ -68,10 +68,6 @@ class searchModel extends model
             /* Set and or. */
             $andOr = strtoupper($this->post->$andOrName);
             if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
-            $where .= " $andOr ";
-
-            /* Set filed name. */
-            $where .= '`' . $this->post->$fieldName . '` ';
 
             /* Set operator. */
             $value    = $this->post->$valueName;
@@ -81,35 +77,40 @@ class searchModel extends model
             /* Escape char. */
             $value = str_replace(array('\\', '%', '_'), array('\\\\', '\\%', '\\_'), $value);
 
+            /* Set condition. */
+            $condition = '';
             if($operator == "include")
             {
-                $where .= ' LIKE ' . $this->dbh->quote("%$value%");
+                $condition = ' LIKE ' . $this->dbh->quote("%$value%");
             }
             elseif($operator == "notinclude")
             {
-                $where .= ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
+                $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
             }
             elseif($operator == 'belong')
             {
                 if($this->post->$fieldName == 'module')
                 {
                     $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    if($allModules) $where .= helper::dbIN($allModules);
+                    if($allModules) $condition = helper::dbIN($allModules);
                 }
                 elseif($this->post->$fieldName == 'dept')
                 {
                     $allDepts = $this->loadModel('dept')->getAllChildId($value);
-                    $where .= helper::dbIN($allDepts);
+                    $condition = helper::dbIN($allDepts);
                 }
                 else
                 {
-                    $where .= ' = ' . $this->dbh->quote($value) . ' ';
+                    $condition = ' = ' . $this->dbh->quote($value) . ' ';
                 }
             }
             else
             {
-                $where .= $operator . ' ' . $this->dbh->quote($value) . ' ';
+                $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
             }
+
+            /* Set filed name. */
+            if($condition) $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
         }
 
         $where .=" ))";
@@ -334,7 +335,7 @@ class searchModel extends model
     }
 
     /**
-     * Get records by the conditon.
+     * Get records by the condition.
      * 
      * @param  string    $module 
      * @param  string    $moduleIdList

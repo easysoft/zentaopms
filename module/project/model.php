@@ -269,6 +269,7 @@ class projectModel extends model
             }
 
             /* Create doc lib. */
+            $this->app->loadLang('doc');
             $lib = new stdclass();
             $lib->project = $projectID;
             $lib->name    = $this->lang->doclib->main['project'];
