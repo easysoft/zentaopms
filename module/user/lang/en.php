@@ -124,8 +124,8 @@ $lang->user->loginWithDemoUser    = 'Login as Demo User:';
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = 'must be contain letters, underline, and numbers,at lease three characters';
 $lang->user->placeholder->password1 = 'must be at lease six characters';
-$lang->user->placeholder->role      = 'Role affects content and user's order.';
-$lang->user->placeholder->group     = 'Group decides user's privilege.';
+$lang->user->placeholder->role      = "Role affects content and user's order.";
+$lang->user->placeholder->group     = "Group decides user's privilege.";
 $lang->user->placeholder->commiter  = 'Subversion Account';
 $lang->user->placeholder->verify    = 'Password is required to verify.';
 
