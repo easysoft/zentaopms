@@ -3,14 +3,14 @@
 
 ZenTao is an open source project management software, developed by Qingdao Nature Easy Soft Network Technology Co., Ltd. Combining product management, project management, quality management, document management, organization management and to-do management, ZenTao is a professional R & D project management software, covering the core processes of R & D project management. 
 
-ZenTao is practical and prgagmatic. It has full functions and a beautiful interface, and is easy to operate. Zentao is well structured and can be flexibly extended. It also has powerful search functions, various forms of statistical reports and complete API. 
+ZenTao is practical and pragmatic. It has full features and a beautiful interface, and is easy to operate. Zentao is well structured and can be flexibly extended. It also has powerful search functions, various forms of statistical reports and complete API. 
 
 ZenTao focuses on R & D project management!
 
 2. Why called ZenTao?
 ============================
 
-Zen(禅) and Tao(道) are the two Chinese words that have rich meanings in both religion and culture. ZenTao Project Management Software take the cutural meaning of Zen and Tao, and is expected to convey our understanding and thinking on management. Inspired by The Tao of Programming and The Zen of Programming, we named our software ZenTao.
+Zen(禅) and Tao(道) are the two Chinese characters that have rich meanings in both religion and culture. ZenTao Project Management Software take the cutural meaning of Zen and Tao, and is expected to convey our understanding and thinking on management. Inspired by The Tao of Programming and The Zen of Programming, we named our software ZenTao.
 
 3. Design philosophy of ZenTao Project Management Software
 ==========================================================
