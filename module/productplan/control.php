@@ -230,6 +230,7 @@ class productplan extends control
         $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->plans       = $this->productplan->getPairs($plan->product, $plan->branch);
+        $this->view->modules     = array('0' => '/') + $this->loadModel('tree')->getModulePairs($plan->product, 'story');
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
         $this->view->link        = $link;
