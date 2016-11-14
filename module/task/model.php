@@ -977,14 +977,14 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getStoryTaskPairs($storyID, $projectID = 0)
+    public function getStoryTasks($storyID, $projectID = 0)
     {
-        return $this->dao->select('id, name')
+        return $this->dao->select('id, name, assignedTo, status, estimate, consumed, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->fetchPairs();
+            ->fetchAll('id');
     }
 
     /**
