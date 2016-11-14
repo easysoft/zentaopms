@@ -1,13 +1,13 @@
 .libs-group-heading {color: #808080; border-bottom:1px solid #ddd; padding:8px;}
 .libs-group-heading a{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.libs-group{padding:10px 10px 10px 10px;}
+.libs-group{padding:10px; height:84px;}
 .lib {float: left; display: block; width:80px; padding: 5px; margin:0px 3px; text-align: center; color: #333; overflow: hidden; text-overflow: ellipsis;}
 .lib .file-icon{margin-bottom:5px;}
 .lib .lib-name{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
 .w-lib-p100{width:100%;}
-.w-lib-p50{width:47%;}
-.w-lib-p33{width:31%;}
+.w-lib-p50{width:45%;}
+.w-lib-p33{width:30%;}
 #titlebar > .heading > strong > i{display:inline;} 
 #modulemenu .nav > li > a{display: inline-block;}
 
