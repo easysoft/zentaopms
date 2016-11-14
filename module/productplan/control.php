@@ -170,13 +170,14 @@ class productplan extends control
      * 
      * @param  int    $product 
      * @param  string $orderBy 
+     * @param  string $browseType
      * @param  int    $recTotal 
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = 0, $browseType = 'unexpired', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -191,8 +192,9 @@ class productplan extends control
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
+        $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
-        $this->view->plans      = $this->productplan->getList($productID, $branch, $pager, $sort);
+        $this->view->plans      = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
         $this->view->pager      = $pager;
         $this->display();
     }
