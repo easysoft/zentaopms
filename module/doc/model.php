@@ -42,7 +42,17 @@ class docModel extends model
             }
         }
 
-        $selectHtml = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$libs[$libID]} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i><div id='libMenu'><div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div><div id='libMenuGroups' class='clearfix'><div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div><div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>已结束<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div><div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div></div></div></div>";
+        $this->app->loadLang('project');
+        $selectHtml  = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$libs[$libID]} <span class='icon-caret-down'></span></a>";
+        $selectHtml .= "<div id='dropMenu'>";
+        $selectHtml .= "<i class='icon icon-spin icon-spinner'></i>";
+        $selectHtml .= "<div id='libMenu'>";
+        $selectHtml .= "<div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div>";
+        $selectHtml .= "<div id='libMenuGroups' class='clearfix'>";
+        $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
+        $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
+        $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
+        $selectHtml .= "</div></div></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
         common::setMenuVars($this->lang->doc->menu, 'crumb', $this->getCrumbs($libID, $moduleID));
     }
