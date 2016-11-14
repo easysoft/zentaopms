@@ -21,34 +21,35 @@ function showLibMenu()
             var productCount = 0, projectCount = 0, customCount = 0;
             $.each(data.product, function(idx, product)
             {
-                $list.append('<div class="list-menu-item-heading" data-product="' + product.id + '">[ ' + product.name + ' ]</div>');
+                $list.append('<div class="list-menu-item-heading" data-status="' + product.status + '" data-product="' + product.id + '">[ ' + product.name + ' ]</div>');
                 $.each(product.libs, function(libId, libName)
                 {
                     var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=product&objectID=' + product.id) : createLink('doc', 'browse', 'libID=' + libId);
                     var url = libId === 'project' ? createLink('doc', 'allLibs', 'type=project&extra=' + product.id) : url;
                     var itemId = 'lib-' + itemIdSeed++;
-                    $list.append('<a data-order="' + (orderSeed++) + '" title="' + product.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="product" data-product="' + product.id + '" data-id="' + libId + '">' + libName + '</a>');
+                    $list.append('<a data-order="' + (orderSeed++) + '" data-status="' + product.status + '" title="' + product.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="product" data-product="' + product.id + '" data-id="' + libId + '">' + libName + '</a>');
                     items[itemId] = {type: 'product', id: libId, name: libName, objectId: product.id, product: product.name, search: (libName + ' ' + product.name).toLowerCase()};
                     productCount++;
                 });
-                $list.append('<div class="list-menu-item-footer" data-product="' + product.id + '"></div>');
+                $list.append('<div class="list-menu-item-footer" data-status="' + product.status + '" data-product="' + product.id + '"></div>');
             });
             $list.toggleClass('lib-list-bg', productCount > 4);
 
             $list = $('#libMenuProjectGroup > .lib-menu-list');
             $.each(data.project, function(idx, project)
             {
-                $list.append('<div class="list-menu-item-heading" data-project="' + project.id + '">[ ' + project.name + ' ]</div>');
+                $list.append('<div class="list-menu-item-heading" data-status="' + project.status + '" data-project="' + project.id + '">[ ' + project.name + ' ]</div>');
                 $.each(project.libs, function(libId, libName)
                 {
                     var url = libId === 'files' ? createLink('doc', 'showFiles', 'type=project&objectID=' + project.id) : createLink('doc', 'browse', 'libID=' + libId);
                     var itemId = 'lib-' + itemIdSeed++;
-                    $list.append('<a data-order="' + (orderSeed++) + '" title="' + project.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="project" data-project="' + project.id + '" data-id="' + libId + '">' + libName + '</a>');
+                    $list.append('<a data-order="' + (orderSeed++) + '" data-status="' + project.status + '" title="' + project.name + '/' + libName + '" id="' + itemId + '" href="' + url + '" class="list-menu-item" data-type="project" data-project="' + project.id + '" data-id="' + libId + '">' + libName + '</a>');
                     items[itemId] = {type: 'project', id: libId, name: libName, objectId: project.id, project: project.name, search: (libName + ' ' + project.name).toLowerCase()};
                     projectCount++;
                 });
-                $list.append('<div class="list-menu-item-footer" data-project="' + project.id + '"></div>');
+                $list.append('<div class="list-menu-item-footer" data-status="' + project.status + '" data-project="' + project.id + '"></div>');
             });
+            $list.find('[data-status="done"]').addClass('hidden');
             $list.toggleClass('lib-list-bg', projectCount > 4);
 
             $list = $('#libMenuCustomGroup > .lib-menu-list');
@@ -94,6 +95,15 @@ function showLibMenu()
                 else
                 {
                     $menu.find('.list-menu-item.hidden,.list-menu-item-heading.hidden,.list-menu-item-footer.hidden').removeClass('hidden');
+                    var hasActive = ($('.lib-menu-project-done').hasClass('active'));
+                    if(hasActive)
+                    {
+                        $('#libMenuProjectGroup > .lib-menu-list').find('[data-status!="done"]').addClass('hidden');
+                    }
+                    else
+                    {
+                        $('#libMenuProjectGroup > .lib-menu-list').find('[data-status="done"]').addClass('hidden');
+                    }
                 }
                 $menu.find('.list-menu-item:not(.hidden)').first().addClass('active');
             }).on('keydown', function(e)
@@ -165,6 +175,22 @@ function showLibMenu()
                 var libType = $(this).data('type');
                 var showFilter = $menu.attr('data-filter') != libType;
                 $menu.attr('data-filter', showFilter ? libType : null);
+            });
+            $menu.on('click', '.lib-menu-project-done', function()
+            {
+                var hasActive = ($(this).hasClass('active'));
+                if(hasActive)
+                {
+                    $(this).removeClass('active');
+                    $('#libMenuProjectGroup > .lib-menu-list').find('[data-status!="done"]').removeClass('hidden');
+                    $('#libMenuProjectGroup > .lib-menu-list').find('[data-status="done"]').addClass('hidden');
+                }
+                else
+                {
+                    $(this).addClass('active');
+                    $('#libMenuProjectGroup > .lib-menu-list').find('[data-status!="done"]').addClass('hidden');
+                    $('#libMenuProjectGroup > .lib-menu-list').find('[data-status="done"]').removeClass('hidden');
+                }
             });
         });
         $li.data('showagain', true);

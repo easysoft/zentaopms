@@ -23,9 +23,11 @@
 #libMenuGroups {display: table; width: 100%; margin-bottom: 10px; table-layout: fixed;}
 .lib-menu-group {display: table-cell; width: 33.333333%; padding: 0}
 .lib-menu-group + .lib-menu-group {border-left: 1px dotted #ddd;}
-.lib-menu-list-heading {background-color: #fafafa; color: #808080; padding: 0 10px; text-align: center; display: inline-block; margin: 0 0 10px 10px; border: 1px solid #ddd; line-height: 20px; border-radius: 10px;}
-.lib-menu-list-heading:hover {border-color: #114f8e; cursor: pointer; color: #114f8e;}
-.lib-menu-list-heading > .icon {display: none}
+.lib-menu-project-done, .lib-menu-list-heading {background-color: #fafafa; color: #808080; padding: 0 10px; text-align: center; display: inline-block; margin: 0 0 10px 10px; border: 1px solid #ddd; line-height: 20px; border-radius: 10px;}
+.lib-menu-project-done:hover, .lib-menu-list-heading:hover {border-color: #114f8e; cursor: pointer; color: #114f8e;}
+.lib-menu-project-done > .icon, .lib-menu-list-heading > .icon {display: none}
+.lib-menu-project-done.active {background-color: #114f8e; color: #fff; border-color: #114f8e;}
+.lib-menu-project-done.active > .icon {display: inline-block;}
 .lib-menu-list {max-height: 500px; overflow-y: auto; min-height: 100px; line-height:25px;}
 .list-menu-item-heading {padding: 0 3px 0 0px; color: #141414; white-space: nowrap; overflow:hidden; float: left; width:35%;text-align:right;}
 .list-menu-item-heading > .icon {display: inline-block; width: 18px;}
