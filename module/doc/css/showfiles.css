@@ -8,10 +8,9 @@
 .lib-file .media-wrapper .img-holder img {display: none}
 .lib-file .media-wrapper > .icon {font-size: 56px; display: block; text-align: center; position: absolute; top: 0; right: 0; left: 0; bottom: 0; line-height: 200px; opacity: 0; transition: opacity .2s; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
 .lib-file .media-wrapper:hover > .icon-download {opacity: .9; animation: flash-icon 1s linear alternate infinite}
-.lib-file .card-heading > .icon-download {opacity: .5; position: relative; top: 2px}
-.lib-file .card-heading {color: #114f8e}
+.lib-file .card-heading {color: #114f8e; position:relative}
 .lib-file .card-heading:hover {background-color: #EBF2F9; color: #2e6dad}
-.lib-file .card-heading > .delete {opacity: 0.2; margin-top:-1px; margin-right:5px}
+.lib-file .card-heading > .delete {position:absolute; opacity: 0.2; right:8px;}
 .lib-file .card-heading > .delete .icon{font-size:16px;}
 .lib-file .card-heading:hover > .delete{opacity:1}
 .lib-file .media-wrapper > .icon-holder {font-size: 105px; opacity: 1; color: rgba(255,255,255,.7); opacity: .6}

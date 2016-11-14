@@ -45,7 +45,7 @@
         <i class='icon icon-download'></i>
       </a>
       <div class='card-heading'>
-        <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID"); ?>'><?php echo $lang->doc->fileObject . ' ' . strtoupper($file->objectType) . ' #' . $file->objectID ?></a>
+        <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . '.' . $file->extension . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
         <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete pull-right'><i class='icon icon-remove'></i></a>
       </div>
     </div>
