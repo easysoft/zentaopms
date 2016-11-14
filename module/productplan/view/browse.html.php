@@ -12,12 +12,28 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
-<div id='titlebar'>
-  <div class='heading'>
-    <i class='icon-flag'></i>
-    <?php echo $lang->productplan->browse;?>
-    <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
-  </div>
+<?php js::set('browseType', $browseType);?>
+<div id='featurebar'>
+  <ul class='nav'>
+    <li>
+      <?php if($product->type !== 'normal'):?>
+      <div class='label-angle<?php if($branch) echo ' with-close';?>'>
+      <?php
+      echo $branches[$branch];
+      if($branch)
+      {
+          $removeLink = inlink('browse', "productID=$productID&branch=0&browseType=$browseType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+          echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
+      }
+      ?>
+      </div>
+      <?php endif;?>
+    </li>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
+    <?php if(isset($menuItem->hidden)) continue;?>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType={$menuItem->name}"), $menuItem->text);?></li>
+    <?php endforeach;?>
+  </ul>
   <div class='actions'>
     <?php common::printIcon('productplan', 'create', "productID=$product->id&branch=$branch", '', 'button', 'plus');?>
   </div>
@@ -82,6 +98,7 @@
 </table>
 </form>
 <script>
+$('#' + browseType + 'Tab').addClass('active');
 $(function(){fixedTfootAction('#productplanForm')});
 $(function(){fixedTheadOfList('#productplan')});
 </script>

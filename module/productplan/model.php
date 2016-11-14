@@ -60,16 +60,21 @@ class productplanModel extends model
      * Get list 
      * 
      * @param  int    $product 
+     * @param  int    $branch
+     * @param  string $browseType
      * @param  object $pager
      * @param  string $orderBy
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $pager = null, $orderBy = 'begin_desc')
+    public function getList($product = 0, $branch = 0, $browseType = 'all', $pager = null, $orderBy = 'begin_desc')
     {
+        $date = date('Y-m-d');
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($browseType == 'unexpired')->andWhere('end')->gt($date)->fi()
+            ->beginIF($browseType == 'overdue')->andWhere('end')->le($date)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
