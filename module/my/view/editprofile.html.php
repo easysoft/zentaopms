@@ -54,6 +54,7 @@
         <tr>
           <th><?php echo $lang->user->password;?></th>
         <td>
+          <input type='password' style="display:none"> <!-- Disable input password by browser automatically. -->
           <span class='input-group'>
             <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
