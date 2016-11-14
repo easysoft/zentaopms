@@ -1589,7 +1589,7 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
-        $teams2Import   = array($this->lang->project->copyTeam) + $teams2Import;
+        $teams2Import   = array('' => '') + $teams2Import;
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
