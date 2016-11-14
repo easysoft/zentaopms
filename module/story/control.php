@@ -914,7 +914,8 @@ class story extends control
     public function tasks($storyID, $projectID = 0)
     {
         $this->loadModel('task');
-        $this->view->tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
+        $this->view->tasks = $this->task->getStoryTasks($storyID, $projectID);
+        $this->view->users = $this->user->getPairs('noletter');
         $this->display();
     }
 
