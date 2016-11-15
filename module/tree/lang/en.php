@@ -33,17 +33,17 @@ $lang->tree->dragAndSort       = "Drag and Sort";
 $lang->tree->addChild          = "Add Child Module";
 
 $lang->tree->confirmDelete = 'Do you want to delete this Module and its Child?';
-$lang->tree->confirmRoot   = "Modify the module {$lang->productCommon}s, modified the {$lang->productCommon}s belong to the needs of the module, bug, use case, and {$lang->projectCommon} and {$lang->productCommon} relationship. This is dangerous, please be careful. To confirm the change?";
-$lang->tree->successSave   = 'Successfully saved';
-$lang->tree->successFixed  = 'Successfully fixed.';
-$lang->tree->repeatName    = 'The name "%s" has exists!';
+$lang->tree->confirmRoot   = "Changes on {$lang->productCommon} will change the Story, Bug, Case of {$lang->productCommon} it belongs to, as well as the realtion of {$lang->projectCommon} and {$lang->productCommon}, which is dangerous, please be aware of it. Do you want to change?";
+$lang->tree->successSave   = 'Saved.';
+$lang->tree->successFixed  = 'Fixed.';
+$lang->tree->repeatName    = 'The name "%s" has existed!';
 
 $lang->tree->name       = 'Name';
 $lang->tree->parent     = 'Parent';
 $lang->tree->child      = 'Child';
 $lang->tree->owner      = 'Owner';
 $lang->tree->order      = 'Order';
-$lang->tree->short      = 'Sort';
+$lang->tree->short      = 'Short';
 $lang->tree->all        = 'All Modules';
 $lang->tree->projectDoc = "{$lang->projectCommon} Doc";
 $lang->tree->product    = $lang->productCommon;
