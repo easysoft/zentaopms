@@ -569,15 +569,21 @@ class taskModel extends model
         $consumed = 0;
         $left     = $task->left;
         $now      = helper::now();
+        $lastDate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc')->limit(1)->fetch('date');
         $this->loadModel('action');
         foreach($estimates as $estimate)
         {
             $consumed += $estimate->consumed;
-            $left      = $estimate->left;
             $work      = $estimate->work;
             $this->addTaskEstimate($estimate);
             $estimateID = $this->dao->lastInsertID();
             $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
+
+            if(empty($lastDate) or $lastDate <= $estimate->date)
+            {
+                $left     = $estimate->left;
+                $lastDate = $estimate->date;
+            }
         }
 
         $data = new stdClass();
@@ -1024,7 +1030,7 @@ class taskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_TASKESTIMATE)  
           ->where('task')->eq($taskID)
-          ->orderBy('id')
+          ->orderBy('date,id')
           ->fetchAll();
     }
 
