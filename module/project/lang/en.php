@@ -253,6 +253,7 @@ $lang->printKanban->typeList['increment'] = 'Increment';
 
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
 $lang->project->featureBar['task']['needconfirm']  = 'Story Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];

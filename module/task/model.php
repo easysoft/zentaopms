@@ -856,7 +856,7 @@ class taskModel extends model
         if($tasks) return $this->processTasks($tasks);
         return array();
     }
-    
+
     /**
      * Get tasks of a project.
      *
