@@ -311,10 +311,12 @@ class project extends control
      * Import tasks undoned from other projects.
      *
      * @param  int    $projectID
+     * @param  int    $fromProject
+     * @param  bool   $containDoing
      * @access public
      * @return void
      */
-    public function importTask($toProject, $fromProject = 0)
+    public function importTask($toProject, $fromProject = 0, $containDoing = false)
     {
         if(!empty($_POST))
         {
@@ -325,7 +327,7 @@ class project extends control
         $project  = $this->commonAction($toProject);
         $branches = $this->project->getProjectBranches($toProject);
         $tasks    = $this->project->getTasks2Imported($toProject, $branches);
-        $projects = $this->project->getProjectsToImport(array_keys($tasks));
+        $projects = $this->project->getProjectsToImport(array_keys($tasks), $containDoing);
         unset($projects[$toProject]);
         unset($tasks[$toProject]);
 
@@ -352,6 +354,7 @@ class project extends control
         $this->view->tasks2Imported = $tasks2Imported; 
         $this->view->projects       = $projects;
         $this->view->projectID      = $project->id;
+        $this->view->containDoing   = $containDoing;
         $this->view->fromProject    = $fromProject;
         $this->display();
     }

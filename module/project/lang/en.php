@@ -50,6 +50,7 @@ $lang->project->mine          = 'My Responsibility: ';
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
+$lang->project->containDoing  = 'Contain doing project';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -252,6 +253,7 @@ $lang->printKanban->typeList['increment'] = 'Increment';
 
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
 $lang->project->featureBar['task']['needconfirm']  = 'Story Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];

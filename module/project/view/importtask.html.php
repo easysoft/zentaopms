@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('containDoing', $containDoing);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix pull-left'><?php echo html::icon($lang->icons['task']);?></span>
@@ -20,6 +21,13 @@
       <?php $projects = array(0 => $lang->project->allProjects) + $projects;?>
       <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
       <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control chosen'");?>
+      <span class='input-group-btn'>
+      <?php
+      $toggleClass = $containDoing ? 'icon-toggle-on' : 'icon-toggle-off';
+      $params      = $containDoing ? "toProject=$projectID&fromProject=$fromProject" : "toProject=$projectID&fromProject=$fromProject&containDoing=true";
+      echo html::a($this->createLink('project', 'importTask', $params), "<i class={$toggleClass}></i>" . $lang->project->containDoing, '', "class='btn'");
+      ?>
+      </span>
     </div>
   </div>
 </div>
