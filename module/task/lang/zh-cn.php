@@ -31,6 +31,7 @@ $lang->task->activate           = "激活";
 $lang->task->export             = "导出数据";
 $lang->task->reportChart        = "报表统计";
 $lang->task->fromBug            = '来源Bug';
+$lang->task->case               = '相关用例';
 $lang->task->confirmStoryChange = "确认需求变动";
 
 $lang->task->common            = '任务';

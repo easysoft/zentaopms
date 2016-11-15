@@ -161,6 +161,18 @@
             <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug"), "#$task->fromBug " . $fromBug->title, '_blank');?></td> 
           </tr>
           <?php endif;?>
+          <?php if(isset($task->cases)):?>
+          <tr>
+            <th><?php echo $lang->task->case;?></th>
+            <td>
+              <ul class='list-unstyled'>
+              <?php
+              foreach($task->cases as $caseID => $case) echo '<li>' . html::a($this->createLink('testcase', 'view', "caseID=$caseID"), "#$caseID " . $case, '_blank') . '</li>';
+              ?>
+              </ul>
+            </td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
