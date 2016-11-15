@@ -974,7 +974,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getProjectsToImport($projectIds)
+    public function getProjectsToImport($projectIds, $containDoing = 'false')
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in($projectIds)
@@ -986,7 +986,14 @@ class projectModel extends model
         $now   = date('Y-m-d');
         foreach($projects as $id => $project)
         {
-            if($this->checkPriv($project) and ($project->status == 'done' or $project->end < $now)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
+            if($containDoing)
+            {
+                if($this->checkPriv($project) and ($project->status == 'done' or $project->status == 'doing' or $project->end < $now)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
+            }
+            else
+            {
+                if($this->checkPriv($project) and ($project->status == 'done' or $project->end < $now)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
+            }
         }
         return $pairs;
     }

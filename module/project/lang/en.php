@@ -50,6 +50,7 @@ $lang->project->mine          = 'My Responsibility: ';
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
+$lang->project->containDoing  = 'Contain doing project';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
