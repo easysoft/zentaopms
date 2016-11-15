@@ -74,6 +74,7 @@ $lang->tutorialConfirm = 'You are using tutorial. Do you want to exit right now�
 
 $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';
+$lang->backShortcutKey = '[Shortcut:Alt+↑]';
 
 $lang->select        = 'Select';
 $lang->selectAll     = 'Select All';

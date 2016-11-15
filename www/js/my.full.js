@@ -1684,6 +1684,13 @@ function initHotKey()
         return false;
     });
 
+    /* Alt+up, go back to the previous page. */
+    $(document).bind('keydown', 'Alt+up', function(evt)
+    {
+        backLink = ($('#back').attr("href"));
+        if(typeof(backLink) != 'undefined') location.href = backLink;
+    });
+
     /* left, go to pre object. */
     $(document).bind('keydown', 'left', function(evt)
     {

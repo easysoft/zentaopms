@@ -126,25 +126,25 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Cancelled';
 
-$lang->task->afterChoices['continueAdding'] = 'Contine Add Task';
+$lang->task->afterChoices['continueAdding'] = 'Continue adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Back to Task List';
 $lang->task->afterChoices['toStoryList']    = 'Back to Story List';
 
 $lang->task->legendBasic  = 'Basic Info';
 $lang->task->legendEffort = 'Man-Hour';
 $lang->task->legendLife   = 'Task Life';
-$lang->task->legendDesc   = 'Task Desn';
+$lang->task->legendDesc   = 'Task Desc';
 
 $lang->task->confirmDelete         = "Do you want to delete this Task?";
 $lang->task->confirmDeleteEstimate = "Do you want to delete it?";
 $lang->task->copyStoryTitle        = "Same Story";
-$lang->task->afterSubmit           = "After Created";
+$lang->task->afterSubmit           = "After Created,";
 $lang->task->successSaved          = "Created!";
 $lang->task->delayWarning          = " <strong class='delayed f-14px'> Delay %s days </strong>";
 $lang->task->remindBug             = "This Task is converted from a Bug. Do you want to update te Bug:%s?";
-$lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the related Module,Story and Assignor will be changed. Do you want to do it?";
-$lang->task->confirmFinish         = '"Estimated Left" is 0. Do you want to change the Status to "Done"?';
-$lang->task->confirmRecord         = '"Left" is 0. Do you want to set Task as "Done"?';
+$lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the related Module, Story and Assignor will be changed. Do you want to do it?";
+$lang->task->confirmFinish         = '"Estimated reamin hour" is 0. Do you want to change the Status to "Done"?';
+$lang->task->confirmRecord         = '"Remain hour" is 0. Do you want to set Task as "Done"?';
 $lang->task->noticeSaveRecord      = 'Your man-hour is not saved. Please save it first.';
 $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.';
 
@@ -206,11 +206,11 @@ $lang->task->report->tasksPerType->item         = 'Type';
 $lang->task->report->tasksPerPri->item          = 'Priority';
 $lang->task->report->tasksPerStatus->item       = 'Status';
 $lang->task->report->tasksPerDeadline->item     = 'Date';
-$lang->task->report->tasksPerEstimate->item     = '预计';
-$lang->task->report->tasksPerLeft->item         = '剩余';
-$lang->task->report->tasksPerConsumed->item     = '消耗';
+$lang->task->report->tasksPerEstimate->item     = 'Est.';
+$lang->task->report->tasksPerLeft->item         = 'Reamin';
+$lang->task->report->tasksPerConsumed->item     = 'Consume';
 $lang->task->report->tasksPerFinishedBy->item   = 'User';
-$lang->task->report->tasksPerClosedReason->item = '原因';
+$lang->task->report->tasksPerClosedReason->item = 'Reason';
 $lang->task->report->finishedTasksPerDay->item  = 'Date';
 
 $lang->task->report->tasksPerProject->graph      = new stdclass();
