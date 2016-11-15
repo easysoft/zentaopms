@@ -31,6 +31,7 @@ $lang->task->activate           = "Activate";
 $lang->task->export             = "Export Data";
 $lang->task->reportChart        = "Report Chart";
 $lang->task->fromBug            = 'From Bug';
+$lang->task->case               = 'Related Case';
 $lang->task->confirmStoryChange = "Confirm Story Change";
 
 $lang->task->common            = 'Task';

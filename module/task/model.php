@@ -804,6 +804,11 @@ class taskModel extends model
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
+
+        /* Get related test cases. */
+        $cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->fetchPairs();
+        if($cases) $task->cases = $cases;
+
         return $this->processTask($task);
     }
 
