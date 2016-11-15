@@ -828,7 +828,8 @@ class commonModel extends model
         global $lang, $app;
         if(isonlybody()) return false;
 
-        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "class='btn' title={$lang->goback}");
+        $title = $lang->goback . $lang->backShortcutKey;
+        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "id='back' class='btn' title={$title}");
 
         if(isset($preAndNext->pre) and $preAndNext->pre) 
         {
