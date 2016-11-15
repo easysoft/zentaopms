@@ -31,19 +31,18 @@
 #docTree.tree ul > li.item-type-doc > .tree-item-wrapper > a {cursor: pointer;}
 </style>
 <div id='featurebar'>
-<ul class='nav'>
-<li>
-    <div class="dropdown">
-      <a href="###" class="dropdown-toggle" data-toggle="dropdown"><i class='icon icon-branch'></i> <?php echo $lang->doc->browseTypeList['tree']?> <span class="caret"></span></a>
+  <ul class='nav'>
+    <li><a href='javascript:history.go(-1);'><?php echo $lang->goback?></a></li>
+  </ul>
+  <div class='actions'>
+    <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-branch'></i> <?php echo $lang->doc->browseTypeList['tree']?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <li><?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
         <li><?php echo html::a('javascript:setBrowseType("bymenu")', "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['menu']}");?></li>
         <li><?php echo html::a('javascript:setBrowseType("bytree")', "<i class='icon icon-branch'></i> {$lang->doc->browseTypeList['tree']}");?></li>
       </ul>
     </div>
-</li>
-</ul>
-  <div class='actions'>
     <div class="btn-group">
       <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon icon-cog'></i> <?php echo $lang->actions?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
@@ -61,7 +60,12 @@
 <div class='main'>
   <div class='panel'>
     <div class='panel-body'>
+      <?php if($tree):?>
       <ul id='docTree' class='tree-lines'></ul>
+      <?php else:;?>
+      <?php echo $lang->pager->noRecord?>
+      <?php if(common::hasPriv('doc', 'create')) echo html::a(inlink('create', "libID=$libID&moduleID=$moduleID"), $lang->doc->create)?>
+      <?php endif;?>
     </div>
   </div>
 </div>
@@ -71,6 +75,7 @@ var libID = <?php echo $libID?>;
 $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
+    <?php if($tree):?>
     var $tree = $('#docTree');
     $tree.tree(
     {
@@ -103,5 +108,6 @@ $(function()
     {
         tree.show($('.item-type-doc').parent().parent());
     }
+    <?php endif;?>
 });
 </script>
