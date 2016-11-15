@@ -121,10 +121,23 @@
       </div>
     </div>
     <div class='btn-group'>
-    <?php
-    common::printIcon('task', 'batchCreate', "projectID=$projectID");
-    common::printIcon('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''), '', 'button', 'sitemap');
-    ?>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+            <i class='icon icon-plus'></i> <?php echo $lang->task->common;?>
+            <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='createTaskActionMenu'>
+        <?php 
+        $misc = common::hasPriv('task', 'create') ? '' : "class=disabled";
+        $link = common::hasPriv('task', 'create') ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
+        echo "<li>" . html::a($link, $lang->task->create, '', $misc) . "</li>";
+
+        $misc = common::hasPriv('task', 'batchCreate') ? '' : "class=disabled";
+        $link = common::hasPriv('task', 'batchCreate') ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
+        echo "<li>" . html::a($link, $lang->task->batchCreate, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
     </div>
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>

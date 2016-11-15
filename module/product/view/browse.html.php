@@ -56,18 +56,30 @@
         <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
     </div>
     <div class='btn-group'>
-    <?php 
-    common::printIcon('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID", '', 'button', 'plus-sign');
-    if(commonModel::isTutorialMode())
-    {
-        $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams"), "<i class='icon-plus'></i> {$lang->story->create}",'', "class='btn create-story-btn'");
-    }
-    else
-    {
-        common::printIcon('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID", 'btn', 'button', 'plus', '', 'create-story-btn');
-    }
-    ?>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+          <i class='icon icon-plus'></i> <?php echo $lang->story->common;?>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='createStoryActionMenu'>
+        <?php 
+        if(commonModel::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
+            echo "<li>" . html::a($this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams"), $lang->story->create) . "</li>";
+        }
+        else
+        {
+            $misc = common::hasPriv('story', 'create') ? '' : "class=disabled";
+            $link = common::hasPriv('story', 'create') ?  $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
+            echo "<li>" . html::a($link, $lang->story->create, '', $misc) . "</li>";
+        }
+        $misc = common::hasPriv('story', 'batchCreate') ? '' : "class=disabled";
+        $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
+        echo "<li>" . html::a($link, $lang->story->batchCreate, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
     </div>
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>

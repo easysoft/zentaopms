@@ -76,13 +76,26 @@
         ?>
         </ul>
       </div>
-      <?php 
-      common::printIcon('testcase', 'import', "productID=$productID&branch=$branch", '', 'button', '', '', 'export cboxElement iframe');
-
-      $initModule = isset($moduleID) ? (int)$moduleID : 0;
-      common::printIcon('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-      common::printIcon('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-      ?>
+      <?php common::printIcon('testcase', 'import', "productID=$productID&branch=$branch", '', 'button', '', '', 'export cboxElement iframe');?>
+    </div>
+    <div class='btn-group'>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+          <i class='icon icon-plus'></i> <?php echo $lang->testcase->common;?>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='createCaseActionMenu'>
+        <?php 
+        $initModule = isset($moduleID) ? (int)$moduleID : 0;
+        $misc = common::hasPriv('testcase', 'create') ? '' : "class=disabled";
+        $link = common::hasPriv('testcase', 'create') ?  $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
+        $misc = common::hasPriv('testcase', 'batchCreate') ? '' : "class=disabled";
+        $link = common::hasPriv('testcase', 'batchCreate') ?  $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
     </div>
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>

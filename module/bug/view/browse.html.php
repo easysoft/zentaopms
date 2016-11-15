@@ -62,18 +62,30 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
       </div>
     </div>
     <div class='btn-group'>
-      <?php
-      common::printIcon('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
-      if(commonModel::isTutorialMode())
-      {
-          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-          echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i> {$lang->bug->create}",'', "class='btn btn-bug-create'");
-      }
-      else
-      {
-          common::printIcon('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", 'btn', 'button', 'plus', '', 'btn-bug-create');
-      }
-      ?>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+          <i class='icon icon-plus'></i> <?php echo $lang->bug->common;?>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='createBugActionMenu'>
+        <?php 
+        if(commonModel::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), $lang->bug->create);
+        }
+        else
+        {
+            $misc = common::hasPriv('bug', 'create') ? '' : "class=disabled";
+            $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
+            echo "<li>" . html::a($link, $lang->bug->create, '', $misc) . "</li>";
+        }
+        $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
+        $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
+        echo "<li>" . html::a($link, $lang->bug->batchCreate, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
     </div>
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
