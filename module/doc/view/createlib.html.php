@@ -23,15 +23,15 @@
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libType?></th>
-        <td><?php echo html::select('libType', $lang->doc->libTypeList, 'product', "class='form-control'")?></td>
+        <td><?php echo html::select('libType', $lang->doc->libTypeList, $type, "class='form-control'")?></td>
       </tr>
       <tr class='product'>
         <th><?php echo $lang->doc->product?></th>
-        <td><?php echo html::select('product', $products, '', "class='form-control chosen'")?></td>
+        <td><?php echo html::select('product', $products, $type == 'product' ? $objectID : '', "class='form-control chosen'")?></td>
       </tr>
       <tr class='project hidden'>
         <th><?php echo $lang->doc->project?></th>
-        <td><?php echo html::select('project', $projects, '', "class='form-control chosen'")?></td>
+        <td><?php echo html::select('project', $projects, $type == 'project' ? $objectID : '', "class='form-control chosen'")?></td>
       </tr>
       <tr>
         <th><?php echo $lang->doclib->name?></th>

@@ -1182,17 +1182,22 @@ class docModel extends model
             die(js::locate('back'));
         }
 
+        $type = $lib->product ? 'product' : 'custom';
+        $type = $lib->project ? 'project' : $type;
+
+        $mainLib = $type == 'product' ? $this->lang->productCommon : $this->lang->doc->customAB;
+        $mainLib = $type == 'project' ? $this->lang->projectCommon : $mainLib;
+        $crumb = html::a(helper::createLink('doc', 'allLibs', "type=$type"), $mainLib) . $this->lang->arrow;
         if($lib->product or $lib->project)
         {
-            $table     = $lib->product ? TABLE_PRODUCT : TABLE_PROJECT;
-            $objectID  = $lib->product ? $lib->product : $lib->project;
-            $object    = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
-            $lib->name = $object->name . ' / ' . $lib->name;
+            $table    = $lib->product ? TABLE_PRODUCT : TABLE_PROJECT;
+            $objectID = $lib->product ? $lib->product : $lib->project;
+            $object   = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+            if($object) $crumb .= html::a(helper::createLink('doc', 'objectLibs', "type=$type&objectID=$objectID"), $object->name) . $this->lang->arrow;
         }
 
-
         $parents = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
-        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), $lib->name);
+        $crumb  .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), $lib->name);
         foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc"), $module->name);
         return $crumb;
     }

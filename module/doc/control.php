@@ -175,10 +175,12 @@ class doc extends control
     /**
      * Create a library.
      * 
+     * @param  string $type 
+     * @param  int    $objectID 
      * @access public
      * @return void
      */
-    public function createLib()
+    public function createLib($type = '', $objectID = 0)
     {
         if(!empty($_POST))
         {
@@ -197,6 +199,8 @@ class doc extends control
         $this->view->users    = $this->user->getPairs('nocode');
         $this->view->products = $this->product->getPairs('nocode');
         $this->view->projects = $this->project->getPairs('nocode');
+        $this->view->type     = $type;
+        $this->view->objectID = $objectID;
         die($this->display());
     }
 
@@ -616,7 +620,8 @@ class doc extends control
         {
             $this->view->product = $this->product->getById($product);
             $libName = $this->view->product->name;
-            $crumb   = html::a(inlink('objectLibs', "type=product&objectID=$product"), $this->view->product->name);
+            $crumb   = html::a(inlink('allLibs',    "type=product"), $this->lang->productCommon) . $this->lang->arrow;
+            $crumb  .= html::a(inlink('objectLibs', "type=product&objectID=$product"), $this->view->product->name);
             $crumb  .= $this->lang->arrow . html::a(inlink('allLibs', "type=$type&product=$product"), $this->lang->doclib->main[$type]);
         }
 
@@ -676,7 +681,8 @@ class doc extends control
         }
         else
         {
-            $crumb  = html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
+            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->arrow;
+            $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
         }
 
@@ -726,7 +732,8 @@ class doc extends control
         }
         else
         {
-            $crumb  = html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
+            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->arrow;
+            $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
         }
 

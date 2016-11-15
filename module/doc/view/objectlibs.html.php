@@ -30,6 +30,7 @@
       <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
     </a>
     <?php endforeach; ?>
+    <?php if(common::hasPriv('doc', 'createLib')) echo html::a(inlink('createLib', "type=$type&objectID={$object->id}"), "<i class='icon icon-plus'></i>", '', "class='lib addbtn' data-toggle='modal' data-type='iframe' title='{$lang->doc->createLib}'")?>
   </div>
 </div>
 <?php js::set('type', 'doc');?>
