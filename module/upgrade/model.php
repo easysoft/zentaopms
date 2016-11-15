@@ -1163,6 +1163,7 @@ class upgradeModel extends model
      */
     public function adjustDocModule()
     {
+        set_time_limit(0);
         $this->app->loadLang('doc');
         $productDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('productdoc')->orderBy('grade,id')->fetchAll('id');
         $allProductIdList  = $this->dao->select('id,name,acl,whitelist,createdBy')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchAll('id');

@@ -57,7 +57,7 @@
         }
     }
 
-    echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban) . '</li>';
+    echo "<li id='kanbanTab'>"; common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban); echo '</li>';
     if($project->type == 'sprint' or $project->type == 'waterfall')
     {
         echo "<li id='burnTab'>";

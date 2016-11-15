@@ -22,3 +22,4 @@ ALTER TABLE `zt_doclib` ADD `acl` varchar(10) COLLATE 'utf8_general_ci' NOT NULL
 ALTER TABLE `zt_doc` ADD `acl` varchar(10) NOT NULL DEFAULT 'open' AFTER `editedDate`;
 ALTER TABLE `zt_doclib` ADD `main` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0' AFTER `users`;
 UPDATE `zt_doc` SET `type` = 'text' WHERE `type` = 'file';
+UPDATE `zt_module` SET `type` = 'doc' WHERE `type` = 'customdoc';
