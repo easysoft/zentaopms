@@ -24,6 +24,44 @@ class docModel extends model
      */
     public function setMenu($libID = 0, $moduleID = 0, $crumb = '')
     {
+        if(isset($this->config->customMenu->doc))
+        {
+            $customMenu = json_decode($this->config->customMenu->doc);
+            $menuLibIdList = array();
+            foreach($customMenu as $i => $menu)
+            {
+                if(strpos($menu->name, 'custom') === 0)
+                {
+                    $menuLibID = (int)substr($menu->name, 6);
+                    if($menuLibID) $menuLibIdList[$i] = $menuLibID;
+                }
+            }
+
+            $productIdList = array();
+            $projectIdList = array();
+            if($menuLibIdList)
+            {
+                $libs = $this->dao->select('id,name,product,project')->from(TABLE_DOCLIB)->where('id')->in($menuLibIdList)->fetchAll('id');
+                foreach($libs as $lib)
+                {
+                    if($lib->product) $productIdList[] = $lib->product;
+                    if($lib->project) $productIdList[] = $lib->project;
+                }
+            }
+            $products = $productIdList ? $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name') : array();
+            $projects = $projectIdList ? $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs('id', 'name') : array();
+            foreach($menuLibIdList as $i => $menuLibID)
+            {
+                $lib = $libs[$menuLibID];
+                $libName = '';
+                if($lib->product) $libName = isset($products[$lib->product]) ? $products[$lib->product] . '/' : '';
+                if($lib->project) $libName = isset($projects[$lib->project]) ? $projects[$lib->project] . '/' : '';
+                $libName .= $lib->name;
+                $customMenu[$i]->link = "{$libName}|doc|browse|libID={$menuLibID}";
+            }
+            $this->config->customMenu->doc = json_encode($customMenu);
+        }
+
         $this->app->loadLang('project');
         $selectHtml  = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$this->lang->doclib->all} <span class='icon-caret-down'></span></a>";
         $selectHtml .= "<div id='dropMenu'>";

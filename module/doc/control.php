@@ -573,13 +573,12 @@ class doc extends control
 
         foreach($customMenus as $i => $customMenu)
         {
-            if(isset($customMenu->buildLink) and strpos($customMenu->buildLink, "|libID=$libID") !== false) unset($customMenus[$i]);
+            if(isset($customMenu->name) and $customMenu->name == "custom{$libID}") unset($customMenus[$i]);
         }
 
         $lib = $this->doc->getLibByID($libID);
         $customMenu = new stdclass();
         $customMenu->name      = "custom{$libID}";
-        $customMenu->buildLink = "$lib->name|doc|browse|libID=$libID";
         $customMenu->order     = count($customMenus); 
         $customMenu->float     = 'right'; 
         if($type == 'fixed') $customMenus[] = $customMenu;
