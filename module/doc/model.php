@@ -22,28 +22,10 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($libs, $libID = 0, $moduleID = 0)
+    public function setMenu($libID = 0, $moduleID = 0, $crumb = '')
     {
-        if($libID)
-        {
-            $lib = $this->getLibById($libID);
-            if(!$this->checkPriv($lib)) 
-            {
-                echo(js::alert($this->lang->doc->accessDenied));
-                die(js::locate('back'));
-            }
-
-            if($lib->product or $lib->project)
-            {
-                $table    = $lib->product ? TABLE_PRODUCT : TABLE_PROJECT;
-                $objectID = $lib->product ? $lib->product : $lib->project;
-                $object   = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
-                if($object) $libs[$libID] = $object->name . ' / ' . $lib->name;
-            }
-        }
-
         $this->app->loadLang('project');
-        $selectHtml  = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$libs[$libID]} <span class='icon-caret-down'></span></a>";
+        $selectHtml  = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$this->lang->doclib->all} <span class='icon-caret-down'></span></a>";
         $selectHtml .= "<div id='dropMenu'>";
         $selectHtml .= "<i class='icon icon-spin icon-spinner'></i>";
         $selectHtml .= "<div id='libMenu'>";
@@ -54,7 +36,7 @@ class docModel extends model
         $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "</div></div></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
-        common::setMenuVars($this->lang->doc->menu, 'crumb', $this->getCrumbs($libID, $moduleID));
+        common::setMenuVars($this->lang->doc->menu, 'crumb', $crumb ? $crumb : $this->getCrumbs($libID, $moduleID));
     }
 
     /**
@@ -1155,8 +1137,24 @@ class docModel extends model
     {
         if(empty($libID)) return '';
 
+        $lib = $this->getLibById($libID);
+        if(!$this->checkPriv($lib)) 
+        {
+            echo(js::alert($this->lang->doc->accessDenied));
+            die(js::locate('back'));
+        }
+
+        if($lib->product or $lib->project)
+        {
+            $table     = $lib->product ? TABLE_PRODUCT : TABLE_PROJECT;
+            $objectID  = $lib->product ? $lib->product : $lib->project;
+            $object    = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+            $lib->name = $object->name . ' / ' . $lib->name;
+        }
+
+
         $parents = $moduleID ? $this->loadModel('tree')->getParents($moduleID) : array();
-        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), '&nbsp;/&nbsp;');
+        $crumb   = html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc"), $lib->name);
         foreach($parents as $module) $crumb .= $this->lang->arrow . html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param=$module->id&orderBy=id_desc"), $module->name);
         return $crumb;
     }

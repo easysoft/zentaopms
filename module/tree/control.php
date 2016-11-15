@@ -94,7 +94,7 @@ class tree extends control
         elseif(strpos($viewType, 'doc') !== false)
         {
             $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
-            $this->doc->setMenu($this->doc->getLibs($type), $rootID, $currentModuleID);
+            $this->doc->setMenu($rootID, $currentModuleID);
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
             $this->lang->set('menugroup.tree', 'doc');
