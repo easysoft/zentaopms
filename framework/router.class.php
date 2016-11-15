@@ -52,4 +52,24 @@ class router extends baseRouter
 
         return parent::loadLang($moduleName, $appName);
     }
+
+    /**
+     * Save error info.
+     * 
+     * @param  int    $level 
+     * @param  string $message 
+     * @param  string $file 
+     * @param  int    $line 
+     * @access public
+     * @return void
+     */
+    public function saveError($level, $message, $file, $line)
+    {
+        $errorNO[E_ERROR]      = E_ERROR;
+        $errorNO[E_PARSE]      = E_PARSE;
+        $errorNO[E_CORE_ERROR] = E_CORE_ERROR;
+        $errorNO[E_USER_ERROR] = E_USER_ERROR;
+        if(isset($errorNO[$level]) and $this->config->debug == false) $this->config->debug = true;
+        parent::saveError($level, $message, $file, $line);
+    }
 }
