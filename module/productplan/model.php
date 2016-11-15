@@ -91,12 +91,26 @@ class productplanModel extends model
     public function getPairs($product = 0, $branch = 0, $expired = '')
     {
         $date = date('Y-m-d');
-        return array('' => '') + $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
+        $plans = $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
             ->beginIF($expired == 'unexpired')->andWhere('end')->gt($date)->fi()
-            ->orderBy('begin desc')->fetchPairs();
+            ->orderBy('begin desc')
+            ->fetchPairs();
+
+        if($expired == 'unexpired' and empty($plans))
+        {
+            $plans = $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
+                ->where('product')->in($product)
+                ->andWhere('deleted')->eq(0)
+                ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+                ->orderBy('begin desc')
+                ->limit(5)
+                ->fetchPairs();
+        }
+
+        return array('' => '') + $plans;
     }
 
     /**
