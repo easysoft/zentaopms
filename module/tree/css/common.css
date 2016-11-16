@@ -4,6 +4,7 @@
 .outer .row .col-md-8 .table-form {max-width: 600px}
 
 #sonModule {max-width: 400px}
+#sonModule  .row-table .input-group input {border-right: none}
 #moduleBox span > .form-control {margin-bottom: 5px;}
 
 .w-260px {width: 260px!important}
