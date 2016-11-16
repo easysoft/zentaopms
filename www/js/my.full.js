@@ -1674,35 +1674,28 @@ function removeCookieByKey(cookieKey)
  */
 function initHotKey()
 {
-    /* CTRL+g, auto focus on the search box. */
-    $(document).bind('keydown', 'Ctrl+g', function(evt)
+    $(document).on('keydown', 'Ctrl+g', function(e)
     {
-        $('#searchQuery').attr('value', '');
-        $('#searchQuery').focus();
-        evt.stopPropagation( );  
-        evt.preventDefault( );
+        /* CTRL+g, auto focus on the search box. */
+        $('#searchQuery').val('').focus();
+        e.stopPropagation();
+        e.preventDefault();
         return false;
-    });
-
-    /* Alt+up, go back to the previous page. */
-    $(document).bind('keydown', 'Alt+up', function(evt)
+    }).on('keydown', 'Alt+up', function()
     {
-        backLink = ($('#back').attr("href"));
-        if(typeof(backLink) != 'undefined') location.href = backLink;
-    });
-
-    /* left, go to pre object. */
-    $(document).bind('keydown', 'left', function(evt)
+        /* Alt+up, go back to the previous page. */
+        var backLink = $('#back').attr("href");
+        if(backLink) location.href = backLink;
+    }).on('keydown', 'left', function()
     {
-        preLink = ($('#pre').attr("href"));
-        if(typeof(preLink) != 'undefined') location.href = preLink;
-    });
-
-    /* right, go to next object. */
-    $(document).bind('keydown', 'right', function(evt)
+        /* left, go to pre object. */
+        var preLink = $('#pre').attr("href");
+        if(preLink) location.href = preLink;
+    }).on('keydown', 'right', function()
     {
-        nextLink = ($('#next').attr("href"));
-        if(typeof(nextLink) != 'undefined') location.href = nextLink;
+        /* right, go to next object. */
+        var nextLink = $('#next').attr("href");
+        if(preLink) location.href = nextLink;
     });
 }
 
