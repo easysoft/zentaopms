@@ -43,10 +43,10 @@ foreach(explode(',', $showFields) as $field)
     <thead>
       <tr>
         <th class='w-50px'><?php echo $lang->idAB;?></th> 
-        <th class='w-200px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
-        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden')?>'> <?php echo $lang->testcase->story;?></th>
+        <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
+        <th class='w-180px<?php echo zget($visibleFields, 'story', ' hidden')?>'> <?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
-        <th class='w-180px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
+        <th class='w-100px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
         <th class='w-80px<?php echo  zget($visibleFields, 'pri', ' hidden')?>'>         <?php echo $lang->testcase->pri;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden')?>'><?php echo $lang->testcase->precondition;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>    <?php echo $lang->testcase->keywords;?></th>
