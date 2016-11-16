@@ -85,7 +85,7 @@ $config->file->maxSize = 1024 * 1024;          // Max size.
 $config->ipWhiteList = '*';
 
 /* View type settings. */ 
-$config->devicePrefix['mhtml'] = 'm.';
+//$config->devicePrefix['mhtml'] = 'm.';
 
 /* Master database settings. */
 $config->db = new stdclass();
