@@ -28,7 +28,7 @@
         for($i = $doc->version; $i >= 1; $i --)
         {
             $class = $i == $version ? " class='active'" : '';
-            echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id"), '#' . $i) . '</li>';
+            echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i"), '#' . $i) . '</li>';
         }
         ?>
       </ul>
