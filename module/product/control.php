@@ -159,6 +159,13 @@ class product extends control
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
+        /* Get related tasks, bugs, cases count of each story. */
+        $storyIdList = array();
+        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
         /* Build search form. */
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['onMenuBar'] = 'yes';
@@ -191,6 +198,9 @@ class product extends control
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
         $this->view->setShowModule = true;
+        $this->view->storyTasks    = $storyTasks;
+        $this->view->storyBugs     = $storyBugs;
+        $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->display();
     }

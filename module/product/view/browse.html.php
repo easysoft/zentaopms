@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <div id='featurebar'>
   <ul class='nav'>
@@ -109,7 +110,7 @@
     ?>
       <tfoot>
       <tr>
-        <td colspan='11'>
+        <td colspan='14'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
             <?php echo html::selectButton();?>

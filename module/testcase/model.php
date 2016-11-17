@@ -383,6 +383,41 @@ class testcaseModel extends model
     }
 
     /**
+     * Get cases of a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryCases($storyID)
+    {
+        return $this->dao->select('id, title, type, status, lastRunner, lastRunDate, lastRunResult')
+            ->from(TABLE_CASE)
+            ->where('story')->eq((int)$storyID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get counts of some stories' cases.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return int
+     */
+    public function getStoryCaseCounts($stories)
+    {
+        $caseCounts = $this->dao->select('story, COUNT(*) AS cases')
+            ->from(TABLE_CASE)
+            ->where('story')->in($stories)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('story')
+            ->fetchPairs();
+        foreach($stories as $storyID) if(!isset($caseCounts[$storyID])) $caseCounts[$storyID] = 0;
+        return $caseCounts;
+    }
+
+    /**
      * Update a case.
      * 
      * @param  int    $caseID 
