@@ -30,6 +30,7 @@ $lang->tree->manageCaseChild   = '维护用例子模块';
 $lang->tree->manageTaskChild   = "维护{$lang->projectCommon}子模块";
 $lang->tree->syncFromProduct   = '复制';
 $lang->tree->dragAndSort       = "拖放排序";
+$lang->tree->sort              = "排序";
 $lang->tree->addChild          = "增加子模块";
 
 $lang->tree->confirmDelete = '该模块及其子模块都会被删除，您确定删除吗？';

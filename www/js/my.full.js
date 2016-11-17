@@ -992,15 +992,11 @@ function setModal()
                     var options = $.extend(
                     {
                         url:        url,
-                        width:      800,
-                        height:     'auto',
-                        icon:       '?',
                         title:      $e.attr('title') || $e.text(),
-                        name:       'modalIframe',
                         cssClass:   $e.data('class'),
-                        headerless: false,
+                        icon:       '?',
                         center:     true
-                    }, $e.data());
+                    }, setting, $e.data());
 
                     if(options.icon == '?')
                     {
@@ -1008,19 +1004,23 @@ function setModal()
                         options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                     }
 
-                    showIframeModal($.extend(options, setting));
+                    showIframeModal(options);
                 }
                 else
                 {
                     initModalFrame();
                     $.get(url, function(data)
                     {
-                        var options = 
+                        var options = $.extend(
                         {
-                            width:      $e.data('width') || 800,
-                            icon:       $e.data('icon') || '?',
-                            title:      $e.data('title') || $e.attr('title') || $e.text(),
-                        };
+                            width: 800,
+                            title: $e.attr('title') || $e.text(),
+                            icon: '?',
+                            backdrop: 'static',
+                            keyboard: false,
+                            show: true
+                        }, setting, $e.data());
+
                         var ajaxModal = $('#ajaxModal');
                         if(data.indexOf('modal-dialog') < 0)
                         {
@@ -1035,8 +1035,7 @@ function setModal()
                             $ajaxModal.data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
                             ajustModalPosition();
                         }
-
-                        ajaxModal.modal($.extend({backdrop: 'static', keyboard: false, show: true}, options));
+                        ajaxModal.modal(options);
                     });
                 }
 
@@ -1065,7 +1064,7 @@ function setModal()
             backdrop:   'static',
             keyboard:   false,
             show:       true
-        }
+        };
         
         if(typeof(settings) == 'string')
         {
@@ -1121,6 +1120,7 @@ function setModal()
             }
             showModal(options, modal, modalBody, dialog);
         }
+        console.log('iframe modal options', options);
         modal.modal(options);
     }
 

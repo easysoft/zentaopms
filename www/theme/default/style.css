@@ -360,7 +360,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* === Layout === */
 /* Background */
-body {font-size: 13px; color:#141414;padding-bottom: 40px;}
+body {color:#141414; padding-bottom: 40px;}
 
 /* Header */
 #header {padding: 12px 20px 0; background:#003366;}
@@ -679,7 +679,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* Tree menu. */
 .tree li:before {width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px; top: 7px;left: 6px;}
-.tree-lines ul>li:after {width: 15px}
 .tree-lines li > a.active{font-weight: bold;}
 
 /* Select all and select reverse. */
