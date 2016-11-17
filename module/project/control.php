@@ -833,33 +833,6 @@ class project extends control
     }
 
     /**
-     * Docs of a project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function doc($projectID)
-    {
-        /* use first project if projectID does not exist. */
-        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
-
-        $this->project->setMenu($this->projects, $projectID);
-        $this->session->set('docList', $this->app->getURI(true));
-
-        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->doc;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $project->name);
-        $this->view->position[] = $this->lang->project->doc;
-        $this->view->project    = $project;
-        $this->view->docs       = $this->loadModel('doc')->getProjectDocs($projectID);
-        $this->view->libs       = $this->doc->getLibByObject('project', $projectID);
-        $this->view->modules    = $this->doc->getProjectModulePairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->display();
-    }
-
-    /**
      * Create a project.
      *
      * @access public

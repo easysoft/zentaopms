@@ -394,29 +394,6 @@ class product extends control
     }
 
     /**
-     * Docs of a product.
-     * 
-     * @param  int    $productID 
-     * @access public
-     * @return void
-     */
-    public function doc($productID)
-    {
-        $this->product->setMenu($this->products, $productID);
-        $this->session->set('docList', $this->app->getURI(true));
-
-        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->doc;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->doc;
-        $this->view->product    = $product;
-        $this->view->docs       = $this->loadModel('doc')->getProductDocs($productID);
-        $this->view->libs       = $this->doc->getLibByObject('product', $productID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->display();
-    }
-
-    /**
      * Road map of a product. 
      * 
      * @param  int    $productID 
