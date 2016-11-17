@@ -275,6 +275,9 @@ $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|p
 $lang->report->menu->test    = array('link' => 'Testing|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
+$lang->report->notice = new stdclass();
+$lang->report->notice->help = 'Note: Report is generated from search results. Please search in the list page before you generate a report.';
+
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
