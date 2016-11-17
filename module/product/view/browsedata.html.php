@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+    <?php include '../../common/view/tablesorter.html.php';?>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
       <thead>
       <tr>
