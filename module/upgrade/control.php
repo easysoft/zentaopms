@@ -122,6 +122,7 @@ class upgrade extends control
     {
         if($processed == 'no')
         {
+            $this->app->loadLang('install');
             $this->view->title      = $this->lang->upgrade->result;
             $this->view->position[] = $this->lang->upgrade->common;
 
