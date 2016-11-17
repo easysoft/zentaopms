@@ -1,0 +1,23 @@
+.adbox{margin-top:20px;}
+.card {
+  border: none;
+  border-radius: 0px;
+  box-shadow: none;
+  display: block;
+  margin-bottom: 0px;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1) 0s;
+}
+.card.ad > .img-wrapper {
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 85px;
+  width: 100%;
+}
+.card.ad > .img-wrapper > img{display: none;}
+.card.ad > .card-heading {text-align: center;}
+.card.ad > .card-reveal > .card-heading { padding: 12px 10px 10px 15px;}
+.card.ad > .card-reveal {color: #333;}
+.card.ad > .card-reveal li{line-height:1.5}

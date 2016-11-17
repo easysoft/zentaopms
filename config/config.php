@@ -17,7 +17,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version      = '8.3';             // The version of zentaopms. Don't change it.
+$config->version      = '8.3.1';             // The version of zentaopms. Don't change it.
 $config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
@@ -85,7 +85,7 @@ $config->file->maxSize = 1024 * 1024;          // Max size.
 $config->ipWhiteList = '*';
 
 /* View type settings. */ 
-$config->devicePrefix['mhtml'] = 'm.';
+$config->devicePrefix = array();
 
 /* Master database settings. */
 $config->db = new stdclass();

@@ -42,6 +42,7 @@ $lang->upgrade->toVersion     = '升級到';
 $lang->upgrade->confirm       = '確認要執行的SQL語句';
 $lang->upgrade->sureExecute   = '確認執行';
 $lang->upgrade->forbiddenExt  = '以下插件與新版本不兼容，已經自動禁用：';
+$lang->upgrade->updateFile    = '需要更新附件信息。';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';
@@ -108,3 +109,4 @@ $lang->upgrade->fromVersions['8_2_3']     = '8.2.3';
 $lang->upgrade->fromVersions['8_2_4']     = '8.2.4';
 $lang->upgrade->fromVersions['8_2_5']     = '8.2.5';
 $lang->upgrade->fromVersions['8_2_6']     = '8.2.6';
+$lang->upgrade->fromVersions['8_3']       = '8.3';

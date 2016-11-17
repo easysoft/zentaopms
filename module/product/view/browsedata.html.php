@@ -13,16 +13,19 @@
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
       <thead>
       <tr>
-        <th class='w-id'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
-        <th class='w-pri'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-        <th class='w-p30'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-        <th>               <?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
-        <th>               <?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>
-        <th>               <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-        <th>               <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-        <th class='w-hour'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-        <th>               <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-        <th>               <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+        <th class='w-id {sorter:false}'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+        <th class='w-pri {sorter:false}'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+        <th class='w-p30 {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+        <th class='w-70px {sorter:false}'><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
+        <th class='w-70px {sorter:false}'><?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>
+        <th class='w-user {sorter:false}'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+        <th class='w-user {sorter:false}'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+        <th class='w-hour {sorter:false}'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+        <th class='w-50px {sorter:false}'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+        <th class='w-70px {sorter:false}'><?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+        <th class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
+        <th class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
+        <th class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
         <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
@@ -62,6 +65,24 @@
               foreach($storyStages[$story->id] as $storyBranch => $storyStage) echo $branches[$storyBranch] . ": " . $lang->story->stageList[$storyStage->stage] . '<br />';
               echo "</div>";
           }
+          ?>
+        </td>
+        <td class='linkbox'>
+          <?php
+          $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id");
+          $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
+          ?>
+        </td>
+        <td class='linkbox'>
+          <?php
+          $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id");
+          $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
+          ?>
+        </td>
+        <td class='linkbox'>
+          <?php
+          $casesLink = $this->createLink('story', 'cases', "storyID=$story->id");
+          $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
           ?>
         </td>
         <td class='text-right'>

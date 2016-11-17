@@ -35,6 +35,7 @@
     ?>
     </div>
   </div>
+  <div id='querybox' class='show'></div>
 </div>
 
 <div class='side' id='taskTree'>

@@ -190,7 +190,7 @@ class project extends control
        /* Build the search form. */
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['onMenuBar'] = 'yes';
-        $this->project->buildSearchForm($projectID, $this->projects, $queryID, $actionURL);
+        $this->project->buildTaskSearchForm($projectID, $this->projects, $queryID, $actionURL);
 
         /* team member pairs. */
         $memberPairs = array();
@@ -539,17 +539,11 @@ class project extends control
 
         $project = $this->commonAction($projectID);
 
-        /* Header and position. */
-        $title      = $project->name . $this->lang->colon . $this->lang->project->story;
-        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[] = $this->lang->project->story;
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* The pager. */
-        $stories    = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
+        $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
@@ -561,8 +555,25 @@ class project extends control
 
         /* Get project's product. */
         $productID = 0;
-        $products = $this->loadModel('product')->getProductsByProject($projectID);
-        if($products) $productID = key($products);
+        $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
+        if($productPairs) $productID = key($productPairs);
+
+        /* Build the search form. */
+        $modules  = array();
+        $products = $this->project->getProducts($projectID);
+        foreach($products as $product)
+        {
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
+            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+        }
+        $actionURL    = $this->createLink('project', 'story', "projectID=$projectID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->project->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'projectStory');
+
+        /* Header and position. */
+        $title      = $project->name . $this->lang->colon . $this->lang->project->story;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->lang->project->story;
 
         /* Assign. */
         $this->view->title        = $title;
@@ -578,7 +589,7 @@ class project extends control
         $this->view->tabID        = 'story';
         $this->view->users        = $users;
         $this->view->pager        = $pager;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->view->branchGroups = $branchGroups;
 
         $this->display();
     }
@@ -818,33 +829,6 @@ class project extends control
         $this->view->title    = $title;
         $this->view->position = $position;
 
-        $this->display();
-    }
-
-    /**
-     * Docs of a project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function doc($projectID)
-    {
-        /* use first project if projectID does not exist. */
-        if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
-
-        $this->project->setMenu($this->projects, $projectID);
-        $this->session->set('docList', $this->app->getURI(true));
-
-        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->doc;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $project->name);
-        $this->view->position[] = $this->lang->project->doc;
-        $this->view->project    = $project;
-        $this->view->docs       = $this->loadModel('doc')->getProjectDocs($projectID);
-        $this->view->libs       = $this->doc->getLibByObject('project', $projectID);
-        $this->view->modules    = $this->doc->getProjectModulePairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1688,62 +1672,25 @@ class project extends control
 
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $branchPairs  = array();
-        $productType  = 'normal';
-        $productNum   = count($products);
-        $branches     = array();
-        $modules      = array();
-        $this->loadModel('tree');
+        /* Set modules and branches. */
+        $modules     = array();
+        $branches    = array();
+        $productType = 'normal';
         foreach($products as $product)
         {
-            $productPairs[$product->id] = $product->name;
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
+            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
             if($product->type != 'normal')
             {
-                $branches[$product->branch] = $product->branch;
                 $productType = $product->type;
-                if($product->branch)
-                {
-                    $branchPairs[$product->branch] = ($productNum > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
-                }
-                else
-                {
-                    $productBranches = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(0);
-                    if($productNum > 1)
-                    {
-                        foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
-                    }
-                    $branchPairs += $productBranches;
-                }
+                $branches[$product->branch] = $product->branch;
             }
-            foreach($this->tree->getOptionMenu($product->id) as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
         }
 
-        /* Build search form. */
-        if(count($products) >= 2) unset($this->config->product->search['fields']['module']);
-        $this->config->product->search['actionURL'] = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
-        $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
-        if(count($products) == 1) $this->config->product->search['params']['module']['values'] = $modules;
-        unset($this->lang->story->statusList['draft']);
-        if($productType == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
-            $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
-        }
-        $this->config->product->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $this->lang->story->statusList);
-
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
-
-        $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
-        $position[] = html::a($browseLink, $project->name);
-        $position[] = $this->lang->project->linkStory;
+        /* Build the search form. */
+        $actionURL    = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->project->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL);
 
         if($browseType == 'bySearch')
         {
@@ -1754,6 +1701,11 @@ class project extends control
             $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active');
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
+
+        /* Assign. */
+        $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
+        $position[] = html::a($browseLink, $project->name);
+        $position[] = $this->lang->project->linkStory;
 
         $this->view->title        = $title;
         $this->view->position     = $position;

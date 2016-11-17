@@ -25,6 +25,12 @@ include '../../common/view/header.html.php';
         <th class='rowhead w-120px'><?php echo $lang->mail->turnon; ?></th>
         <td><?php echo html::radio('turnon', $lang->mail->turnonList, isset($mailConfig->turnon) ? $mailConfig->turnon : 1);?></td>
       </tr>
+      <?php if(!empty($config->global->cron)):?>
+      <tr>
+        <th class='text-top'><?php echo $lang->mail->async?></th>
+        <td><?php echo html::radio('async', $lang->mail->asyncList, zget($config->mail, 'async', 0))?></td>
+      </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->mail->accessKey; ?></th>
         <td>
@@ -46,6 +52,7 @@ include '../../common/view/header.html.php';
            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
            echo html::linkButton($lang->mail->closeSendCloud, inlink('reset'));
            if($this->config->mail->turnon and common::hasPriv('mail', 'sendcloudUser')) echo html::linkButton($lang->mail->sendcloudUser, inlink('sendcloudUser'));
+           if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'));
            ?>
          </td>
        </tr>

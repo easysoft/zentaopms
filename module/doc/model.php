@@ -202,11 +202,10 @@ class docModel extends model
         }
         elseif($browseType == "openedbyme")
         {
-            $condition = $this->buildConditionSQL();
+            $condition = $this->buildConditionSQL('doc');
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('lib')->in($libID)
-                ->andWhere('addedBy')->eq($this->app->user->account)
                 ->beginIF($condition)->andWhere("($condition)")->fi()
                 ->orderBy($sort)
                 ->page($pager)
@@ -220,7 +219,7 @@ class docModel extends model
         }
         elseif($browseType == "bymenu")
         {
-            $condition = $this->buildConditionSQL();
+            $condition = $this->buildConditionSQL('doc');
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where('deleted')->eq(0)->andWhere('lib')->in($libID)
                 ->andWhere('module')->eq($moduleID)
                 ->beginIF($condition)->andWhere("($condition)")->fi()
@@ -259,7 +258,7 @@ class docModel extends model
             $docQuery  = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
             $docQuery  = str_replace("`lib` = 'all'", '1', $docQuery);                // Search all lib.
 
-            $condition = $this->buildConditionSQL();
+            $condition = $this->buildConditionSQL('lib');
             $libIdList = $this->dao->select('id')->from(TABLE_DOCLIB)->beginIF($condition)->where("($condition)")->fi()->get();
 
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
@@ -291,7 +290,7 @@ class docModel extends model
      */
     public function getDocs($libID, $module, $orderBy, $pager)
     {
-        $condition = $this->buildConditionSQL();
+        $condition = $this->buildConditionSQL('doc');
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('lib')->in($libID)
@@ -512,43 +511,6 @@ class docModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
- 
-    /**
-     * Get docs of a product.
-     * 
-     * @param  int    $productID 
-     * @access public
-     * @return array
-     */
-    public function getProductDocs($productID)
-    {
-        $condition = $this->buildConditionSQL('t1');
-        return $this->dao->select('t1.*, t2.name as module')->from(TABLE_DOC)->alias('t1')
-            ->leftjoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->beginIF($condition)->andWhere("($condition)")->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.id_desc')
-            ->fetchAll();
-    }
-
-    /**
-     * Get docs of a project.
-     * 
-     * @param  int    $projectID 
-     * @access public
-     * @return array
-     */
-    public function getProjectDocs($projectID)
-    {
-        $condition = $this->buildConditionSQL();
-        return $this->dao->select('*')->from(TABLE_DOC)
-            ->where('project')->eq($projectID)
-            ->beginIF($condition)->andWhere("($condition)")->fi()
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id_desc')
-            ->fetchAll();
-    }
 
     /**
      * Get pairs of project modules.
@@ -631,6 +593,7 @@ class docModel extends model
         if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
+        if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(strpos($this->app->company->admins, $account) !== false) return true;
         if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
@@ -671,7 +634,7 @@ class docModel extends model
         }
         if(isset($projects)) $stmt = $stmt->andWhere('project')->in($projects);
 
-        $condition = $this->buildConditionSQL();
+        $condition = $this->buildConditionSQL('lib');
         $idList = $stmt->beginIF($condition)->andWhere("($condition)")->fi()->orderBy("{$key}_desc")->page($pager, $key)->fetchPairs($key, $key);
 
         if($type == 'product' or $type == 'project')
@@ -695,7 +658,7 @@ class docModel extends model
      */
     public function getAllLibGroups()
     {
-        $condition = $this->buildConditionSQL();
+        $condition = $this->buildConditionSQL('lib');
         $stmt = $this->dao->select("id,product,project,name")->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->beginIF($condition)->andWhere("($condition)")->fi()
@@ -887,12 +850,36 @@ class docModel extends model
     {
         $this->loadModel('file');
         $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
-        $files = $this->dao->select('*')->from(TABLE_FILE)
-            ->where("(objectType = '$type' and objectID = '$objectID')")
-            ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
-            ->andWhere('size')->gt('0')
-            ->page($pager)
-            ->fetchAll('id');
+        if($type == 'product')
+        {
+            $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $bugIdList     = $this->dao->select('id')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $releaseIdList = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $planIdList    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
+                ->where("(objectType = 'product' and objectID = $objectID)")
+                ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
+                ->orWhere("(objectType = 'story' and objectID in ($storyIdList))")
+                ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
+                ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
+                ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
+                ->andWhere('size')->gt('0')
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($type == 'project')
+        {
+            $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
+                ->where("(objectType = 'project' and objectID = $objectID)")
+                ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
+                ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
+                ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+                ->andWhere('size')->gt('0')
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
         foreach($files as $fileID => $file)
         {
@@ -910,7 +897,7 @@ class docModel extends model
      * @access public
      * @return string
      */
-    public function buildConditionSQL($table = '')
+    public function buildConditionSQL($type = 'lib', $table = '')
     {
         if($table) $table .= '.';
         $condition = '';
@@ -918,6 +905,7 @@ class docModel extends model
         if(strpos($this->app->company->admins, $account) === false)
         {
             $condition .= "{$table}acl='open'";
+            if($type == 'doc') $condition .= " OR {$table}addedBy = '{$this->app->user->account}'";
             $condition .= " OR ({$table}acl='private' and CONCAT(',', {$table}users, ',') like '%$account%')";
             $condition .= " OR ({$table}acl='custom' and (";
             foreach($this->app->user->groups as $groupID) $condition .= "(CONCAT(',', {$table}groups, ',') like '%,$groupID,%') OR ";
@@ -961,7 +949,7 @@ class docModel extends model
         static $docGroups;
         if(empty($docGroups))
         {
-            $condition = $this->buildConditionSQL();
+            $condition = $this->buildConditionSQL('doc');
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('lib')->eq((int)$libID)
                 ->beginIF($condition)->andWhere("($condition)")->fi()

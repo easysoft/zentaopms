@@ -192,6 +192,7 @@ class mail extends control
 
             $mailConfig->turnon         = $this->post->turnon;
             $mailConfig->mta            = 'sendcloud';
+            $mailConfig->async          = $this->post->async;
             $mailConfig->fromAddress    = ''; 
             $mailConfig->fromName       = '';
             $mailConfig->sendcloud->accessKey = trim($this->post->accessKey);
@@ -213,6 +214,7 @@ class mail extends control
             $mailConfig->fromAddress = $this->config->mail->fromAddress;
             $mailConfig->fromName    = $this->config->mail->fromName;
             $mailConfig->turnon      = $this->config->mail->turnon;
+            $mailConfig->async       = isset($this->config->mail->async) ? $this->config->mail->async : 0;
         }
 
         $this->view->title      = $this->lang->mail->sendCloud;

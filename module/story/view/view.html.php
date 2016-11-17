@@ -45,7 +45,23 @@
         common::printIcon('story', 'review',     "storyID=$story->id", $story);
         common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
         common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
-        common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'sitemap');
+
+        $this->app->loadLang('testcase');
+        echo "<div class='btn-group'>";
+        echo "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>";
+        echo "<i class='icon icon-plus'></i>" . $lang->testcase->common;
+        echo "<span class='caret'></span>";
+        echo "</button>";
+        echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
+        $misc = common::hasPriv('testcase', 'create') ? " " : "class='disabled'";
+        $link = common::hasPriv('testcase', 'create') ?  $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
+        $misc = common::hasPriv('testcase', 'batchCreate') ? "data-toggle='modal' data-type='iframe' data-width='95%'" : "class='disabled'";
+        $link = common::hasPriv('testcase', 'batchCreate') ?  $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true) : '#';
+        echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
+        echo "</ul>";
+        echo "</div>";
+
         if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", '', 'button', 'smile');
         echo '</div>';
 

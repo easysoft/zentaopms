@@ -159,6 +159,13 @@ class product extends control
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
+        /* Get related tasks, bugs, cases count of each story. */
+        $storyIdList = array();
+        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
         /* Build search form. */
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['onMenuBar'] = 'yes';
@@ -191,6 +198,9 @@ class product extends control
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
         $this->view->setShowModule = true;
+        $this->view->storyTasks    = $storyTasks;
+        $this->view->storyBugs     = $storyBugs;
+        $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->display();
     }
@@ -391,29 +401,6 @@ class product extends control
             $this->session->set('product', '');     // 清除session。
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
-    }
-
-    /**
-     * Docs of a product.
-     * 
-     * @param  int    $productID 
-     * @access public
-     * @return void
-     */
-    public function doc($productID)
-    {
-        $this->product->setMenu($this->products, $productID);
-        $this->session->set('docList', $this->app->getURI(true));
-
-        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->doc;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->doc;
-        $this->view->product    = $product;
-        $this->view->docs       = $this->loadModel('doc')->getProductDocs($productID);
-        $this->view->libs       = $this->doc->getLibByObject('product', $productID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->display();
     }
 
     /**
