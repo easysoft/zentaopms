@@ -1214,6 +1214,41 @@ class bugModel extends model
     }
 
     /**
+     * Get bugs of a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryBugs($storyID)
+    {
+        return $this->dao->select('id, title, type, status, assignedTo, resolvedBy, resolution')
+            ->from(TABLE_BUG)
+            ->where('story')->eq((int)$storyID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get counts of some stories' bugs.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return int
+     */
+    public function getStoryBugCounts($stories)
+    {
+        $bugCounts = $this->dao->select('story, COUNT(*) AS bugs')
+            ->from(TABLE_BUG)
+            ->where('story')->in($stories)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('story')
+            ->fetchPairs();
+        foreach($stories as $storyID) if(!isset($bugCounts[$storyID])) $bugCounts[$storyID] = 0;
+        return $bugCounts;
+    }
+
+    /**
      * Get bug info from a result.
      * 
      * @param  int    $resultID 

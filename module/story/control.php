@@ -920,6 +920,36 @@ class story extends control
     }
 
     /**
+     * Bugs of a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function bugs($storyID)
+    {
+        $this->loadModel('bug');
+        $this->view->bugs  = $this->bug->getStoryBugs($storyID);
+        $this->view->users = $this->user->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Cases of a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function cases($storyID)
+    {
+        $this->loadModel('testcase');
+        $this->view->cases = $this->testcase->getStoryCases($storyID);
+        $this->view->users = $this->user->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
      * Show zero case story.
      * 
      * @param  int    $productID 
