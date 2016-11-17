@@ -989,18 +989,18 @@ function setModal()
                 var type = (setting ? setting.type : false) || ($e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax'));
                 if(type == 'iframe')
                 {
-                    var options = 
+                    var options = $.extend(
                     {
                         url:        url,
-                        width:      $e.data('width') || 800,
-                        height:     $e.data('height') || 'auto',
-                        icon:       $e.data('icon') || '?',
-                        title:      $e.data('title') || $e.attr('title') || $e.text(),
-                        name:       $e.data('name') || 'modalIframe',
+                        width:      800,
+                        height:     'auto',
+                        icon:       '?',
+                        title:      $e.attr('title') || $e.text(),
+                        name:       'modalIframe',
                         cssClass:   $e.data('class'),
-                        headerless: $e.data('headerless') || false,
-                        center:     $e.data('center') || true
-                    };
+                        headerless: false,
+                        center:     true
+                    }, $e.data());
 
                     if(options.icon == '?')
                     {
@@ -1036,7 +1036,7 @@ function setModal()
                             ajustModalPosition();
                         }
 
-                        ajaxModal.modal('show');
+                        ajaxModal.modal($.extend({backdrop: 'static', keyboard: false, show: true}, options));
                     });
                 }
 
@@ -1061,7 +1061,10 @@ function setModal()
             cssClass:   '',
             headerless: false,
             waittime:   0,
-            center:     true
+            center:     true,
+            backdrop:   'static',
+            keyboard:   false,
+            show:       true
         }
         
         if(typeof(settings) == 'string')
@@ -1118,7 +1121,7 @@ function setModal()
             }
             showModal(options, modal, modalBody, dialog);
         }
-        modal.modal('show');
+        modal.modal(options);
     }
 
     function showModal(options, modal, modalBody, dialog)
