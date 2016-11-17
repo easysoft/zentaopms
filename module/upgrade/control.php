@@ -103,21 +103,40 @@ class upgrade extends control
         $this->view->title      = $this->lang->upgrade->result;
         $this->view->position[] = $this->lang->upgrade->common;
 
-        if(!$this->upgrade->isError())
-        {
-            $this->app->loadLang('install');
-            $this->view->result = 'success';
-        }
-        else
-        {
-            $this->view->result = 'fail';
-            $this->view->errors = $this->upgrade->getError();
-        }
-        $this->display();
-        if($this->view->result == 'fail') die();
+        if(!$this->upgrade->isError()) $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
 
-       @unlink($this->app->getAppRoot() . 'www/install.php');
-       @unlink($this->app->getAppRoot() . 'www/upgrade.php');
+        $this->view->result = 'fail';
+        $this->view->errors = $this->upgrade->getError();
+        $this->display();
+    }
+
+    /**
+     * After execute.
+     * 
+     * @param  string $fromVersion 
+     * @param  string $processed 
+     * @access public
+     * @return void
+     */
+    public function afterExec($fromVersion, $processed = 'no')
+    {
+        if($processed == 'no')
+        {
+            $this->view->title      = $this->lang->upgrade->result;
+            $this->view->position[] = $this->lang->upgrade->common;
+
+            $needProcess = $this->upgrade->checkProcess($fromVersion);
+            $this->view->needProcess = $needProcess;
+            $this->view->fromVersion = $fromVersion;
+            $this->display();
+        }
+        if(empty($needProcess) or $processed == 'yes')
+        {
+            $this->loadModel('setting')->updateVersion($this->config->version);
+
+            @unlink($this->app->getAppRoot() . 'www/install.php');
+            @unlink($this->app->getAppRoot() . 'www/upgrade.php');
+        }
     }
 
     /**
@@ -163,5 +182,36 @@ class upgrade extends control
             $this->view->title = $this->lang->upgrade->checkExtension;
             $this->view->data  = $data;
             $this->display();
+    }
+
+    /**
+     * Ajax update file.
+     * 
+     * @param  string $type 
+     * @param  int    $lastID 
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateFile($type = '', $lastID = 0)
+    {
+        $result = $this->upgrade->updateFileObjectID($type, $lastID);
+        $response = array();
+        if($result['type'] == 'finish')
+        {
+            $response['result']  = 'finished';
+			$response['type']     = $type;
+			$response['count']    = $result['count'];
+            $response['message'] = 'Finished';
+        }
+        else
+        {
+            $response['result']   = 'continue';
+            $response['next']     = inlink('ajaxUpdateFile', "type={$result['type']}&lastID={$result['lastID']}");
+            $response['count']    = $result['count'];
+            $response['type']     = $type;
+            $response['nextType'] = $result['type'];
+            $response['message']  = strtoupper($result['type']) . " <span class='{$result['type']}-num'>0</span>";
+        }
+        die(json_encode($response));
     }
 }
