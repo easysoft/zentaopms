@@ -76,6 +76,7 @@
         <?php endforeach;?>
       </table>
     </div>
+    <div class='alert alert-info'><?php echo $lang->report->notice->help?></div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

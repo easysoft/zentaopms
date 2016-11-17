@@ -14,16 +14,16 @@
 <div id='titlebar'>
   <div class='heading'><i class='icon-folder-close'></i> <?php echo $lang->product->project;?>  </div>
 </div>
-<table class='table'>
+<table class='table table-fixed'>
   <thead>
     <tr class='colhead'>
-      <th class='w-150px'><?php echo $lang->project->name;?></th>
-      <th><?php echo $lang->project->code;?></th>
-      <th><?php echo $lang->project->end;?></th>
-      <th><?php echo $lang->project->status;?></th>
-      <th><?php echo $lang->project->totalEstimate;?></th>
-      <th><?php echo $lang->project->totalConsumed;?></th>
-      <th><?php echo $lang->project->totalLeft;?></th>
+      <th><?php echo $lang->project->name;?></th>
+      <th class='w-100px'><?php echo $lang->project->code;?></th>
+      <th class='w-120px'><?php echo $lang->project->end;?></th>
+      <th class='w-80px'><?php echo $lang->project->status;?></th>
+      <th class='w-50px'><?php echo $lang->project->totalEstimate;?></th>
+      <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
+      <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
       <th class='w-150px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
