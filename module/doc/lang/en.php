@@ -100,8 +100,7 @@ $lang->doc->errorEditSystemDoc = "System Doc Lib needs no modifications.";
 $lang->doc->errorEmptyProduct  = "No {$lang->productCommon}. Document cannot be created.";
 $lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. Document cannot be created.";
 $lang->doc->errorMainSysLib    = "Can not delete this library.";
-$lang->doc->accessDenied       = "Access to library denied!";
-$lang->doc->noMatched          = "No library including '%s' can be found.";
+$lang->doc->accessDenied       = "Access denied!";
 $lang->doc->versionNotFount    = 'The document is not exist in this version.';
 
 $lang->doc->placeholder = new stdclass();

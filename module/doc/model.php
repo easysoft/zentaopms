@@ -45,7 +45,7 @@ class docModel extends model
                 foreach($libs as $lib)
                 {
                     if($lib->product) $productIdList[] = $lib->product;
-                    if($lib->project) $productIdList[] = $lib->project;
+                    if($lib->project) $projectIdList[] = $lib->project;
                 }
             }
             $products = $productIdList ? $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name') : array();
@@ -312,7 +312,12 @@ class docModel extends model
     public function getById($docID, $version = 0, $setImgSize = false)
     {
         $doc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
-        if(!$doc or !$this->checkPriv($doc)) return false;
+        if(!$doc) return false;
+        if(!$this->checkPriv($doc))
+        {
+            echo(js::alert($this->lang->doc->accessDenied));
+            die(js::locate('back'));
+        }
         $version = $version ? $version : $doc->version;
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
 
