@@ -140,4 +140,5 @@
     </table>
   </form>
 </div>
+<?php js::set('weekend', $config->project->weekend);?>
 <?php include '../../common/view/footer.html.php';?>

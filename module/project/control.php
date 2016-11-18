@@ -537,6 +537,7 @@ class project extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $queryID = ($type == 'bySearch') ? (int)$param : 0;
         $project = $this->commonAction($projectID);
 
         /* Load pager. */

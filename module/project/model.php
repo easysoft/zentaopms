@@ -1886,45 +1886,41 @@ class projectModel extends model
     public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y')
     {
         $begin = strtotime($begin);
-        $end   = strtotime($end);
+        $end   = strtotime($end) + 24 * 3600;
 
+        $beginWeekDay = date('w', $begin);
         $days = ($end - $begin) / 3600 / 24;
         if($type == 'noweekend')
         {
-            $mod   = $days % 7;
-            $days  = $days - floor($days / 7) * 2;
-            $days  = $mod == 6 ? $days - 1 : $days;
+            $allDays = $days;
+            $weekDay = $beginWeekDay;
+            for($i = 0; $i < $allDays; $i++, $weekDay++)
+            {
+                $weekDay = $weekDay % 7;
+                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days--;
+            }
         }
 
         if(!$interval) $interval = floor($days / $this->config->project->maxBurnDay);
 
         $dateList = array();
-        $date     = $begin;
         $spaces   = (int)$interval;
         $counter  = $spaces;
-        while($date <= $end)
+        $weekDay  = $beginWeekDay;
+        for($date = $begin; $date <= $end; $date += 24 * 3600, $weekDay++)
         {
             /* Remove weekend when type is noweekend.*/
             if($type == 'noweekend')
             {
-                $weekDay = date('w', $date);
-                if($weekDay == 6 or $weekDay == 0)
-                {
-                    $date += 24 * 3600;
-                    continue;
-                }
+                $weekDay = $weekDay % 7;
+                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) continue;
             }
 
             $counter ++;
-            if($counter <= $spaces)
-            {
-                $date += 24 * 3600;
-                continue;
-            }
+            if($counter <= $spaces) continue;
 
             $counter    = 0;
             $dateList[] = date($format, $date);
-            $date += 24 * 3600;
         }
 
         return array($dateList, $interval);

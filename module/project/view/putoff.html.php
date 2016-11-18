@@ -63,4 +63,5 @@
   </form>
   <div class='main'><?php include '../../common/view/action.html.php';?></div>
 </div>
+<?php js::set('weekend', $config->project->weekend);?>
 <?php include '../../common/view/footer.html.php';?>

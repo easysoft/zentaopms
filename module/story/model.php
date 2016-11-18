@@ -165,6 +165,7 @@ class storyModel extends model
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        if($this->checkForceReview()) $story->status = 'draft';
         $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -265,6 +266,7 @@ class storyModel extends model
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
 
+        $forceReview = $this->checkForceReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if(!empty($stories->title[$i]))
@@ -277,7 +279,7 @@ class storyModel extends model
                 $data->source     = $stories->source[$i];
                 $data->pri        = $stories->pri[$i];
                 $data->estimate   = $stories->estimate[$i];
-                $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
+                $data->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
                 $data->keywords   = $stories->keywords[$i];
                 $data->product    = $productID;
                 $data->branch     = $branch;
@@ -394,6 +396,7 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,comment,needNotReview,uid')
             ->get();
+        if($this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -2272,5 +2275,19 @@ class storyModel extends model
             return $this->session->storyQueryCondition;
         }
         return true;
+    }
+
+    /**
+     * Check force review for user.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function checkForceReview()
+    {
+        $forceReview = false;
+        if(!empty($this->config->story->forceReview)) $forceReview = strpos(",{$this->config->story->forceReview},", ",{$this->app->user->account},") !== false;
+
+        return $forceReview;
     }
 }

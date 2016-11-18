@@ -37,8 +37,7 @@ class custom extends control
         $currentLang = $this->app->getClientLang();
 
         $this->app->loadLang($module);
-        $this->app->loadConfig('story');
-        $fieldList = $this->lang->$module->$field;
+        $fieldList = zget($this->lang->$module, $field, '');
 
         if($module == 'bug' and $field == 'typeList')
         {
@@ -46,12 +45,35 @@ class custom extends control
             unset($fieldList['newfeature']);
             unset($fieldList['trackthings']);
         }
+        if($module == 'story' && $field == 'review')
+        {
+            $this->app->loadConfig('story');
+            $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+            $this->view->needReview   = zget($this->config->story, 'needReview', 1);
+            $this->view->forceReview  = zget($this->config->story, 'forceReview', '');
+        }
+        if($module == 'task' && $field == 'hours')
+        {
+            $this->app->loadConfig('project');
+            $this->view->weekend   = $this->config->project->weekend;
+            $this->view->workhours = $this->config->project->defaultWorkhours;
+        }
+        if($module == 'bug' && $field == 'longlife')
+        {
+            $this->app->loadConfig('bug');
+            $this->view->longlife  = $this->config->bug->longlife;
+        }
 
         if(!empty($_POST))
         {
             if($module == 'story' && $field == 'review')
             {
-                $this->loadModel('setting')->setItem('system.story.needReview', fixer::input('post')->get()->needReview);
+                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $this->loadModel('setting')->setItems('system.story', $data);
+            }
+            elseif($module == 'task' && $field == 'hours')
+            {
+                $this->loadModel('setting')->setItems('system.project', fixer::input('post')->get());
             }
             else
             {
@@ -60,8 +82,8 @@ class custom extends control
                 foreach($_POST['keys'] as $index => $key)
                 {
                     $value  = $_POST['values'][$index];
-                    if(!$value or !$key) continue;
                     $system = $_POST['systems'][$index];
+                    if(!$system and (!$value or !$key)) continue;
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
@@ -93,7 +115,6 @@ class custom extends control
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
         $this->view->position[]  = $this->lang->custom->common;
         $this->view->position[]  = $this->lang->$module->common;
-        $this->view->needReview  = $this->config->story->needReview;
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;

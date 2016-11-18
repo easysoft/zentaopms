@@ -1842,11 +1842,12 @@ class bugModel extends model
      */
     public function getByLonglifebugs($productID, $branch, $modules, $projects, $orderBy, $pager)
     {
-        return $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
+        $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
+        return $this->dao->findByLastEditedDate("<", $lastEditedDate)->from(TABLE_BUG)->andWhere('product')->eq($productID)
             ->andWhere('project')->in(array_keys($projects))
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
+            ->andWhere('openedDate')->lt($lastEditedDate)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
     }
@@ -2114,13 +2115,13 @@ class bugModel extends model
                 echo $bug->activatedCount;
                 break;
             case 'openedBy':
-                echo zget($users, $bug->openedBy, $bug->openedBy);
+                echo zget($users, $bug->openedBy);
                 break;
             case 'openedDate':
                 echo substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                foreach(explode(',', $bug->openedBuild) as $build) echo zget($builds, $build, $build) . '<br />';
+                foreach(explode(',', $bug->openedBuild) as $build) echo zget($builds, $build) . '<br />';
                 break;
             case 'assignedTo':
                 echo zget($users, $bug->assignedTo, $bug->assignedTo);
@@ -2132,7 +2133,7 @@ class bugModel extends model
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);
                 break;
             case 'resolution':
-                echo $this->lang->bug->resolutionList[$bug->resolution];
+                echo zget($this->lang->bug->resolutionList, $bug->resolution);
                 break;
             case 'resolvedDate':
                 echo substr($bug->resolvedDate, 5, 11);
@@ -2141,7 +2142,7 @@ class bugModel extends model
                 echo $bug->resolvedBuild;
                 break;
             case 'closedBy':
-                echo zget($users, $bug->closedBy, $bug->closedBy);
+                echo zget($users, $bug->closedBy);
                 break;
             case 'lastEditedDate':
                 echo substr($bug->lastEditedDate, 5, 11);

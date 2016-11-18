@@ -44,7 +44,7 @@ function computeDaysDelta(date1, date2)
     weekEnds = 0;
     for(i = 0; i < delta; i++)
     {
-        if(date1.getDay() == 0 || date1.getDay() == 6) weekEnds ++;
+        if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekEnds ++;
         date1 = date1.valueOf();
         date1 += 1000 * 60 * 60 * 24;
         date1 = new Date(date1);

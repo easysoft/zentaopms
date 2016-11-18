@@ -89,7 +89,7 @@
 
         <td <?php if($bug->assignedTo == $this->app->user->account) echo 'class="red"';?>><?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy)?></td>
-        <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+        <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
 
         <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
         <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
