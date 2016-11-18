@@ -25,7 +25,7 @@
           <th class='w-80px'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
           <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='w-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-100px'> <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
@@ -54,7 +54,20 @@
         <td><?php echo $users[$case->lastRunner];?></td>
         <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
         <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-        <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'><?php echo $case->needconfirm ? "<span class='warning'>{$lang->story->changed}</span>" : $lang->testcase->statusList[$case->status];?></td>
+        <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'>
+          <?php
+          if($case->needconfirm)
+          {
+              echo "(<span class='warning'>{$lang->story->changed}</span> ";
+              echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+              echo ")";
+          }
+          else
+          {
+              echo $lang->testcase->statusList[$case->status];
+          }
+          ?>
+        </td>
         <td class='text-right'>
           <?php
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
