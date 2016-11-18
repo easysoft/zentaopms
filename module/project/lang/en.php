@@ -261,5 +261,6 @@ $lang->project->featureBar['task']['needconfirm']  = 'Story Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
+$lang->project->treeLevel['root']    = 'Root';
 $lang->project->treeLevel['story']   = 'Show Story';
 $lang->project->treeLevel['task']    = 'Show Task';

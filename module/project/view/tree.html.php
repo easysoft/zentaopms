@@ -86,27 +86,28 @@ $(function()
         itemCreator: function($li, item)
         {
             $li.toggleClass('tree-toggle', item.type !== 'task' && item.type !== 'story').closest('li').addClass('item-type-' + item.type);
+            var $liWrapper = $li.find('.tree-item-wrapper');
             if(item.type === 'product')
             {
-                $li.append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>'));
+                $liWrapper.append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>'));
             }
             else if(item.type === 'story')
             {
-                $li.append('<span class="text-muted"><?php echo $lang->story->common ?>#' + item.storyId + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+                $liWrapper.append('<span class="tree-item-id">' + item.storyId + ' </span><span class="label label-story"><?php echo $lang->story->common ?></span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.children && item.children.length)
                 {
-                    if(item.tasksCount) $li.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
+                    if(item.tasksCount) $liWrapper.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
                 }
             }
             else if(item.type === 'task')
             {
-                $li.append('<span class="task-pri pri' + item.pri + '">' + (item.pri || '') + '</span> <span class="text-muted">#' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
-                if(item.assignedTo) $li.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
+                $liWrapper.append('<span class="tree-item-id">' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+                if(item.assignedTo) $liWrapper.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
                 var $info = $('<div class="task-info clearfix"/>');
                 $info.append($('<div/>').addClass('status-' + item.status).text(statusMap[item.status]));
                 $info.append($('<div/>').text(hoursFormat.replace('%s', item.estimate).replace('%s', item.consumed).replace('%s', item.left)));
                 $info.append($('<div class="buttons"/>').html(item.buttons));
-                $li.append($info);
+                $liWrapper.append($info);
             }
             else if(item.type === 'tasks')
             {
@@ -125,7 +126,7 @@ $(function()
                         $tr.append($('<td class="td-extra" width="150"/>').html(task.buttons));
                         $tbody.append($tr);
                     });
-                    $li.append($table);
+                    $liWrapper.append($table);
                 }
             }
             else if(item.type === 'unlinkStory')
@@ -135,8 +136,16 @@ $(function()
             }
             else
             {
-                $li.append($('<span class="tree-toggle"><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
+                if(item.type === 'module' && (!item.children || !item.children.length))
+                {
+                    $li.remove();
+                }
+                else
+                {
+                    $li.append($('<span class="tree-toggle"><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
+                }
             }
+            return true;
         }
     });
 
@@ -161,7 +170,7 @@ $(function()
             tree.collapse();
             tree.show($('.item-type-tasks, .item-type-task').parent().parent());
         }
-        if(level === 'product') tree.collapse();
+        if(level === 'root') tree.collapse();
         else if(level === 'module')
         {
             tree.collapse();

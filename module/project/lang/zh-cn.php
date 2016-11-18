@@ -261,5 +261,6 @@ $lang->project->featureBar['task']['needconfirm']  = '需求变动';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
+$lang->project->treeLevel['root']    = '全部折叠';
 $lang->project->treeLevel['story']   = '显示需求';
 $lang->project->treeLevel['task']    = '显示任务';
