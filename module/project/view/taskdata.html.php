@@ -17,7 +17,7 @@
           <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
           <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th class='{sorter:false}'>         <?php common::printOrderLink('name',         $orderBy, $vars, $lang->task->name);?></th>
-          <th class='w-status {sorter:false}'><?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-100px {sorter:false}'> <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-70px {sorter:false}'>  <?php common::printOrderLink('deadline',     $orderBy, $vars, $lang->task->deadlineAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
@@ -60,7 +60,16 @@
         <td class="<?php echo $task->status;?>">
           <?php
           $storyChanged = ($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
-          $storyChanged ? print("<span class='warning'>{$lang->story->changed}</span> ") : print($lang->task->statusList[$task->status]);
+          if($storyChanged)
+          {
+                echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->confirm, 'hiddenwin');
+                echo ")";
+          }
+          else
+          {
+              echo $lang->task->statusList[$task->status];
+          }
           ?>
         </td>
         <td class="<?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
